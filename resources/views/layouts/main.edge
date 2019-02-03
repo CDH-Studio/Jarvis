@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
+
     <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.2.1/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-9dACWymWSkhCeCgbjV6xqS20Luu4ue6QnEvr+nMXpPMwIq/OB89AoRh27Flsrxzs" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
 
@@ -51,30 +51,22 @@
                 <a class="dropdown-item" href="../yeti/">Yeti</a>
               </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../help/">Help</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="http://blog.bootswatch.com">Blog</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="download">Flatly <span class="caret"></span></a>
-              <div class="dropdown-menu" aria-labelledby="download">
-                <a class="dropdown-item" href="https://jsfiddle.net/bootswatch/jmg3gykg/">Open in JSFiddle</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="../4/flatly/bootstrap.min.css">bootstrap.min.css</a>
-                <a class="dropdown-item" href="../4/flatly/bootstrap.css">bootstrap.css</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="../4/flatly/_variables.scss">_variables.scss</a>
-                <a class="dropdown-item" href="../4/flatly/_bootswatch.scss">_bootswatch.scss</a>
-              </div>
-            </li>
           </ul>
 
           <ul class="nav navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="https://wrapbootstrap.com/?ref=bsw" target="_blank">WrapBootstrap</a>
-            </li>
+           
+            @loggedIn
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="user-drop">Hi, {{auth.user.username}} <span class="caret"></span></a>
+                  <div class="dropdown-menu" aria-labelledby="user-drop">
+                    <a class="dropdown-item" href="/logout">logout</a>
+                  </div>
+                </li>
+            @else
+                <li class="nav-item">
+                    <a class="nav-link" href="/login" target="_blank">Login</a>
+                </li>
+            @endloggedIn
           </ul>
 
         </div>
