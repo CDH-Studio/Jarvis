@@ -1,41 +1,70 @@
 @layout('layouts.main')
 
+@section('extracss')
+  {{ style('login') }}
+@endsection
+
 @section('title')
-JobPostr - Sign up
+JobPostr - Login
 @endsection
 
 @section('content')
-  <h1>Join now</h1>
 
-  <div class="job-container">
-      <form action="{{ route('UserController.create') }}" method="POST">
+<div class="container">
+<div class="row justify-content-center">
+  <div class="col-lg-5 col-md-8 justify-center">
+    <div class="card text-white mb-3 login-box shadow">
+      <div class="card-header text-center"><img class="brand-logo" src="door_logo.png"></img>
+      </div>
+      <div class="card-body">
+      <h4>Register</h4>
+        <form action="{{ route('UserController.create') }}" method="POST">
         {{ csrfField() }}
 
-        <label for="username">Username</label>
-        <input type="text" name="username" value="{{ old('username', '') }}">
-        @if(hasErrorFor('username'))
-            <span>
-                {{ getErrorFor('username') }}
-            </span>
-        @endif
+            <div class="form-group mb-2">
+                <label for="username">User Name</label>
+                <input type="text" class="form-control" id="username" placeholder="John Doe">
+            </div>
+              @if(hasErrorFor('username'))
+                  <span>
+                      {{ getErrorFor('username') }}
+                  </span>
+              @endif
 
-        <label for="email">Email</label>
-        <input type="email" name="email" value="{{ old('email', '') }}">
-        @if(hasErrorFor('email'))
-            <span>
-                {{ getErrorFor('email') }}
-            </span>
-        @endif
+            <div class="form-group mb-2">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+            </div>
+            @if(hasErrorFor('email'))
+              <span>
+                  {{ getErrorFor('email') }}
+              </span>
+            @endif
 
-        <label for="password">Password</label>
-        <input type="password" name="password">
-        @if(hasErrorFor('password'))
-            <span>
-                {{ getErrorFor('password') }}
-            </span>
-        @endif
+            <div class="form-group mb-2">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" placeholder="Password">
+            </div>
+            @if(hasErrorFor('password'))
+              <span>
+                  {{ getErrorFor('password') }}
+              </span>
+            @endif
 
-        <button type="submit">Join now</button>
-      </form>
+          <button type="submit" class="btn btn-login mt-3">Register</button>
+        </form>
+
+        <hr>
+        <a class="btn ms-signin text-center mb-4"><i class="fab fa-microsoft mr-2"></i>Register with Microsoft</a>
+
+        <p class="mb-1">Already have an account?</p>
+        <a class="btn register text-center" href="/login">Login Page</a>
+
+      </div>
+    </div>
+
   </div>
+  </div>
+</div>
+  
 @endsection
