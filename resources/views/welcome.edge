@@ -11,9 +11,12 @@
     <div class="title"></div>
     <div class="subtitle">
       <p>AdonisJs simplicity will make you feel confident about your code</p>
-      <p>
-        Don't know where to start? Read the <a href="https://adonisjs.com/docs">documentation</a>.
-      </p>
+      <form action="/add_room" method="post">
+        {{ csrfField() }}
+        Room#: <input type="text" name="num"><br>
+        Room name: <input type="text" name="name"><br>
+        <input type="submit" name="add" value="Upvote" />
+    </form>
     </div>
   </section>
 </body>

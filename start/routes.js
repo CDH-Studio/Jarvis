@@ -31,3 +31,5 @@ Route.get('/logout', async ({ auth, response }) => {
     return response.redirect('/');
 });
 
+Route.post('/add_room', 'RoomController.addRoom');
+
