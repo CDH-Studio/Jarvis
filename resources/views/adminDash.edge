@@ -23,7 +23,7 @@ JobPostr - Login
 
           <div class="form-group mb-2">
             <label for="email">Email address</label>
-            <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
           </div>
           @if(hasErrorFor('email'))
               <span>
@@ -33,7 +33,7 @@ JobPostr - Login
 
           <div class="form-group mb-2">
             <label for="password">Password</label>
-            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            <input type="password" class="form-control" id="password" placeholder="Password">
           </div>
           @if(hasErrorFor('password'))
               <span>
@@ -48,7 +48,7 @@ JobPostr - Login
         <a class="btn ms-signin text-center mb-4"><i class="fab fa-microsoft mr-2"></i>Sign in with Microsoft</a>
 
         <p class="mb-1">Don't have an account?</p>
-        <a class="btn register text-center" href="{{ route('register') }}">Register</a>
+        <a class="btn register text-center" href="/signup">Register</a>
         
 
 
