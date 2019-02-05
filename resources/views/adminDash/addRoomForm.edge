@@ -1,0 +1,109 @@
+@layout('layouts.adminLayout')
+
+
+@section('content')
+
+<div class="container">
+    <div class="row">
+        <div class= "col-12">
+        <h2>Add Room</h2>
+            <form>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Room Name</label>
+                    <input class="form-control" type="text" id="roomName" aria-describedby="nameHelp" placeholder="Ex: 308-B" />
+                    <small id="nameHelp" class="form-text text-muted">
+                        Enter the name of the specific meeting room you wish to add
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label>Location</label>
+                    <input class="form-control" id="location" placeholder="Ex: IC CONF OTT-235 Queen-Oasis CONF IC" />
+                    <small id="locationHelp" class="form-text text-muted">
+                        Please enter the location of the room in the following format: **format**
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label>Telephone Number</label>
+                    <input class="form-control" id="telephoneNumber" placeholder="Ex: 343-333-3333" />
+                </div>
+                <div class="form-group">
+                    <label>Table Seats</label>
+                    <input class="form-control" id="tableSeats" placeholder="Ex: 22" />
+                </div>
+                <div class="form-group">
+                    <label>Maximum Capacity</label>
+                    <input class="form-control" id="maximumCapacity" placeholder="Ex: 42" />
+                </div>
+                <div class="form-group">
+                    <label>Projector</label>
+                    <select class="form-control" id="projector">
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>WhiteBoard</label>
+                    <select class="form-control" id="whiteboard">
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Equipment</label>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="optionsRadios" id="optionsRadios1" value="surfaceHub" />
+                            SurfaceHub
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="optionsRadios" id="optionsRadios2" value="pc" />
+                            PC
+                        </label>
+                    </div>
+                    <div class="form-check disabled">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="optionsRadios" id="optionsRadios3" value="tv" />
+                            TV
+                        </label>
+                    </div>
+                    <div class="form-check disabled">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" name="optionsRadios" id="optionsRadios4" value="video" />
+                            Video
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Floor Plan</label>
+                    <div class="input-group mb-3">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="floorPlan" />
+                            <label class="custom-file-label">Choose file</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Room Picture</label>
+                    <div class="input-group mb-3">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="roomPicture" />
+                            <label class="custom-file-label">Choose file</label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mb-3" >Add</button>
+        </form>
+    </div>
+    </div>
+</div> 
+@endsection
+
+
+
+
+
+
+
+
