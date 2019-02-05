@@ -2861,8 +2861,8 @@ fieldset:disabled a.btn {
 
 .btn-dark {
   color: #fff;
-  background-color: #343a40;
-  border-color: #343a40;
+  background-color: #001642;
+  border-color: #001642;
 }
 
 .btn-dark:hover {
@@ -3134,14 +3134,14 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-dark {
-  color: #343a40;
-  border-color: #343a40;
+  color: #001642;
+  border-color: #001642;
 }
 
 .btn-outline-dark:hover {
   color: #fff;
-  background-color: #343a40;
-  border-color: #343a40;
+  background-color: #001642;
+  border-color: #001642;
 }
 
 .btn-outline-dark:focus, .btn-outline-dark.focus {
@@ -3150,15 +3150,15 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-dark.disabled, .btn-outline-dark:disabled {
-  color: #343a40;
+  color: #001642;
   background-color: transparent;
 }
 
 .btn-outline-dark:not(:disabled):not(.disabled):active, .btn-outline-dark:not(:disabled):not(.disabled).active,
 .show > .btn-outline-dark.dropdown-toggle {
   color: #fff;
-  background-color: #343a40;
-  border-color: #343a40;
+  background-color: #001642;
+  border-color: #001642;
 }
 
 .btn-outline-dark:not(:disabled):not(.disabled):active:focus, .btn-outline-dark:not(:disabled):not(.disabled).active:focus,
@@ -4461,13 +4461,16 @@ input[type="button"].btn-block {
 }
 
 .navbar-brand {
+  padding:0px 0px 7px 0;
   display: inline-block;
-  padding-top: 0.3125rem;
-  padding-bottom: 0.3125rem;
   margin-right: 1rem;
   font-size: 1.25rem;
   line-height: inherit;
   white-space: nowrap;
+}
+.navbar-brand img{
+  height:26px;
+	margin:0px;
 }
 
 .navbar-brand:hover, .navbar-brand:focus {
@@ -5405,7 +5408,7 @@ a.badge-light:hover, a.badge-light:focus {
 
 .badge-dark {
   color: #fff;
-  background-color: #343a40;
+  background-color: #001642;
 }
 
 a.badge-dark:hover, a.badge-dark:focus {
@@ -6827,7 +6830,7 @@ button.bg-light:focus {
 }
 
 .bg-dark {
-  background-color: #343a40 !important;
+  background-color: #001642 !important;
 }
 
 a.bg-dark:hover, a.bg-dark:focus,
@@ -6913,7 +6916,7 @@ button.bg-dark:focus {
 }
 
 .border-dark {
-  border-color: #343a40 !important;
+  border-color: #001642 !important;
 }
 
 .border-white {
@@ -10250,7 +10253,7 @@ a.text-light:hover, a.text-light:focus {
 }
 
 .text-dark {
-  color: #343a40 !important;
+  color: #001642 !important;
 }
 
 a.text-dark:hover, a.text-dark:focus {
@@ -10417,7 +10420,7 @@ body {
 }
 
 .scroll-to-top:hover {
-  background: #343a40;
+  background: #001642;
 }
 
 .scroll-to-top i {
