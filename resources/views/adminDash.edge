@@ -1,62 +1,33 @@
 @layout('layouts.main')
 
-@section('extracss')
-  {{ style('login') }}
-@endsection
-
 @section('title')
-JobPostr - Login
+Bootstrap Test 
 @endsection
 
 @section('content')
 
-<div class="container">
-<div class="row justify-content-center">
-  <div class="col-lg-5 col-md-8 justify-center">
-    <div class="card text-white mb-3 login-box shadow">
-      <div class="card-header text-center"><img class="brand-logo" src="door_logo.png"></img>
+  <div class="container">
+    <div class="row dash-header">
+      <div class="col-10">
+        <h3>Hi, {{auth.user.username}}</h3>
       </div>
-      <div class="card-body">
-      <h4>Login</h4>
-        <form action="{{ route('UserController.login') }}" method="POST">
-        {{ csrfField() }}
-
-          <div class="form-group mb-2">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
-          </div>
-          @if(hasErrorFor('email'))
-              <span>
-                  {{ getErrorFor('email') }}
-              </span>
-          @endif
-
-          <div class="form-group mb-2">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password">
-          </div>
-          @if(hasErrorFor('password'))
-              <span>
-                  {{ getErrorFor('password') }}
-              </span>
-          @endif
-
-          <button type="submit" class="btn btn-login mt-3">Login</button>
-        </form>
-
-        <hr>
-        <a class="btn ms-signin text-center mb-4"><i class="fab fa-microsoft mr-2"></i>Sign in with Microsoft</a>
-
-        <p class="mb-1">Don't have an account?</p>
-        <a class="btn register text-center" href="/signup">Register</a>
-        
-
-
+      <div class="col-2 text-right">
+        <h4 class="date" onload="startTime()">{{date}}</h4>
       </div>
     </div>
 
-  </div>
+
+
+    <div class="row">
+      <div class="col-2">
+        <h3>Job Title</h3>
+        <p>Future job description can go hersse.</p>
+      </div>
+      <div class="col-10">
+        <h3>Job Title</h3>
+        <p>Future job description can go hersse.</p>
+      </div>
   </div>
 </div>
-  
+
 @endsection
