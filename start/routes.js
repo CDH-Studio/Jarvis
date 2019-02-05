@@ -16,9 +16,11 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.get('/','HomeController.dashboard');
+
+Route.get('/','HomeController.dashboard').as('home');
 //Route.on('/').render('welcome')
-Route.on('/bootstrap').render('sample');
+Route.on('/sample').render('sample');
+//Route.on('/sample').render('sample');
 
 
 Route.on('/register').render('auth.signup').as('register');
@@ -27,7 +29,7 @@ Route.post('/login', 'UserController.login').validator('LoginUser');
 
 Route.post('/register', 'UserController.create');
 
-Route.get('/logout', 'UserController.logout');
+Route.get('/logout', 'UserController.logout').as('logout');
 
 Route.post('/add_room', 'RoomController.addRoom');
 
