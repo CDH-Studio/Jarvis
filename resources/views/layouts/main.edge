@@ -66,7 +66,7 @@
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="user-drop">Hi, {{auth.user.username}} <span class="caret"></span></a>
                   <div class="dropdown-menu" aria-labelledby="user-drop">
-                    <a class="dropdown-item" href="/logout">logout</a>
+                    <a class="dropdown-item" href="{{ route('logout') }}">logout</a>
                   </div>
                 </li>
 

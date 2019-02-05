@@ -8,6 +8,7 @@ class UserController {
   async create({ request, response, auth}) {
       const user = await User.create(request.only(['username','email','password']));
 
+      console.log(user);
       await auth.login(user);
       return response.redirect('/');
   }
@@ -22,6 +23,11 @@ class UserController {
           session.flash({loginError: 'These credentials do not work.'})
           return response.redirect('/login');
       }
+  }
+
+  async logout({ auth, response }){
+    await auth.logout();
+    return response.redirect('/');
   }
 
 
