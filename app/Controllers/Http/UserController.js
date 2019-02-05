@@ -1,7 +1,7 @@
 'use strict'
 
 const User = use('App/Models/User');
-
+const Mail = use('Mail')
 
 class UserController {
 
@@ -24,12 +24,22 @@ class UserController {
       }
   }
 
-
   show ({ auth, params }) {
     if (auth.user.id !== Number(params.id)) {
       return 'You cannot see someone else\'s profile'
     }
     return auth.user
+  }
+
+  async sendMail () {
+    await Mail.send('emails.testMail', {}, (message) => {
+      message
+        .to('liyunwei10@gmail.com')
+        .from('hello@sparkpostbox.com')
+        .subject('Welcome to Jasper')
+    })
+
+    return 'Registered successfully'
   }
 }
 

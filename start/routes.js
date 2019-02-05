@@ -32,4 +32,5 @@ Route.get('/logout', async ({ auth, response }) => {
 });
 
 Route.post('/add_room', 'RoomController.addRoom');
+Route.post('/send_mail', 'UserController.sendMail')
 
