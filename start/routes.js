@@ -31,5 +31,8 @@ Route.post('/register', 'UserController.create');
 
 Route.get('/logout', 'UserController.logout').as('logout');
 
-Route.post('/add_room', 'RoomController.addRoom');
+Route.on('/addRoom').render('adminDash/addRoomForm');
+Route.on('/removeRoom').render('adminDash/removeRoomForm');
+
+
 
