@@ -16,21 +16,28 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.on('/').render('welcome')
-Route.on('/bootstrap').render('sample')
+
+Route.get('/','HomeController.dashboard').as('home');
+//Route.on('/').render('welcome')
+Route.on('/sample').render('sample');
+//Route.on('/sample').render('sample');
 
 
-Route.on('/signup').render('auth.signup');
-Route.on('/login').render('auth.login');
+Route.on('/register').render('auth.signup').as('register');
+Route.on('/login').render('auth.login').as('login');
 Route.post('/login', 'UserController.login').validator('LoginUser');
 
-Route.post('/signup', 'UserController.create').validator('CreateUser');
+Route.post('/register', 'UserController.create');
 
-Route.get('/logout', async ({ auth, response }) => {
-    await auth.logout();
-    return response.redirect('/');
-});
+Route.get('/logout', 'UserController.logout').as('logout');
 
+Route.on('/addRoom').render('adminDash/addRoomForm');
+Route.on('/removeRoom').render('adminDash/removeRoomForm');
+
+
+<<<<<<< HEAD
 Route.post('/add_room', 'RoomController.addRoom');
 Route.post('/send_mail', 'UserController.sendMail')
+=======
+>>>>>>> master
 
