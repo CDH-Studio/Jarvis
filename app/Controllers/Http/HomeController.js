@@ -46,7 +46,7 @@ class HomeController {
 
   async dashboard({ request, response, auth}) {
       try {
-        await auth.check()
+        await auth.check();
         var d = new Date();
         var date = d.toLocaleDateString();
         return view.render('adminDash',{auth,date})

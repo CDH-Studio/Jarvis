@@ -17,9 +17,9 @@
 const Route = use('Route')
 
 
-Route.get('/','HomeController.dashboard');
+Route.get('/','HomeController.dashboard').as('home');
 //Route.on('/').render('welcome')
-Route.on('/bootstrap').render('sample');
+Route.on('/sample').render('sample');
 //Route.on('/sample').render('sample');
 
 
