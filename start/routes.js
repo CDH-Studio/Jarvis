@@ -34,10 +34,6 @@ Route.get('/logout', 'UserController.logout').as('logout');
 Route.on('/addRoom').render('adminDash/addRoomForm');
 Route.on('/removeRoom').render('adminDash/removeRoomForm');
 
-
-<<<<<<< HEAD
 Route.post('/add_room', 'RoomController.addRoom');
-Route.post('/send_mail', 'UserController.sendMail')
-=======
->>>>>>> master
+Route.post('/send_mail', 'UserController.sendMail');
 
