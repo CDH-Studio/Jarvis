@@ -36,4 +36,7 @@ Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
 
 Route.post('/add_room', 'RoomController.addRoom');
 Route.get('/send_mail', 'UserController.sendMail').as('sendMail');
+// Employee user pages
+Route.on('/booking').render('userPages/booking').as('booking');
+Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
 
