@@ -35,6 +35,6 @@ Route.on('/addRoom').render('adminDash/addRoomForm');
 Route.on('/removeRoom').render('adminDash/removeRoomForm');
 
 // Employee user pages
-Route.on('/bookRoom').render('userPages/bookRoom');
+Route.on('/booking').render('userPages/booking');
 Route.on('/manageBookings').render('userPages/manageBookings');
 
