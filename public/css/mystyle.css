@@ -51,7 +51,7 @@ body {
     overflow: hidden;
 }
 .hvr-underline-from-center:before {
-    content: "";
+    content: '';
     position: absolute;
     z-index: -1;
     left: 50%;
