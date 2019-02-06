@@ -17,7 +17,7 @@
 const Route = use('Route')
 
 
-Route.get('/','HomeController.dashboard').as('home');
+Route.get('/', 'HomeController.dashboard').as('home');
 //Route.on('/').render('welcome')
 Route.on('/sample').render('sample');
 //Route.on('/sample').render('sample');
@@ -31,8 +31,8 @@ Route.post('/register', 'UserController.create');
 
 Route.get('/logout', 'UserController.logout').as('logout');
 
-Route.on('/addRoom').render('adminDash/addRoomForm');
-Route.on('/removeRoom').render('adminDash/removeRoomForm');
+Route.on('/addRoom').render('adminDash/addRoomForm').as('addRoom');
+Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
 
 // Employee user pages
 Route.on('/booking').render('userPages/booking');
