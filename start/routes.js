@@ -27,7 +27,7 @@ Route.on('/register').render('auth.signup').as('register');
 Route.on('/login').render('auth.login').as('login');
 Route.post('/login', 'UserController.login').validator('LoginUser');
 
-Route.post('/register', 'UserController.create');
+Route.post('/register', 'UserController.create').validator('CreateUser');
 
 Route.get('/logout', 'UserController.logout').as('logout');
 

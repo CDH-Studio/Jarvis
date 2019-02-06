@@ -27,8 +27,8 @@
     "@adonisjs/session": "^1.0.27",
     "@adonisjs/shield": "^1.0.8",
     "@adonisjs/validator": "^5.0.6",
-    "lucid-mongo": "^3.1.5",
-    "mysql": "^2.16.0"
+    "mysql": "^2.16.0",
+    "sqlite3": "^4.0.6"
   },
   "devDependencies": {},
   "autoload": {
