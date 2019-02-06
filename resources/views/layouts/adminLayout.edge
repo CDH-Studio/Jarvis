@@ -63,11 +63,12 @@
             <span>Rooms</span>
           </a>
           {{--  Dropdown content  --}}
-          <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <div id="side-nav-dropdown" class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class='dropdown-item' href='{{ route('addRoom')}}'>Add Room</a>
             <a class='dropdown-item' href='{{ route('removeRoom')}}'>Remove Room</a>
             <a class="dropdown-item" href="forgot-password.html">Edit Room</a>
             <a class="dropdown-item" href="forgot-password.html">Search Room</a>
+
           </div>
         </li>
         {{--  Users tab  --}}
@@ -77,7 +78,7 @@
             <span>Users</span>
           </a>
           {{--  Dropdown content  --}}
-          <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <div id="side-nav-dropdown" class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class="dropdown-item" href="login.html">All Users</a>
             <a class="dropdown-item" href="register.html">Search Users</a>
           </div>
@@ -89,7 +90,7 @@
             <span>Bookings</span>
           </a>
           {{--  Dropdown content  --}}
-          <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <div id="side-nav-dropdown" class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class="dropdown-item" href="login.html">All Bookings</a>
             <a class="dropdown-item" href="register.html">Search Bookings</a>
           </div>
@@ -146,3 +147,9 @@
 
   </body>
 </html>
+
+<script>
+    function myFunction() {
+      document.getElementById("nav-link dropdown-toggle").style.boxShadow = "10px 20px 30px lightblue";
+    }
+</script>
