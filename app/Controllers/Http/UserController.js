@@ -43,7 +43,7 @@ class UserController {
       message
         .to('liyunwei10@gmail.com')
         //.from('hello@sparkpostbox.com')
-        .from('liyunwei10@gmail.com')
+        .from('help@mail.cdhstudio.ca')
         .subject('Welcome to Jasper')
     })
 

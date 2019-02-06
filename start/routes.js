@@ -35,5 +35,5 @@ Route.on('/addRoom').render('adminDash/addRoomForm').as('addRoom');
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
 
 Route.post('/add_room', 'RoomController.addRoom');
-Route.post('/send_mail', 'UserController.sendMail');
+Route.get('/send_mail', 'UserController.sendMail').as('sendMail');
 
