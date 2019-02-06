@@ -22,17 +22,20 @@ Route.get('/', 'HomeController.dashboard').as('home');
 Route.on('/sample').render('sample');
 //Route.on('/sample').render('sample');
 
-
 Route.on('/register').render('auth.signup').as('register');
 Route.on('/login').render('auth.login').as('login');
 Route.post('/login', 'UserController.login').validator('LoginUser');
 
-Route.post('/register', 'UserController.create');
+// Admin Register page
+Route.on('/registerAdmin').render('auth.signupAdmin').as('registerAdmin');
 
+Route.post('/register', 'UserController.create');
 Route.get('/logout', 'UserController.logout').as('logout');
 
+// Add and remove room forms
 Route.on('/addRoom').render('adminDash/addRoomForm').as('addRoom');
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
+Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
 
 // Employee user pages
 Route.on('/booking').render('userPages/booking').as('booking');
