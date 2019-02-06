@@ -48,6 +48,30 @@
   box-sizing: border-box;
 }
 
+/* Extra styling */
+.side-nav-icons{
+  width: 16px !important;
+  height: 24px;
+  text-align: center;
+  margin-right: 0px;
+}
+
+/*  Changing icon width to match all */
+.fa-map-marker-alt{
+  text-align: center;
+  width:25px;
+}
+
+.fa-user-friends{
+  text-align: center;
+  width:25px;
+}
+.fa-book{
+  text-align: center;
+  width:25px;
+}
+
+
 html {
   font-family: sans-serif;
   line-height: 1.15;

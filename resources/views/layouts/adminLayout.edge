@@ -56,11 +56,13 @@
     <div id='wrapper'>
       <!-- Sidebar -->
       <ul class="sidebar navbar-nav shadow">
+        {{--  Rooms tab  --}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-fw fa-folder"></i>
+            <i class="fas fa-map-marker-alt"></i>
             <span>Rooms</span>
           </a>
+          {{--  Dropdown content  --}}
           <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class='dropdown-item' href='{{ route('addRoom')}}'>Add Room</a>
             <a class='dropdown-item' href='{{ route('removeRoom')}}'>Remove Room</a>
@@ -68,22 +70,25 @@
             <a class="dropdown-item" href="forgot-password.html">Search Room</a>
           </div>
         </li>
-
+        {{--  Users tab  --}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-fw fa-folder"></i>
+            <i class="fas fa-user-friends"></i>
             <span>Users</span>
           </a>
+          {{--  Dropdown content  --}}
           <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class="dropdown-item" href="login.html">All Users</a>
             <a class="dropdown-item" href="register.html">Search Users</a>
           </div>
         </li>
+        {{--  Bookings content  --}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-fw fa-folder"></i>
+            <i class="fas fa-book"></i>
             <span>Bookings</span>
           </a>
+          {{--  Dropdown content  --}}
           <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class="dropdown-item" href="login.html">All Bookings</a>
             <a class="dropdown-item" href="register.html">Search Bookings</a>
