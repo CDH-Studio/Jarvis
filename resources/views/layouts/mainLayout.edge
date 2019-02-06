@@ -12,8 +12,6 @@
 
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.1/css/all.css' integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous'>
 
-    {{--  https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js  --}}
-
     {{ style('css/myStyle') }}
 
     @!section('extracss')
@@ -25,9 +23,8 @@
 
   <body>
 
-    @loggedIn
-      {{--  Navbar  --}}
-      <nav class='navbar navbar-expand-lg fixed-top navbar-dark bg-primary stroke'>
+    {{--  Navbar  --}}
+    <nav class='navbar navbar-expand-lg fixed-top navbar-dark bg-primary stroke'>
         <div class='container'>
           <a href='../' class='navbar-brand'><img src='door_logo.png'></a>
           <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarResponsive' aria-controls='navbarResponsive' aria-expanded='false' aria-label='Toggle navigation'>
@@ -55,28 +52,27 @@
             </ul>
           </div>
         </div>
-      </nav>
+    </nav>
 
-      <!-- Logout Modal-->
-      <div class='modal fade' id='logoutModal' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
-          <div class='modal-dialog' role='document'>
-            <div class='modal-content'>
-              <div class='modal-header'>
-                <h5 class='modal-title' id='exampleModalLabel'>Ready to Leave?</h5>
-                <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
-                  <span aria-hidden='true'>×</span>
-                </button>
-              </div>
-              <div class='modal-body'>Are you sure you want to log out?</div>
-              <div class='modal-footer'>
-                <button class='btn btn-secondary' type='button' data-dismiss='modal'>Cancel</button>
-                <a class='btn btn-primary' href='{{route('logout')}}'>Logout</a>
-              </div>
-            </div>
+    <!-- Logout Modal-->
+    <div class='modal fade' id='logoutModal' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+      <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+          <div class='modal-header'>
+            <h5 class='modal-title' id='exampleModalLabel'>Ready to Leave?</h5>
+            <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+              <span aria-hidden='true'>×</span>
+            </button>
+          </div>
+          <div class='modal-body'>Are you sure you want to log out?</div>
+          <div class='modal-footer'>
+            <button class='btn btn-secondary' type='button' data-dismiss='modal'>Cancel</button>
+            <a class='btn btn-primary' href='{{route('logout')}}'>Logout</a>
           </div>
         </div>
+      </div>
+    </div>
 
-    @endloggedIn
     
     @!section('content')
     <!-- Bootstrap core JavaScript-->
