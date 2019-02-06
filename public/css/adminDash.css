@@ -48,6 +48,60 @@
   box-sizing: border-box;
 }
 
+/* Extra styling */
+.side-nav-icons{
+  width: 16px !important;
+  height: 24px;
+  text-align: center;
+  margin-right: 0px;
+}
+/* .sidebar.navbar-nav {
+  background: #F5F5F5;
+}  */
+/*  Changing icon width to match all */
+.fa-map-marker-alt{
+  text-align: center;
+  width:25px;
+}
+
+.fa-user-friends{
+  text-align: center;
+  width:25px;
+}
+.fa-book{
+  text-align: center;
+  width:25px;
+}
+
+.nav-link{
+  position: relative;
+  z-index: 20;
+  
+}
+/* Side nav drop down */
+#side-nav-dropdown{
+  position: relative;
+  border:None ;
+  width:100%;
+  margin:0px;
+  z-index: 15;
+  background-color:#F5F5F5;
+}
+/* Small side nav view */
+.sidebar-toggled #side-nav-dropdown{
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+  width:100%;
+  margin:0px;
+  background-color: #F5F5F5;
+}
+/* Addding shadow to drop down */
+.show .nav-link{
+  box-shadow: 
+  0 4px 2px -2px rgba(0,0,0,0.1);
+}
+
+
 html {
   font-family: sans-serif;
   line-height: 1.15;
@@ -4442,7 +4496,7 @@ input[type="button"].btn-block {
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 2rem;
 }
 
 .navbar > .container,
