@@ -34,5 +34,7 @@ Route.get('/logout', 'UserController.logout').as('logout');
 Route.on('/addRoom').render('adminDash/addRoomForm');
 Route.on('/removeRoom').render('adminDash/removeRoomForm');
 
-
+// Employee user pages
+Route.on('/bookRoom').render('userPages/bookRoom');
+Route.on('/manageBookings').render('userPages/manageBookings');
 
