@@ -9,31 +9,61 @@
         <h2>Add Room</h2>
             <form>
                 <div class='form-group'>
-                    <label for='exampleInputEmail1'>Room Name</label>
-                    <input class='form-control' type='text' id='roomName' aria-describedby='nameHelp' placeholder='Ex: 308-B' />
+                    <label for='roomName'>Room Name</label>
+                    <input type='text' name='roomName' class='form-control' id='roomName' aria-describedby='nameHelp' placeholder='Ex: 308-B' />
                     <small id='nameHelp' class='form-text text-muted'>
                         Enter the name of the specific meeting room you wish to add
                     </small>
                 </div>
+                @if(hasErrorFor('roomName'))
+                    <span>
+                        {{ getErrorFor('roomName') }}
+                    </span>
+                @endif
+
                 <div class='form-group'>
-                    <label>Location</label>
-                    <input class='form-control' id='location' placeholder='Ex: IC CONF OTT-235 Queen-Oasis CONF IC' />
+                    <label for='location'>Location</label>
+                    <input type='text' name='location' class='form-control' id='location' placeholder='Ex: IC CONF OTT-235 Queen-Oasis CONF IC' />
                     <small id='locationHelp' class='form-text text-muted'>
                         Please enter the location of the room in the following format: **format**
                     </small>
                 </div>
+                @if(hasErrorFor('location'))
+                    <span>
+                        {{ getErrorFor('location') }}
+                    </span>
+                @endif
+
                 <div class='form-group'>
-                    <label>Telephone Number</label>
-                    <input class='form-control' id='telephoneNumber' placeholder='Ex: 343-333-3333' />
+                    <label for='telephoneNumber'>Telephone Number</label>
+                    <input type='text' name='telephoneNumber' class='form-control' id='telephoneNumber' placeholder='Ex: 343-333-3333' />
                 </div>
+                @if(hasErrorFor('telephoneNumber'))
+                    <span>
+                        {{ getErrorFor('telephoneNumber') }}
+                    </span>
+                @endif
+
                 <div class='form-group'>
-                    <label>Table Seats</label>
-                    <input class='form-control' id='tableSeats' placeholder='Ex: 22' />
+                    <label for='tableSeats'>Table Seats</label>
+                    <input type='text' name='tableSeats' class='form-control' id='tableSeats' placeholder='Ex: 22' />
                 </div>
+                @if(hasErrorFor('tableSeats'))
+                    <span>
+                        {{ getErrorFor('tableSeats') }}
+                    </span>
+                @endif
+
                 <div class='form-group'>
-                    <label>Maximum Capacity</label>
-                    <input class='form-control' id='maximumCapacity' placeholder='Ex: 42' />
+                    <label for='maximumCapacity'>Maximum Capacity</label>
+                    <input type='text' name='maximumCapacity' class='form-control' id='maximumCapacity' placeholder='Ex: 42' />
                 </div>
+                @if(hasErrorFor('maximumCapacity'))
+                    <span>
+                        {{ getErrorFor('maximumCapacity') }}
+                    </span>
+                @endif
+
                 <div class='form-group'>
                     <label>Projector</label>
                     <select class='form-control' id='projector'>
