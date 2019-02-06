@@ -57,9 +57,9 @@ module.exports = {
     driver: 'sparkpost',
     apiKey: Env.get('SPARKPOST_API_KEY'),
     extras: {
-      options: {
-        sandbox: true,
-      }
+      // options: {
+      //   sandbox: true,
+      // }
     }
   },
 

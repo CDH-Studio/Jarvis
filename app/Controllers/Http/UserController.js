@@ -42,7 +42,8 @@ class UserController {
     await Mail.send('emails.testMail', {}, (message) => {
       message
         .to('liyunwei10@gmail.com')
-        .from('hello@sparkpostbox.com')
+        //.from('hello@sparkpostbox.com')
+        .from('liyunwei10@gmail.com')
         .subject('Welcome to Jasper')
     })
 
