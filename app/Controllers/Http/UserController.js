@@ -48,16 +48,15 @@ class UserController {
     return auth.user
   }
 
-  async sendMail () {
-    await Mail.send('emails.testMail', {}, (message) => {
+  async sendMail ({response}) {
+    await Mail.send('emails.passwordReset', {}, (message) => {
       message
         .to('liyunwei10@gmail.com')
-        //.from('hello@sparkpostbox.com')
         .from('help@mail.cdhstudio.ca')
         .subject('Welcome to Jasper')
     })
-
-    return 'Registered successfully'
+    console.log('mail sent')
+    return response.redirect('/');
   }
 }
 
