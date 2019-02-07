@@ -48,7 +48,7 @@ class UserController {
     return auth.user
   }
 
-  async sendMail ({response}) {
+  async sendMail ({ response }) {
     await Mail.send('emails.passwordReset', {}, (message) => {
       message
         .to('liyunwei10@gmail.com')
