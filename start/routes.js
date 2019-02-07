@@ -42,3 +42,4 @@ Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
 Route.on('/booking').render('userPages/booking').as('booking');
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
+Route.on('/results').render('userPages/results').as('results');

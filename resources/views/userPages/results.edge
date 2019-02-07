@@ -1,0 +1,27 @@
+@layout('layouts.mainLayout')
+
+{{--  Manage bookings page content  --}}
+@section('content')
+
+<div class="container">
+    <div class='row dash-header'>
+        <div class='col-10'>
+            <h3>Results</h3>
+        </div>
+        <div class='col-2 text-right'>
+            <h4 class='date' onload='startTime()'>{{date}}</h4>
+        </div>
+    </div>
+    <div class="card border-primary mb-3" style="max-width: 30rem;">
+        <div class="card-header">
+            <h5><b>331A (E)</b></h5>
+            <p>Phone: 613-960-6464</p>
+        </div>
+        <div class="card-body">
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        </div>
+    </div>
+</div> 
+
+@endsection
+
