@@ -21,7 +21,7 @@ Jarvis - Login
           This page is for admin registration only.
           <a href="{{route('login')}}">Click Here</a> to return to safety.
         </div>
-        <form action='{{ route('UserController.create') }}' method='POST'>
+        <form action='{{ route('CreateAdmin') }}' method='POST'>
         {{ csrfField() }}
             <div class='form-group mb-2'>
                 <label for='username'>User Name</label>
@@ -57,6 +57,9 @@ Jarvis - Login
             <div class='form-group mb-2'>
                 <label for='token'>Admin Token</label>
                 <input type='text' class='form-control' name='token' id='token' placeholder='Token'>
+                <span>
+                  {{ getErrorFor('token') }}
+              </span>
             </div>
 
           <button type='submit' class='btn btn-login mt-3'>Register</button>

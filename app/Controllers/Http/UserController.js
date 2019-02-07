@@ -6,10 +6,22 @@ const User = use('App/Models/User');
 class UserController {
 
   async create({ request, response, auth}) {
-      const user = await User.create(request.only(['username','email','password']));
+      var userInfo=request.only(['username','email','password']);
+      userInfo['role']=2;
+      const user = await User.create(userInfo);
 
       await auth.login(user);
       return response.redirect('/');
+  }
+
+  async createAdmin({ request, response, auth}) {
+    var adminInfo=request.only(['username','email','password']);
+    adminInfo['role']=1;
+    console.log(adminInfo);
+    const user = await User.create(adminInfo);
+
+    await auth.login(user);
+    return response.redirect('/');
   }
 
   async login({ request, auth, response, session }) {
