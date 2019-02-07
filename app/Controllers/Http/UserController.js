@@ -1,12 +1,14 @@
 'use strict'
 
 const User = use('App/Models/User');
+const PasswordReset = use('App/Models/PasswordReset');
 const Mail = use('Mail')
 
 class UserController {
 
   async create({ request, response, auth}) {
-      var userInfo=request.only(['username','email','password']);
+	  var userInfo=request.only(['username','email','password']);
+	  console.log(userInfo)
       userInfo['role']=2;
       const user = await User.create(userInfo);
 
@@ -57,16 +59,32 @@ class UserController {
 	const rows = results.toJSON();
 
 	if(rows.length != 0) {
+		var row = { email: email,
+					hash: this.random(4)};
+		console.log(row);
+		var temp = PasswordReset.create(row);
+
 		await Mail.send('emails.passwordReset', {}, (message) => {
 		message
 			.to(email)
 			.from('support@mail.cdhstudio.ca')
-			.subject('Welcome to Jasper')
+			.subject('Password Reset Request')
 		})
 		console.log('mail sent')
 	}
 	
 	return response.redirect('/login');
+  }
+
+  random(times) {
+	
+	let result = '';
+
+	for (let i=0; i < times; i++) {
+		result += Math.random().toString(36).substring(2);
+	}
+
+	return result;
   }
 }
 
