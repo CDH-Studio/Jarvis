@@ -14,13 +14,15 @@ Jarvis - Login
 <div class='row justify-content-center'>
   <div class='col-lg-5 col-md-8 justify-center'>
     <div class='card text-white mb-3 login-box shadow'>
-      <div class='card-header text-center'><img class='brand-logo' src='door_logo.png'>
-      </div>
+
       <div class='card-body'>
-      <h4>Register as Admin</h4>
+        <h4>Admin Registration</h4>
+        <div class="alert alert-dismissible alert-danger">
+          This page is for admin registration only.
+          <a href="{{route('login')}}">Click Here</a> to return to safety.
+        </div>
         <form action='{{ route('UserController.create') }}' method='POST'>
         {{ csrfField() }}
-
             <div class='form-group mb-2'>
                 <label for='username'>User Name</label>
                 <input type='text' class='form-control' name='username' id='username' placeholder='John Doe'>
@@ -53,18 +55,12 @@ Jarvis - Login
             @endif
 
             <div class='form-group mb-2'>
-                <label for='token'>Unique Token</label>
+                <label for='token'>Admin Token</label>
                 <input type='text' class='form-control' name='token' id='token' placeholder='Token'>
             </div>
 
           <button type='submit' class='btn btn-login mt-3'>Register</button>
         </form>
-
-        <hr>
-        <a class='btn ms-signin text-center mb-4'><i class='fab fa-microsoft mr-2'></i>Register with Microsoft</a>
-
-        <p class='mb-1'>Already have an account?</p>
-        <a class='btn register text-center' href='{{ route('login') }}'>Login Page</a>
 
       </div>
     </div>

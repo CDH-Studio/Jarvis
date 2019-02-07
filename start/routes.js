@@ -27,7 +27,7 @@ Route.on('/login').render('auth.login').as('login');
 Route.post('/login', 'UserController.login').validator('LoginUser');
 
 // Admin Register page
-Route.on('/registerAdmin').render('auth.signupAdmin').as('registerAdmin');
+Route.on('/admin/register').render('auth.signupAdmin').as('registerAdmin');
 
 Route.post('/register', 'UserController.create').validator('CreateUser');;
 Route.get('/logout', 'UserController.logout').as('logout');
