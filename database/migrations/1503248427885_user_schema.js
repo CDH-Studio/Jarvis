@@ -16,7 +16,7 @@ class UserSchema extends Schema {
 
     this.create('password_reset_requests', (table) => {
       table.increments()
-      table.string('email', 254).notNullable().unique()
+      table.string('email', 254).notNullable()
       table.string('hash', 254).notNullable().unique()
       table.timestamps()
     })

@@ -2,7 +2,8 @@
 
 const User = use('App/Models/User');
 const PasswordReset = use('App/Models/PasswordReset');
-const Mail = use('Mail')
+const Mail = use('Mail');
+const Hash = use('Hash');
 
 class UserController {
 
@@ -59,12 +60,22 @@ class UserController {
 	const rows = results.toJSON();
 
 	if(rows.length != 0) {
-		var row = { email: email,
-					hash: this.random(4)};
-		console.log(row);
-		var temp = PasswordReset.create(row);
+		let hash = this.random(4);
 
-		await Mail.send('emails.passwordReset', {}, (message) => {
+		let row = { email: email,
+					hash: hash};
+		console.log(row);
+		await PasswordReset.create(row);
+
+		let body = `
+		<h2> Password Reset Request </h2>
+		<p>
+			We received a request to reset your password. If you asked to reset your password, please click the following URL into your browser: 
+			http://localhost:3333/newPassword?hash=${hash}
+		</p>
+		`
+
+		await Mail.raw(body, (message) => {
 		message
 			.to(email)
 			.from('support@mail.cdhstudio.ca')
@@ -73,6 +84,35 @@ class UserController {
 		console.log('mail sent')
 	}
 	
+	return response.redirect('/login');
+  }
+
+  async verifyHash({ request, view }) {
+	const hash = request._all.hash
+
+	const results = await PasswordReset
+		.query()
+		.where('hash', '=', hash)
+		.fetch();
+
+	console.log(hash)
+	if(results) {
+		const rows = results.toJSON();
+		const email = rows[0].email; 
+
+		return view.render('resetPassword', {email: email});
+	}
+  }
+
+  async resetPassword({ request, response }) {
+	console.log(request.body)
+	const newPassword = await Hash.make(request.body.password);
+	const changedRow = await User
+		.query()
+		.where('email', request.body.email)
+		.update({ password: newPassword });
+
+	console.log(changedRow);
 	return response.redirect('/login');
   }
 
