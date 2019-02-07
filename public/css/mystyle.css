@@ -1,3 +1,4 @@
+/* Navbar changes */
 .navbar-dark{
  background-color: #001642 !important;
 }
@@ -11,11 +12,24 @@
 	margin:0px;
 }
 
-body { 
-    padding-top: 65px; 
-    font-family: 'Lato', sans-serif;
+.nav-link{
+	font-size: 16px;
+	margin-left:10px;
+	padding:5px 10px;
+}
+.navbar-expand, .navbar-dark{
+    padding:40px;
 }
 
+.navbar-expand-lg{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+/* Admin dashboard changes*/
+.dropdown-toggle{
+    padding-right: 10px;
+}
 .dash-header{
 	margin-top: 30px;
 	margin-bottom: 30px;
@@ -26,16 +40,10 @@ body {
 	padding-top:8px;
 }
 
-.nav-link{
-	font-size: 16px;
-	margin-left:10px;
-	padding:5px 10px;
+body { 
+    padding-top: 65px; 
+    font-family: 'Lato', sans-serif;
 }
-
-.navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus{
-	color:#fff;
-}
-
 
 /* Underline From Center */
 .hvr-underline-from-center {
@@ -70,6 +78,7 @@ body {
     left: 0;
     right: 0;
 }
+
 /* Fix bootstrap */
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-menu > li > a:active {
     background: none;

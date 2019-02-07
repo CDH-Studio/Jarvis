@@ -17,7 +17,7 @@ Jarvis - Login
       <div class='card-header text-center'><img class='brand-logo' src='door_logo.png'>
       </div>
       <div class='card-body'>
-      <h4>Register</h4>
+      <h4>Register as Admin</h4>
         <form action='{{ route('UserController.create') }}' method='POST'>
         {{ csrfField() }}
 
@@ -51,6 +51,11 @@ Jarvis - Login
                   {{ getErrorFor('password') }}
               </span>
             @endif
+
+            <div class='form-group mb-2'>
+                <label for='token'>Unique Token</label>
+                <input type='text' class='form-control' name='token' id='token' placeholder='Token'>
+            </div>
 
           <button type='submit' class='btn btn-login mt-3'>Register</button>
         </form>
