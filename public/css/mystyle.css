@@ -31,7 +31,7 @@
     padding-right: 10px;
 }
 .dash-header{
-	margin-top: 30px;
+	margin-top: 20px;
 	margin-bottom: 30px;
 	border-bottom: solid 2px #001642;
 }
@@ -89,3 +89,44 @@ body {
     color: #555;
 }
 
+/* Center wrapper */
+.wrapper-center {
+    text-align: center;
+}
+/* Adjusting margins for room booking content */
+.book-room-content{
+    margin-top: 150px;
+}
+
+/* Large button styling */
+.large-buttons{
+    width: 170px;
+    margin: 5px;
+    font-size: 20px;
+}
+
+/* Changinge button colors */
+.btn-primary{
+    border-color: #0FACF3;
+    background-color: #0FACF3;
+}
+.btn-primary:hover{
+    background-color: #036A98;
+    border-color: #036A98;
+}
+
+.btn-outline-secondary{
+    color: #000000;
+    border-color: #000000;
+    background-color: #ffffff;
+}
+
+.btn-outline-secondary:hover{
+    background-color:#546A7B;
+    border-color: #546A7B;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(70, 151, 233, 0.5);
+    box-shadow: 0 0 0 0.2rem rgba(70, 151, 233, 0.5);
+  }
