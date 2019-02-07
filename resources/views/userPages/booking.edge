@@ -2,10 +2,31 @@
 
 {{--  book room page content  --}}
 @section('content')
-
-<div class="container">
-    <div class="row">
-    </div>
+@section('extracss')
+  {{ style('css/mystyle') }}
+@endsection
+<div class='container'>
+        <div class='row dash-header'>
+            <div class='col-10'>
+                <h3>Hi, {{auth.user.username}}</h3>
+            </div>
+            <div class='col-2 text-right'>
+                <h4 class='date' onload='startTime()'>{{date}}</h4>
+            </div>
+        </div>
+        <div class='book-room-content wrapper-center'>
+            <div class='row'>
+                <div class='col-sm-12'>
+                    <h1>Create Booking</h1>
+                </div>
+            </div>    
+            <div class='row'>
+                <div class='col-sm-12'>
+                    <button type='button' class='btn btn-primary large-buttons'>Search</button>
+                    <button type='button' class='btn btn-outline-secondary large-buttons'>View All Rooms</button>
+                </div>
+            </div>
+        </div>
 </div> 
 
 @endsection
