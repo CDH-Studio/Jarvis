@@ -6,18 +6,25 @@
 <div class='container'>
     <div class='row'>
         <div class= 'col-12'>
-        <h2>Add Room</h2>
-            <form>
-                <div class='form-group'>
-                    <label for='roomName'>Room Name</label>
-                    <input type='text' name='roomName' class='form-control' id='roomName' aria-describedby='nameHelp' placeholder='Ex: 308-B' />
+        <h2 align='center'>Add Room</h2>
+            @if(old('notification'))
+                <div class='alert alert-success'>
+                    {{ old('notification') }}
+                </div>
+            @endif
+            <form action="/addRoom" method="POST">
+                {{--  protects against cross site forgery  --}}
+                {{ csrfField() }} 
+                <div class='form-group has-danger'>
+                    <label for='name'>Room Name</label>
+                    <input type='text' name='name' class='form-control' id='name' aria-describedby='nameHelp' placeholder='Ex: 308-B' />
                     <small id='nameHelp' class='form-text text-muted'>
                         Enter the name of the specific meeting room you wish to add
                     </small>
                 </div>
-                @if(hasErrorFor('roomName'))
-                    <span>
-                        {{ getErrorFor('roomName') }}
+                @if(hasErrorFor('name'))
+                    <span class="alert-danger">
+                        {{ getErrorFor('name') }}
                     </span>
                 @endif
 
@@ -29,7 +36,7 @@
                     </small>
                 </div>
                 @if(hasErrorFor('location'))
-                    <span>
+                    <span class="alert-danger">
                         {{ getErrorFor('location') }}
                     </span>
                 @endif
@@ -39,7 +46,7 @@
                     <input type='text' name='telephoneNumber' class='form-control' id='telephoneNumber' placeholder='Ex: 343-333-3333' />
                 </div>
                 @if(hasErrorFor('telephoneNumber'))
-                    <span>
+                    <span class="alert-danger">
                         {{ getErrorFor('telephoneNumber') }}
                     </span>
                 @endif
@@ -49,7 +56,7 @@
                     <input type='text' name='tableSeats' class='form-control' id='tableSeats' placeholder='Ex: 22' />
                 </div>
                 @if(hasErrorFor('tableSeats'))
-                    <span>
+                    <span class="alert-danger">
                         {{ getErrorFor('tableSeats') }}
                     </span>
                 @endif
@@ -59,7 +66,7 @@
                     <input type='text' name='maximumCapacity' class='form-control' id='maximumCapacity' placeholder='Ex: 42' />
                 </div>
                 @if(hasErrorFor('maximumCapacity'))
-                    <span>
+                    <span class="alert-danger">
                         {{ getErrorFor('maximumCapacity') }}
                     </span>
                 @endif
@@ -101,31 +108,27 @@
                     <div class='form-check disabled'>
                         <label class='form-check-label'>
                             <input type='checkbox' class='form-check-input' name='optionsRadios' id='optionsRadios4' value='video' />
-                            Video
+                            Video Conferencing
                         </label>
                     </div>
                 </div>
                 <div class='form-group'>
                     <label>Floor Plan</label>
-                    <div class='input-group mb-3'>
-                        <div class='custom-file'>
-                            <input type='file' class='custom-file-input' id='floorPlan' />
-                            <label class='custom-file-label'>Choose file</label>
-                        </div>
+                    <div class='custom-file input-group mb-3'>
+                        <input type='file' class='custom-file-input' id='floorPlan' />
+                        <label class='custom-file-label'>Choose file</label>
                     </div>
                 </div>
                 <div class='form-group'>
                     <label>Room Picture</label>
-                    <div class='input-group mb-3'>
-                        <div class='custom-file'>
-                            <input type='file' class='custom-file-input' id='roomPicture' />
-                            <label class='custom-file-label'>Choose file</label>
-                        </div>
+                    <div class='custom-file input-group mb-3'>
+                        <input type='file' class='custom-file-input' id='roomPicture' />
+                        <label class='custom-file-label'>Choose file</label>
                     </div>
                 </div>
-                <button type='submit' class='btn btn-primary mb-3' >Add</button>
-        </form>
-    </div>
+                <button type='submit' class='btn btn-primary mb-3'>Add</button>
+            </form>
+        </div>
     </div>
 </div> 
 @endsection
