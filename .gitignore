@@ -8,5 +8,8 @@ tmp
 # Environment variables, never commit this file
 .env
 
+# the vscode config file
+.vscode
+
 # The development sqlite file
 database/jasper_dev.db
