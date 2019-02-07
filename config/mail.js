@@ -100,5 +100,18 @@ module.exports = {
   */
   ethereal: {
     driver: 'ethereal'
+  },
+
+  /*
+  |--------------------------------------------------------------------------
+  | Email List
+  |--------------------------------------------------------------------------
+  |
+  | A list of email addresses used to send mails from.
+  |
+  */
+
+  emailList: {
+    support: 'support@mail.cdhstudio.ca',
   }
 }

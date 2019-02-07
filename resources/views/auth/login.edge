@@ -34,6 +34,7 @@ Jarvis - Login
           <div class='form-group mb-2'>
             <label for='password'>Password</label>
             <input type='password' class='form-control' name='password' id='password' placeholder='Password'>
+          <a class='a-forgot-password' href='{{ route('forgotPassword') }}'>Forgot your password?</a>
           </div>
           @if(hasErrorFor('password'))
               <span>
