@@ -30,7 +30,7 @@ Route.post('/login', 'UserController.login').validator('LoginUser');
 Route.on('/admin/register').render('auth.signupAdmin').as('registerAdmin');
 Route.post('/admin/register','UserController.createAdmin').as('CreateAdmin').validator('CreateAdmin');
 
-Route.post('/register', 'UserController.create').validator('CreateUser');;
+Route.post('/register', 'UserController.create').validator('CreateUser');
 Route.get('/logout', 'UserController.logout').as('logout');
 
 // Add and remove room forms
