@@ -49,17 +49,24 @@ class UserController {
   }
 
   async sendMail ({ request, response }) {
-    const email = request.body.email
-    console.log(email);
+	const email = request.body.email
+    const results = await User
+    	.query()
+    	.where('email', '=', email)
+		.fetch();
+	const rows = results.toJSON();
 
-    await Mail.send('emails.passwordReset', {}, (message) => {
-      message
-        .to(email)
-        .from('support@mail.cdhstudio.ca')
-        .subject('Welcome to Jasper')
-    })
-    console.log('mail sent')
-    return response.redirect('/login');
+	if(rows.length != 0) {
+		await Mail.send('emails.passwordReset', {}, (message) => {
+		message
+			.to(email)
+			.from('support@mail.cdhstudio.ca')
+			.subject('Welcome to Jasper')
+		})
+		console.log('mail sent')
+	}
+	
+	return response.redirect('/login');
   }
 }
 
