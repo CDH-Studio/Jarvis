@@ -12,7 +12,7 @@
                     {{ old('notification') }}
                 </div>
             @endif
-            <form action="/addRoom" method="POST">
+            <form action='/addRoom' method='POST'>
                 {{--  protects against cross site forgery  --}}
                 {{ csrfField() }} 
                 <div class='form-group has-danger'>
@@ -23,7 +23,7 @@
                     </small>
                 </div>
                 @if(hasErrorFor('name'))
-                    <span class="alert-danger">
+                    <span class='alert-danger'>
                         {{ getErrorFor('name') }}
                     </span>
                 @endif
@@ -36,7 +36,7 @@
                     </small>
                 </div>
                 @if(hasErrorFor('location'))
-                    <span class="alert-danger">
+                    <span class='alert-danger'>
                         {{ getErrorFor('location') }}
                     </span>
                 @endif
@@ -46,7 +46,7 @@
                     <input type='text' name='telephoneNumber' class='form-control' id='telephoneNumber' placeholder='Ex: 343-333-3333' />
                 </div>
                 @if(hasErrorFor('telephoneNumber'))
-                    <span class="alert-danger">
+                    <span class='alert-danger'>
                         {{ getErrorFor('telephoneNumber') }}
                     </span>
                 @endif
@@ -56,7 +56,7 @@
                     <input type='text' name='tableSeats' class='form-control' id='tableSeats' placeholder='Ex: 22' />
                 </div>
                 @if(hasErrorFor('tableSeats'))
-                    <span class="alert-danger">
+                    <span class='alert-danger'>
                         {{ getErrorFor('tableSeats') }}
                     </span>
                 @endif
@@ -66,7 +66,7 @@
                     <input type='text' name='maximumCapacity' class='form-control' id='maximumCapacity' placeholder='Ex: 42' />
                 </div>
                 @if(hasErrorFor('maximumCapacity'))
-                    <span class="alert-danger">
+                    <span class='alert-danger'>
                         {{ getErrorFor('maximumCapacity') }}
                     </span>
                 @endif
