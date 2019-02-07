@@ -93,7 +93,15 @@ hr{
 	background-position: 50% 50%; 
 }
 
-.a-forgot-password {
-	color: #f77502
+a.forgot-password {
+	font-weight: 500;
+	font-family: inherit;
+	color: #f77502;
+}
+
+p.forgot-password {
+	font-weight: 500;
+	font-family: inherit;
+	color: #fff;
 }
 

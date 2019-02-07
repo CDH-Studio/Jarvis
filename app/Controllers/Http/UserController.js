@@ -48,18 +48,18 @@ class UserController {
     return auth.user
   }
 
-  async sendMail ({ auth, response }) {
-    const user = auth.user
+  async sendMail ({ request, response }) {
+    const email = request.body.email
+    console.log(email);
 
-    await Mail.send('emails.passwordReset', user, (message) => {
-      console.log(Mail)
+    await Mail.send('emails.passwordReset', {}, (message) => {
       message
-        .to(user.email)
+        .to(email)
         .from('support@mail.cdhstudio.ca')
         .subject('Welcome to Jasper')
     })
     console.log('mail sent')
-    return response.redirect('/');
+    return response.redirect('/login');
   }
 }
 
