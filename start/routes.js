@@ -35,7 +35,6 @@ Route.get('/logout', 'UserController.logout').as('logout');
 Route.on('/addRoom').render('adminDash/addRoomForm').as('addRoom');
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
 Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
-Route.post('/add_room', 'RoomController.addRoom');
 
 // Employee user pages
 Route.on('/booking').render('userPages/booking').as('booking');
@@ -45,6 +44,6 @@ Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
 Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword');
 Route.get('/newPassword', 'UserController.verifyHash');
-Route.post('/send_mail', 'UserController.sendMail').as('sendMail');
+Route.post('/sendPasswordResetMail', 'UserController.sendPasswordResetMail').as('sendPasswordResetMail');
 
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
