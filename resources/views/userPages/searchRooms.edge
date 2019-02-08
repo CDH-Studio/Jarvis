@@ -4,14 +4,8 @@
 @section('content')
 
 <div class='container'>
-    <div class='row dash-header'>
-        <div class='col-10'>
-            <h3>Search Rooms</h3>
-        </div>
-        <div class='col-2 text-right'>
-            <h4 class='date' onload='startTime()'>{{date}}</h4>
-        </div>
-    </div>
+    {{--  Loading Page Header  --}}
+    @!component('components.pageHeader', title='Search Rooms')
     {{--  Page content  --}}
     <div class='search-room-content'>
         {{--  Date form  --}}

@@ -1,6 +1,6 @@
 /* Navbar changes */
 .navbar-dark{
- background-color: #001642 !important;
+    background-color: #001642 !important;
 }
 
 .navbar-brand{
@@ -109,7 +109,7 @@ body {
 .btn-primary{
     margin:2px;
     width:110px;
-    border-color: #0FACF3;
+    border-color: #0facf3;
     background-color: #0FACF3;
 }
 .btn-primary:hover{
@@ -140,4 +140,65 @@ body {
     font-size: 1.25rem;
     line-height: 1.5;
     border-radius: 0.3rem;
+}
+
+/* Room card information */
+.card{
+    max-width: 538px;
+    width: 538px;
+    margin: 8px;
+}
+
+.card-header{
+    padding-top: 2px;
+    padding-bottom: 2px;
+    background-color: #3c5585;
+    min-height: 54px;
+    text-align: center;
+    vertical-align: center;
+    color: #ffffff;
+}
+
+/* .card-body{
+    padding
+} */
+.card-title{
+    margin-top: 3px;
+    margin-bottom: 0px;
+}
+
+.card-subtitle{
+    margin: 0px;    
+    margin-top: 1px;
+}
+
+.card-text{
+    margin-bottom: 2px;
+}
+.card-information{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.card-photo-container{
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(196, 196, 196);
+    padding: 0px;
+    margin-left: 8px; 
+    height: 120px;
+    width: 200px;
+}
+
+.card-image{
+    background-size: cover;
+    height: 100vh;
+}
+
+.card-checkboxes{
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.flex-fixed-width-item {
+    flex: 0 0 200px;
 }

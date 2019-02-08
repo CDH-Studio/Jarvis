@@ -1,0 +1,38 @@
+{{--  Room car component that takes: title, phoneNumber, seats, maxCapacity, equipment, standardEquipment[array] --}}
+<div class='card d.flex'>
+    <div class="card-header">
+        <h5 class='card-title'><b>{{ title }}</b></h5>
+        <p class='card-subtitle'>Phone: {{ phoneNumber }}</p>
+    </div>
+    <div class='row card-body'>
+        <div href='../' class='card-photo-container'><img class='card-image' src='/sakjsdl'></div>
+        <div class='card-information flex-fixed-width-item'> 
+            <p class='card-text'>Table Seats: {{ seats }}</p>
+            <p class='card-text'>Max Capacity: {{ maxCapacity }} </p>
+            <p class='card-text'><u>Equipment:</u></p>
+            <p class='card-text'>{{ equipment }}</p>
+        </div>
+        <div class='card-checkboxes flex-fill'>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
+                <label class="custom-control-label" for="customCheck2">Projector</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck2" disabled="">
+                <label class="custom-control-label" for="customCheck2">Whiteboard</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck2" disabled="">
+                <label class="custom-control-label" for="customCheck2">Flip Chart</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck2" checked="">
+                <label class="custom-control-label" for="customCheck2">Audio Conf.</label>
+            </div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="customCheck2" checked="">
+                <label class="custom-control-label" for="customCheck2">Video Conf.</label>
+            </div>
+        </div>
+    </div>
+</div>

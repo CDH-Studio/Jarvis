@@ -47,3 +47,4 @@ Route.get('/newPassword', 'UserController.verifyHash');
 Route.post('/sendPasswordResetMail', 'UserController.sendPasswordResetMail').as('sendPasswordResetMail');
 
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
+Route.on('/results').render('userPages/results').as('results');
