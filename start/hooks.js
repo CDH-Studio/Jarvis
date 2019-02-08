@@ -7,8 +7,10 @@ hooks.after.providersBooted(() => {
 			return
 		}
 
-		if (data[field] !== data[args[0]]) {
-			throw message
+		for (let arg in args) {
+			if (data[field] !== data[args[arg]]) {
+				throw message
+			}
 		}
 	}
 
