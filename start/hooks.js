@@ -7,8 +7,7 @@ hooks.after.providersBooted(() => {
 			return
 		}
 
-
-		if (data[field] !== args[0]) {
+		if (data[field] !== data[args[0]]) {
 			throw message
 		}
 	}
