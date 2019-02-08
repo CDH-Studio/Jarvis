@@ -42,7 +42,7 @@ Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking
 
 // Forgot password
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
-Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword');
+Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword').validator('resetPassword');
 Route.get('/newPassword', 'UserController.verifyHash');
 Route.post('/sendPasswordResetMail', 'UserController.sendPasswordResetMail').as('sendPasswordResetMail');
 
