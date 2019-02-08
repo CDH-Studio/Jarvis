@@ -12,7 +12,7 @@
                     {{ old('notification') }}
                 </div>
             @endif
-            <form action='/addRoom' method='POST'>
+            <form action='/addRoom' method='POST' enctype="multipart/form-data">
                 {{--  protects against cross site forgery  --}}
                 {{ csrfField() }} 
                 <div class='form-group has-danger'>
@@ -73,14 +73,14 @@
 
                 <div class='form-group'>
                     <label>Projector</label>
-                    <select class='form-control' id='projector'>
+                    <select class='form-control' name='projector' id='projector'>
                         <option>Yes</option>
                         <option>No</option>
                     </select>
                 </div>
                 <div class='form-group'>
                     <label>WhiteBoard</label>
-                    <select class='form-control' id='whiteboard'>
+                    <select class='form-control' name='whiteboard' id='whiteboard'>
                         <option>Yes</option>
                         <option>No</option>
                     </select>
@@ -114,17 +114,11 @@
                 </div>
                 <div class='form-group'>
                     <label>Floor Plan</label>
-                    <div class='custom-file input-group mb-3'>
-                        <input type='file' class='custom-file-input' id='floorPlan' />
-                        <label class='custom-file-label'>Choose file</label>
-                    </div>
+                    <input type='file' name='floorPlan'>
                 </div>
                 <div class='form-group'>
                     <label>Room Picture</label>
-                    <div class='custom-file input-group mb-3'>
-                        <input type='file' class='custom-file-input' id='roomPicture' />
-                        <label class='custom-file-label'>Choose file</label>
-                    </div>
+                    <input type='file' name='roomPicture'>
                 </div>
                 <button type='submit' class='btn btn-primary mb-3'>Add</button>
             </form>
