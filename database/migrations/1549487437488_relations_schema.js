@@ -15,7 +15,7 @@ class RelationsSchema extends Schema {
 
     this.create('room_equipment', (table) => {
       table.string('roomname', 20).notNullable()
-      table.int('id').notNullable()
+      table.integer('id').notNullable()
       table.primary('id', 'roomname')
       table.foreign('id').references('id').on('equipments').onDelete('cascade')
       table.foreign('roomname').references('name').on('rooms').onDelete('cascade')
