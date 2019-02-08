@@ -89,18 +89,19 @@ class UserController {
 
   async verifyHash({ request, view }) {
 	const hash = request._all.hash
-
-	const results = await PasswordReset
-		.query()
-		.where('hash', '=', hash)
-		.fetch();
-
-	console.log(hash)
-	if(results) {
+	if(hash) {
+		const results = await PasswordReset
+			.query()
+			.where('hash', '=', hash)
+			.fetch();
 		const rows = results.toJSON();
-		const email = rows[0].email; 
+		console.log(hash)
+		
+		if(rows.length != 0) {
+			const email = rows[0].email; 
 
-		return view.render('resetPassword', {email: email});
+			return view.render('resetPassword', {email: email});
+		}
 	}
   }
 
