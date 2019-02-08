@@ -4,16 +4,41 @@ const User = use('App/Models/User');
 const PasswordReset = use('App/Models/PasswordReset');
 const Mail = use('Mail');
 const Hash = use('Hash');
+const Env = use('Env');
+
+function random(times) {
+		
+	let result = '';
+
+	for (let i=0; i < times; i++) {
+		result += Math.random().toString(36).substring(2);
+	}
+
+	return result;
+};
 
 class UserController {
 	async create({ request, response, auth}) {
 		var userInfo=request.only(['username','email','password']);
-	  	console.log(userInfo)
-      	userInfo['role']=2;
-      	const user = await User.create(userInfo);
+		userInfo['role']=2;
 
-      	await auth.login(user);
-      	return response.redirect('/');
+		const confirmationRequired = Env.get('REGISTRATION_CONFIRMATION', false);
+
+		if(confirmationRequired) {
+			console.log(userInfo)
+
+			// await Mail.raw(body, (message) => {
+			// 	message
+			// 		.to(email)
+			// 		.from('support@mail.cdhstudio.ca')
+			// 		.subject('Password Reset Request')
+			// })
+			// console.log('mail sent')
+      		const user = await User.create(userInfo);
+
+      		await auth.login(user);
+			return response.redirect('/');
+		}
   	}
 
 	async createAdmin({ request, response, auth}) {
@@ -59,7 +84,7 @@ class UserController {
 		const rows = results.toJSON();
 
 		if(rows.length != 0) {
-			let hash = this.random(4);
+			let hash = random(4);
 
 			let row = { email: email,
 						hash: hash};
@@ -75,10 +100,10 @@ class UserController {
 			`
 
 			await Mail.raw(body, (message) => {
-			message
-				.to(email)
-				.from('support@mail.cdhstudio.ca')
-				.subject('Password Reset Request')
+				message
+					.to(email)
+					.from('support@mail.cdhstudio.ca')
+					.subject('Password Reset Request')
 			})
 			console.log('mail sent')
 		}
@@ -114,17 +139,6 @@ class UserController {
 
 		console.log(changedRow);
 		return response.redirect('/login');
-	}
-
-	random(times) {
-		
-		let result = '';
-
-		for (let i=0; i < times; i++) {
-			result += Math.random().toString(36).substring(2);
-		}
-
-		return result;
 	}
 }
 
