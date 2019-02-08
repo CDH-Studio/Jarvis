@@ -4,23 +4,18 @@
 @section('content')
 
 <div class="container">
-    <div class='row dash-header'>
-        <div class='col-10'>
-            <h3>Results</h3>
-        </div>
-        <div class='col-2 text-right'>
-            <h4 class='date' onload='startTime()'>{{date}}</h4>
-        </div>
+    {{--  Loading page header  --}}
+    @!component('components.pageHeader', title='Results')
+    {{--  where result cards will be displayed [TEMP DATA FOR DEMO PURPOSES]  --}}
+    <div class="d-flex align-content-stretch flex-wrap">
+        @!component('components.card', title='311A (E)', phoneNumber='613-960-6464', seats='12', maxCapacity='37', equipment='2 PCS, 2 Projectors, VOIP #343-291-2205')
+        @!component('components.card', title='353A (W)', phoneNumber='343-291-1409', seats='10', maxCapacity='25', equipment='2 PCS, LED Display')
+        @!component('components.card', title='398C (W)', phoneNumber='343-291-1593', seats='6', maxCapacity='7', equipment='PC, Smartboard')
+        @!component('components.card', title='398B (W)', phoneNumber='343-291-1592', seats='7', maxCapacity='9', equipment='PC, Projector, Smartboard')
+        @!component('components.card', title='399B (W)', phoneNumber='343-291-1592', seats='4', maxCapacity='6', equipment='PC, Microsoft Surface Hub')
+        @!component('components.card', title='3E Lobby', phoneNumber='343-291-1402', seats='12', maxCapacity='28', equipment='2 PCS, 2 Smartboards')
     </div>
-    <div class="card border-primary mb-3" style="max-width: 30rem;">
-        <div class="card-header">
-            <h5><b>331A (E)</b></h5>
-            <p>Phone: 613-960-6464</p>
-        </div>
-        <div class="card-body">
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-    </div>
+
 </div> 
 
 @endsection
