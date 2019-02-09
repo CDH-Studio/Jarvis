@@ -143,62 +143,95 @@ body {
 }
 
 /* Room card information */
-.card{
-    max-width: 538px;
-    width: 538px;
-    margin: 8px;
+.room-card{
+    width: 95%;
+    margin: 0px auto 40px auto;
+    display:block;
+    text-decoration: none;
+    color:#202428;
 }
 
-.card-header{
-    padding-top: 2px;
-    padding-bottom: 2px;
-    background-color: #3c5585;
-    min-height: 54px;
-    text-align: center;
-    vertical-align: center;
-    color: #ffffff;
+/* Room card information */
+.room-card:hover .room-card-body{
+    text-decoration: none;
+    background-color:#F8F8F8;
+}
+
+/* Room card information */
+.room-card:hover {
+    text-decoration: none;
+    color:#202428;
+}
+
+/* Room card information */
+.room-card:hover .room-card-title{
+    background-color: #001642;
+}
+
+
+
+.room-card hr{
+    margin: 15px 0 5px 0;
 }
 
 /* .card-body{
     padding
 } */
-.card-title{
+.room-card-title{
+    height: 50px;
+    background-color: #3c5585;
+    color: #ffffff;
     margin-top: 3px;
     margin-bottom: 0px;
+    vertical-align: center;
+    padding:0 15px;
+}
+.room-card-title h4{
+    line-height: 50px;
+    margin-top: 3px;
+    margin-bottom: 0px;
+    vertical-align: center;
 }
 
-.card-subtitle{
-    margin: 0px;    
-    margin-top: 1px;
+.room-card-body{
+    background-color: #fff;
+    padding:15px 15px;
 }
 
-.card-text{
-    margin-bottom: 2px;
-}
-.card-information{
-    padding-left: 15px;
-    padding-right: 15px;
-}
-.card-photo-container{
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(196, 196, 196);
-    padding: 0px;
-    margin-left: 8px; 
-    height: 120px;
-    width: 200px;
+.room-card-photo img{
+    width:100%;
 }
 
-.card-image{
-    background-size: cover;
-    height: 100vh;
+.room-card-info{
+    padding:0px;
 }
 
-.card-checkboxes{
-    padding-left: 0px;
-    padding-right: 0px;
+.room-card-info ul{
+    list-style: none;
+    margin:0px;
+    padding:0px;
 }
 
-.flex-fixed-width-item {
-    flex: 0 0 200px;
+.room-card-spec{
+    width:100%;
+    display:inline-block;
+    padding:10px 10px 0 10px;
+}
+
+.room-card-spec ul{
+    list-style: none;
+    margin:0px;
+    padding:0px;
+    display:inline;
+}
+
+.room-card-spec li{
+    display:inline-block;
+    width:110px;
+}
+.spec-yes{
+    color:#17BC9B;
+}
+.spec-no{
+    color:#ef8b80;
 }

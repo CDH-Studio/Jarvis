@@ -36,15 +36,14 @@ Route.on('/addRoom').render('adminDash/addRoomForm').as('addRoom');
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
 Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
 
-// Employee user pages
-Route.on('/booking').render('userPages/booking').as('booking');
-Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
-
 // Forgot password
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
 Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword').validator('resetPassword');
 Route.get('/newPassword', 'UserController.verifyHash');
 Route.post('/sendPasswordResetMail', 'UserController.sendPasswordResetMail').as('sendPasswordResetMail');
 
+// Employee user pages
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
 Route.on('/results').render('userPages/results').as('results');
+Route.on('/booking').render('userPages/booking').as('booking');
+Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
