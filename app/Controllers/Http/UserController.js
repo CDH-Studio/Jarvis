@@ -17,69 +17,97 @@ function random(times) {
 	return result;
 };
 
+/**
+ * 
+ * @param {string} subject  Subject of Email
+ * @param {string} body     Body of Email 
+ * @param {string} to       Sending address
+ * @param {string} from     Receiving address
+ */
+function sendMail(subject, body, to, from) {
+	Mail.raw(body, (message) => {
+		message
+			.to(to)
+			.from(from)
+			.subject(subject)
+	})
+	console.log('mail sent')
+};
+
 class UserController {
 	async create({ request, response, auth}) {
+		const confirmationRequired = Env.get('REGISTRATION_CONFIRMATION', false);
+
+		if(confirmationRequired) {
+			console.log('with')
+			return this.createWithVerifyingEmail({request, response});
+		} else {
+			console.log('without')
+			return this.createWithoutVerifyingEmail({request, response, auth});
+		}
+	}
+
+	async createWithoutVerifyingEmail({ request, response, auth}) {
+		var userInfo=request.only(['username','email','password']);
+		userInfo.role = 2;
+		userInfo.verified = true;
+		console.log(userInfo)
+      	const user = await User.create(userInfo);
+
+      	await auth.login(user);
+      	return response.redirect('/');
+  	}
+
+	async createWithVerifyingEmail({ request, response, auth}) {
 		var userInfo=request.only(['username','email','password']);
 		userInfo.role = 2;
 		userInfo.verified = false;
 
-		const confirmationRequired = Env.get('REGISTRATION_CONFIRMATION', false);
+		console.log(userInfo)
 
-		if(confirmationRequired) {
-			console.log(userInfo)
+		let hash = random(4);
 
-			let hash = random(4);
+		let row = { email: userInfo.email,
+					hash: hash,
+					type: 2};
+		await AccountRequest.create(row);
 
-			let row = { email: userInfo.email,
-						hash: hash,
-						type: 2};
-			console.log(row);
-			await AccountRequest.create(row);
+		let body = `
+		<h2> Welcome to Jarvis </h2>
+		<p>
+			Please click the following URL into your browser: 
+			http://localhost:3333/newUser?hash=${hash}
+		</p>
+		`
+		
+		await sendMail('Verify Email Address for Jarvis', 
+						body, userInfo.email, 'support@mail.cdhstudio.ca');
 
-			let body = `
-			<h2> Welcome to Jarvis </h2>
-			<p>
-				Please click the following URL into your browser: 
-				http://localhost:3333/newUser?hash=${hash}
-			</p>
-			`
-			
-			await Mail.raw(body, (message) => {
-				message
-					.to(userInfo.email)
-					.from('support@mail.cdhstudio.ca')
-					.subject('Verify Email Address for Jarvis')
-			})
-			console.log('mail sent')
-      		const user = await User.create(userInfo);
-      		//await auth.login(user);
-			return response.redirect('/login');
-		}
+		await User.create(userInfo);
+		return response.redirect('/login');
 	}
 	  
-	async verifyUser({ request, view }) {
+	async verifyEmail({ request, response}) {
 		const hash = request._all.hash
 
 		try {
-			const results = await AccountRequest
+			let results = await AccountRequest
 				.query()
 				.where('hash', '=', hash)
 				.fetch();
-			const rows = results.toJSON();
+			let rows = results.toJSON();
 			console.log(rows)
-			const row = rows[0];
-			const email = row.email;
+			const email = rows[0].email;
 
-			const changedRow = await User
+			await User
 				.query()
 				.where('email', email)
 				.update({ verified: true });
 			
-			console.log(changedRow)
+			return response.redirect('/');
 		} catch(err) {
 			console.log(err)
 		}
-	
 	}
 
 	async createAdmin({ request, response, auth}) {
@@ -94,8 +122,15 @@ class UserController {
 
 	async login({ request, auth, response, session }) {
 		const { email, password } = request.all();
+
+		const user = await User
+			.query()
+			.where('email', email)
+			.where('verified', true)
+			.first();
+	
 		try {
-			await auth.attempt(email, password);
+			await auth.attempt(user.email, password);
 			return response.redirect('/');
 		} catch (error) {
 			session.flash({loginError: 'These credentials do not work.'})
@@ -116,7 +151,7 @@ class UserController {
 		return auth.user
 	}
 
-	async sendPasswordResetMail ({ request, response }) {
+	async createPasswordResetRequest ({ request, response }) {
 		const email = request.body.email
 		const results = await User
 			.query()
@@ -140,14 +175,8 @@ class UserController {
 				http://localhost:3333/newPassword?hash=${hash}
 			</p>
 			`
-
-			await Mail.raw(body, (message) => {
-				message
-					.to(email)
-					.from('support@mail.cdhstudio.ca')
-					.subject('Password Reset Request')
-			})
-			console.log('mail sent')
+			await sendMail('Password Reset Request', 
+							body, email, 'support@mail.cdhstudio.ca');
 		}
 		
 		return response.redirect('/login');
