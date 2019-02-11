@@ -1,0 +1,21 @@
+@layout('layouts.mainLayout')
+
+{{--  Manage bookings page content  --}}
+@section('content')
+
+<div class="container">
+    {{--  Loading page header  --}}
+    @!component('components.pageHeader', title='311A (E)')
+    {{--  Actual page content  --}}
+    <div class='row'>
+        <div class="card border-primary mb-3" style="max-width: 20rem;">
+            <div class="card-header">Details</div>
+            <div class="card-body">
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+        </div>
+    </div>
+</div> 
+
+@endsection
+

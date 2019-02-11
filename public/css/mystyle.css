@@ -2,6 +2,12 @@ body {
     padding-top: 65px; 
     font-family: 'Lato', sans-serif;
 }
+/* General components */
+
+.wrapper-center {
+    text-align: center;
+}
+
 
 /* Navbar changes */
 .navbar-dark{
@@ -154,6 +160,7 @@ body {
     line-height: 1.5;
     border-radius: 0.3rem;
 }
+
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Room card information */
