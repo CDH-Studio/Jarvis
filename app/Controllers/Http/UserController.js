@@ -20,18 +20,27 @@ function random(times) {
 class UserController {
 	async create({ request, response, auth}) {
 		var userInfo=request.only(['username','email','password']);
-		userInfo['role']=2;
+		userInfo.role = 2;
+		userInfo.verified = false;
 
 		const confirmationRequired = Env.get('REGISTRATION_CONFIRMATION', false);
 
 		if(confirmationRequired) {
 			console.log(userInfo)
+
 			let hash = random(4);
+
+			let row = { email: userInfo.email,
+						hash: hash,
+						type: 2};
+			console.log(row);
+			await AccountRequest.create(row);
+
 			let body = `
 			<h2> Welcome to Jarvis </h2>
 			<p>
 				Please click the following URL into your browser: 
-				http://localhost:3333/newPassword?hash=${hash}
+				http://localhost:3333/newUser?hash=${hash}
 			</p>
 			`
 			
@@ -50,23 +59,27 @@ class UserController {
 	  
 	async verifyUser({ request, view }) {
 		const hash = request._all.hash
-		if(hash) {
+
+		try {
 			const results = await AccountRequest
 				.query()
 				.where('hash', '=', hash)
 				.fetch();
 			const rows = results.toJSON();
-			console.log(hash)
+			console.log(rows)
+			const row = rows[0];
+			const email = row.email;
 
-			if(rows.length !== 0 && rows[0].type === 2) {
-				let row = { email: rows[0].email,
-							username: row[0].username,
-							password: row[0].password, 
-							role: 2};
-				console.log(row);
-				await AccountRequest.create(row);
-			}
+			const changedRow = await User
+				.query()
+				.where('email', email)
+				.update({ verified: true });
+			
+			console.log(changedRow)
+		} catch(err) {
+			console.log(err)
 		}
+	
 	}
 
 	async createAdmin({ request, response, auth}) {
