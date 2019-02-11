@@ -6,25 +6,27 @@ const Schema = use('Schema')
 class UserSchema extends Schema {
 	up () {
 		this.create('users', (table) => {
-		table.increments()
-		table.string('username', 80).notNullable().unique()
-		table.string('email', 254).notNullable().unique()
-		table.string('password', 60).notNullable()
-		table.integer('role').notNullable()
-		table.timestamps()
+			table.increments()
+			table.string('username', 80).notNullable().unique()
+			table.string('email', 254).notNullable().unique()
+			table.string('password', 60).notNullable()
+			table.integer('role').notNullable()
+			table.bool('verified').notNullable()
+			table.timestamps()
 		})
 
-		this.create('password_reset_requests', (table) => {
-		table.increments()
-		table.string('email', 254).notNullable()
-		table.string('hash', 254).notNullable().unique()
-		table.timestamps()
+		this.create('account_requests', (table) => {
+			table.increments()
+			table.string('email', 254).notNullable()
+			table.string('hash', 254).notNullable().unique()
+			table.integer('type').notNullable()
+			table.timestamps()
 		})
 	}
 
 	down () {
 		this.drop('users')
-		this.drop('password_reset_requests')
+		this.drop('account_requests')
 	}
 }
 
