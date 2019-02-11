@@ -4,6 +4,8 @@ const User = use('App/Models/User');
 const PasswordReset = use('App/Models/PasswordReset');
 const Mail = use('Mail');
 const Hash = use('Hash');
+const view = use('View');
+
 
 class UserController {
 	async create({ request, response, auth}) {
@@ -42,12 +44,26 @@ class UserController {
 		return response.redirect('/');
 	}
 
+	async show ({ auth, params }) {
+    const user = await User.find(Number(params.id));
+    var canEdit=0;
+    //if user is admin
+    if (auth.user.role==1){
+      var layoutType='layouts/adminLayout';
+      canEdit=1;
+    //check if user is viewing their own profile
+    }else if(auth.user.id == Number(params.id) && auth.user.role==2){
+      var layoutType='layouts/mainLayout';
+      canEdit=1;
+    //check if user is viewing someone elses profile
+    }else if(auth.user.id != Number(params.id) && auth.user.role==2){
+      var layoutType='layouts/mainLayout';
+      canEdit=0;
+    }else{
+      return response.redirect('/');
+    }
 
-	show ({ auth, params }) {
-		if (auth.user.id !== Number(params.id)) {
-		return 'You cannot see someone else\'s profile'
-		}
-		return auth.user
+		return view.render('auth.showUser',{auth, user ,layoutType});
 	}
 
 	async sendPasswordResetMail ({ request, response }) {

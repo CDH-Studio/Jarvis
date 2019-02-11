@@ -24,6 +24,9 @@ Route.on('/sample').render('sample');
 Route.on('/register').render('auth.signup').as('register');
 Route.on('/login').render('auth.login').as('login');
 Route.post('/login', 'UserController.login').validator('LoginUser');
+Route.get('/user/:id', 'UserController.show').as('showUser');
+
+//Route.on('/user/:id', 'UserController.show').render('auth.showUser');
 
 // Admin Register page
 Route.on('/admin/register').render('auth.signupAdmin').as('registerAdmin');
