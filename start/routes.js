@@ -43,7 +43,8 @@ Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
 Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword').validator('resetPassword');
 Route.get('/newPassword', 'UserController.verifyHash');
-Route.post('/sendPasswordResetMail', 'UserController.sendPasswordResetMail').as('sendPasswordResetMail');
+Route.get('/newUser', 'UserController.verifyEmail');
+Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
 
 // Employee user pages
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
