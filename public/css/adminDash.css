@@ -10779,3 +10779,11 @@ body.sidebar-toggled footer.sticky-footer {
     width: calc(100% - 90px);
   }
 }
+
+
+/*****************************************************/
+/*mystyles*/
+/*****************************************************/
+.page-title{
+    padding:10px 0px;
+}

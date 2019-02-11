@@ -1,0 +1,27 @@
+    @layout(layoutType)
+
+    @section('content')
+
+    <div class='container'>
+        <div class='row'>
+            <div class= 'col-12'>
+            @!component('components.pageTitle', title='User Profile')
+            <p><b>Name:</b> {{user.username}}</p>
+            <p><b>Name:</b> {{user.email}}</p>
+                @if(old('notification'))
+                    <div class='alert alert-success'>
+                        {{ old('notification') }}
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div> 
+    @endsection
+
+
+
+
+
+
+
+

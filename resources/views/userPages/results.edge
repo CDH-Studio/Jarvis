@@ -1,0 +1,31 @@
+@layout('layouts.mainLayout')
+
+{{--  Manage bookings page content  --}}
+@section('content')
+
+<div class="container">
+    {{--  Loading page header  --}}
+    @!component('components.pageHeader', title='Results')
+    {{--  where result cards will be displayed [TEMP DATA FOR DEMO PURPOSES]  --}}
+    <div class="row">
+        <div class="col-lg-6">
+            @!component('components.card', title='311A (E)', phoneNumber='613-960-6464', seats='12', maxCapacity='37')
+        </div>
+        <div class="col-lg-6">
+            @!component('components.card', title='311A (E)', phoneNumber='613-960-6464', seats='12', maxCapacity='37')
+        </div>
+        <div class="col-lg-6">
+            @!component('components.card', title='311A (E)', phoneNumber='613-960-6464', seats='12', maxCapacity='37')
+        </div>
+        <div class="col-lg-6">
+            @!component('components.card', title='311A (E)', phoneNumber='613-960-6464', seats='12', maxCapacity='37')
+        </div>
+        <div class="col-lg-6">
+            @!component('components.card', title='311A (E)', phoneNumber='613-960-6464', seats='12', maxCapacity='37')
+        </div>
+    </div>
+
+</div> 
+
+@endsection
+
