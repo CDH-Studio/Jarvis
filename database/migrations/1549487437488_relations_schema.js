@@ -18,7 +18,7 @@ class RelationsSchema extends Schema {
       table.integer('id').notNullable()
       table.primary('id', 'roomname')
       table.foreign('id').references('id').on('equipments').onDelete('cascade')
-      table.foreign('roomname').references('name').on('rooms').onDelete('cascade')
+      table.foreign('roomname')  .references('name').on('rooms').onDelete('cascade')
     })
   }
 
