@@ -44,6 +44,7 @@ Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
 Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword').validator('resetPassword');
 Route.get('/newPassword', 'UserController.verifyHash');
+Route.get('/newUser', 'UserController.verifyUser');
 Route.post('/sendPasswordResetMail', 'UserController.sendPasswordResetMail').as('sendPasswordResetMail');
 
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
