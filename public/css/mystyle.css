@@ -173,7 +173,6 @@ body {
     color:#202428;
 }
 
-
 .room-card:hover .room-card-body{
     text-decoration: none;
     background-color:#F8F8F8;
@@ -256,4 +255,14 @@ body {
 
 .page-title{
     padding:40px 0px;
+}
+
+/* Room Details Page */
+
+.room-details-card{
+    width: 25%;
+}
+
+.room-details-image{
+    width:100%;
 }

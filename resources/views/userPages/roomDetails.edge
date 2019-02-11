@@ -1,5 +1,11 @@
 @layout('layouts.mainLayout')
 
+@component('components.generalModal', title='Map')
+    @slot('body')
+        sss
+    @endslot
+@endComponent
+
 {{--  Manage bookings page content  --}}
 @section('content')
 
@@ -8,10 +14,36 @@
     @!component('components.pageHeader', title='311A (E)')
     {{--  Actual page content  --}}
     <div class='row'>
-        <div class="card border-primary mb-3" style="max-width: 20rem;">
+        <div class="card room-details-card border-primary">
             <div class="card-header">Details</div>
             <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                <div class='wrapper-center mb-2'>
+                    <img class='room-details-image' src='/images/meeting.jpeg'>
+                    <a data-toggle='' style='display:block;'>View Map</a>
+                </div>
+                <div class='table-responsive'>
+                    <table class='table table-hover'>  
+                        <tbody> 
+                            <tr>
+                                <th scope='row'>Phone Number</th>
+                                <td>{{ phoneNumber }}</td>
+                            </tr>
+                            <tr>
+                                <th scope='row'>Table Seats</th>
+                                <td>{{ seats }}</td>
+                            </tr>
+                            <tr>
+                                <th scope='row'>Max Capacity</th>
+                                <td>{{ maxCapacity }}</td>
+                            </tr> 
+                            <tr>
+                                <th scope='row'>Equipment</th>
+                                <td>{{ equipment }}</td>
+                            </tr>             
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
     </div>
