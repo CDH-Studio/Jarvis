@@ -14,5 +14,23 @@ hooks.after.providersBooted(() => {
 		}
 	}
 
-	Validator.extend('same', sameFn)
+	const onlyFn = async (data, field, message, args) => {
+		if (!data[field]) {
+			return;
+		}
+
+		let count = 0;
+		for (let arg in args) {
+			if (data[field] !== arg) {
+				count++;
+				break;
+			}
+		}
+
+		if(count > 0)
+			throw message;
+	}
+
+	Validator.extend('same', sameFn);
+	Validator.extend('only', onlyFn)
 });
