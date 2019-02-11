@@ -1,11 +1,16 @@
 {{--  Room car component that takes: title, phoneNumber, seats, maxCapacity, equipment, standardEquipment[array] --}}
-<div class='card d.flex'>
+
+
+@!component('components.roomConfirmationModal', id='roomModal', title=title, phoneNumber=phoneNumber, seats=seats, maxCapacity=maxCapacity, equipment=equipment)
+
+<div class='card d.flex' data-toggle='modal' data-target='#roomModal'>
+    
     <div class="card-header">
         <h5 class='card-title'><b>{{ title }}</b></h5>
         <p class='card-subtitle'>Phone: {{ phoneNumber }}</p>
     </div>
     <div class='row card-body'>
-        <div href='../' class='card-photo-container'><img class='card-image' src='/sakjsdl'></div>
+        <div href='../' class='card-photo-container'><img class='card-image' src='/'></div>
         <div class='card-information flex-fixed-width-item'> 
             <p class='card-text'>Table Seats: {{ seats }}</p>
             <p class='card-text'>Max Capacity: {{ maxCapacity }} </p>
@@ -36,3 +41,4 @@
         </div>
     </div>
 </div>
+

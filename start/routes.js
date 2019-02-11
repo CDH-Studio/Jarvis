@@ -47,4 +47,7 @@ Route.get('/newPassword', 'UserController.verifyHash');
 Route.post('/sendPasswordResetMail', 'UserController.sendPasswordResetMail').as('sendPasswordResetMail');
 
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
+
+// Temporary routes ***** Need to change so that a userr cannot acess this through URL ****
 Route.on('/results').render('userPages/results').as('results');
+
