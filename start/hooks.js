@@ -19,15 +19,15 @@ hooks.after.providersBooted(() => {
 			return;
 		}
 
-		let count = 0;
+		let match = false;
 		for (let arg in args) {
-			if (data[field] !== arg) {
-				count++;
+			if (data[field] === arg) {
+				match = true;
 				break;
 			}
 		}
 
-		if(count > 0)
+		if(!match)
 			throw message;
 	}
 
