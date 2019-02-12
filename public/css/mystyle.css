@@ -204,3 +204,17 @@ body {
 .flex-fixed-width-item {
     flex: 0 0 200px;
 }
+
+/* Room confirmation modal */
+
+.confirmation-modal{
+    max-width: 450px;
+}
+.confirmation-modal-text{
+    margin: 0px;
+    padding-top: 18px !important;
+}
+
+.confirmation-modal-column{
+    padding:8px;
+}

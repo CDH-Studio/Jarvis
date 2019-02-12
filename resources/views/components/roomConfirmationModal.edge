@@ -1,5 +1,5 @@
 <div class='modal' id={{ id }}>
-    <div class='modal-dialog' role='document'>
+    <div class='modal-dialog confirmation-modal' role='document'>
         <div class='modal-content'>
             <div class='modal-header'>
                 <h5 class='modal-title'>{{ title }} </h5>
@@ -11,48 +11,43 @@
                 <div class='wrapper-center mb-2'>
                     <img class='card-image' src='/temp'>
                     <a href='/' style='display:block;'>View Map</a>
-                    <input type='text' class='form-control' id='example-text-input' style='text-align:center;' placeholder='Please enter booking name'/>
                 </div>
+
                 <div class='table-responsive'>
                     <table class='table table-hover'>  
-                        <tbody> 
+                        <tbody>
                             <tr>
-                                <th scope='row'>Date</th>
-                                <td>08-19-2019</td>
-                            </tr>
-                            <tr>
-                                <th scope='row'>Time</th>
-                                <td>11:00 AM - 12:00 PM</td>
-                            </tr>
-                            <tr>
-                                <th scope='row'>Phone Number</th>
-                                <td>{{ phoneNumber }}</td>
-                            </tr>
-                            <tr>
-                                <th scope='row'>Table Seats</th>
-                                <td>{{ seats }}</td>
-                            </tr>
-                            <tr>
-                                <th scope='row'>Max Capacity</th>
-                                <td>{{ maxCapacity }}</td>
+                                <th class='confirmation-modal-text' scope='row'>Meeting Name</th>
+                                <td class='confirmation-modal-column'><input type='text' class='form-control' id='example-text-input' placeholder='Please enter booking name'/></td>
                             </tr> 
                             <tr>
-                                <th scope='row'>Equipment</th>
-                                <td>{{ equipment }}</td>
-                            </tr>             
+                                <th class='confirmation-modal-text' scope='row'>Date</th>
+                                <td class='confirmation-modal-column'><input class='form-control' type='date' value='2019-08-19' id='example-date-input'></td>
+                            </tr>
+                            <tr>
+                                <th class='confirmation-modal-text' scope='row'>From</th>
+                                <td class='confirmation-modal-column'><input class='form-control' type='time' value='13:45:00' id='example-time-input'></td>
+                            </tr>
+                            <tr>
+                                <th class='confirmation-modal-text' scope='row'>To</th>
+                                <td class='confirmation-modal-column'><input class='form-control' type='time' value='14:45:00' id='example-time-input'></td>
+                            </tr>
+                            <tr>
+                                <th class='confirmation-modal-text' scope='row'>Reccuring</th>
+                                <td class='confirmation-modal-column'>
+                                    <select class='form-control' id='exampleSelect'>
+                                        <option>No</option>
+                                        <option>Yes</option>
+                                    </select>
+                                </td>
+                            </tr> 
                         </tbody>
                     </table>
                 </div>
                 <div class='wrapper-center mb-2'>
-                    <div class='form-check'>
-                        <div class="custom-control custom-checkbox" style='padding-left:0px; margin-bottom:4px;'>
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
-                            <label class="custom-control-label" for="customCheck1">Recurring?</label>
-                        </div>
-                    </div>
                     <div class='row'>
-                        <div class='col-6 ' style='padding-right:4px;'>
-                            <select class="form-control" id="exampleSelect">
+                        <div class='col-6' style='padding-left:26px; padding-right:4px;'>
+                            <select class='form-control' id='exampleSelect'>
                                 <option>Daily</option>
                                 <option>Weekly</option>
                                 <option>Bi-Weekly</option>
@@ -60,8 +55,8 @@
                                 <option>Yearly</option>
                             </select>
                         </div>
-                        <div class='col-6' style='padding-left:4px;'>
-                            <select class="form-control" id="exampleSelect" style='padding-left:0px;'>
+                        <div class='col-6' style='padding-left:4px; padding-right:26px;'>
+                            <select class='form-control' id='exampleSelect'>
                                 <option>2 Times</option>
                                 <option>3 Times</option>
                                 <option>4 Times</option>
@@ -69,7 +64,6 @@
                             </select>  
                         </div>                        
                     </div>
-
                 </div>
             </div>
             <div class='modal-footer'>
