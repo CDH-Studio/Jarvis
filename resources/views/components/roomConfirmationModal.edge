@@ -1,41 +1,48 @@
-<div class='modal' id={{ id }}>
+{{--  Room confirmation component that takes: title, date, from, to --}}
+<div class='modal' id='roomModal'>
     <div class='modal-dialog confirmation-modal' role='document'>
         <div class='modal-content'>
-            <div class='modal-header'>
+            {{--  Header content  --}}
+            <div class='modal-header' style='padding-top:5px; padding-bottom:5px;'>
                 <h5 class='modal-title'>{{ title }} </h5>
                 <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
                     <span aria-hidden='true'>&times;</span>
                 </button>
             </div>
+            {{--  Body content  --}}
             <div class='modal-body'>
-                <div class='wrapper-center mb-2'>
-                    <img class='card-image' src='/temp'>
-                    <a href='/' style='display:block;'>View Map</a>
+                {{--  Displaying room image and a link to full room details  --}}
+                <div class='wrapper-center mb-2' style='height: auto;'>
+                    <img class='confirmation-image' src='/images/meeting.jpeg'>
+                    <a href='/details' target='_blank' style='display:block;'>
+                        <i class='fas fa-external-link-alt'  ></i>
+                        View More Information
+                    </a>
                 </div>
-
+                {{--  Table that displays booking information  --}}
                 <div class='table-responsive'>
                     <table class='table table-hover'>  
                         <tbody>
                             <tr>
                                 <th class='confirmation-modal-text' scope='row'>Meeting Name</th>
-                                <td class='confirmation-modal-column'><input type='text' class='form-control' id='example-text-input' placeholder='Please enter booking name'/></td>
+                                <td class='confirmation-modal-column'><input type='text' class='form-control confirmation-form' id='example-text-input' placeholder='Please enter booking name'/></td>
                             </tr> 
                             <tr>
                                 <th class='confirmation-modal-text' scope='row'>Date</th>
-                                <td class='confirmation-modal-column'><input class='form-control' type='date' value='2019-08-19' id='example-date-input'></td>
+                                <td class='confirmation-modal-column'><input class='form-control confirmation-form' type='date' value='2019-08-19' id='example-date-input'></td>
                             </tr>
                             <tr>
                                 <th class='confirmation-modal-text' scope='row'>From</th>
-                                <td class='confirmation-modal-column'><input class='form-control' type='time' value='13:45:00' id='example-time-input'></td>
+                                <td class='confirmation-modal-column'><input class='form-control confirmation-form' type='time' value='13:45:00' id='example-time-input'></td>
                             </tr>
                             <tr>
                                 <th class='confirmation-modal-text' scope='row'>To</th>
-                                <td class='confirmation-modal-column'><input class='form-control' type='time' value='14:45:00' id='example-time-input'></td>
+                                <td class='confirmation-modal-column'><input class='form-control confirmation-form' type='time' value='14:45:00' id='example-time-input'></td>
                             </tr>
                             <tr>
-                                <th class='confirmation-modal-text' scope='row'>Reccuring</th>
+                                <th class='confirmation-modal-text confirmation-form' scope='row'>Reccuring</th>
                                 <td class='confirmation-modal-column'>
-                                    <select class='form-control' id='exampleSelect'>
+                                    <select class='form-control' id='reccuringSelect' name='reccuringSelect'>
                                         <option>No</option>
                                         <option>Yes</option>
                                     </select>
@@ -44,10 +51,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class='wrapper-center mb-2'>
+            
+                {{--  Recurring options ##### should be in if statement if recurring is changed to 'Yes'  --}}
+                <div class='wrapper-center'>
                     <div class='row'>
                         <div class='col-6' style='padding-left:26px; padding-right:4px;'>
-                            <select class='form-control' id='exampleSelect'>
+                            <select class='form-control confirmation-form' id='exampleSelect'>
                                 <option>Daily</option>
                                 <option>Weekly</option>
                                 <option>Bi-Weekly</option>
@@ -56,7 +65,7 @@
                             </select>
                         </div>
                         <div class='col-6' style='padding-left:4px; padding-right:26px;'>
-                            <select class='form-control' id='exampleSelect'>
+                            <select class='form-control confirmation-form' id='exampleSelect'>
                                 <option>2 Times</option>
                                 <option>3 Times</option>
                                 <option>4 Times</option>
@@ -65,7 +74,12 @@
                         </div>                        
                     </div>
                 </div>
+                {{--  #### This doesn't work, need a fix  --}}
+                    @if(('reccuringSelect')=='Yes')
+                    Does Not work
+                @endif
             </div>
+            {{--  Footer buttons to cancel and book room  --}}
             <div class='modal-footer'>
                 <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
                 <button type='button' class='btn btn-primary'  data-dismiss='modal' data-toggle='modal' data-target='#successModal'>Book Room</button>
@@ -95,20 +109,20 @@
 </div>
 {{--  Modal for UNsuccessful room booking  --}}
 <div class='modal' id='failureModal'>
-        <div class='modal-dialog' role='document'>
-            <div class='modal-content'>
-                <div class='modal-header'>
-                    <h5 class='modal-title'>Unsuccessful!</h5>
-                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
-                        <span aria-hidden='true'>&times;</span>
-                    </button>
-                </div>
-                <div class='modal-body'>
-                    <p>Unable to book room. Perhaps the room has already been booked, please try again</p>
-                </div>
-                <div class='modal-footer'>
-                    <button type='button' class='btn btn-primary'  data-toggle='modal' data-dismiss='modal'>New Search</button>
-                </div>
+    <div class='modal-dialog' role='document'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Unsuccessful!</h5>
+                <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
+                    <span aria-hidden='true'>&times;</span>
+                </button>
+            </div>
+            <div class='modal-body'>
+                <p>Unable to book room. Perhaps the room has already been booked, please try again</p>
+            </div>
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-primary'  data-toggle='modal' data-dismiss='modal'>New Search</button>
             </div>
         </div>
     </div>
+</div>
