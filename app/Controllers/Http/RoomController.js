@@ -7,7 +7,7 @@ class RoomController {
 	async addRoom({ request, response, session }) {
 		try {
 			// Retrieves user input
-			const body = request.post();
+			const body = request.all();
 
 			// Populates the room object's values 
 			const room = new Room();
@@ -16,20 +16,21 @@ class RoomController {
 			room.telephone = body.telephoneNumber;
 			room.seats = body.tableSeats;
 			room.capacity = body.maximumCapacity;
-			room.projector = body.projector;
-			room.whiteboard = body.whiteboard;
+			room.projector = body.projectorCheck;
+			room.whiteboard = body.whiteboardCheck;
+			room.flipchart = body.flipChartCheck;
+			room.audioConference = body.audioCheck;
+			room.videoConference = body.videoCheck;
 
 			// Upload process - Floor Plan
 			const floorPlanImage = request.file('floorPlan', {
 				types: ['image'],
 				size: '2mb'
 			});
-
 			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
 				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME 
-				name: 'testFloorPlan.png',
+				name: `${room.name}_floorPlan.png`,
 			});
-
 			if (!floorPlanImage.moved()) {
 				return profilePic.error().message;
 			}
@@ -39,14 +40,18 @@ class RoomController {
 				types: ['image'],
 				size: '2mb'
 			});
-
 			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-				name: 'testRoomImage.png',
+				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME 
+				name: `${room.name}_roomPicture.png`,
 			});
-
 			if (!roomImage.moved()) {
 				return profilePic.error().message;
 			}
+
+			room.floorplan = `uploads/floorPlans/${room.name}.png`;
+			room.picture = `uploads/roomPictures/${room.name}.png`;
+			room.extraEquipment = body.extraEquipment;
+			room.comment = body.comment;
 
 			await room.save();
 
