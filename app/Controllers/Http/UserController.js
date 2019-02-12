@@ -5,17 +5,16 @@ const AccountRequest = use('App/Models/AccountRequest');
 const Mail = use('Mail');
 const Hash = use('Hash');
 const Env = use('Env');
-const view = use('View');
 
 function random(times) {
-		
-	let result = '';
+    
+  let result = '';
 
-	for (let i=0; i < times; i++) {
-		result += Math.random().toString(36).substring(2);
-	}
+  for (let i=0; i < times; i++) {
+    result += Math.random().toString(36).substring(2);
+  }
 
-	return result;
+  return result;
 };
 
 /**
@@ -26,120 +25,120 @@ function random(times) {
  * @param {string} from     Receiving address
  */
 function sendMail(subject, body, to, from) {
-	Mail.raw(body, (message) => {
-		message
-			.to(to)
-			.from(from)
-			.subject(subject)
-	})
-	console.log('mail sent')
+  Mail.raw(body, (message) => {
+    message
+      .to(to)
+      .from(from)
+      .subject(subject)
+  })
+  console.log('mail sent')
 };
 
 class UserController {
-	async create({ request, response, auth}) {
-		const confirmationRequired = Env.get('REGISTRATION_CONFIRMATION', false);
+  async create({ request, response, auth}) {
+    const confirmationRequired = Env.get('REGISTRATION_CONFIRMATION', false);
 
-		if(confirmationRequired) {
-			return this.createWithVerifyingEmail({request, response});
-		} else {
-			return this.createWithoutVerifyingEmail({request, response, auth});
-		}
-	}
+    if(confirmationRequired) {
+      return this.createWithVerifyingEmail({request, response});
+    } else {
+      return this.createWithoutVerifyingEmail({request, response, auth});
+    }
+  }
 
-	async createWithoutVerifyingEmail({ request, response, auth}) {
-		var userInfo=request.only(['firstname','lastname','email','password','tower','floor']);
-		userInfo.role = 2;
-		userInfo.verified = true;
-      	const user = await User.create(userInfo);
+  async createWithoutVerifyingEmail({ request, response, auth}) {
+    var userInfo=request.only(['firstname','lastname','email','password','tower','floor']);
+    userInfo.role = 2;
+    userInfo.verified = true;
+        const user = await User.create(userInfo);
 
-      	await auth.login(user);
-      	return response.redirect('/');
-  	}
+        await auth.login(user);
+        return response.redirect('/');
+    }
 
-	async createWithVerifyingEmail({ request, response, auth}) {
-		var userInfo=request.only(['firstname','lastname','email','password','tower','floor']);
-		userInfo.role = 2;
-		userInfo.verified = false;
+  async createWithVerifyingEmail({ request, response, auth}) {
+    var userInfo=request.only(['firstname','lastname','email','password','tower','floor']);
+    userInfo.role = 2;
+    userInfo.verified = false;
 
-		let hash = random(4);
+    let hash = random(4);
 
-		let row = { email: userInfo.email,
-					hash: hash,
-					type: 2};
-		await AccountRequest.create(row);
+    let row = { email: userInfo.email,
+          hash: hash,
+          type: 2};
+    await AccountRequest.create(row);
 
-		let body = `
-		<h2> Welcome to Jarvis </h2>
-		<p>
-			Please click the following URL into your browser: 
-			http://localhost:3333/newUser?hash=${hash}
-		</p>
-		`
-		
-		await sendMail('Verify Email Address for Jarvis', 
-						body, userInfo.email, 'support@mail.cdhstudio.ca');
+    let body = `
+    <h2> Welcome to Jarvis </h2>
+    <p>
+      Please click the following URL into your browser: 
+      http://localhost:3333/newUser?hash=${hash}
+    </p>
+    `
+    
+    await sendMail('Verify Email Address for Jarvis', 
+            body, userInfo.email, 'support@mail.cdhstudio.ca');
 
-		await User.create(userInfo);
-		return response.redirect('/login');
-	}
-	  
-	async verifyEmail({ request, response}) {
-		const hash = request._all.hash
+    await User.create(userInfo);
+    return response.redirect('/login');
+  }
+    
+  async verifyEmail({ request, response}) {
+    const hash = request._all.hash
 
-		try {
-			let results = await AccountRequest
-				.query()
-				.where('hash', '=', hash)
-				.fetch();
-			let rows = results.toJSON();
-			console.log(rows)
-			const email = rows[0].email;
+    try {
+      let results = await AccountRequest
+        .query()
+        .where('hash', '=', hash)
+        .fetch();
+      let rows = results.toJSON();
+      console.log(rows)
+      const email = rows[0].email;
 
-			await User
-				.query()
-				.where('email', email)
-				.update({ verified: true });
-			
-			return response.redirect('/');
-		} catch(err) {
-			console.log(err)
-		}
-	}
+      await User
+        .query()
+        .where('email', email)
+        .update({ verified: true });
+      
+      return response.redirect('/');
+    } catch(err) {
+      console.log(err)
+    }
+  }
 
-	async createAdmin({ request, response, auth}) {
-		var adminInfo=request.only(['firstname','lastname','email','password']);
-		adminInfo['role']=1;
+  async createAdmin({ request, response, auth}) {
+    var adminInfo=request.only(['firstname','lastname','email','password']);
+    adminInfo['role']=1;
     adminInfo['verified']=1;
-		const user = await User.create(adminInfo);
+    const user = await User.create(adminInfo);
 
-		await auth.login(user);
-		return response.redirect('/');
-	}
+    await auth.login(user);
+    return response.redirect('/');
+  }
 
-	async login({ request, auth, response, session }) {
-		const { email, password } = request.all();
+  async login({ request, auth, response, session }) {
+    const { email, password } = request.all();
 
-		const user = await User
-			.query()
-			.where('email', email)
-			.where('verified', true)
-			.first();
-	
-		try {
-			await auth.attempt(user.email, password);
-			return response.redirect('/');
-		} catch (error) {
-			session.flash({loginError: 'These credentials do not work.'})
-			return response.redirect('/login');
-		}
-	}
+    const user = await User
+      .query()
+      .where('email', email)
+      .where('verified', true)
+      .first();
+  
+    try {
+      await auth.attempt(user.email, password);
+      return response.redirect('/');
+    } catch (error) {
+      session.flash({loginError: 'These credentials do not work.'})
+      return response.redirect('/login');
+    }
+  }
 
-	async logout({ auth, response }){
-		await auth.logout();
-		return response.redirect('/');
-	}
+  async logout({ auth, response }){
+    await auth.logout();
+    return response.redirect('/');
+  }
 
-	async show ({ auth, params }) {
+  async show ({ auth, params, view }) {
     const user = await User.find(Number(params.id));
     var canEdit=0;
     //if user is admin
@@ -158,86 +157,112 @@ class UserController {
       return response.redirect('/');
     }
 
-		return view.render('auth.showUser',{auth, user ,layoutType});
-	}
+    return view.render('auth.showUser',{auth, user ,layoutType,canEdit});
+  }
 
-	async createPasswordResetRequest ({ request, response }) {
-		const email = request.body.email
-		const results = await User
-			.query()
-			.where('email', '=', email)
-			.fetch();
-		const rows = results.toJSON();
+  async createPasswordResetRequest ({ request, response }) {
+    const email = request.body.email
+    const results = await User
+      .query()
+      .where('email', '=', email)
+      .fetch();
+    const rows = results.toJSON();
 
-		if(rows.length != 0) {
-			let hash = random(4);
+    if(rows.length != 0) {
+      let hash = random(4);
 
-			let row = { email: email,
-						hash: hash,
-						type: 1};
-			console.log(row);
-			await AccountRequest.create(row);
+      let row = { email: email,
+            hash: hash,
+            type: 1};
+      console.log(row);
+      await AccountRequest.create(row);
 
-			let body = `
-			<h2> Password Reset Request </h2>
-			<p>
-				We received a request to reset your password. If you asked to reset your password, please click the following URL: 
-				http://localhost:3333/newPassword?hash=${hash}
-			</p>
-			`
-			await sendMail('Password Reset Request', 
-							body, email, 'support@mail.cdhstudio.ca');
-		}
-		
-		return response.redirect('/login');
-	}
+      let body = `
+      <h2> Password Reset Request </h2>
+      <p>
+        We received a request to reset your password. If you asked to reset your password, please click the following URL: 
+        http://localhost:3333/newPassword?hash=${hash}
+      </p>
+      `
+      await sendMail('Password Reset Request', 
+              body, email, 'support@mail.cdhstudio.ca');
+    }
+    
+    return response.redirect('/login');
+  }
 
-	async verifyHash({ request, view }) {
-		const hash = request._all.hash
-		if(hash) {
-			const results = await AccountRequest
-				.query()
-				.where('hash', '=', hash)
-				.fetch();
-			const rows = results.toJSON();
-			console.log(hash)
+  async verifyHash({ request, view }) {
+    const hash = request._all.hash
+    if(hash) {
+      const results = await AccountRequest
+        .query()
+        .where('hash', '=', hash)
+        .fetch();
+      const rows = results.toJSON();
+      console.log(hash)
 
-			if(rows.length !== 0 && rows[0].type === 1) {
-				const email = rows[0].email; 
+      if(rows.length !== 0 && rows[0].type === 1) {
+        const email = rows[0].email; 
 
-				return view.render('resetPassword', {email: email});
-			}
-		}
-	}
+        return view.render('resetPassword', {email: email});
+      }
+    }
+  }
 
-	async resetPassword({ request, response }) {
-		console.log(request.body)
-		const newPassword = await Hash.make(request.body.password);
-		const changedRow = await User
-			.query()
-			.where('email', request.body.email)
-			.update({ password: newPassword });
+  async resetPassword({ request, response }) {
+    const newPassword = await Hash.make(request.body.password);
+    const changedRow = await User
+      .query()
+      .where('email', request.body.email)
+      .update({ password: newPassword });
 
-		console.log(changedRow);
-		return response.redirect('/login');
-	}
+    console.log(changedRow);
+    return response.redirect('/login');
+  }
 
-	async changePassword({ request, response, auth }) {
-		const passwords = request.only(['oldPassword', 'newPassword']);
-		const user = auth.user;
-		const isSame = await Hash.verify(passwords.oldPassword, user.password);
+  async changePassword({ request, response, auth, params, session}) {
+    if (auth.user.role==1 || (auth.user.id == Number(params.id) && auth.user.role==2)){
 
-		if(isSame) {	
-			const newPassword = await Hash.make(passwords.newPassword);
-			const changedRow = await User
-			.query()
-			.where('email', user.email)
-			.update({ password: newPassword });
-			console.log(changedRow);
-			
-			return response.redirect('/');
-		}
-	}
+ 
+
+      try {
+        const passwords = request.only(['newPassword']);
+        const user = auth.user;
+        const newPassword = await Hash.make(passwords.newPassword);
+
+        const changedRow = await User
+        .query()
+        .where('id', Number(params.id))
+        .update({ password: newPassword });
+        session.flash({success: 'Password Updated Successfully'})
+      
+    } catch (error) {
+      session.flash({error: 'Password Update failed'})
+      return response.redirect('/login');
+    }
+
+      return response.route('viewProfile',{id: Number(params.id)});
+      //check if user is viewing their own profile
+
+    }else{
+      return response.redirect('/');
+    }
+
+
+
+
+
+    if(isSame) {  
+      const newPassword = await Hash.make(passwords.newPassword);
+      const changedRow = await User
+      .query()
+      .where('email', user.email)
+      .update({ password: newPassword });
+      console.log(changedRow);
+      
+      return response.redirect('/');
+    }
+  }
 }
 
 module.exports = UserController

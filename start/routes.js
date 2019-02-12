@@ -24,7 +24,9 @@ Route.on('/sample').render('sample');
 Route.on('/register').render('auth.signup').as('register');
 Route.on('/login').render('auth.login').as('login');
 Route.post('/login', 'UserController.login').validator('LoginUser');
-Route.get('/user/:id', 'UserController.show').as('showUser');
+Route.get('/user/:id', 'UserController.show').as('viewProfile');
+Route.get('/user/:id/edit', 'UserController.edit');
+Route.post('/user/:id/updatepassword', 'UserController.changePassword').as('changePassword');
 
 //Route.on('/user/:id', 'UserController.show').render('auth.showUser');
 
