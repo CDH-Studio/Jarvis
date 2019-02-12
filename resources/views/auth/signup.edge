@@ -24,43 +24,58 @@ Jarvis - Login
 				<div class='form-group mb-2'>
 					<label for='firstname'>First Name</label>
 					<input type='text' class='form-control' name='firstname' id='firstname' placeholder='John'>
+					@if(hasErrorFor('firstname'))
+						<span>
+							{{ getErrorFor('firstname') }}
+						</span>
+					@endif
 				</div>
-				@if(hasErrorFor('firstname'))
-					<span>
-						{{ getErrorFor('firstname') }}
-					</span>
-				@endif
+				
 
 				<div class='form-group mb-2'>
 					<label for='lastname'>Last Name</label>
 					<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe'>
+					@if(hasErrorFor('lastname'))
+						<span>
+							{{ getErrorFor('lastname') }}
+						</span>
+					@endif
 				</div>
-				@if(hasErrorFor('lastname'))
-					<span>
-						{{ getErrorFor('lastname') }}
-					</span>
-				@endif
+
 
 
 				<div class='form-group mb-2'>
 					<label for='email'>Email address</label>
 					<input type='email' class='form-control' name='email' id='email' placeholder='Enter email'>
+					@if(hasErrorFor('email'))
+						<span>
+							{{ getErrorFor('email') }}
+						</span>
+					@endif
 				</div>
-				@if(hasErrorFor('email'))
-				<span>
-					{{ getErrorFor('email') }}
-				</span>
-				@endif
+				
 
 				<div class='form-group mb-2'>
 					<label for='password'>Password</label>
 					<input type='password' class='form-control' name='password' id='password' placeholder='Password'>
+					@if(hasErrorFor('password'))
+						<span>
+							{{ getErrorFor('password') }}
+						</span>
+					@endif
 				</div>
-				@if(hasErrorFor('password'))
-					<span>
-						{{ getErrorFor('password') }}
-					</span>
-				@endif
+				
+
+				<div class='form-group mb-2'>
+	              <label for='confirmPassword'>Confirm Password</label>
+	              <input type='password' class='form-control' name='confirmPassword' id='confirmPassword' placeholder='Password'>
+	                @if(hasErrorFor('confirmPassword'))
+		              <span>
+		                {{ getErrorFor('confirmPassword') }}
+		              </span>
+	            	@endif
+	            </div>
+
 
 				<div class="form-row">
                     <div class="col">

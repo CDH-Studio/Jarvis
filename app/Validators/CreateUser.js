@@ -7,6 +7,7 @@ class CreateUser {
       'lastname': 'required',
       'email': 'required|unique:users',
       'password': 'required',
+      'confirmPassword': 'required|same:password',
       'tower': 'required',
       'floor': 'required'
     }
@@ -15,7 +16,8 @@ class CreateUser {
   get messages() {
     return {
       'required': 'Woah now, {{ field }} is required.',
-      'unique': 'Wait a second, this {{ field }} already exists'
+      'unique': 'Wait a second, this {{ field }} already exists',
+      'same': 'Passwords did not match'
     }
   }
 
