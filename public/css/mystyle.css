@@ -258,9 +258,21 @@ body {
 }
 
 /* Room Details Page */
+.room-details-spec{
+    text-align:center; 
+    padding-top:0px;
+}
 
-.room-details-card{
-    width: 25%;
+.room-details-spec li{
+    display:inline-block;
+    padding-left:10px;
+    padding-right:10px;
+}
+
+.room-details-spec ul{
+    text-align:center; 
+    padding-left:0px;
+    margin:0px;
 }
 
 .room-details-image{
