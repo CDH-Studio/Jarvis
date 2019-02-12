@@ -55,3 +55,6 @@ Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
 Route.on('/results').render('userPages/results').as('results');
 Route.on('/booking').render('userPages/booking').as('booking');
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
+
+// Temp routing for user pages
+Route.on('/details').render('userPages/roomDetails').as('roomDetails');

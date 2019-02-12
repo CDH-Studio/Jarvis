@@ -2,6 +2,12 @@ body {
     padding-top: 65px; 
     font-family: 'Lato', sans-serif;
 }
+/* General components */
+
+.wrapper-center {
+    text-align: center;
+}
+
 
 /* Navbar changes */
 .navbar-dark{
@@ -155,6 +161,7 @@ body {
     border-radius: 0.3rem;
 }
 
+
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Room card information */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -165,7 +172,6 @@ body {
     text-decoration: none;
     color:#202428;
 }
-
 
 .room-card:hover .room-card-body{
     text-decoration: none;
@@ -248,5 +254,29 @@ body {
 }
 
 .page-title{
-    padding:20px 0px;
+    padding:40px 0px;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Room Details Page */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+.room-details-spec{
+    text-align:center; 
+    padding-top:0px;
+}
+
+.room-details-spec li{
+    display:inline-block;
+    padding-left:10px;
+    padding-right:10px;
+}
+
+.room-details-spec ul{
+    text-align:center; 
+    padding-left:0px;
+    margin:0px;
+}
+
+.room-details-image{
+    width:100%;
 }
