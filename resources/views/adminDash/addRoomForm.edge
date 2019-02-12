@@ -12,7 +12,7 @@
                     {{ old('notification') }}
                 </div>
             @endif
-            <form action='/addRoom' method='POST' enctype="multipart/form-data">
+            <form action='/addRoom' method='POST' enctype='multipart/form-data'>
                 {{--  protects against cross site forgery  --}}
                 {{ csrfField() }} 
                 <div class='form-group has-danger'>
@@ -74,36 +74,36 @@
                 <div class='form-group'>
                     <label>Equipment</label>
 
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" name='projectorCheck' class="custom-control-input" id="projectorCheck" value='1'/>
-                        <label class="custom-control-label" for="projectorCheck">Projector</label>
+                    <div class='custom-control custom-checkbox'>
+                        <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value='1'/>
+                        <label class='custom-control-label' for='projectorCheck'>Projector</label>
                     </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" name='whiteboardCheck' class="custom-control-input" id="whiteboardCheck" value='1'/>
-                        <label class="custom-control-label" for="whiteboardCheck">Whiteboard</label>
+                    <div class='custom-control custom-checkbox'>
+                        <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1'/>
+                        <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
                     </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" name='flipChartCheck' class="custom-control-input" id="flipChartCheck" value='1'/>
-                        <label class="custom-control-label" for="flipChartCheck">Flip Chart</label>
+                    <div class='custom-control custom-checkbox'>
+                        <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1'/>
+                        <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
                     </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" name='audioCheck' class="custom-control-input" id="audioCheck" value='1'/>
-                        <label class="custom-control-label" for="audioCheck">Audio Conferencing</label>
+                    <div class='custom-control custom-checkbox'>
+                        <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1'/>
+                        <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
                     </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" name='videoCheck' class="custom-control-input" id="videoCheck" value='1'/>
-                        <label class="custom-control-label" for="videoCheck">Video Conferencing</label>
+                    <div class='custom-control custom-checkbox'>
+                        <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1'/>
+                        <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="extraEquipment">Extra Equipment</label>
-                    <textarea class="form-control" name='extraEquipment' id="extraEquipment" rows="3"></textarea>
+                <div class='form-group'>
+                    <label for='extraEquipment'>Extra Equipment</label>
+                    <textarea class='form-control' name='extraEquipment' id='extraEquipment' rows='3'></textarea>
                 </div>
 
-                <div class="form-group">
-                    <label for="extraEquipment">Comments</label>
-                    <textarea class="form-control" name='comment' id="comment" rows="5"></textarea>
+                <div class='form-group'>
+                    <label for='extraEquipment'>Comments</label>
+                    <textarea class='form-control' name='comment' id='comment' rows='5'></textarea>
                 </div>
 
                 <div class='form-group'>
