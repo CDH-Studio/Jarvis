@@ -1,44 +1,34 @@
 {{--  Room car component that takes: title, phoneNumber, seats, maxCapacity, equipment, standardEquipment[array] --}}
-
-
-@!component('components.roomConfirmationModal', id='roomModal', title=title, phoneNumber=phoneNumber, seats=seats, maxCapacity=maxCapacity, equipment=equipment)
-
-<div class='card d.flex' data-toggle='modal' data-target='#roomModal'>
-    
-    <div class="card-header">
-        <h5 class='card-title'><b>{{ title }}</b></h5>
-        <p class='card-subtitle'>Phone: {{ phoneNumber }}</p>
-    </div>
-    <div class='row card-body'>
-        <div href='../' class='card-photo-container'><img class='card-image' src='/'></div>
-        <div class='card-information flex-fixed-width-item'> 
-            <p class='card-text'>Table Seats: {{ seats }}</p>
-            <p class='card-text'>Max Capacity: {{ maxCapacity }} </p>
-            <p class='card-text'><u>Equipment:</u></p>
-            <p class='card-text'>{{ equipment }}</p>
+<a class="room-card" href="#">
+        <div class="room-card-title">
+            <h4>{{ title }}</h4>
         </div>
-        <div class='card-checkboxes flex-fill'>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
-                <label class="custom-control-label" for="customCheck2">Projector</label>
+        <div class="room-card-body shadow">
+            <div class="row">
+                <div href="../" class="room-card-photo col-5">
+                    <img src="/images/meeting.jpeg">
+                </div>
+                <div class="room-card-info col-7">
+                    <ul> 
+                        <li><b>Floor:</b><span> 3</span></li>
+                        <li><b>Seats:</b><span> {{ seats }}</span></li>
+                        <li><b>Max Capacity:</b><span> {{ maxCapacity }}</span></li>
+                        <br>
+                        <li><i class="fas fa-phone"></i> {{ phoneNumber }}</li>
+                    </ul>
+                </div>
             </div>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck2" disabled="">
-                <label class="custom-control-label" for="customCheck2">Whiteboard</label>
-            </div>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck2" disabled="">
-                <label class="custom-control-label" for="customCheck2">Flip Chart</label>
-            </div>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck2" checked="">
-                <label class="custom-control-label" for="customCheck2">Audio Conf.</label>
-            </div>
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="customCheck2" checked="">
-                <label class="custom-control-label" for="customCheck2">Video Conf.</label>
+            <hr>
+            <div class="room-card-spec col-12">
+                <ul>
+                    <li class="spec-yes"><i class="fas fa-check-circle"></i><span> Projector</span></li>
+                    <li class="spec-no"><i class="fas fa-times-circle"></i><span> Flip Chart</span></li>
+                    <li class="spec-no"><i class="fa fa-times-circle"></i><span> Whiteboard</span></li>
+                    <li class="spec-yes"><i class="fa fa-check-circle"></i><span> Audio Conf.</span></li>
+                    <li class="spec-yes"><i class="fa fa-check-circle"></i><span> Video Conf.</span></li>
+                    <li class="spec-yes"><i class="fa fa-check-circle"></i><span> PC</span></li>
+                    <li class="spec-no"><i class="fa fa-times-circle"></i><span> Surface</span></li>
+                </ul>
             </div>
         </div>
-    </div>
-</div>
-
+</a>

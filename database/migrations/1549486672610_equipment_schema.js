@@ -4,16 +4,16 @@
 const Schema = use('Schema')
 
 class EquipmentSchema extends Schema {
-  up () {
-    this.create('equipments', (table) => {
-      table.increments()
-      table.string('name', 100).notNullable()
-    })
-  }
+	up () {
+		this.create('equipments', (table) => {
+			table.increments()
+			table.string('name', 100).notNullable()
+		})
+	}
 
-  down () {
-    this.drop('equipments')
-  }
+	down () {
+		this.drop('equipments')
+	}
 }
 
 module.exports = EquipmentSchema

@@ -1,3 +1,8 @@
+body { 
+    padding-top: 65px; 
+    font-family: 'Lato', sans-serif;
+}
+
 /* Navbar changes */
 .navbar-dark{
     background-color: #001642 !important;
@@ -26,26 +31,51 @@
     padding-bottom: 10px;
 }
 
-/* Admin dashboard changes*/
-.dropdown-toggle{
-    padding-right: 10px;
-}
-.dash-header{
-	margin-top: 20px;
-	margin-bottom: 30px;
-	border-bottom: solid 2px #001642;
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* TODO: these are overriding everything we should investigate*/
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+/* Changinge button colors */
+.btn-primary{
+    margin:2px;
+    width:110px;
+    border-color: #0facf3;
+    background-color: #0FACF3;
 }
 
-.dash-header .date{
-	padding-top:8px;
+.btn-primary:hover{
+    background-color: #036A98;
+    border-color: #036A98;
 }
 
-body { 
-    padding-top: 65px; 
-    font-family: 'Lato', sans-serif;
+.btn-outline-secondary{
+    margin:2px;
+    width:110px;
+    color: #000000;
+    border-color: #000000;
+    background-color: #ffffff;
 }
 
-/* Underline From Center */
+.btn-outline-secondary:hover{
+    background-color:#546A7B;
+    border-color: #546A7B;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(70, 151, 233, 0.5);
+    box-shadow: 0 0 0 0.2rem rgba(70, 151, 233, 0.5);
+  }
+
+  /* Large button styling */
+.large-buttons{
+    width: 170px !important;
+    margin: 5px !important;
+    font-size: 20px !important;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* user nav*/
+/*+++++++++++++++++++++++++++++++++++++++++++*/
 .hvr-underline-from-center {
     display: inline-block;
     vertical-align: middle;
@@ -79,6 +109,23 @@ body {
     right: 0;
 }
 
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* admin nav*/
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+.dropdown-toggle{
+    padding-right: 10px;
+}
+.dash-header{
+	margin-top: 20px;
+	margin-bottom: 30px;
+	border-bottom: solid 2px #001642;
+}
+
+.dash-header .date{
+	padding-top:8px;
+}
+
 /* Fix bootstrap */
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-menu > li > a:active {
     background: none;
@@ -89,10 +136,6 @@ body {
     color: #555;
 }
 
-/* Center wrapper */
-.wrapper-center {
-    text-align: center;
-}
 /* Adjusting margins for room booking content */
 .book-room-content{
     margin-top: 150px;
@@ -105,36 +148,6 @@ body {
     font-size: 20px !important;
 }
 
-/* Changinge button colors */
-.btn-primary{
-    margin:2px;
-    width:110px;
-    border-color: #0facf3;
-    background-color: #0FACF3;
-}
-.btn-primary:hover{
-    background-color: #036A98;
-    border-color: #036A98;
-}
-
-.btn-outline-secondary{
-    margin:2px;
-    width:110px;
-    color: #000000;
-    border-color: #000000;
-    background-color: #ffffff;
-}
-
-.btn-outline-secondary:hover{
-    background-color:#546A7B;
-    border-color: #546A7B;
-}
-
-.btn-primary:focus, .btn-primary.focus {
-    -webkit-box-shadow: 0 0 0 0.2rem rgba(70, 151, 233, 0.5);
-    box-shadow: 0 0 0 0.2rem rgba(70, 151, 233, 0.5);
-  }
-
 .number-spinner{
     padding: 0.5rem 1rem;
     font-size: 1.25rem;
@@ -142,67 +155,104 @@ body {
     border-radius: 0.3rem;
 }
 
+/*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Room card information */
-.card{
-    max-width: 538px;
-    width: 538px;
-    margin: 8px;
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+.room-card{
+    width: 95%;
+    margin: 0px auto 40px auto;
+    display:block;
+    text-decoration: none;
+    color:#202428;
 }
 
-.card-header{
-    padding-top: 2px;
-    padding-bottom: 2px;
+
+.room-card:hover .room-card-body{
+    text-decoration: none;
+    background-color:#F8F8F8;
+}
+
+
+.room-card:hover {
+    text-decoration: none;
+    color:#202428;
+}
+
+
+.room-card:hover .room-card-title{
+    background-color: #001642;
+}
+
+
+.room-card hr{
+    margin: 15px 0 5px 0;
+}
+
+.room-card-title{
+    height: 50px;
     background-color: #3c5585;
-    min-height: 54px;
-    text-align: center;
-    vertical-align: center;
     color: #ffffff;
-}
-
-/* .card-body{
-    padding
-} */
-.card-title{
     margin-top: 3px;
     margin-bottom: 0px;
+    vertical-align: center;
+    padding:0 15px;
+}
+.room-card-title h4{
+    line-height: 50px;
+    margin-top: 3px;
+    margin-bottom: 0px;
+    vertical-align: center;
 }
 
-.card-subtitle{
-    margin: 0px;    
-    margin-top: 1px;
+.room-card-body{
+    background-color: #fff;
+    padding:15px 15px;
 }
 
-.card-text{
-    margin-bottom: 2px;
-}
-.card-information{
-    padding-left: 15px;
-    padding-right: 15px;
-}
-.card-photo-container{
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(196, 196, 196);
-    padding: 0px;
-    margin-left: 8px; 
-    height: 120px;
-    width: 200px;
+.room-card-photo img{
+    width:100%;
 }
 
-
-
-.card-image{
-    background-size: cover;
-    height: 100vh;
+.room-card-info{
+    padding:0px;
 }
 
-.card-checkboxes{
-    padding-left: 0px;
-    padding-right: 0px;
+.room-card-info ul{
+    list-style: none;
+    margin:0px;
+    padding:0px;
+}
+
+.room-card-spec{
+    width:100%;
+    display:inline-block;
+    padding:10px 10px 0 10px;
+}
+
+.room-card-spec ul{
+    list-style: none;
+    margin:0px;
+    padding:0px;
+    display:inline;
+}
+
+.room-card-spec li{
+    display:inline-block;
+    width:110px;
+}
+.spec-yes{
+    color:#17BC9B;
+}
+.spec-no{
+    color:#ef8b80;
 }
 
 .flex-fixed-width-item {
     flex: 0 0 200px;
+}
+
+.page-title{
+    padding:40px 0px;
 }
 
 /* Room confirmation modal */
@@ -218,3 +268,4 @@ body {
 .confirmation-modal-column{
     padding:8px;
 }
+

@@ -1,0 +1,27 @@
+@layout(layoutType)
+
+@section('content')
+
+<div class='container'>
+    <div class='row'>
+        <div class= 'col-12'>
+        @!component('components.pageTitle', title='Room Information')
+        <p><b>Name:</b> {{room.name}}</p>
+        <p><b>Location:</b> {{user.location}}</p>
+            @if(old('notification'))
+                <div class='alert alert-success'>
+                    {{ old('notification') }}
+                </div>
+            @endif
+        </div>
+    </div>
+</div> 
+@endsection
+
+
+
+
+
+
+
+
