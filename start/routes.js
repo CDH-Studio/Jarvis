@@ -41,7 +41,6 @@ Route.on('/addRoom').render('adminDash/addRoomForm').as('addRoom');
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
 Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
 Route.on('/roomDetails').render('adminDash/roomDetails').as('roomDetails');
-// Route.get('/roomDetails', 'RoomController.addRoom').as('roomDetails');
 
 // Forgot password
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
