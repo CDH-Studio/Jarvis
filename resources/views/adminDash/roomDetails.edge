@@ -10,6 +10,8 @@
             @if(old('notification'))
                 <div class='alert alert-success'>
                     {{ old('notification') }}
+                    To add another room, click here: 
+                    <a href='{{ route('addRoom')}}'>Add Room</a>
                 </div>
             @endif
             <p><b>Name:</b> {{room.name}}</p>
