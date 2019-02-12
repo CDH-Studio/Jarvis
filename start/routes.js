@@ -18,7 +18,7 @@ const Route = use('Route')
 
 
 Route.get('/', 'HomeController.dashboard').as('home');
-//Route.on('/').render('welcome')
+Route.on('/welcome').render('welcome')
 Route.on('/sample').render('sample');
 
 Route.on('/register').render('auth.signup').as('register');
@@ -43,7 +43,9 @@ Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
 Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword').validator('resetPassword');
 Route.get('/newPassword', 'UserController.verifyHash');
-Route.post('/sendPasswordResetMail', 'UserController.sendPasswordResetMail').as('sendPasswordResetMail');
+Route.get('/newUser', 'UserController.verifyEmail');
+Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
+Route.post('/changePassword', 'UserController.changePassword').as('changePassword')//.validator('changePassword');
 
 // Employee user pages
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');

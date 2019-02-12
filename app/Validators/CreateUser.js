@@ -3,16 +3,21 @@
 class CreateUser {
   get rules () {
     return {
-      'username': 'required|unique:users',
+      'firstname': 'required',
+      'lastname': 'required',
       'email': 'required|unique:users',
-      'password': 'required'
+      'password': 'required',
+      'confirmPassword': 'required|same:password',
+      'tower': 'required',
+      'floor': 'required'
     }
   }
 
   get messages() {
     return {
       'required': 'Woah now, {{ field }} is required.',
-      'unique': 'Wait a second, the {{ field }} already exists'
+      'unique': 'Wait a second, this {{ field }} already exists',
+      'same': 'Passwords did not match'
     }
   }
 
