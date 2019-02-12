@@ -57,6 +57,7 @@ class RoomController {
 
 			session.flash({ notification: 'Room Added!' });
 			return response.redirect('/addRoom');
+			return response.redirect('roomDetails');
 		} catch (err) {
 			console.log(err);
 		}

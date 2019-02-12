@@ -7,7 +7,7 @@
         <div class= 'col-12'>
         @!component('components.pageTitle', title='Room Information')
         <p><b>Name:</b> {{room.name}}</p>
-        <p><b>Location:</b> {{user.location}}</p>
+        <p><b>Location:</b> {{room.location}}</p>
             @if(old('notification'))
                 <div class='alert alert-success'>
                     {{ old('notification') }}

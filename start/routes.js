@@ -32,14 +32,16 @@ Route.post('/user/:id/updatepassword', 'UserController.changePassword').as('chan
 
 // Admin Register page
 Route.on('/admin/register').render('auth.signupAdmin').as('registerAdmin');
-Route.post('/admin/register','UserController.createAdmin').as('CreateAdmin').validator('CreateAdmin');
+Route.post('/admin/register', 'UserController.createAdmin').as('CreateAdmin').validator('CreateAdmin');
 Route.post('/register', 'UserController.create').validator('CreateUser');
 Route.get('/logout', 'UserController.logout').as('logout');
 
-// Add and remove room forms
+// Room pages
 Route.on('/addRoom').render('adminDash/addRoomForm').as('addRoom');
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
 Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
+Route.on('/roomDetails').render('adminDash/roomDetails').as('roomDetails');
+// Route.get('/roomDetails', 'RoomController.addRoom').as('roomDetails');
 
 // Forgot password
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
