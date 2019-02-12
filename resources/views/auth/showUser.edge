@@ -4,16 +4,48 @@
 
     <div class='container'>
         <div class='row'>
-            <div class= 'col-12'>
-            @!component('components.pageTitle', title='User Profile')
-            <p><b>Name:</b> {{user.username}}</p>
-            <p><b>Name:</b> {{user.email}}</p>
-                @if(old('notification'))
-                    <div class='alert alert-success'>
-                        {{ old('notification') }}
-                    </div>
+            <div class= 'col-5'>
+                @!component('components.pageTitle', title='User Profile')
+                <p><b>Name:</b> {{user.firstname}} {{user.lastname}}</p>
+                <p><b>Email:</b> {{user.email}}
+                @if(user.verified)
+                    <i>verified</i>
                 @endif
+                </p>
+                @if(user.role==2)
+                    <p><b>Floor:</b> {{user.floor}}</p>
+                    <p><b>Tower:</b> {{user.tower}}</p>
+                @endif
+                @if(canEdit)
+                    <a class="btn btn-primary mb-4" href="/user/{{user.id}}/edit"><i class="fas fa-pen"></i> Edit Profile</a>
+                    <hr>
+                    <br>
+                    <h4>Change Password</h4>
+                    @if(old('error'))
+                        <div class='alert alert-danger'>
+                            {{ old('error') }}
+                        </div>
+                    @endif
+                    @if(old('success'))
+                        <div class='alert alert-success'>
+                            {{ old('success') }}
+                        </div>
+                    @endif
+                    <form action='{{ route('changePassword',{id: auth.user.id}) }}' method='POST'>
+                        {{ csrfField() }}
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmNewPassword">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" placeholder="Confirm new password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form> 
+                @endif          
             </div>
+
         </div>
     </div> 
     @endsection

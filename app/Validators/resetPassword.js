@@ -3,15 +3,15 @@
 class resetPassword {
   get rules () {
     return {
-	  'password': 'required',
-	  'confirmPassword' : 'required|same:password'
+  	  'password': 'required',
+  	  'confirmPassword' : 'required|same:password'
     }
   }
 
   get messages() {
     return {
-      'required': 'Woah now, {{ field }} is required.',
-	  'same' : 'Passwords do not match.'
+        'required': 'Woah now, {{ field }} is required.',
+	     'same' : 'Passwords do not match.'
     }
   }
 
