@@ -7,11 +7,7 @@
     @!component('components.pageTitle', title='Add Room')
     <div class='row'>
         <div class= 'col-12'>
-            @if(old('notification'))
-                <div class='alert alert-success'>
-                    {{ old('notification') }}
-                </div>
-            @endif
+
             <form action='/addRoom' method='POST' enctype='multipart/form-data'>
                 {{--  protects against cross site forgery  --}}
                 {{ csrfField() }} 
@@ -19,7 +15,7 @@
                     <label for='name'>Room Name</label>
                     <input type='text' name='name' class='form-control' id='name' aria-describedby='nameHelp' placeholder='Ex: 308-B' />
                     <small id='nameHelp' class='form-text text-muted'>
-                        Enter the name of the specific meeting room you wish to add
+                        Enter the name of the meeting room you wish to add
                     </small>
                 </div>
                 @if(hasErrorFor('name'))

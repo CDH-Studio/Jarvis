@@ -1,21 +1,56 @@
-@layout(layoutType)
+@layout('layouts.adminLayout')
 
 @section('content')
 
-<div class='container'>
-    <div class='row'>
-        <div class= 'col-12'>
-        @!component('components.pageTitle', title='Room Information')
-        <p><b>Name:</b> {{room.name}}</p>
-        <p><b>Location:</b> {{user.location}}</p>
-            @if(old('notification'))
-                <div class='alert alert-success'>
-                    {{ old('notification') }}
-                </div>
-            @endif
+    <div class='container'>
+        <div class='row'>
+            <div class= 'col-12'>
+                @!component('components.pageTitle', title='Room Information')
+                
+                @if(old('notification'))
+                    <div class='alert alert-success'>
+                        {{ old('notification') }}
+                        To add another room, click here: 
+                        <a href='{{ route('addRoom')}}'>Add Room</a>
+                    </div>
+                @endif
+                <p><b>Name: </b>{{room.name}}</p>
+                <p><b>Location: </b>{{room.location}}</p>
+                <p><b>Telephone Number: </b>{{room.telephone}}</p>
+                <p><b>Table Seats: </b>{{room.seats}}</p>
+                <p><b>Maximum Capacity: </b>{{room.capacity}}</p>
+                @if(room.projector == 1) 
+                    <p><b>Projector: </b>Yes</p>
+                @else
+                    <p><b>Projector: </b>No</p>                
+                @endif
+
+                @if(room.whiteboard == 1) 
+                    <p><b>Whiteboard: </b>Yes</p>
+                @else
+                    <p><b>Whiteboard: </b>No</p>                
+                @endif
+
+                @if(room.flipchart == 1) 
+                    <p><b>Flip Chart: </b>Yes</p>
+                @else
+                    <p><b>Flip Chart: </b>No</p>                
+                @endif
+
+                @if(room.audioConference == 1) 
+                    <p><b>Audio Conferencing: </b>Yes</p>
+                @else
+                    <p><b>Audio Conferencing: </b>No</p>                
+                @endif
+
+                @if(room.videoConference == 1) 
+                    <p><b>Video Conferencing: </b>Yes</p>
+                @else
+                    <p><b>Video Conferencing: </b>No</p>                
+                @endif
+            </div>
         </div>
-    </div>
-</div> 
+    </div> 
 @endsection
 
 

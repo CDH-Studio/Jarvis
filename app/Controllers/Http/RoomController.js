@@ -4,7 +4,7 @@ const Helpers = use('Helpers');
 
 class RoomController {
 	// Adds a room Object into the Database
-	async addRoom({ request, response, session }) {
+	async addRoom({ request, response, session, view }) {
 		try {
 			// Retrieves user input
 			const body = request.all();
@@ -56,7 +56,9 @@ class RoomController {
 			await room.save();
 
 			session.flash({ notification: 'Room Added!' });
-			return response.redirect('/addRoom');
+			//return response.redirect('/addRoom');
+			//return response.redirect('/roomDetails');
+			return view.render('adminDash.roomDetails', { room });
 		} catch (err) {
 			console.log(err);
 		}

@@ -40,9 +40,9 @@
             {{--  Header drop down for user settings, logout  --}}
             <ul class='nav navbar-nav ml-auto'>
                   <li class='nav-item dropdown'>
-                    <a class='nav-link dropdown-toggle' data-toggle='dropdown' href='#' id='user-drop'>{{auth.user.username}} <span class='caret'></span></a>
+                    <a class='nav-link dropdown-toggle' data-toggle='dropdown' href='#' id='user-drop'>{{auth.user.firstname}} {{auth.user.lastname}} <span class='caret'></span></a>
                     <div class='dropdown-menu' aria-labelledby='user-drop'>
-                        <a class='dropdown-item' href='#'>Settings</a>
+                        <a class='dropdown-item' href='{{route('viewProfile',{id: auth.user.id})}}'>Profile</a>
                         <a class='dropdown-item' href='#'>Activity Log</a>
                         <div class='dropdown-divider'></div>
                         <a class='dropdown-item' href='#' data-toggle='modal' data-target='#logoutModal'>Logout</a>
