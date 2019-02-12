@@ -226,6 +226,23 @@ class UserController {
 		console.log(changedRow);
 		return response.redirect('/login');
 	}
+
+	async changePassword({ request, response, auth }) {
+		const passwords = request.only(['oldPassword', 'newPassword']);
+		const user = auth.user;
+		const isSame = await Hash.verify(passwords.oldPassword, user.password);
+
+		if(isSame) {	
+			const newPassword = await Hash.make(passwords.newPassword);
+			const changedRow = await User
+			.query()
+			.where('email', user.email)
+			.update({ password: newPassword });
+			console.log(changedRow);
+			
+			return response.redirect('/');
+		}
+	}
 }
 
 module.exports = UserController
