@@ -40,19 +40,16 @@ class UserController {
 		const confirmationRequired = Env.get('REGISTRATION_CONFIRMATION', false);
 
 		if(confirmationRequired) {
-			console.log('with')
 			return this.createWithVerifyingEmail({request, response});
 		} else {
-			console.log('without')
 			return this.createWithoutVerifyingEmail({request, response, auth});
 		}
 	}
 
 	async createWithoutVerifyingEmail({ request, response, auth}) {
-		var userInfo=request.only(['username','email','password']);
+		var userInfo=request.only(['firstname','lastname','email','password','tower','floor']);
 		userInfo.role = 2;
 		userInfo.verified = true;
-		console.log(userInfo)
       	const user = await User.create(userInfo);
 
       	await auth.login(user);
@@ -60,11 +57,9 @@ class UserController {
   	}
 
 	async createWithVerifyingEmail({ request, response, auth}) {
-		var userInfo=request.only(['username','email','password']);
+		var userInfo=request.only(['firstname','lastname','email','password','tower','floor']);
 		userInfo.role = 2;
 		userInfo.verified = false;
-
-		console.log(userInfo)
 
 		let hash = random(4);
 
@@ -112,9 +107,9 @@ class UserController {
 	}
 
 	async createAdmin({ request, response, auth}) {
-		var adminInfo=request.only(['username','email','password']);
+		var adminInfo=request.only(['firstname','lastname','email','password']);
 		adminInfo['role']=1;
-		console.log(adminInfo);
+    adminInfo['verified']=1;
 		const user = await User.create(adminInfo);
 
 		await auth.login(user);

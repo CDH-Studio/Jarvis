@@ -24,42 +24,54 @@ Jarvis - Login
         <form action='{{ route('CreateAdmin') }}' method='POST'>
         {{ csrfField() }}
             <div class='form-group mb-2'>
-                <label for='username'>User Name</label>
-                <input type='text' class='form-control' name='username' id='username' placeholder='John Doe'>
-            </div>
-              @if(hasErrorFor('username'))
-                  <span>
-                      {{ getErrorFor('username') }}
-                  </span>
+              <label for='firstname'>First Name</label>
+              <input type='text' class='form-control' name='firstname' id='firstname' placeholder='John'>
+              @if(hasErrorFor('firstname'))
+                <span>
+                  {{ getErrorFor('firstname') }}
+                </span>
               @endif
+            </div>
 
 
             <div class='form-group mb-2'>
-                <label for='email'>Email address</label>
-                <input type='email' class='form-control' name='email' id='email' placeholder='Enter email'>
+              <label for='lastname'>Last Name</label>
+              <input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe'>   
+              @if(hasErrorFor('lastname'))
+                <span>
+                  {{ getErrorFor('lastname') }}
+                </span>
+              @endif
             </div>
-            @if(hasErrorFor('email'))
+
+            <div class='form-group mb-2'>
+              <label for='email'>Email address</label>
+              <input type='email' class='form-control' name='email' id='email' placeholder='Enter email'>
+              @if(hasErrorFor('email'))
               <span>
-                  {{ getErrorFor('email') }}
+                {{ getErrorFor('email') }}
               </span>
             @endif
+            </div>
 
             <div class='form-group mb-2'>
-                <label for='password'>Password</label>
-                <input type='password' class='form-control' name='password' id='password' placeholder='Password'>
+              <label for='password'>Password</label>
+              <input type='password' class='form-control' name='password' id='password' placeholder='Password'>
             </div>
             @if(hasErrorFor('password'))
               <span>
-                  {{ getErrorFor('password') }}
+                {{ getErrorFor('password') }}
               </span>
             @endif
 
             <div class='form-group mb-2'>
                 <label for='token'>Admin Token</label>
                 <input type='text' class='form-control' name='token' id='token' placeholder='Token'>
-                <span>
-                  {{ getErrorFor('token') }}
-              </span>
+                @if(hasErrorFor('token'))
+                  <span>
+                    {{ getErrorFor('token') }}
+                  </span>
+                @endif
             </div>
 
           <button type='submit' class='btn btn-login mt-3'>Register</button>

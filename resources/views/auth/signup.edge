@@ -22,12 +22,22 @@ Jarvis - Login
 			{{ csrfField() }}
 
 				<div class='form-group mb-2'>
-					<label for='username'>User Name</label>
-					<input type='text' class='form-control' name='username' id='username' placeholder='John Doe'>
+					<label for='firstname'>First Name</label>
+					<input type='text' class='form-control' name='firstname' id='firstname' placeholder='John'>
 				</div>
-				@if(hasErrorFor('username'))
+				@if(hasErrorFor('firstname'))
 					<span>
-						{{ getErrorFor('username') }}
+						{{ getErrorFor('firstname') }}
+					</span>
+				@endif
+
+				<div class='form-group mb-2'>
+					<label for='lastname'>Last Name</label>
+					<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe'>
+				</div>
+				@if(hasErrorFor('lastname'))
+					<span>
+						{{ getErrorFor('lastname') }}
 					</span>
 				@endif
 
@@ -47,10 +57,46 @@ Jarvis - Login
 					<input type='password' class='form-control' name='password' id='password' placeholder='Password'>
 				</div>
 				@if(hasErrorFor('password'))
-				<span>
-					{{ getErrorFor('password') }}
-				</span>
+					<span>
+						{{ getErrorFor('password') }}
+					</span>
 				@endif
+
+				<div class="form-row">
+                    <div class="col">
+                        <label for="tower">Tower</label>
+                        <select id="tower" name="tower" class="form-control">
+                            <option selected>Choose...</option>
+                            <option value="1">East</option>
+                            <option value="2">West</option>
+                        </select>
+                        @if(hasErrorFor('tower'))
+							<span>
+								{{ getErrorFor('tower') }}
+							</span>
+						@endif
+                    </div>
+                    <div class="col">
+                        <label for="floor">Floor</label>
+                        <select id="floor" name="floor" class="form-control">
+                            <option selected>Choose...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                        </select>
+                        @if(hasErrorFor('floor'))
+							<span>
+								{{ getErrorFor('floor') }}
+							</span>
+						@endif
+                    </div>
+                </div>
 
 			<button type='submit' class='btn btn-login mt-3'>Register</button>
 			</form>

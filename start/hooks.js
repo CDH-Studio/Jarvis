@@ -2,17 +2,18 @@ const { hooks } = require('@adonisjs/ignitor')
 
 hooks.after.providersBooted(() => {
 	const Validator = use('Validator');
-	const sameFn = async (data, field, message, args) => {
-		if (!data[field]) {
-			return
-		}
+	// const sameFn = async (data, field, message, args) => {
+	// 	if (!data[field]) {
+	// 		return
+	// 	}
 
-		for (let arg in args) {
-			if (data[field] !== data[args[arg]]) {
-				throw message
-			}
-		}
-	}
+	// 	for (let arg in args) {
+	// 		console.log(data[args[arg]]);
+	// 		if (data[field] !== data[args[arg]]) {
+	// 			throw message
+	// 		}
+	// 	}
+	// }
 
 	const onlyFn = async (data, field, message, args) => {
 		if (!data[field]) {
@@ -31,6 +32,5 @@ hooks.after.providersBooted(() => {
 			throw message;
 	}
 
-	Validator.extend('same', sameFn);
 	Validator.extend('only', onlyFn)
 });
