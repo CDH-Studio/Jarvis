@@ -1,3 +1,4 @@
+/* General */
 body { 
     padding-top: 65px; 
     font-family: 'Lato', sans-serif;
@@ -9,6 +10,9 @@ body {
 }
 
 
+.wrapper-center{
+    text-align: center;
+}
 /* Navbar changes */
 .navbar-dark{
     background-color: #001642 !important;
@@ -253,13 +257,44 @@ body {
     color:#ef8b80;
 }
 
+.flex-fixed-width-item {
+    flex: 0 0 200px;
+}
+
 .page-title{
     padding:40px 0px;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Room confirmation modal */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.confirmation-modal{
+    max-width: 450px;
+}
+
+.confirmation-image{
+    width:80%;
+    height: auto;
+}
+
+.confirmation-modal-text{
+    margin: 0px;
+    padding-top: 18px !important;
+}
+
+.confirmation-modal-column{
+    padding:8px;
+}
+
+.confirmation-form{
+    max-width: 240px;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Room Details Page */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .room-details-spec{
     text-align:center; 
     padding-top:0px;

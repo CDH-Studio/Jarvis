@@ -52,9 +52,11 @@ Route.post('/changePassword', 'UserController.changePassword').as('changePasswor
 
 // Employee user pages
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
-Route.on('/results').render('userPages/results').as('results');
 Route.on('/booking').render('userPages/booking').as('booking');
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
 
-// Temp routing for user pages
+// Temporary routes ***** Need to change so that a userr cannot acess this through URL ****
+Route.on('/results').render('userPages/results').as('results');
+
+// ************ Needs a unique url for all rooms **********
 Route.on('/details').render('userPages/roomDetails').as('roomDetails');
