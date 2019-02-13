@@ -60,3 +60,6 @@ Route.on('/results').render('userPages/results').as('results');
 
 // ************ Needs a unique url for all rooms **********
 Route.on('/details').render('userPages/roomDetails').as('roomDetails');
+
+
+Route.get('/test', 'UserController.test');

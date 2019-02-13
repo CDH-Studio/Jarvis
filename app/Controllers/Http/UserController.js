@@ -220,48 +220,70 @@ class UserController {
     return response.redirect('/login');
   }
 
-  async changePassword({ request, response, auth, params, session}) {
-    if (auth.user.role==1 || (auth.user.id == Number(params.id) && auth.user.role==2)){
+	async changePassword({ request, response, auth, params, session}) {
+	if (auth.user.role==1 || (auth.user.id == Number(params.id) && auth.user.role==2)){
+	try {
+		const passwords = request.only(['newPassword']);
+		const user = auth.user;
+		const newPassword = await Hash.make(passwords.newPassword);
 
- 
+		const changedRow = await User
+		.query()
+		.where('id', Number(params.id))
+		.update({ password: newPassword });
+		session.flash({success: 'Password Updated Successfully'})
 
-      try {
-        const passwords = request.only(['newPassword']);
-        const user = auth.user;
-        const newPassword = await Hash.make(passwords.newPassword);
+	} catch (error) {
+	session.flash({error: 'Password Update failed'})
+	return response.redirect('/login');
+	}
 
-        const changedRow = await User
-        .query()
-        .where('id', Number(params.id))
-        .update({ password: newPassword });
-        session.flash({success: 'Password Updated Successfully'})
-      
-    } catch (error) {
-      session.flash({error: 'Password Update failed'})
-      return response.redirect('/login');
-    }
+	return response.route('viewProfile',{id: Number(params.id)});
+	//check if user is viewing their own profile
 
-      return response.route('viewProfile',{id: Number(params.id)});
-      //check if user is viewing their own profile
-
-    }else{
-      return response.redirect('/');
-    }
+	}else{
+	return response.redirect('/');
+	}
 
 
 
 
 
-    if(isSame) {  
-      const newPassword = await Hash.make(passwords.newPassword);
-      const changedRow = await User
-      .query()
-      .where('email', user.email)
-      .update({ password: newPassword });
-      console.log(changedRow);
-      
-      return response.redirect('/');
-    }
+		if(isSame) {  
+			const newPassword = await Hash.make(passwords.newPassword);
+			const changedRow = await User
+			.query()
+			.where('email', user.email)
+			.update({ password: newPassword });
+			console.log(changedRow);
+			
+			return response.redirect('/');
+		}
+  	}
+
+	async test({ response }) {
+		const credentials = {
+			client: {
+				id: Env.get('MICROSOFT_APP_ID'),
+				secret: Env.get('MICROSOFT_APP_ID')
+			},
+			
+			auth: {
+				tokenHost: 'https://login.microsoftonline.com',
+				authorizePath: 'common/oauth2/v2.0/authorize',
+				tokenPath: 'common/oauth2/v2.0/token'
+			}
+		};
+
+		const oauth2 = require('simple-oauth2').create(credentials);
+		  
+		const returnVal = await oauth2.authorizationCode.authorizeURL({
+			redirect_uri: Env.get('MICROSOFT_REDIRECT_URI'),
+			scope: Env.get('MICROSOFT_SCOPES')
+		});
+
+		console.log(`Generated auth url: ${returnVal}`);
+		return response.redirect(returnVal);
   }
 }
 
