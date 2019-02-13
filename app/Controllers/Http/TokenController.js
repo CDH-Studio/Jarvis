@@ -15,6 +15,16 @@ const credentials = {
 };
 const Oauth2 = require('simple-oauth2').create(credentials);
 
+const JWT = require('jsonwebtoken');
+
+function saveCookie(token, res) {
+	const user = JWT.decode(token.token.id_token);
+	console.log(user)
+
+	res.cookie('accessToken', token.token.access_token, {maxAge: 3600000, httpOnly: true});
+	res.cookie('username', user.name, {maxAge: 3600000, httpOnly: true});
+   }
+
 class TokenController {
 	async getAuthUrl({ response }) {
 		const returnVal = await Oauth2.authorizationCode.authorizeURL({
@@ -26,16 +36,16 @@ class TokenController {
 		return response.redirect(returnVal);
 	}
 
-  	async authorize({ request }) {
+  	async authorize({ request, response }) {
 		const code = request.only(['code']).code;
 		
 		if(code) {
-			const token = await this.getAccessToken(code);
+			const token = await this.getAccessToken(code, response);
 			return token;
 		}
 	}
 
-	async getAccessToken(authCode) {
+	async getAccessToken(authCode, response) {
 		try {
 			let result = await Oauth2.authorizationCode.getToken({
 				code: authCode,
@@ -44,7 +54,9 @@ class TokenController {
 			});
 
 			const token = Oauth2.accessToken.create(result);
-			
+			console.log(token)
+			saveCookie(token, response);
+
 			return token.token.access_token;
 		} catch(err) {
 			console.log(err)
