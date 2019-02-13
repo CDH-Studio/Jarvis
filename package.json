@@ -28,6 +28,7 @@
 		"@adonisjs/session": "^1.0.27",
 		"@adonisjs/shield": "^1.0.8",
 		"@adonisjs/validator": "^5.0.6",
+		"@microsoft/microsoft-graph-client": "^1.4.0",
 		"jsonwebtoken": "^8.4.0",
 		"simple-oauth2": "^2.2.1",
 		"sqlite3": "^4.0.6"

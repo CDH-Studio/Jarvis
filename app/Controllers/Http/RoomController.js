@@ -1,6 +1,7 @@
 'use strict'
 const Room = use('App/Models/Room');
 const Helpers = use('Helpers');
+const graph = require('@microsoft/microsoft-graph-client');
 
 class RoomController {
 	// Adds a room Object into the Database
@@ -61,6 +62,79 @@ class RoomController {
 			return view.render('adminDash.roomDetails', { room });
 		} catch (err) {
 			console.log(err);
+		}
+	}
+
+	async getEvents({ request }) {
+		const accessToken = request.cookie('accessToken');
+		const username = request.cookie('username');
+
+		if (username && accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const events = await client
+      				.api('/me/events')
+      				.select('subject,organizer,start,end')
+      				//.orderby('createdDateTime DESC')
+      				.get();
+				
+				return events;
+			  } catch (err) {
+				console.log(err);
+			  }
+		}
+	}
+
+	async getCalendars({ request }) {
+		const accessToken = request.cookie('accessToken');
+		const username = request.cookie('username');
+
+		if (username && accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const calendars = await client
+      				.api('/me/calendars')
+      				//.orderby('createdDateTime DESC')
+      				.get();
+				
+				return calendars;
+			  } catch (err) {
+				console.log(err);
+			  }
+		}
+	}
+
+	async getCalendar({ request }) {
+		const accessToken = request.cookie('accessToken');
+		const username = request.cookie('username');
+
+		if (username && accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const calendars = await client
+      				.api(`/me/calendars/AQMkADAwATM3ZmYAZS1kNzk2LWRkADNkLTAwAi0wMAoARgAAA5AqfjNGCEVAv9Maot2ubu8HAIvwfWDIkbVCrIYUZM1RmYwAAAIBBgAAAIvwfWDIkbVCrIYUZM1RmYwAAAIsZQAAAA==`)
+      				//.orderby('createdDateTime DESC')
+      				.get();
+				
+				return calendars;
+			  } catch (err) {
+				console.log(err);
+			  }
 		}
 	}
 }

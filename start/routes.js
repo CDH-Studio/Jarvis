@@ -64,3 +64,6 @@ Route.on('/details').render('userPages/roomDetails').as('roomDetails');
 
 Route.get('/test', 'TokenController.getAuthUrl');
 Route.get('/authorize', 'TokenController.authorize');
+Route.get('/events', 'RoomController.getEvents');
+Route.get('/calendars', 'RoomController.getCalendars');
+Route.get('/calendar', 'RoomController.getCalendar');
