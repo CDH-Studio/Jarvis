@@ -62,4 +62,5 @@ Route.on('/results').render('userPages/results').as('results');
 Route.on('/details').render('userPages/roomDetails').as('roomDetails');
 
 
-Route.get('/test', 'UserController.test');
+Route.get('/test', 'TokenController.getAuthUrl');
+Route.get('/authorize', 'TokenController.authorize');
