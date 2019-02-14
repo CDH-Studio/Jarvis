@@ -144,29 +144,29 @@ class RoomController {
 		const username = request.cookie('username');
 
 		const event = {
-			"subject": "Let's go for lunch",
-			"body": {
-				"contentType": "HTML",
-				"content": "Does late morning work for you?"
+			'subject': `Let's go for lunch`,
+			'body': {
+				'contentType': 'HTML',
+				'content': 'Does late morning work for you?'
 			},
-			"start": {
-				"dateTime": "2019-02-15T12:00:00",
-				"timeZone": "Eastern Standard Time"
+			'start': {
+				'dateTime': '2019-02-15T12:00:00',
+				'timeZone': 'Eastern Standard Time'
 			},
-			"end": {
-				"dateTime": "2019-02-15T18:00:00",
-				"timeZone": "Eastern Standard Time"
+			'end': {
+				'dateTime': '2019-02-15T18:00:00',
+				'timeZone': 'Eastern Standard Time'
 			},
-			"location":{
-				"displayName":"The Fry"
+			'location':{
+				'displayName':'The Fry'
 			},
-			"attendees": [
+			'attendees': [
 				{
-				"emailAddress": {
-					"address":"liyunwei10@gmail.com",
-					"name": "Li"
+				'emailAddress': {
+					'address':'liyunwei10@gmail.com',
+					'name': 'Li'
 				},
-				"type": "required"
+				'type': 'required'
 				}
 			]
 		  }
