@@ -31,9 +31,6 @@ class RoomController {
 				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
 				name: `${room.name}_floorPlan.png`
 			});
-			if (!floorPlanImage.moved()) {
-				return profilePic.error().message; // eslint-disable-line 
-			}
 
 			// Upload process - Room Picture
 			const roomImage = request.file('roomPicture', {
@@ -44,9 +41,6 @@ class RoomController {
 				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
 				name: `${room.name}_roomPicture.png`
 			});
-			if (!roomImage.moved()) {
-				return profilePic.error().message; // eslint-disable-line 
-			}
 
 			room.floorplan = `uploads/floorPlans/${room.name}.png`;
 			room.picture = `uploads/roomPictures/${room.name}.png`;
@@ -56,8 +50,7 @@ class RoomController {
 			await room.save();
 
 			session.flash({ notification: 'Room Added!' });
-			//return response.redirect('/addRoom');
-			//return response.redirect('/roomDetails');
+			// return response.redirect('/roomDetails');
 			return view.render('adminDash.roomDetails', { params, room });
 		} catch (err) {
 			console.log(err);
@@ -65,26 +58,16 @@ class RoomController {
 	}
 
 	async edit({ params, view }) {
-		const room = await Room.find(params.id);
-
-		console.log('Came through the edit method');
+		const room = await Room.findBy('name', params.name);
 
 		return view.render('adminDash.editRoom', { room: room });
 	}
 
-	async update({ params, view }) {
-		const room = await Rooms.find(params.id);
+	async update({ request, response, session, params, view }) {
+		let room = await Room.findBy('name', params.name);
 
-		room.name = body.name;
-		room.location = body.location;
-		room.telephone = body.telephoneNumber;
-		room.seats = body.tableSeats;
-		room.capacity = body.maximumCapacity;
-		room.projector = body.projectorCheck;
-		room.whiteboard = body.whiteboardCheck;
-		room.flipchart = body.flipChartCheck;
-		room.audioConference = body.audioCheck;
-		room.videoConference = body.videoCheck;
+		// Retrieves user input
+		const body = request.all();
 
 		// Upload process - Floor Plan
 		const floorPlanImage = request.file('floorPlan', {
@@ -92,12 +75,9 @@ class RoomController {
 			size: '2mb'
 		});
 		await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME 
-			name: `${room.name}_floorPlan.png`,
+			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
+			name: `${body.name}_floorPlan.png`
 		});
-		if (!floorPlanImage.moved()) {
-			return profilePic.error().message;
-		}
 
 		// Upload process - Room Picture
 		const roomImage = request.file('roomPicture', {
@@ -105,19 +85,35 @@ class RoomController {
 			size: '2mb'
 		});
 		await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME 
-			name: `${room.name}_roomPicture.png`,
+			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
+			name: `${body.name}_roomPicture.png`
 		});
-		if (!roomImage.moved()) {
-			return profilePic.error().message;
-		}
 
-		room.floorplan = `uploads/floorPlans/${room.name}.png`;
-		room.picture = `uploads/roomPictures/${room.name}.png`;
-		room.extraEquipment = body.extraEquipment;
-		room.comment = body.comment;
+		await Room
+			.query()
+			.where('name', room.name)
+			.update({
+				name: body.name,
+				location: body.location,
+				telephone: body.seats,
+				seats: body.tableSeats,
+				capacity: body.maximumCapacity,
+				projector: body.projectorCheck,
+				whiteboard: body.whiteboardCheck,
+				flipchart: body.flipchart,
+				audioConference: body.audioCheck,
+				videoConference: body.videoCheck,
+				floorplan: `uploads/floorPlans/${body.name}.png`,
+				picture: `uploads/roomPictures/${body.name}.png`,
+				extraEquipment: body.extraEquipment,
+				comment: body.comment
+			});
 
-		return response.redirect('/roomDetails');
+		room = await Room.findBy('name', body.name);
+
+		session.flash({ notification: 'Room Updated!' });
+
+		return view.render('adminDash.roomDetails', { params, room });
 	}
 }
 
