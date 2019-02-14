@@ -66,6 +66,46 @@ class RoomController {
 		}
 	}
 
+	book() {
+		console.log('book')
+	}
+
+	async confirmBooking({ request, response }) {
+		const {title, date, from, to, location} = request.only(['title', 'date', 'from', 'to', 'location'])
+		const event = {
+			'subject': title,
+			'body': {
+				'contentType': 'HTML',
+				'content': 'Does late morning work for you?'
+			},
+			'start': {
+				'dateTime': `${date}T${from}`,
+				'timeZone': 'Eastern Standard Time'
+			},
+			'end': {
+				'dateTime': `${date}T${to}`,
+				'timeZone': 'Eastern Standard Time'
+			},
+			'location':{
+				'displayName':'311A (E)'
+			},
+			'attendees': [
+				{
+				'emailAddress': {
+					'address':'liyunwei10@gmail.com',
+					'name': 'Li'
+				},
+				'type': 'required'
+				}
+			]
+		  }
+
+		  const createdEvent = this.createEvent(request, event);
+
+		  if (createdEvent)
+		  	return response.redirect('/booking');
+	}
+
 	async getEvents({ request }) {
 		const accessToken = request.cookie('accessToken');
 		const username = request.cookie('username');
@@ -111,6 +151,7 @@ class RoomController {
 				return calendars;
 			  } catch (err) {
 				console.log(err);
+				return;
 			  }
 		}
 	}
@@ -139,37 +180,9 @@ class RoomController {
 		}
 	}
 
-	async createEvent({ request }) {
+	async createEvent(request, event) {
 		const accessToken = request.cookie('accessToken');
 		const username = request.cookie('username');
-
-		const event = {
-			'subject': `Let's go for lunch`,
-			'body': {
-				'contentType': 'HTML',
-				'content': 'Does late morning work for you?'
-			},
-			'start': {
-				'dateTime': '2019-02-15T12:00:00',
-				'timeZone': 'Eastern Standard Time'
-			},
-			'end': {
-				'dateTime': '2019-02-15T18:00:00',
-				'timeZone': 'Eastern Standard Time'
-			},
-			'location':{
-				'displayName':'The Fry'
-			},
-			'attendees': [
-				{
-				'emailAddress': {
-					'address':'liyunwei10@gmail.com',
-					'name': 'Li'
-				},
-				'type': 'required'
-				}
-			]
-		  }
 
 		if (username && accessToken) {
 			const client = graph.Client.init({

@@ -33,7 +33,10 @@
 		"simple-oauth2": "^2.2.1",
 		"sqlite3": "^4.0.6"
 	},
-	"devDependencies": {},
+	"devDependencies": {
+		"eslint": "^5.13.0",
+		"eslint-plugin-import": "^2.16.0"
+	},
 	"autoload": {
 		"App": "./app"
 	}

@@ -126,7 +126,11 @@ class UserController {
   
     try {
       await auth.attempt(user.email, password);
-      return response.redirect('/');
+      if(auth.user.role === 2) {
+        return response.redirect('/booking');
+      } else {
+        return response.redirect('/');
+      }
     } catch (error) {
       session.flash({loginError: 'These credentials do not work.'})
       return response.redirect('/login');
