@@ -4,7 +4,7 @@ const Helpers = use('Helpers');
 
 class RoomController {
 	// Adds a room Object into the Database
-	async addRoom({ request, response, session, params, view }) {
+	async addRoom ({ request, response, session, params, view }) {
 		try {
 			// Retrieves user input
 			const body = request.all();
@@ -57,13 +57,13 @@ class RoomController {
 		}
 	}
 
-	async edit({ params, view }) {
+	async edit ({ params, view }) {
 		const room = await Room.findBy('name', params.name);
 
 		return view.render('adminDash.editRoom', { room: room });
 	}
 
-	async update({ request, response, session, params, view }) {
+	async update ({ request, response, session, params, view }) {
 		let room = await Room.findBy('name', params.name);
 
 		// Retrieves user input
