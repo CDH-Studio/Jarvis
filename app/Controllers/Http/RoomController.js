@@ -151,11 +151,11 @@ class RoomController {
 			},
 			"start": {
 				"dateTime": "2019-02-15T12:00:00",
-				"timeZone": "Pacific Standard Time"
+				"timeZone": "Eastern Standard Time"
 			},
 			"end": {
-				"dateTime": "2019-02-15T16:00:00",
-				"timeZone": "Pacific Standard Time"
+				"dateTime": "2019-02-15T18:00:00",
+				"timeZone": "Eastern Standard Time"
 			},
 			"location":{
 				"displayName":"The Fry"
