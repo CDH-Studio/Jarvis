@@ -2,6 +2,7 @@
 const Room = use('App/Models/Room');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
+const room_id = 'AQMkADAwATM3ZmYAZS1kNzk2LWRkADNkLTAwAi0wMAoARgAAA5AqfjNGCEVAv9Maot2ubu8HAIvwfWDIkbVCrIYUZM1RmYwAAAIBBgAAAIvwfWDIkbVCrIYUZM1RmYwAAlWD4rsAAAA=';
 
 class RoomController {
 	// Adds a room Object into the Database
@@ -127,11 +128,62 @@ class RoomController {
 
 			try {
 				const calendars = await client
-      				.api(`/me/calendars/AQMkADAwATM3ZmYAZS1kNzk2LWRkADNkLTAwAi0wMAoARgAAA5AqfjNGCEVAv9Maot2ubu8HAIvwfWDIkbVCrIYUZM1RmYwAAAIBBgAAAIvwfWDIkbVCrIYUZM1RmYwAAAIsZQAAAA==`)
+      				.api(`/me/calendars/${room_id}`)
       				//.orderby('createdDateTime DESC')
       				.get();
 				
 				return calendars;
+			  } catch (err) {
+				console.log(err);
+			  }
+		}
+	}
+
+	async createEvent({ request }) {
+		const accessToken = request.cookie('accessToken');
+		const username = request.cookie('username');
+
+		const event = {
+			"subject": "Let's go for lunch",
+			"body": {
+				"contentType": "HTML",
+				"content": "Does late morning work for you?"
+			},
+			"start": {
+				"dateTime": "2019-02-15T12:00:00",
+				"timeZone": "Pacific Standard Time"
+			},
+			"end": {
+				"dateTime": "2019-02-15T16:00:00",
+				"timeZone": "Pacific Standard Time"
+			},
+			"location":{
+				"displayName":"The Fry"
+			},
+			"attendees": [
+				{
+				"emailAddress": {
+					"address":"liyunwei10@gmail.com",
+					"name": "Li"
+				},
+				"type": "required"
+				}
+			]
+		  }
+
+		if (username && accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const newEvent = await client
+		  			.api(`/me/calendars/${room_id}/events`)
+		  			.post(event);
+				
+				return newEvent;
 			  } catch (err) {
 				console.log(err);
 			  }
