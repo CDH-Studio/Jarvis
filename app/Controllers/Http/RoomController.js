@@ -56,8 +56,8 @@ class RoomController {
 			await room.save();
 
 			session.flash({ notification: 'Room Added!' });
-			//return response.redirect('/addRoom');
-			//return response.redirect('/roomDetails');
+			// return response.redirect('/addRoom');
+			// return response.redirect('/roomDetails');
 			return view.render('adminDash.roomDetails', { params, room });
 		} catch (err) {
 			console.log(err);
@@ -73,7 +73,7 @@ class RoomController {
 	}
 
 	async update({ params, view }) {
-		const room = await Rooms.find(params.id);
+		const room = await Room.find(params.id);
 
 		room.name = body.name;
 		room.location = body.location;
@@ -92,8 +92,8 @@ class RoomController {
 			size: '2mb'
 		});
 		await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME 
-			name: `${room.name}_floorPlan.png`,
+			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
+			name: `${room.name}_floorPlan.png`
 		});
 		if (!floorPlanImage.moved()) {
 			return profilePic.error().message;
@@ -105,8 +105,8 @@ class RoomController {
 			size: '2mb'
 		});
 		await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME 
-			name: `${room.name}_roomPicture.png`,
+			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
+			name: `${room.name}_roomPicture.png`
 		});
 		if (!roomImage.moved()) {
 			return profilePic.error().message;
