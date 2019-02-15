@@ -3,9 +3,21 @@ const Room = use('App/Models/Room');
 const Helpers = use('Helpers');
 
 class RoomController {
+
+	async create ({ view, auth }) {
+		if (auth.user.role === 1) {
+			return view.render('adminDash.addRoomForm');
+		} else {
+			redirect('/');
+		}		
+	}
 	// Adds a room Object into the Database
 	async addRoom ({ request, response, session, params, view }) {
 		try {
+
+			if (auth.user.role != 1) {
+				redirect('/');
+			}
 			// Retrieves user input
 			const body = request.all();
 
@@ -50,8 +62,9 @@ class RoomController {
 			await room.save();
 
 			session.flash({ notification: 'Room Added!' });
-			// return response.redirect('/roomDetails');
-			return view.render('adminDash.roomDetails', { params, room });
+			return response.route('roomDetails', { id: Number(room.id) });
+			//return response.redirect('roomDetails');
+			//return view.render('adminDash.roomDetails', { params, room });
 		} catch (err) {
 			console.log(err);
 		}
@@ -119,11 +132,26 @@ class RoomController {
 		return view.render('adminDash.roomDetails', { params, room });
 	}
 
-	async show ({ response, params, view }) {
+	async show ({ response, params, view, auth}) {
 		// Retrieves room object
 		try {
 			const room = await Room.firstOrFail('id', params.id);
-			return view.render('adminDash.roomDetails', { room: room });
+			
+			var canEdit = 0;
+			var layoutType = 'll';
+			// if user is admin
+			if (auth.user.role === 1) {
+				layoutType = 'layouts/adminLayout';
+				canEdit = 1;
+				// check if user is viewing their own profile
+			} else if (auth.user.role === 2) {
+				layoutType = 'layouts/mainLayout';
+				canEdit = 0;
+				// check if user is viewing someone elses profile
+			} else {
+				return response.redirect('/');
+			}
+			return view.render('adminDash.roomDetails', {room, layoutType, canEdit});
 		} catch (error) {
 			return response.redirect('/');
 		}

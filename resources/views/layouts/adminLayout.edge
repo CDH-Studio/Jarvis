@@ -61,7 +61,7 @@
           </a>
           {{--  Dropdown content  --}}
           <div id="side-nav-dropdown" class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <a class='dropdown-item' href='{{ route('addRoom') }}'>Add Room</a>
+            <a class='dropdown-item' href='{{ route('addRoomForm') }}'>Add Room</a>
             <a class='dropdown-item' href='{{ route('removeRoom') }}'>Remove Room</a>
             <a class="dropdown-item" href="forgot-password.html">Edit Room</a>
             <a class="dropdown-item" href="forgot-password.html">Search Room</a>
@@ -97,7 +97,7 @@
       <!-- /.content-wrapper -->
       <div id='content-wrapper'>
         <!-- /.container-fluid -->
-        <div class='container-fluid'>
+        <div class='container-fluid' style="padding:10px 50px">
           @!section('content')
         </div>
 
@@ -137,7 +137,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src='vendor/jquery-easing/jquery.easing.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.compatibility.js"></script>
 
     <!-- Custom scripts for all pages-->
     {{ script('js/adminDash.js') }}
