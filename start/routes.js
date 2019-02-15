@@ -43,6 +43,7 @@ Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
 Route.on('/roomDetails').render('adminDash/roomDetails').as('roomDetails');
 Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBooking');
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms');
+Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails')
 
 // Forgot password
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
@@ -51,7 +52,7 @@ Route.get('/newPassword', 'UserController.verifyHash');
 Route.get('/newUser', 'UserController.verifyEmail');
 Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
 Route.post('/changePassword', 'UserController.changePassword').as('changePassword')//.validator('changePassword');
-
+Route.on('/card').render('components.card');
 // Employee user pages
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
 Route.on('/booking').render('userPages/booking').as('booking');

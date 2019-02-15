@@ -9,7 +9,8 @@
         <div class='row'>
             @each(room in rooms)
                 <div class='col-lg-6'>
-                    @!component('components.card', title=room.name, phoneNumber=room.telephone, seats=room.seats, maxCapacity=room.capacity, floor=room.location)
+                    {{ csrfField() }}
+                    @!component('components.card', title=room.name, phoneNumber=room.telephone, seats=room.seats, maxCapacity=room.capacity, floor=room.location, token=csrfToken)
                 </div>
             @endeach
         </div>

@@ -78,10 +78,23 @@ class RoomController {
 		return view.render('userPages.results', { rooms });
 	}
 
+	async goToDetails({ request, view }) {
+		const room = request.only(['title', 'floor', 'seats', 'maxCapacity', 'phoneNumber']);
+		console.log(room)
+
+		return view.render('userPages.roomDetails', { room });
+	}
+
 	async confirmBooking({ request, response }) {
-		const {title, date, from, to, location} = request.only(['title', 'date', 'from', 'to', 'location'])
+		const {meeting, date, from, to, room} = request.only(['meeting', 'date', 'from', 'to', 'room']);
+		const results = await Room
+			.findBy('name', room);
+		const row = results.toJSON();
+		const calendar = row.calendar;
+		console.log(calendar)
+
 		const event = {
-			'subject': title,
+			'subject': meeting,
 			'body': {
 				'contentType': 'HTML',
 				'content': 'Does late morning work for you?'
@@ -95,7 +108,7 @@ class RoomController {
 				'timeZone': 'Eastern Standard Time'
 			},
 			'location':{
-				'displayName':'311A (E)'
+				'displayName': room
 			},
 			'attendees': [
 				{
@@ -108,7 +121,7 @@ class RoomController {
 			]
 		  }
 
-		  const createdEvent = this.createEvent(request, event);
+		  const createdEvent = this.createEvent(request, event, calendar);
 
 		  if (createdEvent)
 		  	return response.redirect('/booking');
@@ -188,7 +201,7 @@ class RoomController {
 		}
 	}
 
-	async createEvent(request, event) {
+	async createEvent(request, event, calendar) {
 		const accessToken = request.cookie('accessToken');
 		const username = request.cookie('username');
 
@@ -201,7 +214,7 @@ class RoomController {
 
 			try {
 				const newEvent = await client
-		  			.api(`/me/calendars/${room_id}/events`)
+		  			.api(`/me/calendars/${calendar}/events`)
 		  			.post(event);
 				
 				return newEvent;

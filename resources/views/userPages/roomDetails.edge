@@ -13,7 +13,7 @@
     @endcomponent
     <div class='container'>
         {{--  Loading page header  --}}
-        @!component('components.pageHeader', title='311A (E)')
+        @!component('components.pageHeader', title=room.title)
         {{--  Actual page content  --}}
         <div class='row'>
             <div class='col card room-details-card border-primary shadow'>
@@ -36,19 +36,19 @@
                                         <tbody> 
                                             <tr>
                                                 <th scope='row'>Phone Number</th>
-                                                <td>{{ phoneNumber }} 613-960-6464</td>
+                                                <td>{{ room.phoneNumber }}</td>
                                             </tr>
                                             <tr>
                                                 <th scope='row'>Table Seats</th>
-                                                <td>{{ seats }} 12</td>
+                                                <td>{{ room.seats }}</td>
                                             </tr>
                                             <tr>
                                                 <th scope='row'>Max Capacity</th>
-                                                <td>{{ maxCapacity }} 32</td>
+                                                <td>{{ room.maxCapacity }}</td>
                                             </tr> 
                                             <tr>
                                                 <th scope='row'>Equipment</th>
-                                                <td>{{ equipment }} TV, Mircosoft Surface Hub, Phone</td>
+                                                <td>{{ equipment }}</td>
                                             </tr>             
                                         </tbody>
                                     </table>
@@ -77,6 +77,7 @@
         <form action='{{ route('confirmBooking') }}' method='POST'>
                 {{ csrfField() }}
 
+                <input type='hidden' name='room' value={{ room.title }} /> 
                 {{--  Body content  --}}
                 <div class='modal-body'>
                     {{--  Table that displays booking information  --}}
@@ -85,7 +86,7 @@
                             <tbody>
                                 <tr>
                                     <th class='confirmation-modal-text' scope='row'>Meeting Name</th>
-                                    <td class='confirmation-modal-column'><input type='text' name='title' class='form-control confirmation-form' id='example-text-input' placeholder='Please enter booking name'/></td>
+                                    <td class='confirmation-modal-column'><input type='text' name='meeting' class='form-control confirmation-form' id='example-text-input' placeholder='Please enter booking name'/></td>
                                 </tr> 
                                 <tr>
                                     <th class='confirmation-modal-text' scope='row'>Date</th>
