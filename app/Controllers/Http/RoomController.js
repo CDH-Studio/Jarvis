@@ -58,12 +58,14 @@ class RoomController {
 	}
 
 	async edit ({ params, view }) {
+		// Retrieves room object
 		const room = await Room.findBy('name', params.name);
 
 		return view.render('adminDash.editRoom', { room: room });
 	}
 
 	async update ({ request, response, session, params, view }) {
+		// Retrieves room object
 		let room = await Room.findBy('name', params.name);
 
 		// Retrieves user input
@@ -89,6 +91,7 @@ class RoomController {
 			name: `${body.name}_roomPicture.png`
 		});
 
+		// Updates room information in database
 		await Room
 			.query()
 			.where('name', room.name)
