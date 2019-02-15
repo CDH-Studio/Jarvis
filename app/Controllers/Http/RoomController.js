@@ -34,7 +34,7 @@ class RoomController {
 				name: `${room.name}_floorPlan.png`
 			});
 			if (!floorPlanImage.moved()) {
-				return profilePic.error().message; // eslint-disable-line 
+				//return profilePic.error().message; // eslint-disable-line 
 			}
 
 			// Upload process - Room Picture
@@ -47,7 +47,7 @@ class RoomController {
 				name: `${room.name}_roomPicture.png`
 			});
 			if (!roomImage.moved()) {
-				return profilePic.error().message; // eslint-disable-line 
+				//return profilePic.error().message; // eslint-disable-line 
 			}
 
 			room.floorplan = `uploads/floorPlans/${room.name}.png`;
