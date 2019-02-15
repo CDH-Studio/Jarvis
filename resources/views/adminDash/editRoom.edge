@@ -8,7 +8,7 @@
     <div class='row'>
         <div class= 'col-12'>
 
-        <form action='{{ '/addRoom/' + room.name + '?_method=PUT' }}' method='POST' enctype='multipart/form-data'>
+        <form action='{{route('saveRoom',{id: room.id}) }}' method='POST' enctype='multipart/form-data'>
                 {{--  protects against cross site forgery  --}}
                 {{ csrfField() }} 
                 <div class='form-group has-danger'>

@@ -59,14 +59,14 @@ class RoomController {
 
 	async edit ({ params, view }) {
 		// Retrieves room object
-		const room = await Room.findBy('name', params.name);
+		const room = await Room.findBy('id', params.id);
 
 		return view.render('adminDash.editRoom', { room: room });
 	}
 
 	async update ({ request, response, session, params, view }) {
 		// Retrieves room object
-		let room = await Room.findBy('name', params.name);
+		let room = await Room.findBy('id', params.id);
 
 		// Retrieves user input
 		const body = request.all();
@@ -117,6 +117,16 @@ class RoomController {
 		session.flash({ notification: 'Room Updated!' });
 
 		return view.render('adminDash.roomDetails', { params, room });
+	}
+
+	async show ({ response, params, view }) {
+		// Retrieves room object
+		try {
+			const room = await Room.firstOrFail('id', params.id);
+			return view.render('adminDash.roomDetails', { room: room });
+		} catch (error) {
+			return response.redirect('/');
+		}
 	}
 }
 

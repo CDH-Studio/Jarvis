@@ -40,8 +40,8 @@ Route.on('/addRoom').render('adminDash/addRoomForm').as('addRoom');
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
 Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
 
-Route.get('/addRoom/edit/:name', 'RoomController.edit').as('editRoom');
-Route.put('addRoom/:name', 'RoomController.update');
+Route.get('/addRoom/edit/:id', 'RoomController.edit').as('editRoom');
+Route.put('addRoom/:id', 'RoomController.update').as('saveRoom');
 
 // Forgot password
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
@@ -53,7 +53,6 @@ Route.post('/changePassword', 'UserController.changePassword').as('changePasswor
 
 // Employee user pages
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
-Route.on('/booking').render('userPages/booking').as('booking');
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
 
 // Temporary routes ***** Need to change so that a userr cannot acess this through URL ****
@@ -61,3 +60,4 @@ Route.on('/results').render('userPages/results').as('results');
 
 // ************ Needs a unique url for all rooms **********
 Route.on('/details').render('userPages/roomDetails').as('roomDetails');
+Route.get('/room/:id', 'RoomController.show');
