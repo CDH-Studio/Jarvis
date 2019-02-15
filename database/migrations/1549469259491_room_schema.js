@@ -22,7 +22,6 @@ class RoomsSchema extends Schema {
       table.string('floorplan', 100)
       table.string('picture', 100)
       table.string('calendar', 250)
-      table.primary('name')
       table.timestamps()
     })
   }

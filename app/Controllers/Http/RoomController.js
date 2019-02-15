@@ -216,11 +216,12 @@ class RoomController {
 			  }
 		}
 	}
-	
+
 	async edit ({ params, view }) {
 		// Retrieves room object
-		const room = await Room.findBy('id', params.id);
+		const room = await Room.findBy('name', params.id);
 
+		console.log(room)
 		return view.render('adminDash.editRoom', { room: room });
 	}
 
