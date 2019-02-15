@@ -8,7 +8,7 @@
     <div class='row'>
         <div class= 'col-12'>
 
-        <form action='{{ '/addRoom' + 'room.id' + '?_method=PUT' }}' method='POST' enctype='multipart/form-data'>
+        <form action='{{ '/addRoom/' + room.name + '?_method=PUT' }}' method='POST' enctype='multipart/form-data'>
                 {{--  protects against cross site forgery  --}}
                 {{ csrfField() }} 
                 <div class='form-group has-danger'>
@@ -67,27 +67,47 @@
                     </span>
                 @endif
 
+                @if(room.projector)
+                    @set('projectorChecked','checked')
+                @endif
+
+                @if(room.whiteboard)
+                    @set('whiteboardChecked','checked')
+                @endif
+
+                @if(room.flipchart)
+                    @set('flipchartChecked','checked')
+                @endif
+
+                @if(room.audioConference)
+                    @set('audioConferenceChecked','checked')
+                @endif
+
+                @if(room.videoConference)
+                    @set('videoConferenceChecked','checked')
+                @endif
+
                 <div class='form-group'>
                     <label>Equipment</label>
 
                     <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value='1' />
+                        <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value='1' {{projectorChecked}}/>
                         <label class='custom-control-label' for='projectorCheck'>Projector</label>
                     </div>
                     <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1'/>
-                        <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
+                        <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1' {{whiteboardChecked}}/>
+                    <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
                     </div>
                     <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1'/>
+                        <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{flipchartChecked}}/>
                         <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
                     </div>
                     <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1'/>
+                        <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{audioConferenceChecked}}/>
                         <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
                     </div>
                     <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1'/>
+                        <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{videoConferenceChecked}}/>
                         <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
                     </div>
                 </div>
@@ -104,11 +124,11 @@
 
                 <div class='form-group'>
                     <label>Floor Plan</label>
-                    <input type='file' name='floorPlan'>
+                    <input type='file' name='floorPlan' value='{{ room.floorplan }}'>
                 </div>
                 <div class='form-group'>
                     <label>Room Picture</label>
-                    <input type='file' name='roomPicture'>
+                    <input type='file' name='roomPicture' value='{{ room.picture }}'>
                 </div>
                 <button type='submit' class='btn btn-primary mb-3'>Add</button>
             </form>

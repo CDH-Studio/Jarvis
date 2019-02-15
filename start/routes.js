@@ -40,10 +40,8 @@ Route.on('/addRoom').render('adminDash/addRoomForm').as('addRoom');
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
 Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
 
-// Route.on('/edit').render('adminDash/editRoom').as('editRoom');
-Route.get('/addRoom/edit/:id', 'RoomController.edit').as('editRoom');
-// Route.put('addRoom/edit', 'RoomController.update');
-Route.on('/roomDetails').render('adminDash/roomDetails').as('roomDetails');
+Route.get('/addRoom/edit/:name', 'RoomController.edit').as('editRoom');
+Route.put('addRoom/:name', 'RoomController.update');
 
 // Forgot password
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');

@@ -96,21 +96,21 @@
 
                 <div class='form-group'>
                     <label for='extraEquipment'>Extra Equipment</label>
-                    <textarea class='form-control' name='extraEquipment' id='extraEquipment' rows='3' value='{{ old('extraEquipment', '') }}'></textarea>
+                    <textarea class='form-control' name='extraEquipment' id='extraEquipment' rows='3' >{{ old('extraEquipment', '') }}</textarea>
                 </div>
 
                 <div class='form-group'>
                     <label for='extraEquipment'>Comments</label>
-                    <textarea class='form-control' name='comment' id='comment' rows='5' value='{{ old('comment', '') }}'></textarea>
+                    <textarea class='form-control' name='comment' id='comment' rows='5' >{{ old('comment', '') }}</textarea>
                 </div>
 
                 <div class='form-group'>
                     <label>Floor Plan</label>
-                    <input type='file' name='floorPlan'>
+                    <input type='file' name='floorPlan' value='{{ old('floorplan', '') }}'>
                 </div>
                 <div class='form-group'>
                     <label>Room Picture</label>
-                    <input type='file' name='roomPicture'>
+                    <input type='file' name='roomPicture' value='{{ old('picture', '') }}'>
                 </div>
                 <button type='submit' class='btn btn-primary mb-3'>Add</button>
             </form>
