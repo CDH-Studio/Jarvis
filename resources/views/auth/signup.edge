@@ -23,7 +23,7 @@ Jarvis - Login
 
 				<div class='form-group mb-2'>
 					<label for='firstname'>First Name</label>
-					<input type='text' class='form-control' name='firstname' id='firstname' placeholder='John'>
+					<input type='text' class='form-control' name='firstname' id='firstname' placeholder='John' value='{{ old('firstname', '') }}'>
 					@if(hasErrorFor('firstname'))
 						<span>
 							{{ getErrorFor('firstname') }}
@@ -34,7 +34,7 @@ Jarvis - Login
 
 				<div class='form-group mb-2'>
 					<label for='lastname'>Last Name</label>
-					<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe'>
+					<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe' value='{{ old('lastname', '') }}'>
 					@if(hasErrorFor('lastname'))
 						<span>
 							{{ getErrorFor('lastname') }}
@@ -46,7 +46,7 @@ Jarvis - Login
 
 				<div class='form-group mb-2'>
 					<label for='email'>Email address</label>
-					<input type='email' class='form-control' name='email' id='email' placeholder='Enter email'>
+					<input type='email' class='form-control' name='email' id='email' placeholder='Enter email' value='{{ old('email', '') }}'>
 					@if(hasErrorFor('email'))
 						<span>
 							{{ getErrorFor('email') }}
