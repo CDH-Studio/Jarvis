@@ -74,3 +74,5 @@ Route.get('/calendars', 'RoomController.getCalendars');
 Route.get('/calendar', 'RoomController.getCalendar');
 Route.on('/details').render('userPages/roomDetails').as('roomDetails');
 Route.get('/room/:id', 'RoomController.show');
+
+Route.on('/booking').render('userPages/booking').as('booking');
