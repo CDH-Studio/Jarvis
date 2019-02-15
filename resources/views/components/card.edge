@@ -1,7 +1,7 @@
 {{--  Room car component that takes: title, phoneNumber, seats, maxCapacity, equipment, standardEquipment[array] --}}
 @!component('components.roomConfirmationModal', id='roomModal', title=title)
 
-<a class='room-card' href='#' data-toggle='modal' data-target='#roomModal'>
+<a class='room-card' href='{{ route('/details') }}' {{--data-toggle='modal' data-target='#roomModal'--}}>
     <div class='room-card-title'>
         <h4>{{ title }}</h4>
     </div>

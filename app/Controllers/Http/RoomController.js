@@ -66,8 +66,16 @@ class RoomController {
 		}
 	}
 
-	book() {
-		console.log('book')
+	async getAllRooms({ view }) {
+		const results = await Room.all();
+		const rooms = results.toJSON();
+
+		rooms.sort((a,b) => {
+			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+		});
+		console.log(rooms)
+
+		return view.render('userPages.results', { rooms });
 	}
 
 	async confirmBooking({ request, response }) {

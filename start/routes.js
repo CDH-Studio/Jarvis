@@ -42,6 +42,7 @@ Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
 Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
 Route.on('/roomDetails').render('adminDash/roomDetails').as('roomDetails');
 Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBooking');
+Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms');
 
 // Forgot password
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
@@ -60,7 +61,7 @@ Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking
 Route.on('/results').render('userPages/results').as('results');
 
 // ************ Needs a unique url for all rooms **********
-Route.on('/details').render('userPages/roomDetails').as('roomDetails');
+Route.on('/details').render('userPages/roomDetails');
 
 
 Route.get('/test', 'TokenController.getAuthUrl');
