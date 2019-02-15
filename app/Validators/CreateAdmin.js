@@ -4,13 +4,14 @@ const Env = use('Env');
 class CreateAdmin {
 	get rules () {
 		const secretToken = Env.get('ADMIN_TOKEN', '666');
+		console.log(secretToken);
 		return {
 			firstname: 'required',
 			lastname: 'required',
 			email: 'required|email|unique:users',
 			password: 'required',
 			confirmPassword: 'required|same:password',
-			token: `required|equals: ${secretToken}`
+			token: `required|equals:${secretToken}`
 		};
 	}
 
@@ -18,8 +19,7 @@ class CreateAdmin {
 		return {
 			'required': 'Woah now, {{ field }} is required.',
 			'unique': 'Wait a second, the {{ field }} already exists',
-			'equals': 'Token incorrect',
-			'same': 'Passwords did not match'
+			'equals': 'Token incorrect'
 		};
 	}
 

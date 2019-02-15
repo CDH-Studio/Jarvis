@@ -6,7 +6,7 @@ const room_id = 'AQMkADAwATM3ZmYAZS1kNzk2LWRkADNkLTAwAi0wMAoARgAAA5AqfjNGCEVAv9M
 
 class RoomController {
 	// Adds a room Object into the Database
-	async addRoom ({ request, response, session, view }) {
+	async addRoom ({ request, response, session, params, view }) {
 		try {
 			// Retrieves user input
 			const body = request.all();
@@ -33,9 +33,6 @@ class RoomController {
 				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
 				name: `${room.name}_floorPlan.png`
 			});
-			if (!floorPlanImage.moved()) {
-				//return profilePic.error().message; // eslint-disable-line 
-			}
 
 			// Upload process - Room Picture
 			const roomImage = request.file('roomPicture', {
@@ -46,9 +43,6 @@ class RoomController {
 				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
 				name: `${room.name}_roomPicture.png`
 			});
-			if (!roomImage.moved()) {
-				//return profilePic.error().message; // eslint-disable-line 
-			}
 
 			room.floorplan = `uploads/floorPlans/${room.name}.png`;
 			room.picture = `uploads/roomPictures/${room.name}.png`;
@@ -58,9 +52,8 @@ class RoomController {
 			await room.save();
 
 			session.flash({ notification: 'Room Added!' });
-			// return response.redirect('/addRoom');
 			// return response.redirect('/roomDetails');
-			return view.render('adminDash.roomDetails', { room });
+			return view.render('adminDash.roomDetails', { params, room });
 		} catch (err) {
 			console.log(err);
 		}
@@ -221,6 +214,78 @@ class RoomController {
 			  } catch (err) {
 				console.log(err);
 			  }
+		}
+	}
+	
+	async edit ({ params, view }) {
+		// Retrieves room object
+		const room = await Room.findBy('id', params.id);
+
+		return view.render('adminDash.editRoom', { room: room });
+	}
+
+	async update ({ request, response, session, params, view }) {
+		// Retrieves room object
+		let room = await Room.findBy('id', params.id);
+
+		// Retrieves user input
+		const body = request.all();
+
+		// Upload process - Floor Plan
+		const floorPlanImage = request.file('floorPlan', {
+			types: ['image'],
+			size: '2mb'
+		});
+		await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
+			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
+			name: `${body.name}_floorPlan.png`
+		});
+
+		// Upload process - Room Picture
+		const roomImage = request.file('roomPicture', {
+			types: ['image'],
+			size: '2mb'
+		});
+		await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
+			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
+			name: `${body.name}_roomPicture.png`
+		});
+
+		// Updates room information in database
+		await Room
+			.query()
+			.where('name', room.name)
+			.update({
+				name: body.name,
+				location: body.location,
+				telephone: body.seats,
+				seats: body.tableSeats,
+				capacity: body.maximumCapacity,
+				projector: body.projectorCheck,
+				whiteboard: body.whiteboardCheck,
+				flipchart: body.flipchart,
+				audioConference: body.audioCheck,
+				videoConference: body.videoCheck,
+				floorplan: `uploads/floorPlans/${body.name}.png`,
+				picture: `uploads/roomPictures/${body.name}.png`,
+				extraEquipment: body.extraEquipment,
+				comment: body.comment
+			});
+
+		room = await Room.findBy('name', body.name);
+
+		session.flash({ notification: 'Room Updated!' });
+
+		return view.render('adminDash.roomDetails', { params, room });
+	}
+
+	async show ({ response, params, view }) {
+		// Retrieves room object
+		try {
+			const room = await Room.firstOrFail('id', params.id);
+			return view.render('adminDash.roomDetails', { room: room });
+		} catch (error) {
+			return response.redirect('/');
 		}
 	}
 }
