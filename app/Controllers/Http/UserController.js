@@ -60,9 +60,11 @@ class UserController {
 
 		let hash = random(4);
 
-		let row = { email: userInfo.email,
+		let row = {
+			email: userInfo.email,
 			hash: hash,
-			type: 2 };
+			type: 2
+		};
 		await AccountRequest.create(row);
 
 		let body = `
@@ -170,9 +172,11 @@ class UserController {
 		if (rows.length !== 0) {
 			let hash = random(4);
 
-			let row = { email: email,
+			let row = {
+				email: email,
 				hash: hash,
-				type: 1 };
+				type: 1
+			};
 			console.log(row);
 			await AccountRequest.create(row);
 
@@ -223,10 +227,10 @@ class UserController {
 		if (auth.user.role === 1 || (auth.user.id === Number(params.id) && auth.user.role === 2)) {
 			try {
 				const passwords = request.only(['newPassword']);
-				const user = auth.user;  // eslint-disable-line
+        const user = auth.user;  // eslint-disable-line
 				const newPassword = await Hash.make(passwords.newPassword);
 
-				const changedRow = await User  // eslint-disable-line
+        const changedRow = await User  // eslint-disable-line
 					.query()
 					.where('id', Number(params.id))
 					.update({ password: newPassword });

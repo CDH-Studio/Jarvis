@@ -46,7 +46,12 @@ class HomeController {
 			await auth.check();
 			var d = new Date();
 			var date = d.toLocaleDateString();
-			return view.render('adminDash', { auth, date });
+			console.log(auth.user.role);
+			if (auth.user.role === 1) {
+				return view.render('adminDash', { auth, date });
+			} else {
+				return view.render('userPages.booking', { auth });
+			}
 		} catch (error) {
 			return response.redirect('/login');
 		}

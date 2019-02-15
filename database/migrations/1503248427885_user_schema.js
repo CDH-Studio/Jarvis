@@ -29,7 +29,7 @@ class UserSchema extends Schema {
 
 	down () {
 		this.drop('users');
-		// this.drop('account_requests')
+		this.drop('account_requests');
 	}
 }
 
