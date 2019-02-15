@@ -36,7 +36,8 @@ Route.post('/register', 'UserController.create').validator('CreateUser');
 Route.get('/logout', 'UserController.logout').as('logout');
 
 // Room pages
-Route.on('/addRoom').render('adminDash/addRoomForm').as('addRoom');
+Route.get('/room/:id', 'RoomController.show').as('showRoom');
+Route.get('/newRoom', 'RoomController.create').as('addRoomForm');
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
 Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
 

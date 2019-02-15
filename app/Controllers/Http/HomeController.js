@@ -46,7 +46,6 @@ class HomeController {
 			await auth.check();
 			var d = new Date();
 			var date = d.toLocaleDateString();
-			console.log(auth.user.role);
 			if (auth.user.role === 1) {
 				return view.render('adminDash', { auth, date });
 			} else {
