@@ -1,6 +1,6 @@
-'use strict'
+'use strict';
 
-const Env = use('Env')
+const Env = use('Env');
 
 module.exports = {
 	/*
@@ -29,8 +29,8 @@ module.exports = {
 		host: Env.get('SMTP_HOST'),
 		secure: false,
 		auth: {
-		user: Env.get('MAIL_USERNAME'),
-		pass: Env.get('MAIL_PASSWORD')
+			user: Env.get('MAIL_USERNAME'),
+			pass: Env.get('MAIL_PASSWORD')
 		},
 		maxConnections: 5,
 		maxMessages: 100,
@@ -112,6 +112,6 @@ module.exports = {
 	*/
 
 	emailList: {
-		support: 'support@mail.cdhstudio.ca',
+		support: 'support@mail.cdhstudio.ca'
 	}
-}
+};

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const Room = use('App/Models/Room');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
@@ -6,12 +6,12 @@ const room_id = 'AQMkADAwATM3ZmYAZS1kNzk2LWRkADNkLTAwAi0wMAoARgAAA5AqfjNGCEVAv9M
 
 class RoomController {
 	// Adds a room Object into the Database
-	async addRoom({ request, response, session, view }) {
+	async addRoom ({ request, response, session, view }) {
 		try {
 			// Retrieves user input
 			const body = request.all();
 
-			// Populates the room object's values 
+			// Populates the room object's values
 			const room = new Room();
 			room.name = body.name;
 			room.location = body.location;
@@ -30,11 +30,11 @@ class RoomController {
 				size: '2mb'
 			});
 			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME 
-				name: `${room.name}_floorPlan.png`,
+				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
+				name: `${room.name}_floorPlan.png`
 			});
 			if (!floorPlanImage.moved()) {
-				return profilePic.error().message;
+				return profilePic.error().message; // eslint-disable-line 
 			}
 
 			// Upload process - Room Picture
@@ -43,11 +43,11 @@ class RoomController {
 				size: '2mb'
 			});
 			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME 
-				name: `${room.name}_roomPicture.png`,
+				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
+				name: `${room.name}_roomPicture.png`
 			});
 			if (!roomImage.moved()) {
-				return profilePic.error().message;
+				return profilePic.error().message; // eslint-disable-line 
 			}
 
 			room.floorplan = `uploads/floorPlans/${room.name}.png`;
@@ -58,8 +58,8 @@ class RoomController {
 			await room.save();
 
 			session.flash({ notification: 'Room Added!' });
-			//return response.redirect('/addRoom');
-			//return response.redirect('/roomDetails');
+			// return response.redirect('/addRoom');
+			// return response.redirect('/roomDetails');
 			return view.render('adminDash.roomDetails', { room });
 		} catch (err) {
 			console.log(err);
@@ -225,4 +225,4 @@ class RoomController {
 	}
 }
 
-module.exports = RoomController
+module.exports = RoomController;

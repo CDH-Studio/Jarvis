@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 /*
 |--------------------------------------------------------------------------
@@ -14,11 +14,10 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route')
-
+const Route = use('Route');
 
 Route.get('/', 'HomeController.dashboard').as('home');
-Route.on('/welcome').render('welcome')
+Route.on('/welcome').render('welcome');
 Route.on('/sample').render('sample');
 
 Route.on('/register').render('auth.signup').as('register');
@@ -28,7 +27,7 @@ Route.get('/user/:id', 'UserController.show').as('viewProfile');
 Route.get('/user/:id/edit', 'UserController.edit');
 Route.post('/user/:id/updatepassword', 'UserController.changePassword').as('changePassword');
 
-//Route.on('/user/:id', 'UserController.show').render('auth.showUser');
+// Route.on('/user/:id', 'UserController.show').render('auth.showUser');
 
 // Admin Register page
 Route.on('/admin/register').render('auth.signupAdmin').as('registerAdmin');
@@ -52,7 +51,8 @@ Route.get('/newPassword', 'UserController.verifyHash');
 Route.get('/newUser', 'UserController.verifyEmail');
 Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
 Route.post('/changePassword', 'UserController.changePassword').as('changePassword')//.validator('changePassword');
-Route.on('/card').render('components.card');
+//Route.on('/card').render('components.card');
+
 // Employee user pages
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
 Route.on('/booking').render('userPages/booking').as('booking');
