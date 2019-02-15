@@ -55,7 +55,7 @@ class UserController {
 
 	async createWithVerifyingEmail ({ request, response, auth }) {
 		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
-		console.log(userInfo)
+		console.log(userInfo);
 		userInfo.role = 2;
 		userInfo.verified = false;
 
@@ -127,11 +127,11 @@ class UserController {
 
 		try {
 			await auth.attempt(user.email, password);
-		if(auth.user.role === 2) {
-			return response.redirect('/booking');
-		} else {
-			return response.redirect('/');
-		}
+			if (auth.user.role === 2) {
+				return response.redirect('/booking');
+			} else {
+				return response.redirect('/');
+			}
 		} catch (error) {
 			session.flash({ loginError: 'These credentials do not work.' });
 			return response.redirect('/login');
@@ -218,7 +218,7 @@ class UserController {
 	}
 
 	async resetPassword ({ request, response }) {
-		console.log(request.body)
+		console.log(request.body);
 		const newPassword = await Hash.make(request.body.newPassword);
 		const changedRow = await User
 			.query()
@@ -229,10 +229,10 @@ class UserController {
 			.query()
 			.where('email', request.body.email)
 			.fetch();
-		const rows = results.toJSON()
+		const rows = results.toJSON();
 		const password = rows[0].password;
 		const isSame = await Hash.verify(request.body.newPassword, password);
-		console.log(isSame)
+		console.log(isSame);
 
 		console.log(changedRow);
 		return response.redirect('/login');

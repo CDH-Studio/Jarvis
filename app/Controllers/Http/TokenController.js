@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 const Env = use('Env');
 
 const credentials = {
@@ -6,7 +6,7 @@ const credentials = {
 		id: Env.get('MICROSOFT_APP_ID'),
 		secret: Env.get('MICROSOFT_APP_PASSWORD')
 	},
-	
+
 	auth: {
 		tokenHost: Env.get('MICROSOFT_HOST'),
 		authorizePath: Env.get('MICROSOFT_AUTHORIZE_ENDPOINT'),
@@ -17,35 +17,35 @@ const Oauth2 = require('simple-oauth2').create(credentials);
 
 const JWT = require('jsonwebtoken');
 
-function saveCookie(token, res) {
+function saveCookie (token, res) {
 	const user = JWT.decode(token.token.id_token);
-	console.log(user)
+	console.log(user);
 
-	res.cookie('accessToken', token.token.access_token, {maxAge: 3600000, httpOnly: true});
-	res.cookie('username', user.name, {maxAge: 3600000, httpOnly: true});
-   }
+	res.cookie('accessToken', token.token.access_token, { maxAge: 3600000, httpOnly: true });
+	res.cookie('username', user.name, { maxAge: 3600000, httpOnly: true });
+}
 
 class TokenController {
-	async getAuthUrl({ response }) {
+	async getAuthUrl ({ response }) {
 		const returnVal = await Oauth2.authorizationCode.authorizeURL({
 			redirect_uri: Env.get('MICROSOFT_REDIRECT_URI'),
 			scope: Env.get('MICROSOFT_SCOPES')
 		});
 
-		//console.log(`Auth url: ${returnVal}`);
+		// console.log(`Auth url: ${returnVal}`);
 		return response.redirect(returnVal);
 	}
 
-  	async authorize({ request, response }) {
+	async authorize ({ request, response }) {
 		const code = request.only(['code']).code;
-		
-		if(code) {
+
+		if (code) {
 			const token = await this.getAccessToken(code, response);
 			return token;
 		}
 	}
 
-	async getAccessToken(authCode, response) {
+	async getAccessToken (authCode, response) {
 		try {
 			let result = await Oauth2.authorizationCode.getToken({
 				code: authCode,
@@ -54,14 +54,14 @@ class TokenController {
 			});
 
 			const token = Oauth2.accessToken.create(result);
-			console.log(token)
+			console.log(token);
 			saveCookie(token, response);
 
 			return token.token.access_token;
-		} catch(err) {
-			console.log(err)
+		} catch (err) {
+			console.log(err);
 		}
 	}
 }
 
-module.exports = TokenController
+module.exports = TokenController;

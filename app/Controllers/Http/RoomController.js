@@ -59,32 +59,32 @@ class RoomController {
 		}
 	}
 
-	async getAllRooms({ view }) {
+	async getAllRooms ({ view }) {
 		const results = await Room.all();
 		const rooms = results.toJSON();
 
-		rooms.sort((a,b) => {
+		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
-		console.log(rooms)
+		console.log(rooms);
 
 		return view.render('userPages.results', { rooms });
 	}
 
-	async goToDetails({ request, view }) {
+	async goToDetails ({ request, view }) {
 		const room = request.only(['title', 'floor', 'seats', 'maxCapacity', 'phoneNumber']);
-		console.log(room)
+		console.log(room);
 
 		return view.render('userPages.roomDetails', { room });
 	}
 
-	async confirmBooking({ request, response }) {
-		const {meeting, date, from, to, room} = request.only(['meeting', 'date', 'from', 'to', 'room']);
+	async confirmBooking ({ request, response }) {
+		const { meeting, date, from, to, room } = request.only(['meeting', 'date', 'from', 'to', 'room']);
 		const results = await Room
 			.findBy('name', room);
 		const row = results.toJSON();
 		const calendar = row.calendar;
-		console.log(calendar)
+		console.log(calendar);
 
 		const event = {
 			'subject': meeting,
@@ -100,27 +100,26 @@ class RoomController {
 				'dateTime': `${date}T${to}`,
 				'timeZone': 'Eastern Standard Time'
 			},
-			'location':{
+			'location': {
 				'displayName': room
 			},
 			'attendees': [
 				{
-				'emailAddress': {
-					'address':'liyunwei10@gmail.com',
-					'name': 'Li'
-				},
-				'type': 'required'
+					'emailAddress': {
+						'address': 'liyunwei10@gmail.com',
+						'name': 'Li'
+					},
+					'type': 'required'
 				}
 			]
-		  }
+		};
 
-		  const createdEvent = this.createEvent(request, event, calendar);
+		const createdEvent = this.createEvent(request, event, calendar);
 
-		  if (createdEvent)
-		  	return response.redirect('/booking');
+		if (createdEvent) { return response.redirect('/booking'); }
 	}
 
-	async getEvents({ request }) {
+	async getEvents ({ request }) {
 		const accessToken = request.cookie('accessToken');
 		const username = request.cookie('username');
 
@@ -133,19 +132,19 @@ class RoomController {
 
 			try {
 				const events = await client
-      				.api('/me/events')
-      				.select('subject,organizer,start,end')
-      				//.orderby('createdDateTime DESC')
-      				.get();
-				
+					.api('/me/events')
+					.select('subject,organizer,start,end')
+					// .orderby('createdDateTime DESC')
+					.get();
+
 				return events;
-			  } catch (err) {
+			} catch (err) {
 				console.log(err);
-			  }
+			}
 		}
 	}
 
-	async getCalendars({ request }) {
+	async getCalendars ({ request }) {
 		const accessToken = request.cookie('accessToken');
 		const username = request.cookie('username');
 
@@ -158,19 +157,18 @@ class RoomController {
 
 			try {
 				const calendars = await client
-      				.api('/me/calendars')
-      				//.orderby('createdDateTime DESC')
-      				.get();
-				
+					.api('/me/calendars')
+					// .orderby('createdDateTime DESC')
+					.get();
+
 				return calendars;
-			  } catch (err) {
+			} catch (err) {
 				console.log(err);
-				return;
-			  }
+			}
 		}
 	}
 
-	async getCalendar({ request }) {
+	async getCalendar ({ request }) {
 		const accessToken = request.cookie('accessToken');
 		const username = request.cookie('username');
 
@@ -183,18 +181,18 @@ class RoomController {
 
 			try {
 				const calendars = await client
-      				.api(`/me/calendars/${room_id}`)
-      				//.orderby('createdDateTime DESC')
-      				.get();
-				
+					.api(`/me/calendars/${room_id}`)
+					// .orderby('createdDateTime DESC')
+					.get();
+
 				return calendars;
-			  } catch (err) {
+			} catch (err) {
 				console.log(err);
-			  }
+			}
 		}
 	}
 
-	async createEvent(request, event, calendar) {
+	async createEvent (request, event, calendar) {
 		const accessToken = request.cookie('accessToken');
 		const username = request.cookie('username');
 
@@ -207,13 +205,13 @@ class RoomController {
 
 			try {
 				const newEvent = await client
-		  			.api(`/me/calendars/${calendar}/events`)
-		  			.post(event);
-				
+					.api(`/me/calendars/${calendar}/events`)
+					.post(event);
+
 				return newEvent;
-			  } catch (err) {
+			} catch (err) {
 				console.log(err);
-			  }
+			}
 		}
 	}
 
@@ -221,7 +219,7 @@ class RoomController {
 		// Retrieves room object
 		const room = await Room.findBy('name', params.id);
 
-		console.log(room)
+		console.log(room);
 		return view.render('adminDash.editRoom', { room: room });
 	}
 
