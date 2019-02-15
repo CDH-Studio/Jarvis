@@ -12,62 +12,60 @@
                 {{--  protects against cross site forgery  --}}
                 {{ csrfField() }} 
                 <div class='form-group has-danger'>
-                    <label for='name'>Room Name</label>
+                    <label for='name'>*Room Name</label>
                     <input type='text' name='name' class='form-control' id='name' aria-describedby='nameHelp' placeholder='Ex: 308-B' value='{{ old('name', '') }}' />
                     <small id='nameHelp' class='form-text text-muted'>
                         Enter the name of the meeting room you wish to add
                     </small>
-
-
+                    @if(hasErrorFor('name'))
+                        <span class='alert-danger'>
+                            {{ getErrorFor('name') }}
+                        </span>
+                    @endif
                 </div>
-                @if(hasErrorFor('name'))
-                    <span class='alert-danger'>
-                        {{ getErrorFor('name') }}
-                    </span>
-                @endif
 
                 <div class='form-group'>
-                    <label for='location'>Location</label>
+                    <label for='location'>*Location</label>
                     <input type='text' name='location' class='form-control' id='location' placeholder='Ex: IC CONF OTT-235 Queen-Oasis CONF IC' value='{{ old('location', '') }}'/>
                     <small id='locationHelp' class='form-text text-muted'>
                         Please enter the location of the room in the following format: **format**
                     </small>
+                    @if(hasErrorFor('location'))
+                        <span class='alert-danger'>
+                            {{ getErrorFor('location') }}
+                        </span>
+                    @endif
                 </div>
-                @if(hasErrorFor('location'))
-                    <span class='alert-danger'>
-                        {{ getErrorFor('location') }}
-                    </span>
-                @endif
 
                 <div class='form-group'>
-                    <label for='telephoneNumber'>Telephone Number</label>
+                    <label for='telephoneNumber'>*Telephone Number</label>
                     <input type='text' name='telephoneNumber' class='form-control' id='telephoneNumber' placeholder='Ex: 343-333-3333' value='{{ old('telephoneNumber', '') }}' />
+                    @if(hasErrorFor('telephoneNumber'))
+                        <span class='alert-danger'>
+                            {{ getErrorFor('telephoneNumber') }}
+                        </span>
+                    @endif
                 </div>
-                @if(hasErrorFor('telephoneNumber'))
-                    <span class='alert-danger'>
-                        {{ getErrorFor('telephoneNumber') }}
-                    </span>
-                @endif
 
                 <div class='form-group'>
-                    <label for='tableSeats'>Table Seats</label>
+                    <label for='tableSeats'>*Table Seats</label>
                     <input type='text' name='tableSeats' class='form-control' id='tableSeats' placeholder='Ex: 22' value='{{ old('tableSeats', '') }}'/>
+                    @if(hasErrorFor('tableSeats'))
+                        <span class='alert-danger'>
+                            {{ getErrorFor('tableSeats') }}
+                        </span>
+                    @endif
                 </div>
-                @if(hasErrorFor('tableSeats'))
-                    <span class='alert-danger'>
-                        {{ getErrorFor('tableSeats') }}
-                    </span>
-                @endif
 
                 <div class='form-group'>
-                    <label for='maximumCapacity'>Maximum Capacity</label>
+                    <label for='maximumCapacity'>*Maximum Capacity</label>
                     <input type='text' name='maximumCapacity' class='form-control' id='maximumCapacity' placeholder='Ex: 42' value='{{ old('maximumCapacity', '') }}'/>
+                    @if(hasErrorFor('maximumCapacity'))
+                        <span class='alert-danger'>
+                            {{ getErrorFor('maximumCapacity') }}
+                        </span>
+                    @endif
                 </div>
-                @if(hasErrorFor('maximumCapacity'))
-                    <span class='alert-danger'>
-                        {{ getErrorFor('maximumCapacity') }}
-                    </span>
-                @endif
 
                 <div class='form-group'>
                     <label>Equipment</label>
