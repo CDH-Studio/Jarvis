@@ -122,7 +122,7 @@ class RoomController {
 	}
 
 	async getEvents () {
-		const accessToken = getAccessToken();
+		const accessToken = await getAccessToken();
 
 		if (accessToken) {
 			const client = graph.Client.init({
@@ -146,7 +146,7 @@ class RoomController {
 	}
 
 	async getCalendars () {
-		const accessToken = getAccessToken();
+		const accessToken = await getAccessToken();
 
 		if (accessToken) {
 			const client = graph.Client.init({
@@ -169,7 +169,7 @@ class RoomController {
 	}
 
 	async getCalendar (calendarId) {
-		const accessToken = getAccessToken();
+		const accessToken = await getAccessToken();
 
 		if (accessToken) {
 			const client = graph.Client.init({
@@ -192,7 +192,7 @@ class RoomController {
 	}
 
 	async createEvent (eventInfo, calendarId) {
-		const accessToken = getAccessToken();
+		const accessToken = await getAccessToken();
 
 		if (accessToken) {
 			const client = graph.Client.init({
