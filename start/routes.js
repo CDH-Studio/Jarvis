@@ -65,7 +65,7 @@ Route.on('/results').render('userPages/results').as('results');
 // ************ Needs a unique url for all rooms **********
 Route.on('/details').render('userPages/roomDetails');
 
-Route.get('/test', 'TokenController.getAuthUrl');
+Route.get('/authenticate', 'TokenController.getAuthUrl');
 Route.get('/authorize', 'TokenController.authorize');
 Route.get('/events', 'RoomController.getEvents');
 Route.get('/event', 'RoomController.createEvent');

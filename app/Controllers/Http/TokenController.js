@@ -1,5 +1,6 @@
 'use strict';
 const Env = use('Env');
+const Token = use('App/Models/Token');
 
 const credentials = {
 	client: {
@@ -14,38 +15,41 @@ const credentials = {
 	}
 };
 const Oauth2 = require('simple-oauth2').create(credentials);
-
 const JWT = require('jsonwebtoken');
 
-function saveCookie (token, res) {
-	const user = JWT.decode(token.token.id_token);
-	console.log(user);
+async function saveToDatabase (token) {
+	await Token.truncate();
+	const accessTokenModel = new Token();
+	accessTokenModel.token = token.token.access_token;
+	accessTokenModel.type = 'access';
+	accessTokenModel.save();
 
-	res.cookie('accessToken', token.token.access_token, { maxAge: 3600000, httpOnly: true });
-	res.cookie('username', user.name, { maxAge: 3600000, httpOnly: true });
+	const refreshTokenModel = new Token();
+	refreshTokenModel.token = token.token.refresh_token;
+	refreshTokenModel.type = 'refresh';
+	refreshTokenModel.save();
 }
 
 class TokenController {
 	async getAuthUrl ({ response }) {
-		const returnVal = await Oauth2.authorizationCode.authorizeURL({
+		const authUrl = await Oauth2.authorizationCode.authorizeURL({
 			redirect_uri: Env.get('MICROSOFT_REDIRECT_URI'),
 			scope: Env.get('MICROSOFT_SCOPES')
 		});
 
-		// console.log(`Auth url: ${returnVal}`);
-		return response.redirect(returnVal);
+		return response.redirect(authUrl);
 	}
 
-	async authorize ({ request, response }) {
+	async authorize ({ request }) {
 		const code = request.only(['code']).code;
 
 		if (code) {
-			const token = await this.getAccessToken(code, response);
+			const token = await this.getAccessTokenFromAuthCode(code);
 			return token;
 		}
 	}
 
-	async getAccessToken (authCode, response) {
+	async getAccessTokenFromAuthCode (authCode) {
 		try {
 			let result = await Oauth2.authorizationCode.getToken({
 				code: authCode,
@@ -53,14 +57,63 @@ class TokenController {
 				scope: Env.get('MICROSOFT_SCOPES')
 			});
 
-			const token = Oauth2.accessToken.create(result);
-			console.log(token);
-			saveCookie(token, response);
+			const token = await Oauth2.accessToken.create(result);
+
+			saveToDatabase(token);
 
 			return token.token.access_token;
 		} catch (err) {
 			console.log(err);
 		}
+	}
+
+	async getAccessTokenFromCookie ({ request, response }) {
+		const cookies = request.cookies();
+		const accessToken = cookies.accessToken;
+
+		if (accessToken) {
+			const fiveMinutes = 300000;
+			const expiration = new Date(parseFloat(cookies.graph_token_expires - fiveMinutes));
+
+			if (expiration > new Date()) {
+				return accessToken;
+			}
+		}
+
+		const refreshToken = cookies.refreshToken;
+		if (refreshToken) {
+			const newToken = await Oauth2.accessToken.create({
+				refresh_token: refreshToken
+			}).refresh();
+
+			return newToken.token.access_token;
+		}
+
+		return null;
+	}
+
+	saveToCookie (token, res) {
+		const user = JWT.decode(token.token.id_token);
+
+		res.cookie('accessToken', token.token.access_token, {
+			maxAge: 3600000,
+			httpOnly: true
+		});
+
+		res.cookie('username', user.name, {
+			maxAge: 3600000,
+			httpOnly: true
+		});
+
+		res.cookie('refreshToken', token.token.refresh_token, {
+			maxAge: 7200000,
+			httpOnly: true
+		});
+
+		res.cookie('tokenExpiry', token.token.expires_at.getTime(), {
+			maxAge: 3600000,
+			httpOnly: true
+		});
 	}
 }
 

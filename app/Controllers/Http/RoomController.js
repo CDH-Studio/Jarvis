@@ -1,7 +1,19 @@
 'use strict';
 const Room = use('App/Models/Room');
+const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
+
+async function getAccessToken () {
+	try {
+		const results = await Token.findBy('type', 'access');
+		const accessToken = results.toJSON().token;
+		return accessToken;
+	} catch (err) {
+		console.log(err);
+		return null;
+	}
+}
 
 class RoomController {
 	// Adds a room Object into the Database
@@ -65,7 +77,6 @@ class RoomController {
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
-		console.log(rooms);
 
 		return view.render('userPages.results', { rooms });
 	}
@@ -102,27 +113,18 @@ class RoomController {
 			'location': {
 				'displayName': room
 			},
-			'attendees': [
-				{
-					'emailAddress': {
-						'address': 'liyunwei10@gmail.com',
-						'name': 'Li'
-					},
-					'type': 'required'
-				}
-			]
+			'attendees': []
 		};
-		const accessToken = request.cookie('accessToken');
-		const createdEvent = this.createEvent(accessToken, eventInfo, calendar);
+
+		const createdEvent = this.createEvent(eventInfo, calendar);
 
 		if (createdEvent) { return response.redirect('/booking'); }
 	}
 
-	async getEvents ({ request }) {
-		const accessToken = request.cookie('accessToken');
-		const username = request.cookie('username');
+	async getEvents () {
+		const accessToken = getAccessToken();
 
-		if (username && accessToken) {
+		if (accessToken) {
 			const client = graph.Client.init({
 				authProvider: (done) => {
 					done(null, accessToken);
@@ -143,11 +145,10 @@ class RoomController {
 		}
 	}
 
-	async getCalendars ({ request }) {
-		const accessToken = request.cookie('accessToken');
-		const username = request.cookie('username');
+	async getCalendars () {
+		const accessToken = getAccessToken();
 
-		if (username && accessToken) {
+		if (accessToken) {
 			const client = graph.Client.init({
 				authProvider: (done) => {
 					done(null, accessToken);
@@ -167,7 +168,9 @@ class RoomController {
 		}
 	}
 
-	async getCalendar (accessToken, calendarId) {
+	async getCalendar (calendarId) {
+		const accessToken = getAccessToken();
+
 		if (accessToken) {
 			const client = graph.Client.init({
 				authProvider: (done) => {
@@ -188,7 +191,9 @@ class RoomController {
 		}
 	}
 
-	async createEvent (accessToken, eventInfo, calendarId) {
+	async createEvent (eventInfo, calendarId) {
+		const accessToken = getAccessToken();
+
 		if (accessToken) {
 			const client = graph.Client.init({
 				authProvider: (done) => {
