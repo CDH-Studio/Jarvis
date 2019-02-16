@@ -2,7 +2,6 @@
 const Room = use('App/Models/Room');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
-const room_id = 'AQMkADAwATM3ZmYAZS1kNzk2LWRkADNkLTAwAi0wMAoARgAAA5AqfjNGCEVAv9Maot2ubu8HAIvwfWDIkbVCrIYUZM1RmYwAAAIBBgAAAIvwfWDIkbVCrIYUZM1RmYwAAlWD4rsAAAA=';
 
 class RoomController {
 	// Adds a room Object into the Database
@@ -86,7 +85,7 @@ class RoomController {
 		const calendar = row.calendar;
 		console.log(calendar);
 
-		const event = {
+		const eventInfo = {
 			'subject': meeting,
 			'body': {
 				'contentType': 'HTML',
@@ -113,8 +112,8 @@ class RoomController {
 				}
 			]
 		};
-
-		const createdEvent = this.createEvent(request, event, calendar);
+		const accessToken = request.cookie('accessToken');
+		const createdEvent = this.createEvent(accessToken, eventInfo, calendar);
 
 		if (createdEvent) { return response.redirect('/booking'); }
 	}
@@ -168,11 +167,8 @@ class RoomController {
 		}
 	}
 
-	async getCalendar ({ request }) {
-		const accessToken = request.cookie('accessToken');
-		const username = request.cookie('username');
-
-		if (username && accessToken) {
+	async getCalendar (accessToken, calendarId) {
+		if (accessToken) {
 			const client = graph.Client.init({
 				authProvider: (done) => {
 					done(null, accessToken);
@@ -181,7 +177,7 @@ class RoomController {
 
 			try {
 				const calendars = await client
-					.api(`/me/calendars/${room_id}`)
+					.api(`/me/calendars/${calendarId}`)
 					// .orderby('createdDateTime DESC')
 					.get();
 
@@ -192,11 +188,8 @@ class RoomController {
 		}
 	}
 
-	async createEvent (request, event, calendar) {
-		const accessToken = request.cookie('accessToken');
-		const username = request.cookie('username');
-
-		if (username && accessToken) {
+	async createEvent (accessToken, eventInfo, calendarId) {
+		if (accessToken) {
 			const client = graph.Client.init({
 				authProvider: (done) => {
 					done(null, accessToken);
@@ -205,8 +198,8 @@ class RoomController {
 
 			try {
 				const newEvent = await client
-					.api(`/me/calendars/${calendar}/events`)
-					.post(event);
+					.api(`/me/calendars/${calendarId}/events`)
+					.post(eventInfo);
 
 				return newEvent;
 			} catch (err) {
