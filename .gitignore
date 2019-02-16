@@ -8,6 +8,9 @@ tmp
 # Environment variables, never commit this file
 .env
 
+# Uploads 
+public/uploads/
+
 # the vscode config file
 .vscode
 
