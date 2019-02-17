@@ -3,7 +3,7 @@
 class resetPassword {
 	get rules () {
 		return {
-			'password': 'required',
+			'newPassword': 'required',
 			'confirmPassword': 'required|same:password'
 		};
 	}

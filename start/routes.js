@@ -39,6 +39,10 @@ Route.get('/logout', 'UserController.logout').as('logout');
 Route.on('/addRoom').render('adminDash/addRoomForm').as('addRoom');
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
 Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
+Route.on('/roomDetails').render('adminDash/roomDetails').as('roomDetails');
+Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBooking');
+Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms');
+Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails');
 
 Route.get('/addRoom/edit/:id', 'RoomController.edit').as('editRoom');
 Route.put('addRoom/:id', 'RoomController.update').as('saveRoom');
@@ -49,7 +53,7 @@ Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword')
 Route.get('/newPassword', 'UserController.verifyHash');
 Route.get('/newUser', 'UserController.verifyEmail');
 Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
-Route.post('/changePassword', 'UserController.changePassword').as('changePassword'); // .validator('changePassword');
+Route.post('/changePassword', 'UserController.changePassword').as('changePassword');// .validator('changePassword');
 
 // Employee user pages
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
@@ -59,5 +63,15 @@ Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking
 Route.on('/results').render('userPages/results').as('results');
 
 // ************ Needs a unique url for all rooms **********
+Route.on('/details').render('userPages/roomDetails');
+
+Route.get('/authenticate', 'TokenController.getAuthUrl');
+Route.get('/authorize', 'TokenController.authorize');
+Route.get('/events', 'RoomController.getEvents');
+Route.get('/event', 'RoomController.createEvent');
+Route.get('/calendars', 'RoomController.getCalendars');
+Route.get('/calendar', 'RoomController.getCalendar');
 Route.on('/details').render('userPages/roomDetails').as('roomDetails');
 Route.get('/room/:id', 'RoomController.show');
+
+Route.on('/booking').render('userPages/booking').as('booking');
