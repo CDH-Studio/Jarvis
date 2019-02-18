@@ -1,9 +1,11 @@
+/*+++++++++++++++++++++++++++++++++++++++++++*/
 /* General */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
 body { 
     padding-top: 65px; 
     font-family: 'Lato', sans-serif;
 }
-/* General components */
 
 .wrapper-center {
     text-align: center;
@@ -13,7 +15,11 @@ body {
 .wrapper-center{
     text-align: center;
 }
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Navbar changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .navbar-dark{
     background-color: #001642 !important;
 }
@@ -42,13 +48,9 @@ body {
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-/* TODO: these are overriding everything we should investigate*/
+/* Changing  button colors */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-
-/* Changinge button colors */
 .btn-primary{
-    margin:2px;
-    width:110px;
     border-color: #0facf3;
     background-color: #0FACF3;
 }
@@ -59,8 +61,6 @@ body {
 }
 
 .btn-outline-secondary{
-    margin:2px;
-    width:110px;
     color: #000000;
     border-color: #000000;
     background-color: #ffffff;
@@ -86,6 +86,7 @@ body {
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* user nav*/
 /*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .hvr-underline-from-center {
     display: inline-block;
     vertical-align: middle;
@@ -123,6 +124,7 @@ body {
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* admin nav*/
 /*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .dropdown-toggle{
     padding-right: 10px;
 }
@@ -169,6 +171,7 @@ body {
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Room card information */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .room-card{
     width: 95%;
     margin: 0px auto 40px auto;
