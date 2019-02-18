@@ -3,6 +3,8 @@
 const Task = use('Task');
 const Env = use('Env');
 const Token = use('App/Models/Token');
+
+// The credentials for Microsoft Graph
 const credentials = {
 	client: {
 		id: Env.get('MICROSOFT_APP_ID'),
@@ -17,6 +19,11 @@ const credentials = {
 };
 const Oauth2 = require('simple-oauth2').create(credentials);
 
+/**
+ * Update the tokens in the database
+ *
+ * @param {*} token The tokens received from Graph (access token, refresh token and account information).
+ */
 async function saveToDatabase (token) {
 	await Token.truncate();
 	const accessTokenModel = new Token();
@@ -30,10 +37,16 @@ async function saveToDatabase (token) {
 }
 
 class RefreshAccessToken extends Task {
+	/**
+	 * Run the scheduled task every half hour.
+	 */
 	static get schedule () {
 		return '*/30 * * * *';
 	}
 
+	/**
+	 * Update the tokens in the database.
+	 */
 	async handle () {
 		const results = await Token.findBy('type', 'refresh');
 		const refreshToken = results.toJSON().token;
