@@ -5,6 +5,7 @@ const Schema = use('Schema');
 
 class TokensSchema extends Schema {
 	up () {
+		// Tokens - Various tokens for API authentication
 		this.create('tokens', (table) => {
 			table.increments();
 			// table.integer('user_id').unsigned().references('id').inTable('users');

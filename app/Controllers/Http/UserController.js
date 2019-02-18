@@ -6,6 +6,11 @@ const Mail = use('Mail');
 const Hash = use('Hash');
 const Env = use('Env');
 
+/**
+ * Generating a random string.
+ *
+ * @param {Integer} times Each time a string of 5 to 6 characters is generated.
+ */
 function random (times) {
 	let result = '';
 	for (let i = 0; i < times; i++) {
@@ -16,6 +21,7 @@ function random (times) {
 };
 
 /**
+ * Send an email.
  *
  * @param {string} subject  Subject of Email
  * @param {string} body     Body of Email
@@ -33,6 +39,12 @@ function sendMail (subject, body, to, from) {
 };
 
 class UserController {
+	/**
+	 * Create a new Enployee user. There is an option to verify the user directly
+	 * or to make them verify their email address.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async create ({ request, response, auth }) {
 		const confirmationRequired = Env.get('REGISTRATION_CONFIRMATION', false);
 
@@ -43,6 +55,11 @@ class UserController {
 		}
 	}
 
+	/**
+	 * Create and verify a new Enployee user. Save them to the database and log them in.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async createWithoutVerifyingEmail ({ request, response, auth }) {
 		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
 		userInfo.role = 2;
@@ -53,6 +70,11 @@ class UserController {
 		return response.redirect('/');
 	}
 
+	/**
+	 * Create a new Enployee user and send a confirmation email to them.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async createWithVerifyingEmail ({ request, response, auth }) {
 		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
 		console.log(userInfo);
@@ -74,7 +96,7 @@ class UserController {
       			Please click the following URL into your browser: 
       			http://localhost:3333/newUser?hash=${hash}
     		</p>
-    `;
+    	`;
 
 		await sendMail('Verify Email Address for Jarvis',
 			body, userInfo.email, 'support@mail.cdhstudio.ca');
@@ -83,6 +105,11 @@ class UserController {
 		return response.redirect('/login');
 	}
 
+	/**
+	 * Verify the user's emaill address.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async verifyEmail ({ request, response }) {
 		const hash = request._all.hash;
 
@@ -106,6 +133,11 @@ class UserController {
 		}
 	}
 
+	/**
+	 * Create and verify a new Admin user. Save them to the database and log them in.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async createAdmin ({ request, response, auth }) {
 		var adminInfo = request.only(['firstname', 'lastname', 'email', 'password']);
 		adminInfo['role'] = 1;
@@ -116,6 +148,11 @@ class UserController {
 		return response.redirect('/');
 	}
 
+	/**
+	 * Log a user in and redirect them to their respective landing page depending on the user type.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async login ({ request, auth, response, session }) {
 		const { email, password } = request.all();
 
@@ -138,6 +175,11 @@ class UserController {
 		}
 	}
 
+	/**
+	 * Log a user out.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async logout ({ auth, response }) {
 		await auth.logout();
 		return response.redirect('/');
@@ -166,6 +208,11 @@ class UserController {
 		return view.render('auth.showUser', { auth, user, layoutType, canEdit });
 	}
 
+	/**
+	 * Create a password reset request record in the database and send a confirmation email to the user.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async createPasswordResetRequest ({ request, response }) {
 		const email = request.body.email;
 		const results = await User
@@ -186,12 +233,13 @@ class UserController {
 			await AccountRequest.create(row);
 
 			let body = `
-      <h2> Password Reset Request </h2>
-      <p>
-        We received a request to reset your password. If you asked to reset your password, please click the following URL: 
-        http://localhost:3333/newPassword?hash=${hash}
-      </p>
-      `;
+      			<h2> Password Reset Request </h2>
+      			<p>
+        			We received a request to reset your password. If you asked to reset your password, please click the following URL: 
+        			http://localhost:3333/newPassword?hash=${hash}
+      			</p>
+			`;
+
 			await sendMail('Password Reset Request',
 				body, email, 'support@mail.cdhstudio.ca');
 		}
@@ -199,6 +247,11 @@ class UserController {
 		return response.redirect('/login');
 	}
 
+	/**
+	 * Verify the user's password reset hash code and redirect them to the password reset page.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async verifyHash ({ request, view }) {
 		const hash = request._all.hash;
 		if (hash) {
@@ -217,6 +270,11 @@ class UserController {
 		}
 	}
 
+	/**
+	 * Update the user's password in the database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async resetPassword ({ request, response }) {
 		console.log(request.body);
 		const newPassword = await Hash.make(request.body.newPassword);
@@ -225,27 +283,23 @@ class UserController {
 			.where('email', request.body.email)
 			.update({ password: newPassword });
 
-		const results = await User
-			.query()
-			.where('email', request.body.email)
-			.fetch();
-		const rows = results.toJSON();
-		const password = rows[0].password;
-		const isSame = await Hash.verify(request.body.newPassword, password);
-		console.log(isSame);
-
 		console.log(changedRow);
 		return response.redirect('/login');
 	}
 
+	/**
+	 * Update the user's password in the database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async changePassword ({ request, response, auth, params, session }) {
 		if (auth.user.role === 1 || (auth.user.id === Number(params.id) && auth.user.role === 2)) {
 			try {
 				const passwords = request.only(['newPassword']);
-        const user = auth.user;  // eslint-disable-line
+        		const user = auth.user;  // eslint-disable-line
 				const newPassword = await Hash.make(passwords.newPassword);
 
-        const changedRow = await User  // eslint-disable-line
+        		const changedRow = await User  // eslint-disable-line
 					.query()
 					.where('id', Number(params.id))
 					.update({ password: newPassword });

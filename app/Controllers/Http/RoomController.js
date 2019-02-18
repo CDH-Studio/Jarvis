@@ -4,6 +4,12 @@ const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
 
+/**
+ * Retrieve access token for Microsoft Graph from the data basebase.
+ *
+ * @returns {Object} The access token.
+ *
+ */
 async function getAccessToken () {
 	try {
 		const results = await Token.findBy('type', 'access');
@@ -140,10 +146,16 @@ class RoomController {
 		}
 	}
 
+	/**
+	 * Query all the rooms from the database and render the results page.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async getAllRooms ({ view }) {
 		const results = await Room.all();
 		const rooms = results.toJSON();
 
+		// Sort the results by name
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
@@ -151,6 +163,11 @@ class RoomController {
 		return view.render('userPages.results', { rooms });
 	}
 
+	/**
+	 * Navigate to the details page of specified room.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async goToDetails ({ request, view }) {
 		const room = request.only(['title', 'floor', 'seats', 'maxCapacity', 'phoneNumber']);
 		console.log(room);
@@ -158,14 +175,19 @@ class RoomController {
 		return view.render('userPages.roomDetails', { room });
 	}
 
+	/**
+	 * Create the requested event on the room calendar.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async confirmBooking ({ request, response }) {
 		const { meeting, date, from, to, room } = request.only(['meeting', 'date', 'from', 'to', 'room']);
 		const results = await Room
 			.findBy('name', room);
 		const row = results.toJSON();
 		const calendar = row.calendar;
-		console.log(calendar);
 
+		// Information of the event
 		const eventInfo = {
 			'subject': meeting,
 			'body': {
@@ -186,12 +208,20 @@ class RoomController {
 			'attendees': []
 		};
 
+		// Create the event
 		const createdEvent = this.createEvent(eventInfo, calendar);
 
-		if (createdEvent) { return response.redirect('/booking'); }
+		if (createdEvent) {
+			return response.redirect('/booking');
+		}
 	}
 
-	async getEvents () {
+	/**
+	 * Query all events of the specified room calendar.
+	 *
+	 * @param {String} calendarId The id of the room calendar.
+	 */
+	async getEvents (calendarId) {
 		const accessToken = await getAccessToken();
 
 		if (accessToken) {
@@ -203,7 +233,7 @@ class RoomController {
 
 			try {
 				const events = await client
-					.api('/me/events')
+					.api(`/me/calendars/${calendarId}/events`)
 					.select('subject,organizer,start,end')
 					// .orderby('createdDateTime DESC')
 					.get();
@@ -215,6 +245,9 @@ class RoomController {
 		}
 	}
 
+	/**
+	 * Query all the room calendars.
+	 */
 	async getCalendars () {
 		const accessToken = await getAccessToken();
 
@@ -238,6 +271,11 @@ class RoomController {
 		}
 	}
 
+	/**
+	 * Query the specified room calendar.
+	 *
+	 * @param {String} calendarId The id of the room calendar.
+	 */
 	async getCalendar (calendarId) {
 		const accessToken = await getAccessToken();
 
@@ -261,6 +299,12 @@ class RoomController {
 		}
 	}
 
+	/**
+	 * Create an event on the specified room calendar.
+	 *
+	 * @param {*} eventInfo Information of the event.
+	 * @param {*} calendarId The id of the room calendar.
+	 */
 	async createEvent (eventInfo, calendarId) {
 		const accessToken = await getAccessToken();
 
