@@ -12,39 +12,31 @@
 
         {{--  Page content  --}}
         <div class='search-room-content'>
-            {{--  Date form  --}}
-            <div class='row mb-4'>
-                <div class='col-sm-2'>
-                    <h4>*Select Date:</h4>
+            
+            <form action='/' method='POST' enctype='multipart/form-data'>
+                {{--  Date form  --}}
+                <div class='form-group mb-4'>
+                    <label for='date-input'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[REQUIRED] Please enter the date your a looking for'>*Select Date:</label>
+                    {{--  ######## Need to Change value to the current date #############  --}}
+                    <input type='date' name='date-input' class='form-control col-4' value=''/>
                 </div>
-                <div class='col-sm-4'>
-                    <input class='form-control' type='date' value='2019-08-19' id='example-date-input'>
+
+                {{--  Meeting time form  --}}
+                <div class='form-group mb-4'>
+                    <label for='time-from-input'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[REQUIRED] Please enter the start time of the room booking'>*From:</label>
+                    {{--  ######## Need to Change value to the current date #############  --}}
+                    <input type='time' name='time-from-input' class='form-control col-4' value='13:45:00'/>
                 </div>
-            </div>
-            {{--  M<eeting time form  --}}
-            <div class='row mb-4'>
-                <div class='col-sm-2'>
-                    <h4>*From:</h4>
+                <div class='form-group mb-4'>
+                    <label for='time-to-input'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[REQUIRED] Please enter the end time of the room booking'>*To:</label>
+                    {{--  ######## Need to Change value to the current date #############  --}}
+                    <input type='time' name='time-to-input' class='form-control col-4' value='14:45:00'/>
                 </div>
-                <div class='col-sm-4'>
-                    <input class='form-control' type='time' value='13:45:00' id='example-time-input'>
-                </div>
-            </div>
-            <div class='row mb-4'>
-                <div class='col-sm-2'>
-                    <h4>*To:</h4>
-                </div>
-                <div class='col-sm-4'>
-                    <input class='form-control' type='time' value='14:45:00' id='example-time-input'>
-                </div>
-            </div>  
-            {{--  Location form  --}}
-            <div class='row mb-4'>
-                <div class='col-sm-2'>
-                    <h4>Location:</h4>
-                </div>
-                <div class='col-sm-4'>
-                    <select class='form-control'>
+
+                {{--  Location form  --}}
+                <div class='form-group mb-4'>
+                    <label for='location-input'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Enter the preferred location'>Location:</label>
+                    <select name='location-input' class='form-control col-4'>
                         <option selected=''>Select a floor</option>
                         <option value='0'>Floor 0</option>
                         <option value='1'>Floor 1</option>
@@ -58,69 +50,67 @@
                         <option value='9'>Floor 9</option>
                     </select>
                 </div>
-            </div>
-            {{--  Number of people form  --}}
-            <div class='row mb-4'>
-                <div class='col-sm-2'>
-                    <h4>Room For:</h4>
-                </div>
-                <div class='col-sm-4'>
-                    <input class='form-control' type='number' name='quantity' min='1' max='50'  value='14:45:00'>
-                </div>
-            </div>
-            {{--  Equipment check box form  --}}
-            
-            <div class='form-group'>
-                <h4>Equipment:</h4>
 
-                <div class='row'>
-                    <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                        <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value='1'/>
-                        <label class='custom-control-label' for='projectorCheck'>Projector</label>
+                {{--  Number of people form  --}}
+                <div class='form-group mb-4'>
+                    <label for='number-people-input'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Please enter the estimated number of people that need to be accommodated for'>Number of People:</label>
+                    <input class='form-control col-4' name='number-people-input' type='number' name='quantity' min='1' max='50'  value='1'>
+                </div>
+
+                {{--  Equipment check box form  --}}
+                <div class='form-group'>
+                    <h4>Equipment:</h4>
+
+                    <div class='row'>
+                        <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                            <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value='1'/>
+                            <label class='custom-control-label' for='projectorCheck'>Projector</label>
+                        </div>
+                        <div class='custom-control custom-checkbox ml-3'>
+                            <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1'/>
+                            <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
+                        </div>
                     </div>
-                    <div class='custom-control custom-checkbox ml-3'>
-                        <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1'/>
-                        <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
+
+                    <div class='row'>
+                        <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                            <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1'/>
+                            <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
+                        </div>  
+                        <div class='custom-control custom-checkbox ml-3'>
+                            <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1'/>
+                            <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
+                        </div>                
+                    </div>
+
+                    <div class='row'>
+                        <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                            <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1'/>
+                            <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
+                        </div>
+                        <div class='custom-control custom-checkbox ml-3'>
+                            <input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1'/>
+                            <label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
+                        </div>               
+                    </div>
+
+                    <div class='row'>
+                        <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                            <input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1'/>
+                            <label class='custom-control-label' for='pcCheck'>PC</label>
+                        </div>                
                     </div>
                 </div>
-
+                {{--  Page buttons  --}}
                 <div class='row'>
-                    <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                        <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1'/>
-                        <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
-                    </div>  
-                    <div class='custom-control custom-checkbox ml-3'>
-                        <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1'/>
-                        <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
-                    </div>                
-                </div>
-
-                <div class='row'>
-                    <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                        <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1'/>
-                        <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
-                    </div>
-                    <div class='custom-control custom-checkbox ml-3'>
-                        <input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1'/>
-                        <label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
-                    </div>               
-                </div>
-
-                <div class='row'>
-                    <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                        <input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1'/>
-                        <label class='custom-control-label' for='pcCheck'>PC</label>
-                    </div>                
+                    <div class='col-sm-12'>
+                        <button type='button' class='btn btn-outline-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
+                        <button type='button' class='btn btn-primary' onclick="window.location='{{ route('results')}}';">Search</button>
+                    </div>       
                 </div>
             </div>
-            {{--  Page buttons  --}}
-            <div class='row'>
-                <div class='col-sm-12'>
-                    <button type='button' class='btn btn-outline-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
-                    <button type='button' class='btn btn-primary' onclick="window.location='{{ route('results')}}';">Search</button>
-                </div>       
-            </div>
-        </div>
+        </form>
     </div> 
+
 @endsection
 
