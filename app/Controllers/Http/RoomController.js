@@ -304,7 +304,7 @@ class RoomController {
 
 	/**
 	 * Create an event on the specified room calendar.
-	 *  
+	 *
 	 * @param {*} eventInfo Information of the event.
 	 * @param {*} calendarId The id of the room calendar.
 	 */
