@@ -1,0 +1,126 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+    Search Room
+@endsection
+
+{{--  search room page content  --}}
+@section('content')
+    <div class='container'>
+        {{--  Loading Page Header  --}}
+        @!component('components.pageHeader', title='Search Rooms')
+
+        {{--  Page content  --}}
+        <div class='search-room-content'>
+            {{--  Date form  --}}
+            <div class='row mb-4'>
+                <div class='col-sm-2'>
+                    <h4>*Select Date:</h4>
+                </div>
+                <div class='col-sm-4'>
+                    <input class='form-control' type='date' value='2019-08-19' id='example-date-input'>
+                </div>
+            </div>
+            {{--  M<eeting time form  --}}
+            <div class='row mb-4'>
+                <div class='col-sm-2'>
+                    <h4>*From:</h4>
+                </div>
+                <div class='col-sm-4'>
+                    <input class='form-control' type='time' value='13:45:00' id='example-time-input'>
+                </div>
+            </div>
+            <div class='row mb-4'>
+                <div class='col-sm-2'>
+                    <h4>*To:</h4>
+                </div>
+                <div class='col-sm-4'>
+                    <input class='form-control' type='time' value='14:45:00' id='example-time-input'>
+                </div>
+            </div>  
+            {{--  Location form  --}}
+            <div class='row mb-4'>
+                <div class='col-sm-2'>
+                    <h4>Location:</h4>
+                </div>
+                <div class='col-sm-4'>
+                    <select class='form-control'>
+                        <option selected=''>Select a floor</option>
+                        <option value='0'>Floor 0</option>
+                        <option value='1'>Floor 1</option>
+                        <option value='2'>Floor 2</option>
+                        <option value='3'>Floor 3</option>
+                        <option value='4'>Floor 4</option>
+                        <option value='5'>Floor 5</option>
+                        <option value='6'>Floor 6</option>
+                        <option value='7'>Floor 7</option>
+                        <option value='8'>Floor 8</option>
+                        <option value='9'>Floor 9</option>
+                    </select>
+                </div>
+            </div>
+            {{--  Number of people form  --}}
+            <div class='row mb-4'>
+                <div class='col-sm-2'>
+                    <h4>Room For:</h4>
+                </div>
+                <div class='col-sm-4'>
+                    <input class='form-control' type='number' name='quantity' min='1' max='50'  value='14:45:00'>
+                </div>
+            </div>
+            {{--  Equipment check box form  --}}
+            
+            <div class='form-group'>
+                <h4>Equipment:</h4>
+
+                <div class='row'>
+                    <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                        <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value='1'/>
+                        <label class='custom-control-label' for='projectorCheck'>Projector</label>
+                    </div>
+                    <div class='custom-control custom-checkbox ml-3'>
+                        <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1'/>
+                        <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                        <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1'/>
+                        <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
+                    </div>  
+                    <div class='custom-control custom-checkbox ml-3'>
+                        <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1'/>
+                        <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
+                    </div>                
+                </div>
+
+                <div class='row'>
+                    <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                        <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1'/>
+                        <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
+                    </div>
+                    <div class='custom-control custom-checkbox ml-3'>
+                        <input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1'/>
+                        <label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
+                    </div>               
+                </div>
+
+                <div class='row'>
+                    <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                        <input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1'/>
+                        <label class='custom-control-label' for='pcCheck'>PC</label>
+                    </div>                
+                </div>
+            </div>
+            {{--  Page buttons  --}}
+            <div class='row'>
+                <div class='col-sm-12'>
+                    <button type='button' class='btn btn-outline-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
+                    <button type='button' class='btn btn-primary' onclick="window.location='{{ route('results')}}';">Search</button>
+                </div>       
+            </div>
+        </div>
+    </div> 
+@endsection
+

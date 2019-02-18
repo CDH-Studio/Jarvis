@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-  <meta charset="UTF-8" />
+  <meta charset='UTF-8' />
   <title>Hello Adonis</title>
   {{ style('style') }}
 </head>
 <body>
   <section>
-    <div class="logo"></div>
-    <div class="title"></div>
-    <div class="subtitle">
+    <div class='logo'></div>
+    <div class='title'></div>
+    <div class='subtitle'>
       <p>AdonisJs simplicity will make you feel confident about your code</p>
-      <form action="/add_room" method="post">
+      <form action='/changePassword' method='post'>
         {{ csrfField() }}
-        Room#: <input type="text" name="num"><br>
-        Room name: <input type="text" name="name"><br>
-        <input type="submit" name="add" value="Upvote" />
+        Room#: <input type='text' name='oldPassword'><br>
+        Room name: <input type='text' name='newPassword'><br>
+        <input type='submit' name='add' value='Upvote' />
     </form>
     </div>
   </section>

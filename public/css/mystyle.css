@@ -1,5 +1,27 @@
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* General */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+body { 
+    padding-top: 65px; 
+    font-family: 'Lato', sans-serif;
+}
+
+.wrapper-center {
+    text-align: center;
+}
+
+
+.wrapper-center{
+    text-align: center;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Navbar changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .navbar-dark{
- background-color: #001642 !important;
+    background-color: #001642 !important;
 }
 
 .navbar-brand{
@@ -11,33 +33,60 @@
 	margin:0px;
 }
 
-body { 
-    padding-top: 65px; 
-    font-family: 'Lato', sans-serif;
-}
-
-.dash-header{
-	margin-top: 30px;
-	margin-bottom: 30px;
-	border-bottom: solid 2px #001642;
-}
-
-.dash-header .date{
-	padding-top:8px;
-}
-
 .nav-link{
 	font-size: 16px;
 	margin-left:10px;
 	padding:5px 10px;
 }
-
-.navbar-dark .navbar-nav .nav-link:hover, .navbar-dark .navbar-nav .nav-link:focus{
-	color:#fff;
+.navbar-expand, .navbar-dark{
+    padding:40px;
 }
 
+.navbar-expand-lg{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
-/* Underline From Center */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Changing  button colors */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+.btn-primary{
+    border-color: #0facf3;
+    background-color: #0FACF3;
+}
+
+.btn-primary:hover{
+    background-color: #036A98;
+    border-color: #036A98;
+}
+
+.btn-outline-secondary{
+    color: #000000;
+    border-color: #000000;
+    background-color: #ffffff;
+}
+
+.btn-outline-secondary:hover{
+    background-color:#546A7B;
+    border-color: #546A7B;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(70, 151, 233, 0.5);
+    box-shadow: 0 0 0 0.2rem rgba(70, 151, 233, 0.5);
+  }
+
+  /* Large button styling */
+.large-buttons{
+    width: 170px !important;
+    margin: 5px !important;
+    font-size: 20px !important;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* user nav*/
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .hvr-underline-from-center {
     display: inline-block;
     vertical-align: middle;
@@ -51,7 +100,7 @@ body {
     overflow: hidden;
 }
 .hvr-underline-from-center:before {
-    content: "";
+    content: '';
     position: absolute;
     z-index: -1;
     left: 50%;
@@ -65,11 +114,34 @@ body {
     transition-duration: 0.3s;
     -webkit-transition-timing-function: ease-out;
     transition-timing-function: ease-out;
+    color: #12ACF3
 }
 .hvr-underline-from-center:hover:before, .hvr-underline-from-center:focus:before, .hvr-underline-from-center:active:before {
     left: 0;
     right: 0;
 }
+
+.user-nav-link:hover, .user-nav-link:visited, .user-nav-link:active{
+    color: #FFFFFF !important;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* admin nav*/
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.dropdown-toggle{
+    padding-right: 10px;
+}
+.dash-header{
+	margin-top: 20px;
+	margin-bottom: 30px;
+	border-bottom: solid 2px #001642;
+}
+
+.dash-header .date{
+	padding-top:8px;
+}
+
 /* Fix bootstrap */
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus, .dropdown-menu > li > a:active {
     background: none;
@@ -80,3 +152,174 @@ body {
     color: #555;
 }
 
+/* Adjusting margins for room booking content */
+.book-room-content{
+    margin-top: 150px;
+}
+
+/* Large button styling */
+.large-buttons{
+    width: 170px !important;
+    margin: 5px !important;
+    font-size: 20px !important;
+}
+
+.number-spinner{
+    padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    border-radius: 0.3rem;
+}
+
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Room card information */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.room-card{
+    width: 95%;
+    margin: 0px auto 40px auto;
+    display:block;
+    text-decoration: none;
+    color:#202428;
+}
+
+.room-card:hover .room-card-body{
+    text-decoration: none;
+    background-color:#F8F8F8;
+}
+
+
+.room-card:hover {
+    text-decoration: none;
+    color:#202428;
+}
+
+
+.room-card:hover .room-card-title{
+    background-color: #001642;
+}
+
+
+.room-card hr{
+    margin: 15px 0 5px 0;
+}
+
+.room-card-title{
+    height: 50px;
+    background-color: #3c5585;
+    color: #ffffff;
+    margin-top: 3px;
+    margin-bottom: 0px;
+    vertical-align: center;
+    padding:0 15px;
+}
+.room-card-title h4{
+    line-height: 50px;
+    margin-top: 3px;
+    margin-bottom: 0px;
+    vertical-align: center;
+}
+
+.room-card-body{
+    background-color: #fff;
+    padding:15px 15px;
+}
+
+.room-card-photo img{
+    max-width:100%;
+}
+
+.room-card-info{
+    padding:0px;
+    padding-left: 15px;
+}
+
+.room-card-info ul{
+    list-style: none;
+    margin:0px;
+    padding:0px;
+}
+
+.room-card-spec{
+    width:100%;
+    display:inline-block;
+    padding:10px 10px 0 10px;
+}
+
+.room-card-spec ul{
+    list-style: none;
+    margin:0px;
+    padding:0px;
+    display:inline;
+}
+
+.room-card-spec li{
+    display:inline-block;
+    width:110px;
+}
+.spec-yes{
+    color:#17BC9B;
+}
+.spec-no{
+    color:#ef8b80;
+}
+
+.flex-fixed-width-item {
+    flex: 0 0 200px;
+}
+
+.page-title{
+    padding:40px 0px;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Room confirmation modal */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.confirmation-modal{
+    max-width: 450px;
+}
+
+.confirmation-image{
+    width:80%;
+    height: auto;
+}
+
+.confirmation-modal-text{
+    margin: 0px;
+    padding-top: 18px !important;
+}
+
+.confirmation-modal-column{
+    padding:8px;
+}
+
+.confirmation-form{
+    max-width: 240px;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Room Details Page */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.room-details-spec{
+    text-align:center; 
+    padding-top:0px;
+}
+
+.room-details-spec li{
+    display:inline-block;
+    padding-left:10px;
+    padding-right:10px;
+}
+
+.room-details-spec ul{
+    text-align:center; 
+    padding-left:0px;
+    margin:0px;
+}
+
+.room-details-image{
+    width:100%;
+}

@@ -8,7 +8,7 @@ html, body {
 body {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
-  background-image: url("/splash.png");
+  background-image: url('/splash.png');
   background-color: #220052;
 }
 
@@ -29,9 +29,9 @@ section {
 }
 
 section:before {
-  content: "";
+  content: '';
   position: absolute;
-  background: url("/pyramid.png") no-repeat;
+  background: url('/pyramid.png') no-repeat;
   background-size: 100%;
   width: 100%;
   height: 402px;
@@ -39,7 +39,7 @@ section:before {
 }
 
 .logo {
-  background: url("/logo.svg") no-repeat;
+  background: url('/logo.svg') no-repeat;
   width: 36px;
   height: 33px;
   background-size: 100%;
@@ -49,7 +49,7 @@ section:before {
 }
 
 .title {
-  background: url("/title.svg") no-repeat;
+  background: url('/title.svg') no-repeat;
   width: 219px;
   height: 36px;
   background-size: 100%;

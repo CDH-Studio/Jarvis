@@ -1,25 +1,23 @@
-'use strict'
+'use strict';
 
 class CreateUser {
-  get rules () {
-    return {
-      'email': 'required|email',
-      'password': 'required'
-    }
-  }
+	get rules () {
+		return {
+			'email': 'required|email',
+			'password': 'required'
+		};
+	}
 
-  get messages() {
-    return {
-      'required': 'Woah now, {{ field }} is required.',
-    }
-  }
+	get messages () {
+		return {
+			'required': 'Woah now, {{ field }} is required.'
+		};
+	}
 
-  async fails(error) {
-    this.ctx.session.withErrors(error)
-      .flashAll();
-    
-    return this.ctx.response.redirect('back');
-  }
+	async fails (error) {
+		this.ctx.session.withErrors(error).flashAll();
+		return this.ctx.response.redirect('back');
+	}
 }
 
-module.exports = CreateUser
+module.exports = CreateUser;

@@ -1,0 +1,31 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+    Booking
+@endsection
+
+{{--  book room page content  --}}
+@section('content')
+    @section('extracss')
+        {{ style('css/mystyle') }}
+    @endsection
+    <div class='container'>
+        {{--  Loading page header  --}}
+        @!component('components.pageHeader', title= 'Hello, '+ auth.user.firstname)
+        {{--  Content  --}}
+        <div class='book-room-content wrapper-center'>
+            <div class='row'>
+                <div class='col-sm-12'>
+                    <h1>Create Booking</h1>
+                </div>
+            </div>    
+            <div class='row'>
+                <div class='col-sm-12'>
+                    <button type='button' class='btn btn-primary large-buttons' onclick="window.location='{{ route('searchRooms') }}';">Search</button>
+                    <a type='button' class='btn btn-outline-secondary large-buttons' href='{{ route('allRooms') }}'>View All Rooms</a>
+                </div>
+            </div>
+        </div>
+    </div> 
+@endsection
+

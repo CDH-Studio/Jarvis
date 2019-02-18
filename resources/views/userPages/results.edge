@@ -1,0 +1,18 @@
+@layout('layouts.mainLayout')
+
+{{--  Manage bookings page content  --}}
+@section('content')
+    <div class='container'>
+        {{--  Loading page header  --}}
+        @!component('components.pageHeader', title='Results')
+        {{--  where result cards will be displayed --}}
+        <div class='row'>
+            @each(room in rooms)
+                <div class='col-lg-6'>
+                    {{ csrfField() }}
+                    @!component('components.card', title=room.name, phoneNumber=room.telephone, seats=room.seats, maxCapacity=room.capacity, floor=room.location, extraEquipment=room.extraEquipment, token=csrfToken)
+                </div>
+            @endeach
+        </div>
+    </div> 
+@endsection
