@@ -45,7 +45,7 @@ Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms');
 Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails');
 
 Route.get('/addRoom/edit/:id', 'RoomController.edit').as('editRoom');
-Route.put('addRoom/:id', 'RoomController.update').as('saveRoom');
+Route.post('addRoom/:id', 'RoomController.update').as('saveRoom');
 
 // Forgot password
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
