@@ -5,6 +5,7 @@
         <div class= 'col-12'>
             @!component('components.pageTitle', title='Room Information')
             
+            {{--  Displays "Room Added!" success message  --}}
             @if(old('notification'))
                 <div class='alert alert-success'>
                     {{ old('notification') }}
@@ -12,11 +13,15 @@
                     <a href='{{ route('addRoom')}}'>Add Room</a>
                 </div>
             @endif
+
+            {{--  Displays all the information of a room  --}}
             <p><b>Name: </b>{{room.name}}</p>
             <p><b>Location: </b>{{room.location}}</p>
             <p><b>Telephone Number: </b>{{room.telephone}}</p>
             <p><b>Table Seats: </b>{{room.seats}}</p>
             <p><b>Maximum Capacity: </b>{{room.capacity}}</p>
+
+            {{--  Check value in database to display 'Yes' or 'No'  --}}
             @if(room.projector == 1) 
                 <p><b>Projector: </b>Yes</p>
             @else

@@ -41,7 +41,6 @@ class RoomController {
 				size: '2mb'
 			});
 			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
 				name: `${room.name}_floorPlan.png`
 			});
 
@@ -51,10 +50,10 @@ class RoomController {
 				size: '2mb'
 			});
 			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
 				name: `${room.name}_roomPicture.png`
 			});
 
+			// Populates the room object's values
 			room.floorplan = `uploads/floorPlans/${room.name}.png`;
 			room.picture = `uploads/roomPictures/${room.name}.png`;
 			room.extraEquipment = body.extraEquipment;
@@ -67,6 +66,77 @@ class RoomController {
 			return view.render('adminDash.roomDetails', { params, room });
 		} catch (err) {
 			console.log(err);
+		}
+	}
+
+	async edit ({ params, view }) {
+		// Retrieves room object
+		const room = await Room.findBy('name', params.id);
+
+		console.log(room);
+		return view.render('adminDash.editRoom', { room: room });
+	}
+
+	async update ({ request, response, session, params, view }) {
+		// Retrieves room object
+		let room = await Room.findBy('id', params.id);
+
+		// Retrieves user input
+		const body = request.all();
+
+		// Upload process - Floor Plan
+		const floorPlanImage = request.file('floorPlan', {
+			types: ['image'],
+			size: '2mb'
+		});
+		await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
+			name: `${body.name}_floorPlan.png`
+		});
+
+		// Upload process - Room Picture
+		const roomImage = request.file('roomPicture', {
+			types: ['image'],
+			size: '2mb'
+		});
+		await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
+			name: `${body.name}_roomPicture.png`
+		});
+
+		// Updates room information in database
+		await Room
+			.query()
+			.where('name', room.name)
+			.update({
+				name: body.name,
+				location: body.location,
+				telephone: body.seats,
+				seats: body.tableSeats,
+				capacity: body.maximumCapacity,
+				projector: body.projectorCheck,
+				whiteboard: body.whiteboardCheck,
+				flipchart: body.flipchart,
+				audioConference: body.audioCheck,
+				videoConference: body.videoCheck,
+				floorplan: `uploads/floorPlans/${body.name}.png`,
+				picture: `uploads/roomPictures/${body.name}.png`,
+				extraEquipment: body.extraEquipment,
+				comment: body.comment
+			});
+
+		room = await Room.findBy('name', body.name);
+
+		session.flash({ notification: 'Room Updated!' });
+
+		return view.render('adminDash.roomDetails', { params, room });
+	}
+
+	async show ({ response, params, view }) {
+		// Retrieves room object
+		try {
+			const room = await Room.firstOrFail('id', params.id);
+			return view.render('adminDash.roomDetails', { room: room });
+		} catch (error) {
+			return response.redirect('/');
 		}
 	}
 
@@ -210,79 +280,6 @@ class RoomController {
 			} catch (err) {
 				console.log(err);
 			}
-		}
-	}
-
-	async edit ({ params, view }) {
-		// Retrieves room object
-		const room = await Room.findBy('name', params.id);
-
-		console.log(room);
-		return view.render('adminDash.editRoom', { room: room });
-	}
-
-	async update ({ request, response, session, params, view }) {
-		// Retrieves room object
-		let room = await Room.findBy('id', params.id);
-
-		// Retrieves user input
-		const body = request.all();
-
-		// Upload process - Floor Plan
-		const floorPlanImage = request.file('floorPlan', {
-			types: ['image'],
-			size: '2mb'
-		});
-		await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
-			name: `${body.name}_floorPlan.png`
-		});
-
-		// Upload process - Room Picture
-		const roomImage = request.file('roomPicture', {
-			types: ['image'],
-			size: '2mb'
-		});
-		await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
-			name: `${body.name}_roomPicture.png`
-		});
-
-		// Updates room information in database
-		await Room
-			.query()
-			.where('name', room.name)
-			.update({
-				name: body.name,
-				location: body.location,
-				telephone: body.seats,
-				seats: body.tableSeats,
-				capacity: body.maximumCapacity,
-				projector: body.projectorCheck,
-				whiteboard: body.whiteboardCheck,
-				flipchart: body.flipchart,
-				audioConference: body.audioCheck,
-				videoConference: body.videoCheck,
-				floorplan: `uploads/floorPlans/${body.name}.png`,
-				picture: `uploads/roomPictures/${body.name}.png`,
-				extraEquipment: body.extraEquipment,
-				comment: body.comment
-			});
-
-		room = await Room.findBy('name', body.name);
-
-		session.flash({ notification: 'Room Updated!' });
-
-		return view.render('adminDash.roomDetails', { params, room });
-	}
-
-	async show ({ response, params, view }) {
-		// Retrieves room object
-		try {
-			const room = await Room.firstOrFail('id', params.id);
-			return view.render('adminDash.roomDetails', { room: room });
-		} catch (error) {
-			return response.redirect('/');
 		}
 	}
 }
