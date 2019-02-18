@@ -10,7 +10,8 @@
 | provider here.
 |
 */
-const providers = ['@adonisjs/framework/providers/AppProvider',
+const providers = [
+	'@adonisjs/framework/providers/AppProvider',
 	'@adonisjs/framework/providers/ViewProvider',
 	'@adonisjs/lucid/providers/LucidProvider',
 	'@adonisjs/bodyparser/providers/BodyParserProvider',

@@ -5,6 +5,7 @@ const Schema = use('Schema');
 
 class UserSchema extends Schema {
 	up () {
+		// Users - Information about users
 		this.create('users', (table) => {
 			table.increments();
 			table.string('firstname', 80).notNullable();
@@ -18,6 +19,7 @@ class UserSchema extends Schema {
 			table.timestamps();
 		});
 
+		// Accont requests - Requests such as registration and password reset
 		this.create('account_requests', (table) => {
 			table.increments();
 			table.string('email', 254).notNullable();

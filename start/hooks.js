@@ -15,6 +15,14 @@ hooks.after.providersBooted(() => {
 	// }
 	// }
 
+	/**
+	 * Validator for limiting values of an input field.
+	 *
+	 * @param {Object} data Data sent through the request.
+	 * @param {*} field Name of the field.
+	 * @param {*} message Error message for violation.
+	 * @param {*} args Arguments pass to the validator function.
+	 */
 	const onlyFn = async (data, field, message, args) => {
 		if (!data[field]) {
 			return;
