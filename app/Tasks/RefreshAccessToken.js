@@ -57,7 +57,6 @@ class RefreshAccessToken extends Task {
 			}).refresh();
 
 			saveToDatabase(newToken);
-			console.log('Access token refreshed.');
 		}
 	}
 }

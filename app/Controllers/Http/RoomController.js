@@ -47,7 +47,6 @@ class RoomController {
 				size: '2mb'
 			});
 			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
 				name: `${room.name}_floorPlan.png`
 			});
 
@@ -57,10 +56,10 @@ class RoomController {
 				size: '2mb'
 			});
 			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-				// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
 				name: `${room.name}_roomPicture.png`
 			});
 
+			// Populates the room object's values
 			room.floorplan = `uploads/floorPlans/${room.name}.png`;
 			room.picture = `uploads/roomPictures/${room.name}.png`;
 			room.extraEquipment = body.extraEquipment;
@@ -97,7 +96,6 @@ class RoomController {
 			size: '2mb'
 		});
 		await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
 			name: `${body.name}_floorPlan.png`
 		});
 
@@ -107,7 +105,6 @@ class RoomController {
 			size: '2mb'
 		});
 		await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-			// Name must follow specific guidlines - CANNOT HAVE THE SAME NAME
 			name: `${body.name}_roomPicture.png`
 		});
 

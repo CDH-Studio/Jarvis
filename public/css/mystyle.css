@@ -1,9 +1,11 @@
+/*+++++++++++++++++++++++++++++++++++++++++++*/
 /* General */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
 body { 
     padding-top: 65px; 
     font-family: 'Lato', sans-serif;
 }
-/* General components */
 
 .wrapper-center {
     text-align: center;
@@ -13,7 +15,11 @@ body {
 .wrapper-center{
     text-align: center;
 }
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Navbar changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .navbar-dark{
     background-color: #001642 !important;
 }
@@ -42,13 +48,9 @@ body {
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-/* TODO: these are overriding everything we should investigate*/
+/* Changing  button colors */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-
-/* Changinge button colors */
 .btn-primary{
-    margin:2px;
-    width:110px;
     border-color: #0facf3;
     background-color: #0FACF3;
 }
@@ -59,8 +61,6 @@ body {
 }
 
 .btn-outline-secondary{
-    margin:2px;
-    width:110px;
     color: #000000;
     border-color: #000000;
     background-color: #ffffff;
@@ -86,6 +86,7 @@ body {
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* user nav*/
 /*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .hvr-underline-from-center {
     display: inline-block;
     vertical-align: middle;
@@ -113,16 +114,21 @@ body {
     transition-duration: 0.3s;
     -webkit-transition-timing-function: ease-out;
     transition-timing-function: ease-out;
+    color: #12ACF3
 }
 .hvr-underline-from-center:hover:before, .hvr-underline-from-center:focus:before, .hvr-underline-from-center:active:before {
     left: 0;
     right: 0;
 }
 
+.user-nav-link:hover, .user-nav-link:visited, .user-nav-link:active{
+    color: #FFFFFF !important;
+}
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* admin nav*/
 /*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .dropdown-toggle{
     padding-right: 10px;
 }
@@ -169,6 +175,7 @@ body {
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Room card information */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .room-card{
     width: 95%;
     margin: 0px auto 40px auto;
@@ -220,11 +227,12 @@ body {
 }
 
 .room-card-photo img{
-    width:100%;
+    max-width:100%;
 }
 
 .room-card-info{
     padding:0px;
+    padding-left: 15px;
 }
 
 .room-card-info ul{

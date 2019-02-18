@@ -1,33 +1,41 @@
 {{--  Room car component that takes: title, phoneNumber, seats, maxCapacity, equipment, standardEquipment[array] --}}
 @!component('components.roomConfirmationModal', id='roomModal', title=title)
 
+{{--  Routing to rooom details when clicked  --}}
 <form action='{{ route('goToDetails') }}' method='POST'>
     <input type='hidden' name='_csrf' value={{ token }} />
     <input type='hidden' name='title' value={{ title }} /> 
     <input type='hidden' name='floor' value={{ floor }} /> 
     <input type='hidden' name='seats' value={{ seats }} /> 
     <input type='hidden' name='maxCapacity' value={{ maxCapacity }} /> 
-    <input type='hidden' name='phoneNumber' value={{ phoneNumber }} /> 
+    <input type='hidden' name='phoneNumber' value={{ phoneNumber }} />
+    <input type='hidden' name='extraEquipment' value={{ extraEquipment }} />
+
+    {{--  Room card  --}}
     <a class='room-card' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
+        {{--  Title  --}}
         <div class='room-card-title'>
             <h4>{{ title }}</h4>
         </div>
         <div class='room-card-body shadow'>
             <div class='row'>
-                <div href='../' class='room-card-photo col-5'>
+                {{--  Room Picture  --}}
+                <div href='../' class='room-card-photo wrapper-center col-sm-5'>
                     <img src='/images/meeting.jpeg'>
                 </div>
-                <div class='room-card-info col-7'>
+                {{--  Room information  --}}
+                <div class='room-card-info col-5' style='margin-top:5px;'>
                     <ul> 
                         <li><b>Floor:</b><span> {{ floor }}</span></li>
                         <li><b>Seats:</b><span> {{ seats }}</span></li>
                         <li><b>Max Capacity:</b><span> {{ maxCapacity }}</span></li>
-                        <br>
-                        <li><i class='fas fa-phone'></i> {{ phoneNumber }}</li>
+                        <li><b>Phone: </b><span>{{ phoneNumber }}</li>
+                        <li><b>Other Equipment: </b><span> {{ extraEquipment }}</span></li>
                     </ul>
                 </div>
             </div>
             <hr>
+            {{--  Checkboxes  --}}
             <div class='room-card-spec col-12'>
                 <ul>
                     <li class='spec-yes'><i class='fas fa-check-circle'></i><span> Projector</span></li>
