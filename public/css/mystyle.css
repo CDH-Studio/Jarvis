@@ -114,12 +114,16 @@ body {
     transition-duration: 0.3s;
     -webkit-transition-timing-function: ease-out;
     transition-timing-function: ease-out;
+    color: #12ACF3
 }
 .hvr-underline-from-center:hover:before, .hvr-underline-from-center:focus:before, .hvr-underline-from-center:active:before {
     left: 0;
     right: 0;
 }
 
+.user-nav-link:hover, .user-nav-link:visited, .user-nav-link:active{
+    color: #FFFFFF !important;
+}
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* admin nav*/
@@ -223,11 +227,12 @@ body {
 }
 
 .room-card-photo img{
-    width:100%;
+    max-width:100%;
 }
 
 .room-card-info{
     padding:0px;
+    padding-left: 15px;
 }
 
 .room-card-info ul{
