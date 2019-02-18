@@ -120,7 +120,7 @@ class TokenController {
 	}
 
 	/**
-	 * Save tokens to Cookie. 
+	 * Save tokens to Cookie.
 	 *
 	 * @param {Object} token Tokens to be saved.
 	 * @param {Object} response Response object to access Cookie.
