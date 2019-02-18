@@ -6,11 +6,12 @@
 <div class='container'>
     @!component('components.pageTitle', title='Edit Room')
     <div class='row'>
-        <div class= 'col-12'>
-
+        <div class= 'col-12'>    
         <form action='{{route('saveRoom', {id: room.id}) }}' method='POST' enctype='multipart/form-data'>
                 {{--  protects against cross site forgery  --}}
                 {{ csrfField() }} 
+
+                {{--  Input fields  --}}
                 <div class='form-group has-danger'>
                     <label for='name'>*Room Name</label>
                     <input type='text' name='name' class='form-control' id='name' aria-describedby='nameHelp' placeholder='Ex: 308-B' value='{{ room.name }}' />
@@ -67,6 +68,7 @@
                     @endif
                 </div>
 
+                {{--  Retreives previous values of all checkboxes  --}}
                 @if(room.projector)
                     @set('projectorChecked','checked')
                 @endif
@@ -87,6 +89,7 @@
                     @set('videoConferenceChecked','checked')
                 @endif
 
+                {{--  Checkboxes  --}}
                 <div class='form-group'>
                     <label>Equipment</label>
 
