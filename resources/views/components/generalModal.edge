@@ -1,3 +1,4 @@
+{{--  This is a general modal box with a custom body insert--}}
 <div class='modal' id='mapModal'>
     <div class='modal-dialog' role='document'>
         <div class='modal-content'>
@@ -7,6 +8,7 @@
                     <span aria-hidden='true'>&times;</span>
                 </button>
             </div>
+            {{--  Flexible body content that can be inserted by loading a component  --}}
             <div class='modal-body'>
                 @!yield($slot.body) 
             </div>
