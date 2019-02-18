@@ -4,7 +4,6 @@ const Env = use('Env');
 class CreateAdmin {
 	get rules () {
 		const secretToken = Env.get('ADMIN_TOKEN', '666');
-		console.log(secretToken);
 		return {
 			firstname: 'required',
 			lastname: 'required',

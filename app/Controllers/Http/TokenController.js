@@ -1,7 +1,9 @@
 'use strict';
 const Env = use('Env');
 const Token = use('App/Models/Token');
+const JWT = require('jsonwebtoken');
 
+// The credentials for Microsoft Graph
 const credentials = {
 	client: {
 		id: Env.get('MICROSOFT_APP_ID'),
@@ -15,8 +17,12 @@ const credentials = {
 	}
 };
 const Oauth2 = require('simple-oauth2').create(credentials);
-const JWT = require('jsonwebtoken');
 
+/**
+ * Update the tokens in the database
+ *
+ * @param {*} token The tokens received from Graph (access token, refresh token and account information).
+ */
 async function saveToDatabase (token) {
 	await Token.truncate();
 	const accessTokenModel = new Token();
@@ -31,6 +37,11 @@ async function saveToDatabase (token) {
 }
 
 class TokenController {
+	/**
+	 * Request for a link from Graph for Microsoft account authentication.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async getAuthUrl ({ response }) {
 		const authUrl = await Oauth2.authorizationCode.authorizeURL({
 			redirect_uri: Env.get('MICROSOFT_REDIRECT_URI'),
@@ -40,6 +51,11 @@ class TokenController {
 		return response.redirect(authUrl);
 	}
 
+	/**
+	 * Request for an access token from Graph.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async authorize ({ request }) {
 		const code = request.only(['code']).code;
 
@@ -49,6 +65,11 @@ class TokenController {
 		}
 	}
 
+	/**
+	 * Request for an access token from Graph with an authencation code.
+	 *
+	 * @param {String} authCode The authencation code.
+	 */
 	async getAccessTokenFromAuthCode (authCode) {
 		try {
 			let result = await Oauth2.authorizationCode.getToken({
@@ -67,6 +88,11 @@ class TokenController {
 		}
 	}
 
+	/**
+	 * Get access token from Cookie.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async getAccessTokenFromCookie ({ request, response }) {
 		const cookies = request.cookies();
 		const accessToken = cookies.accessToken;
@@ -85,6 +111,7 @@ class TokenController {
 			const newToken = await Oauth2.accessToken.create({
 				refresh_token: refreshToken
 			}).refresh();
+			this.saveToCookie(newToken, response);
 
 			return newToken.token.access_token;
 		}
@@ -92,25 +119,31 @@ class TokenController {
 		return null;
 	}
 
-	saveToCookie (token, res) {
+	/**
+	 * Save tokens to Cookie.
+	 *
+	 * @param {Object} token Tokens to be saved.
+	 * @param {Object} response Response object to access Cookie.
+	 */
+	saveToCookie (token, response) {
 		const user = JWT.decode(token.token.id_token);
 
-		res.cookie('accessToken', token.token.access_token, {
+		response.cookie('accessToken', token.token.access_token, {
 			maxAge: 3600000,
 			httpOnly: true
 		});
 
-		res.cookie('username', user.name, {
+		response.cookie('username', user.name, {
 			maxAge: 3600000,
 			httpOnly: true
 		});
 
-		res.cookie('refreshToken', token.token.refresh_token, {
+		response.cookie('refreshToken', token.token.refresh_token, {
 			maxAge: 7200000,
 			httpOnly: true
 		});
 
-		res.cookie('tokenExpiry', token.token.expires_at.getTime(), {
+		response.cookie('tokenExpiry', token.token.expires_at.getTime(), {
 			maxAge: 3600000,
 			httpOnly: true
 		});
