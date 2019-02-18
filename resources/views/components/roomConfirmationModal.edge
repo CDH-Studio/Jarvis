@@ -4,7 +4,6 @@
         <div class='modal-content'>
             <form action='{{ route('confirmBooking') }}' method='POST'>
                 {{ csrfToken }}
-
                 <input type='hidden' name='location' value={{ title }} />
                 {{--  Header content  --}}
                 <div class='modal-header' style='padding-top:5px; padding-bottom:5px;'>
@@ -19,7 +18,7 @@
                     <div class='wrapper-center mb-2' style='height: auto;'>
                         <img class='confirmation-image' src='/images/meeting.jpeg'>
                         <a href='/details' target='_blank' style='display:block;'>
-                            <i class='fas fa-external-link-alt'  ></i>
+                            <i class='fas fa-external-link-alt'></i>
                             View More Information
                         </a>
                     </div>
