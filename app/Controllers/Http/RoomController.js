@@ -78,8 +78,8 @@ class RoomController {
 			await room.save();
 
 			session.flash({ notification: 'Room Added!' });
-
-			return view.render('adminDash.roomDetails', { room: room, id: Number(room.id) });
+			return response.route('showRoom', { id: room.id });
+			// return view.render('adminDash.roomDetails', { room: room, id: Number(room.id) });
 		} catch (err) {
 			console.log(err);
 		}
@@ -149,7 +149,7 @@ class RoomController {
 	async show ({ response, params, view, auth }) {
 		// Retrieves room object
 		try {
-			const room = await Room.firstOrFail('id', params.id);
+			const room = await Room.findOrFail(params.id);
 
 			var canEdit = 0;
 			var layoutType = 'll';
