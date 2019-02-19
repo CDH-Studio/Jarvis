@@ -162,6 +162,26 @@ class RoomController {
 
 		return view.render('userPages.results', { rooms });
 	}
+	/**
+	 * Query rooms from search criteria and render the results page.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async searchRooms ({ view }) {
+		let searchResults = await Room
+			.query()
+			.where('location', '=', 3)
+			.fetch();
+		const rooms = searchResults.toJSON();
+
+		// Sort the results by name
+		rooms.sort((a, b) => {
+			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+		});
+
+		return view.render('userPages.results', { rooms });
+
+	}
 
 	/**
 	 * Navigate to the details page of specified room.
