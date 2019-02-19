@@ -205,6 +205,8 @@ class UserController {
 			return response.redirect('/');
 		}
 
+		console.log(auth.user.role);
+
 		return view.render('auth.showUser', { auth, user, layoutType, canEdit });
 	}
 
