@@ -20,21 +20,20 @@ Route.get('/', 'HomeController.dashboard').as('home');
 Route.on('/welcome').render('welcome');
 Route.on('/sample').render('sample');
 
-//=========================================================================
-//Auth
-//=========================================================================
+//= ========================================================================
+// Auth
+//= ========================================================================
 
 // User Authentication
 Route.on('/register').render('auth.signup').as('register');
 Route.post('/register', 'UserController.create').validator('CreateUser');
 Route.on('/login').render('auth.login').as('login');
 
-
 // Admin Authentication
 Route.on('/admin/register').render('auth.signupAdmin').as('registerAdmin');
 Route.post('/admin/register', 'UserController.createAdmin').as('CreateAdmin').validator('CreateAdmin');
 
-//Logout
+// Logout
 Route.post('/login', 'UserController.login').validator('LoginUser');
 Route.get('/logout', 'UserController.logout').as('logout');
 
@@ -46,18 +45,16 @@ Route.get('/newUser', 'UserController.verifyEmail');
 Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
 Route.post('/changePassword', 'UserController.changePassword').as('changePassword');// .validator('changePassword');
 
-
 // Authentication
 Route.get('/user/:id', 'UserController.show').as('viewProfile');
 Route.get('/user/:id/edit', 'UserController.edit');
 Route.post('/user/:id/updatepassword', 'UserController.changePassword').as('changePassword');
 
+//= ========================================================================
+// Rooms
+//= ========================================================================
 
-//=========================================================================
-//Rooms
-//=========================================================================
-
-//admin 
+// admin
 Route.get('/addRoom', 'RoomController.create').as('addRoomForm');
 Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('addRoom');
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
@@ -68,14 +65,12 @@ Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom');
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms');
 Route.get('/room/:id', 'RoomController.show').as('showRoom');
 
-
-//=========================================================================
-//Bookings
-//=========================================================================
+//= ========================================================================
+// Bookings
+//= ========================================================================
 Route.on('/booking').render('userPages/booking').as('booking');
 Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBooking');
-Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails'); //needs to be changed to get
-
+Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails'); // needs to be changed to get
 
 // Employee user pages
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
@@ -84,13 +79,10 @@ Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking
 // Temporary routes ***** Need to change so that a userr cannot acess this through URL ****
 Route.on('/results').render('userPages/results').as('results');
 
-
-//Outlook
+// Outlook
 Route.get('/authenticate', 'TokenController.getAuthUrl');
 Route.get('/authorize', 'TokenController.authorize');
 Route.get('/events', 'RoomController.getEvents');
 Route.get('/event', 'RoomController.createEvent');
 Route.get('/calendars', 'RoomController.getCalendars');
 Route.get('/calendar', 'RoomController.getCalendar');
-
-
