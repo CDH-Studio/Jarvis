@@ -248,7 +248,15 @@ class RoomController {
 			'location': {
 				'displayName': room
 			},
-			'attendees': []
+			'attendees': [
+				{
+					'emailAddress': {
+						'address': 'yunwei.li@canada.ca',
+						'name': 'Yunwei Li'
+					},
+					'type': 'required'
+				}
+			]
 		};
 
 		// Create the event
