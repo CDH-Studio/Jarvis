@@ -74,10 +74,9 @@ class RoomController {
 			room.comment = body.comment;
 
 			await room.save();
-
 			session.flash({ notification: 'Room Added!' });
-			return response.redirect('showDetails', { id: room.id });
-			// return view.render('adminDash.roomDetails', { params, room });
+
+			return response.route('showRoom', { id: room.id });
 		} catch (err) {
 			console.log(err);
 		}
@@ -100,7 +99,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async update ({ request, session, params, view }) {
+	async update ({ request, session, params, response, view }) {
 		// Retrieves room object
 		let room = await Room.findBy('id', params.id);
 
@@ -147,10 +146,9 @@ class RoomController {
 			});
 
 		room = await Room.findBy('name', body.name);
-
 		session.flash({ notification: 'Room Updated!' });
 
-		return view.render('adminDash.roomDetails', { params, room });
+		return response.route('showRoom', { id: room.id });
 	}
 
 	/**
