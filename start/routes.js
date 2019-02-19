@@ -43,27 +43,27 @@ Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword')
 Route.get('/newPassword', 'UserController.verifyHash');
 Route.get('/newUser', 'UserController.verifyEmail');
 Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
-Route.post('/changePassword', 'UserController.changePassword').as('changePassword');// .validator('changePassword');
+Route.post('/changePassword', 'UserController.changePassword').as('changePassword').middleware(['auth']);// .validator('changePassword');
 
 // Authentication
-Route.get('/user/:id', 'UserController.show').as('viewProfile');
-Route.get('/user/:id/edit', 'UserController.edit');
-Route.post('/user/:id/updatepassword', 'UserController.changePassword').as('changePassword');
+Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
+Route.get('/user/:id/edit', 'UserController.edit').middleware(['auth']);
+Route.post('/user/:id/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']);
 
 //= ========================================================================
 // Rooms
 //= ========================================================================
 
 // admin
-Route.get('/addRoom', 'RoomController.create').as('addRoomForm');
-Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('addRoom');
-Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
+Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['admin']);
+Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('addRoom').middleware(['admin']);
+Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom').middleware(['admin']);
 
-Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom');
-Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom');
+Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['admin']);
+Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').middleware(['admin']);
 
-Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms');
-Route.get('/room/:id', 'RoomController.show').as('showRoom');
+Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
+Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
 //= ========================================================================
 // Bookings
