@@ -12,30 +12,31 @@
         {{--  Page content  --}}
         <div class='search-room-content'>
             
-            <form action='/results' method='ON' enctype='multipart/form-data'>
+            <form action='/results' method='POST' enctype='multipart/form-data'>
+                {{ csrfField() }}
                 {{--  Date form  --}}
                 <div class='form-group mb-4'>
-                    <label for='date-input'data-toggle='tooltip' data-placement='right' title='' data-original-title='[REQUIRED] Please enter the date your a looking for'>*Select Date:</label>
+                    <label for='date'data-toggle='tooltip' data-placement='right' title='' data-original-title='[REQUIRED] Please enter the date your a looking for'>*Select Date:</label>
                     {{--  ######## Need to Change value to the current date #############  --}}
-                    <input type='date' name='date-input' class='form-control col-4' value=''/>
+                    <input type='date' name='date' class='form-control col-4' value=''/>
                 </div>
 
                 {{--  Meeting time form  --}}
                 <div class='form-group mb-4'>
-                    <label for='time-from-input'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[REQUIRED] Please enter the start time of the room booking'>*From:</label>
+                    <label for='from'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[REQUIRED] Please enter the start time of the room booking'>*From:</label>
                     {{--  ######## Need to Change value to the current date #############  --}}
-                    <input type='time' name='time-from-input' class='form-control col-4' value='13:45:00'/>
+                    <input type='time' name='from' class='form-control col-4' value='13:45:00'/>
                 </div>
                 <div class='form-group mb-4'>
-                    <label for='time-to-input'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[REQUIRED] Please enter the end time of the room booking'>*To:</label>
+                    <label for='to'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[REQUIRED] Please enter the end time of the room booking'>*To:</label>
                     {{--  ######## Need to Change value to the current date #############  --}}
-                    <input type='time' name='time-to-input' class='form-control col-4' value='14:45:00'/>
+                    <input type='time' name='to' class='form-control col-4' value='14:45:00'/>
                 </div>
 
                 {{--  Location form  --}}
                 <div class='form-group mb-4'>
-                    <label for='location-input'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Enter the preferred location'>Location:</label>
-                    <select name='location-input' class='form-control col-4'>
+                    <label for='location'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Enter the preferred location'>Location:</label>
+                    <select name='location' class='form-control col-4'>
                         <option selected=''>Select a floor</option>
                         <option value='0'>Floor 0</option>
                         <option value='1'>Floor 1</option>
@@ -52,8 +53,8 @@
 
                 {{--  Number of people form  --}}
                 <div class='form-group mb-4'>
-                    <label for='number-people-input' data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Please enter the estimated number of people that need to be accommodated for'>Number of People:</label>
-                    <input class='form-control col-4' name='number-people-input' type='number' name='quantity' min='1' max='50'  value=''>
+                    <label for='capacity' data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Please enter the estimated number of people that need to be accommodated for'>Number of People:</label>
+                    <input class='form-control col-4' name='capacity' type='number' name='quantity' min='1' max='50'  value=''>
                 </div>
 
                 {{--  Equipment check box form  --}}
@@ -105,7 +106,7 @@
                 <div class='row'>
                     <div class='col-sm-12'>
                         <button type='button' class='btn btn-outline-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
-                        <button type='submit' class='btn btn-primary' onclick="window.location='{{ route('results')}}';">Search</button>
+                        <button type='submit' class='btn btn-primary'>Search</button>
                     </div>       
                 </div>
             </div>

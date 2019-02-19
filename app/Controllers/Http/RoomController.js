@@ -187,15 +187,27 @@ class RoomController {
 
 		return view.render('userPages.results', { rooms });
 	}
+
 	/**
 	 * Query rooms from search criteria and render the results page.
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async searchRooms ({ view }) {
-		let searchResults = await Room
+	async getSearchRooms ({ request, view }) {
+		// importign forms from search form
+		// const { date, from, to, location, capacity, projector, whiteboard, flipchart, audioConference, videoConference } = request.only(['date-input', 'time-from-input', 'time-to-input', 'location-input', 'number-people-input', 'projectorCheck', 'whiteboardCheck', 'flipChartCheck', 'audioConference', 'videoConference']);
+		const body = request.all();
+		const capacity = body.capacity;
+		console.log(body);
+		const searchResults = await Room
 			.query()
-			.where('location', '=', 3)
+			// .where('location', '=', location)
+			.where('capacity', '>', capacity)
+			// .where('projector', '=', projector)
+			// .where('whiteboard', '=', whiteboard)
+			// .where('flipchart', '=', flipchart)
+			// .where('audioConference', '=', audioConference)
+			// .where('videoConference', '=', videoConference)
 			.fetch();
 		const rooms = searchResults.toJSON();
 
@@ -205,7 +217,6 @@ class RoomController {
 		});
 
 		return view.render('userPages.results', { rooms });
-
 	}
 
 	/**

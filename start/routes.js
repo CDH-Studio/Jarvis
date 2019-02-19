@@ -45,6 +45,9 @@ Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBookin
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms');
 Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails');
 
+// Temporary routes ***** Need to change so that a user cannot access this through URL ****
+Route.post('/results', 'RoomController.getSearchRooms').as('results');
+
 Route.get('/addRoom/edit/:id', 'RoomController.edit').as('editRoom');
 Route.post('addRoom/:id', 'RoomController.update').as('saveRoom');
 
@@ -59,9 +62,6 @@ Route.post('/changePassword', 'UserController.changePassword').as('changePasswor
 // Employee user pages
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
-
-// Temporary routes ***** Need to change so that a userr cannot acess this through URL ****
-Route.on('/results').render('userPages/results').as('results');
 
 // ************ Needs a unique url for all rooms **********
 Route.on('/details').render('userPages/roomDetails');
