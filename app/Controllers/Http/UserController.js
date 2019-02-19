@@ -18,7 +18,7 @@ function random (times) {
 	}
 
 	return result;
-};
+}
 
 /**
  * Send an email.
@@ -36,7 +36,7 @@ function sendMail (subject, body, to, from) {
 			.subject(subject);
 	});
 	console.log('mail sent');
-};
+}
 
 class UserController {
 	/**
@@ -204,6 +204,8 @@ class UserController {
 		} else {
 			return response.redirect('/');
 		}
+
+		console.log(auth.user.role);
 
 		return view.render('auth.showUser', { auth, user, layoutType, canEdit });
 	}

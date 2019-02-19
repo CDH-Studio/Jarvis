@@ -1,0 +1,22 @@
+@layout('layouts.adminLayout')
+
+
+@section('content')
+    <div>
+        @!component('components.pageTitle', title='View Rooms')
+        <ul class='list-group'>
+            {{--  Displays all of the rooms in the database in a table  --}}
+            @each(room in rooms) 
+                <a type='button' class='list-group-item list-group-item-action' href='{{ route('showRoom', { id: room.id }) }}'>  {{ room.name }}</a>
+            @endeach
+        </ul>
+    </div> 
+@endsection
+
+
+
+
+
+
+
+
