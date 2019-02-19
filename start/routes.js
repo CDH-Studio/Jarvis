@@ -36,9 +36,10 @@ Route.post('/register', 'UserController.create').validator('CreateUser');
 Route.get('/logout', 'UserController.logout').as('logout');
 
 // Room pages
-Route.on('/addRoom').render('adminDash/addRoomForm').as('addRoom');
+Route.get('/room/:id', 'RoomController.show').as('showRoom');
+Route.get('/addRoom', 'RoomController.create').as('addRoomForm');
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom');
-Route.post('/addRoom', 'RoomController.addRoom').validator('addRoom');
+Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('addRoom');
 Route.on('/roomDetails').render('adminDash/roomDetails').as('roomDetails');
 Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBooking');
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms');
@@ -72,6 +73,6 @@ Route.get('/event', 'RoomController.createEvent');
 Route.get('/calendars', 'RoomController.getCalendars');
 Route.get('/calendar', 'RoomController.getCalendar');
 Route.on('/details').render('userPages/roomDetails').as('roomDetails');
-Route.get('/room/:id', 'RoomController.show');
+Route.get('/room/:id', 'RoomController.show').as('showRoom');
 
 Route.on('/booking').render('userPages/booking').as('booking');
