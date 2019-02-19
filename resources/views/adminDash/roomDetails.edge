@@ -1,6 +1,9 @@
-@layout('layouts.adminLayout')
+@layout('layouts.mainLayout')
 
 @section('content')
+    @section('extracss')
+        {{ style('css/mystyle') }}
+    @endsection
     <div class='row ml-5'>
         <div class= 'col-12'>
             @!component('components.pageTitle', title='Room Information')
