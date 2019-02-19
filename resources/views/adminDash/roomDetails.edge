@@ -10,8 +10,8 @@
             @if(old('notification'))
                 <div class='alert alert-success'>
                     {{ old('notification') }}
-                    To add another room, click here: 
-                    <a href='{{ route('addRoom')}}'>Add Room</a>
+                    To add another room, click  
+                    <a href='{{ route('addRoom')}}'>here</a>
                 </div>
             @endif
 
@@ -54,7 +54,9 @@
             @endif
         </div>
         
-        <a href='/addRoom/edit/{{ room.id }}' class='btn btn-dark d-block float-left ml-2'>Edit</a>
+        @if(canEdit)
+            <a href='{{ route('editRoom', { id: room.id }) }}' class='btn btn-dark d-block float-left ml-3'>Edit</a>
+        @endif
     </div>
 @endsection
 

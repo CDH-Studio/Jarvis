@@ -23,18 +23,16 @@ async function getAccessToken () {
 
 class RoomController {
 	async create ({ response, view, auth }) {
-		if (auth.user.role === 1) {
-			return view.render('adminDash.addRoomForm');
-		} else {
-			return response.redirect('/');
-		}
+		return view.render('adminDash.addRoomForm');
 	}
-	// Adds a room Object into the Database
-	async addRoom ({ request, response, session, params, view, auth }) {
+
+	/**
+	 * Adds a room Object into the Database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async addRoom ({ request, response, session, auth }) {
 		try {
-			if (auth.user.role !== 1) {
-				return response.redirect('/');
-			}
 			// Retrieves user input
 			const body = request.all();
 
@@ -76,24 +74,32 @@ class RoomController {
 			room.comment = body.comment;
 
 			await room.save();
-
 			session.flash({ notification: 'Room Added!' });
+
 			return response.route('showRoom', { id: room.id });
-			// return view.render('adminDash.roomDetails', { room: room, id: Number(room.id) });
 		} catch (err) {
 			console.log(err);
 		}
 	}
 
+	/**
+	 * Render a specific edit room page depending on the room Id.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async edit ({ params, view }) {
 		// Retrieves room object
 		const room = await Room.findBy('id', params.id);
 
-		console.log(room);
 		return view.render('adminDash.editRoom', { room: room });
 	}
 
-	async update ({ request, response, session, params, view }) {
+	/**
+	 * Updates a room object in the database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async update ({ request, session, params, response, view }) {
 		// Retrieves room object
 		let room = await Room.findBy('id', params.id);
 
@@ -140,13 +146,17 @@ class RoomController {
 			});
 
 		room = await Room.findBy('name', body.name);
-
 		session.flash({ notification: 'Room Updated!' });
 
-		return view.render('adminDash.roomDetails', { params, room });
+		return response.route('showRoom', { id: room.id });
 	}
 
-	async show ({ response, params, view, auth }) {
+	/**
+	 * Render a specific room details page depending on the room Id.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async show ({ response, auth, params, view }) {
 		// Retrieves room object
 		try {
 			const room = await Room.findOrFail(params.id);
@@ -172,20 +182,28 @@ class RoomController {
 	}
 
 	/**
-	 * Query all the rooms from the database and render the results page.
+	 * Query all the rooms from the database and render a page depending on the type of user.
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getAllRooms ({ view }) {
+	async getAllRooms ({ auth, view }) {
 		const results = await Room.all();
 		const rooms = results.toJSON();
+		let page = '';
 
 		// Sort the results by name
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
 
-		return view.render('userPages.results', { rooms });
+		// if user is admin
+		if (auth.user.role === 1) {
+			page = 'adminDash.viewRooms';
+			return view.render('adminDash.viewRooms', { rooms });
+		} else {
+			page = 'userPages.results';
+			return view.render(page, { rooms });
+		}
 	}
 
 	/**
