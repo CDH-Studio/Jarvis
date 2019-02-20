@@ -47,6 +47,7 @@ Route.post('/changePassword', 'UserController.changePassword').as('changePasswor
 
 // Authentication
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
+Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['auth']);
 Route.get('/user/:id/edit', 'UserController.edit').middleware(['auth']);
 Route.post('/user/:id/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']);
 
@@ -65,8 +66,8 @@ Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').middleware(
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
-// users
-Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['auth']);
+// [Employee] Search Room
+Route.post('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']); // .validator('searchRooms') <- Put this back in when ready all features are added
 
 //= ========================================================================
 // Bookings
@@ -78,9 +79,6 @@ Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails'); // n
 // Employee user pages
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
-
-// Temporary routes ***** Need to change so that a userr cannot acess this through URL ****
-Route.on('/results').render('userPages/results').as('results');
 
 // Outlook
 Route.get('/authenticate', 'TokenController.getAuthUrl');
