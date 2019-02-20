@@ -66,8 +66,7 @@ Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware([
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
 // [Employee] Search Room
-// Temporary routes ***** Need to change so that a userr cannot acess this through URL ****
-Route.post('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']);
+Route.post('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']); // .validator('searchRooms') <- Put this back in when ready all features are added
 
 //= ========================================================================
 // Bookings
