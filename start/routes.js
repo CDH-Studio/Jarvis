@@ -65,6 +65,9 @@ Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').middleware(
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
+// users
+Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['auth']);
+
 //= ========================================================================
 // Bookings
 //= ========================================================================

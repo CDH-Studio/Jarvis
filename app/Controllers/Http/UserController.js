@@ -328,6 +328,23 @@ class UserController {
 		// return response.redirect('/');
 		// }
 	}
+
+	/**
+	 * Query all the users from the database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getAllUsers ({ auth, view, response }) {
+		const results = await User.all();
+		const users = results.toJSON();
+
+		// Sort the results by name
+		users.sort((a, b) => {
+			return (a.firstname > b.firstname) ? 1 : ((b.firstname > a.firstname) ? -1 : 0);
+		});
+
+		return view.render('adminDash.viewUsers', { users });
+	}
 }
 
 module.exports = UserController;
