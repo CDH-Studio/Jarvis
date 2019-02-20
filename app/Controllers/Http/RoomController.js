@@ -199,7 +199,6 @@ class RoomController {
 		// if user is admin
 		if (auth.user.role === 1) {
 			page = 'adminDash.viewRooms';
-			console.log(rooms);
 			return view.render('adminDash.viewRooms', { rooms });
 		} else {
 			page = 'userPages.results';
