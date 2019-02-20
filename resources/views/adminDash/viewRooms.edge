@@ -18,6 +18,7 @@
                     <th scope="col">Maximum Capacity</th>
                     </tr>
                 </thead>
+                {{--  Loops through the rooms array and displays every room's content  --}}
                 @each(room in rooms) 
                 <tbody>
                     <tr id='roomRow' class="table-light" onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
