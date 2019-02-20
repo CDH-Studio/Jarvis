@@ -80,8 +80,6 @@ Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails'); // n
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
 
-
-
 // Outlook
 Route.get('/authenticate', 'TokenController.getAuthUrl');
 Route.get('/authorize', 'TokenController.authorize');
