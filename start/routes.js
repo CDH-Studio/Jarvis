@@ -65,6 +65,10 @@ Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').middleware(
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
+// [Employee] Search Room
+// Temporary routes ***** Need to change so that a userr cannot acess this through URL ****
+Route.post('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']);
+
 //= ========================================================================
 // Bookings
 //= ========================================================================
@@ -76,9 +80,7 @@ Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails'); // n
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
 
-// Search Room
-// Temporary routes ***** Need to change so that a userr cannot acess this through URL ****
-Route.post('/results', 'RoomController.getSearchRooms').as('results');
+
 
 // Outlook
 Route.get('/authenticate', 'TokenController.getAuthUrl');

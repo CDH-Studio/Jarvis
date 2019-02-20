@@ -22,6 +22,19 @@ async function getAccessToken () {
 }
 
 class RoomController {
+	/**
+	 * Takes in a variable and converts the value to 0 if it's null (Used for checkboxes)
+	 *
+	 * @param {Object} variable The variable that will be converted
+	 * @returns {Object} Returning converted variable if needed
+	 *
+	 */
+	async convertCheckbox (variable) {
+		if (variable === undefined) {
+			variable = 0;
+		}
+		return variable;
+	}
 	async create ({ response, view, auth }) {
 		if (auth.user.role === 1) {
 			return view.render('adminDash.addRoomForm');
@@ -194,21 +207,63 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async getSearchRooms ({ request, view }) {
-		// importign forms from search form
-		// const { date, from, to, location, capacity, projector, whiteboard, flipchart, audioConference, videoConference } = request.only(['date-input', 'time-from-input', 'time-to-input', 'location-input', 'number-people-input', 'projectorCheck', 'whiteboardCheck', 'flipChartCheck', 'audioConference', 'videoConference']);
-		const body = request.all();
-		const capacity = body.capacity;
-		console.log(body);
-		const searchResults = await Room
+		// importing forms from search form
+		const form = request.all();
+		// const date = form.date;
+		// const from = form.from;
+		// const to = form.to;
+		const location = form.location;
+		const capacity = form.capacity;
+		const pc = form.pcCheck;
+		const surfaceHub = form.surfaceHubCheck;
+		// check boxes input
+		let checkBox = [{ checkName: 'projector', checkValue: form.projectorCheck },
+			{ checkName: 'whiteboard', checkValue: form.whiteboardCheck },
+			{ checkName: 'flipchart', checkValue: form.flipChartCheck },
+			{ checkName: 'audioConference', checkValue: form.audioCheck },
+			{ checkName: 'videoConference', checkValue: form.videoCheck }
+		];
+		// basic search for mandatory input like (To,From and Date)
+		let searchResults = Room
 			.query()
-			// .where('location', '=', location)
-			.where('capacity', '>', capacity)
-			// .where('projector', '=', projector)
-			// .where('whiteboard', '=', whiteboard)
-			// .where('flipchart', '=', flipchart)
-			// .where('audioConference', '=', audioConference)
-			// .where('videoConference', '=', videoConference)
-			.fetch();
+			.clone();
+
+		// if the location is selected then query, else dont
+		if (location !== 'Select a floor') {
+			searchResults = searchResults
+				.where('location', location)
+				.clone();
+		}
+		// if the "number of people" is selected then add to query, else ignore it
+		if (capacity) {
+			searchResults = searchResults
+				.where('capacity', '>=', capacity)
+				.clone();
+		}
+		// loop through the array of objects and add to query if checked
+		for (let i = 0; i < checkBox.length; i++) {
+			if (checkBox[i].checkValue === '1') {
+				searchResults = searchResults
+					.where(checkBox[i].checkName, checkBox[i].checkValue)
+					.clone();
+			}
+		}
+
+		// Checking for 2 special conditions where check boxes are in the "extreaEquipment" coloumn in the database
+		if (surfaceHub === '1') {
+			searchResults = searchResults
+				.where('extraEquipment', 'like', '%Surface Hub%')
+				.clone();
+		}
+		if (pc === '1') {
+			searchResults = searchResults
+				.where('extraEquipment', 'like', '%PC%')
+				.clone();
+		}
+
+		// fetch the query
+		searchResults = await searchResults.fetch();
+
 		const rooms = searchResults.toJSON();
 
 		// Sort the results by name
