@@ -189,10 +189,14 @@ class UserController {
 		const user = await User.find(Number(params.id));
 		var canEdit = 0;
 		var layoutType = '';
-		// if user is admin
-		if (auth.user.role === 1) {
+		// check if admin is viewing their own profile
+		if (auth.user.id === Number(params.id) && auth.user.role === 1) {
 			layoutType = 'layouts/adminLayout';
 			canEdit = 1;
+			// check if admin is viewing someone elses profile
+		} else if (auth.user.id !== Number(params.id) && auth.user.role === 1) {
+			layoutType = 'layouts/adminLayout';
+			canEdit = 0;
 			// check if user is viewing their own profile
 		} else if (auth.user.id === Number(params.id) && auth.user.role === 2) {
 			layoutType = 'layouts/mainLayout';
