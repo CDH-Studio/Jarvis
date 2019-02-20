@@ -4,8 +4,8 @@
 @section('content')
     <div>
         @!component('components.pageTitle', title='View Rooms')
-
-
+        
+        {{--  Displays all of the rooms in the database in a table  --}}
         @if(rooms.length == 0)
             <div>There are currently no rooms in the database. To add a room, click <a href='{{ route('addRoom')}}'>here</a></div>
         @else
@@ -20,7 +20,7 @@
                 </thead>
                 @each(room in rooms) 
                 <tbody>
-                    <tr class="table-light" onclick="document.location.href = {{ route('showRoom', { id: room.id }) }}">
+                    <tr id='roomRow' class="table-light" onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
                     <td>{{ room.name }}</td>
                     <td>{{ room.telephone }}</td>
                     <td>{{ room.location }}</td>
@@ -28,16 +28,7 @@
                     </tr>
                 </tbody>
                 @endeach
-
             </table>
-            
-            
-            <ul class='list-group'>
-                {{--  Displays all of the rooms in the database in a table  --}}
-                @each(room in rooms) 
-                    <a type='button' class='list-group-item list-group-item-action' href='{{ route('showRoom', { id: room.id }) }}'>  {{ room.name }}</a>
-                @endeach
-            </ul>
         @endif
 
     </div> 

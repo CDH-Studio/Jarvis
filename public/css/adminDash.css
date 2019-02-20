@@ -48,6 +48,11 @@
   box-sizing: border-box;
 }
 
+/* Hover-over a row for the view all rooms table */
+#roomRow:hover {
+  cursor:pointer;
+}
+
 /* Extra styling */
 .side-nav-icons{
   width: 16px !important;
@@ -10779,7 +10784,6 @@ body.sidebar-toggled footer.sticky-footer {
     width: calc(100% - 90px);
   }
 }
-
 
 /*****************************************************/
 /*mystyles*/
