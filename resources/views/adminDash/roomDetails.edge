@@ -17,7 +17,9 @@
 
             {{--  Displays all the information of a room  --}}
             <p><b>Name: </b>{{room.name}}</p>
-            <p><b>Location: </b>{{room.location}}</p>
+            <p><b>Full Name: </b>{{room.fullName}}</p>
+            <p><b>Floor: </b>{{room.floor}}</p>
+            <p><b>Tower: </b>{{room.tower}}</p>
             <p><b>Telephone Number: </b>{{room.telephone}}</p>
             <p><b>Table Seats: </b>{{room.seats}}</p>
             <p><b>Maximum Capacity: </b>{{room.capacity}}</p>
@@ -52,6 +54,7 @@
             @else
                 <p><b>Video Conferencing: </b>No</p> 
             @endif
+<<<<<<< HEAD
 
             @if(room.state == 1) 
             <p><b>State: </b>Active</p>
@@ -59,6 +62,19 @@
             <p><b>State: </b>Deactive</p>                
             @endif
 
+=======
+            @if(room.surfaceHub == 1) 
+                <p><b>Surface hub: </b>Yes</p>
+            @else
+                <p><b>Surface hub: </b>No</p>                
+            @endif
+
+            @if(room.pc == 1) 
+                <p><b>PC: </b>Yes</p>
+            @else
+                <p><b>PC: </b>No</p>                
+            @endif
+>>>>>>> e69fa63b0f60cc620e9a21a1904d2e196fe9811e
         </div>
         
         @if(canEdit)

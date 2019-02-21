@@ -24,18 +24,43 @@
                 </div>
 
                 <div class='form-group'>
-                    <label for='location'>*Location</label>
-                    <input type='text' name='location' class='form-control' id='location' placeholder='Ex: IC CONF OTT-235 Queen-Oasis CONF IC' value='{{ room.location }}'/>
-                    <small id='locationHelp' class='form-text text-muted'>
-                        Please enter the location of the room in the following format: **format**
+                    <label for='fullName'>*Full Room Name</label>
+                    <input type='text' name='fullName' class='form-control' id='fullName' placeholder='Ex: IC CONF OTT-235 Queen-Oasis CONF IC' value='{{ room.fullName }}'/>
+                    <small id='fullNameHelp' class='form-text text-muted'>
+                        Please enter the full name of the room in the following format: **format**
                     </small>
-                    @if(hasErrorFor('location'))
+                    @if(hasErrorFor('fullName'))
                         <span class='alert-danger'>
-                            {{ getErrorFor('location') }}
+                            {{ getErrorFor('fullName') }}
                         </span>
                     @endif
                 </div>
-
+                {{--  Floor Location form  --}}
+                <div class='form-group'>
+                    <label for='floor'>*Floor Number</label>
+                    <select class='form-control' name='floor'>
+                        <option selected='{{ room.floor }}'>{{ room.floor }}</option>
+                        <option value='0'>0</option>
+                        <option value='1'>1</option>
+                        <option value='2'>2</option>
+                        <option value='3'>3</option>
+                        <option value='4'>4</option>
+                        <option value='5'>5</option>
+                        <option value='6'>6</option>
+                        <option value='7'>7</option>
+                        <option value='8'>8</option>
+                        <option value='9'>9</option>
+                    </select>
+                </div>
+                {{--  Tower Location  --}}
+                <div class='form-group'>
+                    <label for='tower'>*Tower</label>
+                    <select class='form-control' name='tower'>
+                        <option selected='{{ room.tower }}'>{{ room.tower}}</option>
+                        <option value='West'>West</option>
+                        <option value='East'>East</option>
+                    </select>
+                </div>
                 <div class='form-group'>
                     <label for='telephoneNumber'>*Telephone Number</label>
                     <input type='text' name='telephoneNumber' class='form-control' id='telephoneNumber' placeholder='Ex: 343-333-3333' value='{{ room.telephone }}' />
@@ -87,6 +112,13 @@
                     @set('videoConferenceChecked','checked')
                 @endif
 
+                @if(room.surfaceHub)
+                    @set('surfaceHubChecked','checked')
+                @endif
+
+                @if(room.pc)
+                @set('pcChecked','checked')
+            @endif
                 {{--  Checkboxes  --}}
                 <div class='form-group'>
                     <label>Equipment</label>
@@ -108,8 +140,12 @@
                         <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
                     </div>
                     <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{videoConferenceChecked}}/>
-                        <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
+                        <input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1' {{surfaceHubChecked}}/>
+                        <label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
+                    </div>
+                    <div class='custom-control custom-checkbox'>
+                        <input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1' {{pcChecked}}/>
+                        <label class='custom-control-label' for='pcCheck'>PC</label>
                     </div>
                 </div>
 
