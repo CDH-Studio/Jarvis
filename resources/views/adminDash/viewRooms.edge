@@ -13,8 +13,10 @@
                 <thead>
                     <tr>
                     <th scope='col'>Name</th>
+                    <th scope='col'>Full Name</th>
                     <th scope='col'>Phone Number</th>
-                    <th scope='col'>Location</th>
+                    <th scope='col'>Tower</th>
+                    <th scope='col'>Floor</th>
                     <th scope='col'>Maximum Capacity</th>
                     </tr>
                 </thead>
@@ -23,8 +25,10 @@
                 <tbody>
                     <tr id='roomRow' class='table-light' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
                     <td>{{ room.name }}</td>
+                    <td>{{ room.fullName }}</td>
                     <td>{{ room.telephone }}</td>
-                    <td>{{ room.location }}</td>
+                    <td>{{ room.tower }}</td>
+                    <td>{{ room.floor }}</td>
                     <td>{{ room.capacity }}</td>
                     </tr>
                 </tbody>

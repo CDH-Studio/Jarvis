@@ -14,8 +14,9 @@
             <img class='room-details-image' src='/images/temp_floor_map.png'>
         @endslot
     @endcomponent
+        {{ csrfField() }}
         {{--  Loading page header  --}}
-        @!component('components.pageHeader', title=room.title)
+        @!component('components.pageHeader', title=room.name)
         {{--  Actual page content  --}}
         <div class='row'>
             <div class='col card room-details-card border-primary shadow'>
@@ -37,8 +38,16 @@
                                     <table class='table table-hover'>  
                                         <tbody> 
                                             <tr>
+                                                <th scope='row'>Full Name</th>
+                                                <td>{{ room.fullName }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope='row'>Floor</th>
+                                                <td>{{ room.floor }}  {{ room.tower }}</td>
+                                            </tr>
+                                            <tr>
                                                 <th scope='row'>Phone Number</th>
-                                                <td>{{ room.phoneNumber }}</td>
+                                                <td>{{ room.telephone }}</td>
                                             </tr>
                                             <tr>
                                                 <th scope='row'>Table Seats</th>
@@ -46,32 +55,64 @@
                                             </tr>
                                             <tr>
                                                 <th scope='row'>Max Capacity</th>
-                                                <td>{{ room.maxCapacity }}</td>
+                                                <td>{{ room.capacity }}</td>
                                             </tr> 
                                             <tr>
                                                 <th scope='row'>Equipment</th>
-                                                <td>{{ equipment }}</td>
-                                            </tr>             
+                                                <td>{{ room.extraEquipment }}</td>
+                                            </tr>     
+                                            <tr>
+                                                <th scope='row'>Comments</th>
+                                                <td>{{ room.comment }}</td>
+                                            </tr>         
                                         </tbody>
                                     </table>
-                                </div>
-                            </div> 
-                            {{--  Checkboxes  --}}
-                            <div class='row'>
-                                <div class='col room-details-spec'>
-                                    <ul>
-                                        <li class='spec-yes' style='padding-left:0px;'><i class='fas fa-check-circle'></i><span> Projector</span></li>
-                                        <li class='spec-no'><i class='fas fa-times-circle'></i><span> Flip Chart</span></li>
-                                        <li class='spec-no'><i class='fa fa-times-circle'></i><span> Whiteboard</span></li>
-                                        <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio Conf.</span></li>
-                                        <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video Conf.</span></li>
-                                        <li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
-                                        <li class='spec-no' style='padding-right:0px;'><i class='fa fa-times-circle'></i><span> Surface</span></li>
-                                    </ul>
                                 </div>
                             </div>                 
                         </div>
                     </div>
+                    {{--  Checkboxes  --}}
+                    <div class='row'>
+                        <div class='col room-details-spec'>
+                            <ul>
+                                @if(room.projector == 1)
+                                    <li class='spec-yes'><i class='fas fa-check-circle'></i><span> Projector</span></li>
+                                @else
+                                    <li class='spec-no'><i class='fas fa-times-circle'></i><span> Projector</span></li>
+                                @endif
+                                @if(room.flipchart == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Flip Chart</span></li>
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Flip Chart</span></li>
+                                @endif
+                                @if(room.whiteboard == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Whiteboard</span></li>
+                                @endif
+                                @if(room.audioConference == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio Conf.</span></li>
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Audio Conf.</span></li>
+                                @endif
+                                @if(room.videoConference == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video Conf.</span></li> 
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Video Conf.</span></li>
+                                @endif
+                                @if(room.pc == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> PC</span></li>
+                                @endif
+                                @if(room.surfaceHub == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Surface Hub</span></li>
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Surface Hub</span></li>
+                                @endif
+                            </ul>
+                        </div>
+                    </div> 
                 </div>
             </div>
         </div>
