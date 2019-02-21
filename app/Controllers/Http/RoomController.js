@@ -86,6 +86,12 @@ class RoomController {
 			room.extraEquipment = body.extraEquipment;
 			room.comment = body.comment;
 
+			if (body.state === undefined) {
+				room.state = 0;
+			} else {
+				room.state = 1;
+			}
+
 			await room.save();
 			session.flash({ notification: 'Room Added!' });
 
@@ -137,6 +143,12 @@ class RoomController {
 			name: `${body.name}_roomPicture.png`
 		});
 
+		if (body.state === undefined) {
+			body.state = 0;
+		} else {
+			body.state = 1;
+		}
+
 		// Updates room information in database
 		await Room
 			.query()
@@ -155,7 +167,8 @@ class RoomController {
 				floorplan: `uploads/floorPlans/${body.name}.png`,
 				picture: `uploads/roomPictures/${body.name}.png`,
 				extraEquipment: body.extraEquipment,
-				comment: body.comment
+				comment: body.comment,
+				state: body.state
 			});
 
 		room = await Room.findBy('name', body.name);

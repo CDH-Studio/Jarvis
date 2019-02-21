@@ -131,7 +131,14 @@
                     <label>Room Picture</label>
                     <input type='file' name='roomPicture' value='{{ room.picture }}'>
                 </div>
-                <button type='submit' class='btn btn-primary mb-3'>Add</button>
+
+                <div class='form-group'>
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" name='state' id="state" checked="">
+                        <label class="custom-control-label" for="state">*State</label>
+                    </div>
+                </div>
+                <button type='submit' class='btn btn-primary mb-3'>Submit</button>
             </form>
         </div>
     </div>

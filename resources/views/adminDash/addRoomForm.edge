@@ -69,23 +69,23 @@
                     <label>Equipment</label>
 
                     <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value='1' />
+                        <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value='1' {{ old('projectorCheck') ? 'checked' : '' }} >
                         <label class='custom-control-label' for='projectorCheck'>Projector</label>
                     </div>
                     <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1'/>
+                        <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1' {{ old('whiteboardCheck') ? 'checked' : '' }} >
                         <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
                     </div>
                     <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1'/>
+                        <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck') ? 'checked' : '' }} >
                         <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
                     </div>
                     <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1'/>
+                        <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck') ? 'checked' : '' }} >
                         <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
                     </div>
                     <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1'/>
+                        <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck') ? 'checked' : '' }} >
                         <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
                     </div>
                 </div>
@@ -107,6 +107,13 @@
                 <div class='form-group'>
                     <label>Room Picture</label>
                     <input type='file' name='roomPicture' value='{{ old('picture', '') }}'>
+                </div>
+
+                <div class='form-group'>
+                    <div class='custom-control custom-switch'>
+                        <input type='checkbox' class='custom-control-input' name='state' id='state' checked='' value='on' {{ old('state') ? 'on' : 'undefined' }}> 
+                        <label class='custom-control-label' for='state'>*State</label>
+                    </div>
                 </div>
                 <button type='submit' class='btn btn-primary mb-3'>Add</button>
             </form>
