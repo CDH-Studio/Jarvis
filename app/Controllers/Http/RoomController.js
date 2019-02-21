@@ -3,6 +3,7 @@ const Room = use('App/Models/Room');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
+const Drive = use('Drive');
 
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
@@ -124,6 +125,9 @@ class RoomController {
 
 		// Retrieves user input
 		const body = request.all();
+
+		await Drive.delete('uploads/floorPlans/' + `${room.name}_floorPlan.png`);
+		await Drive.delete('uploads/roomPictures/' + `${room.name}_roomPicture.png`);
 
 		// Upload process - Floor Plan
 		const floorPlanImage = request.file('floorPlan', {
