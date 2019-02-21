@@ -306,9 +306,13 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async goToDetails ({ request, view }) {
-		const room = request.only(['title', 'fullName', 'floor', 'tower', 'seats', 'maxCapacity', 'phoneNumber', 'extraEquipment', 'projector', 'flipchart', 'whiteboard', 'audioConference', 'videoConference', 'pc', 'surfaceHub', 'comment']);
-		console.log(room);
-
+		//  get all information from card view
+		const results = request.all();
+		// take the unique id from the rooom and search tyhe database for the rest of the information to display in room details
+		let roomId = results.id;
+		let searchResults = await Room
+			.findBy('id', roomId);
+		const room = searchResults.toJSON();
 		return view.render('userPages.roomDetails', { room });
 	}
 

@@ -245,6 +245,7 @@ body {
 }
 
 .room-card-body{
+    min-height: 264px;
     background-color: #fff;
     padding:15px 15px;
 }

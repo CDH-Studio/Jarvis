@@ -4,22 +4,7 @@
 {{--  Routing to rooom details when clicked  --}}
 <form action='{{ route('goToDetails') }}' method='POST'>
     <input type='hidden' name='_csrf' value={{ token }} />
-    <input type='hidden' name='title' value={{ title }} /> 
-    <input type='hidden' name='fullName' value={{ fullName }} /> 
-    <input type='hidden' name='floor' value={{ floor }} />
-    <input type='hidden' name='tower' value={{ tower }} />
-    <input type='hidden' name='seats' value={{ seats }} /> 
-    <input type='hidden' name='maxCapacity' value={{ maxCapacity }} /> 
-    <input type='hidden' name='phoneNumber' value={{ phoneNumber }} />
-    <input type='hidden' name='extraEquipment' value={{ extraEquipment }} />
-    <input type='hidden' name='projector' value={{ projector }} />
-    <input type='hidden' name='flipchart' value={{ flipChart }} />
-    <input type='hidden' name='whiteboard' value={{ whiteBoard }} />
-    <input type='hidden' name='audioConference' value={{ audioConference }} />
-    <input type='hidden' name='videoConference' value={{ videoConference }} />
-    <input type='hidden' name='pc' value={{ pc }} />
-    <input type='hidden' name='surfaceHub' value={{ surfaceHub }} />
-    <input type='hidden' name='comment' value={{ comment }} />
+    <input type='hidden' name='id' value={{ id }} /> 
     {{--  Room card  --}}
     <a class='room-card' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
         {{--  Title  --}}
@@ -43,9 +28,10 @@
                     </ul>
                 </div>
             </div>
-            <hr>
+            
             {{--  Checkboxes  --}}
-            <div class='room-card-spec col-12'>
+            <div class='room-card-spec'>
+                    <hr>
                 <ul>
                     @if(projector === 1)
                         <li class='spec-yes'><i class='fas fa-check-circle'></i><span> Projector</span></li>

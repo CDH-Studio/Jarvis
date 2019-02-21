@@ -14,8 +14,9 @@
             <img class='room-details-image' src='/images/temp_floor_map.png'>
         @endslot
     @endcomponent
+        {{ csrfField() }}
         {{--  Loading page header  --}}
-        @!component('components.pageHeader', title=room.title)
+        @!component('components.pageHeader', title=room.name)
         {{--  Actual page content  --}}
         <div class='row'>
             <div class='col card room-details-card border-primary shadow'>
@@ -46,7 +47,7 @@
                                             </tr>
                                             <tr>
                                                 <th scope='row'>Phone Number</th>
-                                                <td>{{ room.phoneNumber }}</td>
+                                                <td>{{ room.telephone }}</td>
                                             </tr>
                                             <tr>
                                                 <th scope='row'>Table Seats</th>
@@ -54,7 +55,7 @@
                                             </tr>
                                             <tr>
                                                 <th scope='row'>Max Capacity</th>
-                                                <td>{{ room.maxCapacity }}</td>
+                                                <td>{{ room.capacity }}</td>
                                             </tr> 
                                             <tr>
                                                 <th scope='row'>Equipment</th>
@@ -62,7 +63,7 @@
                                             </tr>     
                                             <tr>
                                                 <th scope='row'>Comments</th>
-                                                <td>{{ room.comments }}</td>
+                                                <td>{{ room.comment }}</td>
                                             </tr>         
                                         </tbody>
                                     </table>

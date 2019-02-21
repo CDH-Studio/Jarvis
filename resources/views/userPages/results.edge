@@ -13,6 +13,7 @@
             <div class='col-lg-6'>
                 {{ csrfField() }}
                 @!component('components.card',
+                    id=room.id,
                     title=room.name,
                     fullName=room.fullName,
                     phoneNumber=room.telephone,
