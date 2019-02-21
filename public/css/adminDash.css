@@ -53,6 +53,11 @@
   cursor:pointer;
 }
 
+/* Hover-over a row for the view all users table */
+#userRow:hover {
+  cursor:pointer;
+}
+
 /* Extra styling */
 .side-nav-icons{
   width: 16px !important;

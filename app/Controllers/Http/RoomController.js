@@ -210,7 +210,6 @@ class RoomController {
 	async getAllRooms ({ auth, view }) {
 		const results = await Room.all();
 		const rooms = results.toJSON();
-		let page = '';
 
 		// Sort the results by name
 		rooms.sort((a, b) => {
@@ -219,11 +218,9 @@ class RoomController {
 
 		// if user is admin
 		if (auth.user.role === 1) {
-			page = 'adminDash.viewRooms';
 			return view.render('adminDash.viewRooms', { rooms });
 		} else {
-			page = 'userPages.results';
-			return view.render(page, { rooms });
+			return view.render('userPages.results', { rooms });
 		}
 	}
 

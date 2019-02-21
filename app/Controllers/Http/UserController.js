@@ -189,10 +189,14 @@ class UserController {
 		const user = await User.find(Number(params.id));
 		var canEdit = 0;
 		var layoutType = '';
-		// if user is admin
-		if (auth.user.role === 1) {
+		// check if admin is viewing their own profile
+		if (auth.user.id === Number(params.id) && auth.user.role === 1) {
 			layoutType = 'layouts/adminLayout';
 			canEdit = 1;
+			// check if admin is viewing someone elses profile
+		} else if (auth.user.id !== Number(params.id) && auth.user.role === 1) {
+			layoutType = 'layouts/adminLayout';
+			canEdit = 0;
 			// check if user is viewing their own profile
 		} else if (auth.user.id === Number(params.id) && auth.user.role === 2) {
 			layoutType = 'layouts/mainLayout';
@@ -327,6 +331,23 @@ class UserController {
 
 		// return response.redirect('/');
 		// }
+	}
+
+	/**
+	 * Query all the users from the database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getAllUsers ({ auth, view, response }) {
+		const results = await User.all();
+		const users = results.toJSON();
+
+		// Sort the results by name
+		users.sort((a, b) => {
+			return (a.firstname > b.firstname) ? 1 : ((b.firstname > a.firstname) ? -1 : 0);
+		});
+
+		return view.render('adminDash.viewUsers', { users });
 	}
 }
 
