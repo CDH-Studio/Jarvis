@@ -3,6 +3,7 @@
 const Task = use('Task');
 const Env = use('Env');
 const Token = use('App/Models/Token');
+const Logger = use('Logger');
 
 // The credentials for Microsoft Graph
 const credentials = {
@@ -57,6 +58,8 @@ class RefreshAccessToken extends Task {
 			}).refresh();
 
 			saveToDatabase(newToken);
+
+			Logger.info('Access Token Refreshed');
 		}
 	}
 }
