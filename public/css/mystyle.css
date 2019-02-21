@@ -282,10 +282,10 @@ body {
     width:110px;
 }
 .spec-yes{
-    color:#17BC9B;
+    color:rgb(18, 201, 164);
 }
 .spec-no{
-    color:#ef8b80;
+    color:#a1a1a1;
 }
 
 .flex-fixed-width-item {
