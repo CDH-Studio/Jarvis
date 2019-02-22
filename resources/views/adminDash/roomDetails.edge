@@ -54,15 +54,7 @@
             @else
                 <p><b>Video Conferencing: </b>No</p> 
             @endif
-<<<<<<< HEAD
 
-            @if(room.state == 1) 
-            <p><b>State: </b>Active</p>
-            @else
-            <p><b>State: </b>Deactive</p>                
-            @endif
-
-=======
             @if(room.surfaceHub == 1) 
                 <p><b>Surface hub: </b>Yes</p>
             @else
@@ -74,7 +66,12 @@
             @else
                 <p><b>PC: </b>No</p>                
             @endif
->>>>>>> e69fa63b0f60cc620e9a21a1904d2e196fe9811e
+
+            @if(room.state == 1) 
+            <p><b>State: </b>Active</p>
+            @else
+            <p><b>State: </b>Deactive</p>                
+            @endif
         </div>
         
         @if(canEdit)

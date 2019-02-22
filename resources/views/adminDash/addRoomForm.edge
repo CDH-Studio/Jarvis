@@ -53,7 +53,6 @@
                 <div class='form-group'>
                     <label for='tower'>*Tower</label>
                     <select class='form-control' name='tower' >
-                        <option selected=''>Select a tower</option>
                         <option value='0' {{ old('tower') == 0 ? 'selected' : '' }}>West</option>
                         <option value='1' {{ old('tower') == 1 ? 'selected' : '' }}>East</option>
                     </select>
