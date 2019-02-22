@@ -249,9 +249,9 @@ class RoomController {
 	async getSearchRooms ({ request, view }) {
 		// importing forms from search form
 		const form = request.all();
-		// const date = form.date;
-		// const from = form.from;
-		// const to = form.to;
+		const date = form.date;
+		const from = form.from;
+		const to = form.to;
 		const location = form.location;
 		const capacity = form.capacity;
 		const pc = form.pcCheck;
@@ -372,14 +372,7 @@ class RoomController {
 						'name': 'Yunwei Li'
 					},
 					'type': 'required'
-				},
-				// {
-				// 	'emailAddress': {
-				// 		'address': 'benoit.jeaurond@canada.ca',
-				// 		'name': 'Ben'
-				// 	},
-				// 	'type': 'required'
-				// }
+				}
 			]
 		};
 
@@ -462,12 +455,36 @@ class RoomController {
 			});
 
 			try {
-				const calendars = await client
+				const calendar = await client
 					.api(`/me/calendars/${calendarId}`)
 					// .orderby('createdDateTime DESC')
 					.get();
 
-				return calendars;
+				return calendar;
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	}
+
+	async getCalendarView (calendarId, start, end) {
+		const accessToken = await getAccessToken();
+
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const calendarView = await client
+					.api(`/me/calendars/${calendarId}/calendarView?startDateTime=${start}&endDateTime=${end}`)
+					// .orderby('start DESC')
+					.header('Prefer', 'outlook.timezone="Eastern Standard Time"')
+					.get();
+
+				return calendarView;
 			} catch (err) {
 				console.log(err);
 			}
