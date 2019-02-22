@@ -306,6 +306,49 @@ class RoomController {
 
 		const rooms = searchResults.toJSON();
 
+		// iterate through the rooms
+		async function asyncForEach (arr, callback) {
+			for (let i = 0; i < arr.length; i++) {
+				await callback(arr[i], i, arr);
+			}
+		}
+
+		const checkRoomAvailability = async () => {
+			await asyncForEach(rooms, async (item, index, items) => {
+				const startTime = date + 'T' + from;
+				const endTime = date + 'T' + to;
+
+				// if there is a calendar for the room
+				if (item.calendar !== 'insertCalendarHere') {
+					// query the events within the search time range
+					const calendarViews = (await this.getCalendarView(
+						item.calendar,
+						startTime,
+						endTime
+					)).value;
+
+					// if event end time is the same as search start time, remove the event
+					calendarViews.forEach((item, index, items) => {
+						const eventEndTime = new Date(item.end.dateTime);
+						const searchStartTime = new Date(startTime);
+
+						if (+eventEndTime === +searchStartTime) {
+							items.splice(index, 1);
+						}
+					});
+
+					// remove the room if it is not available
+					const available = calendarViews.length === 0;
+
+					if (!available) {
+						items.splice(index, 1);
+					}
+				}
+			});
+		};
+
+		await checkRoomAvailability();
+
 		// Sort the results by name
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
