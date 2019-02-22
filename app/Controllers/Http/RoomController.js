@@ -391,11 +391,7 @@ class RoomController {
 			'subject': meeting,
 			'body': {
 				'contentType': 'HTML',
-				'content': `
-					Subject: Sprint Demo \n
-					When: 3/01/19 8a \n
-					Location: Office \n
-				`
+				'content': 'Jarvis Daily Standup'
 			},
 			'start': {
 				'dateTime': `${date}T${from}`,
