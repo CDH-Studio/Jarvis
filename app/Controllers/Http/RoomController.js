@@ -338,9 +338,10 @@ class RoomController {
 	async confirmBooking ({ request, response }) {
 		const { meeting, date, from, to, room } = request.only(['meeting', 'date', 'from', 'to', 'room']);
 		const results = await Room
-			.findBy('name', room);
+			.findBy('id', room);
 		const row = results.toJSON();
 		const calendar = row.calendar;
+		const name = row.name;
 
 		// Information of the event
 		const eventInfo = {
@@ -362,12 +363,12 @@ class RoomController {
 				'timeZone': 'Eastern Standard Time'
 			},
 			'location': {
-				'displayName': room
+				'displayName': name
 			},
 			'attendees': [
 				{
 					'emailAddress': {
-						'address': 'yunwei.li@canada.ca',
+						'address': '',
 						'name': 'Yunwei Li'
 					},
 					'type': 'required'
