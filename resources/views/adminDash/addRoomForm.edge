@@ -33,30 +33,29 @@
                         </span>
                     @endif
                 </div>
-                {{--  Floor Location form  --}}
+                {{--  Floor Location form  --}} 
                 <div class='form-group'>
                     <label for='floor'>*Floor Number</label>
-                    <select class='form-control' name='floor'>
-                        <option selected=''>Select a floor</option>
-                        <option value='0'>0</option>
-                        <option value='1'>1</option>
-                        <option value='2'>2</option>
-                        <option value='3'>3</option>
-                        <option value='4'>4</option>
-                        <option value='5'>5</option>
-                        <option value='6'>6</option>
-                        <option value='7'>7</option>
-                        <option value='8'>8</option>
-                        <option value='9'>9</option>
+                    <select class='form-control' name='floor' placeholder='Select a floor'>
+                        <option value='0' {{ old('floor') == 0 ? 'selected' : '' }}>0</option>
+                        <option value='1' {{ old('floor') == 1 ? 'selected' : '' }}>1</option>
+                        <option value='2' {{ old('floor') == 2 ? 'selected' : '' }}>2</option>
+                        <option value='3' {{ old('floor') == 3 ? 'selected' : '' }}>3</option>
+                        <option value='4' {{ old('floor') == 4 ? 'selected' : '' }}>4</option>
+                        <option value='5' {{ old('floor') == 5 ? 'selected' : '' }}>5</option>
+                        <option value='6' {{ old('floor') == 6 ? 'selected' : '' }}>6</option>
+                        <option value='7' {{ old('floor') == 7 ? 'selected' : '' }}>7</option>
+                        <option value='8' {{ old('floor') == 8 ? 'selected' : '' }}>8</option>
+                        <option value='9' {{ old('floor') == 9 ? 'selected' : '' }}>9</option>
                     </select>
                 </div>
                 {{--  Tower Location  --}}
                 <div class='form-group'>
                     <label for='tower'>*Tower</label>
-                    <select class='form-control' name='tower'>
+                    <select class='form-control' name='tower' >
                         <option selected=''>Select a tower</option>
-                        <option value='West'>West</option>
-                        <option value='East'>East</option>
+                        <option value='0' {{ old('tower') == 0 ? 'selected' : '' }}>West</option>
+                        <option value='1' {{ old('tower') == 1 ? 'selected' : '' }}>East</option>
                     </select>
                 </div>
                 {{--  Phone Number  --}}
@@ -89,80 +88,51 @@
                         </span>
                     @endif
                 </div>
-<<<<<<< HEAD
-
-                <div class='form-group'>
-                    <label>Equipment</label>
-
-                    <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value='1' {{ old('projectorCheck') ? 'checked' : '' }} >
-                        <label class='custom-control-label' for='projectorCheck'>Projector</label>
-                    </div>
-                    <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1' {{ old('whiteboardCheck') ? 'checked' : '' }} >
-                        <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
-                    </div>
-                    <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck') ? 'checked' : '' }} >
-                        <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
-                    </div>
-                    <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck') ? 'checked' : '' }} >
-                        <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
-                    </div>
-                    <div class='custom-control custom-checkbox'>
-                        <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck') ? 'checked' : '' }} >
-                        <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
-                    </div>
-                </div>
-
-=======
                 {{--  Equipment List  --}}
->>>>>>> e69fa63b0f60cc620e9a21a1904d2e196fe9811e
                 <div class='form-group'>
-                        <label for='equipment'>*Equipment:</label>
+                        <label for='equipment'>*Equipment</label>
     
                         <div class='row'>               
                             <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                                <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value= '1' />
+                                <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value= '1' {{ old('projectorCheck') ? 'checked' : '' }} >
                                 <label class='custom-control-label' for='projectorCheck'>Projector</label>
                             </div>
                             <div class='custom-control custom-checkbox ml-3'>
-                                <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1'/>
+                                <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1' {{ old('whiteboardCheck') ? 'checked' : '' }} >
                                 <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
                             </div>
                         </div>
     
                         <div class='row'>
                             <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                                <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1'/>
+                                <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck') ? 'checked' : '' }} >
                                 <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
                             </div>  
                             <div class='custom-control custom-checkbox ml-3'>
-                                <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1'/>
+                                <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck') ? 'checked' : '' }} >
                                 <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
                             </div>                
                         </div>
     
                         <div class='row'>
                             <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                                <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1'/>
+                                <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck') ? 'checked' : '' }} >
                                 <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
                             </div>
                             
                             <div class="custom-control custom-checkbox ml-3">
-                                <input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1'/>
+                                <input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1' {{ old('surfaceHubCheck') ? 'checked' : '' }} >
                                 <label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
                             </div>               
                         </div>
     
                         <div class='row'>
                             <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                                <input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1'/>
+                                <input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1' {{ old('pcCheck') ? 'checked' : '' }} >
                                 <label class='custom-control-label' for='pcCheck'>PC</label>
                             </div>                
-                        </div>
-
+                        </div> 
+                {{--  Extra Equipment  --}}
                 <div class='form-group mt-4'>
                     <label for='extraEquipment'>Extra Equipment</label>
                     <textarea class='form-control' name='extraEquipment' id='extraEquipment' rows='3' >{{ old('extraEquipment', '') }}</textarea>
@@ -172,16 +142,17 @@
                     <label for='extraEquipment'>Comments</label>
                     <textarea class='form-control' name='comment' id='comment' rows='5' >{{ old('comment', '') }}</textarea>
                 </div>
-
+                {{--  Floor Plan  --}}
                 <div class='form-group'>
                     <label>Floor Plan</label>
                     <input type='file' name='floorPlan' value='{{ old('floorplan', '') }}'>
                 </div>
+                {{--  Room Picture  --}}
                 <div class='form-group'>
                     <label>Room Picture</label>
                     <input type='file' name='roomPicture' value='{{ old('picture', '') }}'>
                 </div>
-
+                {{--    --}}
                 <div class='form-group'>
                     <div class='custom-control custom-switch'>
                         <input type='checkbox' class='custom-control-input' name='state' id='state' checked='' value='on' {{ old('state') ? 'on' : 'undefined' }}> 
