@@ -130,12 +130,6 @@ class RoomController {
 		// Retrieves user input
 		const body = request.all();
 
-<<<<<<< HEAD
-		//let oldFloor = await Drive.get('uploads/floorPlans/' + `${room.name}_floorPlan.png`);
-		//let oldRoom = await Drive.get('uploads/floorPlans/' + `${room.name}_roomPicture.png`);
-
-=======
->>>>>>> dev
 		await Drive.delete('uploads/floorPlans/' + `${room.name}_floorPlan.png`);
 		await Drive.delete('uploads/roomPictures/' + `${room.name}_roomPicture.png`);
 
