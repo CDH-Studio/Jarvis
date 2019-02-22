@@ -199,21 +199,21 @@ class RoomController {
 		try {
 			const room = await Room.findOrFail(params.id);
 
-			var canEdit = 0;
+			var isAdmin = 0;
 			var layoutType = 'll';
 			// if user is admin
 			if (auth.user.role === 1) {
 				layoutType = 'layouts/adminLayout';
-				canEdit = 1;
+				isAdmin = 1;
 				// check if user is viewing their own profile
 			} else if (auth.user.role === 2) {
 				layoutType = 'layouts/mainLayout';
-				canEdit = 0;
+				isAdmin = 0;
 				// check if user is viewing someone elses profile
 			} else {
 				return response.redirect('/');
 			}
-			return view.render('adminDash.roomDetails', { room, layoutType, canEdit });
+			return view.render('userPages.roomDetails', { room, layoutType, isAdmin });
 		} catch (error) {
 			return response.redirect('/');
 		}
@@ -319,16 +319,16 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async goToDetails ({ request, view }) {
-		//  get all information from card view
-		const results = request.all();
-		// take the unique id from the rooom and search tyhe database for the rest of the information to display in room details
-		let roomId = results.id;
-		let searchResults = await Room
-			.findBy('id', roomId);
-		const room = searchResults.toJSON();
-		return view.render('userPages.roomDetails', { room });
-	}
+	// async goToDetails ({ request, view }) {
+	// //  get all information from card view
+	// const results = request.all();
+	// // take the unique id from the rooom and search tyhe database for the rest of the information to display in room details
+	// let roomId = results.id;
+	// let searchResults = await Room
+	// .findBy('id', roomId);
+	// const room = searchResults.toJSON();
+	// return view.render('userPages.roomDetails', { room });
+	// }
 
 	/**
 	 * Create the requested event on the room calendar.

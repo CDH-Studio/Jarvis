@@ -7,6 +7,9 @@
 {{--  Manage bookings page content  --}}
 @section('content')
     {{--  Loading page header  --}}
-    @!component('components.pageHeader', title='Manage Bookings')
+    @component('components.pageHeader', title='Manage Bookings')
+        @slot('body')
+        @endslot
+    @endcomponent
 @endsection
 
