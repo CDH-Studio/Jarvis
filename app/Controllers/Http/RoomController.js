@@ -53,7 +53,9 @@ class RoomController {
 			// Populates the room object's values
 			const room = new Room();
 			room.name = body.name;
-			room.location = body.location;
+			room.fullName = body.fullName;
+			room.floor = body.floor;
+			room.tower = body.tower;
 			room.telephone = body.telephoneNumber;
 			room.seats = body.tableSeats;
 			room.capacity = body.maximumCapacity;
@@ -62,6 +64,8 @@ class RoomController {
 			room.flipchart = body.flipChartCheck;
 			room.audioConference = body.audioCheck;
 			room.videoConference = body.videoCheck;
+			room.surfaceHub = body.surfaceHubCheck;
+			room.pc = body.pcCheck;
 
 			// Upload process - Floor Plan
 			const floorPlanImage = request.file('floorPlan', {
@@ -86,6 +90,12 @@ class RoomController {
 			room.picture = `uploads/roomPictures/${room.name}.png`;
 			room.extraEquipment = body.extraEquipment;
 			room.comment = body.comment;
+
+			if (body.state === undefined) {
+				room.state = 0;
+			} else {
+				room.state = 1;
+			}
 
 			await room.save();
 			session.flash({ notification: 'Room Added!' });
@@ -120,9 +130,12 @@ class RoomController {
 		// Retrieves user input
 		const body = request.all();
 
+<<<<<<< HEAD
 		//let oldFloor = await Drive.get('uploads/floorPlans/' + `${room.name}_floorPlan.png`);
 		//let oldRoom = await Drive.get('uploads/floorPlans/' + `${room.name}_roomPicture.png`);
 
+=======
+>>>>>>> dev
 		await Drive.delete('uploads/floorPlans/' + `${room.name}_floorPlan.png`);
 		await Drive.delete('uploads/roomPictures/' + `${room.name}_roomPicture.png`);
 
@@ -144,13 +157,21 @@ class RoomController {
 			name: `${body.name}_roomPicture.png`
 		});
 
+		if (body.state === undefined) {
+			body.state = 0;
+		} else {
+			body.state = 1;
+		}
+
 		// Updates room information in database
 		await Room
 			.query()
 			.where('name', room.name)
 			.update({
 				name: body.name,
-				location: body.location,
+				fullName: body.fullName,
+				floor: body.floor,
+				tower: body.tower,
 				telephone: body.seats,
 				seats: body.tableSeats,
 				capacity: body.maximumCapacity,
@@ -159,10 +180,13 @@ class RoomController {
 				flipchart: body.flipchart,
 				audioConference: body.audioCheck,
 				videoConference: body.videoCheck,
+				surfaceHub: body.surfaceHubCheck,
+				pc: body.pcCheck,
 				floorplan: `uploads/floorPlans/${body.name}.png`,
 				picture: `uploads/roomPictures/${body.name}.png`,
 				extraEquipment: body.extraEquipment,
-				comment: body.comment
+				comment: body.comment,
+				state: body.state
 			});
 
 		room = await Room.findBy('name', body.name);
@@ -253,7 +277,7 @@ class RoomController {
 		// if the location is selected then query, else dont
 		if (location !== 'Select a floor') {
 			searchResults = searchResults
-				.where('location', location)
+				.where('floor', location)
 				.clone();
 		}
 		// if the "number of people" is selected then add to query, else ignore it
@@ -302,9 +326,13 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async goToDetails ({ request, view }) {
-		const room = request.only(['title', 'floor', 'seats', 'maxCapacity', 'phoneNumber']);
-		console.log(room);
-
+		//  get all information from card view
+		const results = request.all();
+		// take the unique id from the rooom and search tyhe database for the rest of the information to display in room details
+		let roomId = results.id;
+		let searchResults = await Room
+			.findBy('id', roomId);
+		const room = searchResults.toJSON();
 		return view.render('userPages.roomDetails', { room });
 	}
 
