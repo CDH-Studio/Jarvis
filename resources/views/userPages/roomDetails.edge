@@ -120,7 +120,7 @@
         <form action='{{ route('confirmBooking') }}' method='POST'>
                 {{ csrfField() }}
 
-                <input type='hidden' name='room' value={{ room.title }} /> 
+                <input type='hidden' name='room' value={{ room.id }} /> 
                 {{--  Body content  --}}
                 <div class='modal-body'>
                     {{--  Table that displays booking information  --}}
