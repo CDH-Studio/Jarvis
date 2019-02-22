@@ -3,6 +3,7 @@ const Room = use('App/Models/Room');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
+const Drive = use('Drive');
 
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
@@ -118,6 +119,12 @@ class RoomController {
 
 		// Retrieves user input
 		const body = request.all();
+
+		//let oldFloor = await Drive.get('uploads/floorPlans/' + `${room.name}_floorPlan.png`);
+		//let oldRoom = await Drive.get('uploads/floorPlans/' + `${room.name}_roomPicture.png`);
+
+		await Drive.delete('uploads/floorPlans/' + `${room.name}_floorPlan.png`);
+		await Drive.delete('uploads/roomPictures/' + `${room.name}_roomPicture.png`);
 
 		// Upload process - Floor Plan
 		const floorPlanImage = request.file('floorPlan', {
@@ -318,7 +325,11 @@ class RoomController {
 			'subject': meeting,
 			'body': {
 				'contentType': 'HTML',
-				'content': 'Does late morning work for you?'
+				'content': `
+					Subject: Sprint Demo \n
+					When: 3/01/19 8a \n
+					Location: Office \n
+				`
 			},
 			'start': {
 				'dateTime': `${date}T${from}`,
@@ -338,7 +349,14 @@ class RoomController {
 						'name': 'Yunwei Li'
 					},
 					'type': 'required'
-				}
+				},
+				// {
+				// 	'emailAddress': {
+				// 		'address': 'benoit.jeaurond@canada.ca',
+				// 		'name': 'Ben'
+				// 	},
+				// 	'type': 'required'
+				// }
 			]
 		};
 
