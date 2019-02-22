@@ -18,6 +18,7 @@
                     <th scope='col'>Tower</th>
                     <th scope='col'>Floor</th>
                     <th scope='col'>Maximum Capacity</th>
+                    <th scope='col'>State</th>
                     </tr>
                 </thead>
                 {{--  Loops through the rooms array and displays every room's content  --}}
@@ -30,7 +31,12 @@
                     <td>{{ room.tower }}</td>
                     <td>{{ room.floor }}</td>
                     <td>{{ room.capacity }}</td>
-                    </tr>
+                    @if(room.state == 1)
+                        <td>Active</td>
+                    @else
+                        <td>Deactive</td>
+                    @endif 
+                    </tr>3
                 </tbody>
                 @endeach
             </table>
