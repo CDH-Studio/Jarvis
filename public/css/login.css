@@ -105,3 +105,13 @@ p.forgot-password {
 	color: #fff;
 }
 
+.is-success {
+	background: #0facf3;
+	color: #fff;
+	position:absolute;
+   	top: 1vh;
+	right: 1vw;
+	--font-family-sans-serif: "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;   
+}
+

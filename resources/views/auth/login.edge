@@ -11,12 +11,16 @@ Jarvis - Login
 @section('content')
 
 <div class='container'>
+	@if(flashMessage('notification'))
+		<div class="notification is-{{ flashMessage('notification.type') }}">
+			{{ flashMessage('notification.message') }}
+		</div>
+	@endif
 	<div class='row justify-content-center'>
 		<div class='col-lg-5 col-md-8 justify-center'>
 			<div class='card text-white mb-3 login-box shadow'>
 				<div class='card-header text-center'><img class='brand-logo' src='door_logo.png'>
 				</div>
-
 				<div class='card-body'>
 					<h4>Login</h4>
 					<form action='{{ route('UserController.login') }}' method='POST'>

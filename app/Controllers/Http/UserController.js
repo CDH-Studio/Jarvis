@@ -180,9 +180,15 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async logout ({ auth, response }) {
+	async logout ({ auth, response, session }) {
 		await auth.logout();
-		return response.redirect('/');
+		session.flash({
+			notification: {
+				type: 'success',
+				message: 'You have been logged out.'
+			}
+		});
+		return response.redirect('/login');
 	}
 
 	async show ({ auth, params, view, response }) {
