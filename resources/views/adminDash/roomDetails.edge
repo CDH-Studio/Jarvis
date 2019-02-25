@@ -1,4 +1,4 @@
-@layout('layouts.adminLayout')
+@layout(layoutType)
 
 @section('content')
 
@@ -54,15 +54,7 @@
             @else
                 <p><b>Video Conferencing: </b>No</p> 
             @endif
-<<<<<<< HEAD
 
-            @if(room.state == 1) 
-            <p><b>State: </b>Active</p>
-            @else
-            <p><b>State: </b>Deactive</p>                
-            @endif
-
-=======
             @if(room.surfaceHub == 1) 
                 <p><b>Surface hub: </b>Yes</p>
             @else
@@ -74,13 +66,23 @@
             @else
                 <p><b>PC: </b>No</p>                
             @endif
->>>>>>> e69fa63b0f60cc620e9a21a1904d2e196fe9811e
+
+            @if(room.state == 1) 
+            <p><b>State: </b>Active</p>
+            @else
+            <p><b>State: </b>Deactive</p>                
+            @endif
         </div>
         
-        @if(canEdit)
+        @if(isAdmin)   
+        <div class='row'>
             <a href='{{ route('editRoom', { id: room.id }) }}' class='btn btn-dark d-block float-left ml-3'>Edit</a>
-            {{--  <button type='button' class='btn btn-dark d-block float-left ml-3' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';">Edit</button>  --}}
-            {{--  <button type='button' class='btn btn-primary large-buttons' onclick="window.location='{{ route('searchRooms') }}';">Search</button>  --}}
+            @if(room.state == 1)
+                <button type='button' class='btn btn-danger ml-3' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">Deactive</button>              
+            @else
+                <button type='button' class='btn btn-success ml-3' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">Activate</button>               
+            @endif
+        </div>
         @endif
     </div>
 @endsection

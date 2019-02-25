@@ -2,7 +2,7 @@
 @!component('components.roomConfirmationModal', id='roomModal', title=title)
 
 {{--  Routing to rooom details when clicked  --}}
-<form action='{{ route('goToDetails') }}' method='POST'>
+<form action='{{ route('showRoom', {id }) }}' method='GET'>
     <input type='hidden' name='_csrf' value={{ token }} />
     <input type='hidden' name='id' value={{ id }} /> 
     {{--  Room card  --}}
