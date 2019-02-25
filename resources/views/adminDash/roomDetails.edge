@@ -1,4 +1,4 @@
-@layout('layouts.adminLayout')
+@layout(layoutType)
 
 @section('content')
 
@@ -74,9 +74,9 @@
             @endif
         </div>
         
-        @if(canEdit)
+        @if(isAdmin)   
         <div class='row'>
-            <button type='button' class='btn btn-dark d-block float-left ml-4' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';">Edit</button>
+            <a href='{{ route('editRoom', { id: room.id }) }}' class='btn btn-dark d-block float-left ml-3'>Edit</a>
             @if(room.state == 1)
                 <button type='button' class='btn btn-danger ml-3' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">Deactive</button>              
             @else

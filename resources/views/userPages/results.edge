@@ -3,10 +3,14 @@
 {{--  Manage bookings page content  --}}
 @section('content')
     @section('extracss')
-        {{ style('css/mystyle') }}
+        {{ style('css/user') }}
     @endsection
     {{--  Loading page header  --}}
-    @!component('components.pageHeader', title='Results')
+    @component('components.pageHeader', title='Results')
+        @slot('body')
+        @endslot
+    @endcomponent
+    
     {{--  where result cards will be displayed --}}
     <div class='row'>
         @each(room in rooms)

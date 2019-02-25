@@ -1,3 +1,6 @@
+/* DO NOT MAKE CHANGES IN THIS FILE */
+/* TO MAKE CHANGES TO ADMIN DASH/VIEW GO TO ADMIN.CSS */
+
 /*!
  * Start Bootstrap - SB Admin v5.0.3 (https://startbootstrap.com/template-overviews/sb-admin)
  * Copyright 2013-2019 Start Bootstrap
@@ -10,6 +13,8 @@
  * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+
+ @import url('admin.css');
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -47,70 +52,6 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-
-/* Hover-over a row for the view all rooms table */
-#roomRow:hover {
-  cursor:pointer;
-}
-
-/* Hover-over a row for the view all users table */
-#userRow:hover {
-  cursor:pointer;
-}
-
-/* Extra styling */
-.side-nav-icons{
-  width: 16px !important;
-  height: 24px;
-  text-align: center;
-  margin-right: 0px;
-}
-/* .sidebar.navbar-nav {
-  background: #F5F5F5;
-}  */
-/*  Changing icon width to match all */
-.fa-map-marker-alt{
-  text-align: center;
-  width:25px;
-}
-
-.fa-user-friends{
-  text-align: center;
-  width:25px;
-}
-.fa-book{
-  text-align: center;
-  width:25px;
-}
-
-.nav-link{
-  position: relative;
-  z-index: 20;
-  
-}
-/* Side nav drop down */
-#side-nav-dropdown{
-  position: relative;
-  border:None ;
-  width:100%;
-  margin:0px;
-  z-index: 15;
-  background-color:#F5F5F5;
-}
-/* Small side nav view */
-.sidebar-toggled #side-nav-dropdown{
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 0.25rem;
-  width:100%;
-  margin:0px;
-  background-color: #F5F5F5;
-}
-/* Addding shadow to drop down */
-.show .nav-link{
-  box-shadow: 
-  0 4px 2px -2px rgba(0,0,0,0.1);
-}
-
 
 html {
   font-family: sans-serif;
@@ -6952,7 +6893,7 @@ button.bg-dark:focus {
 }
 
 .border-primary {
-  border-color: #007bff !important;
+  border-color: #007bff;
 }
 
 .border-secondary {
@@ -10790,9 +10731,3 @@ body.sidebar-toggled footer.sticky-footer {
   }
 }
 
-/*****************************************************/
-/*mystyles*/
-/*****************************************************/
-.page-title{
-    padding:10px 0px;
-}

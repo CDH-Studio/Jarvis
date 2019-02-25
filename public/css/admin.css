@@ -1,0 +1,85 @@
+/* This file is for ADMIN view specific changes */
+@import url('shared.css');
+
+/*****************************************************/
+/* General */
+/*****************************************************/
+
+.border-primary {
+    border-color: #383838 !important;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Table View Hover */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+/* Hover-over a row for the view all rooms table */
+#roomRow:hover {
+    cursor:pointer;
+}
+  
+/* Hover-over a row for the view all users table */
+#userRow:hover {
+    cursor:pointer;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/  
+/* Navbar changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+.side-nav-icons{
+    width: 16px !important;
+    height: 24px;
+    text-align: center;
+    margin-right: 0px;
+}
+
+/*  Changing icon width to match all */
+.fa-map-marker-alt{
+    text-align: center;
+    width:25px;
+}
+
+.fa-user-friends{
+    text-align: center;
+    width:25px;
+}
+  .fa-book{
+    text-align: center;
+    width:25px;
+}
+  
+.nav-link{
+    position: relative;
+    z-index: 20;
+    
+}
+
+/* Side nav drop down */
+#side-nav-dropdown{
+    position: relative;
+    border:None ;
+    width:100%;
+    margin:0px;
+    z-index: 15;
+    background-color:#F5F5F5;
+}
+/* Small side nav view */
+.sidebar-toggled #side-nav-dropdown{
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+    width:100%;
+    margin:0px;
+    background-color: #F5F5F5;
+}
+/* Addding shadow to drop down */
+    .show .nav-link{
+    box-shadow: 
+    0 4px 2px -2px rgba(0,0,0,0.1);
+}
+
+/*****************************************************/
+/* etc */
+/*****************************************************/
+.page-title{
+    padding:10px 0px;
+}
