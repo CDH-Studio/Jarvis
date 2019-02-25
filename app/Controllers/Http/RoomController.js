@@ -467,7 +467,7 @@ class RoomController {
 
 			try {
 				const calendars = await client
-					.api('/me/calendars')
+					.api('/me/calendars?top=100')
 					// .orderby('createdDateTime DESC')
 					.get();
 
