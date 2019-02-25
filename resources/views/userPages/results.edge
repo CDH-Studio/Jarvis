@@ -17,6 +17,7 @@
             <div class='col-lg-6'>
                 {{ csrfField() }}
                 @!component('components.card',
+                    form=form,
                     id=room.id,
                     title=room.name,
                     fullName=room.fullName,

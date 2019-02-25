@@ -5,6 +5,7 @@
 <form action='{{ route('showRoom', {id }) }}' method='GET'>
     <input type='hidden' name='_csrf' value={{ token }} />
     <input type='hidden' name='id' value={{ id }} /> 
+    <input type='hidden' name='id' value={{ form }} /> 
     {{--  Room card  --}}
     <a class='room-card' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
         {{--  Title  --}}

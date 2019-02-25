@@ -345,7 +345,7 @@ class RoomController {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
 
-		return view.render('userPages.results', { rooms });
+		return view.render('userPages.results', { rooms, form });
 	}
 
 	/**
