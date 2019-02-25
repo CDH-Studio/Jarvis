@@ -3,14 +3,20 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* General */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-
-
+.wrapper-center {
+    text-align: center;
+}
+.no-padding{
+    padding:0px;
+}
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Room card information */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .link-color{
     color:rgb(18, 201, 164) !important;
 }
+
 .room-card{
     width: 95%;
     margin: 0px auto 40px auto;
@@ -22,17 +28,20 @@
 .room-card:hover .room-card-body{
     text-decoration: none;
     background-color:#F8F8F8;
+    border-color: #F8F8F8;
 }
 
 
 .room-card:hover {
     text-decoration: none;
     color:#202428;
+    
 }
 
-
 .room-card:hover .room-card-title{
-    background-color: #001642;
+    background-color: #001642 ;
+    color: #FFFFFF;
+    border-color: #001642;
 }
 
 
@@ -41,13 +50,18 @@
 }
 
 .room-card-title{
+    border-style: solid;
+    border-color: rgb(224, 224, 224);
+    border-width: 1px;
     height: 50px;
-    background-color: #3c5585;
-    color: #ffffff;
-    margin-top: 3px;
+    background-color: #f7f7f7;
+    /* background-color: #3c5585;  OLD Color*/
+    color: #000000;
+    /* margin-top: 3px; */
     margin-bottom: 0px;
     vertical-align: center;
     padding:0 15px;
+    line-height: 50px;
 }
 .room-card-title h4{
     line-height: 50px;
@@ -57,18 +71,22 @@
 }
 
 .room-card-body{
-    min-height: 264px;
+    border-style: solid;
+    border-top-style: none;
+    border-color: rgb(224, 224, 224);
+    border-width: 1px;
+    /* min-height: 264px; */
     background-color: #fff;
     padding:15px 15px;
 }
 
 .room-card-photo img{
     max-width:100%;
+    padding-bottom: 15px;
 }
 
 .room-card-info{
-    padding:0px;
-    padding-left: 15px;
+    padding:0px 15px 0px 15px;
 }
 
 .room-card-info ul{
@@ -77,10 +95,18 @@
     padding:0px;
 }
 
+/* used for spacing the list items */
+.space-evenly { 
+    height: 100% !important;
+    list-style: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+}
 .room-card-spec{
     width:100%;
     display:inline-block;
-    padding:10px 10px 0 10px;
+    padding-right:0px;
 }
 
 .room-card-spec ul{
@@ -107,7 +133,9 @@
     flex: 0 0 200px;
 }
 
-
+.checkbox-content{
+    padding: 0px 0px 15px 15px;
+}
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Room Details Page */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
