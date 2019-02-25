@@ -310,7 +310,8 @@ class RoomController {
 				const endTime = date + 'T' + to;
 
 				// if there is a calendar for the room
-				if (item.calendar !== 'insertCalendarHere') {
+				if (item.calendar !== 'insertCalendarHere' && item.calendar !== null) {
+					console.log(item.calendar)
 					// query the events within the search time range
 					const calendarViews = (await this.getCalendarView(
 						item.calendar,

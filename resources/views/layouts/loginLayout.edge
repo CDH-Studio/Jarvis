@@ -10,6 +10,7 @@
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.1/css/all.css' integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous'>
 
     {{ style('css/user') }}
+    {{ style('css/vendor/animate') }}
 
     @!section('extracss')
 
@@ -23,6 +24,7 @@
 
 </body>
     <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    {{script('js/vendor/particles')}}
-    
+    {{ script('js/vendor/particles') }}
+    {{ script('js/vendor/bootstrap-notify') }}
+    {{ script('js/vendor/bootstrap-notify.min') }}
 </html>
