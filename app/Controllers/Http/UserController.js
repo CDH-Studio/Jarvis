@@ -183,10 +183,7 @@ class UserController {
 	async logout ({ auth, response, session }) {
 		await auth.logout();
 		session.flash({
-			notification: {
-				type: 'success',
-				message: 'You have been logged out.'
-			}
+			notification: 'You have been logged out.'
 		});
 		return response.redirect('/login');
 	}

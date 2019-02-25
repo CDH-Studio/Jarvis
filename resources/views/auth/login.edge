@@ -10,32 +10,16 @@ Jarvis - Login
 
 @section('content')
 
+@if(flashMessage('notification'))
+	<script type='module'>
+		import {notify} from '/js/notify.js';
+		$(window).on('load', () => {
+			notify('{{ flashMessage('notification') }}', $);
+		});
+	</script>
+@endif
+
 <div class='container'>
-	@if(flashMessage('notification'))
-		<script type='text/javascript'>
-			(function (type, message) {
-				const ti = '<strong>' + type + '</strong>';
-				$.notify({
-					title: ti,
-					message: message
-					},{
-					type: 'info',
-					animate: {
-						enter: 'animated fadeInUp',
-						exit: 'animated fadeOutRight'
-					},
-					placement: {
-						from: "top",
-						align: "right"
-					},
-					offset: 20,
-					spacing: 10,
-					z_index: 1031,
-				})
-			})('{{ flashMessage('notification.type') }}', '{{ flashMessage('notification.message') }}');
-		</script>
-		{{--  <div class="notification is-{{ flashMessage('notification.type') }}"> {{ flashMessage('notification.message') }}</div>  --}}
-	@endif
 	<div class='row justify-content-center'>
 		<div class='col-lg-5 col-md-8 justify-center'>
 			<div class='card text-white mb-3 login-box shadow'>
