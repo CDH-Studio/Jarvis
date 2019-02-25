@@ -9,16 +9,6 @@ body {
     font-family: 'Lato', sans-serif;
 }
 
-.wrapper-center {
-    text-align: center;
-}
-
-
-.wrapper-center{
-    text-align: center;
-}
-
-
 /* Tooltip coloor changes */
 .tooltip-inner {
     background-color: rgb(115, 146, 187);
