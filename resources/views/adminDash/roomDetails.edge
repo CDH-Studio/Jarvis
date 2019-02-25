@@ -74,10 +74,15 @@
             @endif
         </div>
         
-        @if(isAdmin)
+        @if(isAdmin)   
+        <div class='row'>
             <a href='{{ route('editRoom', { id: room.id }) }}' class='btn btn-dark d-block float-left ml-3'>Edit</a>
-            {{--  <button type='button' class='btn btn-dark d-block float-left ml-3' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';">Edit</button>  --}}
-            {{--  <button type='button' class='btn btn-primary large-buttons' onclick="window.location='{{ route('searchRooms') }}';">Search</button>  --}}
+            @if(room.state == 1)
+                <button type='button' class='btn btn-danger ml-3' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">Deactive</button>              
+            @else
+                <button type='button' class='btn btn-success ml-3' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">Activate</button>               
+            @endif
+        </div>
         @endif
     </div>
 @endsection

@@ -55,7 +55,7 @@ class RoomController {
 			room.name = body.name;
 			room.fullName = body.fullName;
 			room.floor = body.floor;
-			room.tower = body.tower;
+			room.tower = body.tower === 0 ? 'West' : 'East';
 			room.telephone = body.telephoneNumber;
 			room.seats = body.tableSeats;
 			room.capacity = body.maximumCapacity;
@@ -90,12 +90,7 @@ class RoomController {
 			room.picture = `uploads/roomPictures/${room.name}.png`;
 			room.extraEquipment = body.extraEquipment;
 			room.comment = body.comment;
-
-			if (body.state === undefined) {
-				room.state = 0;
-			} else {
-				room.state = 1;
-			}
+			room.state = body.state === undefined ? 0 : 1;
 
 			await room.save();
 			session.flash({ notification: 'Room Added!' });
@@ -151,11 +146,7 @@ class RoomController {
 			name: `${body.name}_roomPicture.png`
 		});
 
-		if (body.state === undefined) {
-			body.state = 0;
-		} else {
-			body.state = 1;
-		}
+		body.state = body.state === undefined ? 0 : 1;
 
 		// Updates room information in database
 		await Room
@@ -249,9 +240,9 @@ class RoomController {
 	async getSearchRooms ({ request, view }) {
 		// importing forms from search form
 		const form = request.all();
-		// const date = form.date;
-		// const from = form.from;
-		// const to = form.to;
+		const date = form.date;
+		const from = form.from;
+		const to = form.to;
 		const location = form.location;
 		const capacity = form.capacity;
 		const pc = form.pcCheck;
@@ -306,6 +297,49 @@ class RoomController {
 
 		const rooms = searchResults.toJSON();
 
+		// iterate through the rooms
+		async function asyncForEach (arr, callback) {
+			for (let i = 0; i < arr.length; i++) {
+				await callback(arr[i], i, arr);
+			}
+		}
+
+		const checkRoomAvailability = async () => {
+			await asyncForEach(rooms, async (item, index, items) => {
+				const startTime = date + 'T' + from;
+				const endTime = date + 'T' + to;
+
+				// if there is a calendar for the room
+				if (item.calendar !== 'insertCalendarHere') {
+					// query the events within the search time range
+					const calendarViews = (await this.getCalendarView(
+						item.calendar,
+						startTime,
+						endTime
+					)).value;
+
+					// if event end time is the same as search start time, remove the event
+					calendarViews.forEach((item, index, items) => {
+						const eventEndTime = new Date(item.end.dateTime);
+						const searchStartTime = new Date(startTime);
+
+						if (+eventEndTime === +searchStartTime) {
+							items.splice(index, 1);
+						}
+					});
+
+					// remove the room if it is not available
+					const available = calendarViews.length === 0;
+
+					if (!available) {
+						items.splice(index, 1);
+					}
+				}
+			});
+		};
+
+		await checkRoomAvailability();
+
 		// Sort the results by name
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
@@ -348,7 +382,7 @@ class RoomController {
 			'subject': meeting,
 			'body': {
 				'contentType': 'HTML',
-				'content': 'Does late morning work for you?'
+				'content': 'Jarvis Daily Standup'
 			},
 			'start': {
 				'dateTime': `${date}T${from}`,
@@ -451,12 +485,36 @@ class RoomController {
 			});
 
 			try {
-				const calendars = await client
+				const calendar = await client
 					.api(`/me/calendars/${calendarId}`)
 					// .orderby('createdDateTime DESC')
 					.get();
 
-				return calendars;
+				return calendar;
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	}
+
+	async getCalendarView (calendarId, start, end) {
+		const accessToken = await getAccessToken();
+
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const calendarView = await client
+					.api(`/me/calendars/${calendarId}/calendarView?startDateTime=${start}&endDateTime=${end}`)
+					// .orderby('start DESC')
+					.header('Prefer', 'outlook.timezone="Eastern Standard Time"')
+					.get();
+
+				return calendarView;
 			} catch (err) {
 				console.log(err);
 			}

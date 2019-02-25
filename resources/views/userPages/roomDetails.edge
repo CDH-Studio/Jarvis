@@ -135,62 +135,63 @@
         <form action='{{ route('confirmBooking') }}' method='POST'>
             {{ csrfField() }}
 
-            <input type='hidden' name='room' value={{ room.id }} /> 
-            {{--  Body content  --}}
-            <div class='modal-body'>
-                {{--  Table that displays booking information  --}}
-                <div class='table-responsive'>
-                    <table class='table table-hover'>  
-                        <tbody>
-                            <tr>
-                                <th class='confirmation-modal-text' scope='row'>Meeting Name</th>
-                                <td class='confirmation-modal-column'><input type='text' name='meeting' class='form-control confirmation-form' id='example-text-input' placeholder='Please enter booking name'/></td>
-                            </tr> 
-                            <tr>
-                                <th class='confirmation-modal-text' scope='row'>Date</th>
-                                <td class='confirmation-modal-column'><input class='form-control confirmation-form' type='date' name='date' value='2019-02-19' id='example-date-input'></td>
-                            </tr>
-                            <tr>
-                                <th class='confirmation-modal-text' scope='row'>From</th>
-                                <td class='confirmation-modal-column'><input class='form-control confirmation-form' type='time' name='from' value='13:45:00' id='example-time-input'></td>
-                            </tr>
-                            <tr>
-                                <th class='confirmation-modal-text' scope='row'>To</th>
-                                <td class='confirmation-modal-column'><input class='form-control confirmation-form' type='time' name='to' value='14:45:00' id='example-time-input'></td>
-                            </tr>
-                            <tr>
-                                <th class='confirmation-modal-text confirmation-form' scope='row'>Reccuring</th>
-                                <td class='confirmation-modal-column'>
-                                    <select class='form-control' id='reccuringSelect' name='reccuringSelect'>
-                                        <option>No</option>
-                                        <option>Yes</option>
-                                    </select>
-                                </td>
-                            </tr> 
-                        </tbody>
-                    </table>
-                </div>
-            
-                {{--  Recurring options ##### should be in if statement if recurring is changed to 'Yes'  --}}
-                <div class='wrapper-center'>
-                    <div class='row'>
-                        <div class='col-6' style='padding-left:26px; padding-right:4px;'>
-                            <select class='form-control confirmation-form' id='exampleSelect'>
-                                <option>Daily</option>
-                                <option>Weekly</option>
-                                <option>Bi-Weekly</option>
-                                <option>Monthly</option>
-                                <option>Yearly</option>
-                            </select>
-                        </div>
-                        <div class='col-6' style='padding-left:4px; padding-right:26px;'>
-                            <select class='form-control confirmation-form' id='exampleSelect'>
-                                <option>2 Times</option>
-                                <option>3 Times</option>
-                                <option>4 Times</option>
-                                <option>5 Times</option>
-                            </select>  
-                        </div>                        
+                <input type='hidden' name='room' value={{ room.id }} /> 
+                {{--  Body content  --}}
+                <div class='modal-body'>
+                    {{--  Table that displays booking information  --}}
+                    <div class='table-responsive'>
+                        <table class='table table-hover'>  
+                            <tbody>
+                                <tr>
+                                    <th class='confirmation-modal-text' scope='row'>Meeting Name</th>
+                                    <td class='confirmation-modal-column'><input type='text' name='meeting' class='form-control confirmation-form' id='example-text-input' placeholder='Please enter booking name'/></td>
+                                </tr> 
+                                <tr>
+                                    <th class='confirmation-modal-text' scope='row'>Date</th>
+                                    <td class='confirmation-modal-column'><input class='form-control confirmation-form' type='date' name='date' value='2019-03-01' id='example-date-input'></td>
+                                </tr>
+                                <tr>
+                                    <th class='confirmation-modal-text' scope='row'>From</th>
+                                    <td class='confirmation-modal-column'><input class='form-control confirmation-form' type='time' name='from' value='08:00:00' id='example-time-input'></td>
+                                </tr>
+                                <tr>
+                                    <th class='confirmation-modal-text' scope='row'>To</th>
+                                    <td class='confirmation-modal-column'><input class='form-control confirmation-form' type='time' name='to' value='09:00:00' id='example-time-input'></td>
+                                </tr>
+                                <tr>
+                                    <th class='confirmation-modal-text confirmation-form' scope='row'>Reccuring</th>
+                                    <td class='confirmation-modal-column'>
+                                        <select class='form-control' id='reccuringSelect' name='reccuringSelect'>
+                                            <option>No</option>
+                                            <option>Yes</option>
+                                        </select>
+                                    </td>
+                                </tr> 
+                            </tbody>
+                        </table>
+                    </div>
+                
+                    {{--  Recurring options ##### should be in if statement if recurring is changed to 'Yes'  --}}
+                    <div class='wrapper-center'>
+                        <div class='row'>
+                            <div class='col-6' style='padding-left:26px; padding-right:4px;'>
+                                <select class='form-control confirmation-form' id='exampleSelect'>
+                                    <option>Daily</option>
+                                    <option>Weekly</option>
+                                    <option>Bi-Weekly</option>
+                                    <option>Monthly</option>
+                                    <option>Yearly</option>
+                                </select>
+                            </div>
+                            <div class='col-6' style='padding-left:4px; padding-right:26px;'>
+                                <select class='form-control confirmation-form' id='exampleSelect'>
+                                    <option>2 Times</option>
+                                    <option>3 Times</option>
+                                    <option>4 Times</option>
+                                    <option>5 Times</option>
+                                </select>  
+                            </div>                        
+                        </div>                
                     </div>
                 </div>
                 {{--  #### This doesn't work, need a fix  --}}
