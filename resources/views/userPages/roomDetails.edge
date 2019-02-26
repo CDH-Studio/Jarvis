@@ -173,22 +173,20 @@
                     <div class='wrapper-center' id='recurringInfo' style='display:none'>
                         <div class='row'>
                             <div class='col-6' style='padding-left:26px; padding-right:4px;'>
-                                <select class='form-control confirmation-form' id='interval'>
-                                    <option value='0'>Select Interval</option>
-                                    <option value='daily'>Daily</option>
-                                    <option value='weekly'>Weekly</option>
-                                    <option value='biWeekly'>Bi-Weekly</option>
-                                    <option value='monthly'>Monthly</option>
-                                    <option value='yearly'>Yearly</option>
+                                <select class='form-control confirmation-form' id='exampleSelect'>
+                                    <option value='0' {{ old('floor') == 0 ? 'selected' : '' }}>Daily</option>
+                                    <option value='1' {{ old('floor') == 1 ? 'selected' : '' }}>Weekly</option>
+                                    <option value='2' {{ old('floor') == 2 ? 'selected' : '' }}>Bi-Weekly</option>
+                                    <option value='3' {{ old('floor') == 3 ? 'selected' : '' }}>Monthly</option>
+                                    <option value='4' {{ old('floor') == 4 ? 'selected' : '' }}>Yearly</option>
                                 </select>
                             </div>
                             <div class='col-6' style='padding-left:4px; padding-right:26px;'>
-                                <select class='form-control confirmation-form' id='numberOfOccurences'>
-                                    <option value='0'>Number of Occurences</option>
-                                    <option value='2'>2 Times</option>
-                                    <option value='3'>3 Times</option>
-                                    <option value='4'>4 Times</option>
-                                    <option value='5'>5 Times</option>
+                                <select class='form-control confirmation-form' id='exampleSelect'>
+                                    <option value='0' {{ old('floor') == 0 ? 'selected' : '' }}>2 Times</option>
+                                    <option value='1' {{ old('floor') == 1 ? 'selected' : '' }}>3 Times</option>
+                                    <option value='2' {{ old('floor') == 2 ? 'selected' : '' }}>4 Times</option>
+                                    <option value='3' {{ old('floor') == 3 ? 'selected' : '' }}>5 Times</option>
                                 </select>  
                             </div>                        
                         </div>                
