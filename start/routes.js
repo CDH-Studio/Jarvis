@@ -68,7 +68,7 @@ Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware([
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
 // [Employee] Search Room
-Route.post('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']); // .validator('searchRooms') <- Put this back in when ready all features are added
+Route.post('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('searchRooms');
 
 //= ========================================================================
 // Bookings
