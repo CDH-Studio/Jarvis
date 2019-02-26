@@ -9,7 +9,12 @@
         @if(rooms.length == 0)
             <div>There are currently no rooms in the database. To add a room, click <a href='{{ route('addRoom')}}'>here</a></div>
         @else
-            <table class='table table-hover'>
+            <div>
+                <input type='text' id='search' name='searchField' placeholder='Type to search'>
+                <button type='submit' id='searchButton'>Search</button>
+            </div>
+
+            <table class='table table-hover' id='table' >
                 <thead>
                     <tr>
                     <th scope='col'>Name</th>
@@ -21,7 +26,7 @@
                     <th scope='col'>State</th>
                     </tr>
                 </thead>
-                {{--  Loops through the rooms array and displays every room's content  --}}
+                {{--  Loops through1 the rooms array and displays every room's content  --}}
                 @each(room in rooms) 
                 <tbody>
                     <tr id='roomRow' class='table-light' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
@@ -36,12 +41,11 @@
                     @else
                         <td>Deactive</td>
                     @endif 
-                    </tr>3
+                    </tr>
                 </tbody>
                 @endeach
             </table>
         @endif
-
     </div> 
 @endsection
 

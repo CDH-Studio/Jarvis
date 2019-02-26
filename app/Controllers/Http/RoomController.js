@@ -232,6 +232,27 @@ class RoomController {
 		}
 	}
 
+		/**
+	 * Query all the rooms from the database and render a page depending on the type of user.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async searchRooms ({ auth, view }) {
+		const results = await Room.all();
+		const rooms = results.toJSON();
+
+		const form = request.all();
+		const name = form.searchField;
+
+		let searchResults = Room
+			.query()
+			.where('name', name).fetch();
+
+		const rooms = searchResults.toJSON();
+
+		return view.render('adminDash.viewRooms', { rooms });		
+	}
+
 	/**
 	 * Query rooms from search criteria and render the results page.
 	 *

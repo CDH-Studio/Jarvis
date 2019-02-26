@@ -176,19 +176,19 @@
                         <div class='row'>
                             <div class='col-6' style='padding-left:26px; padding-right:4px;'>
                                 <select class='form-control confirmation-form' id='exampleSelect'>
-                                    <option>Daily</option>
-                                    <option>Weekly</option>
-                                    <option>Bi-Weekly</option>
-                                    <option>Monthly</option>
-                                    <option>Yearly</option>
+                                    <option value='0' {{ old('floor') == 0 ? 'selected' : '' }}>Daily</option>
+                                    <option value='1' {{ old('floor') == 1 ? 'selected' : '' }}>Weekly</option>
+                                    <option value='2' {{ old('floor') == 2 ? 'selected' : '' }}>Bi-Weekly</option>
+                                    <option value='3' {{ old('floor') == 3 ? 'selected' : '' }}>Monthly</option>
+                                    <option value='4' {{ old('floor') == 4 ? 'selected' : '' }}>Yearly</option>
                                 </select>
                             </div>
                             <div class='col-6' style='padding-left:4px; padding-right:26px;'>
                                 <select class='form-control confirmation-form' id='exampleSelect'>
-                                    <option>2 Times</option>
-                                    <option>3 Times</option>
-                                    <option>4 Times</option>
-                                    <option>5 Times</option>
+                                    <option value='0' {{ old('floor') == 0 ? 'selected' : '' }}>2 Times</option>
+                                    <option value='1' {{ old('floor') == 1 ? 'selected' : '' }}>3 Times</option>
+                                    <option value='2' {{ old('floor') == 2 ? 'selected' : '' }}>4 Times</option>
+                                    <option value='3' {{ old('floor') == 3 ? 'selected' : '' }}>5 Times</option>
                                 </select>  
                             </div>                        
                         </div>                
