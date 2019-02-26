@@ -239,22 +239,13 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async searchRooms ({ request, view }) {
-		// const results = await Room.all();
-		// const rooms = results.toJSON();
-
-		console.log('Came through the searchRoom method');
-
 		const form = request.all();
 		const name = form.searchField;
-
-		console.log('Came through the searchRoom method');
 
 		let searchResults = await Room
 			.query()
 			.where('name', name)
 			.fetch();
-
-		console.log(searchResults);
 
 		const rooms = searchResults.toJSON();
 
