@@ -1,3 +1,12 @@
 @layout('layouts.adminLayout')
 
+@section('content')
+    @if(flashMessage('notification'))
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', () => {
+                notify({ $: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, type: 'info' });
+            });
+        </script>
+    @endif
 @endsection

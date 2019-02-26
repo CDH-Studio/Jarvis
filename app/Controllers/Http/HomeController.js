@@ -1,18 +1,15 @@
-
 'use strict';
 
-const view = use('View');
-
 class HomeController {
-	async dashboard ({ request, response, auth }) {
+	async dashboard ({ response, auth }) {
 		try {
 			await auth.check();
 			var d = new Date();
 			var date = d.toLocaleDateString();
 			if (auth.user.role === 1) {
-				return view.render('adminDash', { auth, date });
+				return response.route('adminDash', { auth, date });
 			} else {
-				return view.render('userPages.booking', { auth });
+				return response.route('booking', { auth });
 			}
 		} catch (error) {
 			return response.redirect('/login');

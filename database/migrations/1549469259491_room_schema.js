@@ -25,7 +25,7 @@ class RoomsSchema extends Schema {
 			table.string('comment', 100);
 			table.string('floorplan', 100);
 			table.string('picture', 100);
-			table.string('calendar', 250);
+			table.string('calendar', 250).defaultTo('insertCalendarHere');
 			table.integer('state').notNullable();
 			table.timestamps();
 		});
