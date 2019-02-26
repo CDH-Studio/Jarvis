@@ -16,10 +16,9 @@ Jarvis - Login
 			<div class='card text-white mb-3 login-box shadow'>
 				<div class='card-header text-center'><img class='brand-logo' src='door_logo.png'>
 				</div>
-
 				<div class='card-body'>
 					<h4>Login</h4>
-					<form action='{{ route('UserController.login') }}' method='POST'>
+					<form action='{{ route('UserController.login') }}' method='POST' id='test'>
 						{{ csrfField() }}
 
 						<div class='form-group mb-2'>
@@ -56,5 +55,28 @@ Jarvis - Login
 		</div>
 	</div>
 </div>
+
+@if(flashMessage('notification'))
+	<script type='module'>
+		import {notify} from '/js/notify.js';
+		$(window).on('load', () => {
+			notify({ $: $, message: '{{ flashMessage('notification') }}' });
+		});
+	</script>
+@elseif(hasErrorFor('password'))
+	<script type='module'>
+		import {notify} from '/js/notify.js';
+		$(window).on('load', () => {
+			notify({ $: $, message: 'One or more errors occurred.', type: 'danger' });
+		});
+	</script>
+@elseif(hasErrorFor('email'))
+<script type='module'>
+	import {notify} from '/js/notify.js';
+	$(window).on('load', () => {
+		notify({ $: $, message: 'One or more errors occurred.', type: 'danger' });
+	});
+</script>
+@endif
   
 @endsection

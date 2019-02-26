@@ -2,46 +2,50 @@
 
 
 @section('content')
+    @!component('components.pageTitle', title='View Rooms')
     <div>
-        @!component('components.pageTitle', title='View Rooms')
-        
         {{--  Displays all of the rooms in the database in a table  --}}
         @if(rooms.length == 0)
             <div>There are currently no rooms in the database. To add a room, click <a href='{{ route('addRoom')}}'>here</a></div>
         @else
-            <table class='table table-hover'>
+            <form class='form-inline my-2 my-lg-0' action={{ route('roomResults') }} method='POST' enctype='multipart/form-data'>
+                {{ csrfField() }} 
+                <input type='text' class='form-control mr-sm-2' name='searchField' placeholder='Search..'>
+                <button type='submit' class='btn btn-secondary my-2 my-sm-0' name='searchButton' id='searchButton'><i class='fas fa-search'></i> Search</button>
+            </form>
+
+            <table class='table table-hover mt-4' id='table' >
                 <thead>
                     <tr>
                     <th scope='col'>Name</th>
                     <th scope='col'>Full Name</th>
                     <th scope='col'>Phone Number</th>
-                    <th scope='col'>Tower</th>
                     <th scope='col'>Floor</th>
+                    <th scope='col'>Tower</th>
                     <th scope='col'>Maximum Capacity</th>
                     <th scope='col'>State</th>
                     </tr>
                 </thead>
-                {{--  Loops through the rooms array and displays every room's content  --}}
+                {{--  Loops through1 the rooms array and displays every room's content  --}}
                 @each(room in rooms) 
                 <tbody>
                     <tr id='roomRow' class='table-light' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
                     <td>{{ room.name }}</td>
                     <td>{{ room.fullName }}</td>
                     <td>{{ room.telephone }}</td>
-                    <td>{{ room.tower }}</td>
                     <td>{{ room.floor }}</td>
+                    <td>{{ room.tower }} </td>
                     <td>{{ room.capacity }}</td>
                     @if(room.state == 1)
                         <td>Active</td>
                     @else
                         <td>Deactive</td>
                     @endif 
-                    </tr>3
+                    </tr>
                 </tbody>
                 @endeach
             </table>
         @endif
-
     </div> 
 @endsection
 

@@ -185,11 +185,12 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async show ({ response, auth, params, view }) {
+	async show ({ response, auth, params, view, request }) {
 		// Retrieves room object
 		try {
+			// get the search form data if employee view
+			const form = request.only(['date', 'from', 'to']);
 			const room = await Room.findOrFail(params.id);
-
 			var isAdmin = 0;
 			var layoutType = 'll';
 			// if user is admin
@@ -204,7 +205,7 @@ class RoomController {
 			} else {
 				return response.redirect('/');
 			}
-			return view.render('userPages.roomDetails', { room, layoutType, isAdmin });
+			return view.render('userPages.roomDetails', { room, layoutType, isAdmin, form });
 		} catch (error) {
 			return response.redirect('/');
 		}
@@ -230,6 +231,25 @@ class RoomController {
 		} else {
 			return view.render('userPages.results', { rooms });
 		}
+	}
+
+	/**
+	 * Query the room from the database which matches the search input.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async searchRooms ({ request, view }) {
+		const form = request.all();
+		const name = form.searchField;
+
+		let searchResults = await Room
+			.query()
+			.where('name', name)
+			.fetch();
+
+		const rooms = searchResults.toJSON();
+
+		return view.render('adminDash.viewRooms', { rooms });
 	}
 
 	/**
@@ -345,7 +365,7 @@ class RoomController {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
 
-		return view.render('userPages.results', { rooms });
+		return view.render('userPages.results', { rooms, form });
 	}
 
 	/**
@@ -458,7 +478,7 @@ class RoomController {
 
 			try {
 				const calendars = await client
-					.api('/me/calendars')
+					.api('/me/calendars?top=100')
 					// .orderby('createdDateTime DESC')
 					.get();
 
