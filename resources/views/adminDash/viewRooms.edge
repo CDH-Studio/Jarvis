@@ -2,26 +2,26 @@
 
 
 @section('content')
+    @!component('components.pageTitle', title='View Rooms')
     <div>
-        @!component('components.pageTitle', title='View Rooms')
-        
         {{--  Displays all of the rooms in the database in a table  --}}
         @if(rooms.length == 0)
             <div>There are currently no rooms in the database. To add a room, click <a href='{{ route('addRoom')}}'>here</a></div>
         @else
-            <div>
-                <input type='text' id='search' name='searchField' placeholder='Type to search'>
-                <button type='submit' id='searchButton'>Search</button>
-            </div>
+            <form class='form-inline my-2 my-lg-0' action={{ route('roomResults') }} method='POST' enctype='multipart/form-data'>
+                {{ csrfField() }} 
+                <input type='text' class='form-control mr-sm-2' name='searchField' placeholder='Search..'>
+                <button type='submit' class='btn btn-secondary my-2 my-sm-0' name='searchButton' id='searchButton'><i class='fas fa-search'></i> Search</button>
+            </form>
 
-            <table class='table table-hover' id='table' >
+            <table class='table table-hover mt-4' id='table' >
                 <thead>
                     <tr>
                     <th scope='col'>Name</th>
                     <th scope='col'>Full Name</th>
                     <th scope='col'>Phone Number</th>
-                    <th scope='col'>Tower</th>
                     <th scope='col'>Floor</th>
+                    <th scope='col'>Tower</th>
                     <th scope='col'>Maximum Capacity</th>
                     <th scope='col'>State</th>
                     </tr>
@@ -33,8 +33,8 @@
                     <td>{{ room.name }}</td>
                     <td>{{ room.fullName }}</td>
                     <td>{{ room.telephone }}</td>
-                    <td>{{ room.tower }}</td>
                     <td>{{ room.floor }}</td>
+                    <td>{{ room.tower }} </td>
                     <td>{{ room.capacity }}</td>
                     @if(room.state == 1)
                         <td>Active</td>
