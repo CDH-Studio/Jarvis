@@ -1,8 +1,16 @@
-export function notify ($, message, x = 10, y = 10) {
+export function notify ({
+	$,
+	message,
+	type = 'success',
+	x = 10,
+	y = 10,
+	from = 'top',
+	align = 'right'
+} = {}) {
 	$.notify({
 		message: message
 	}, {
-		type: 'success',
+		type: type,
 		animate: {
 			enter: 'animated fadeInRight',
 			exit: 'animated fadeOutUp'

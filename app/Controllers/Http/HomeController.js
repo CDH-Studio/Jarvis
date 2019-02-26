@@ -1,18 +1,22 @@
 
 'use strict';
 
-const view = use('View');
-
 class HomeController {
-	async dashboard ({ request, response, auth }) {
+	async dashboard ({ response, auth, session }) {
 		try {
 			await auth.check();
 			var d = new Date();
 			var date = d.toLocaleDateString();
 			if (auth.user.role === 1) {
-				return view.render('adminDash', { auth, date });
+				session.flash({
+					notification: 'You are logged in as an Admin user.'
+				});
+				return response.route('adminDash', { auth, date });
 			} else {
-				return view.render('userPages.booking', { auth });
+				session.flash({
+					notification: 'You are logged in as an Employee user.'
+				});
+				return response.route('booking', { auth });
 			}
 		} catch (error) {
 			return response.redirect('/login');

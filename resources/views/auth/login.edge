@@ -10,15 +10,6 @@ Jarvis - Login
 
 @section('content')
 
-@if(flashMessage('notification'))
-	<script type='module'>
-		import {notify} from '/js/notify.js';
-		$(window).on('load', () => {
-			notify($, '{{ flashMessage('notification') }}');
-		});
-	</script>
-@endif
-
 <div class='container'>
 	<div class='row justify-content-center'>
 		<div class='col-lg-5 col-md-8 justify-center'>
@@ -27,7 +18,7 @@ Jarvis - Login
 				</div>
 				<div class='card-body'>
 					<h4>Login</h4>
-					<form action='{{ route('UserController.login') }}' method='POST'>
+					<form action='{{ route('UserController.login') }}' method='POST' id='test'>
 						{{ csrfField() }}
 
 						<div class='form-group mb-2'>
@@ -64,5 +55,28 @@ Jarvis - Login
 		</div>
 	</div>
 </div>
+
+@if(flashMessage('notification'))
+	<script type='module'>
+		import {notify} from '/js/notify.js';
+		$(window).on('load', () => {
+			notify({ $: $, message: '{{ flashMessage('notification') }}' });
+		});
+	</script>
+@elseif(hasErrorFor('password'))
+	<script type='module'>
+		import {notify} from '/js/notify.js';
+		$(window).on('load', () => {
+			notify({ $: $, message: 'One or more errors occurred.', type: 'danger' });
+		});
+	</script>
+@elseif(hasErrorFor('email'))
+<script type='module'>
+	import {notify} from '/js/notify.js';
+	$(window).on('load', () => {
+		notify({ $: $, message: 'One or more errors occurred.', type: 'danger' });
+	});
+</script>
+@endif
   
 @endsection

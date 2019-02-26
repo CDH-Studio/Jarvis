@@ -291,7 +291,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async resetPassword ({ request, response }) {
+	async resetPassword ({ request, response, session }) {
 		console.log(request.body);
 		const newPassword = await Hash.make(request.body.newPassword);
 		const changedRow = await User
@@ -300,6 +300,10 @@ class UserController {
 			.update({ password: newPassword });
 
 		console.log(changedRow);
+
+		session.flash({
+			notification: 'Your password has been changed. Please use the new password to log in.'
+		});
 		return response.redirect('/login');
 	}
 
