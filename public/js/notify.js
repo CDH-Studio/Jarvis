@@ -11,7 +11,10 @@ export function notify (message, $) {
 			from: 'top',
 			align: 'right'
 		},
-		offset: 10,
+		offset: {
+			x: 10,
+			y: 60
+		},
 		spacing: 10,
 		z_index: 1031
 	});

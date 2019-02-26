@@ -165,6 +165,9 @@ class UserController {
 		try {
 			await auth.attempt(user.email, password);
 			if (auth.user.role === 2) {
+				session.flash({
+					notification: 'You are logged in as an Employee user.'
+				});
 				return response.redirect('/booking');
 			} else {
 				return response.redirect('/');

@@ -6,6 +6,14 @@
 
 {{--  book room page content  --}}
 @section('content')
+    @if(flashMessage('notification'))
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', () => {
+                notify('{{ flashMessage('notification') }}', $);
+            });
+        </script>
+    @endif
     {{--  Loading page header  --}}
     @component('components.pageHeader', title= 'Hello, '+ auth.user.firstname)
         @slot('body')
