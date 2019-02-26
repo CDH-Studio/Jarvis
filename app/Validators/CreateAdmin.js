@@ -2,6 +2,10 @@
 const Env = use('Env');
 
 class CreateAdmin {
+	get validateAll () {
+		return true;
+	}
+
 	get rules () {
 		const secretToken = Env.get('ADMIN_TOKEN', '666');
 		return {
