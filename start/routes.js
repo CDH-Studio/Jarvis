@@ -69,6 +69,8 @@ Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']
 // [Employee] Search Room
 Route.post('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('searchRooms');
 
+Route.post('/roomResults', 'RoomController.searchRooms').as('roomResults').middleware(['auth']);
+
 //= ========================================================================
 // Bookings
 //= ========================================================================
