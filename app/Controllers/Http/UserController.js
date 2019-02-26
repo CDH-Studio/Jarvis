@@ -225,7 +225,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async createPasswordResetRequest ({ request, response }) {
+	async createPasswordResetRequest ({ request, response, session }) {
 		const email = request.body.email;
 		const results = await User
 			.query()
@@ -255,6 +255,10 @@ class UserController {
 			await sendMail('Password Reset Request',
 				body, email, 'support@mail.cdhstudio.ca');
 		}
+
+		session.flash({
+			notification: `An email has been sent to ${email} with further instructions on how to reset your password.`
+		});
 
 		return response.redirect('/login');
 	}
