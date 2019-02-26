@@ -10,7 +10,7 @@
         <script type='module'>
             import {notify} from '/js/notify.js';
             $(window).on('load', () => {
-                notify('{{ flashMessage('notification') }}', $);
+                notify($, '{{ flashMessage('notification') }}', 10, 60);
             });
         </script>
     @endif

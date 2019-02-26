@@ -1,4 +1,4 @@
-export function notify (message, $) {
+export function notify ($, message, x = 10, y = 10) {
 	$.notify({
 		message: message
 	}, {
@@ -12,8 +12,8 @@ export function notify (message, $) {
 			align: 'right'
 		},
 		offset: {
-			x: 10,
-			y: 60
+			x: x,
+			y: y
 		},
 		spacing: 10,
 		z_index: 1031
