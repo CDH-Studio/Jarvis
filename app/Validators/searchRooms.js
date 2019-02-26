@@ -15,8 +15,8 @@ class searchRooms {
 		beforeDate.setMonth(beforeDate.getMonth() + 3);
 
 		// getting current hour time
-		let currentTime = new Date();
-		let newhour = currentTime.getHours();
+		// let currentTime = new Date();
+		// let newhour = currentTime.getHours();
 		// console.log(newhour);
 		// validation rules
 		return {
@@ -34,11 +34,9 @@ class searchRooms {
 			 *
 			 * required: require field, cannot search without a date entered
 			 * ends_with: time must end in 0
-			 * after: must be current date or after
-			 * before: cannot be more than 3 months ahead of the current date
 			 */
-			from: 'required|ends_with:0',
-			to: 'required|ends_with:0'
+			from: 'required|timeFormat',
+			to: 'required|timeFormat'
 		};
 	}
 
@@ -51,6 +49,7 @@ class searchRooms {
 			'date.after': 'Please enter a time in the future',
 			'date.before': 'You can only book rooms up to 3 months ahead of time',
 			'from.required': 'Please enter a starting time',
+			'from.timeFormat': 'You may only search with 30min time intervals, please enter a starting time that ends with 00 or 30.',
 			'to.required': 'Please enter an end time'
 		};
 	}

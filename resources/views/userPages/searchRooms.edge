@@ -20,12 +20,12 @@
                    {{--  If field is not filled correctly show an error box  --}}
                     @if(hasErrorFor('date'))
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='date' name='date' class='form-control is-invalid col-4 ' placeholder='mm/dd/yy' value='{{ old('date', '') }}'/>
+                        <input type='date' name='date' class='form-control is-invalid col-4 ' placeholder='MM-DD-YYYY' value='{{ old('date', '') }}'/>
                         <div class="invalid-feedback">{{ getErrorFor('date')}}</div>
                     {{--  Otherwise show a normal input  --}}
                     @else
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='date' name='date' class='form-control col-4' placeholder='mm/dd/yy' value='{{ old('date', '') }}'/>
+                        <input type='date' name='date' class='form-control col-4' placeholder='MM-DD-YYYY' value='{{ old('date', '') }}'/>
                     @endif
                 </div>
 
@@ -36,12 +36,12 @@
                     {{--  If field is not filled correctly show an error box  --}}
                     @if(hasErrorFor('from'))
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='from' class='form-control is-invalid col-4' placeholder='00:00 AM' value='{{ old('from', '') }}'/>
+                        <input type='time' name='from' class='form-control is-invalid col-4' placeholder='HH:MM AM' step='1800' value='{{ old('from', '') }}'/>
                         <div class="invalid-feedback">{{ getErrorFor('from')}}</div>
                     {{--  Otherwise show a normal input  --}}
                     @else
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='from' class='form-control col-4' placeholder='00:00 AM' value='{{ old('from', '') }}'/>
+                        <input type='time' name='from' class='form-control col-4' placeholder='HH:MM AM' step='1800' value='{{ old('from', '') }}'/>
                     @endif
                 </div>
 
@@ -51,12 +51,12 @@
                     {{--  If field is not filled correctly show an error box  --}}
                     @if(hasErrorFor('from'))
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='to' class='form-control col-4' placeholder='00:00 AM' step='1800' value='{{ old('to', '') }}'/>
+                        <input type='time' name='to' class='form-control col-4' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}'/>
                         <div class="invalid-feedback">{{ getErrorFor('to')}}</div>
                      {{--  Otherwise show a normal input  --}}
                     @else
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='to' class='form-control col-4' placeholder='00:00 AM' step='1800' value='{{ old('to', '') }}'/>
+                        <input type='time' name='to' class='form-control col-4' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}'/>
                     @endif                  
                 </div>
 
