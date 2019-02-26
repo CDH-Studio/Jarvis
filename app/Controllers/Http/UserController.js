@@ -349,6 +349,27 @@ class UserController {
 
 		return view.render('adminDash.viewUsers', { users });
 	}
+
+	/**
+	 * Query the room from the database which matches the search input.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async adminSearchUsers ({ request, view }) {
+		const form = request.all();
+		const firstName = form.searchField;
+
+		console.log(firstName);
+
+		let searchResults = await User
+			.query()
+			.where('firstname', firstName)
+			.fetch();
+
+		const users = searchResults.toJSON();
+
+		return view.render('adminDash.viewUsers', { users });
+	}
 }
 
 module.exports = UserController;

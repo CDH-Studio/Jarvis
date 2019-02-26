@@ -8,10 +8,16 @@
         @if(rooms.length == 0)
             <div>There are currently no rooms in the database. To add a room, click <a href='{{ route('addRoom')}}'>here</a></div>
         @else
-            <form class='form-inline my-2 my-lg-0' action={{ route('roomResults') }} method='POST' enctype='multipart/form-data'>
+            {{--  Search functionalities and view all rooms button  --}}
+            <form class='row form-inline my-2 my-lg-0' action={{ route('roomResults') }} method='POST' enctype='multipart/form-data'>
                 {{ csrfField() }} 
-                <input type='text' class='form-control mr-sm-2' name='searchField' placeholder='Search..'>
-                <button type='submit' class='btn btn-secondary my-2 my-sm-0' name='searchButton' id='searchButton'><i class='fas fa-search'></i> Search</button>
+                <div class='col'>
+                    <input type='text' class='form-control mr-sm-2' name='searchField' placeholder='Search..'>
+                    <button type='submit'class='btn btn-secondary my-2 my-sm-0' name='searchButton' id='searchButton'><i class='fas fa-search'></i> Search</button>
+                </div>
+                <div class='col text-right'>
+                    <button type='button' class='btn btn-info ml-3' onclick="window.location='{{ route('allRooms') }}';"> <i class="fas fa-list-ul"></i> All Rooms</button>
+                </div>
             </form>
 
             <table class='table table-hover mt-4' id='table' >

@@ -238,7 +238,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async searchRooms ({ request, view }) {
+	async adminSearchRooms ({ request, view }) {
 		const form = request.all();
 		const name = form.searchField;
 
