@@ -440,10 +440,16 @@ class RoomController {
 		if (createdEvent) {
 			session.flash({
 				notification: `Room ${name} has been booked. Please click here to view your bookings.`,
-				url: '/manageBookings'
+				url: '/viewBookings'
 			});
 			return response.redirect('/booking');
 		}
+	}
+
+	async viewBookings ({ auth, view }) {
+		const bookings = (await auth.user.bookings().fetch()).toJSON();
+		console.log(bookings);
+		return view.render('userPages.manageBookings', { bookings: bookings });
 	}
 
 	/**

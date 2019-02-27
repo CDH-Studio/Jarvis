@@ -21,6 +21,15 @@
 					</tr>
 				</thead>
 				{{--  Loops through the bookings array and displays every booking  --}}
+				@each(booking in bookings) 
+					<tbody>
+						<td>{{ booking.room_id }}</td>
+						<td>{{ booking.subject }}</td>
+						<td>{{ booking.from }}</td>
+						<td>{{ booking.to }}</td>
+						</tr>
+					</tbody>
+                @endeach
 			</table>
         </div> 
 @endsection
