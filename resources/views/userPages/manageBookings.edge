@@ -14,19 +14,22 @@
 			<table class='table table-hover mt-4' id='table' >
 				<thead>
 					<tr>
-					<th scope='col'>Room</th>
-					<th scope='col'>Meeting Name</th>
-					<th scope='col'>From</th>
-					<th scope='col'>To</th>
+						<th scope='col'>Room</th>
+						<th scope='col'>Meeting Name</th>
+						<th scope='col'>Date</th>
+						<th scope='col'>Time</th>
+						<th scope='col'>Status</th>
 					</tr>
 				</thead>
 				{{--  Loops through the bookings array and displays every booking  --}}
 				@each(booking in bookings) 
 					<tbody>
-						<td>{{ booking.room_id }}</td>
-						<td>{{ booking.subject }}</td>
-						<td>{{ booking.from }}</td>
-						<td>{{ booking.to }}</td>
+						<tr>
+							<td>{{ booking.room }}</td>
+							<td>{{ booking.subject }}</td>
+							<td>{{ booking.date }}</td>
+							<td>{{ booking.time }}</td>
+							<td>{{ booking.status }}</td>
 						</tr>
 					</tbody>
                 @endeach

@@ -447,8 +447,41 @@ class RoomController {
 	}
 
 	async viewBookings ({ auth, view }) {
-		const bookings = (await auth.user.bookings().fetch()).toJSON();
-		console.log(bookings);
+		const results = (await auth.user.bookings().fetch()).toJSON();
+
+		const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+		async function asyncMap (arr, callback) {
+			let arr2 = [];
+
+			for (let i = 0; i < arr.length; i++) {
+				arr2.push(await callback(arr[i], i, arr));
+			}
+
+			return arr2;
+		}
+
+		let bookings = [];
+		const loop = async () => {
+			bookings = await asyncMap(results, async (result) => {
+				console.log(result)
+				const booking = {};
+
+				const from = new Date(result.from);
+				const to = new Date(result.to);
+				booking.subject = result.subject;
+				booking.status = 'Approved';
+				booking.date = days[from.getDay()] + ',' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
+				booking.time = from.toLocaleTimeString() + ' - ' + to.toLocaleTimeString();
+				booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
+
+				return booking;
+			});
+		};
+
+		await loop();
+		
 		return view.render('userPages.manageBookings', { bookings: bookings });
 	}
 
