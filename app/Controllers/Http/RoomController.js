@@ -234,6 +234,26 @@ class RoomController {
 	}
 
 	/**
+	 * Query the room from the database which matches the search input.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+
+	async searchRooms ({ request, view }) {
+		const form = request.all();
+		const name = form.searchField;
+
+		let searchResults = await Room
+			.query()
+			.where('name', name)
+			.fetch();
+
+		const rooms = searchResults.toJSON();
+
+		return view.render('adminDash.viewRooms', { rooms });
+	}
+
+	/**
 	 * Query rooms from search criteria and render the results page.
 	 *
 	 * @param {Object} Context The context object.
@@ -248,6 +268,7 @@ class RoomController {
 		const capacity = form.capacity;
 		const pc = form.pcCheck;
 		const surfaceHub = form.surfaceHubCheck;
+
 		// check boxes input
 		let checkBox = [{ checkName: 'projector', checkValue: form.projectorCheck },
 			{ checkName: 'whiteboard', checkValue: form.whiteboardCheck },
