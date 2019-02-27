@@ -463,7 +463,7 @@ class RoomController {
 		}
 
 		let bookings = [];
-		const loop = async () => {
+		const populateBookings = async () => {
 			bookings = await asyncMap(results, async (result) => {
 				console.log(result)
 				const booking = {};
@@ -472,16 +472,16 @@ class RoomController {
 				const to = new Date(result.to);
 				booking.subject = result.subject;
 				booking.status = 'Approved';
-				booking.date = days[from.getDay()] + ',' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
-				booking.time = from.toLocaleTimeString() + ' - ' + to.toLocaleTimeString();
+				booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
+				booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 				booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
 
 				return booking;
 			});
 		};
 
-		await loop();
-		
+		await populateBookings();
+
 		return view.render('userPages.manageBookings', { bookings: bookings });
 	}
 
