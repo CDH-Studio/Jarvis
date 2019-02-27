@@ -1842,33 +1842,20 @@ pre code {
 .table-danger td,
 .table-danger thead th,
 .table-danger tbody + tbody {
-  border-color: #ed969e;
+  border-color: #8b8b8b;
 }
 
 .table-hover .table-danger:hover {
-  background-color: #f1b0b7;
+  background-color: #8b8b8b;
 }
 
 .table-hover .table-danger:hover > td,
 .table-hover .table-danger:hover > th {
-  background-color: #f1b0b7;
-}
-
-.table-light,
-.table-light > th,
-.table-light > td {
-  background-color: #fdfdfe;
-}
-
-.table-light th,
-.table-light td,
-.table-light thead th,
-.table-light tbody + tbody {
-  border-color: #fbfcfc;
+  background-color: #8b8b8b;
 }
 
 .table-hover .table-light:hover {
-  background-color: #ececf6;
+  background-color: #8b8b8b;
 }
 
 .table-hover .table-light:hover > td,

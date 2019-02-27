@@ -359,8 +359,6 @@ class UserController {
 		const form = request.all();
 		const firstName = form.searchField;
 
-		console.log(firstName);
-
 		let searchResults = await User
 			.query()
 			.where('firstname', firstName)
