@@ -465,7 +465,6 @@ class RoomController {
 		let bookings = [];
 		const populateBookings = async () => {
 			bookings = await asyncMap(results, async (result) => {
-				console.log(result)
 				const booking = {};
 
 				const from = new Date(result.from);
@@ -475,6 +474,7 @@ class RoomController {
 				booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
 				booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 				booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
+				booking.roomId = result.room_id;
 
 				return booking;
 			});
