@@ -83,3 +83,7 @@
 .page-title{
     padding:10px 0px;
 }
+
+td{
+    border-bottom:1px solid #fbfcfc !important;
+}

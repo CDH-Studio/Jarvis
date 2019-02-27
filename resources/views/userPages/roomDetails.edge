@@ -19,7 +19,7 @@
             @if(isAdmin)
                 <button type='button' class='btn btn-dark' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit</button>
             @else
-                <button type='button' class='btn btn-primary'  data-dismiss='modal' data-toggle='modal' data-target='#successModal'>Book Room</button>
+                <button type='button' class='btn btn-primary' data-dismiss='modal' data-toggle='modal' data-target='#successModal'>Book Room</button>
             @endif
         @endslot
     @endcomponent
