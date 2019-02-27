@@ -37,5 +37,6 @@
 		}, 1000, 'easeInOutExpo');
 		event.preventDefault();
 	});
+
 })(jQuery); // eslint-disable-line
 // End of use strict
