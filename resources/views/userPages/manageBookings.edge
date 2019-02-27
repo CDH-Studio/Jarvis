@@ -7,9 +7,21 @@
 {{--  Manage bookings page content  --}}
 @section('content')
     {{--  Loading page header  --}}
-    @component('components.pageHeader', title='Manage Bookings')
-        @slot('body')
-        @endslot
-    @endcomponent
+	@component('components.pageHeader', title='Manage Bookings')
+	@endcomponent
+    <div>
+            {{--  Displays all of the bookings for the current user  --}}
+			<table class='table table-hover mt-4' id='table' >
+				<thead>
+					<tr>
+					<th scope='col'>Room</th>
+					<th scope='col'>Meeting Name</th>
+					<th scope='col'>From</th>
+					<th scope='col'>To</th>
+					</tr>
+				</thead>
+				{{--  Loops through the bookings array and displays every booking  --}}
+			</table>
+        </div> 
 @endsection
 
