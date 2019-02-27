@@ -1,5 +1,7 @@
 'use strict';
 const Room = use('App/Models/Room');
+const Booking = use('App/Models/Booking');
+const User = use('App/Models/User');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
@@ -389,7 +391,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async confirmBooking ({ request, response }) {
+	async confirmBooking ({ request, response, session }) {
 		const { meeting, date, from, to, room } = request.only(['meeting', 'date', 'from', 'to', 'room']);
 		const results = await Room
 			.findBy('id', room);
@@ -427,9 +429,19 @@ class RoomController {
 		};
 
 		// Create the event
-		const createdEvent = this.createEvent(eventInfo, calendar);
+		const createdEvent = await this.createEvent(eventInfo, calendar);
+		console.log(createdEvent);
+		const booking = new Booking();
+		booking.from = createdEvent.start.dateTime;
+		booking.to = createdEvent.end.dateTime;
+		booking.subject = createdEvent.subject;
+		await booking.save();
 
 		if (createdEvent) {
+			session.flash({
+				notification: `Room ${name} has been booked. Please click here to view your bookings.`,
+				url: '/manageBookings'
+			});
 			return response.redirect('/booking');
 		}
 	}
