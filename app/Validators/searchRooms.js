@@ -33,10 +33,13 @@ class searchRooms {
 			 * From and To validation rules
 			 *
 			 * required: require field, cannot search without a date entered
-			 * ends_with: time must end in 0
+			 * timeFormat: time must end in :00 or :30
+			 * isAfter: the 'to' field must occur after the 'from' field (custom validator see CustomValidationProvidor.js for more)
+			 * isAfterToday: 'from' and 'to' fields must occur after the current time if the date field is the current date
+			 * isWithinRange: 'to' field cannot be more than X hours after 'from'
 			 */
-			from: 'required|timeFormat',
-			to: 'required|timeFormat'
+			from: 'required|timeFormat|isAfterToday:date',
+			to: 'required|timeFormat|isAfter:from|isAfterToday:date'
 		};
 	}
 
@@ -50,7 +53,10 @@ class searchRooms {
 			'date.before': 'You can only book rooms up to 3 months ahead of time',
 			'from.required': 'Please enter a starting time',
 			'from.timeFormat': 'You may only search with 30min time intervals, please enter a starting time that ends with 00 or 30.',
-			'to.required': 'Please enter an end time'
+			'to.required': 'Please enter an end time',
+			'to.timeFormat': 'You may only search with 30min time intervals, please enter a starting time that ends with 00 or 30.',
+			'from.isAfterToday': 'This field must occur after the current time',
+			'to.isAfterToday': 'This field must occur after the current time'
 		};
 	}
 

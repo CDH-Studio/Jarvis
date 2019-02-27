@@ -11,7 +11,7 @@
 
         {{--  Page content  --}}
         <div class='search-room-content'>
-            <form action='/results' method='POST' enctype='multipart/form-data'>
+            <form action='/results' method='GET' enctype='multipart/form-data'>
                 {{ csrfField() }}
                 {{--  Date form  --}}
                 <div class='form-group mb-4 '>
@@ -48,9 +48,9 @@
                     <label for='to'  data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: 00:00 AM/PM (03:30 PM)'>*To:</label>
                     
                     {{--  If field is not filled correctly show an error box  --}}
-                    @if(hasErrorFor('from'))
+                    @if(hasErrorFor('to'))
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='to' class='form-control col-4' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}'/>
+                        <input type='time' name='to' class='form-control is-invalid col-4' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}'/>
                         <div class="invalid-feedback">{{ getErrorFor('to')}}</div>
                      {{--  Otherwise show a normal input  --}}
                     @else
