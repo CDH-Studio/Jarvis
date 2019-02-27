@@ -238,6 +238,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
+
 	async searchRooms ({ request, view }) {
 		const form = request.all();
 		const name = form.searchField;
@@ -267,6 +268,19 @@ class RoomController {
 		const capacity = form.capacity;
 		const pc = form.pcCheck;
 		const surfaceHub = form.surfaceHubCheck;
+		const isRangeValid = () => {
+			const newFromInput = from.slice(0, 2) + from.slice(3, 5);
+			console.log(newFromInput);
+			const newToInput = to.slice(0, 2) + to.slice(3, 5);
+			console.log(newToInput);
+			if (newFromInput < newToInput) {
+				return true;
+			}
+			return false;
+		};
+		if (!isRangeValid()) {
+			return view.render('userPages.searchRooms');
+		}
 		// check boxes input
 		let checkBox = [{ checkName: 'projector', checkValue: form.projectorCheck },
 			{ checkName: 'whiteboard', checkValue: form.whiteboardCheck },
