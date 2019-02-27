@@ -165,6 +165,9 @@ class UserController {
 		try {
 			await auth.attempt(user.email, password);
 			if (auth.user.role === 2) {
+				session.flash({
+					notification: 'You are logged in as an Employee user.'
+				});
 				return response.redirect('/booking');
 			} else {
 				return response.redirect('/');
@@ -180,9 +183,12 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async logout ({ auth, response }) {
+	async logout ({ auth, response, session }) {
 		await auth.logout();
-		return response.redirect('/');
+		session.flash({
+			notification: 'You have been logged out.'
+		});
+		return response.redirect('/login');
 	}
 
 	async show ({ auth, params, view, response }) {
@@ -219,7 +225,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async createPasswordResetRequest ({ request, response }) {
+	async createPasswordResetRequest ({ request, response, session }) {
 		const email = request.body.email;
 		const results = await User
 			.query()
@@ -249,6 +255,10 @@ class UserController {
 			await sendMail('Password Reset Request',
 				body, email, 'support@mail.cdhstudio.ca');
 		}
+
+		session.flash({
+			notification: `An email has been sent to ${email} with further instructions on how to reset your password.`
+		});
 
 		return response.redirect('/login');
 	}
@@ -281,7 +291,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async resetPassword ({ request, response }) {
+	async resetPassword ({ request, response, session }) {
 		console.log(request.body);
 		const newPassword = await Hash.make(request.body.newPassword);
 		const changedRow = await User
@@ -290,6 +300,10 @@ class UserController {
 			.update({ password: newPassword });
 
 		console.log(changedRow);
+
+		session.flash({
+			notification: 'Your password has been changed. Please use the new password to log in.'
+		});
 		return response.redirect('/login');
 	}
 
