@@ -13,16 +13,16 @@
             <div>There are currently no rooms in the database. To add a room, click <a href='{{ route('addRoom')}}'>here</a></div>
         @else
             {{--  Search functionalities and view all rooms button  --}}
-            <table id="example" class='table table-hover' style="width:100%;">
-                <thead class="thead-dark">
+            <table id='example' class='table table-hover' style='width:100%;'>
+                <thead class='thead-dark'>
                     <tr>
-                        <th scope='col' style="width:14%">Name</th>
-                        <th scope='col' style="width:14%">Full Name</th>
-                        <th scope='col' style="width:14%">Phone Number</th>
-                        <th scope='col' style="width:14%">Floor</th>
-                        <th scope='col' style="width:14%">Tower</th>
-                        <th scope='col' style="width:14%">Maximum Capacity</th>
-                        <th scope='col' style="width:14%">State</th>
+                        <th scope='col' style='width:14%'>Name</th>
+                        <th scope='col' style='width:14%'>Full Name</th>
+                        <th scope='col' style='width:14%'>Phone Number</th>
+                        <th scope='col' style='width:14%'>Floor</th>
+                        <th scope='col' style='width:14%'>Tower</th>
+                        <th scope='col' style='width:14%'>Maximum Capacity</th>
+                        <th scope='col' style='width:14%'>State</th>
                     </tr>
                 </thead>
                 {{--  Loops through the rooms array and displays every room's content  --}}
