@@ -1,7 +1,6 @@
 'use strict';
 const Room = use('App/Models/Room');
 const Booking = use('App/Models/Booking');
-const User = use('App/Models/User');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
@@ -391,7 +390,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async confirmBooking ({ request, response, session }) {
+	async confirmBooking ({ request, response, session, auth }) {
 		const { meeting, date, from, to, room } = request.only(['meeting', 'date', 'from', 'to', 'room']);
 		const results = await Room
 			.findBy('id', room);
@@ -435,7 +434,8 @@ class RoomController {
 		booking.from = createdEvent.start.dateTime;
 		booking.to = createdEvent.end.dateTime;
 		booking.subject = createdEvent.subject;
-		await booking.save();
+		await auth.user.bookings().save(booking);
+		await results.bookings().save(booking);
 
 		if (createdEvent) {
 			session.flash({
