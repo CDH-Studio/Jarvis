@@ -1,6 +1,10 @@
 'use strict';
 
 class resetPassword {
+	get validateAll () {
+		return true;
+	}
+
 	get rules () {
 		return {
 			'newPassword': 'required',

@@ -1,6 +1,10 @@
 'use strict';
 
 class addRoom {
+	get validateAll () {
+		return true;
+	}
+
 	get rules () {
 		return {
 			// validation rules

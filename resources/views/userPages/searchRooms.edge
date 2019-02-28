@@ -11,8 +11,7 @@
 
         {{--  Page content  --}}
         <div class='search-room-content'>
-            
-            <form action='/results' method='POST' enctype='multipart/form-data'>
+            <form action='/results' method='GET' enctype='multipart/form-data'>
                 {{ csrfField() }}
                 {{--  Date form  --}}
                 <div class='form-group mb-4 '>
@@ -20,12 +19,12 @@
                    {{--  If field is not filled correctly show an error box  --}}
                     @if(hasErrorFor('date'))
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='date' name='date' class='form-control is-invalid col-4 ' placeholder='mm/dd/yy'/>
+                        <input type='date' name='date' class='form-control is-invalid col-4 ' placeholder='MM-DD-YYYY' value='{{ old('date', '') }}'/>
                         <div class="invalid-feedback">{{ getErrorFor('date')}}</div>
                     {{--  Otherwise show a normal input  --}}
                     @else
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='date' name='date' class='form-control col-4' placeholder='mm/dd/yy'/>
+                        <input type='date' name='date' class='form-control col-4' placeholder='MM-DD-YYYY' value='{{ old('date', '') }}'/>
                     @endif
                 </div>
 
@@ -36,12 +35,12 @@
                     {{--  If field is not filled correctly show an error box  --}}
                     @if(hasErrorFor('from'))
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='from' class='form-control is-invalid col-4' placeholder='00:00 AM'/>
+                        <input type='time' name='from' class='form-control is-invalid col-4' placeholder='HH:MM AM' step='1800' value='{{ old('from', '') }}'/>
                         <div class="invalid-feedback">{{ getErrorFor('from')}}</div>
                     {{--  Otherwise show a normal input  --}}
                     @else
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='from' class='form-control col-4' placeholder='00:00 AM'/>
+                        <input type='time' name='from' class='form-control col-4' placeholder='HH:MM AM' step='1800' value='{{ old('from', '') }}'/>
                     @endif
                 </div>
 
@@ -49,14 +48,14 @@
                     <label for='to'  data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: 00:00 AM/PM (03:30 PM)'>*To:</label>
                     
                     {{--  If field is not filled correctly show an error box  --}}
-                    @if(hasErrorFor('from'))
+                    @if(hasErrorFor('to'))
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='to' class='form-control col-4' placeholder='00:00 AM'/>
+                        <input type='time' name='to' class='form-control is-invalid col-4' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}'/>
                         <div class="invalid-feedback">{{ getErrorFor('to')}}</div>
                      {{--  Otherwise show a normal input  --}}
                     @else
                         {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='to' class='form-control col-4' value='00:00 AM'/>
+                        <input type='time' name='to' class='form-control col-4' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}'/>
                     @endif                  
                 </div>
 
