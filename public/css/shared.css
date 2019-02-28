@@ -139,12 +139,30 @@
 /* Room Details Page */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 .room-details-card{
+    padding:0px !important;
 }
 
-.room-details-card:hover{
-
+.room-details-card-title{
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+    height: 55px;
+    background-color: #f1f1f1;
+    color: #000000;
+    margin-bottom: 0px;
+    vertical-align: center;
+    padding:0 15px;
+    line-height: 50px;
 }
 
+.room-details-card-title h3{
+    line-height: 55px;
+    margin-bottom: 0px;
+    vertical-align: center;
+}
+.room-details-card-title button{
+    margin-bottom: 0px;
+    vertical-align: center;
+}
 .room-details-spec{
     text-align:center; 
     padding-top:0px;
