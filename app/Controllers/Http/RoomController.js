@@ -415,6 +415,8 @@ class RoomController {
 		booking.from = createdEvent.start.dateTime;
 		booking.to = createdEvent.end.dateTime;
 		booking.subject = createdEvent.subject;
+		booking.status = 'Approved';
+		booking.event_id = createdEvent.id;
 		await auth.user.bookings().save(booking);
 		await results.bookings().save(booking);
 
@@ -427,6 +429,11 @@ class RoomController {
 		}
 	}
 
+	/**
+	 * Create a list of all bookings under the current user and render a view for it.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async viewBookings ({ auth, view }) {
 		const results = (await auth.user.bookings().fetch()).toJSON();
 
@@ -451,11 +458,12 @@ class RoomController {
 				const from = new Date(result.from);
 				const to = new Date(result.to);
 				booking.subject = result.subject;
-				booking.status = 'Approved';
+				booking.status = result.status;
 				booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
 				booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 				booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
 				booking.roomId = result.room_id;
+				booking.id = result.id;
 
 				return booking;
 			});
@@ -464,6 +472,19 @@ class RoomController {
 		await populateBookings();
 
 		return view.render('userPages.manageBookings', { bookings: bookings });
+	}
+
+	async cancelBooking ({ params, response }) {
+		const booking = await Booking.findBy('id', params.id);
+		const roomId = booking.toJSON().room_id;
+		// const room = (await Room.findBy('id', roomId)).toJSON();
+		const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
+
+		await this.deleteEvent(calendarId);
+		booking.status = 'Cancelled';
+		await booking.save();
+
+		return response.redirect('/viewBookings');
 	}
 
 	/**
@@ -489,6 +510,32 @@ class RoomController {
 					.get();
 
 				return events;
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	}
+
+	/**
+	 * Delete an event from the room calendar.
+	 *
+	 * @param {String} calendarId The id of the room calendar.
+	 * @param {String} eventId The id of the event to delete.
+	 */
+	async deleteEvent (calendarId, eventId) {
+		const accessToken = await getAccessToken();
+
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				await client
+					.api(`/me/calendars/${calendarId}/events/${eventId}`)
+					.delete();
 			} catch (err) {
 				console.log(err);
 			}

@@ -79,6 +79,7 @@ Route.on('/booking').render('userPages/booking').as('booking');
 Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBooking');
 Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails'); // needs to be changed to get
 Route.get('/viewBookings', 'RoomController.viewBookings').as('viewBookings');
+Route.get('/cancelBooking/:id', 'RoomController.cancelBooking').as('cancelBooking');
 
 // Employee user pages
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
