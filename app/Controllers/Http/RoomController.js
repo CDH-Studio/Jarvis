@@ -547,7 +547,7 @@ class RoomController {
 				console.log(err);
 				booking.status = 'Failed';
 				await user.bookings().save(booking);
-				await room.bookings().save(booking);	
+				await room.bookings().save(booking);
 			}
 		}
 	}
