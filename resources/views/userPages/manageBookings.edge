@@ -34,7 +34,7 @@
 						<td>{{ booking.subject }}</td>
 						<td>{{ booking.date }}</td>
 						<td>{{ booking.time }}</td>
-						<td>{{ booking.status }}</td>
+						<td class='td-{{ booking.status }}'>{{ booking.status }}</td>
 						@if(booking.status == 'Approved')
 							<td><a class='btn btn-secondary' name='cancel' id='cancelButton' href='{{ route('cancelBooking', {id: booking.id}) }}'>Cancel</a></td>
 						@else
