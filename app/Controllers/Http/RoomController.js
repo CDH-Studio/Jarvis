@@ -55,7 +55,7 @@ class RoomController {
 			room.name = body.name;
 			room.fullName = body.fullName;
 			room.floor = body.floor;
-			room.tower = body.tower === 0 ? 'West' : 'East';
+			room.tower = body.tower === '0' ? 'West' : 'East';
 			room.telephone = body.telephoneNumber;
 			room.seats = body.tableSeats;
 			room.capacity = body.maximumCapacity;
