@@ -68,8 +68,9 @@ class CustomValidationProvider extends ServiceProvider {
 		const inputTime = get(data, field);
 		const inputDate = get(data, args[0]);
 		const currentDate = new Date();
-		let currentTime = currentDate.getHours() + ':' + currentDate.getMinutes();
+		let currentTime = ('0' + (currentDate.getHours())).slice(-2) + ':' + ('0' + (currentDate.getMinutes())).slice(-2);
 		const newCurrentDate = currentDate.getFullYear() + '-' + ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' + currentDate.getDate();
+
 		// if the current date and the search date is the same, check that the times are NOT in the past
 		if (inputDate === newCurrentDate && inputTime < currentTime) {
 			throw message;
