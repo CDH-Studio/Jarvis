@@ -1,6 +1,6 @@
 'use strict';
 
-class searchRooms {
+class SearchRoom {
 	get validateAll () {
 		return true;
 	}
@@ -66,4 +66,4 @@ class searchRooms {
 	}
 }
 
-module.exports = searchRooms;
+module.exports = SearchRoom;
