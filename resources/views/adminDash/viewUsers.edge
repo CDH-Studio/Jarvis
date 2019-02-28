@@ -9,16 +9,6 @@
             <div>There are currently no users in the database.</div>
         @else
             {{--  Search functionalities and view all rooms button  --}}
-            <form class='row form-inline my-2 my-lg-0' action={{ route('userResults') }} method='POST' enctype='multipart/form-data'>
-                {{ csrfField() }} 
-                <div class='col'>
-                    <input type='text' class='form-control mr-sm-2' name='searchField' placeholder='Search..'>
-                    <button type='submit'class='btn btn-secondary my-2 my-sm-0' name='searchButton' id='searchButton'><i class='fas fa-search'></i> Search</button>
-                </div>
-                <div class='col text-right'>
-                    <button type='button' class='btn btn-info ml-3' onclick="window.location='{{ route('allUsers') }}';"> <i class="fas fa-list-ul"></i> All Users</button>
-                </div>
-            </form>
 
             <table class='table table-hover mt-4'>
                 <thead>
@@ -39,6 +29,19 @@
             </table>
         @endif
     </div> 
+@endsection
+
+{{--  Deals with the search functionality of the table above- searches all fields   --}}
+@section('extrajs') 
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>$(document).ready(function() {
+            $('#example').DataTable( {
+                "paging":   false,
+                "ordering": true,
+                "info":     false
+            });
+        });
+    </script>
 @endsection
 
 
