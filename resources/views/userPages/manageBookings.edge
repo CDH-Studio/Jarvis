@@ -35,7 +35,7 @@
 						<td>{{ booking.date }}</td>
 						<td>{{ booking.time }}</td>
 						<td>{{ booking.status }}</td>
-						<td><button class='btn btn-secondary' name='cancel' id='cancelButton'>Cancel</button></td>
+						<td><button class='btn btn-secondary' name='cancel' id='cancelButton' href='{{ route('cancelBooking') }}'>Cancel</button></td>
 					</tr>
 				</tbody>
 			@endeach
