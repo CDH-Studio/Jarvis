@@ -477,10 +477,10 @@ class RoomController {
 	async cancelBooking ({ params, response }) {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
-		// const room = (await Room.findBy('id', roomId)).toJSON();
 		const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
+		const eventId = booking.toJSON().event_id;
 
-		await this.deleteEvent(calendarId);
+		await this.deleteEvent(calendarId, eventId);
 		booking.status = 'Cancelled';
 		await booking.save();
 
