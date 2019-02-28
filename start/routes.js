@@ -39,7 +39,7 @@ Route.get('/logout', 'UserController.logout').as('logout');
 
 // Forgot password
 Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
-Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword').validator('resetPassword');
+Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword').validator('ResetPassword');
 Route.get('/newPassword', 'UserController.verifyHash');
 Route.get('/newUser', 'UserController.verifyEmail');
 Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
@@ -52,12 +52,12 @@ Route.get('/user/:id/edit', 'UserController.edit').middleware(['auth']);
 Route.post('/user/:id/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']);
 
 //= ========================================================================
-// Rooms
+//  [ Admin ] Rooms
 //= ========================================================================
 
 // admin
 Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['admin']);
-Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('addRoom').middleware(['admin']);
+Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('AddRoom').middleware(['admin']);
 Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom').middleware(['admin']);
 Route.on('/adminDash').render('adminDash').as('adminDash').middleware(['admin']);
 
@@ -69,21 +69,23 @@ Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']
 
 Route.post('/userResults', 'UserController.adminSearchUsers').as('userResults').middleware(['auth']);
 
-// [Employee] Search Room
-Route.get('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('searchRooms');
-
 //= ========================================================================
 // Bookings
 //= ========================================================================
-Route.on('/booking').render('userPages/booking').as('booking');
-Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBooking');
 Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails'); // needs to be changed to get
 Route.get('/viewBookings', 'RoomController.viewBookings').as('viewBookings');
 Route.get('/cancelBooking/:id', 'RoomController.cancelBooking').as('cancelBooking');
 
 // Employee user pages
+Route.on('/booking').render('userPages/booking').as('booking');
 Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
+
+// Rendering Results
+Route.get('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('SearchRoom');
+
+// Booking a Room
+Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBooking').validator('BookRoom');
 
 // Outlook
 Route.get('/authenticate', 'TokenController.getAuthUrl');
