@@ -37,9 +37,9 @@
                             <td>{{ room.tower }} </td>
                             <td>{{ room.capacity }}</td>
                             @if(room.state == 1)
-                                <td>Active</td>
+                                <td class='td-{{ room.state }}'>Active</td>
                             @else
-                                <td>Deactive</td>
+                                <td class='td-{{ room.state }}'>Deactive</td>
                             @endif 
                         </tr>
                         @endeach

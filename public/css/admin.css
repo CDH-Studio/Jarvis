@@ -23,6 +23,14 @@
     cursor:pointer;
 }
 
+/* Deactie and Active room state colours */
+.td-0 {
+    color: #d9534f;
+}
+
+.td-1 {
+    color: #5cb85c;
+}
 /*+++++++++++++++++++++++++++++++++++++++++++*/  
 /* Navbar changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/

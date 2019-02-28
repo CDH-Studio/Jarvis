@@ -75,6 +75,7 @@ class RoomController {
 			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
 				name: `${room.name}_floorPlan.png`
 			});
+			console.log(Helpers.publicPath);
 
 			// Upload process - Room Picture
 			const roomImage = request.file('roomPicture', {
