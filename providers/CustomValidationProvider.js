@@ -30,6 +30,7 @@ class CustomValidationProvider extends ServiceProvider {
 		Validator.extend('isAfter', this._isAfter, '');
 		Validator.extend('isAfterToday', this._isAfterToday, '');
 		Validator.extend('isWithinRange', this._isWithinRange, '');
+		Validator.extend('recurringSelected', this._recurringSelected, '');
 	}
 
 	/* Validate if time ends in 00 or 30
@@ -95,6 +96,19 @@ class CustomValidationProvider extends ServiceProvider {
 		}
 		console.log(difference);
 		if (difference > bookingLimit) {
+			throw message;
+		}
+	}
+
+	/* Validate to check if {{field}} is selected when {{args}} is selected as YES
+	*
+	* @usage recurringSelected
+	*/
+	async _recurringSelected (data, field, message, args, get) {
+		const userSelection = get(data, field);
+		const recurringSelection = get(data, args[0]);
+		// if the reccuringSelection is 1 (Yes) and userSelection 0 ("Select X" aka value not selected) throw an error
+		if (recurringSelection === '1' && userSelection === '0') {
 			throw message;
 		}
 	}
