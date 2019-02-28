@@ -67,8 +67,6 @@ Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').middleware(
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
-Route.post('/userResults', 'UserController.adminSearchUsers').as('userResults').middleware(['auth']);
-
 // [Employee] Search Room
 Route.get('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('searchRooms');
 
