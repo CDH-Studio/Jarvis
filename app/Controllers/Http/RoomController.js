@@ -409,24 +409,20 @@ class RoomController {
 		};
 
 		// Create the event
-		const createdEvent = await this.createEvent(eventInfo, calendar);
-		console.log(createdEvent);
 		const booking = new Booking();
-		booking.from = createdEvent.start.dateTime;
-		booking.to = createdEvent.end.dateTime;
-		booking.subject = createdEvent.subject;
-		booking.status = 'Approved';
-		booking.event_id = createdEvent.id;
+		booking.subject = meeting;
+		booking.status = 'Pending';
 		await auth.user.bookings().save(booking);
 		await results.bookings().save(booking);
 
-		if (createdEvent) {
-			session.flash({
-				notification: `Room ${name} has been booked. Please click here to view your bookings.`,
-				url: '/viewBookings'
-			});
-			return response.redirect('/booking');
-		}
+		this.createEvent(eventInfo, calendar, booking, auth.user, results);
+
+		session.flash({
+			notification: `Room ${name} has been booked. Please click here to view your bookings.`,
+			url: '/viewBookings'
+		});
+
+		return response.redirect('/booking');
 	}
 
 	/**
@@ -474,6 +470,11 @@ class RoomController {
 		return view.render('userPages.manageBookings', { bookings: bookings });
 	}
 
+	/**
+	 * Create a list of all bookings under the current user and render a view for it.
+	 *
+	 * @param {Object} Context The context object.
+	 */
 	async cancelBooking ({ params, response }) {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
@@ -485,6 +486,46 @@ class RoomController {
 		await booking.save();
 
 		return response.redirect('/viewBookings');
+	}
+
+	/**
+	 * Create an event on the specified room calendar.
+	 *
+	 * @param {String} eventInfo Information of the event.
+	 * @param {String} calendarId The id of the room calendar.
+	 * @param {Object} booking The Booking (Lucid) Model.
+	 * @param {Object} user The User (Lucid) Model.
+	 * @param {Object} room The Room (Lucid) Model.
+	 */
+	async createEvent (eventInfo, calendarId, booking, user, room) {
+		const accessToken = await getAccessToken();
+
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const newEvent = await client
+					.api(`/me/calendars/${calendarId}/events`)
+					.post(eventInfo);
+
+				if (newEvent) {
+					booking.from = newEvent.start.dateTime;
+					booking.to = newEvent.end.dateTime;
+					booking.event_id = newEvent.id;
+					booking.status = 'Approved';
+					await user.bookings().save(booking);
+					await room.bookings().save(booking);
+
+					return newEvent;
+				}
+			} catch (err) {
+				console.log(err);
+			}
+		}
 	}
 
 	/**
@@ -614,34 +655,6 @@ class RoomController {
 					.get();
 
 				return calendarView;
-			} catch (err) {
-				console.log(err);
-			}
-		}
-	}
-
-	/**
-	 * Create an event on the specified room calendar.
-	 *
-	 * @param {*} eventInfo Information of the event.
-	 * @param {*} calendarId The id of the room calendar.
-	 */
-	async createEvent (eventInfo, calendarId) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const newEvent = await client
-					.api(`/me/calendars/${calendarId}/events`)
-					.post(eventInfo);
-
-				return newEvent;
 			} catch (err) {
 				console.log(err);
 			}
