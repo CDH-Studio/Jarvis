@@ -4,6 +4,10 @@
     Manage Bookings
 @endsection
 
+@section('extracss')
+{{ style('css/manageBookings') }}
+@endsection
+
 {{--  Manage bookings page content  --}}
 @section('content')
     {{--  Loading page header  --}}
@@ -19,6 +23,7 @@
 					<th scope='col'>Date</th>
 					<th scope='col'>Time</th>
 					<th scope='col'>Status</th>
+					<th scope='col'></th>
 				</tr>
 			</thead>
 			{{--  Loops through the bookings array and displays every booking  --}}
@@ -30,6 +35,7 @@
 						<td>{{ booking.date }}</td>
 						<td>{{ booking.time }}</td>
 						<td>{{ booking.status }}</td>
+						<td><button class='btn btn-secondary' name='cancel' id='cancelButton'>Cancel</button></td>
 					</tr>
 				</tbody>
 			@endeach
