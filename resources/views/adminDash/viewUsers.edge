@@ -1,0 +1,57 @@
+@layout('layouts.adminLayout')
+
+@section('extracss')
+<link href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css' rel='stylesheet'>
+@endsection
+
+@section('content')
+    @!component('components.pageTitle', title='View Users')
+    <div>
+        {{--  Displays all of the users in the database in a table  --}}
+        @if(users.length == 0)
+            <div>There are currently no users in the database.</div>
+        @else
+            {{--  All Users table  --}}
+            <div class='table-responsive'>
+                <table id='usersTable' class='table table-hover mt-4' style='width:100%'> 
+                    <thead class='thead-dark'>
+                        <tr>
+                        <th scope='col' style='width:50%'>Name</th>
+                        <th scope='col' style='width:50%'>Email Address</th>
+                        </tr>
+                    </thead>
+                    {{--  Loops through the users array and displays every user's information  --}}
+                    <tbody>
+                        @each(user in users) 
+                            <tr id='userRow' class='table-light' onclick="window.location='{{ route('viewProfile', { id: user.id }) }}';">
+                            <td>{{ user.firstname }} {{ user.lastname }}</td>
+                            <td>{{ user.email }}</td>
+                            </tr>
+                        @endeach
+                    <tbody>
+                </table>
+            </div>
+        @endif
+    </div> 
+@endsection
+
+{{--  Deals with the search functionality of the table above- searches all fields   --}}
+@section('extrajs') 
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>$(document).ready(function() {
+            $('#usersTable').DataTable( {
+                "paging":   false,
+                "ordering": true,
+                "info":     false
+            });
+        });
+    </script>
+@endsection
+
+
+
+
+
+
+
+

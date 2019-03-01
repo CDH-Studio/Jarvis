@@ -9,52 +9,45 @@ Jarvis - Login
 @endsection
 
 @section('content')
+	<div class='row'>
+		<div class='col-md-4 text-center image-bar d-none d-md-block p-0'></div>
+		<div class='col-md-8 shadow form-bar p-0'>   
+			<form action='{{ route('UserController.login') }}' method='POST' class='mb-4'>
+				<img class='brand-logo mb-3' src='door_logo.png'>
+				<h3 class='mb-3'>Login</h3>
 
-<div class='container'>
-	<div class='row justify-content-center'>
-		<div class='col-lg-5 col-md-8 justify-center'>
-			<div class='card text-white mb-3 login-box shadow'>
-				<div class='card-header text-center'><img class='brand-logo' src='door_logo.png'>
+				{{-- login error --}}
+				@if(flashMessage('loginError'))
+					<div class='alert alert-dismissible alert-danger'>
+						<button type='button' class='close' data-dismiss='alert'>&times;</button>
+						<strong>{{ flashMessage('loginError') }}</strong>
+					</div>
+				@endif
+				
+				{{ csrfField() }}
+				<div class='form-group mb-2'>
+					<label for='email'>Email address</label>
+					<input type='email' class='form-control' name='email' id='email' aria-describedby='emailHelp' placeholder='Enter email'>
+					@if(hasErrorFor('email'))        
+						<div class='invalid-feedback d-block'>{{ getErrorFor('email') }}</div>
+					@endif
 				</div>
 
-				<div class='card-body'>
-					<h4>Login</h4>
-					<form action='{{ route('UserController.login') }}' method='POST'>
-						{{ csrfField() }}
-
-						<div class='form-group mb-2'>
-							<label for='email'>Email address</label>
-							<input type='email' class='form-control' name='email' id='email' aria-describedby='emailHelp' placeholder='Enter email'>
-						</div>
-						@if(hasErrorFor('email'))
-							<span>
-								{{ getErrorFor('email') }}
-							</span>
-						@endif
-
-						<div class='form-group mb-2'>
-							<label for='password'>Password</label>
-							<input type='password' class='form-control' name='password' id='password' placeholder='Password'>
-							<a class='forgot-password' href='{{ route('forgotPassword') }}'>Forgot your password?</a>
-						</div>
-						@if(hasErrorFor('password'))
-							<span>
-								{{ getErrorFor('password') }}
-							</span>
-						@endif
-
-						<button type='submit' class='btn btn-login mt-3'>Login</button>
-					</form>
-
-					<hr>
-
-					<p class='mb-1'>Don't have an account?</p>
-					<a class='btn register text-center mb-2' href='{{ route('register') }}'>Register</a>
-					
+				<div class='form-group mb-2'>
+				  <label for='password'>Password</label>
+				  <input type='password' class='form-control' name='password' id='password' placeholder='Password'>
+				  @if(hasErrorFor('password'))
+				    <span>
+				      	<div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>
+				    </span>
+				  @endif
+				  <a class='forgot-password' href='{{ route('forgotPassword') }}'>Forgot password</a>
 				</div>
-			</div>
+				
+				<button type='submit' class='btn btn-login mt-2'>Login</button>
+				<p class='mb-1 mt-3'>Don't have an account?</p>
+				<a class='btn btn-register text-center mb-2' href='{{ route('register') }}'>Register</a>
+			</form>
 		</div>
 	</div>
-</div>
-  
 @endsection

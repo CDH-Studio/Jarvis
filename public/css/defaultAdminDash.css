@@ -1,3 +1,6 @@
+/* DO NOT MAKE CHANGES IN THIS FILE */
+/* TO MAKE CHANGES TO ADMIN DASH/VIEW GO TO ADMIN.CSS */
+
 /*!
  * Start Bootstrap - SB Admin v5.0.3 (https://startbootstrap.com/template-overviews/sb-admin)
  * Copyright 2013-2019 Start Bootstrap
@@ -10,6 +13,8 @@
  * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
+
+
 :root {
   --blue: #007bff;
   --indigo: #6610f2;
@@ -47,60 +52,6 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
-
-/* Extra styling */
-.side-nav-icons{
-  width: 16px !important;
-  height: 24px;
-  text-align: center;
-  margin-right: 0px;
-}
-/* .sidebar.navbar-nav {
-  background: #F5F5F5;
-}  */
-/*  Changing icon width to match all */
-.fa-map-marker-alt{
-  text-align: center;
-  width:25px;
-}
-
-.fa-user-friends{
-  text-align: center;
-  width:25px;
-}
-.fa-book{
-  text-align: center;
-  width:25px;
-}
-
-.nav-link{
-  position: relative;
-  z-index: 20;
-  
-}
-/* Side nav drop down */
-#side-nav-dropdown{
-  position: relative;
-  border:None ;
-  width:100%;
-  margin:0px;
-  z-index: 15;
-  background-color:#F5F5F5;
-}
-/* Small side nav view */
-.sidebar-toggled #side-nav-dropdown{
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 0.25rem;
-  width:100%;
-  margin:0px;
-  background-color: #F5F5F5;
-}
-/* Addding shadow to drop down */
-.show .nav-link{
-  box-shadow: 
-  0 4px 2px -2px rgba(0,0,0,0.1);
-}
-
 
 html {
   font-family: sans-serif;
@@ -1891,33 +1842,20 @@ pre code {
 .table-danger td,
 .table-danger thead th,
 .table-danger tbody + tbody {
-  border-color: #ed969e;
+  border-color: #8b8b8b;
 }
 
 .table-hover .table-danger:hover {
-  background-color: #f1b0b7;
+  background-color: #8b8b8b;
 }
 
 .table-hover .table-danger:hover > td,
 .table-hover .table-danger:hover > th {
-  background-color: #f1b0b7;
-}
-
-.table-light,
-.table-light > th,
-.table-light > td {
-  background-color: #fdfdfe;
-}
-
-.table-light th,
-.table-light td,
-.table-light thead th,
-.table-light tbody + tbody {
-  border-color: #fbfcfc;
+  background-color: #8b8b8b;
 }
 
 .table-hover .table-light:hover {
-  background-color: #ececf6;
+  background-color: #8b8b8b;
 }
 
 .table-hover .table-light:hover > td,
@@ -6942,7 +6880,7 @@ button.bg-dark:focus {
 }
 
 .border-primary {
-  border-color: #007bff !important;
+  border-color: #007bff;
 }
 
 .border-secondary {
@@ -8238,8 +8176,8 @@ button.bg-dark:focus {
 }
 
 .shadow {
-  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+  -webkit-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
 .shadow-lg {
@@ -10780,10 +10718,3 @@ body.sidebar-toggled footer.sticky-footer {
   }
 }
 
-
-/*****************************************************/
-/*mystyles*/
-/*****************************************************/
-.page-title{
-    padding:10px 0px;
-}

@@ -7,39 +7,64 @@
 {{--  search room page content  --}}
 @section('content')
     {{--  Loading Page Header  --}}
-    @!component('components.pageHeader', title='Search Rooms')
+    @component('components.pageHeader', title='Search Rooms')
+        @slot('body')
+        @endslot
+    @endcomponent
+        {{--  Page content  --}}
+        <div class='search-room-content'>
+            <form action='/results' method='GET' enctype='multipart/form-data'>
+                {{ csrfField() }}
+                {{--  Date form  --}}
+                <div class='form-group mb-4 '>
+                    <label for='date'data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: mm/dd/yyyy (02/20/2019)'>*Select Date:</label>
+                   {{--  If field is not filled correctly show an error box  --}}
+                    @if(hasErrorFor('date'))
+                        {{--  ######## Need to Change value to the current date #############  --}}
+                        <input type='date' name='date' class='form-control is-invalid col-4 ' placeholder='MM-DD-YYYY' value='{{ old('date', '') }}'/>
+                        <div class="invalid-feedback">{{ getErrorFor('date')}}</div>
+                    {{--  Otherwise show a normal input  --}}
+                    @else
+                        {{--  ######## Need to Change value to the current date #############  --}}
+                        <input type='date' name='date' class='form-control col-4' placeholder='MM-DD-YYYY' value='{{ old('date', '') }}'/>
+                    @endif
+                </div>
 
-    {{--  Page content  --}}
-    <div class='search-room-content'>
-        {{--  Date form  --}}
-        <div class='row mb-4'>
-            <div class='col-sm-2'>
-                <h4>*Select Date:</h4>
-            </div>
-            {{--  M<eeting time form  --}}
-            <div class='row mb-4'>
-                <div class='col-sm-2'>
-                    <h4>*From:</h4>
+                {{--  Meeting time form  --}}
+                <div class='form-group mb-4'>
+                    <label for='from'  data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: 00:00 AM/PM (02:30)'>*From:</label>
+                    
+                    {{--  If field is not filled correctly show an error box  --}}
+                    @if(hasErrorFor('from'))
+                        {{--  ######## Need to Change value to the current date #############  --}}
+                        <input type='time' name='from' class='form-control is-invalid col-4' placeholder='HH:MM AM' step='1800' value='{{ old('from', '') }}'/>
+                        <div class="invalid-feedback">{{ getErrorFor('from')}}</div>
+                    {{--  Otherwise show a normal input  --}}
+                    @else
+                        {{--  ######## Need to Change value to the current date #############  --}}
+                        <input type='time' name='from' class='form-control col-4' placeholder='HH:MM AM' step='1800' value='{{ old('from', '') }}'/>
+                    @endif
                 </div>
-                <div class='col-sm-4'>
-                    <input class='form-control' type='time' value='13:45:00' id='example-time-input'>
+
+                <div class='form-group mb-4'>
+                    <label for='to'  data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: 00:00 AM/PM (03:30 PM)'>*To:</label>
+                    
+                    {{--  If field is not filled correctly show an error box  --}}
+                    @if(hasErrorFor('to'))
+                        {{--  ######## Need to Change value to the current date #############  --}}
+                        <input type='time' name='to' class='form-control is-invalid col-4' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}'/>
+                        <div class="invalid-feedback">{{ getErrorFor('to')}}</div>
+                     {{--  Otherwise show a normal input  --}}
+                    @else
+                        {{--  ######## Need to Change value to the current date #############  --}}
+                        <input type='time' name='to' class='form-control col-4' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}'/>
+                    @endif                  
                 </div>
-            </div>
-            <div class='row mb-4'>
-                <div class='col-sm-2'>
-                    <h4>*To:</h4>
-                </div>
-                <div class='col-sm-4'>
-                    <input class='form-control' type='time' value='14:45:00' id='example-time-input'>
-                </div>
-            </div>  
-            {{--  Location form  --}}
-            <div class='row mb-4'>
-                <div class='col-sm-2'>
-                    <h4>Location:</h4>
-                </div>
-                <div class='col-sm-4'>
-                    <select class='form-control'>
+
+                {{--  Location form  --}}
+                <div class='form-group mb-4'>
+                    <label for='location'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Enter the preferred location'>Location:</label>
+                    <select name='location' class='form-control col-4'>
                         <option selected=''>Select a floor</option>
                         <option value='0'>Floor 0</option>
                         <option value='1'>Floor 1</option>
@@ -53,83 +78,68 @@
                         <option value='9'>Floor 9</option>
                     </select>
                 </div>
-            </div>
-            {{--  Number of people form  --}}
-            <div class='row mb-4'>
-                <div class='col-sm-2'>
-                    <h4>Room For:</h4>
-                </div>
-                <div class='col-sm-4'>
-                    <input class='form-control' type='number' name='quantity' min='1' max='50'  value='14:45:00'>
-                </div>
-            </div>
-            {{--  Equipment check box form  --}}
-            
-            <div class='form-group'>
-                <h4>Equipment:</h4>
 
-                <div class='row'>
-                    <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                        <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value='1'/>
-                        <label class='custom-control-label' for='projectorCheck'>Projector</label>
+                {{--  Number of people form  --}}
+                <div class='form-group mb-4'>
+                    <label for='capacity' data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Please enter the estimated number of people that need to be accommodated for'>Number of People:</label>
+                    <input class='form-control col-4' name='capacity' type='number' name='quantity' min='1' max='50'  value=''>
+                </div>
+
+                {{--  Equipment check box form  --}}
+                <div class='form-group'>
+                    <h4>Equipment:</h4>
+
+                    <div class='row'>               
+                        <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                            <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value= '1' />
+                            <label class='custom-control-label' for='projectorCheck'>Projector</label>
+                        </div>
+                        <div class='custom-control custom-checkbox ml-3'>
+                            <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1'/>
+                            <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
+                        </div>
                     </div>
-                    <div class='custom-control custom-checkbox ml-3'>
-                        <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1'/>
-                        <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
+
+                    <div class='row'>
+                        <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                            <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1'/>
+                            <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
+                        </div>  
+                        <div class='custom-control custom-checkbox ml-3'>
+                            <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1'/>
+                            <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
+                        </div>                
+                    </div>
+
+                    <div class='row'>
+                        <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                            <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1'/>
+                            <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
+                        </div>
+                        
+                        <div class="custom-control custom-checkbox ml-3">
+                            <input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1'/>
+                            <label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
+                        </div>               
+                    </div>
+
+                    <div class='row'>
+                        <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                            <input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1'/>
+                            <label class='custom-control-label' for='pcCheck'>PC</label>
+                        </div>                
                     </div>
                 </div>
-
+                {{--  Page buttons  --}}
                 <div class='row'>
-                    <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                        <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1'/>
-                        <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
-                    </div>  
-                    <div class='custom-control custom-checkbox ml-3'>
-                        <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1'/>
-                        <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
-                    </div>                
-                </div>
-
-                <div class='row'>
-                    <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                        <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1'/>
-                        <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
-                    </div>
-                    <div class='custom-control custom-checkbox ml-3'>
-                        <input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1'/>
-                        <label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
-                    </div>               
-                </div>
-
-                <div class='row'>
-                    <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                        <input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1'/>
-                        <label class='custom-control-label' for='pcCheck'>PC</label>
-                    </div>                
+                    <div class='col-sm-12'>
+                        <button type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
+                        <button type='submit' class='btn btn-primary'>Search</button>
+                    </div>       
                 </div>
             </div>
-            {{--  Page buttons  --}}
-            <div class='row'>
-                <div class='col-sm-12'>
-                    <button type='button' class='btn btn-outline-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
-                    <button type='button' class='btn btn-primary' onclick="window.location='{{ route('results')}}';">Search</button>
-                </div>       
-            </div>
-            <div class='col-xs-5 col-sm-4 col-md-3 col-lg-3'>
-                <div class='form-check'>
-                    <label class='form-check-label'>
-                        <input class='form-check-input' type='checkbox' value='videoConference'> Video Conference
-                    </label>
-                </div>
-            </div>                              
-        </div> 
-        {{--  Page buttons  --}}
-        <div class='row'>
-            <div class='col-sm-12'>
-                <button type='button' class='btn btn-outline-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
-                <button type='button' class='btn btn-primary' onclick="window.location='{{ route('results')}}';">Search</button>
-            </div>       
-        </div>
+        </form>
     </div> 
+
 @endsection
 

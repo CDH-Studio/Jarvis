@@ -6,11 +6,11 @@
 
 {{--  book room page content  --}}
 @section('content')
-    @section('extracss')
-        {{ style('css/mystyle') }}
-    @endsection
     {{--  Loading page header  --}}
-    @!component('components.pageHeader', title= 'Hello, '+ auth.user.firstname)
+    @component('components.pageHeader', title= 'Hello, '+ auth.user.firstname)
+        @slot('body')
+        @endslot
+    @endcomponent
     {{--  Content  --}}
     <div class='book-room-content wrapper-center'>
         <div class='row'>
@@ -21,9 +21,19 @@
         <div class='row'>
             <div class='col-sm-12'>
                 <button type='button' class='btn btn-primary large-buttons' onclick="window.location='{{ route('searchRooms') }}';">Search</button>
-                <a type='button' class='btn btn-outline-secondary large-buttons' href='{{ route('allRooms') }}'>View All Rooms</a>
+                <button type='button' class='btn btn-secondary large-buttons' onclick="window.location='{{ route('allRooms') }}';">View All Rooms</button>
             </div>
         </div>
     </div>
+
+    @if(flashMessage('notification'))
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', () => {
+                var url = '{{ flashMessage('url') }}';
+                notify({ $: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
+            });
+        </script>
+    @endif
 @endsection
 

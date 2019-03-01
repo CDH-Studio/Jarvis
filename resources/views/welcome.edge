@@ -3,21 +3,91 @@
 <head>
   <meta charset='UTF-8' />
   <title>Hello Adonis</title>
-  {{ style('style') }}
+
+    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.2.1/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-9dACWymWSkhCeCgbjV6xqS20Luu4ue6QnEvr+nMXpPMwIq/OB89AoRh27Flsrxzs" crossorigin="anonymous">
+
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.1/css/all.css' integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous'>
+    <style>
+  .btn-login{
+    border: solid 1px #04163F;
+    width:100%;
+    border-radius: 20px;
+  }
+
+  .btn-register{
+    border: solid 1px #04163F;
+    width:100%;
+    border-radius: 20px;
+    background-color: #04163f;
+    color:white;
+  }
+  html {
+    height: 100%;
+  }
+  body{
+    height:100%;
+    background-color: #F8F8F8;
+  }
+  body .row{
+    height:100%;
+  }
+  .image-bar{
+    background:linear-gradient(rgba(4, 22, 63, 0.8), rgba(4, 22, 63, 0.8), rgba(4, 22, 63, 0.7)), url("images/login.jpg") no-repeat center top;background-size:cover;  height:100%;
+    background:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)), url("images/login.jpg") no-repeat center top;background-size:cover;  height:100%;
+  }
+  .form-bar{
+    ;
+  }
+
+  .form-bar form{
+    margin-top:150px;
+    width:40%;
+    margin-right: auto; 
+    margin-left:auto;
+  }
+
+  .form-bar form img{
+    width:45%;
+    background-color:#04163F;
+    padding:15px 15px;
+  }
+}
+
+    </style>
 </head>
 <body>
-  <section>
-    <div class='logo'></div>
-    <div class='title'></div>
-    <div class='subtitle'>
-      <p>AdonisJs simplicity will make you feel confident about your code</p>
-      <form action='/changePassword' method='post'>
-        {{ csrfField() }}
-        Room#: <input type='text' name='oldPassword'><br>
-        Room name: <input type='text' name='newPassword'><br>
-        <input type='submit' name='add' value='Upvote' />
-    </form>
+    <div class="row">
+      <div class="col-lg-4  text-center  image-bar"></div>
+      <div class="col-lg-8 shadow form-bar" style="">   
+
+          <form action='{{ route('UserController.login') }}' method='POST' class="mb-4">
+            <img class='brand-logo mb-3' src='door_logo.png'>
+            <h3 class="mb-3">Login</h3>
+            {{ csrfField() }}
+
+            <div class='form-group mb-2'>
+              <label for='email'>Email address</label>
+              <input type='email' class='form-control' name='email' id='email' aria-describedby='emailHelp' placeholder='Enter email'>
+              @if(hasErrorFor('email'))        
+                  <div class="invalid-feedback" style="display:block">{{ getErrorFor('email') }}</div>
+              @endif
+            </div>
+            <div class='form-group mb-2'>
+              <label for='password'>Password</label>
+              <input type='password' class='form-control' name='password' id='password' placeholder='Password'>
+              @if(hasErrorFor('password'))
+                <span>
+                  <div class="invalid-feedback" style="display:block">{{ getErrorFor('password') }}</div>
+                </span>
+              @endif
+              <a class='forgot-password' href='{{ route('forgotPassword') }}'>Forgot password</a>
+            </div>
+            <button type='submit' class='btn btn-login mt-3'>Login</button>
+
+            <p class='mb-1 mt-3'>Don't have an account?</p>
+            <a class='btn btn-register text-center mb-2' href='{{ route('register') }}'>Register</a>
+          </form>
+      </div>
     </div>
-  </section>
 </body>
 </html>

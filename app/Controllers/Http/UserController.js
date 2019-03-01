@@ -149,6 +149,20 @@ class UserController {
 	}
 
 	/**
+	 * Render login page
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async loginRender ({ request, auth, view, response }) {
+		// present login to logged out users only
+		if (auth.user) {
+			return response.redirect('/');
+		} else {
+			return view.render('auth.login');
+		}
+	}
+
+	/**
 	 * Log a user in and redirect them to their respective landing page depending on the user type.
 	 *
 	 * @param {Object} Context The context object.
@@ -165,12 +179,15 @@ class UserController {
 		try {
 			await auth.attempt(user.email, password);
 			if (auth.user.role === 2) {
+				session.flash({
+					notification: 'You are logged in as an Employee user.'
+				});
 				return response.redirect('/booking');
 			} else {
 				return response.redirect('/');
 			}
 		} catch (error) {
-			session.flash({ loginError: 'These credentials do not work.' });
+			session.flash({ loginError: 'Invalid email/password' });
 			return response.redirect('/login');
 		}
 	}
@@ -180,24 +197,29 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async logout ({ auth, response }) {
+	async logout ({ auth, response, session }) {
 		await auth.logout();
-		return response.redirect('/');
+		session.flash({
+			notification: 'You have been logged out.'
+		});
+		return response.redirect('/login');
 	}
 
 	async show ({ auth, params, view, response }) {
 		const user = await User.find(Number(params.id));
 		var canEdit = 0;
 		var layoutType = '';
-		// if user is admin
+		// check if admin is viewing their own profile
 		if (auth.user.role === 1) {
 			layoutType = 'layouts/adminLayout';
 			canEdit = 1;
-			// check if user is viewing their own profile
+
+		// check if user is viewing their own profile
 		} else if (auth.user.id === Number(params.id) && auth.user.role === 2) {
 			layoutType = 'layouts/mainLayout';
 			canEdit = 1;
-			// check if user is viewing someone elses profile
+
+		// check if user is viewing someone elses profile
 		} else if (auth.user.id !== Number(params.id) && auth.user.role === 2) {
 			layoutType = 'layouts/mainLayout';
 			canEdit = 0;
@@ -215,7 +237,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async createPasswordResetRequest ({ request, response }) {
+	async createPasswordResetRequest ({ request, response, session }) {
 		const email = request.body.email;
 		const results = await User
 			.query()
@@ -245,6 +267,10 @@ class UserController {
 			await sendMail('Password Reset Request',
 				body, email, 'support@mail.cdhstudio.ca');
 		}
+
+		session.flash({
+			notification: `An email has been sent to ${email} with further instructions on how to reset your password.`
+		});
 
 		return response.redirect('/login');
 	}
@@ -277,7 +303,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async resetPassword ({ request, response }) {
+	async resetPassword ({ request, response, session }) {
 		console.log(request.body);
 		const newPassword = await Hash.make(request.body.newPassword);
 		const changedRow = await User
@@ -286,6 +312,10 @@ class UserController {
 			.update({ password: newPassword });
 
 		console.log(changedRow);
+
+		session.flash({
+			notification: 'Your password has been changed. Please use the new password to log in.'
+		});
 		return response.redirect('/login');
 	}
 
@@ -327,6 +357,23 @@ class UserController {
 
 		// return response.redirect('/');
 		// }
+	}
+
+	/**
+	 * Query all the users from the database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getAllUsers ({ auth, view, response }) {
+		const results = await User.all();
+		const users = results.toJSON();
+
+		// Sort the results by name
+		users.sort((a, b) => {
+			return (a.firstname > b.firstname) ? 1 : ((b.firstname > a.firstname) ? -1 : 0);
+		});
+
+		return view.render('adminDash.viewUsers', { users });
 	}
 }
 

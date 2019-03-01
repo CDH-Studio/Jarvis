@@ -1,107 +1,70 @@
-body {
-	font-weight: 300;
-	background-color: #001642;
-	padding:0px;
-}
-
-section {
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	max-width: 536px;
-	margin: auto;
-	position: relative;
-}
-
-section:before {
-	content: '';
-	position: absolute;
-	background: url('/pyramid.png') no-repeat;
-	background-size: 100%;
-	width: 100%;
-	height: 402px;
-	z-index: -1;
-}
-
-hr{
-	border-top: 1px solid rgba(255, 255, 255, 0.3);
-	width:90%;
-	margin:25px auto;
-}
-
-.card-header{
-	background-color: rgba(255, 255, 255, 0);
-	border:none;
-	padding:0px;
-}
-
-.login-box{
-	margin-top: 60px;
-	background-color: rgba(255, 255, 255, 0.25);
-	padding: 20px 20px;
-}
-
+/*********new login****************/
 .btn-login{
-	margin-top: 20px;
-	background-color: rgba(255, 255, 255, 0.4);
+	border: solid 1px #04163F;
 	width:100%;
-	color:rgba(255, 255, 255, 0.8);
-	height:40px;
-	font-size: 15px;
+	border-radius: 20px;
 }
 
-.login-box .brand-logo{
-	width:80%;
-	margin:20px;
+.btn-login:hover{
+background-color: #eff2f7;
 }
-
-.ms-signin{
+.btn-register {
+	border: solid 1px #04163F;
 	width:100%;
-	padding:0px;
-	background-color: #fff;
-	border-color: #fff;
-	height:50px;
-	text-align: left;
-	line-height: 50px !important;
-	color: #5e5e5e !important;
-	font-size: 18px
+	border-radius: 20px;
+	background-color: #04163f;
+	color:white;
+}
+.btn-register:hover{
+	background-color: #313131;
+	color:white;
+}
+html {
+	height: 100%;
+}
+body{
+	height:100%;
+	background-color: #F8F8F8;
+	overflow: hidden;
+}
+body .row{
+	height:100%;
+}
+
+.container-flex{
+	height:100%;
+}
+.image-bar{
+	background:linear-gradient(rgba(4, 22, 63, 0.8), rgba(4, 22, 63, 0.8), rgba(4, 22, 63, 0.7)), url("../images/login.jpg") no-repeat center top;background-size:cover;  height:100%;
+	background:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)), url("../images/login.jpg") no-repeat center top;background-size:cover;  height:100%;
+}
+
+.form-bar form{
+	margin-top:150px;
+	width:45%;
+	min-width: 275px;
+	max-width: 500px;
+	margin-right: auto; 
+	margin-left:auto;
+}
+
+.form-bar form img{
+	width:45%;
+	background-color:#04163F;
+	padding:15px 15px;
+}
+
+@media(max-width:768px){
+	.image-bar{
+		display:none;
+	}
+
+	.form-bar form{
+		margin-top:50px;
+	}
 
 }
 
-.register{
-	width:100%;
-	padding:0px;
-	background-color: #12ACF3;
-	border-color: #12ACF3;
-	height:50px;
-	text-align: left;
-	line-height: 50px;
-	color: #fff;
-	font-size: 18px
-
-}
 
 
-#particles-js{ 
-	position:absolute; 
-	width: 100%; 
-	height: 100%;  
-	background-repeat: no-repeat; 
-	background-size: 20%;
-	background-position: 50% 50%; 
-}
-
-a.forgot-password {
-	font-weight: 500;
-	font-family: inherit;
-	color: #fff;
-}
-
-p.forgot-password {
-	font-weight: 500;
-	font-family: inherit;
-	color: #fff;
-}
 

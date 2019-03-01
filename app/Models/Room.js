@@ -6,7 +6,9 @@
 const Model = use('Model');
 
 class Room extends Model {
-
+	bookings () {
+		return this.hasMany('App/Models/Booking');
+	}
 }
 
 module.exports = Room;

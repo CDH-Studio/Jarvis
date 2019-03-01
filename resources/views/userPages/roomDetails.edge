@@ -1,151 +1,277 @@
-@layout('layouts.mainLayout')
+@layout(layoutType)
 
 @section('title')
     Details
 @endsection
-
 {{--  Manage bookings page content  --}}
 @section('content')
-    @section('extracss')
-        {{ style('css/mystyle') }}
-    @endsection
+
     @component('components.generalModal', id='mapModal', title='Map')
         @slot('body')
             <img class='room-details-image' src='/images/temp_floor_map.png'>
         @endslot
     @endcomponent
-        {{--  Loading page header  --}}
-        @!component('components.pageHeader', title=room.title)
-        {{--  Actual page content  --}}
-        <div class='row'>
-            <div class='col card room-details-card border-primary shadow'>
-                <div class='card-body'>
-                    <div class='row'>
-                        {{--  Room Image and Map  --}}
-                        <div class='col-sm-12 col-md-5 col-lg-4'>
-                            <img class='room-details-image' src='/images/meeting.jpeg'>
-                            <a href='' style='display:block; text-align:center;'  data-toggle='modal' data-target='#mapModal'>
-                                <i class='fas fa-external-link-alt'></i>
-                                View Map
-                            </a>
-                        </div>  
-                        {{--  Room Details  --}}
-                        <div class='col-sm-12 col-md-7 col-lg-8'>
-                            {{--  Table contents  --}}
-                            <div class='row'>
-                                <div class='table-responsive'>
-                                    <table class='table table-hover'>  
-                                        <tbody> 
+
+    {{ csrfField() }}
+    {{--  Loading page header  --}}
+
+    {{--  Actual page content  --}}
+    <div class='row justify-content-center'>
+        <div class='col room-details-card shadow' style='margin-top:10px;'>
+            <div class='room-details-card-title'>
+                <div class='row'>
+                <div class='col'>
+                    <h3>{{room.name}}</h3>
+                </div>
+                <div class='col text-right'>
+                    @if(isAdmin)
+                        <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit</button>
+                    @else
+                        {{--  <button type='button' class='btn btn-primary' data-dismiss='modal' data-toggle='modal' data-target='#successModal'>Book Room</button>  --}}
+                    @endif
+                </div>
+                </div>
+            </div>
+            <div class='card-body'>
+                <div class='row'>
+                    {{--  Room Image and Map  --}}
+                    <div class='col-sm-12 col-md-5 col-lg-4'>
+                        <img class='room-details-image' src='/images/meeting.jpeg'>
+                        <a class='link-color' href='' style='display:block; text-align:center;'  data-toggle='modal' data-target='#mapModal'>
+                            <i class='fas fa-external-link-alt'></i>
+                            View Map
+                        </a>
+                    </div>  
+                    {{--  Room Details  --}}
+                    <div class='col-sm-12 col-md-7 col-lg-8'>
+                        {{--  Table contents  --}}
+                        <div class='row' style='padding-right:15px;'>
+                            <div class='table-responsive'>
+                                <table class='table table-hover'>  
+                                    <tbody> 
+                                        {{--  If the room is deactivated then display info  --}}
+                                        @if(room.state == 0)
                                             <tr>
-                                                <th scope='row'>Phone Number</th>
-                                                <td>{{ room.phoneNumber }}</td>
+                                                <th scope='row'>Room Status</th>
+                                                <td class='spec-warning'><i class='fa fa-times-circle'></i> DEACTIVE</td>
                                             </tr>
-                                            <tr>
-                                                <th scope='row'>Table Seats</th>
-                                                <td>{{ room.seats }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th scope='row'>Max Capacity</th>
-                                                <td>{{ room.maxCapacity }}</td>
-                                            </tr> 
-                                            <tr>
-                                                <th scope='row'>Equipment</th>
-                                                <td>{{ equipment }}</td>
-                                            </tr>             
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div> 
-                            {{--  Checkboxes  --}}
-                            <div class='row'>
-                                <div class='col room-details-spec'>
-                                    <ul>
-                                        <li class='spec-yes' style='padding-left:0px;'><i class='fas fa-check-circle'></i><span> Projector</span></li>
-                                        <li class='spec-no'><i class='fas fa-times-circle'></i><span> Flip Chart</span></li>
-                                        <li class='spec-no'><i class='fa fa-times-circle'></i><span> Whiteboard</span></li>
-                                        <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio Conf.</span></li>
-                                        <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video Conf.</span></li>
-                                        <li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
-                                        <li class='spec-no' style='padding-right:0px;'><i class='fa fa-times-circle'></i><span> Surface</span></li>
-                                    </ul>
-                                </div>
-                            </div>                 
+                                        @endif
+                                        <tr>
+                                            <th scope='row'>Full Name</th>
+                                            <td>{{ room.fullName }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope='row'>Floor</th>
+                                            <td>{{ room.floor }}  {{ room.tower }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope='row'>Phone Number</th>
+                                            <td>{{ room.telephone }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope='row'>Table Seats</th>
+                                            <td>{{ room.seats }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope='row'>Max Capacity</th>
+                                            <td>{{ room.capacity }}</td>
+                                        </tr> 
+                                        <tr>
+                                            <th scope='row'>Equipment</th>
+                                            <td>{{ room.extraEquipment }}</td>
+                                        </tr>     
+                                        <tr>
+                                            <th scope='row'>Comments</th>
+                                            <td>{{ room.comment }}</td>
+                                        </tr>         
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                 
+                    </div>
+                </div>
+                {{--  Checkboxes  --}}
+                <div class='row'>
+                    <div class='col room-details-spec'>
+                        <ul>
+                            @if(room.projector == 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Projector</span></li>
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Projector</span></li>
+                            @endif
+                            @if(room.flipchart == 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Flip Chart</span></li>
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Flip Chart</span></li>
+                            @endif
+                            @if(room.whiteboard == 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Whiteboard</span></li>
+                            @endif
+                            @if(room.audioConference == 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio Conf.</span></li>
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Audio Conf.</span></li>
+                            @endif
+                            @if(room.videoConference == 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video Conf.</span></li> 
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Video Conf.</span></li>
+                            @endif
+                            @if(room.pc == 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> PC</span></li>
+                            @endif
+                            @if(room.surfaceHub == 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Surface Hub</span></li>
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Surface Hub</span></li>
+                            @endif
+                        </ul>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+    {{--  Only show to non-admin users  --}}
+    @if(!isAdmin)
+        <form action='{{ route('confirmBooking') }}' method='POST'>
+            {{ csrfField() }}
+            <input type='hidden' name='room' value={{ room.id }} /> 
+            {{--  Body content  --}}
+            <div class='body' style='margin-top:15px;'>
+                <div class='row'>
+                    <div class='col-9'>
+                        {{--  Table that displays booking information  --}}
+                        <div class='table-responsive'>
+                            <table class='table table-hover'>  
+                                <tbody>
+                                    <tr>
+                                        <th class='confirmation-modal-text' scope='row'>*Meeting Name</th>
+                                        <td class='confirmation-modal-column'>
+                                            @if(hasErrorFor('meeting'))
+                                                <input type='text' name='meeting' class='form-control confirmation-form is-invalid' placeholder='Please enter booking name' value='{{ old('meeting', '') }}'/>
+                                                <div class="invalid-feedback">{{ getErrorFor('meeting')}}</div>
+                                            @else
+                                                <input type='text' name='meeting' class='form-control confirmation-form' placeholder='Please enter booking name' value='{{ old('meeting', '') }}'/>
+                                            @endif
+                                        </td>
+                                    </tr> 
+                                    <tr>
+                                        <th class='confirmation-modal-text' scope='row'>*Date</th>
+                                        <td class='confirmation-modal-column'>
+                                            @if(hasErrorFor('date'))
+                                                <input class='form-control confirmation-form is-invalid' type='date' name='date' value='{{form.date}}' id='date'>
+                                                <div class="invalid-feedback">{{ getErrorFor('date')}}</div>
+                                            @else
+                                                <input class='form-control confirmation-form' type='date' name='date' value='{{form.date}}' id='date'>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class='confirmation-modal-text' scope='row'>*From</th>
+                                        <td class='confirmation-modal-column'>
+                                            @if(hasErrorFor('from'))
+                                                <input class='form-control confirmation-form is-invalid' type='time' name='from' value='{{form.from}}' id='from'> 
+                                                <div class="invalid-feedback">{{ getErrorFor('from')}}</div>
+                                            @else
+                                                <input class='form-control confirmation-form' type='time' name='from' value='{{form.from}}' id='from'>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class='confirmation-modal-text' scope='row'>*To</th>
+                                        <td class='confirmation-modal-column'>
+                                            @if(hasErrorFor('to'))
+                                                <input class='form-control confirmation-form is-invalid' type='time' name='to' value='{{form.to}}' id='to'>
+                                                <div class="invalid-feedback">{{ getErrorFor('to')}}</div>
+                                            @else
+                                                <input class='form-control confirmation-form' type='time' name='to' value='{{form.to}}' id='to'>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class='confirmation-modal-text confirmation-form' scope='row'>Recurring</th>
+                                        <td class='confirmation-modal-column'>
+                                            <select class='form-control confirmation-form col' id='recurringSelect' name='recurringSelect' onchange='showRecurring()'>
+                                                <option value='0' {{ old('recurringSelect') == 0 ? 'selected' : '' }}>No</option>
+                                                <option value='1' {{ old('recurringSelect') == 1 ? 'selected' : '' }}>Yes</option>
+                                            </select>
+                                            {{--  NOTE: This only shows when the user selects 'Yes' in the Reccuring Dropdown  --}}
+                                            <div id='recurringInfo' style='display:none'>
+                                                @if(hasErrorFor('interval'))
+                                                    <select class='form-control confirmation-form is-invalid' name='interval' style='margin-top: 20px;'>
+                                                        <option value='0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
+                                                        <option value='daily' {{ old('interval') == 'daily' ? 'selected' : '' }}>Daily</option>
+                                                        <option value='weekly' {{ old('interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
+                                                        <option value='biWeekly' {{ old('interval') == 'biWeekly' ? 'selected' : '' }}>Bi-Weekly</option>
+                                                        <option value='monthly' {{ old('interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
+                                                        <option value='yearly' {{ old('interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
+                                                    </select>
+                                                    <div class="invalid-feedback">{{ getErrorFor('interval')}}</div>
+                                                @else
+                                                    <select class='form-control confirmation-form' name='interval' style='margin-top: 20px;'>
+                                                        <option value= '0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
+                                                        <option value='daily' {{ old('interval') == 'daily' ? 'selected' : '' }}>Daily</option>
+                                                        <option value='weekly' {{ old('interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
+                                                        <option value='biWeekly' {{ old('interval') == 'biWeekly' ? 'selected' : '' }}>Bi-Weekly</option>
+                                                        <option value='monthly' {{ old('interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
+                                                        <option value='yearly' {{ old('interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
+                                                    </select>
+                                                @endif
+                                                @if(hasErrorFor('numberOfTimes'))
+                                                    <select class='form-control confirmation-form is-invalid' name='numberOfTimes' style='margin-top: 20px;'>
+                                                        <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
+                                                        <option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
+                                                        <option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
+                                                        <option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
+                                                        <option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
+                                                    </select> 
+                                                    <div class="invalid-feedback">{{ getErrorFor('numberOfTimes')}}</div>
+                                                @else
+                                                    <select class='form-control confirmation-form' name='numberOfTimes' style='margin-top: 20px;'>
+                                                        <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
+                                                        <option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
+                                                        <option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
+                                                        <option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
+                                                        <option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
+                                                    </select> 
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr> 
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <form action='{{ route('confirmBooking') }}' method='POST'>
-                {{ csrfField() }}
-
-                <input type='hidden' name='room' value={{ room.title }} /> 
-                {{--  Body content  --}}
-                <div class='modal-body'>
-                    {{--  Table that displays booking information  --}}
-                    <div class='table-responsive'>
-                        <table class='table table-hover'>  
-                            <tbody>
-                                <tr>
-                                    <th class='confirmation-modal-text' scope='row'>Meeting Name</th>
-                                    <td class='confirmation-modal-column'><input type='text' name='meeting' class='form-control confirmation-form' id='example-text-input' placeholder='Please enter booking name'/></td>
-                                </tr> 
-                                <tr>
-                                    <th class='confirmation-modal-text' scope='row'>Date</th>
-                                    <td class='confirmation-modal-column'><input class='form-control confirmation-form' type='date' name='date' value='2019-02-19' id='example-date-input'></td>
-                                </tr>
-                                <tr>
-                                    <th class='confirmation-modal-text' scope='row'>From</th>
-                                    <td class='confirmation-modal-column'><input class='form-control confirmation-form' type='time' name='from' value='13:45:00' id='example-time-input'></td>
-                                </tr>
-                                <tr>
-                                    <th class='confirmation-modal-text' scope='row'>To</th>
-                                    <td class='confirmation-modal-column'><input class='form-control confirmation-form' type='time' name='to' value='14:45:00' id='example-time-input'></td>
-                                </tr>
-                                <tr>
-                                    <th class='confirmation-modal-text confirmation-form' scope='row'>Reccuring</th>
-                                    <td class='confirmation-modal-column'>
-                                        <select class='form-control' id='reccuringSelect' name='reccuringSelect'>
-                                            <option>No</option>
-                                            <option>Yes</option>
-                                        </select>
-                                    </td>
-                                </tr> 
-                            </tbody>
-                        </table>
-                    </div>
-                
-                    {{--  Recurring options ##### should be in if statement if recurring is changed to 'Yes'  --}}
-                    <div class='wrapper-center'>
-                        <div class='row'>
-                            <div class='col-6' style='padding-left:26px; padding-right:4px;'>
-                                <select class='form-control confirmation-form' id='exampleSelect'>
-                                    <option>Daily</option>
-                                    <option>Weekly</option>
-                                    <option>Bi-Weekly</option>
-                                    <option>Monthly</option>
-                                    <option>Yearly</option>
-                                </select>
-                            </div>
-                            <div class='col-6' style='padding-left:4px; padding-right:26px;'>
-                                <select class='form-control confirmation-form' id='exampleSelect'>
-                                    <option>2 Times</option>
-                                    <option>3 Times</option>
-                                    <option>4 Times</option>
-                                    <option>5 Times</option>
-                                </select>  
-                            </div>                        
-                        </div>
-                    </div>
-                    {{--  #### This doesn't work, need a fix  --}}
-                        @if(('reccuringSelect')=='Yes')
-                        Does Not work
-                    @endif
-                </div>
-                {{--  Footer buttons to cancel and book room  --}}
-                <div class='modal-footer'>
-                    <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                    <button type='submit' class='btn btn-primary'  {{-- data-dismiss='modal' data-toggle='modal' data-target='#successModal' --}}>Book Room</button>
-                </div>
-            </form>
+            {{--  Footer buttons to cancel and book room  --}}
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
+                <button type='submit' class='btn btn-primary'  {{-- data-dismiss='modal' data-toggle='modal' data-target='#successModal' --}}>Book Room</button>
+            </div>
+        </form>
+    @endif
+    {{--  Run this on load incase the page reloaded with field 'recurringSelect' set to YES --}}
+    <script>
+            var selection=document.getElementById("recurringSelect");
+            if (selection.value==='1'){
+                document.getElementById('recurringInfo').style.display='';
+            }
+    </script>
+    {{--  Show the recurring drop down if the user selects yes, otherwise hide it  --}}
+    <script>
+        function showRecurring(){
+            var selection=document.getElementById("recurringSelect");
+            if (selection.value==='1'){
+                document.getElementById('recurringInfo').style.display='';
+            }
+            else{
+                document.getElementById('recurringInfo').style.display='none';
+            }
+        }
+    </script>
 @endsection

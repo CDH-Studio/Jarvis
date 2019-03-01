@@ -12,7 +12,10 @@
 
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.1/css/all.css' integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous'>
 
-    {{ style('css/myStyle') }}
+    {{ style('css/user') }}
+    {{ style('css/vendor/animate') }}
+    {{ script('js/vendor/bootstrap-notify') }}
+    {{ script('js/vendor/bootstrap-notify.min') }}
 
     @!section('extracss')
 
@@ -33,8 +36,8 @@
             {{--  Header menu links (Book a room, Manage bookings)  --}}
             <ul class='navbar-nav'>
               <li class='nav-item dropdown'>
-              <a class='nav-link mr-2 user-nav-link hvr-underline-from-center' href='{{route('home')}}'>Book a Room <span className='sr-only'></span></a>
-                <a class='nav-link mr-2 user-nav-link hvr-underline-from-center' href='/manageBookings'>Manage Bookings <span className='sr-only'></span></a>
+              <a class='nav-link mr-2 user-nav-link hvr-underline-from-center' href='{{ route('home') }}'>Book a Room <span className='sr-only'></span></a>
+                <a class='nav-link mr-2 user-nav-link hvr-underline-from-center' href='{{ route('viewBookings') }}'>Manage Bookings <span className='sr-only'></span></a>
               </li>
             </ul>
             {{--  Header drop down for user settings, logout  --}}
@@ -43,7 +46,6 @@
                     <a class='nav-link user-nav-link dropdown-toggle' data-toggle='dropdown' href='#' id='user-drop'>{{auth.user.firstname}} {{auth.user.lastname}} <span class='caret'></span></a>
                     <div class='dropdown-menu' aria-labelledby='user-drop'>
                         <a class='dropdown-item' href='{{route('viewProfile',{id: auth.user.id})}}'>Profile</a>
-                        <a class='dropdown-item' href='#'>Activity Log</a>
                         <div class='dropdown-divider'></div>
                         <a class='dropdown-item' href='#' data-toggle='modal' data-target='#logoutModal'>Logout</a>
                     </div>
@@ -73,15 +75,17 @@
     </div>
 
     <div class='container'>
-    	@!section('content')
+      @!section('content')
     </div>
     <!-- Bootstrap core JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     {{script('js/vendor/popper.js')}}
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
     <!-- Core plugin JavaScript-->
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.compatibility.js'></script>
+
+    {{--  Mouseover Tooltip  --}}
+    <script> $(document).ready(function(){ $('[data-toggle="tooltip"]').tooltip(); });</script>
 
   </body>
 </html>

@@ -1,0 +1,260 @@
+/*  This file is for CSS changes that are used by both ADMIN and USER views */
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* General */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+.wrapper-center {
+    text-align: center;
+}
+
+.no-padding{
+    padding:0px;
+}
+
+.shadow{
+    box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2) !important;
+}
+
+.dropdown-item:hover{
+    background-color:#001642;
+}
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Colors */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+.bg-primary{
+    background-color: #001642 !important;
+}
+
+.bg-secondary{
+    background-color: #95a5a6 !important;
+}
+
+.bg-success{
+    background-color: #18bc9c !important;
+}
+
+.bg-danger{
+    background-color: #e74c3c !important;
+}
+
+.bg-warning{
+    background-color: #f39c12 !important;
+}
+
+.bg-info{
+    background-color: #3498db !important;
+}
+
+.bg-light{
+    background-color: #ecf0f1 !important;
+}
+.bg-dark{
+    background-color: #001642 !important;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Changing button colors */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+.btn-primary{
+    /* #0FACF3 old color */
+    border-style: none;
+    background-color: #223851;
+    box-shadow: 0 2px 6px 0 #00000033 !important;
+}
+
+.btn-primary:hover{
+    background-color: #152333;
+    position: relative; 
+    top: -1px;
+    box-shadow: 0 4px 8px 0 #00000033 !important;
+}
+
+.btn-secondary{
+    color: #223851;
+    border-style: none;
+    background-color: #eff2f7;
+    box-shadow: 0 2px 6px 0 #00000033 !important;
+}
+
+.btn-secondary:hover{
+    background-color:#dde3e9;
+    border-color: #dde3e9;
+    color: #223851;
+    position: relative; 
+    top: -1px;
+    box-shadow: 0 4px 8px 0 #00000033 !important;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Room card information */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.link-color{
+    color:rgb(18, 201, 164) !important;
+}
+
+.room-card{
+    border-radius: 2px;
+    box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2);
+    width: 95%;
+    margin: 0px auto 40px auto;
+    display:block;
+    text-decoration: none;
+    color:#202428;
+}
+
+.room-card:hover .room-card-body{
+    text-decoration: none;
+    background-color:#F8F8F8;
+    border-color: #F8F8F8;
+}
+
+
+.room-card:hover {
+    text-decoration: none;
+    color:#202428;
+    
+}
+
+.room-card:hover .room-card-title{
+    background-color: #001642 ;
+    color: #FFFFFF;
+}
+
+
+.room-card hr{
+    margin: 15px 0 5px 0;
+}
+
+.room-card-title{
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+    height: 50px;
+    background-color: #f7f7f7;
+    /* background-color: #3c5585;  OLD Color*/
+    color: #000000;
+    /* margin-top: 3px; */
+    margin-bottom: 0px;
+    vertical-align: center;
+    padding:0 15px;
+    line-height: 50px;
+}
+.room-card-title h4{
+    line-height: 50px;
+    margin-top: 3px;
+    margin-bottom: 0px;
+    vertical-align: center;
+}
+
+.room-card-body{
+    border-bottom-right-radius: 2px;
+    border-bottom-left-radius: 2px;
+    padding:15px 15px;
+}
+
+.room-card-photo img{
+    max-width:100%;
+    padding-bottom: 15px;
+}
+
+.room-card-info{
+    padding:0px 15px 0px 15px;
+}
+
+.room-card-info ul{
+    list-style: none;
+    margin:0px;
+    padding:0px;
+}
+
+/* used for spacing the list items */
+.space-evenly { 
+    height: 100% !important;
+    list-style: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+}
+.room-card-spec{
+    width:100%;
+    display:inline-block;
+    padding-right:0px;
+}
+
+.room-card-spec ul{
+    list-style: none;
+    margin:0px;
+    padding:0px;
+    display:inline;
+}
+
+.room-card-spec li{
+    display:inline-block;
+    width:110px;
+}
+.spec-yes{
+    color:rgb(18, 201, 164);
+}
+.spec-no{
+    color:#a1a1a1;
+}
+.spec-warning{
+    color:#e04141;
+}
+.flex-fixed-width-item {
+    flex: 0 0 200px;
+}
+
+.checkbox-content{
+    padding: 0px 0px 15px 15px;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Room Details Page */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+.room-details-card{
+    padding:0px !important;
+}
+
+.room-details-card-title{
+    border-top-right-radius: 2px;
+    border-top-left-radius: 2px;
+    height: 55px;
+    background-color: #f1f1f1;
+    color: #000000;
+    margin-bottom: 0px;
+    vertical-align: center;
+    padding:0 15px;
+    line-height: 50px;
+}
+
+.room-details-card-title h3{
+    line-height: 55px;
+    margin-bottom: 0px;
+    vertical-align: center;
+}
+.room-details-card-title button{
+    margin-bottom: 0px;
+    vertical-align: center;
+}
+.room-details-spec{
+    text-align:center; 
+    padding-top:0px;
+}
+
+.room-details-spec li{
+    display:inline-block;
+    padding-left:10px;
+    padding-right:10px;
+}
+
+.room-details-spec ul{
+    text-align:center; 
+    padding-left:0px;
+    margin:0px;
+}
+
+.room-details-image{
+    width:100%;
+}
+

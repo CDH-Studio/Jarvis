@@ -1,6 +1,10 @@
 'use strict';
 
-class resetPassword {
+class ResetPassword {
+	get validateAll () {
+		return true;
+	}
+
 	get rules () {
 		return {
 			'newPassword': 'required',
@@ -21,4 +25,4 @@ class resetPassword {
 	}
 }
 
-module.exports = resetPassword;
+module.exports = ResetPassword;

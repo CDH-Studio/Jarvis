@@ -2,50 +2,93 @@
 @!component('components.roomConfirmationModal', id='roomModal', title=title)
 
 {{--  Routing to rooom details when clicked  --}}
-<form action='{{ route('goToDetails') }}' method='POST'>
+<form action='{{ route('showRoom', {id}) }}' method='GET'>
     <input type='hidden' name='_csrf' value={{ token }} />
-    <input type='hidden' name='title' value={{ title }} /> 
-    <input type='hidden' name='floor' value={{ floor }} /> 
-    <input type='hidden' name='seats' value={{ seats }} /> 
-    <input type='hidden' name='maxCapacity' value={{ maxCapacity }} /> 
-    <input type='hidden' name='phoneNumber' value={{ phoneNumber }} />
-    <input type='hidden' name='extraEquipment' value={{ extraEquipment }} />
-
+    <input type='hidden' name='date' value={{ form.date }} />
+    <input type='hidden' name='from' value={{ form.from }} />
+    <input type='hidden' name='to' value={{ form.to }} />
     {{--  Room card  --}}
-    <a class='room-card' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
+    <a class='room-card shadow ' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
         {{--  Title  --}}
         <div class='room-card-title'>
-            <h4>{{ title }}</h4>
+            <div class='row'>
+                <div class='col'>
+                    <h4>{{ title }} </h4>
+                </div>
+                <div class='col text-right'>
+                    <i class="fas fa-plus"></i>
+                </div>  
+            </div>
+
         </div>
-        <div class='room-card-body shadow'>
+        <div class='room-card-body '>
             <div class='row'>
                 {{--  Room Picture  --}}
                 <div href='../' class='room-card-photo wrapper-center col-sm-5'>
                     <img src='/images/meeting.jpeg'>
                 </div>
                 {{--  Room information  --}}
-                <div class='room-card-info col-5' style='margin-top:5px;'>
-                    <ul> 
-                        <li><b>Floor:</b><span> {{ floor }}</span></li>
-                        <li><b>Seats:</b><span> {{ seats }}</span></li>
-                        <li><b>Max Capacity:</b><span> {{ maxCapacity }}</span></li>
-                        <li><b>Phone: </b><span>{{ phoneNumber }}</li>
-                        <li><b>Other Equipment: </b><span> {{ extraEquipment }}</span></li>
-                    </ul>
+                <div class='checkbox-content col row'>
+                    <div class='room-card-spec col'>
+                        <ul class='space-evenly'>
+                            @if(projector === 1)
+                                <li class='spec-yes'><i class='fas fa-check-circle'></i><span> Projector</span></li>
+                            @else
+                                <li class='spec-no'><i class='fas fa-times-circle'></i><span> Projector</span></li>
+                            @endif
+                            @if(flipChart === 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Flip Chart</span></li>
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Flip Chart</span></li>
+                            @endif
+                            @if(whiteBoard === 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Whiteboard</span></li>
+                            @endif
+                            @if(audioConference === 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio Conf.</span></li>
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Audio Conf.</span></li>
+                            @endif
+                        </ul>
+                    </div>
+                    <div class='room-card-spec col'>
+                        <ul class='space-evenly'>
+                            @if(videoConference === 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video Conf.</span></li> 
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Video Conf.</span></li>
+                            @endif
+                            @if(pc === 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> PC</span></li>
+                            @endif
+                            @if(surfaceHub === 1)
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Surface Hub</span></li>
+                            @else
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Surface Hub</span></li>
+                            @endif
+                            {{--  <li><span class='link-color'>More info...</span></li>  --}}
+                            <li class='spec-no' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Empty Check</span></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            <hr>
+            
             {{--  Checkboxes  --}}
-            <div class='room-card-spec col-12'>
-                <ul>
-                    <li class='spec-yes'><i class='fas fa-check-circle'></i><span> Projector</span></li>
-                    <li class='spec-no'><i class='fas fa-times-circle'></i><span> Flip Chart</span></li>
-                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Whiteboard</span></li>
-                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio Conf.</span></li>
-                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video Conf.</span></li>
-                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
-                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Surface</span></li>
-                </ul>
+            <hr style='margin-top:0px;'>
+            <div class='room-card-info row wrapper-center'>
+                <div class='col'>
+                    <b>Location:</b><span>  {{ floor }}-{{ tower }} </span>
+                </div>
+                <div class='col'>
+                    <b>Seats:</b><span> {{ seats }}</span>
+                </div>
+                <div class='col'>
+                    <b>Capacity:</b><span> {{ maxCapacity }}</span>
+                </div>
             </div>
         </div>
     </a>

@@ -1,3 +1,5 @@
+/* This file is for USER view specific changes */
+@import url('shared.css');
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* General */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -7,13 +9,26 @@ body {
     font-family: 'Lato', sans-serif;
 }
 
-.wrapper-center {
-    text-align: center;
+/* Tooltip coloor changes */
+.tooltip-inner {
+    background-color: rgb(115, 146, 187);
 }
 
+.tooltip.bs-tooltip-auto[x-placement^=left] .arrow::before, .tooltip.bs-tooltip-left .arrow::before {
+    border-left-color: rgb(115, 146, 187);
+}
 
-.wrapper-center{
-    text-align: center;
+.tooltip.bs-tooltip-auto[x-placement^=bottom] .arrow::before, .tooltip.bs-tooltip-bottom .arrow::before {
+    border-bottom-color:  rgb(115, 146, 187);
+}
+
+.tooltip.bs-tooltip-auto[x-placement^=right] .arrow::before, .tooltip.bs-tooltip-right .arrow::before {
+
+    border-right-color:  rgb(115, 146, 187);
+}
+
+.tooltip.bs-tooltip-auto[x-placement^=top] .arrow::before, .tooltip.bs-tooltip-top .arrow::before {
+    border-top-color:  rgb(115, 146, 187);
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -24,6 +39,9 @@ body {
     background-color: #001642 !important;
 }
 
+.navbar-toggler{
+    border-style: none;
+}
 .navbar-brand{
 	padding:0px 0px 7px 0;
 }
@@ -47,29 +65,7 @@ body {
     padding-bottom: 10px;
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++*/
-/* Changing  button colors */
-/*+++++++++++++++++++++++++++++++++++++++++++*/
-.btn-primary{
-    border-color: #0facf3;
-    background-color: #0FACF3;
-}
 
-.btn-primary:hover{
-    background-color: #036A98;
-    border-color: #036A98;
-}
-
-.btn-outline-secondary{
-    color: #000000;
-    border-color: #000000;
-    background-color: #ffffff;
-}
-
-.btn-outline-secondary:hover{
-    background-color:#546A7B;
-    border-color: #546A7B;
-}
 
 .btn-primary:focus, .btn-primary.focus {
     -webkit-box-shadow: 0 0 0 0.2rem rgba(70, 151, 233, 0.5);
@@ -121,7 +117,7 @@ body {
     right: 0;
 }
 
-.user-nav-link:hover, .user-nav-link:visited, .user-nav-link:active{
+.user-nav-link:hover, .user-nav-link:visited, .user-nav-link:active, .nav-link{
     color: #FFFFFF !important;
 }
 
@@ -132,13 +128,13 @@ body {
 .dropdown-toggle{
     padding-right: 10px;
 }
-.dash-header{
+.page-title{
 	margin-top: 20px;
 	margin-bottom: 30px;
 	border-bottom: solid 2px #001642;
 }
 
-.dash-header .date{
+.page-title .date{
 	padding-top:8px;
 }
 
@@ -171,108 +167,6 @@ body {
     border-radius: 0.3rem;
 }
 
-
-/*+++++++++++++++++++++++++++++++++++++++++++*/
-/* Room card information */
-/*+++++++++++++++++++++++++++++++++++++++++++*/
-
-.room-card{
-    width: 95%;
-    margin: 0px auto 40px auto;
-    display:block;
-    text-decoration: none;
-    color:#202428;
-}
-
-.room-card:hover .room-card-body{
-    text-decoration: none;
-    background-color:#F8F8F8;
-}
-
-
-.room-card:hover {
-    text-decoration: none;
-    color:#202428;
-}
-
-
-.room-card:hover .room-card-title{
-    background-color: #001642;
-}
-
-
-.room-card hr{
-    margin: 15px 0 5px 0;
-}
-
-.room-card-title{
-    height: 50px;
-    background-color: #3c5585;
-    color: #ffffff;
-    margin-top: 3px;
-    margin-bottom: 0px;
-    vertical-align: center;
-    padding:0 15px;
-}
-.room-card-title h4{
-    line-height: 50px;
-    margin-top: 3px;
-    margin-bottom: 0px;
-    vertical-align: center;
-}
-
-.room-card-body{
-    background-color: #fff;
-    padding:15px 15px;
-}
-
-.room-card-photo img{
-    max-width:100%;
-}
-
-.room-card-info{
-    padding:0px;
-    padding-left: 15px;
-}
-
-.room-card-info ul{
-    list-style: none;
-    margin:0px;
-    padding:0px;
-}
-
-.room-card-spec{
-    width:100%;
-    display:inline-block;
-    padding:10px 10px 0 10px;
-}
-
-.room-card-spec ul{
-    list-style: none;
-    margin:0px;
-    padding:0px;
-    display:inline;
-}
-
-.room-card-spec li{
-    display:inline-block;
-    width:110px;
-}
-.spec-yes{
-    color:#17BC9B;
-}
-.spec-no{
-    color:#ef8b80;
-}
-
-.flex-fixed-width-item {
-    flex: 0 0 200px;
-}
-
-.page-title{
-    padding:40px 0px;
-}
-
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Room confirmation modal */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -297,29 +191,4 @@ body {
 
 .confirmation-form{
     max-width: 240px;
-}
-
-/*+++++++++++++++++++++++++++++++++++++++++++*/
-/* Room Details Page */
-/*+++++++++++++++++++++++++++++++++++++++++++*/
-
-.room-details-spec{
-    text-align:center; 
-    padding-top:0px;
-}
-
-.room-details-spec li{
-    display:inline-block;
-    padding-left:10px;
-    padding-right:10px;
-}
-
-.room-details-spec ul{
-    text-align:center; 
-    padding-left:0px;
-    margin:0px;
-}
-
-.room-details-image{
-    width:100%;
 }

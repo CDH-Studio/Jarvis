@@ -1,18 +1,45 @@
 @layout('layouts.mainLayout')
 
+@section('title')
+    Results
+@endsection
+
 {{--  Manage bookings page content  --}}
 @section('content')
     @section('extracss')
-        {{ style('css/mystyle') }}
+        {{ style('css/user') }}
     @endsection
     {{--  Loading page header  --}}
-    @!component('components.pageHeader', title='Results')
+    @component('components.pageHeader', title='Results')
+        @slot('body')
+        @endslot
+    @endcomponent
+    
     {{--  where result cards will be displayed --}}
     <div class='row'>
         @each(room in rooms)
             <div class='col-lg-6'>
                 {{ csrfField() }}
-                @!component('components.card', title=room.name, phoneNumber=room.telephone, seats=room.seats, maxCapacity=room.capacity, floor=room.location, extraEquipment=room.extraEquipment, token=csrfToken)
+                @!component('components.card',
+                    form=form,
+                    id=room.id,
+                    title=room.name,
+                    fullName=room.fullName,
+                    phoneNumber=room.telephone,
+                    seats=room.seats,
+                    maxCapacity=room.capacity,
+                    floor=room.floor,
+                    tower=room.tower,
+                    projector=room.projector,
+                    flipChart=room.flipchart,
+                    whiteBoard=room.whiteboard,
+                    audioConference=room.audioConference,
+                    videoConference=room.videoConference,
+                    pc=room.pc,
+                    surfaceHub=room.surfaceHub,
+                    extraEquipment=room.extraEquipment,
+                    comment=room.comment,
+                    token=csrfToken)
             </div>
         @endeach
     </div>

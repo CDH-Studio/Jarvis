@@ -1,11 +1,17 @@
 'use strict';
 
-class addRoom {
+class AddRoom {
+	get validateAll () {
+		return true;
+	}
+
 	get rules () {
 		return {
 			// validation rules
 			name: 'required|unique:rooms',
-			location: 'required',
+			fullName: 'required',
+			floor: 'required',
+			tower: 'required',
 			telephoneNumber: 'required',
 			tableSeats: 'required|integer',
 			maximumCapacity: 'required|integer'
@@ -19,7 +25,9 @@ class addRoom {
 		return {
 			'name.required': 'Woah now, Room Name is required.',
 			'name.unique': 'Wait a second, this Room Name already exists',
-			'location.required': 'Woah now, Location is required.',
+			'fullName.required': 'Woah now, the full name is required.',
+			'floor.required': 'Woah now, the floor number is required.',
+			'tower.required': 'Woah now, the tower location is required (West/East).',
 			'telephoneNumber.required': 'Woah now, Telephone Number is required.',
 			'tableSeats.required': 'Woah now, Table Seats is required.',
 			'tableSeats.integer': 'Woah now, Table Seats must be a number.',
@@ -36,4 +44,4 @@ class addRoom {
 	}
 }
 
-module.exports = addRoom;
+module.exports = AddRoom;
