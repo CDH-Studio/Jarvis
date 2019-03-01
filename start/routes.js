@@ -72,6 +72,9 @@ Route.post('/userResults', 'UserController.adminSearchUsers').as('userResults').
 //= ========================================================================
 // Bookings
 //= ========================================================================
+Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails'); // needs to be changed to get
+Route.get('/viewBookings', 'RoomController.viewBookings').as('viewBookings');
+Route.get('/cancelBooking/:id', 'RoomController.cancelBooking').as('cancelBooking');
 
 // Employee user pages
 Route.on('/booking').render('userPages/booking').as('booking');

@@ -5,10 +5,12 @@ export function notify ({
 	x = 10,
 	y = 10,
 	from = 'top',
-	align = 'right'
+	align = 'right',
+	url = ''
 } = {}) {
 	$.notify({
-		message: message
+		message: message,
+		url: url
 	}, {
 		type: type,
 		animate: {
@@ -16,8 +18,8 @@ export function notify ({
 			exit: 'animated fadeOutUp'
 		},
 		placement: {
-			from: 'top',
-			align: 'right'
+			from: from,
+			align: align
 		},
 		offset: {
 			x: x,

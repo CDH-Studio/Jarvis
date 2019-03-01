@@ -1,5 +1,6 @@
 'use strict';
 const Room = use('App/Models/Room');
+const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
@@ -391,7 +392,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async confirmBooking ({ request, response }) {
+	async confirmBooking ({ request, response, session, auth }) {
 		const { meeting, date, from, to, room } = request.only(['meeting', 'date', 'from', 'to', 'room']);
 		const results = await Room
 			.findBy('id', room);
@@ -429,10 +430,125 @@ class RoomController {
 		};
 
 		// Create the event
-		const createdEvent = this.createEvent(eventInfo, calendar);
+		const booking = new Booking();
+		booking.subject = meeting;
+		booking.status = 'Pending';
+		await auth.user.bookings().save(booking);
+		await results.bookings().save(booking);
 
-		if (createdEvent) {
-			return response.redirect('/booking');
+		this.createEvent(eventInfo, calendar, booking, auth.user, results);
+
+		session.flash({
+			notification: `Room ${name} has been booked. Please click here to view your bookings.`,
+			url: '/viewBookings'
+		});
+
+		return response.redirect('/booking');
+	}
+
+	/**
+	 * Create a list of all bookings under the current user and render a view for it.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async viewBookings ({ auth, view }) {
+		const results = (await auth.user.bookings().fetch()).toJSON();
+
+		const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+		async function asyncMap (arr, callback) {
+			let arr2 = [];
+
+			for (let i = 0; i < arr.length; i++) {
+				arr2.push(await callback(arr[i], i, arr));
+			}
+
+			return arr2;
+		}
+
+		let bookings = [];
+		const populateBookings = async () => {
+			bookings = await asyncMap(results, async (result) => {
+				const booking = {};
+
+				const from = new Date(result.from);
+				const to = new Date(result.to);
+				booking.subject = result.subject;
+				booking.status = result.status;
+				booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
+				booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+				booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
+				booking.roomId = result.room_id;
+				booking.id = result.id;
+
+				return booking;
+			});
+		};
+
+		await populateBookings();
+
+		return view.render('userPages.manageBookings', { bookings: bookings });
+	}
+
+	/**
+	 * Create a list of all bookings under the current user and render a view for it.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async cancelBooking ({ params, response }) {
+		const booking = await Booking.findBy('id', params.id);
+		const roomId = booking.toJSON().room_id;
+		const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
+		const eventId = booking.toJSON().event_id;
+
+		await this.deleteEvent(calendarId, eventId);
+		booking.status = 'Cancelled';
+		await booking.save();
+
+		return response.redirect('/viewBookings');
+	}
+
+	/**
+	 * Create an event on the specified room calendar.
+	 *
+	 * @param {String} eventInfo Information of the event.
+	 * @param {String} calendarId The id of the room calendar.
+	 * @param {Object} booking The Booking (Lucid) Model.
+	 * @param {Object} user The User (Lucid) Model.
+	 * @param {Object} room The Room (Lucid) Model.
+	 */
+	async createEvent (eventInfo, calendarId, booking, user, room) {
+		const accessToken = await getAccessToken();
+
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const newEvent = await client
+					.api(`/me/calendars/${calendarId}/events`)
+					.post(eventInfo);
+
+				if (newEvent) {
+					booking.from = newEvent.start.dateTime;
+					booking.to = newEvent.end.dateTime;
+					booking.event_id = newEvent.id;
+					booking.status = 'Approved';
+					await user.bookings().save(booking);
+					await room.bookings().save(booking);
+
+					return newEvent;
+				}
+			} catch (err) {
+				console.log(err);
+				booking.status = 'Failed';
+				await user.bookings().save(booking);
+				await room.bookings().save(booking);
+			}
 		}
 	}
 
@@ -459,6 +575,32 @@ class RoomController {
 					.get();
 
 				return events;
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	}
+
+	/**
+	 * Delete an event from the room calendar.
+	 *
+	 * @param {String} calendarId The id of the room calendar.
+	 * @param {String} eventId The id of the event to delete.
+	 */
+	async deleteEvent (calendarId, eventId) {
+		const accessToken = await getAccessToken();
+
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				await client
+					.api(`/me/calendars/${calendarId}/events/${eventId}`)
+					.delete();
 			} catch (err) {
 				console.log(err);
 			}
@@ -537,34 +679,6 @@ class RoomController {
 					.get();
 
 				return calendarView;
-			} catch (err) {
-				console.log(err);
-			}
-		}
-	}
-
-	/**
-	 * Create an event on the specified room calendar.
-	 *
-	 * @param {*} eventInfo Information of the event.
-	 * @param {*} calendarId The id of the room calendar.
-	 */
-	async createEvent (eventInfo, calendarId) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const newEvent = await client
-					.api(`/me/calendars/${calendarId}/events`)
-					.post(eventInfo);
-
-				return newEvent;
 			} catch (err) {
 				console.log(err);
 			}
