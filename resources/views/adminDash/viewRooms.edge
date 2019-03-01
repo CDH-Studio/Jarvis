@@ -1,5 +1,9 @@
 @layout('layouts.adminLayout')
 
+@section('title')
+View Rooms
+@endsection
+
 @section('extracss')
 <link href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css' rel='stylesheet'>
 @endsection
@@ -13,33 +17,62 @@
             <div>There are currently no rooms in the database. To add a room, click <a href='{{ route('addRoom')}}'>here</a></div>
         @else
             {{--  All Rooms button  --}}
-            <div class='table-responsive'>
+
+            <div class='row'> 
+                <div class="col card text-white bg-primary mr-3 mb-3" style="max-width: 20rem;">
+                    <div class="card-header">Number of Rooms</div>
+                    <div class="card-body">
+                        <h4 class="card-title">{{ stats['total'] }}</h4>
+                    </div>
+                </div>
+
+                <div class="col card text-white bg-success mr-3 mb-3" style="max-width: 20rem;">
+                    <div class="card-header">Active Rooms</div>
+                    <div class="card-body">
+                        <h4 class="card-title">{{ stats['active'] }}</h4>
+                    </div>
+                </div>
+                <div class="col card text-white bg-danger mr-3 mb-3" style="max-width: 20rem;">
+                    <div class="card-header">Deactive Rooms</div>
+						<div class="card-body">
+						<h4 class="card-title">{{ stats['deactive'] }}</h4>
+                    </div>
+                </div>
+                <div class="col card text-white bg-warning mr-3 mb-3" style="max-width: 20rem;">
+                    <div class="card-header">Maintenance</div>
+                    <div class="card-body">
+					<h4 class="card-title">{{ stats['maintenance'] }}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class='table table-responsive'>
                 <table id='roomsTable' class='table table-hover' style='width:100%;'>
                     <thead class='thead-dark'>
                         <tr>
-                            <th scope='col' style='width:14%'>Name</th>
-                            <th scope='col' style='width:14%'>Full Name</th>
-                            <th scope='col' style='width:14%'>Phone Number</th>
-                            <th scope='col' style='width:14%'>Floor</th>
-                            <th scope='col' style='width:14%'>Tower</th>
-                            <th scope='col' style='width:14%'>Maximum Capacity</th>
-                            <th scope='col' style='width:14%'>State</th>
+                            <th scope='col' class='text-center' style='width:10%'>Name</th>
+                            <th scope='col' class='text-center' style='width:25%'>Full Name</th>
+                            <th scope='col' class='text-center' style='width:15%'>Phone Number</th>
+                            <th scope='col' class='text-center' style='width:10%'>Floor</th>
+                            <th scope='col' class='text-center' style='width:10%'>Tower</th>
+                            <th scope='col' class='text-center' style='width:10%'>Capacity</th>
+                            <th scope='col' class='text-center' style='width:15%'>State</th>
                         </tr>
                     </thead>
                     {{--  Loops through the rooms array and displays every room's content  --}}
                     <tbody>
                         @each(room in rooms) 
                         <tr class='table-light' id='roomRow' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
-                            <td>{{ room.name }}</td>
-                            <td>{{ room.fullName }}</td>
-                            <td>{{ room.telephone }}</td>
-                            <td>{{ room.floor }}</td>
-                            <td>{{ room.tower }} </td>
-                            <td>{{ room.capacity }}</td>
+                            <td class='text-center'>{{ room.name }}</td>
+                            <td class='text-center'>{{ room.fullName }}</td>
+                            <td class='text-center'>{{ room.telephone }}</td>
+                            <td class='text-center'>{{ room.floor }}</td>
+                            <td class='text-center'>{{ room.tower }} </td>
+                            <td class='text-center'>{{ room.capacity }}</td>
                             @if(room.state == 1)
-                                <td class='td-{{ room.state }}'>Active</td>
+                                <td class='text-center td-{{ room.state }}'>Active</td>
                             @else
-                                <td class='td-{{ room.state }}'>Deactive</td>
+                                <td class='text-center td-{{ room.state }}'>Deactive</td>
                             @endif 
                         </tr>
                         @endeach
@@ -54,6 +87,7 @@
 {{--  Deals with the search functionality of the table above- searches all fields   --}}
 @section('extrajs') 
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script>$(document).ready(function() {
             $('#roomsTable').DataTable( {
                 "paging":   false,

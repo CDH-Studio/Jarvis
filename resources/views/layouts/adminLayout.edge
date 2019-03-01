@@ -7,8 +7,6 @@
     <meta name='description' content=''>
     <meta name='author' content=''>
 
-    @!section('extracss')
-
     <title>
       @!section('title')
     </title>
@@ -35,6 +33,8 @@
     {{ style('css/vendor/animate') }}
     {{ script('js/vendor/bootstrap-notify') }}
     {{ script('js/vendor/bootstrap-notify.min') }}
+
+    @!section('extracss')
 
   </head>
 
