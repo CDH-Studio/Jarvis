@@ -153,13 +153,11 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async loginRender ({ request, auth, view, response}) {
-
-		//present login to logged out users only
-		if(auth.user){
+	async loginRender ({ request, auth, view, response }) {
+		// present login to logged out users only
+		if (auth.user) {
 			return response.redirect('/');
 		} else {
-			console.log("helloz");
 			return view.render('auth.login');
 		}
 	}

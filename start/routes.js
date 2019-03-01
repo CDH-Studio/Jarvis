@@ -33,7 +33,7 @@ Route.on('/admin/register').render('auth.signupAdmin').as('registerAdmin');
 Route.post('/admin/register', 'UserController.createAdmin').as('CreateAdmin').validator('CreateAdmin');
 
 // Logout
-Route.get('/login','UserController.loginRender').as('login');
+Route.get('/login', 'UserController.loginRender').as('login');
 Route.post('/login', 'UserController.login').validator('LoginUser');
 Route.get('/logout', 'UserController.logout').as('logout');
 
