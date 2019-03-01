@@ -173,7 +173,7 @@ class UserController {
 				return response.redirect('/');
 			}
 		} catch (error) {
-			session.flash({ loginError: 'These credentials do not work.' });
+			session.flash({ loginError: 'Invalid email/password' });
 			return response.redirect('/login');
 		}
 	}
