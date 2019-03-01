@@ -9,31 +9,31 @@ Jarvis - Login
 @endsection
 
 @section('content')
-    <div class="row">
-      <div class="col-md-4  text-center  image-bar d-none d-md-block"></div>
-      <div class="col-12 col-md-8 shadow form-bar" style=""> 
+    <div class='row'>
+      <div class='col-md-4  text-center  image-bar d-none d-md-block'></div>
+      <div class='col-12 col-md-8 shadow form-bar' style=''> 
 
-      	<form class="needs-validation" action='{{ route('UserController.create') }}' method='POST' style="margin-top:80px; margin-bottom:80px">
+      	<form class='needs-validation' action='{{ route('UserController.create') }}' method='POST' style='margin-top:80px; margin-bottom:80px'>
 
-            <h3 class="mb-3">Register</h3>
+            <h3 class='mb-3'>Register</h3>
 			{{ csrfField() }}
 
-			<div class="form-row">
-			    <div class="col-md-6">
+			<div class='form-row'>
+			    <div class='col-md-6'>
 			      	<div class='form-group mb-2'>
 						<label for='firstname'>First Name</label>
 						<input type='text' class='form-control' name='firstname' id='firstname' placeholder='John' value='{{ old('firstname', '') }}'>
 						@if(hasErrorFor('firstname'))
-							<div class="invalid-feedback d-block">{{ getErrorFor('firstname') }}</div>
+							<div class='invalid-feedback d-block'>{{ getErrorFor('firstname') }}</div>
 						@endif
 					</div>
 				</div>
-				<div class="col-md-6">
+				<div class='col-md-6'>
 				    <div class='form-group mb-2'>
 						<label for='lastname'>Last Name</label>
 						<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe' value='{{ old('lastname', '') }}'>
 						@if(hasErrorFor('lastname'))        
-		              		<div class="invalid-feedback d-block">{{ getErrorFor('lastname') }}</div>
+		              		<div class='invalid-feedback d-block'>{{ getErrorFor('lastname') }}</div>
 		          		@endif
 					</div>
 			    </div>
@@ -44,7 +44,7 @@ Jarvis - Login
 				<label for='email'>Email address</label>
 				<input type='email' class='form-control' name='email' id='email' placeholder='Enter email' value='{{ old('email', '') }}'>
 				@if(hasErrorFor('email'))        
-              		<div class="invalid-feedback d-block">{{ getErrorFor('email') }}</div>
+              		<div class='invalid-feedback d-block'>{{ getErrorFor('email') }}</div>
           		@endif
 			</div>
 				
@@ -53,7 +53,7 @@ Jarvis - Login
 				<label for='password'>Password</label>
 				<input type='password' class='form-control' name='password' id='password' placeholder='Password'>
 				@if(hasErrorFor('password'))
-					<div class="invalid-feedback d-block">{{ getErrorFor('password') }}</div>
+					<div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>
 				@endif
 			</div>
 
@@ -61,42 +61,42 @@ Jarvis - Login
               <label for='confirmPassword'>Confirm Password</label>
               <input type='password' class='form-control' name='confirmPassword' id='confirmPassword' placeholder='Password'>
                 @if(hasErrorFor('confirmPassword'))
-	              <div class="invalid-feedback d-block">{{ getErrorFor('confirmPassword') }}</div>
+	              <div class='invalid-feedback d-block'>{{ getErrorFor('confirmPassword') }}</div>
             	@endif
             </div>
 
 
-			<div class="form-row">
-                <div class="col">
+			<div class='form-row'>
+                <div class='col'>
                 	<div class='form-group mb-2'>
-                        <label for="tower">Tower</label>
-                        <select id="tower" name="tower" class="form-control">
+                        <label for='tower'>Tower</label>
+                        <select id='tower' name='tower' class='form-control'>
                             <option selected>Choose...</option>
-                            <option value="1">East</option>
-                            <option value="2">West</option>
+                            <option value='1'>East</option>
+                            <option value='2'>West</option>
                         </select>
                         @if(hasErrorFor('tower'))
-							<div class="invalid-feedback d-block">{{ getErrorFor('tower') }}</div>
+							<div class='invalid-feedback d-block'>{{ getErrorFor('tower') }}</div>
 						@endif
 					</div>
                 </div>
-                <div class="col">
+                <div class='col'>
                 	<div class='form-group mb-2'>
-                        <label for="floor">Floor</label>
-                        <select id="floor" name="floor" class="form-control">
+                        <label for='floor'>Floor</label>
+                        <select id='floor' name='floor' class='form-control'>
                             <option selected>Choose...</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
+                            <option value='7'>7</option>
+                            <option value='8'>8</option>
+                            <option value='9'>9</option>
                         </select>
                         @if(hasErrorFor('floor'))
-							<div class="invalid-feedback d-block">{{ getErrorFor('floor') }}</div>
+							<div class='invalid-feedback d-block'>{{ getErrorFor('floor') }}</div>
 						@endif
 					</div>
                 </div>
