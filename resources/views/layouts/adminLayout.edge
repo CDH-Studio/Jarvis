@@ -31,7 +31,7 @@
     {{--  Mouseover Tooltip  --}}
     <script> $(document).ready(function(){ $('[data-toggle="tooltip"]').tooltip(); });</script>
     <!-- Custom styles for this template-->
-    {{ style('css/defaultAdminDash') }}
+    {{ style('css/admin') }}
     {{ style('css/vendor/animate') }}
     {{ script('js/vendor/bootstrap-notify') }}
     {{ script('js/vendor/bootstrap-notify.min') }}
@@ -50,17 +50,16 @@
       <!-- Navbar -->
       <ul class='navbar-nav ml-auto'>
         <li class='nav-item dropdown no-arrow'>
-          <a class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+          <a id='header-nav-link' class='nav-link dropdown-toggle' href='#' id='userDropdown' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
             {{--  Displays user name  --}}
             {{auth.user.firstname}} {{auth.user.lastname}}
             <i class='fas fa-user-circle fa-fw ml-2'></i>
           </a>
           <div class='dropdown-menu dropdown-menu-right' aria-labelledby='userDropdown'>
-            <a class='dropdown-item' href='{{route('viewProfile',{id: auth.user.id})}}'>Profile</a>
-          <a class='dropdown-item' href='#'>Activity Log</a>
+            <a id='header-dropdown-item' class='dropdown-item' href='{{route('viewProfile',{id: auth.user.id})}}'>Profile</a>
             <div class='dropdown-divider'></div>
             {{--  Logout option that openss a modal to confirm  --}}
-            <a class='dropdown-item' href='#' data-toggle='modal' data-target='#logoutModal'>Logout</a>
+            <a id='header-dropdown-item' class='dropdown-item' href='#' data-toggle='modal' data-target='#logoutModal'>Logout</a>
           </div>
         </li>
       </ul>
@@ -77,8 +76,8 @@
           </a>
           {{--  Dropdown content  --}}
           <div id="side-nav-dropdown" class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <a class='dropdown-item' href='{{ route('addRoom') }}'>Add Room</a>
-            <a class='dropdown-item' href='{{ route('allRooms') }}'>View Rooms</a>
+            <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('addRoom') }}'>Add Room</a>
+            <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('allRooms') }}'>View Rooms</a>
           </div>
         </li>
         {{--  Users tab  --}}
@@ -89,7 +88,7 @@
           </a>
           {{--  Dropdown content  --}}
           <div id="side-nav-dropdown" class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <a class="dropdown-item" href='{{ route('allUsers') }}'>View Users</a>
+            <a id="side-nav-dropdown-item" class="dropdown-item" href='{{ route('allUsers') }}'>View Users</a>
           </div>
         </li>
         {{--  Bookings content  --}}
@@ -100,8 +99,8 @@
           </a>
           {{--  Dropdown content  --}}
           <div id="side-nav-dropdown" class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <a class="dropdown-item" href="login.html">All Bookings</a>
-            <a class="dropdown-item" href="register.html">Search Bookings</a>
+            <a id="side-nav-dropdown-item" class="dropdown-item" href="login.html">All Bookings</a>
+            <a id="side-nav-dropdown-item" class="dropdown-item" href="register.html">Search Bookings</a>
           </div>
         </li>
       </ul>

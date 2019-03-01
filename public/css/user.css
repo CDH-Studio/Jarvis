@@ -39,6 +39,9 @@ body {
     background-color: #001642 !important;
 }
 
+.navbar-toggler{
+    border-style: none;
+}
 .navbar-brand{
 	padding:0px 0px 7px 0;
 }
@@ -62,31 +65,7 @@ body {
     padding-bottom: 10px;
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++*/
-/* Changing  button colors */
-/*+++++++++++++++++++++++++++++++++++++++++++*/
-.btn-primary{
-    border-color: #0facf3;
-    background-color: #0FACF3;
-  
-}
 
-.btn-primary:hover{
-    background-color: #036A98;
-    border-color: #036A98;
-}
-
-.btn-outline-secondary{
-    color: rgb(114, 172, 237);
-    border-color: rgb(114, 172, 237);
-    background-color: #ffffff;
-    
-}
-
-.btn-outline-secondary:hover{
-    background-color:#546A7B;
-    border-color: #546A7B;
-}
 
 .btn-primary:focus, .btn-primary.focus {
     -webkit-box-shadow: 0 0 0 0.2rem rgba(70, 151, 233, 0.5);
@@ -138,7 +117,7 @@ body {
     right: 0;
 }
 
-.user-nav-link:hover, .user-nav-link:visited, .user-nav-link:active{
+.user-nav-link:hover, .user-nav-link:visited, .user-nav-link:active, .nav-link{
     color: #FFFFFF !important;
 }
 
