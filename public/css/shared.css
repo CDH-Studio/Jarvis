@@ -6,9 +6,11 @@
 .wrapper-center {
     text-align: center;
 }
+
 .no-padding{
     padding:0px;
 }
+
 .shadow{
     box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2) !important;
 }
@@ -16,9 +18,42 @@
 .dropdown-item:hover{
     background-color:#001642;
 }
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Colors */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+.bg-primary{
+    background-color: #2c3e50;
+}
+
+.bg-secondary{
+    background-color: #95a5a6;
+}
+
+.bg-success{
+    background-color: #18bc9c;
+}
+
+.bg-danger{
+    background-color: #e74c3c;
+}
+
+.bg-warning{
+    background-color: #f39c12;
+}
+
+.bg-info{
+    background-color: #3498db
+}
+
+.bg-light{
+    background-color: #ecf0f1;
+}
+.bg-dark{
+    background-color: #18bc9c
+}
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-/* Changing  button colors */
+/* Changing button colors */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 .btn-primary{
     /* #0FACF3 old color */
@@ -36,7 +71,6 @@
 
 .btn-secondary{
     color: #223851;
-
     border-style: none;
     background-color: #eff2f7;
     box-shadow: 0 2px 6px 0 #00000033 !important;
