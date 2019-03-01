@@ -7,8 +7,10 @@
 {{--  search room page content  --}}
 @section('content')
     {{--  Loading Page Header  --}}
-    @!component('components.pageHeader', title='Search Rooms')
-
+    @component('components.pageHeader', title='Search Rooms')
+        @slot('body')
+        @endslot
+    @endcomponent
         {{--  Page content  --}}
         <div class='search-room-content'>
             <form action='/results' method='GET' enctype='multipart/form-data'>

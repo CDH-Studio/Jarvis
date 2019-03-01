@@ -1,0 +1,15 @@
+#cancelButton {
+    padding: 0;
+}
+
+.td-Approved {
+    color: #5cb85c;
+}
+
+.td-Cancelled {
+    color: #d9534f;
+}
+
+.td-Pending {
+    color: #ec971f;
+}

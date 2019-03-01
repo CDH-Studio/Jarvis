@@ -68,6 +68,7 @@ body {
 .btn-primary{
     border-color: #0facf3;
     background-color: #0FACF3;
+  
 }
 
 .btn-primary:hover{
@@ -76,9 +77,10 @@ body {
 }
 
 .btn-outline-secondary{
-    color: #000000;
-    border-color: #000000;
+    color: rgb(114, 172, 237);
+    border-color: rgb(114, 172, 237);
     background-color: #ffffff;
+    
 }
 
 .btn-outline-secondary:hover{

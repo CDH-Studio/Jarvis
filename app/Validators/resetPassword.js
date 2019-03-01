@@ -1,6 +1,6 @@
 'use strict';
 
-class resetPassword {
+class ResetPassword {
 	get validateAll () {
 		return true;
 	}
@@ -25,4 +25,4 @@ class resetPassword {
 	}
 }
 
-module.exports = resetPassword;
+module.exports = ResetPassword;
