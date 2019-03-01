@@ -1,4 +1,5 @@
 /* This file is for ADMIN view specific changes */
+@import url('defaultAdminDash.css');
 @import url('shared.css');
 
 /*****************************************************/
@@ -59,9 +60,18 @@
 .nav-link{
     position: relative;
     z-index: 20;
-    
 }
 
+#header-nav-link{
+    color: #FFFF;
+}
+
+#header-dropdown-item:hover{
+    color: #FFFF;
+}
+#side-nav-link{
+    color: rgba(0, 0, 0, 0.5);
+}
 /* Side nav drop down */
 #side-nav-dropdown{
     position: relative;
@@ -70,6 +80,14 @@
     margin:0px;
     z-index: 15;
     background-color:#F5F5F5;
+}
+
+#side-nav-dropdown-item:visited, #side-nav-dropdown-item:active{
+    color:#001642 !important;
+}
+#side-nav-dropdown-item:hover{
+    /* color:#F5F5F5; */
+    background-color:rgb(216, 215, 223);
 }
 /* Small side nav view */
 .sidebar-toggled #side-nav-dropdown{
