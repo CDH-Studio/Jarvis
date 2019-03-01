@@ -22,34 +22,34 @@
 /* Colors */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 .bg-primary{
-    background-color: #2c3e50;
+    background-color: #001642 !important;
 }
 
 .bg-secondary{
-    background-color: #95a5a6;
+    background-color: #95a5a6 !important;
 }
 
 .bg-success{
-    background-color: #18bc9c;
+    background-color: #18bc9c !important;
 }
 
 .bg-danger{
-    background-color: #e74c3c;
+    background-color: #e74c3c !important;
 }
 
 .bg-warning{
-    background-color: #f39c12;
+    background-color: #f39c12 !important;
 }
 
 .bg-info{
-    background-color: #3498db
+    background-color: #3498db !important;
 }
 
 .bg-light{
-    background-color: #ecf0f1;
+    background-color: #ecf0f1 !important;
 }
 .bg-dark{
-    background-color: #18bc9c
+    background-color: #001642 !important;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -257,3 +257,4 @@
 .room-details-image{
     width:100%;
 }
+

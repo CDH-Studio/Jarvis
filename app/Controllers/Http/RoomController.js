@@ -92,7 +92,7 @@ class RoomController {
 			room.picture = `uploads/roomPictures/${room.name}.png`;
 			room.extraEquipment = body.extraEquipment;
 			room.comment = body.comment;
-			room.state = body.state === undefined ? 0 : 1;
+			room.state = body.state === undefined ? 2 : 1;
 
 			await room.save();
 			session.flash({ notification: 'Room Added!' });
@@ -148,7 +148,7 @@ class RoomController {
 			name: `${body.name}_roomPicture.png`
 		});
 
-		body.state = body.state === undefined ? 0 : 1;
+		body.state = body.state === undefined ? 2 : 1;
 
 		// Updates room information in database
 		await Room
@@ -227,9 +227,34 @@ class RoomController {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
 
+		// Retrieve number of active rooms
+		let countActive = await Room
+			.query()
+			.where('state', 1)
+			.count();
+
+		// Retrieve number of deactive rooms
+		let countDeactive = await Room
+			.query()
+			.where('state', 2)
+			.count();
+
+		// Retrieve number of rooms under maintenance
+		let countMaint = await Room
+			.query()
+			.where('state', 3)
+			.count();
+
+		// Create statistic array with custom keys
+		var stats = {};
+		stats['total'] = rooms.length;
+		stats['active'] = countActive[0]['count(*)'];
+		stats['deactive'] = countDeactive[0]['count(*)'];
+		stats['maintenance'] = countMaint[0]['count(*)'];
+
 		// if user is admin
 		if (auth.user.role === 1) {
-			return view.render('adminDash.viewRooms', { rooms });
+			return view.render('adminDash.viewRooms', { rooms, stats });
 		} else {
 			return view.render('userPages.results', { rooms });
 		}
