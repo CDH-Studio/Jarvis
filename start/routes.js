@@ -43,7 +43,6 @@ Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword')
 Route.get('/newPassword', 'UserController.verifyHash');
 Route.get('/newUser', 'UserController.verifyEmail');
 Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
-Route.post('/changePassword', 'UserController.changePassword').as('changePassword').middleware(['auth']);// .validator('changePassword');
 
 // Authentication
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
