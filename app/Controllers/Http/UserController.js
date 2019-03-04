@@ -5,6 +5,7 @@ const AccountRequest = use('App/Models/AccountRequest');
 const Mail = use('Mail');
 const Hash = use('Hash');
 const Env = use('Env');
+const Logger = use('Logger');
 
 /**
  * Generating a random string.
@@ -36,6 +37,27 @@ function sendMail (subject, body, to, from) {
 			.subject(subject);
 	});
 	console.log('mail sent');
+}
+
+/**
+ * Update user password in the database
+ *
+ * @param {String} newPassword New password
+ * @param {String} columnName  Name of the column to query by
+ * @param {*} columnValue      Value of the column to query by
+ */
+async function updatePassword (newPassword, columnName, columnValue) {
+	try {
+		const hashedNewPassword = await Hash.make(newPassword);
+		const changedRow = await User
+			.query()
+			.where(columnName, columnValue)
+			.update({ password: hashedNewPassword });
+
+		return changedRow;
+	} catch (err) {
+		Logger.debug(err);
+	}
 }
 
 class UserController {
@@ -229,7 +251,20 @@ class UserController {
 
 		console.log(auth.user.role);
 
-		return view.render('auth.showUser', { auth, user, layoutType, canEdit });
+		const options = {
+			redirect: '/user/updatepassword',
+			method: 'POST',
+			hidden: [
+				{
+					name: 'userId',
+					value: user.id
+				}
+			],
+			buttonName: 'Submit',
+			buttonClass: 'btn btn-primary'
+		};
+
+		return view.render('auth.showUser', { auth, user, layoutType, canEdit, options });
 	}
 
 	/**
@@ -293,7 +328,20 @@ class UserController {
 			if (rows.length !== 0 && rows[0].type === 1) {
 				const email = rows[0].email;
 
-				return view.render('resetPassword', { email: email });
+				const options = {
+					redirect: '/resetPassword',
+					method: 'POST',
+					hidden: [
+						{
+							name: 'email',
+							value: email
+						}
+					],
+					buttonName: 'Create New Password',
+					buttonClass: 'btn btn-login mt-3'
+				};
+
+				return view.render('resetPassword', { options });
 			}
 		}
 	}
@@ -304,19 +352,14 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async resetPassword ({ request, response, session }) {
-		console.log(request.body);
-		const newPassword = await Hash.make(request.body.newPassword);
-		const changedRow = await User
-			.query()
-			.where('email', request.body.email)
-			.update({ password: newPassword });
+		const { newPassword, email } = request.only(['newPassword', 'email']);
 
-		console.log(changedRow);
-
-		session.flash({
-			notification: 'Your password has been changed. Please use the new password to log in.'
-		});
-		return response.redirect('/login');
+		if (updatePassword(newPassword, 'email', email)) {
+			session.flash({
+				notification: 'Your password has been changed. Please use the new password to log in.'
+			});
+			return response.redirect('/login');
+		}
 	}
 
 	/**
@@ -324,39 +367,23 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async changePassword ({ request, response, auth, params, session }) {
-		if (auth.user.role === 1 || (auth.user.id === Number(params.id) && auth.user.role === 2)) {
+	async changePassword ({ request, response, auth, session }) {
+		const { newPassword, userId } = request.only(['newPassword', 'userId']);
+		if (auth.user.role === 1 || (auth.user.id === Number(userId) && auth.user.role === 2)) {
 			try {
-				const passwords = request.only(['newPassword']);
-        		const user = auth.user;  // eslint-disable-line
-				const newPassword = await Hash.make(passwords.newPassword);
-
-        		const changedRow = await User  // eslint-disable-line
-					.query()
-					.where('id', Number(params.id))
-					.update({ password: newPassword });
-				session.flash({ success: 'Password Updated Successfully' });
+				if (updatePassword(newPassword, 'id', userId)) {
+					session.flash({ success: 'Password Updated Successfully' });
+				}
 			} catch (error) {
 				session.flash({ error: 'Password Update failed' });
 				return response.redirect('/login');
 			}
 
-			return response.route('viewProfile', { id: Number(params.id) });
+			return response.route('viewProfile', { id: Number(userId) });
 			// check if user is viewing their own profile
 		} else {
 			return response.redirect('/');
 		}
-
-		// if (isSame) {
-		// const newPassword = await Hash.make(passwords.newPassword);
-		// const changedRow = await User
-		// .query()
-		// .where('email', user.email)
-		// .update({ password: newPassword });
-		// console.log(changedRow);
-
-		// return response.redirect('/');
-		// }
 	}
 
 	/**

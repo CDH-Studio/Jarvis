@@ -8,7 +8,7 @@ class ResetPassword {
 	get rules () {
 		return {
 			'newPassword': 'required',
-			'confirmPassword': 'required|same:password'
+			'confirmPassword': 'required|same:newPassword'
 		};
 	}
 
