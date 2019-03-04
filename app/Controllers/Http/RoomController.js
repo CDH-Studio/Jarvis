@@ -293,15 +293,15 @@ class RoomController {
 		const to = form.to;
 		const location = form.location;
 		const capacity = form.capacity;
-		const pc = form.pcCheck;
-		const surfaceHub = form.surfaceHubCheck;
 
 		// check boxes input
 		let checkBox = [{ checkName: 'projector', checkValue: form.projectorCheck },
 			{ checkName: 'whiteboard', checkValue: form.whiteboardCheck },
 			{ checkName: 'flipchart', checkValue: form.flipChartCheck },
 			{ checkName: 'audioConference', checkValue: form.audioCheck },
-			{ checkName: 'videoConference', checkValue: form.videoCheck }
+			{ checkName: 'videoConference', checkValue: form.videoCheck },
+			{ checkName: 'surfaceHub', checkValue: form.surfaceHubCheck },
+			{ checkName: 'pc', checkValue: form.pcCheck }
 		];
 		// basic search for mandatory input like (To,From and Date)
 		let searchResults = Room
@@ -309,7 +309,7 @@ class RoomController {
 			.clone();
 
 		// if the location is selected then query, else dont
-		if (location !== 'Select a floor') {
+		if (location !== 'undefined') {
 			searchResults = searchResults
 				.where('floor', location)
 				.clone();
@@ -328,19 +328,6 @@ class RoomController {
 					.clone();
 			}
 		}
-
-		// Checking for 2 special conditions where check boxes are in the "extreaEquipment" coloumn in the database
-		if (surfaceHub === '1') {
-			searchResults = searchResults
-				.where('extraEquipment', 'like', '%Surface Hub%')
-				.clone();
-		}
-		if (pc === '1') {
-			searchResults = searchResults
-				.where('extraEquipment', 'like', '%PC%')
-				.clone();
-		}
-
 		// fetch the query
 		searchResults = await searchResults.fetch();
 

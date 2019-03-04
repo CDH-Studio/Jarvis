@@ -37,25 +37,37 @@
                 <div class='form-group'>
                     <label for='floor'>*Floor Number</label>
                     <select class='form-control' name='floor'>
-                        <option value='0' {{ old('floor') == 0 ? 'selected' : '' }}>0</option>
-                        <option value='1' {{ old('floor') == 1 ? 'selected' : '' }}>1</option>
-                        <option value='2' {{ old('floor') == 2 ? 'selected' : '' }}>2</option>
-                        <option value='3' {{ old('floor') == 3 ? 'selected' : '' }}>3</option>
-                        <option value='4' {{ old('floor') == 4 ? 'selected' : '' }}>4</option>
-                        <option value='5' {{ old('floor') == 5 ? 'selected' : '' }}>5</option>
-                        <option value='6' {{ old('floor') == 6 ? 'selected' : '' }}>6</option>
-                        <option value='7' {{ old('floor') == 7 ? 'selected' : '' }}>7</option>
-                        <option value='8' {{ old('floor') == 8 ? 'selected' : '' }}>8</option>
-                        <option value='9' {{ old('floor') == 9 ? 'selected' : '' }}>9</option>
+                        <option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected=''>Select a Floor</option>
+                        <option value='0' {{ old('floor') == '0' ? 'selected' : '' }}>0</option>
+                        <option value='1' {{ old('floor') == '1' ? 'selected' : '' }}>1</option>
+                        <option value='2' {{ old('floor') == '2' ? 'selected' : '' }}>2</option>
+                        <option value='3' {{ old('floor') == '3' ? 'selected' : '' }}>3</option>
+                        <option value='4' {{ old('floor') == '4' ? 'selected' : '' }}>4</option>
+                        <option value='5' {{ old('floor') == '5' ? 'selected' : '' }}>5</option>
+                        <option value='6' {{ old('floor') == '6' ? 'selected' : '' }}>6</option>
+                        <option value='7' {{ old('floor') == '7' ? 'selected' : '' }}>7</option>
+                        <option value='8' {{ old('floor') == '8' ? 'selected' : '' }}>8</option>
+                        <option value='9' {{ old('floor') == '9' ? 'selected' : '' }}>9</option>
                     </select>
+                    @if(hasErrorFor('floor'))
+                        <span class='alert-danger'>
+                            {{ getErrorFor('floor') }}
+                        </span>
+                     @endif
                 </div>
                 {{--  Tower Location  --}}
                 <div class='form-group'>
                     <label for='tower'>*Tower</label>
                     <select class='form-control' name='tower' >
-                        <option value='0' {{ old('tower') == 0 ? 'selected' : '' }}>West</option>
-                        <option value='1' {{ old('tower') == 1 ? 'selected' : '' }}>East</option>
+                        <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected=''>Select a Tower</option>
+                        <option value='0' {{ old('tower') == '0' ? 'selected' : '' }}>West</option>
+                        <option value='1' {{ old('tower') == '1' ? 'selected' : '' }}>East</option>
                     </select>
+                    @if(hasErrorFor('tower'))
+                        <span class='alert-danger'>
+                            {{ getErrorFor('tower') }}
+                        </span>
+                     @endif
                 </div>
                 {{--  Phone Number  --}}
                 <div class='form-group'>
