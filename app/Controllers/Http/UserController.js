@@ -336,13 +336,9 @@ class UserController {
 		const { newPassword, userId } = request.only(['newPassword', 'userId']);
 		if (auth.user.role === 1 || (auth.user.id === Number(userId) && auth.user.role === 2)) {
 			try {
-				const hashedNewPassword = await Hash.make(newPassword);
-
-        		await User
-					.query()
-					.where('id', Number(userId))
-					.update({ password: hashedNewPassword });
-				session.flash({ success: 'Password Updated Successfully' });
+				if (updatePassword(newPassword, 'id', userId)) {
+					session.flash({ success: 'Password Updated Successfully' });
+				}
 			} catch (error) {
 				session.flash({ error: 'Password Update failed' });
 				return response.redirect('/login');
@@ -353,17 +349,6 @@ class UserController {
 		} else {
 			return response.redirect('/');
 		}
-
-		// if (isSame) {
-		// const newPassword = await Hash.make(passwords.newPassword);
-		// const changedRow = await User
-		// .query()
-		// .where('email', user.email)
-		// .update({ password: newPassword });
-		// console.log(changedRow);
-
-		// return response.redirect('/');
-		// }
 	}
 
 	/**
