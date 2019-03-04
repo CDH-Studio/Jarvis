@@ -171,6 +171,20 @@ class UserController {
 	}
 
 	/**
+	 * Render login page
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async loginRender ({ request, auth, view, response }) {
+		// present login to logged out users only
+		if (auth.user) {
+			return response.redirect('/');
+		} else {
+			return view.render('auth.login');
+		}
+	}
+
+	/**
 	 * Log a user in and redirect them to their respective landing page depending on the user type.
 	 *
 	 * @param {Object} Context The context object.
@@ -195,7 +209,7 @@ class UserController {
 				return response.redirect('/');
 			}
 		} catch (error) {
-			session.flash({ loginError: 'These credentials do not work.' });
+			session.flash({ loginError: 'Invalid email/password' });
 			return response.redirect('/login');
 		}
 	}

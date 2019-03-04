@@ -27,13 +27,13 @@ Route.on('/sample').render('sample');
 // User Authentication
 Route.on('/register').render('auth.signup').as('register');
 Route.post('/register', 'UserController.create').validator('CreateUser');
-Route.on('/login').render('auth.login').as('login');
 
 // Admin Authentication
 Route.on('/admin/register').render('auth.signupAdmin').as('registerAdmin');
 Route.post('/admin/register', 'UserController.createAdmin').as('CreateAdmin').validator('CreateAdmin');
 
 // Logout
+Route.get('/login', 'UserController.loginRender').as('login');
 Route.post('/login', 'UserController.login').validator('LoginUser');
 Route.get('/logout', 'UserController.logout').as('logout');
 

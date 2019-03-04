@@ -9,87 +9,73 @@ Jarvis - Login
 @endsection
 
 @section('content')
-<div class='row justify-content-center'>
-  <div class='col-lg-5 col-md-8 justify-center'>
-    <div class='card text-white mb-3 login-box shadow'>
+	<div class='row'>
+		<div class='col-md-4  text-center  image-bar d-none d-md-block'></div>
+		<div class='col-12 col-md-8 shadow form-bar' style=''> 
+		 	<form class='needs-validation' action='{{ route('CreateAdmin') }}' method='POST' style='margin-top:80px; margin-bottom:80px'>
 
-      <div class='card-body'>
-        <h4>Admin Registration</h4>
-        <div class="alert alert-dismissible alert-danger">
-          This page is for admin registration only.
-          <a href="{{route('login')}}">Click Here</a> to return to safety.
-        </div>
-        <form action='{{ route('CreateAdmin') }}' method='POST'>
-        {{ csrfField() }}
-            <div class='form-group mb-2'>
-              <label for='firstname'>First Name</label>
-              <input type='text' class='form-control' name='firstname' id='firstname' placeholder='John' value='{{ old('firstname', '') }}'>
-              @if(hasErrorFor('firstname'))
-                <span>
-                  {{ getErrorFor('firstname') }}
-                </span>
-              @endif
-            </div>
+				<h3 class='mb-3'>Register</h3>
+				{{ csrfField() }}
 
+				<div class='form-row'>
+				  <div class='col-md-6'>
+					<div class='form-group mb-2'>
+					  <label for='firstname'>First Name</label>
+					  <input type='text' class='form-control' name='firstname' id='firstname' placeholder='John' value='{{ old('firstname', '') }}'>
+					  @if(hasErrorFor('firstname'))
+						<div class='invalid-feedback d-block'>{{ getErrorFor('firstname') }}</div>
+					  @endif
+					</div>
+				  </div>
+				  <div class='col-md-6'>
+					<div class='form-group mb-2'>
+					  <label for='lastname'>Last Name</label>
+					  <input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe' value='{{ old('lastname', '') }}'>
+					  @if(hasErrorFor('lastname'))        
+						  <div class='invalid-feedback d-block'>{{ getErrorFor('lastname') }}</div>
+					  @endif
+					</div>
+				  </div>
+				</div>
+			  
+				<div class='form-group mb-2'>
+				  <label for='email'>Email address</label>
+				  <input type='email' class='form-control' name='email' id='email' placeholder='Enter email' value='{{ old('email', '') }}'>
+				  @if(hasErrorFor('email'))        
+					  <div class='invalid-feedback d-block'>{{ getErrorFor('email') }}</div>
+				  @endif
+				</div>
+			  
+				<div class='form-group mb-2'>
+				  <label for='password'>Password</label>
+				  <input type='password' class='form-control' name='password' id='password' placeholder='Password'>
+				  @if(hasErrorFor('password'))
+					<div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>
+				  @endif
+				</div>
 
-            <div class='form-group mb-2'>
-              <label for='lastname'>Last Name</label>
-              <input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe' value='{{ old('lastname', '') }}'>   
-              @if(hasErrorFor('lastname'))
-                <span>
-                  {{ getErrorFor('lastname') }}
-                </span>
-              @endif
-            </div>
+				<div class='form-group mb-2'>
+				  <label for='confirmPassword'>Confirm Password</label>
+				  <input type='password' class='form-control' name='confirmPassword' id='confirmPassword' placeholder='Password'>
+					@if(hasErrorFor('confirmPassword'))
+					<div class='invalid-feedback d-block'>{{ getErrorFor('confirmPassword') }}</div>
+				  @endif
+				</div>
 
-            <div class='form-group mb-2'>
-              <label for='email'>Email address</label>
-              <input type='email' class='form-control' name='email' id='email' placeholder='Enter email' value='{{ old('email', '') }}'>
-              @if(hasErrorFor('email'))
-                <span>
-                  {{ getErrorFor('email') }}
-                </span>
-              @endif
-            </div>
+				<div class='form-group mb-2'>
+				  <label for='token'>Admin Token</label>
+				  <input type='text' class='form-control' name='token' id='token' placeholder='Token'>
+				  @if(hasErrorFor('token'))
+					<div class='invalid-feedback d-block'>{{ getErrorFor('token') }}</div>
+				  @endif
+				</div>
 
-            <div class='form-group mb-2'>
-              <label for='password'>Password</label>
-              <input type='password' class='form-control' name='password' id='password' placeholder='Password'>
-              @if(hasErrorFor('password'))
-                <span>
-                  {{ getErrorFor('password') }}
-                </span>
-              @endif
-            </div>
-            
+				<button type='submit' class='btn btn-login mt-3 mb-2'>Register</button>
+				<hr>
 
-            <div class='form-group mb-2'>
-              <label for='confirmPassword'>Confirm Password</label>
-              <input type='password' class='form-control' name='confirmPassword' id='confirmPassword' placeholder='Password'>
-                @if(hasErrorFor('confirmPassword'))
-                <span>
-                  {{ getErrorFor('confirmPassword') }}
-                </span>
-              @endif
-            </div>
-
-            <div class='form-group mb-2'>
-                <label for='token'>Admin Token</label>
-                <input type='text' class='form-control' name='token' id='token' placeholder='Token'>
-                @if(hasErrorFor('token'))
-                  <span>
-                    {{ getErrorFor('token') }}
-                  </span>
-                @endif
-            </div>
-
-          <button type='submit' class='btn btn-login mt-3'>Register</button>
-        </form>
-
-      </div>
-    </div>
-
-  </div>
-</div>
-  
+				<p class='mb-1'>Already have an account?</p>
+				<a class='btn btn-register text-center mb-2' href='{{ route('login') }}'>Login Page</a>
+		  	</form>
+		</div>
+	</div>
 @endsection
