@@ -1,10 +1,17 @@
+/**
+ * File Name: BookRoom.js
+ * Description: Validator used to validate input fields in Book Room Page (Employee)
+ * Instructions: Use this validator by adding ".validator('BookRoom')" to your route in /routes.js
+ **/
 'use strict';
 
 class BookRoom {
+	// Validate and return all fields
 	get validateAll () {
 		return true;
 	}
 
+	// Validation rules
 	get rules () {
 		// getting the current date subract 1 day
 		let afterDate = new Date();
@@ -14,16 +21,11 @@ class BookRoom {
 		beforeDate.setDate(beforeDate.getDate() + 1);
 		beforeDate.setMonth(beforeDate.getMonth() + 3);
 
-		// getting current hour time
-		// let currentTime = new Date();
-		// let newhour = currentTime.getHours();
-		// console.log(newhour);
-		// validation rules
 		return {
 			/**
 			 * Meeting name validation rules
 			 *
-			 * required: require field, a meeting name needs to be assigned to book a room
+			 * required: required field, a meeting name needs to be assigned to book a room
 			 */
 			meeting: 'required',
 			/**
@@ -57,19 +59,16 @@ class BookRoom {
 		};
 	}
 
-	// Error messages
+	// Custom error messages
 	get messages () {
 		return {
-			'meeting.required': 'This field is required, please enter a meeting name',
-			'date.required': 'This field is required, please enter a date',
+			'required': 'This field is required',
 			'date.date': 'Please enter a valid date',
 			'date.dateFormat': 'Please enter a date with the following format: MM/DD/YYYY',
 			'date.after': 'Please enter a time in the future',
 			'date.before': 'You can only book rooms up to 3 months ahead of time',
-			'from.required': 'Please enter a starting time',
-			'from.timeFormat': 'You may only search with 30min time intervals, please enter a starting time that ends with 00 or 30.',
-			'to.required': 'Please enter an end time',
-			'to.timeFormat': 'You may only search with 30min time intervals, please enter a starting time that ends with 00 or 30.',
+			'from.timeFormat': 'You may only search with 30 min time intervals, please enter a starting time that ends with 00 or 30',
+			'to.timeFormat': 'You may only search with 30 min time intervals, please enter a starting time that ends with 00 or 30',
 			'from.isAfterToday': 'This field must occur after the current time',
 			'to.isAfterToday': 'This field must occur after the current time',
 			'recurringSelected': 'This field is required'
