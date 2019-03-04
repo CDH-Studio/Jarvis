@@ -5,6 +5,7 @@ const AccountRequest = use('App/Models/AccountRequest');
 const Mail = use('Mail');
 const Hash = use('Hash');
 const Env = use('Env');
+const Logger = use('Logger');
 
 /**
  * Generating a random string.
@@ -36,6 +37,20 @@ function sendMail (subject, body, to, from) {
 			.subject(subject);
 	});
 	console.log('mail sent');
+}
+
+async function updatePassword (newPassword, columnName, columnValue) {
+	try {
+		const hashedNewPassword = await Hash.make(newPassword);
+		const changedRow = await User
+			.query()
+			.where(columnName, columnValue)
+			.update({ password: hashedNewPassword });
+
+		return changedRow;
+	} catch (err) {
+		Logger.debug(err);
+	}
 }
 
 class UserController {
@@ -302,19 +317,14 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async resetPassword ({ request, response, session }) {
-		console.log(request.body);
-		const newPassword = await Hash.make(request.body.newPassword);
-		const changedRow = await User
-			.query()
-			.where('email', request.body.email)
-			.update({ password: newPassword });
+		const { newPassword, email } = request.only(['newPassword', 'email']);
 
-		console.log(changedRow);
-
-		session.flash({
-			notification: 'Your password has been changed. Please use the new password to log in.'
-		});
-		return response.redirect('/login');
+		if (updatePassword(newPassword, 'email', email)) {
+			session.flash({
+				notification: 'Your password has been changed. Please use the new password to log in.'
+			});
+			return response.redirect('/login');
+		}
 	}
 
 	/**
@@ -322,24 +332,23 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async changePassword ({ request, response, auth, params, session }) {
-		if (auth.user.role === 1 || (auth.user.id === Number(params.id) && auth.user.role === 2)) {
+	async changePassword ({ request, response, auth, session }) {
+		const { newPassword, userId } = request.only(['newPassword', 'userId']);
+		if (auth.user.role === 1 || (auth.user.id === Number(userId) && auth.user.role === 2)) {
 			try {
-				const passwords = request.only(['newPassword']);
-        		const user = auth.user;  // eslint-disable-line
-				const newPassword = await Hash.make(passwords.newPassword);
+				const hashedNewPassword = await Hash.make(newPassword);
 
-        		const changedRow = await User  // eslint-disable-line
+        		await User
 					.query()
-					.where('id', Number(params.id))
-					.update({ password: newPassword });
+					.where('id', Number(userId))
+					.update({ password: hashedNewPassword });
 				session.flash({ success: 'Password Updated Successfully' });
 			} catch (error) {
 				session.flash({ error: 'Password Update failed' });
 				return response.redirect('/login');
 			}
 
-			return response.route('viewProfile', { id: Number(params.id) });
+			return response.route('viewProfile', { id: Number(userId) });
 			// check if user is viewing their own profile
 		} else {
 			return response.redirect('/');

@@ -29,8 +29,9 @@
                         {{ old('success') }}
                     </div>
                 @endif
-                <form action='{{ route('changePassword', {id: user.id}) }}' method='POST'>
+                <form action='{{ route('changePassword') }}' method='POST'>
                     {{ csrfField() }}
+                    <input type='hidden' name='userId' value='{{ user.id }}' />
                     <div class="form-group">
                         <label for="newPassword">New Password</label>
                         <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password">
