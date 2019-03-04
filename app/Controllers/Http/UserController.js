@@ -39,6 +39,13 @@ function sendMail (subject, body, to, from) {
 	console.log('mail sent');
 }
 
+/**
+ * Update user password in the database
+ *
+ * @param {String} newPassword New password
+ * @param {String} columnName  Name of the column to query by
+ * @param {*} columnValue      Value of the column to query by
+ */
 async function updatePassword (newPassword, columnName, columnValue) {
 	try {
 		const hashedNewPassword = await Hash.make(newPassword);
@@ -230,7 +237,20 @@ class UserController {
 
 		console.log(auth.user.role);
 
-		return view.render('auth.showUser', { auth, user, layoutType, canEdit });
+		const options = {
+			redirect: '/user/updatepassword',
+			method: 'POST',
+			hidden: [
+				{
+					name: 'userId',
+					value: user.id
+				}
+			],
+			buttonName: 'Submit',
+			buttonClass: 'btn btn-primary'
+		};
+
+		return view.render('auth.showUser', { auth, user, layoutType, canEdit, options });
 	}
 
 	/**
@@ -303,7 +323,8 @@ class UserController {
 							value: email
 						}
 					],
-					buttonName: 'Create New Password'
+					buttonName: 'Create New Password',
+					buttonClass: 'btn btn-login mt-3'
 				};
 
 				return view.render('resetPassword', { options });
