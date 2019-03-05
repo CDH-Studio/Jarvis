@@ -57,7 +57,6 @@ Route.post('/user/:id/updatepassword', 'UserController.changePassword').as('chan
 // admin
 Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['admin']);
 Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('AddRoom').middleware(['admin']);
-Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom').middleware(['admin']);
 Route.on('/adminDash').render('adminDash').as('adminDash').middleware(['admin']);
 
 Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['admin']);
@@ -66,7 +65,7 @@ Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').middleware(
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
-Route.post('/userResults', 'UserController.adminSearchUsers').as('userResults').middleware(['auth']);
+Route.get('/allBookings', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 
 //= ========================================================================
 // Bookings
