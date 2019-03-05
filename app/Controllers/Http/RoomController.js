@@ -4,8 +4,6 @@ const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
-const Drive = use('Drive');
-
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -127,16 +125,14 @@ class RoomController {
 		// Retrieves user input
 		const body = request.all();
 
-		await Drive.delete('uploads/floorPlans/' + `${room.name}_floorPlan.png`);
-		await Drive.delete('uploads/roomPictures/' + `${room.name}_roomPicture.png`);
-
 		// Upload process - Floor Plan
 		const floorPlanImage = request.file('floorPlan', {
 			types: ['image'],
 			size: '2mb'
 		});
 		await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-			name: `${body.name}_floorPlan.png`
+			name: `${body.name}_floorPlan.png`,
+			overwrite: true
 		});
 
 		// Upload process - Room Picture
@@ -145,7 +141,8 @@ class RoomController {
 			size: '2mb'
 		});
 		await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-			name: `${body.name}_roomPicture.png`
+			name: `${body.name}_roomPicture.png`,
+			overwrite: true
 		});
 
 		body.state = body.state === undefined ? 2 : 1;
