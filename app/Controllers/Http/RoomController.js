@@ -4,8 +4,6 @@ const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
-const Drive = use('Drive');
-
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
