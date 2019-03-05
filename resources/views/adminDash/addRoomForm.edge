@@ -10,14 +10,14 @@
                 {{ csrfField() }} 
                 <div class='form-group has-danger'>
                     <label for='name'>*Room Name</label>
-                    <input type='text' name='name' class='form-control' id='name' aria-describedby='nameHelp' placeholder='Ex: 308-B' value='{{ old('name', '') }}' />
                     <small id='nameHelp' class='form-text text-muted'>
                         Enter the short name of the meeting room you wish to add
                     </small>
                     @if(hasErrorFor('name'))
-                        <span class='alert-danger'>
-                            {{ getErrorFor('name') }}
-                        </span>
+                        <input type='text' name='name' class='form-control is-invalid' id='name' aria-describedby='nameHelp' placeholder='Ex: 308-B' value='{{ old('name', '') }}' />
+                        <div class="invalid-feedback">{{ getErrorFor('name') }}</div>
+                    @else
+                        <input type='text' name='name' class='form-control' id='name' aria-describedby='nameHelp' placeholder='Ex: 308-B' value='{{ old('name', '') }}' />
                     @endif
                 </div>
                 {{--  Full Room Name form  --}}
@@ -31,6 +31,8 @@
                         <span class='alert-danger'>
                             {{ getErrorFor('fullName') }}
                         </span>
+                    @else
+
                     @endif
                 </div>
                 {{--  Floor Location form  --}} 
@@ -53,7 +55,9 @@
                         <span class='alert-danger'>
                             {{ getErrorFor('floor') }}
                         </span>
-                     @endif
+                    @else
+
+                    @endif
                 </div>
                 {{--  Tower Location  --}}
                 <div class='form-group'>
@@ -77,6 +81,8 @@
                         <span class='alert-danger'>
                             {{ getErrorFor('telephoneNumber') }}
                         </span>
+                    @else
+
                     @endif
                 </div>
                 {{--  Table Seats  --}}
@@ -87,6 +93,8 @@
                         <span class='alert-danger'>
                             {{ getErrorFor('tableSeats') }}
                         </span>
+                    @else
+
                     @endif
                 </div>
                 {{--  Max Capacity  --}}
@@ -97,6 +105,8 @@
                         <span class='alert-danger'>
                             {{ getErrorFor('maximumCapacity') }}
                         </span>
+                    @else
+                    
                     @endif
                 </div>
                 {{--  Equipment List  --}}
