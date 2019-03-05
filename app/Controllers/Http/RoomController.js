@@ -46,7 +46,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async addRoom ({ request, response, session, auth }) {
+	async addRoom ({ request, response, session }) {
 		try {
 			// Retrieves user input
 			const body = request.all();
@@ -120,7 +120,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async update ({ request, session, params, response, view }) {
+	async update ({ request, session, params, response }) {
 		// Retrieves room object
 		let room = await Room.findBy('id', params.id);
 
@@ -460,6 +460,25 @@ class RoomController {
 	}
 
 	/**
+	 * Retrives all of the bookings that correspond to a specific room.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getBookings ({ params, view }) {
+		// Queries the database fr the bookings associated to a specific room
+		let searchResults = await Booking
+			.query()
+			.where('room_id', params.id)
+			.fetch();
+
+		const bookings = searchResults.toJSON();
+		var layoutType = 'layouts/adminLayout';
+		console.log(bookings);
+
+		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
+	}
+
+	/**
 	 * Create a list of all bookings under the current user and render a view for it.
 	 *
 	 * @param {Object} Context The context object.
@@ -492,7 +511,7 @@ class RoomController {
 				booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
 				booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 				booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
-				booking.roomId = result.room_id;
+				booking.room_id = result.room_id;
 				booking.id = result.id;
 
 				return booking;
@@ -501,7 +520,9 @@ class RoomController {
 
 		await populateBookings();
 
-		return view.render('userPages.manageBookings', { bookings: bookings });
+		var layoutType = 'layouts/mainLayout';
+
+		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
 	}
 
 	/**
