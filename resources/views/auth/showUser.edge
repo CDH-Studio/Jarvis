@@ -29,18 +29,9 @@
                         {{ old('success') }}
                     </div>
                 @endif
-                <form action='{{ route('changePassword', {id: user.id}) }}' method='POST'>
-                    {{ csrfField() }}
-                    <div class="form-group">
-                        <label for="newPassword">New Password</label>
-                        <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password">
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmNewPassword">Confirm New Password</label>
-                        <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" placeholder="Confirm new password">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form> 
+                {{ csrfField() }}
+				@component('components.changePasswordForm', options=options, token=csrfToken, newPasswordError = getErrorFor('newPassword'), confirmPasswordError = getErrorFor('confirmPassword'))    
+				@endcomponent
             @endif          
         </div>
     </div>
