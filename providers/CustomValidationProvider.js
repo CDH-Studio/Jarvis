@@ -30,7 +30,7 @@ class CustomValidationProvider extends ServiceProvider {
 		Validator.extend('isAfter', this._isAfter, '');
 		Validator.extend('isAfterToday', this._isAfterToday, '');
 		Validator.extend('isWithinRange', this._isWithinRange, '');
-		Validator.extend('recurringSelected', this._recurringSelected, '');
+		Validator.extend('requiredDropdown', this._requiredDropdown, '');
 	}
 
 	/* Validate if time ends in 00 or 30
@@ -45,6 +45,7 @@ class CustomValidationProvider extends ServiceProvider {
 			throw message;
 		}
 	}
+
 	/* Validate to check if {{ field }} come before {{args}}
 	*
 	* @usage isAfter
@@ -61,6 +62,7 @@ class CustomValidationProvider extends ServiceProvider {
 			throw new Error('This field must occur after ' + after);
 		}
 	}
+
 	/* Validate to check if {{args}} and current Date is the same, then make sure the {{field}} is after the current time
 	*
 	* @usage isAfter
@@ -112,6 +114,16 @@ class CustomValidationProvider extends ServiceProvider {
 			throw message;
 		}
 	}
-}
 
+	/* Validate to check if {{ field }} dropdown is selected on "Select a ___", if so throw message
+	*
+	* @usage requiredDropdown
+	*/
+	async _requiredDropdown (data, field, message, args, get) {
+		const userSelection = get(data, field);
+		if (userSelection === 'undefined') {
+			throw message;
+		}
+	}
+}
 module.exports = CustomValidationProvider;

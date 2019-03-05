@@ -17,8 +17,8 @@ class CreateUser {
 			/**
 			 * Validation Rules
 			 *
-			 * required: required field, to register an account, these fields are required
 			 * email: must be a valid email format
+			 * required: required field, to register an account, these fields are required
 			 */
 			'email': 'required|email',
 			'password': 'required'
@@ -28,8 +28,8 @@ class CreateUser {
 	// Custom error messages
 	get messages () {
 		return {
-			'required': 'This field is required',
-			'email': 'Please enter a valid e-mail address (somebody@example.com)'
+			'email': 'Please enter a valid e-mail address (somebody@example.com)',
+			'required': 'This field is required'
 		};
 	}
 

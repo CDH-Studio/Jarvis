@@ -157,11 +157,21 @@
                 <div class='form-group'>
                     <label>Floor Plan</label>
                     <input type='file' name='floorPlan' value='{{ old('floorplan', '') }}'>
+                    @if(hasErrorFor('floorPlan'))
+                        <span class='alert-danger'>
+                            {{ getErrorFor('floorPlan') }}
+                        </span>
+                    @endif
                 </div>
                 {{--  Room Picture  --}}
                 <div class='form-group'>
                     <label>Room Picture</label>
-                    <input type='file' name='roomPicture' value='{{ old('picture', '') }}'>
+                    <input type='file' name='roomPicture' value='{{ old('roomPicture', '') }}'>
+                    @if(hasErrorFor('roomPicture'))
+                        <span class='alert-danger'>
+                            {{ getErrorFor('roomPicture') }}
+                        </span>
+                    @endif
                 </div>
                 {{--    --}}
                 <div class='form-group'>
