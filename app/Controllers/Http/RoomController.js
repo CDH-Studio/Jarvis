@@ -55,6 +55,7 @@ class RoomController {
 			room.fullName = body.fullName;
 			room.floor = body.floor;
 			room.tower = body.tower === '0' ? 'West' : 'East';
+			room.state = body.state;
 			room.telephone = body.telephoneNumber;
 			room.seats = body.tableSeats;
 			room.capacity = body.maximumCapacity;
@@ -90,8 +91,6 @@ class RoomController {
 			room.picture = `uploads/roomPictures/${room.name}.png`;
 			room.extraEquipment = body.extraEquipment;
 			room.comment = body.comment;
-			room.state = body.state === undefined ? 2 : 1;
-
 			await room.save();
 			session.flash({ notification: 'Room Added!' });
 

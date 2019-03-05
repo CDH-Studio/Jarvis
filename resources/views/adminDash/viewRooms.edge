@@ -71,8 +71,10 @@ View Rooms
                             <td class='text-center'>{{ room.capacity }}</td>
                             @if(room.state == 1)
                                 <td class='text-center td-{{ room.state }}'>Active</td>
-                            @else
+                            @elseif(room.state == 2)
                                 <td class='text-center td-{{ room.state }}'>Deactive</td>
+                            @else
+                                <td class='text-center td-{{ room.state }}'>Under Maintenance</td>
                             @endif 
                         </tr>
                         @endeach
