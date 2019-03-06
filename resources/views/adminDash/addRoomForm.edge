@@ -209,7 +209,7 @@
                 <div class='row'>
                     <div class='col form-group'>
                         <label for='extraEquipment'>Comments</label>
-                        <textarea class='form-control' name='comment' id='comment' rows='5' >{{ old('comment', room.comment) }}</textarea>
+                        <textarea class='form-control' name='comment' id='comment' rows='5' >{{ old('comment',  room.comment) }}</textarea>
                     </div>
                 </div>
     
@@ -225,7 +225,7 @@
                                 @else
                                     <input type='file' class='custom-file-input' id='floorPlan' name='floorPlan'>
                                 @endif
-                                <label class='custom-file-label' for='floorPlan'>Choose File</label>
+                                <label id='floorPlanLabel' class='custom-file-label' for='floorPlan'>Choose File</label>
                             </div>
                         </div>
                     </div>
@@ -240,7 +240,7 @@
                                 @else
                                     <input type='file' class='custom-file-input' id='roomPicture' name='roomPicture'>
                                 @endif
-                                <label class='custom-file-label' for='floorPlan'>Choose File</label>
+                                <label id='roomPictureLabel' class='custom-file-label' for='roomPicture'>Choose File</label>
                             </div>
                         </div>
                     </div>
@@ -255,14 +255,14 @@
         </div>
     </div> 
     {{--  Script to display file name on upload  --}}
-    <script type='application/javascript'>
+    <script>
         $('#floorPlan').change(function(e){
             var fileName = e.target.files[0].name;
-            $(this).next('.custom-file-label').html(fileName);
+            $('#floorPlanLabel').html(fileName);
         });
         $('#roomPicture').change(function(e){
             var fileName = e.target.files[0].name;
-            $(this).next('.custom-file-label').html(fileName);
+            $('#roomPictureLabel').html(fileName);
         });
     </script>
     {{--  Remove the is-invalid class when input changes  --}}

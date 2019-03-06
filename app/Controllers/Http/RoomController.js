@@ -60,14 +60,13 @@ class RoomController {
 			room.telephone = body.telephoneNumber;
 			room.seats = body.tableSeats;
 			room.capacity = body.maximumCapacity;
-			room.projector = body.projectorCheck;
-			room.whiteboard = body.whiteboardCheck;
-			room.flipchart = body.flipChartCheck;
-			room.audioConference = body.audioCheck;
-			room.videoConference = body.videoCheck;
-			room.surfaceHub = body.surfaceHubCheck;
-			room.pc = body.pcCheck;
-
+			room.projector = body.projectorCheck === '1' ? '1' : '0';
+			room.whiteboard = body.whiteboardCheck === '1' ? '1' : '0';
+			room.flipchart = body.flipChartCheck === '1' ? '1' : '0';
+			room.audioConference = body.audioCheck === '1' ? '1' : '0';
+			room.videoConference = body.videoCheck === '1' ? '1' : '0';
+			room.surfaceHub = body.surfaceHubCheck === '1' ? '1' : '0';
+			room.pc = body.pcCheck === '1' ? '1' : '0';
 			// Upload process - Floor Plan
 			const floorPlanImage = request.file('floorPlan', {
 				types: ['image'],
@@ -90,8 +89,8 @@ class RoomController {
 			// Populates the room object's values
 			room.floorplan = `uploads/floorPlans/${room.name}.png`;
 			room.picture = `uploads/roomPictures/${room.name}.png`;
-			room.extraEquipment = body.extraEquipment;
-			room.comment = body.comment;
+			room.extraEquipment = body.extraEquipment == null ? ' ' : body.extraEquipment;
+			room.comment = body.comment == null ? ' ' : body.extraEquipment;
 			await room.save();
 			session.flash({ notification: 'Room Added!' });
 
@@ -110,7 +109,7 @@ class RoomController {
 		// Retrieves room object
 		const room = await Room.findBy('id', params.id);
 		const actionType = 'Edit Room';
-		return view.render('adminDash.editRoom', { room: room, actionType });
+		return view.render('adminDash.addRoomForm', { room: room, actionType });
 	}
 
 	/**
@@ -144,9 +143,6 @@ class RoomController {
 			name: `${body.name}_roomPicture.png`,
 			overwrite: true
 		});
-
-		body.state = body.state === undefined ? 2 : 1;
-
 		// Updates room information in database
 		await Room
 			.query()
@@ -156,23 +152,22 @@ class RoomController {
 				fullName: body.fullName,
 				floor: body.floor,
 				tower: body.tower,
-				telephone: body.seats,
+				telephone: body.telephoneNumber,
 				seats: body.tableSeats,
 				capacity: body.maximumCapacity,
-				projector: body.projectorCheck,
-				whiteboard: body.whiteboardCheck,
-				flipchart: body.flipchart,
-				audioConference: body.audioCheck,
-				videoConference: body.videoCheck,
-				surfaceHub: body.surfaceHubCheck,
-				pc: body.pcCheck,
+				projector: body.projectorCheck === '1' ? '1' : '0',
+				whiteboard: body.whiteboardCheck === '1' ? '1' : '0',
+				flipchart: body.flipChartCheck === '1' ? '1' : '0',
+				audioConference: body.audioCheck === '1' ? '1' : '0',
+				videoConference: body.videoCheck === '1' ? '1' : '0',
+				surfaceHub: body.surfaceHubCheck === '1' ? '1' : '0',
+				pc: body.pcCheck === '1' ? '1' : '0',
 				floorplan: `uploads/floorPlans/${body.name}.png`,
 				picture: `uploads/roomPictures/${body.name}.png`,
-				extraEquipment: body.extraEquipment,
-				comment: body.comment,
+				extraEquipment: body.extraEquipment == null ? ' ' : body.extraEquipment,
+				comment: body.comment == null ? ' ' : body.comment,
 				state: body.state
 			});
-
 		room = await Room.findBy('name', body.name);
 		session.flash({ notification: 'Room Updated!' });
 
