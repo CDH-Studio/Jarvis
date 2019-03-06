@@ -6,16 +6,20 @@ export function notify ({
 	y = 10,
 	from = 'top',
 	align = 'right',
-	url = ''
+	url = '',
+	enter = 'fadeInRight',
+	exit = 'fadeOutUp',
+	element = 'body'
 } = {}) {
 	$.notify({
 		message: message,
 		url: url
 	}, {
+		element: element,
 		type: type,
 		animate: {
-			enter: 'animated fadeInRight',
-			exit: 'animated fadeOutUp'
+			enter: 'animated ' + enter,
+			exit: 'animated ' + exit
 		},
 		placement: {
 			from: from,
