@@ -37,7 +37,7 @@ class RoomController {
 	}
 	async create ({ response, view, auth }) {
 		const actionType = 'Add Room';
-		return view.render('adminDash.addRoomForm', { actionType });
+		return view.render('adminDash.addEditRoom', { actionType });
 	}
 
 	/**
@@ -109,7 +109,7 @@ class RoomController {
 		// Retrieves room object
 		const room = await Room.findBy('id', params.id);
 		const actionType = 'Edit Room';
-		return view.render('adminDash.addRoomForm', { room: room, actionType });
+		return view.render('adminDash.addEditRoom', { room: room, actionType });
 	}
 
 	/**
