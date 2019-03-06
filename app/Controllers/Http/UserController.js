@@ -130,16 +130,22 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async edit ({ params, view, auth }) {
+	async edit ({ params, view, auth, response }) {
 		// Retrieves user object
 		const user = await User.findBy('id', params.id);
 		var layoutType = '';
 
-		// Check type of user in order to render the correct layout
+		// check if admin is editing their own profile
 		if (auth.user.role === 1) {
 			layoutType = 'layouts/adminLayout';
-		} else if (auth.user.role === 2) {
+		// check if user is editing their own profile
+		} else if (auth.user.id === Number(params.id) && auth.user.role === 2) {
 			layoutType = 'layouts/mainLayout';
+		// check if user is editing someone elses profile
+		} else if (auth.user.id !== Number(params.id) && auth.user.role === 2) {
+			layoutType = 'layouts/mainLayout';
+		} else {
+			return response.redirect('/');
 		}
 
 		return view.render('auth.editUser', { user: user, layoutType: layoutType });
@@ -298,13 +304,11 @@ class UserController {
 	async show ({ auth, params, view, response }) {
 		const user = await User.find(Number(params.id));
 		var canEdit = 0;
-		var isAdmin = false;
 		var layoutType = '';
 		// check if admin is viewing their own profile
 		if (auth.user.role === 1) {
 			layoutType = 'layouts/adminLayout';
 			canEdit = 1;
-			isAdmin = true;
 		// check if user is viewing their own profile
 		} else if (auth.user.id === Number(params.id) && auth.user.role === 2) {
 			layoutType = 'layouts/mainLayout';
@@ -333,7 +337,7 @@ class UserController {
 			buttonClass: 'btn btn-primary'
 		};
 
-		return view.render('auth.showUser', { auth, user, layoutType, canEdit, options, isAdmin });
+		return view.render('auth.showUser', { auth, user, layoutType, canEdit, options });
 	}
 
 	/**

@@ -17,9 +17,7 @@
 
             @if(canEdit)
                 <button type='button' class='btn btn-primary mb-3' onclick="window.location='{{ route('editUser', { id: user.id }) }}';"><i class='fas fa-pen'></i> Edit Profile</button>
-                @if(isAdmin)
-                    <button type='button' class='btn btn-info mb-3' onclick="window.location='{{ route('roomBookings', { id: user.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
-                @endif
+                <button type='button' class='btn btn-info mb-3' onclick="window.location='{{ route('roomBookings', { id: user.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
                 <hr>
                 <br>
                 <h4>Change Password</h4>
