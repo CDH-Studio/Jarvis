@@ -90,7 +90,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async addRoom ({ request, response, session, auth }) {
+	async addRoom ({ request, response, session }) {
 		try {
 			// Retrieves user input
 			const body = request.all();
@@ -164,7 +164,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async update ({ request, session, params, response, view }) {
+	async update ({ request, session, params, response }) {
 		// Retrieves room object
 		let room = await Room.findBy('id', params.id);
 
@@ -503,6 +503,25 @@ class RoomController {
 	}
 
 	/**
+	 * Retrives all of the bookings that correspond to a specific room.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getBookings ({ params, view }) {
+		// Queries the database fr the bookings associated to a specific room
+		let searchResults = await Booking
+			.query()
+			.where('room_id', params.id)
+			.fetch();
+
+		searchResults = searchResults.toJSON();
+		const bookings = await populateBookings(searchResults);
+		var layoutType = 'layouts/adminLayout';
+
+		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
+	}
+
+	/**
 	 * Create a list of all bookings under the current user and render a view for it.
 	 *
 	 * @param {Object} Context The context object.
@@ -510,8 +529,9 @@ class RoomController {
 	async viewBookings ({ auth, view }) {
 		const results = (await auth.user.bookings().fetch()).toJSON();
 		const bookings = await populateBookings(results);
+		var layoutType = 'layouts/mainLayout';
 
-		return view.render('userPages.manageBookings', { bookings: bookings });
+		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
 	}
 
 	/**
