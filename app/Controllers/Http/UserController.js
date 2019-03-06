@@ -1,6 +1,7 @@
 'use strict';
 
 const User = use('App/Models/User');
+const Booking = use('App/Models/Booking');
 const AccountRequest = use('App/Models/AccountRequest');
 const Mail = use('Mail');
 const Hash = use('Hash');
@@ -230,12 +231,13 @@ class UserController {
 	async show ({ auth, params, view, response }) {
 		const user = await User.find(Number(params.id));
 		var canEdit = 0;
+		var isAdmin = false;
 		var layoutType = '';
 		// check if admin is viewing their own profile
 		if (auth.user.role === 1) {
 			layoutType = 'layouts/adminLayout';
 			canEdit = 1;
-
+			isAdmin = true;
 		// check if user is viewing their own profile
 		} else if (auth.user.id === Number(params.id) && auth.user.role === 2) {
 			layoutType = 'layouts/mainLayout';
@@ -264,7 +266,7 @@ class UserController {
 			buttonClass: 'btn btn-primary'
 		};
 
-		return view.render('auth.showUser', { auth, user, layoutType, canEdit, options });
+		return view.render('auth.showUser', { auth, user, layoutType, canEdit, options, isAdmin });
 	}
 
 	/**
@@ -401,6 +403,25 @@ class UserController {
 		});
 
 		return view.render('adminDash.viewUsers', { users });
+	}
+
+	/**
+	 * Retrives all of the bookings that are associated to a specific user.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getBookings ({ params, view }) {
+		// Queries the database for the bookings associated to a specific user
+		let searchResults = await Booking
+			.query()
+			.where('user_id', params.id)
+			.fetch();
+
+		const bookings = searchResults.toJSON();
+		var layoutType = 'layouts/adminLayout';
+		console.log(bookings);
+
+		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
 	}
 }
 

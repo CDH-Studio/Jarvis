@@ -518,7 +518,7 @@ class RoomController {
 			});
 		};
 
-		await populateBookings();
+		await populateBookings(bookings);
 
 		var layoutType = 'layouts/mainLayout';
 
