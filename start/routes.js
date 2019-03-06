@@ -48,7 +48,7 @@ Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetReq
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['auth']);
 Route.get('/user/:id/edit', 'UserController.edit').middleware(['auth']);
-Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']);
+Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 
 //= ========================================================================
 //  [ Admin ] Rooms
@@ -61,7 +61,7 @@ Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom').midd
 Route.on('/adminDash').render('adminDash').as('adminDash').middleware(['admin']);
 
 Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['admin']);
-Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('AddRoom').middleware(['admin']);
+Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['admin']);
 
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
