@@ -328,20 +328,7 @@ class UserController {
 			if (rows.length !== 0 && rows[0].type === 1) {
 				const email = rows[0].email;
 
-				const options = {
-					redirect: '/resetPassword',
-					method: 'POST',
-					hidden: [
-						{
-							name: 'email',
-							value: email
-						}
-					],
-					buttonName: 'Create New Password',
-					buttonClass: 'btn btn-login mt-3'
-				};
-
-				return view.render('resetPassword', { options });
+				return view.render('resetPassword', { email });
 			}
 		}
 	}
