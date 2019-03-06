@@ -7,137 +7,151 @@ Add Room
 @section('content')
     @!component('components.pageTitle', title='Add Room')
     <div class='row'>
-        <div class= 'col-7'>
+        <div class= 'col roomForm'>
             <form action={{ route('addRoom') }} method='POST' enctype='multipart/form-data'>
                 {{--  protects against cross site forgery  --}}
-                {{ csrfField() }} 
-                <div class='form-group has-danger'>
-                    <label for='name' data-toggle='tooltip' data-placement='left' data-original-title='Enter the short name of the meeting room you wish to add (Ex. 101A (E))'><i class="fas fa-question-circle fa-sm"></i> Room Name <b class='text-danger'>*</b></label>
-                    @if(hasErrorFor('name'))
-                        <input type='text' name='name' class='form-control is-invalid' id='name' aria-describedby='nameHelp' placeholder='Ex: 101A (E)' value='{{ old('name', '') }}' oninput='removeErrorClass("name")'/>
-                        <div class='invalid-feedback'>{{ getErrorFor('name') }}</div>
-                    @else
-                        <input type='text' name='name' class='form-control' id='name' aria-describedby='nameHelp' placeholder='Ex: 101A (E)' value='{{ old('name', '') }}' />
-                    @endif
+                {{ csrfField() }}
+                <div class='row'>
+                    <div class='col form-group has-danger'>
+                        <label for='name' data-toggle='tooltip' data-placement='left' data-original-title='Enter the short name of the meeting room you wish to add (Ex. 101A (E))'><i class="fas fa-question-circle fa-sm"></i> Room Name <b class='text-danger'>*</b></label>
+                        @if(hasErrorFor('name'))
+                            <input type='text' name='name' class='form-control is-invalid' id='name' aria-describedby='nameHelp' placeholder='Ex: 101A (E)' value='{{ old('name', '') }}' oninput='removeErrorClass("name")'/>
+                            <div class='invalid-feedback'>{{ getErrorFor('name') }}</div>
+                        @else
+                            <input type='text' name='name' class='form-control' id='name' aria-describedby='nameHelp' placeholder='Ex: 101A (E)' value='{{ old('name', '') }}' />
+                        @endif
+                    </div>
                 </div>
                 {{--  Full Room Name form  --}}
-                <div class='form-group'>
-                    <label for='fullName' data-toggle='tooltip' data-placement='left' data-original-title='Please enter the full name of the room (Ex. IC CONF OTT-235 Queen-Oasis CONF IC)'><i class="fas fa-question-circle fa-sm"></i> Full Room Name <b class='text-danger'>*</b></label>
-                    @if(hasErrorFor('fullName'))
-                        <input type='text' name='fullName' class='form-control is-invalid' id='fullName' placeholder='Ex: IC CONF OTT-235 Queen-Oasis CONF IC' value='{{ old('fullName', '') }}'  oninput='removeErrorClass("fullName")'/>
-                        <div class='invalid-feedback'>{{ getErrorFor('fullName') }}</div>
-                    @else
-                        <input type='text' name='fullName' class='form-control' id='fullName' placeholder='Ex: IC CONF OTT-235 Queen-Oasis CONF IC' value='{{ old('fullName', '') }}'/>
-                    @endif
+                <div class='row'>
+                    <div class='col form-group'>
+                        <label for='fullName' data-toggle='tooltip' data-placement='left' data-original-title='Please enter the full name of the room (Ex. IC CONF OTT-235 Queen-Oasis CONF IC)'><i class="fas fa-question-circle fa-sm"></i> Full Room Name <b class='text-danger'>*</b></label>
+                        @if(hasErrorFor('fullName'))
+                            <input type='text' name='fullName' class='form-control is-invalid' id='fullName' placeholder='Ex: IC CONF OTT-235 Queen-Oasis CONF IC' value='{{ old('fullName', '') }}'  oninput='removeErrorClass("fullName")'/>
+                            <div class='invalid-feedback'>{{ getErrorFor('fullName') }}</div>
+                        @else
+                            <input type='text' name='fullName' class='form-control' id='fullName' placeholder='Ex: IC CONF OTT-235 Queen-Oasis CONF IC' value='{{ old('fullName', '') }}'/>
+                        @endif
+                    </div>
                 </div>
                 {{--  Room Status form  --}} 
-                <div class='form-group'>
-                    <label for='state' data-toggle='tooltip' data-placement='left' data-original-title='(Active: available for booking, Deactive & Maintenance: unavailable for booking)'><i class="fas fa-question-circle fa-sm"></i> Room Status <b class='text-danger'>*</b></label>
-                    @if(hasErrorFor('state'))
-                        <select class='form-control is-invalid' name='state' id='state' onchange='removeErrorClass("state")'>
-                            <option value='undefined' {{ old('state') == 'undefined' ? 'selected' : '' }} selected=''>Select Room Status</option>
-                            <option value='1' {{ old('state') == '1' ? 'selected' : '' }}>Active</option>
-                            <option value='2' {{ old('state') == '2' ? 'selected' : '' }}>Deactive</option>
-                            <option value='3' {{ old('state') == '3' ? 'selected' : '' }}>Under Maintenance</option>
-                        </select>
-                        <div class='invalid-feedback'>{{ getErrorFor('state') }}</div>
-                    @else
-                        <select class='form-control' name='state' id='state' onchange='removeErrorClass("state")'>
-                            <option value='undefined' {{ old('state') == 'undefined' ? 'selected' : '' }} selected=''>Select Room Status</option>
-                            <option value='1' {{ old('state') == '1' ? 'selected' : '' }}>Active</option>
-                            <option value='2' {{ old('state') == '2' ? 'selected' : '' }}>Deactive</option>
-                            <option value='3' {{ old('state') == '3' ? 'selected' : '' }}>Under Maintenance</option>
-                        </select>
-                    @endif
+                <div class='row'>                
+                    <div class='col form-group'>
+                        <label for='state' data-toggle='tooltip' data-placement='left' data-original-title='(Active: available for booking, Deactive & Maintenance: unavailable for booking)'><i class="fas fa-question-circle fa-sm"></i> Room Status <b class='text-danger'>*</b></label>
+                        @if(hasErrorFor('state'))
+                            <select class='form-control is-invalid' name='state' id='state' onchange='removeErrorClass("state")'>
+                                <option value='undefined' {{ old('state') == 'undefined' ? 'selected' : '' }} selected=''>Select Room Status</option>
+                                <option value='1' {{ old('state') == '1' ? 'selected' : '' }}>Active</option>
+                                <option value='2' {{ old('state') == '2' ? 'selected' : '' }}>Deactive</option>
+                                <option value='3' {{ old('state') == '3' ? 'selected' : '' }}>Under Maintenance</option>
+                            </select>
+                            <div class='invalid-feedback'>{{ getErrorFor('state') }}</div>
+                        @else
+                            <select class='form-control' name='state' id='state' onchange='removeErrorClass("state")'>
+                                <option value='undefined' {{ old('state') == 'undefined' ? 'selected' : '' }} selected=''>Select Room Status</option>
+                                <option value='1' {{ old('state') == '1' ? 'selected' : '' }}>Active</option>
+                                <option value='2' {{ old('state') == '2' ? 'selected' : '' }}>Deactive</option>
+                                <option value='3' {{ old('state') == '3' ? 'selected' : '' }}>Under Maintenance</option>
+                            </select>
+                        @endif
+                    </div>
                 </div>
                 {{--  Floor Location form  --}} 
-                <div class='form-group'>
-                    <label for='floor'>Floor Number <b class='text-danger'>*</b></label>
-                    @if(hasErrorFor('floor'))
-                        <select class='form-control is-invalid' name='floor' id='floor' onchange='removeErrorClass("floor")'>
-                            <option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected=''>Select a Floor</option>
-                            <option value='0' {{ old('floor') == '0' ? 'selected' : '' }}>0</option>
-                            <option value='1' {{ old('floor') == '1' ? 'selected' : '' }}>1</option>
-                            <option value='2' {{ old('floor') == '2' ? 'selected' : '' }}>2</option>
-                            <option value='3' {{ old('floor') == '3' ? 'selected' : '' }}>3</option>
-                            <option value='4' {{ old('floor') == '4' ? 'selected' : '' }}>4</option>
-                            <option value='5' {{ old('floor') == '5' ? 'selected' : '' }}>5</option>
-                            <option value='6' {{ old('floor') == '6' ? 'selected' : '' }}>6</option>
-                            <option value='7' {{ old('floor') == '7' ? 'selected' : '' }}>7</option>
-                            <option value='8' {{ old('floor') == '8' ? 'selected' : '' }}>8</option>
-                            <option value='9' {{ old('floor') == '9' ? 'selected' : '' }}>9</option>
-                        </select>
-                        <div class='invalid-feedback'>{{ getErrorFor('floor') }}</div>
-                    @else
-                        <select class='form-control' name='floor'>
-                            <option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected=''>Select a Floor</option>
-                            <option value='0' {{ old('floor') == '0' ? 'selected' : '' }}>0</option>
-                            <option value='1' {{ old('floor') == '1' ? 'selected' : '' }}>1</option>
-                            <option value='2' {{ old('floor') == '2' ? 'selected' : '' }}>2</option>
-                            <option value='3' {{ old('floor') == '3' ? 'selected' : '' }}>3</option>
-                            <option value='4' {{ old('floor') == '4' ? 'selected' : '' }}>4</option>
-                            <option value='5' {{ old('floor') == '5' ? 'selected' : '' }}>5</option>
-                            <option value='6' {{ old('floor') == '6' ? 'selected' : '' }}>6</option>
-                            <option value='7' {{ old('floor') == '7' ? 'selected' : '' }}>7</option>
-                            <option value='8' {{ old('floor') == '8' ? 'selected' : '' }}>8</option>
-                            <option value='9' {{ old('floor') == '9' ? 'selected' : '' }}>9</option>
-                        </select>
-                    @endif
-                </div>
-                {{--  Tower Location  --}}
-                <div class='form-group'>
-                    <label for='tower'>Tower <b class='text-danger'>*</b></label>
-                    @if(hasErrorFor('tower'))
-                        <select class='form-control is-invalid' name='tower' id='tower' onchange='removeErrorClass("tower")'>
-                            <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected=''>Select a Tower</option>
-                            <option value='0' {{ old('tower') == '0' ? 'selected' : '' }}>West</option>
-                            <option value='1' {{ old('tower') == '1' ? 'selected' : '' }}>East</option>
-                        </select>
-                        <div class='invalid-feedback'>{{ getErrorFor('tower') }}</div>
-                    @else
-                        <select class='form-control' name='tower' >
-                            <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected=''>Select a Tower</option>
-                            <option value='0' {{ old('tower') == '0' ? 'selected' : '' }}>West</option>
-                            <option value='1' {{ old('tower') == '1' ? 'selected' : '' }}>East</option>
-                        </select>
-                    @endif
+                <div class='row'>
+                    <div class='col-6 form-group'>
+                        <label for='floor'>Floor Number <b class='text-danger'>*</b></label>
+                        @if(hasErrorFor('floor'))
+                            <select class='form-control is-invalid' name='floor' id='floor' onchange='removeErrorClass("floor")'>
+                                <option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected=''>Select a Floor</option>
+                                <option value='0' {{ old('floor') == '0' ? 'selected' : '' }}>0</option>
+                                <option value='1' {{ old('floor') == '1' ? 'selected' : '' }}>1</option>
+                                <option value='2' {{ old('floor') == '2' ? 'selected' : '' }}>2</option>
+                                <option value='3' {{ old('floor') == '3' ? 'selected' : '' }}>3</option>
+                                <option value='4' {{ old('floor') == '4' ? 'selected' : '' }}>4</option>
+                                <option value='5' {{ old('floor') == '5' ? 'selected' : '' }}>5</option>
+                                <option value='6' {{ old('floor') == '6' ? 'selected' : '' }}>6</option>
+                                <option value='7' {{ old('floor') == '7' ? 'selected' : '' }}>7</option>
+                                <option value='8' {{ old('floor') == '8' ? 'selected' : '' }}>8</option>
+                                <option value='9' {{ old('floor') == '9' ? 'selected' : '' }}>9</option>
+                            </select>
+                            <div class='invalid-feedback'>{{ getErrorFor('floor') }}</div>
+                        @else
+                            <select class='form-control' name='floor'>
+                                <option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected=''>Select a Floor</option>
+                                <option value='0' {{ old('floor') == '0' ? 'selected' : '' }}>0</option>
+                                <option value='1' {{ old('floor') == '1' ? 'selected' : '' }}>1</option>
+                                <option value='2' {{ old('floor') == '2' ? 'selected' : '' }}>2</option>
+                                <option value='3' {{ old('floor') == '3' ? 'selected' : '' }}>3</option>
+                                <option value='4' {{ old('floor') == '4' ? 'selected' : '' }}>4</option>
+                                <option value='5' {{ old('floor') == '5' ? 'selected' : '' }}>5</option>
+                                <option value='6' {{ old('floor') == '6' ? 'selected' : '' }}>6</option>
+                                <option value='7' {{ old('floor') == '7' ? 'selected' : '' }}>7</option>
+                                <option value='8' {{ old('floor') == '8' ? 'selected' : '' }}>8</option>
+                                <option value='9' {{ old('floor') == '9' ? 'selected' : '' }}>9</option>
+                            </select>
+                        @endif
+                    </div>
+                    {{--  Tower Location  --}}
+                    <div class='col-6 form-group'>
+                        <label for='tower'>Tower <b class='text-danger'>*</b></label>
+                        @if(hasErrorFor('tower'))
+                            <select class='form-control is-invalid' name='tower' id='tower' onchange='removeErrorClass("tower")'>
+                                <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected=''>Select a Tower</option>
+                                <option value='0' {{ old('tower') == '0' ? 'selected' : '' }}>West</option>
+                                <option value='1' {{ old('tower') == '1' ? 'selected' : '' }}>East</option>
+                            </select>
+                            <div class='invalid-feedback'>{{ getErrorFor('tower') }}</div>
+                        @else
+                            <select class='form-control' name='tower' >
+                                <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected=''>Select a Tower</option>
+                                <option value='0' {{ old('tower') == '0' ? 'selected' : '' }}>West</option>
+                                <option value='1' {{ old('tower') == '1' ? 'selected' : '' }}>East</option>
+                            </select>
+                        @endif
+                    </div>
                 </div>
                 {{--  Phone Number  --}}
-                <div class='form-group'>
-                    <label for='telephoneNumber'>Telephone Number <b class='text-danger'>*</b></label>
-                    @if(hasErrorFor('telephoneNumber'))
-                        <input type='text' name='telephoneNumber' class='form-control is-invalid' id='telephoneNumber' placeholder='Ex: 343-333-3333' value='{{ old('telephoneNumber', '') }}' oninput='removeErrorClass("telephoneNumber")'/>
-                        <div class='invalid-feedback'>{{ getErrorFor('telephoneNumber') }}</div>
-                    @else
-                        <input type='text' name='telephoneNumber' class='form-control' id='telephoneNumber' placeholder='Ex: 343-333-3333' value='{{ old('telephoneNumber', '') }}' />
-                    @endif
+                <div class='row'>
+                    <div class='col form-group'>
+                        <label for='telephoneNumber'>Telephone Number <b class='text-danger'>*</b></label>
+                        @if(hasErrorFor('telephoneNumber'))
+                            <input type='text' name='telephoneNumber' class='form-control is-invalid' id='telephoneNumber' placeholder='Ex: 343-333-3333' value='{{ old('telephoneNumber', '') }}' oninput='removeErrorClass("telephoneNumber")'/>
+                            <div class='invalid-feedback'>{{ getErrorFor('telephoneNumber') }}</div>
+                        @else
+                            <input type='text' name='telephoneNumber' class='form-control' id='telephoneNumber' placeholder='Ex: 343-333-3333' value='{{ old('telephoneNumber', '') }}' />
+                        @endif
+                    </div>
                 </div>
                 {{--  Table Seats  --}}
-                <div class='form-group'>
-                    <label for='tableSeats'>Table Seats <b class='text-danger'>*</b></label>
-                    @if(hasErrorFor('tableSeats'))
-                        <input type='text' name='tableSeats' class='form-control is-invalid' id='tableSeats' placeholder='Ex: 22' value='{{ old('tableSeats', '') }}' oninput='removeErrorClass("tableSeats")'/>
-                        <div class='invalid-feedback'>{{ getErrorFor('tableSeats') }}</div>
-                    @else
-                        <input type='text' name='tableSeats' class='form-control' id='tableSeats' placeholder='Ex: 22' value='{{ old('tableSeats', '') }}'/>
-                    @endif
+                <div class='row'>
+                    <div class='col form-group'>
+                        <label for='tableSeats'>Table Seats <b class='text-danger'>*</b></label>
+                        @if(hasErrorFor('tableSeats'))
+                            <input type='text' name='tableSeats' class='form-control is-invalid' id='tableSeats' placeholder='Ex: 22' value='{{ old('tableSeats', '') }}' oninput='removeErrorClass("tableSeats")'/>
+                            <div class='invalid-feedback'>{{ getErrorFor('tableSeats') }}</div>
+                        @else
+                            <input type='text' name='tableSeats' class='form-control' id='tableSeats' placeholder='Ex: 22' value='{{ old('tableSeats', '') }}'/>
+                        @endif
+                    </div>
                 </div>
                 {{--  Max Capacity  --}}
-                <div class='form-group'>
-                    <label for='maximumCapacity'>Maximum Capacity <b class='text-danger'>*</b></label>
-                    @if(hasErrorFor('maximumCapacity'))
-                        <input type='text' name='maximumCapacity' class='form-control is-invalid' id='maximumCapacity' placeholder='Ex: 42' value='{{ old('maximumCapacity', '') }}' oninput='removeErrorClass("maximumCapacity")'/>
-                        <div class='invalid-feedback'>{{ getErrorFor('maximumCapacity') }}</div>
-                    @else
-                        <input type='text' name='maximumCapacity' class='form-control' id='maximumCapacity' placeholder='Ex: 42' value='{{ old('maximumCapacity', '') }}'/>   
-                    @endif
+                <div class='row'>
+                    <div class='col form-group'>
+                        <label for='maximumCapacity'>Maximum Capacity <b class='text-danger'>*</b></label>
+                        @if(hasErrorFor('maximumCapacity'))
+                            <input type='text' name='maximumCapacity' class='form-control is-invalid' id='maximumCapacity' placeholder='Ex: 42' value='{{ old('maximumCapacity', '') }}' oninput='removeErrorClass("maximumCapacity")'/>
+                            <div class='invalid-feedback'>{{ getErrorFor('maximumCapacity') }}</div>
+                        @else
+                            <input type='text' name='maximumCapacity' class='form-control' id='maximumCapacity' placeholder='Ex: 42' value='{{ old('maximumCapacity', '') }}'/>   
+                        @endif
+                    </div>
                 </div>
                 {{--  Equipment List  --}}
-                <div class='form-group'>
+                <div class='row'>
+                    <div class='col form-group'>
                         <label for='equipment'>Equipment <b class='text-danger'>*</b></label>
-    
                         <div class='row'>               
-                            <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                            <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-4 ml-3'>
                                 <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value= '1' {{ old('projectorCheck') ? 'checked' : '' }} >
                                 <label class='custom-control-label' for='projectorCheck'>Projector</label>
                             </div>
@@ -148,7 +162,7 @@ Add Room
                         </div>
     
                         <div class='row'>
-                            <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                            <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-4 ml-3'>
                                 <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck') ? 'checked' : '' }} >
                                 <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
                             </div>  
@@ -159,7 +173,7 @@ Add Room
                         </div>
     
                         <div class='row'>
-                            <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                            <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-4 ml-3'>
                                 <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck') ? 'checked' : '' }} >
                                 <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
                             </div>
@@ -171,48 +185,65 @@ Add Room
                         </div>
     
                         <div class='row'>
-                            <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
+                            <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-4 ml-3'>
                                 <input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1' {{ old('pcCheck') ? 'checked' : '' }} >
                                 <label class='custom-control-label' for='pcCheck'>PC</label>
                             </div>                
                         </div> 
+                    </div>
+                </div>
                 {{--  Extra Equipment  --}}
-                <div class='form-group mt-4'>
-                    <label for='extraEquipment'>Extra Equipment</label>
-                    <textarea class='form-control' name='extraEquipment' id='extraEquipment' rows='3' >{{ old('extraEquipment', '') }}</textarea>
-                </div>
-
-                <div class='form-group'>
-                    <label for='extraEquipment'>Comments</label>
-                    <textarea class='form-control' name='comment' id='comment' rows='5' >{{ old('comment', '') }}</textarea>
-                </div>
-                {{--  Floor Plan Picture --}}
-                <label>Floor Plan <b class='text-danger'>*</b></label>
-                <div class='form-group'>
-                    <div class='custom-file'>
-                        @if(hasErrorFor('floorPlan'))
-                            <input type='file' class='custom-file-input is-invalid' id='floorPlan' name='floorPlan' oninput='removeErrorClass("floorPlan")'>
-                            <div class='invalid-feedback'>{{ getErrorFor('floorPlan') }}</div>
-                        @else
-                            <input type='file' class='custom-file-input' id='floorPlan' name='floorPlan'>
-                        @endif
-                        <label class='custom-file-label' for='floorPlan'>Choose File</label>
+                <div class='row'>
+                    <div class='col form-group mt-4'>
+                        <label for='extraEquipment'>Extra Equipment</label>
+                        <textarea class='form-control' name='extraEquipment' id='extraEquipment' rows='3' >{{ old('extraEquipment', '') }}</textarea>
                     </div>
                 </div>
-                {{--  Room Picture  --}}
-                <label>Room Picture <b class='text-danger'>*</b></label>
-                <div class='form-group'>
-                    <div class='custom-file'>
-                        @if(hasErrorFor('roomPicture'))
-                            <input type='file' class='custom-file-input is-invalid' id='roomPicture' name='roomPicture' oninput='removeErrorClass("roomPicture")'>
-                            <div class='invalid-feedback'>{{ getErrorFor('roomPicture') }}</div>
-                        @else
-                            <input type='file' class='custom-file-input' id='roomPicture' name='roomPicture'>
-                        @endif
-                        <label class='custom-file-label' for='floorPlan'>Choose File</label>
+                <div class='row'>
+                    <div class='col form-group'>
+                        <label for='extraEquipment'>Comments</label>
+                        <textarea class='form-control' name='comment' id='comment' rows='5' >{{ old('comment', '') }}</textarea>
                     </div>
                 </div>
-                <button type='submit' class='btn btn-primary mb-3'>Add</button>
+    
+                <div class='row'>
+                    {{--  Floor Plan Picture --}}
+                    <div class='col' id='floorPlanContent'>
+                        <label>Floor Plan <b class='text-danger'>*</b></label>
+                        <div class='form-group'>
+                            <div class='custom-file'>
+                                @if(hasErrorFor('floorPlan'))
+                                    <input type='file' class='custom-file-input is-invalid' id='floorPlan' name='floorPlan' oninput='removeErrorClass("floorPlan")'>
+                                    <div class='invalid-feedback'>{{ getErrorFor('floorPlan') }}</div>
+                                @else
+                                    <input type='file' class='custom-file-input' id='floorPlan' name='floorPlan'>
+                                @endif
+                                <label class='custom-file-label' for='floorPlan'>Choose File</label>
+                            </div>
+                        </div>
+                    </div>
+                    {{--  Room Picture  --}}
+                    <div class='col' id='roomPictureContent'>
+                        <label>Room Picture <b class='text-danger'>*</b></label>
+                        <div class='form-group'>
+                            <div class='custom-file'>
+                                @if(hasErrorFor('roomPicture'))
+                                    <input type='file' class='custom-file-input is-invalid' id='roomPicture' name='roomPicture' oninput='removeErrorClass("roomPicture")'>
+                                    <div class='invalid-feedback'>{{ getErrorFor('roomPicture') }}</div>
+                                @else
+                                    <input type='file' class='custom-file-input' id='roomPicture' name='roomPicture'>
+                                @endif
+                                <label class='custom-file-label' for='floorPlan'>Choose File</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='row' style='margin-top:20px;'>
+                    <div class='col text-right'>
+                        <button type='button' class='btn btn-secondary mb-3' onclick="window.location='{{ route('adminDash')}}';">Cancel</button>       
+                        <button type='submit' class='btn btn-primary mb-3'>Add Room</button>                
+                    </div>
+                </div>
             </form>
         </div>
     </div> 
