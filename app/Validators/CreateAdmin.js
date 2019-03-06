@@ -31,7 +31,8 @@ class CreateAdmin {
 			email: 'required|email|unique:users',
 			firstname: 'required',
 			lastname: 'required',
-			password:"required|regex: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$", // eslint-disable-line
+			password:"required", // eslint-disable-line
+			// regex: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$
 			token: `required|equals:${secretToken}`
 		};
 	}
