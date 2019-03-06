@@ -17,7 +17,7 @@
                 {{ csrfField() }}
                 {{--  Date form  --}}
                 <div class='form-group mb-4 '>
-                    <label for='date'data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: mm/dd/yyyy (02/20/2019)'>*Select Date:</label>
+                    <label for='date' data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: mm/dd/yyyy (02/20/2019)'>*Select Date:</label>
                    {{--  If field is not filled correctly show an error box  --}}
                     @if(hasErrorFor('date'))
                         {{--  ######## Need to Change value to the current date #############  --}}
@@ -32,7 +32,7 @@
 
                 {{--  Meeting time form  --}}
                 <div class='form-group mb-4'>
-                    <label for='from'  data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: 00:00 AM/PM (02:30)'>*From:</label>
+                    <label for='from' data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: 00:00 AM/PM (02:30)'>*From:</label>
                     
                     {{--  If field is not filled correctly show an error box  --}}
                     @if(hasErrorFor('from'))
@@ -47,7 +47,7 @@
                 </div>
 
                 <div class='form-group mb-4'>
-                    <label for='to'  data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: 00:00 AM/PM (03:30 PM)'>*To:</label>
+                    <label for='to' data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: 00:00 AM/PM (03:30 PM)'>*To:</label>
                     
                     {{--  If field is not filled correctly show an error box  --}}
                     @if(hasErrorFor('to'))
@@ -63,7 +63,7 @@
 
                 {{--  Location form  --}}
                 <div class='form-group mb-4'>
-                    <label for='location'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Enter the preferred location'>Location:</label>
+                    <label for='location' data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Enter the preferred location'>Location:</label>
                     <select name='location' class='form-control col-4'>
                         <option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>Select a floor</option>
                         <option value='0' {{ old('location') == '0' ? 'selected' : '' }}>Floor 0</option>
