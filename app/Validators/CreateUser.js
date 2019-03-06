@@ -25,13 +25,13 @@ class CreateUser {
 			 * unique: email must be unique and must not already exist within the database
 			 *
 			 */
-			confirmPassword: 'required|same:password',
-			email: 'required|email|unique:users',
-			firstname: 'required',
-			floor: 'required|requiredDropdown',
-			lastname: 'required',
-			password:"required|regex: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$", // eslint-disable-line
-			tower: 'required|requiredDropdown'
+			confirmPassword: `required|same:password`,
+			email: `required|email|unique:users`,
+			firstname: `required`,
+			floor: `required|requiredDropdown`,
+			lastname: `required`,
+			password:`required`, // eslint-disable-line
+			tower: `required|requiredDropdown`
 		};
 	}
 	// Custom error messages

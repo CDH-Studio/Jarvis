@@ -27,11 +27,11 @@ class CreateAdmin {
 			 * unique: email must be unique and must not already exist within the database
 			 *
 			 */
-			confirmPassword: 'required|same:password',
-			email: 'required|email|unique:users',
-			firstname: 'required',
-			lastname: 'required',
-			password:"required|regex: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$", // eslint-disable-line
+			confirmPassword: `required|same:password`,
+			email: `required|email|unique:users`,
+			firstname: `required`,
+			lastname: `required`,
+			password:`required`, // eslint-disable-line
 			token: `required|equals:${secretToken}`
 		};
 	}
