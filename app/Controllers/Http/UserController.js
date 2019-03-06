@@ -79,6 +79,26 @@ class UserController {
 	}
 
 	/**
+	 * Render a specific edit user page depending on the user Id.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async edit ({ params, view, auth }) {
+		// Retrieves user object
+		const user = await User.findBy('id', params.id);
+		var layoutType = '';
+
+		// Check type of user in order to render the correct layout
+		if (auth.user.role === 1) {
+			layoutType = 'layouts/adminLayout';
+		} else if (auth.user.role === 2) {
+			layoutType = 'layouts/mainLayout';
+		}
+
+		return view.render('auth.editUser', { user: user, layoutType: layoutType });
+	}
+
+	/**
 	 * Create and verify a new Enployee user. Save them to the database and log them in.
 	 *
 	 * @param {Object} Context The context object.

@@ -16,11 +16,12 @@
             @endif
 
             @if(isAdmin)
-                <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: user.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
+                <button type='button' class='btn btn-info mb-3' onclick="window.location='{{ route('roomBookings', { id: user.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
             @endif
 
             @if(canEdit)
-                <a class='btn btn-primary mb-4' href='/user/{{ user.id }}/edit'><i class='fas fa-pen'></i> Edit Profile</a>
+                {{--  <a class='btn btn-primary mb-4' href='/user/{{ user.id }}/edit'><i class='fas fa-pen'></i> Edit Profile</a>  --}}
+                <button type='button' class='btn btn-primary mb-3' onclick="window.location='{{ route('editUser', { id: user.id }) }}';"><i class='fas fa-pen'></i> Edit Profile</button>
                 <hr>
                 <br>
                 <h4>Change Password</h4>
