@@ -15,7 +15,7 @@
 	@endcomponent
 	
 	@if(bookings.length == 0)
-		<div>There are currently no bookings associated to this room.</div>
+		<div>There are currently no bookings.</div>
 	@else
 		<div>
 			{{--  Displays all of the bookings for the current user  --}}
@@ -34,7 +34,7 @@
 				@each(booking in bookings) 
 					<tbody>
 						<tr>
-							<td><a href='{{ route('showRoom', {id: booking.room_id}) }}'>{{ booking.room }}</a></td>
+							<td><a href='{{ route('showRoom', {id: booking.roomId}) }}'>{{ booking.room }}</a></td>
 							<td>{{ booking.subject }}</td>
 							<td>{{ booking.date }}</td>
 							<td>{{ booking.time }}</td>

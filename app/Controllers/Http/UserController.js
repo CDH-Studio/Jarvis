@@ -1,6 +1,7 @@
 'use strict';
 
 const User = use('App/Models/User');
+const Room = use('App/Models/Room');
 const Booking = use('App/Models/Booking');
 const AccountRequest = use('App/Models/AccountRequest');
 const Mail = use('Mail');
@@ -59,6 +60,52 @@ async function updatePassword (newPassword, columnName, columnValue) {
 	} catch (err) {
 		Logger.debug(err);
 	}
+}
+
+/**
+ * Populate bookings from booking query results.
+ *
+ * @param {Object} results Results from bookings query.
+ *
+ * @returns {Object} The access token.
+ *
+ */
+async function populateBookings (results) {
+	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+	async function asyncMap (arr, callback) {
+		let arr2 = [];
+
+		for (let i = 0; i < arr.length; i++) {
+			arr2.push(await callback(arr[i], i, arr));
+		}
+
+		return arr2;
+	}
+
+	let bookings = [];
+	const populate = async () => {
+		bookings = await asyncMap(results, async (result) => {
+			const booking = {};
+
+			const from = new Date(result.from);
+			const to = new Date(result.to);
+			booking.subject = result.subject;
+			booking.status = result.status;
+			booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
+			booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+			booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
+			booking.roomId = result.room_id;
+			booking.id = result.id;
+
+			return booking;
+		});
+	};
+
+	await populate();
+
+	return bookings;
 }
 
 class UserController {
@@ -350,20 +397,7 @@ class UserController {
 			if (rows.length !== 0 && rows[0].type === 1) {
 				const email = rows[0].email;
 
-				const options = {
-					redirect: '/resetPassword',
-					method: 'POST',
-					hidden: [
-						{
-							name: 'email',
-							value: email
-						}
-					],
-					buttonName: 'Create New Password',
-					buttonClass: 'btn btn-login mt-3'
-				};
-
-				return view.render('resetPassword', { options });
+				return view.render('resetPassword', { email });
 			}
 		}
 	}
@@ -437,9 +471,9 @@ class UserController {
 			.where('user_id', params.id)
 			.fetch();
 
-		const bookings = searchResults.toJSON();
+		searchResults = searchResults.toJSON();
+		const bookings = await populateBookings(searchResults);
 		var layoutType = 'layouts/adminLayout';
-		console.log(bookings);
 
 		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
 	}
