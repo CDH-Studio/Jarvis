@@ -21,6 +21,52 @@ async function getAccessToken () {
 	}
 }
 
+/**
+ * Populate bookings from booking query results.
+ *
+ * @param {Object} results Results from bookings query.
+ *
+ * @returns {Object} The access token.
+ *
+ */
+async function populateBookings (results) {
+	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+	async function asyncMap (arr, callback) {
+		let arr2 = [];
+
+		for (let i = 0; i < arr.length; i++) {
+			arr2.push(await callback(arr[i], i, arr));
+		}
+
+		return arr2;
+	}
+
+	let bookings = [];
+	const populate = async () => {
+		bookings = await asyncMap(results, async (result) => {
+			const booking = {};
+
+			const from = new Date(result.from);
+			const to = new Date(result.to);
+			booking.subject = result.subject;
+			booking.status = result.status;
+			booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
+			booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+			booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
+			booking.roomId = result.room_id;
+			booking.id = result.id;
+
+			return booking;
+		});
+	};
+
+	await populate();
+
+	return bookings;
+}
+
 class RoomController {
 	/**
 	 * Takes in a variable and converts the value to 0 if it's null (Used for checkboxes)
@@ -45,7 +91,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async addRoom ({ request, response, session, auth }) {
+	async addRoom ({ request, response, session }) {
 		try {
 			// Retrieves user input
 			const body = request.all();
@@ -117,7 +163,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async update ({ request, session, params, response, view }) {
+	async update ({ request, session, params, response }) {
 		// Retrieves room object
 		let room = await Room.findBy('id', params.id);
 
@@ -452,48 +498,35 @@ class RoomController {
 	}
 
 	/**
+	 * Retrives all of the bookings that correspond to a specific room.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getBookings ({ params, view }) {
+		// Queries the database fr the bookings associated to a specific room
+		let searchResults = await Booking
+			.query()
+			.where('room_id', params.id)
+			.fetch();
+
+		searchResults = searchResults.toJSON();
+		const bookings = await populateBookings(searchResults);
+		var layoutType = 'layouts/adminLayout';
+
+		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
+	}
+
+	/**
 	 * Create a list of all bookings under the current user and render a view for it.
 	 *
 	 * @param {Object} Context The context object.
 	 */
 	async viewBookings ({ auth, view }) {
 		const results = (await auth.user.bookings().fetch()).toJSON();
+		const bookings = await populateBookings(results);
+		var layoutType = 'layouts/mainLayout';
 
-		const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-		const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-		async function asyncMap (arr, callback) {
-			let arr2 = [];
-
-			for (let i = 0; i < arr.length; i++) {
-				arr2.push(await callback(arr[i], i, arr));
-			}
-
-			return arr2;
-		}
-
-		let bookings = [];
-		const populateBookings = async () => {
-			bookings = await asyncMap(results, async (result) => {
-				const booking = {};
-
-				const from = new Date(result.from);
-				const to = new Date(result.to);
-				booking.subject = result.subject;
-				booking.status = result.status;
-				booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
-				booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-				booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
-				booking.roomId = result.room_id;
-				booking.id = result.id;
-
-				return booking;
-			});
-		};
-
-		await populateBookings();
-
-		return view.render('userPages.manageBookings', { bookings: bookings });
+		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
 	}
 
 	/**
