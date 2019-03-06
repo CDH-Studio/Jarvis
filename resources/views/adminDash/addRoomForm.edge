@@ -8,7 +8,6 @@
     @!component('components.pageTitle', title=actionType)
     <div class='row'>
         <div class= 'col roomForm'>
-           
             {{--  If user is adding a room post to that on submition, otherwise post to saveing room  --}}
             @if(actionType =='Add Room')
                 <form action={{ route('addRoom') }} method='POST' enctype='multipart/form-data'>
@@ -248,7 +247,11 @@
                 <div class='row' style='margin-top:20px;'>
                     <div class='col text-right'>
                         <button type='button' class='btn btn-secondary mb-3' onclick="window.location='{{ route('adminDash')}}';">Cancel</button>      
-                        <button type='submit' class='btn btn-primary mb-3'>Add Room</button>                
+                        @if(actionType =='Add Room')
+                            <button type='submit' class='btn btn-primary mb-3'>Add Room</button>                
+                        @else
+                            <button type='submit' class='btn btn-primary mb-3'>Update</button>  
+                        @endif
                     </div>
                 </div>
             </form>
