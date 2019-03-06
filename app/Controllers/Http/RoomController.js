@@ -21,6 +21,14 @@ async function getAccessToken () {
 	}
 }
 
+/**
+ * Populate bookings from booking query results.
+ *
+ * @param {Object} results Results from bookings query.
+ *
+ * @returns {Object} The access token.
+ *
+ */
 async function populateBookings (results) {
 	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
