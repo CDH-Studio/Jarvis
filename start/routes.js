@@ -61,7 +61,7 @@ Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom').midd
 Route.on('/adminDash').render('adminDash').as('adminDash').middleware(['admin']);
 
 Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['admin']);
-Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('AddRoom').middleware(['admin']);
+Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['admin']);
 
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
