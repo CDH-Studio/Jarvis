@@ -36,7 +36,8 @@ class RoomController {
 		return variable;
 	}
 	async create ({ response, view, auth }) {
-		return view.render('adminDash.addRoomForm');
+		const actionType = 'Add Room';
+		return view.render('adminDash.addRoomForm', { actionType });
 	}
 
 	/**
@@ -54,7 +55,7 @@ class RoomController {
 			room.name = body.name;
 			room.fullName = body.fullName;
 			room.floor = body.floor;
-			room.tower = body.tower === '0' ? 'West' : 'East';
+			room.tower = body.tower;
 			room.state = body.state;
 			room.telephone = body.telephoneNumber;
 			room.seats = body.tableSeats;
@@ -108,8 +109,8 @@ class RoomController {
 	async edit ({ params, view }) {
 		// Retrieves room object
 		const room = await Room.findBy('id', params.id);
-
-		return view.render('adminDash.editRoom', { room: room });
+		const actionType = 'Edit Room';
+		return view.render('adminDash.editRoom', { room: room, actionType });
 	}
 
 	/**
