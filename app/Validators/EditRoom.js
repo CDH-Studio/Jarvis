@@ -1,11 +1,11 @@
 /**
- * File Name: AddRoom.js
+ * File Name: EditRoom.js
  * Description: Validator used to validate input fields in Add Room Page (Admin)
- * Instructions: Use this validator by adding ".validator('AddRoom')" to your route in /routes.js
+ * Instructions: Use this validator by adding ".validator('EditRoom')" to your route in /routes.js
  **/
 'use strict';
 
-class AddRoom {
+class EditRoom {
 	// Validate and return all fields
 	get validateAll () {
 		return true;
@@ -38,8 +38,7 @@ class AddRoom {
 			// telephoneNumber: "required| regex: ^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$",
 			tower: 'required|requiredDropdown',
 			maximumCapacity: 'required|integer|above:0',
-			name: 'required|unique:rooms',
-			state: 'required|requiredDropdown'
+			name: 'required'
 		};
 	}
 
@@ -65,4 +64,4 @@ class AddRoom {
 	}
 }
 
-module.exports = AddRoom;
+module.exports = EditRoom;

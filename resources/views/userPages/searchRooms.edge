@@ -12,134 +12,136 @@
         @endslot
     @endcomponent
         {{--  Page content  --}}
-        <div class='search-room-content'>
-            <form action='/results' method='GET' enctype='multipart/form-data'>
-                {{ csrfField() }}
-                {{--  Date form  --}}
-                <div class='form-group mb-4 '>
-                    <label for='date'data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: mm/dd/yyyy (02/20/2019)'>*Select Date:</label>
-                   {{--  If field is not filled correctly show an error box  --}}
-                    @if(hasErrorFor('date'))
-                        {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='date' name='date' class='form-control is-invalid col-4 ' placeholder='MM-DD-YYYY' value='{{ old('date', '') }}'/>
-                        <div class="invalid-feedback">{{ getErrorFor('date')}}</div>
-                    {{--  Otherwise show a normal input  --}}
-                    @else
-                        {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='date' name='date' class='form-control col-4' placeholder='MM-DD-YYYY' value='{{ old('date', '') }}'/>
-                    @endif
-                </div>
-
-                {{--  Meeting time form  --}}
-                <div class='form-group mb-4'>
-                    <label for='from'  data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: 00:00 AM/PM (02:30)'>*From:</label>
-                    
-                    {{--  If field is not filled correctly show an error box  --}}
-                    @if(hasErrorFor('from'))
-                        {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='from' class='form-control is-invalid col-4' placeholder='HH:MM AM' step='1800' value='{{ old('from', '') }}'/>
-                        <div class="invalid-feedback">{{ getErrorFor('from')}}</div>
-                    {{--  Otherwise show a normal input  --}}
-                    @else
-                        {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='from' class='form-control col-4' placeholder='HH:MM AM' step='1800' value='{{ old('from', '') }}'/>
-                    @endif
-                </div>
-
-                <div class='form-group mb-4'>
-                    <label for='to'  data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: 00:00 AM/PM (03:30 PM)'>*To:</label>
-                    
-                    {{--  If field is not filled correctly show an error box  --}}
-                    @if(hasErrorFor('to'))
-                        {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='to' class='form-control is-invalid col-4' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}'/>
-                        <div class="invalid-feedback">{{ getErrorFor('to')}}</div>
-                     {{--  Otherwise show a normal input  --}}
-                    @else
-                        {{--  ######## Need to Change value to the current date #############  --}}
-                        <input type='time' name='to' class='form-control col-4' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}'/>
-                    @endif                  
-                </div>
-
-                {{--  Location form  --}}
-                <div class='form-group mb-4'>
-                    <label for='location'  data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Enter the preferred location'>Location:</label>
-                    <select name='location' class='form-control col-4'>
-                        <option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>Select a floor</option>
-                        <option value='0' {{ old('location') == '0' ? 'selected' : '' }}>Floor 0</option>
-                        <option value='1' {{ old('location') == '1' ? 'selected' : '' }}>Floor 1</option>
-                        <option value='2' {{ old('location') == '2' ? 'selected' : '' }}>Floor 2</option>
-                        <option value='3' {{ old('location') == '3' ? 'selected' : '' }}>Floor 3</option>
-                        <option value='4' {{ old('location') == '4' ? 'selected' : '' }}>Floor 4</option>
-                        <option value='5' {{ old('location') == '5' ? 'selected' : '' }}>Floor 5</option>
-                        <option value='6' {{ old('location') == '6' ? 'selected' : '' }}>Floor 6</option>
-                        <option value='7' {{ old('location') == '7' ? 'selected' : '' }}>Floor 7</option>
-                        <option value='8' {{ old('location') == '8' ? 'selected' : '' }}>Floor 8</option>
-                        <option value='9' {{ old('location') == '9' ? 'selected' : '' }}>Floor 9</option>
-                    </select>
-                </div>
-
-                {{--  Number of people form  --}}
-                <div class='form-group mb-4'>
-                    <label for='capacity' data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Please enter the estimated number of people that need to be accommodated for'>Number of People:</label>
-                    <input class='form-control col-4' name='capacity' type='number' min='1' max='50'  value='{{ old('capacity', '') }}'>
-                </div>
-
-                {{--  Equipment check box form  --}}
-                <div class='form-group'>
-                    <h4>Equipment:</h4>
-
-                    <div class='row'>               
-                        <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                            <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value= '1' {{ old('projectorCheck') ? 'checked' : '' }}/>
-                            <label class='custom-control-label' for='projectorCheck'>Projector</label>
-                        </div>
-                        <div class='custom-control custom-checkbox ml-3'>
-                            <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1' {{ old('whiteboardCheck') ? 'checked' : '' }}/>
-                            <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
+            <div class='search-room-content'>
+                <form action='/results' method='GET' enctype='multipart/form-data'>
+                    {{ csrfField() }}
+                    {{--  Date form  --}}
+                    <div class='row'>
+                        <div class='col form-group mb-4 '>
+                            <label for='date' data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: mm/dd/yyyy (02/20/2019)'>Select Date: <b class='text-danger'>*</b></label>
+                            {{--  If field is not filled correctly show an error box  --}}
+                            @if(hasErrorFor('date'))
+                                {{--  ######## Need to Change value to the current date #############  --}}
+                                <input type='date' id='date' name='date' class='form-control is-invalid' placeholder='MM-DD-YYYY' value='{{ old('date', '') }}' oninput='removeErrorClass("date")'/>
+                                <div class="invalid-feedback">{{ getErrorFor('date')}}</div>
+                            {{--  Otherwise show a normal input  --}}
+                            @else
+                                {{--  ######## Need to Change value to the current date #############  --}}
+                                <input type='date' name='date' class='form-control' placeholder='MM-DD-YYYY' value='{{ old('date', '') }}'/>
+                            @endif
                         </div>
                     </div>
-
+                    {{--  Meeting time from  --}}
                     <div class='row'>
-                        <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                            <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck') ? 'checked' : '' }}/>
-                            <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
-                        </div>  
-                        <div class='custom-control custom-checkbox ml-3'>
-                            <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck') ? 'checked' : '' }}/>
-                            <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
-                        </div>                
-                    </div>
-
-                    <div class='row'>
-                        <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                            <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck') ? 'checked' : '' }}/>
-                            <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
+                        <div class='col form-group mb-4'>
+                            <label for='from' data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: 00:00 AM/PM (02:30)'>From: <b class='text-danger'>*</b></label>
+                            {{--  If field is not filled correctly show an error box  --}}
+                            @if(hasErrorFor('from'))
+                                {{--  ######## Need to Change value to the current date #############  --}}
+                                <input type='time' id='from' name='from' class='form-control is-invalid' placeholder='HH:MM AM' step='1800' value='{{ old('from', '') }}' oninput='removeErrorClass("from")'/>
+                                <div class="invalid-feedback">{{ getErrorFor('from')}}</div>
+                            {{--  Otherwise show a normal input  --}}
+                            @else
+                                {{--  ######## Need to Change value to the current date #############  --}}
+                                <input type='time' name='from' class='form-control' placeholder='HH:MM AM' step='1800' value='{{ old('from', '') }}'/>
+                            @endif
                         </div>
-                        
-                        <div class="custom-control custom-checkbox ml-3">
-                            <input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1' {{ old('surfaceHubCheck') ? 'checked' : '' }}/>
-                            <label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
-                        </div>               
+                        <div class='col form-group mb-4'>
+                            <label for='to' data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: 00:00 AM/PM (03:30 PM)'>To: <b class='text-danger'>*</b></label>
+                            {{--  If field is not filled correctly show an error box  --}}
+                            @if(hasErrorFor('to'))
+                                {{--  ######## Need to Change value to the current date #############  --}}
+                                <input type='time'  id='to' name='to' class='form-control is-invalid' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}' oninput='removeErrorClass("to")'/>
+                                <div class="invalid-feedback">{{ getErrorFor('to')}}</div>
+                            {{--  Otherwise show a normal input  --}}
+                            @else
+                                {{--  ######## Need to Change value to the current date #############  --}}
+                                <input type='time' name='to' class='form-control' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}'/>
+                            @endif                  
+                        </div>
                     </div>
-
+                    {{--  Location form  --}}
                     <div class='row'>
-                        <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-3 ml-3'>
-                            <input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1' {{ old('pcCheck') ? 'checked' : '' }}/>
-                            <label class='custom-control-label' for='pcCheck'>PC</label>
-                        </div>                
+                        <div class='col form-group mb-4'>
+                            <label for='location' data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Enter the preferred location'>Location:</label>
+                            <select name='location' class='form-control'>
+                                <option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>Select a floor</option>
+                                <option value='0' {{ old('location') == '0' ? 'selected' : '' }}>Floor 0</option>
+                                <option value='1' {{ old('location') == '1' ? 'selected' : '' }}>Floor 1</option>
+                                <option value='2' {{ old('location') == '2' ? 'selected' : '' }}>Floor 2</option>
+                                <option value='3' {{ old('location') == '3' ? 'selected' : '' }}>Floor 3</option>
+                                <option value='4' {{ old('location') == '4' ? 'selected' : '' }}>Floor 4</option>
+                                <option value='5' {{ old('location') == '5' ? 'selected' : '' }}>Floor 5</option>
+                                <option value='6' {{ old('location') == '6' ? 'selected' : '' }}>Floor 6</option>
+                                <option value='7' {{ old('location') == '7' ? 'selected' : '' }}>Floor 7</option>
+                                <option value='8' {{ old('location') == '8' ? 'selected' : '' }}>Floor 8</option>
+                                <option value='9' {{ old('location') == '9' ? 'selected' : '' }}>Floor 9</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                {{--  Page buttons  --}}
-                <div class='row'>
-                    <div class='col-sm-12'>
-                        <button type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
-                        <button type='submit' class='btn btn-primary'>Search</button>
-                    </div>       
-                </div>
-            </div>
-        </form>
-    </div> 
+                    <div class='row'>
+                        {{--  Table Seats form  --}}
+                        <div class='col form-group mb-4'>
+                            <label for='seats' data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Please enter the estimated number of seats that need to be accommodated for'>Number of Table Seats:</label>
+                            <input class='form-control' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
+                        </div>
+                        {{--  Max Capacity  --}}
+                        <div class='col form-group mb-4'>
+                            <label for='capacity' data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Please enter the estimated number of people that need to be accommodated for'>Number of People:</label>
+                            <input class='form-control' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
+                        </div>
+                    </div>
+                    {{--  Equipment check box form  --}}
+                    <div class='form-group'>
+                        <h4>Equipment:</h4>
+                        <div class='row'>               
+                            <div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
+                                <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value= '1' {{ old('projectorCheck') ? 'checked' : '' }}/>
+                                <label class='custom-control-label' for='projectorCheck'>Projector</label>
+                            </div>
+                            <div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
+                                <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1' {{ old('whiteboardCheck') ? 'checked' : '' }}/>
+                                <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
+                            </div>
+                            <div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
+                                <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck') ? 'checked' : '' }}/>
+                                <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
+                            </div>  
+  
+                            <div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
+                                <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck') ? 'checked' : '' }}/>
+                                <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
+                            </div>
+                            <div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
+                                <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck') ? 'checked' : '' }}/>
+                                <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
+                            </div>
+                            
+                            <div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
+                                <input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1' {{ old('surfaceHubCheck') ? 'checked' : '' }}/>
+                                <label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
+                            </div>              
+                            <div class='custom-control custom-checkbox col ml-3'>
+                                <input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1' {{ old('pcCheck') ? 'checked' : '' }}/>
+                                <label class='custom-control-label' for='pcCheck'>PC</label>
+                            </div>                
+                        </div>
+                    </div>
+                    {{--  Page buttons  --}}
+                    <div class='row'>
+                        <div class='col-sm-12'>
+                            <button type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
+                            <button type='submit' class='btn btn-primary'>Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div> 
 
+    {{--  Remove the is-invalid class when input changes  --}}
+    <script>
+        function removeErrorClass(idOfInput){
+            $('#'+idOfInput).removeClass('is-invalid');
+        }
+    </script>
 @endsection
 

@@ -1,6 +1,8 @@
 'use strict';
 
 const User = use('App/Models/User');
+const Room = use('App/Models/Room');
+const Booking = use('App/Models/Booking');
 const AccountRequest = use('App/Models/AccountRequest');
 const Mail = use('Mail');
 const Hash = use('Hash');
@@ -60,6 +62,52 @@ async function updatePassword (newPassword, columnName, columnValue) {
 	}
 }
 
+/**
+ * Populate bookings from booking query results.
+ *
+ * @param {Object} results Results from bookings query.
+ *
+ * @returns {Object} The access token.
+ *
+ */
+async function populateBookings (results) {
+	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+	async function asyncMap (arr, callback) {
+		let arr2 = [];
+
+		for (let i = 0; i < arr.length; i++) {
+			arr2.push(await callback(arr[i], i, arr));
+		}
+
+		return arr2;
+	}
+
+	let bookings = [];
+	const populate = async () => {
+		bookings = await asyncMap(results, async (result) => {
+			const booking = {};
+
+			const from = new Date(result.from);
+			const to = new Date(result.to);
+			booking.subject = result.subject;
+			booking.status = result.status;
+			booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
+			booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+			booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
+			booking.roomId = result.room_id;
+			booking.id = result.id;
+
+			return booking;
+		});
+	};
+
+	await populate();
+
+	return bookings;
+}
+
 class UserController {
 	/**
 	 * Create a new Enployee user. There is an option to verify the user directly
@@ -75,6 +123,32 @@ class UserController {
 		} else {
 			return this.createWithoutVerifyingEmail({ request, response, auth });
 		}
+	}
+
+	/**
+	 * Render a specific edit user page depending on the user Id.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async edit ({ params, view, auth, response }) {
+		// Retrieves user object
+		const user = await User.findBy('id', params.id);
+		var layoutType = '';
+
+		// check if admin is editing their own profile
+		if (auth.user.role === 1) {
+			layoutType = 'layouts/adminLayout';
+		// check if user is editing their own profile
+		} else if (auth.user.id === Number(params.id) && auth.user.role === 2) {
+			layoutType = 'layouts/mainLayout';
+		// check if user is editing someone elses profile
+		} else if (auth.user.id !== Number(params.id) && auth.user.role === 2) {
+			layoutType = 'layouts/mainLayout';
+		} else {
+			return response.redirect('/');
+		}
+
+		return view.render('auth.editUser', { user: user, layoutType: layoutType });
 	}
 
 	/**
@@ -235,7 +309,6 @@ class UserController {
 		if (auth.user.role === 1) {
 			layoutType = 'layouts/adminLayout';
 			canEdit = 1;
-
 		// check if user is viewing their own profile
 		} else if (auth.user.id === Number(params.id) && auth.user.role === 2) {
 			layoutType = 'layouts/mainLayout';
@@ -328,20 +401,7 @@ class UserController {
 			if (rows.length !== 0 && rows[0].type === 1) {
 				const email = rows[0].email;
 
-				const options = {
-					redirect: '/resetPassword',
-					method: 'POST',
-					hidden: [
-						{
-							name: 'email',
-							value: email
-						}
-					],
-					buttonName: 'Create New Password',
-					buttonClass: 'btn btn-login mt-3'
-				};
-
-				return view.render('resetPassword', { options });
+				return view.render('resetPassword', { email });
 			}
 		}
 	}
@@ -401,6 +461,31 @@ class UserController {
 		});
 
 		return view.render('adminDash.viewUsers', { users });
+	}
+
+	/**
+	 * Retrives all of the bookings that are associated to a specific user.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getBookings ({ params, view, auth }) {
+		// Queries the database for the bookings associated to a specific user
+		let searchResults = await Booking
+			.query()
+			.where('user_id', params.id)
+			.fetch();
+
+		searchResults = searchResults.toJSON();
+		const bookings = await populateBookings(searchResults);
+		var layoutType = '';
+
+		if (auth.user.role === 1) {
+			layoutType = 'layouts/adminLayout';
+		} else {
+			layoutType = 'layouts/adminLayout';
+		}
+
+		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
 	}
 }
 

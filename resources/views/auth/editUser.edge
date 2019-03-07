@@ -4,57 +4,58 @@
     <div class='row'>
         <div class= 'col-12'>
             @!component('components.pageTitle', title='Edit Profile')
-            <p><b>Name:</b> {{user.firstName}} {{user.lastName}}</p>
-            <p><b>Email:</b> {{user.email}}</p>
+            <p><b>Name:</b> {{ user.firstname }} {{ user.lastname }}</p>
+            <p><b>Email:</b> {{ user.email }}</p>
             @if(verified)
                 <i></i>
             @endif
-            <p><b>Floor:</b> {{user.floor}}</p>
-            <p><b>Tower:</b> {{user.floor}}</p>
-            @if(canEdit)
-                <a class="btn btn-primary" href="/user/{{user.id}}/edit"><i class="fas fa-pen"></i> Edit Profile</a>
+            <p><b>Floor:</b> {{ user.floor }}</p>
+
+            @if(user.tower == 1)
+                <p><b>Tower:</b> West</p>
+            @else
+                <p><b>Tower:</b> East</p>
             @endif
 
             <form>
                 {{ csrfField() }}
-                <div class="form-group">
-                    <label for="exampleInputEmail1">First Name</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" Value="{{user.firstName}}">
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                <div class='form-group'>
+                    <label for='firstName'>First Name</label>
+                    <input type='text' class='form-control' id='firstName' Value='{{ user.firstname }}'>
                 </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Last Name</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{user.lastName}}">
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                <div class='form-group'>
+                    <label for='lastName'>Last Name</label>
+                    <input type='text' class='form-control' id='lastName' value='{{ user.lastname }}'>  
                 </div>
-                <div class="form-group">
-                    <label for="exampleInputEmail1">Email</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{user.email}}">
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                <div class='form-group'>
+                    <label for='exampleInputEmail1'>Email</label>
+                    <input type='email' class='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' value='{{ user.email }}'>
+                    <small id='emailHelp' class='form-text text-muted'>We'll never share your email with anyone else.</small>
                 </div>
-                <div class="form-row">
-                    <div class="col">
-                        <label for="exampleInputEmail1">Tower</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value="{{user.lastName}}">
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                <div class='form-row'>
+                    <div class='col'>
+                        <label for='floor'>Floor</label>
+                        <select class='form-control' id='floor' name='floor'>
+                            <option {{ user.floor == '1' ? 'selected' : '' }}>1</option>
+                            <option {{ user.floor == '2' ? 'selected' : '' }}>2</option>
+                            <option {{ user.floor == '3' ? 'selected' : '' }}>3</option>
+                            <option {{ user.floor == '4' ? 'selected' : '' }}>4</option>
+                            <option {{ user.floor == '5' ? 'selected' : '' }}>5</option>
+                            <option {{ user.floor == '6' ? 'selected' : '' }}>6</option>
+                            <option {{ user.floor == '7' ? 'selected' : '' }}>7</option>
+                            <option {{ user.floor == '8' ? 'selected' : '' }}>8</option>
+                            <option {{ user.floor == '9' ? 'selected' : '' }}>9</option>
+                        </select>
                     </div>
-                    <div class="col">
-                        <label for="inputState">Floor</label>
-                        <select id="inputState" class="form-control">
-                            <option selected>Choose...</option>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>6</option>
-                            <option>7</option>
-                            <option>8</option>
-                            <option>9</option>
+                    <div class='col'>
+                        <label for='tower'>Tower</label>
+                        <select class='form-control' id='tower' name='tower' >
+                            <option {{ user.tower == 1 ? 'selected' : '' }}>West</option>
+                            <option {{ user.tower == 2 ? 'selected' : '' }}>East</option>
                         </select>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type='submit' class='btn btn-primary mt-3'>Update</button>
             </form>          
         </div>
 

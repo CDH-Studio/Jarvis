@@ -18,6 +18,45 @@
 .dropdown-item:hover{
     background-color:#001642;
 }
+
+/* Tooltip color changes */
+.tooltip-inner {
+    background-color: rgb(115, 146, 187);
+}
+
+.tooltip.bs-tooltip-auto[x-placement^=left] .arrow::before, .tooltip.bs-tooltip-left .arrow::before {
+    border-left-color: rgb(115, 146, 187);
+}
+
+.tooltip.bs-tooltip-auto[x-placement^=bottom] .arrow::before, .tooltip.bs-tooltip-bottom .arrow::before {
+    border-bottom-color:  rgb(115, 146, 187);
+}
+
+.tooltip.bs-tooltip-auto[x-placement^=right] .arrow::before, .tooltip.bs-tooltip-right .arrow::before {
+
+    border-right-color:  rgb(115, 146, 187);
+}
+
+.tooltip.bs-tooltip-auto[x-placement^=top] .arrow::before, .tooltip.bs-tooltip-top .arrow::before {
+    border-top-color:  rgb(115, 146, 187);
+}
+
+/* checkboxes */
+.custom-control-input:checked ~ .custom-control-label::before {
+    color: #fff;
+    border-color: #001642;
+    background-color: #001642;
+}
+
+/* Form Focus color and style */
+.form-control:focus{
+      color: #495057;
+  background-color: #fff;
+  border-color: #80bdff;
+  outline: 0;
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Colors */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -80,6 +119,17 @@
     background-color:#dde3e9;
     border-color: #dde3e9;
     color: #223851;
+    position: relative; 
+    top: -1px;
+    box-shadow: 0 4px 8px 0 #00000033 !important;
+}
+
+.btn-info{
+    border-style: none;
+    box-shadow: 0 2px 6px 0 #00000033 !important;
+}
+
+.btn-info:hover{
     position: relative; 
     top: -1px;
     box-shadow: 0 4px 8px 0 #00000033 !important;
