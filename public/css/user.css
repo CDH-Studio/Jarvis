@@ -8,7 +8,9 @@ body {
     padding-top: 65px; 
     font-family: 'Lato', sans-serif;
 }
-
+.search-room-content{
+    max-width: 600px;
+}
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Navbar changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
