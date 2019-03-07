@@ -330,6 +330,7 @@ class RoomController {
 		const from = form.from;
 		const to = form.to;
 		const location = form.location;
+		const seats = form.seats;
 		const capacity = form.capacity;
 
 		// check boxes input
@@ -352,6 +353,13 @@ class RoomController {
 				.where('floor', location)
 				.clone();
 		}
+		// if the "number of seats" is selected then add to query, else ignore it
+		if (seats) {
+			searchResults = searchResults
+				.where('seats', '>=', seats)
+				.clone();
+		}
+
 		// if the "number of people" is selected then add to query, else ignore it
 		if (capacity) {
 			searchResults = searchResults
