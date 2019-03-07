@@ -13,7 +13,6 @@
         @endslot
     @endcomponent
 
-    {{ csrfField() }}
     {{--  Loading page header  --}}
 
     {{--  Actual page content  --}}
@@ -251,7 +250,7 @@
             {{--  Footer buttons to cancel and book room  --}}
             <div class='modal-footer'>
                 <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                <button type='submit' class='btn btn-primary'  {{-- data-dismiss='modal' data-toggle='modal' data-target='#successModal' --}}>Book Room</button>
+                <button type='submit' class='btn btn-primary'>Book Room</button>
             </div>
         </form>
     @endif
