@@ -477,7 +477,7 @@ class UserController {
 
 		searchResults = searchResults.toJSON();
 		const bookings = await populateBookings(searchResults);
-		var layoutType = 'layouts/adminLayout';
+		var layoutType = 'layouts/mainLayout';
 
 		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
 	}
