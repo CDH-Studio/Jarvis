@@ -468,7 +468,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getBookings ({ params, view }) {
+	async getBookings ({ params, view, auth }) {
 		// Queries the database for the bookings associated to a specific user
 		let searchResults = await Booking
 			.query()
@@ -477,7 +477,13 @@ class UserController {
 
 		searchResults = searchResults.toJSON();
 		const bookings = await populateBookings(searchResults);
-		var layoutType = 'layouts/adminLayout';
+		var layoutType = '';
+
+		if (auth.user.role === 1) {
+			layoutType = 'layouts/adminLayout';
+		} else {
+			layoutType = 'layouts/adminLayout';
+		}
 
 		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
 	}
