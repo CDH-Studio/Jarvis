@@ -28,6 +28,8 @@
                     @if(isAdmin)
                         <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
                         <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit</button>
+                    @else
+                        <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-plus"></i> Add Rating & Review</button>
                     @endif
                 </div>
                 </div>
