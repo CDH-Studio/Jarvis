@@ -53,11 +53,11 @@ class SearchRoom {
 			'date.before': 'You can only book rooms up to 3 months ahead of time',
 			'date.date': 'Please enter a valid date',
 			'date.dateFormat': 'Please enter a date with the following format: MM/DD/YYYY',
-			'date.required': 'This field is required',
+			'from.isAfterToday': 'This field must occur after the current time',
+			'from.timeFormat': 'You may only search with 30min time intervals, please enter a starting time that ends with 00 or 30.',
 			'to.isAfterToday': 'This field must occur after the current time',
 			'to.timeFormat': 'You may only search with 30min time intervals, please enter a starting time that ends with 00 or 30.',
-			'from.isAfterToday': 'This field must occur after the current time',
-			'from.timeFormat': 'You may only search with 30min time intervals, please enter a starting time that ends with 00 or 30.'
+			'required': 'This field is required'
 		};
 	}
 
