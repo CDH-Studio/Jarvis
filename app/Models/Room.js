@@ -11,7 +11,7 @@ class Room extends Model {
 	}
 
 	static get table () {
-    	return 'room'
+    	return 'rooms'
   	}
 
 }

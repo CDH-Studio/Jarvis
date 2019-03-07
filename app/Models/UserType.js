@@ -8,6 +8,10 @@ class UserType extends Model {
 	static get table () {
     	return 'user_types'
   	}
+
+  	user () {
+		return this.belongsToMany('App/Model/user')
+	}
 }
 
 module.exports = UserType
