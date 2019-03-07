@@ -5,14 +5,14 @@ class HomeController {
 		try {
 			await auth.check();
 			var d = new Date();
-			var date = d.toLocaleDateString();
-			if (auth.user.role === 1) {
-				return response.route('adminDash');
+			var date = d.toLocaleDateString();			
+		if (await auth.user.getUserRole() == 'admin') {
+				return response.route('adminDash', { auth, date });
 			} else {
 				return response.route('booking');
 			}
 		} catch (error) {
-			return response.redirect('/login');
+			return response.route('login');
 		}
 	}
 

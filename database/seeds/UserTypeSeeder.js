@@ -16,7 +16,7 @@ const UserTypes = use('App/Models/UserType');
 
 class UserTypeSeeder {
   	async run () {
-	  	var userTypesFiller=['user','admin'];
+	  	var userTypesFiller=['admin','user'];
 	  	var count= await UserTypes.getCount();
 
 	  	if(count==0){

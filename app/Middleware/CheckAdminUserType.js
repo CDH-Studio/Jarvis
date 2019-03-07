@@ -26,9 +26,8 @@ class CheckAdminUserType {
 	*/
 	async _authenticate (auth, schemes, response) {
 		let lastError = null;
+
 		schemes = Array.isArray(schemes) && schemes.length ? schemes : [this.scheme];
-		console.log("wait");
-		console.log(schemes);
 
 		debug('attempting to authenticate via %j scheme(s)', schemes);
 
@@ -42,7 +41,7 @@ class CheckAdminUserType {
 				await authenticator.check();
 				
 
-				if (auth.user.role !== 1) {
+				if (await auth.user.getUserRole() !== 'admin') {
 					throw Error('not Admin!');
 				}
 
