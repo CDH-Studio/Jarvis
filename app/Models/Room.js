@@ -9,6 +9,10 @@ class Room extends Model {
 	bookings () {
 		return this.hasMany('App/Models/Booking');
 	}
+
+	equipments () {
+		return this.hasMany('App/Models/Equipment');
+	} 
 }
 
 module.exports = Room;
