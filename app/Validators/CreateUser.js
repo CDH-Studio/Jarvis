@@ -30,7 +30,8 @@ class CreateUser {
 			firstname: 'required',
 			floor: 'required|requiredDropdown',
 			lastname: 'required',
-			password:"required|regex: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$", // eslint-disable-line
+			password:"required|", // eslint-disable-line
+			// regex: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$
 			tower: 'required|requiredDropdown'
 		};
 	}
