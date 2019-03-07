@@ -8,6 +8,7 @@ class EquipmentSchema extends Schema {
 		this.create('equipments', (table) => {
 			table.increments();
 			table.string('name', 100).notNullable();
+			table.timestamps();
 		});
 	}
 
