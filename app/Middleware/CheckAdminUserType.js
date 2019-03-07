@@ -22,11 +22,13 @@ class CheckAdminUserType {
 	* @param  {Object}      auth
 	* @param  {Array}      schemes
 	*
-	* @return {void}
+	* @return valid Auth = 1
 	*/
 	async _authenticate (auth, schemes, response) {
 		let lastError = null;
 		schemes = Array.isArray(schemes) && schemes.length ? schemes : [this.scheme];
+		console.log("wait");
+		console.log(schemes);
 
 		debug('attempting to authenticate via %j scheme(s)', schemes);
 
@@ -38,6 +40,7 @@ class CheckAdminUserType {
 			try {
 				const authenticator = auth.authenticator(scheme);
 				await authenticator.check();
+				
 
 				if (auth.user.role !== 1) {
 					throw Error('not Admin!');
@@ -64,8 +67,9 @@ class CheckAdminUserType {
 		* then throw it back
 		*/
 		if (lastError) {
-			response.redirect('/');
+			return 0;
 		}
+		return 1
 	}
 
 	/**
@@ -74,7 +78,11 @@ class CheckAdminUserType {
 	* @param {Function} next
 	*/
 	async handle ({ auth, view, response }, next, schemes) {
-		await this._authenticate(auth, schemes, response);
+		var authValid = await this._authenticate(auth, schemes, response);
+
+		if(!authValid){
+			return response.redirect('/');
+		}
 
 		/**
 		 * For compatibility with the old API

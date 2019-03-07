@@ -16,7 +16,7 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route');
 
-Route.get('/', 'HomeController.dashboard').as('home');
+Route.get('/', 'HomeController.home').as('home');
 Route.on('/welcome').render('welcome');
 Route.on('/sample').render('sample');
 
@@ -57,7 +57,7 @@ Route.post('/user/updatepassword', 'UserController.changePassword').as('changePa
 // admin
 Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['admin']);
 Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('AddRoom').middleware(['admin']);
-Route.on('/adminDash').render('adminDash').as('adminDash').middleware(['admin']);
+Route.get('/adminDash', 'HomeController.adminDashboard').as('adminDash').middleware(['admin']);
 
 Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['admin']);
 Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['admin']);

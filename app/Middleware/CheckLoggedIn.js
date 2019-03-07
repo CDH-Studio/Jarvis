@@ -8,7 +8,6 @@ const debug = require('debug')('adonis:auth');
 class CheckAdminUserType {
 	constructor (Config) {
 		Config = use('Config');
-		// console.log(Config);
 		const authenticator = Config.get('auth.authenticator');
 		this.scheme = Config.get(`auth.${authenticator}.scheme`, null);
 	}
@@ -60,8 +59,9 @@ class CheckAdminUserType {
 		* then throw it back
 		*/
 		if (lastError) {
-			response.redirect('/');
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
@@ -70,7 +70,11 @@ class CheckAdminUserType {
 	* @param {Function} next
 	*/
 	async handle ({ auth, view, response }, next, schemes) {
-		await this._authenticate(auth, schemes, response);
+		var authValid = await this._authenticate(auth, schemes, response);
+
+		if(!authValid){
+			return response.redirect('/');
+		}
 
 		/**
 		 * For compatibility with the old API
