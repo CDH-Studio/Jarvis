@@ -9,7 +9,9 @@ class Equipment extends Model {
 	}
 
 	rooms () {
-		return this.belongsToMany('App/Models/Room');
+		return this
+			.belongsToMany('App/Models/Room')
+			.pivotTable('room_equipment');
 	}
 }
 

@@ -6,11 +6,11 @@ const Schema = use('Schema');
 class RelationsSchema extends Schema {
 	up () {
 		this.create('room_equipment', (table) => {
-			table.string('roomname', 20).notNullable();
-			table.integer('id').notNullable();
-			table.primary('id', 'roomname');
-			table.foreign('id').references('id').on('equipments').onDelete('cascade');
-			table.foreign('roomname').references('name').on('rooms').onDelete('cascade');
+			table.integer('room_id').notNullable();
+			table.integer('equipment_id').notNullable();
+			table.primary('room_id', 'equipment_id');
+			// table.foreign('id').references('id').on('equipments').onDelete('cascade');
+			// table.foreign('roomname').references('name').on('rooms').onDelete('cascade');
 		});
 	}
 
