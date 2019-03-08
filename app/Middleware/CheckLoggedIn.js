@@ -1,11 +1,16 @@
 'use strict';
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+
+/**
+*
+* Middleware: CheckLoggedIn
+* Check if user is logged-in and user role is "Admin"
+*
+*/
 
 const debug = require('debug')('adonis:auth');
 
-class CheckAdminUserType {
+class CheckLoggedIn {
+
 	constructor (Config) {
 		Config = use('Config');
 		const authenticator = Config.get('auth.authenticator');
@@ -13,6 +18,7 @@ class CheckAdminUserType {
 	}
 
 	/**
+	*
 	* Attempts to authenticate the user using defined multiple schemes and
 	* stops on the first one
 	*
@@ -21,7 +27,8 @@ class CheckAdminUserType {
 	* @param  {Object}      auth
 	* @param  {Array}      schemes
 	*
-	* @return {void}
+	* @return valid Auth = 1
+	*
 	*/
 	async _authenticate (auth, schemes, response) {
 		let lastError = null;
@@ -64,16 +71,23 @@ class CheckAdminUserType {
 		return 1;
 	}
 
+
 	/**
+	*
+	* Check if user is logged in and admin. 
+	* Loggedin: continue;
+	* Not Loggedin: Redirect to login
+	*
 	* @param {object} ctx
 	* @param {Request} ctx.request
 	* @param {Function} next
+	*
 	*/
 	async handle ({ auth, view, response }, next, schemes) {
 		var authValid = await this._authenticate(auth, schemes, response);
 
 		if(!authValid){
-			return response.redirect('/');
+			return response.redirect('/login');
 		}
 
 		/**
@@ -96,4 +110,4 @@ class CheckAdminUserType {
 	}
 }
 
-module.exports = CheckAdminUserType;
+module.exports = CheckLoggedIn;

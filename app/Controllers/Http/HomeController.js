@@ -11,7 +11,7 @@ class HomeController {
 	* @param {auth}
 	*
 	*/
-	async home (response, auth) {
+	async home ({response, auth}) {
 		try {
 			// cheack user is logged-in and role
 			await auth.check();
@@ -34,7 +34,7 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async adminDashboard (view) {
+	async adminDashboard ({view}) {
 		return view.render('adminDash');
 	}
 
@@ -45,7 +45,7 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async userDashboard (view) {
+	async userDashboard ({view}) {
 		return view.render('booking');
 	}
 }
