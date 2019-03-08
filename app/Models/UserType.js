@@ -1,16 +1,14 @@
-'use strict'
+'use strict';
 
-/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const Model = use('Model')
+const Model = use('Model');
 
 class UserType extends Model {
-
 	static get table () {
-    	return 'user_types'
-  	}
+		return 'user_types';
+	}
 
-  	user () {
-		return this.belongsToMany('App/Model/user')
+	user () {
+		return this.belongsToMany('App/Model/user');
 	}
 
 	static async getRoleID (role_name) {
@@ -24,4 +22,4 @@ class UserType extends Model {
 	}
 }
 
-module.exports = UserType
+module.exports = UserType;

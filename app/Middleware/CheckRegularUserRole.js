@@ -10,9 +10,8 @@
 const debug = require('debug')('adonis:auth');
 
 class CheckRegularUserRole {
-
 	constructor (Config) {
-		Config = use('Config');	
+		Config = use('Config');
 		const authenticator = Config.get('auth.authenticator');
 		this.scheme = Config.get(`auth.${authenticator}.scheme`, null);
 	}
@@ -30,7 +29,7 @@ class CheckRegularUserRole {
 	* @return valid Auth = 1
 	*
 	*/
-	async _authenticate ({auth}, schemes) {
+	async _authenticate ({ auth }, schemes) {
 		let lastError = null;
 
 		schemes = Array.isArray(schemes) && schemes.length ? schemes : [this.scheme];
@@ -44,7 +43,7 @@ class CheckRegularUserRole {
 		for (const scheme of schemes) {
 			try {
 				const authenticator = auth.authenticator(scheme);
-				await authenticator.check();		
+				await authenticator.check();
 
 				if (await auth.user.getUserRole() !== 'user') {
 					throw Error('This User is an Admin!');
@@ -73,12 +72,12 @@ class CheckRegularUserRole {
 		if (lastError) {
 			return 0;
 		}
-		return 1
+		return 1;
 	}
 
 	/**
 	*
-	* Check if user is logged in and admin. 
+	* Check if user is logged in and admin.
 	* User: continue;
 	* Not User: Redirect to landing page
 	*
@@ -90,7 +89,7 @@ class CheckRegularUserRole {
 	async handle ({ auth, view, response }, next, schemes) {
 		var authValid = await this._authenticate(auth, schemes, response);
 
-		if(!authValid){
+		if (!authValid) {
 			return response.redirect('/');
 		}
 

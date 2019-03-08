@@ -10,7 +10,6 @@
 const debug = require('debug')('adonis:auth');
 
 class CheckAdminUserRole {
-	
 	constructor (Config) {
 		Config = use('Config');
 		const authenticator = Config.get('auth.authenticator');
@@ -45,7 +44,6 @@ class CheckAdminUserRole {
 			try {
 				const authenticator = auth.authenticator(scheme);
 				await authenticator.check();
-				
 
 				if (await auth.user.getUserRole() !== 'admin') {
 					throw Error('not Admin!');
@@ -74,12 +72,12 @@ class CheckAdminUserRole {
 		if (lastError) {
 			return 0;
 		}
-		return 1
+		return 1;
 	}
 
 	/**
 	*
-	* Check if user is logged in and admin. 
+	* Check if user is logged in and admin.
 	* Admin: continue;
 	* Not Admin: Redirect to landing page
 	*
@@ -91,7 +89,7 @@ class CheckAdminUserRole {
 	async handle ({ auth, view, response }, next, schemes) {
 		var authValid = await this._authenticate(auth, schemes, response);
 
-		if(!authValid){
+		if (!authValid) {
 			return response.redirect('/');
 		}
 

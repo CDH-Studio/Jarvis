@@ -10,7 +10,6 @@
 const debug = require('debug')('adonis:auth');
 
 class CheckLoggedIn {
-
 	constructor (Config) {
 		Config = use('Config');
 		const authenticator = Config.get('auth.authenticator');
@@ -71,10 +70,9 @@ class CheckLoggedIn {
 		return 1;
 	}
 
-
 	/**
 	*
-	* Check if user is logged in and admin. 
+	* Check if user is logged in and admin.
 	* Loggedin: continue;
 	* Not Loggedin: Redirect to login
 	*
@@ -86,7 +84,7 @@ class CheckLoggedIn {
 	async handle ({ auth, view, response }, next, schemes) {
 		var authValid = await this._authenticate(auth, schemes, response);
 
-		if(!authValid){
+		if (!authValid) {
 			return response.redirect('/login');
 		}
 

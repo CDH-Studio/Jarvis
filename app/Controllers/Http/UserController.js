@@ -159,15 +159,13 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async createWithoutVerifyingEmail ({ request, response, auth }) {
+		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
+		userInfo.role_id = await UserType.getRoleID('user');
+		userInfo.verified = true;
+		const user = await User.create(userInfo);
 
-			var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
-			userInfo.role_id = await UserType.getRoleID('user');
-			userInfo.verified = true;
-			const user = await User.create(userInfo);
-
-			await auth.login(user);
-			return response.redirect('/');
-
+		await auth.login(user);
+		return response.redirect('/');
 	}
 
 	/**
@@ -239,7 +237,7 @@ class UserController {
 	 */
 	async createAdmin ({ request, response, auth }) {
 		var adminInfo = request.only(['firstname', 'lastname', 'email', 'password']);
-		userInfo.role_id = await UserType.getRoleID('admin');
+		adminInfo.role_id = await UserType.getRoleID('admin');
 		adminInfo['verified'] = 1;
 		const user = await User.create(adminInfo);
 
@@ -308,7 +306,7 @@ class UserController {
 		const user = await User.find(Number(params.id));
 		var canEdit = 0;
 		var layoutType = '';
-		const userRole= await auth.user.getUserRole();
+		const userRole = await auth.user.getUserRole();
 		// check if admin is viewing their own profile
 		if (userRole === 'admin') {
 			layoutType = 'layouts/adminLayout';
@@ -432,7 +430,7 @@ class UserController {
 	async changePassword ({ request, response, auth, session }) {
 		const { newPassword, userId } = request.only(['newPassword', 'userId']);
 		const userRole = await auth.user.getUserRole();
-		if (userRole === 'admin' || (auth.user.id === Number(userId) && aauth.user.getUserRole() === 'user')) {
+		if (userRole === 'admin' || (auth.user.id === Number(userId) && auth.user.getUserRole() === 'user')) {
 			try {
 				if (updatePassword(newPassword, 'id', userId)) {
 					session.flash({ success: 'Password Updated Successfully' });
