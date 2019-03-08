@@ -9,26 +9,10 @@
     <div class='col'>
         <div class='row'>
             <div class='col form-group'>
-                <label for='extraEquipment'>Rating</label>
-                <input  name='comment' id='comment' rows='5' />
+                <label for='rating' data-original-title='Enter the rating for this room'>Rating</b></label>
+                <input type='text' name='fullName' class='form-control' id='fullName' placeholder='Ex: 2' value='{{ old('fullName', room.fullName) }}'/>
             </div>
         </div>
-        {{--  <fieldset >
-            <input type="radio" id="star5" name="rating" value="5" />
-            <label class = "full fas fa-star" for="star5" ></label>
-        
-            <input type="radio" id="star4" name="rating" value="4" />
-            <label class = "full fas fa-star" for="star4" ></label>
-        
-            <input type="radio" id="star3" name="rating" value="3" />
-            <label class = "full fas fa-star" for="star3" ></label>
-        
-            <input type="radio" id="star2" name="rating" value="2" />
-            <label class = "full fas fa-star" for="star2" ></label>
-        
-            <input type="radio" id="star1" name="rating" value="1" />
-            <label class = "full fas fa-star" for="star1" ></label>
-        </fieldset>  --}}
 
         <div class='row'>
             <div class='col form-group'>
@@ -36,6 +20,8 @@
                 <textarea class='form-control' name='comment' id='comment' rows='5' ></textarea>
             </div>
         </div>
+
+        <button type='submit' class='btn btn-primary mb-3'>Add</button>                
     </div>
     
 @endsection
