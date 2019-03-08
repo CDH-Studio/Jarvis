@@ -482,7 +482,7 @@ class UserController {
 		if (auth.user.role === 1) {
 			layoutType = 'layouts/adminLayout';
 		} else {
-			layoutType = 'layouts/adminLayout';
+			layoutType = 'layouts/mainLayout';
 		}
 
 		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
