@@ -4,8 +4,6 @@ const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
-const Drive = use('Drive');
-
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -23,6 +21,52 @@ async function getAccessToken () {
 	}
 }
 
+/**
+ * Populate bookings from booking query results.
+ *
+ * @param {Object} results Results from bookings query.
+ *
+ * @returns {Object} The access token.
+ *
+ */
+async function populateBookings (results) {
+	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+	async function asyncMap (arr, callback) {
+		let arr2 = [];
+
+		for (let i = 0; i < arr.length; i++) {
+			arr2.push(await callback(arr[i], i, arr));
+		}
+
+		return arr2;
+	}
+
+	let bookings = [];
+	const populate = async () => {
+		bookings = await asyncMap(results, async (result) => {
+			const booking = {};
+
+			const from = new Date(result.from);
+			const to = new Date(result.to);
+			booking.subject = result.subject;
+			booking.status = result.status;
+			booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
+			booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+			booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
+			booking.roomId = result.room_id;
+			booking.id = result.id;
+
+			return booking;
+		});
+	};
+
+	await populate();
+
+	return bookings;
+}
+
 class RoomController {
 	/**
 	 * Takes in a variable and converts the value to 0 if it's null (Used for checkboxes)
@@ -38,7 +82,8 @@ class RoomController {
 		return variable;
 	}
 	async create ({ response, view, auth }) {
-		return view.render('adminDash.addRoomForm');
+		const actionType = 'Add Room';
+		return view.render('adminDash.addEditRoom', { actionType });
 	}
 
 	/**
@@ -46,7 +91,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async addRoom ({ request, response, session, auth }) {
+	async addRoom ({ request, response, session }) {
 		try {
 			// Retrieves user input
 			const body = request.all();
@@ -56,18 +101,18 @@ class RoomController {
 			room.name = body.name;
 			room.fullName = body.fullName;
 			room.floor = body.floor;
-			room.tower = body.tower === '0' ? 'West' : 'East';
+			room.tower = body.tower;
+			room.state = body.state;
 			room.telephone = body.telephoneNumber;
 			room.seats = body.tableSeats;
 			room.capacity = body.maximumCapacity;
-			room.projector = body.projectorCheck;
-			room.whiteboard = body.whiteboardCheck;
-			room.flipchart = body.flipChartCheck;
-			room.audioConference = body.audioCheck;
-			room.videoConference = body.videoCheck;
-			room.surfaceHub = body.surfaceHubCheck;
-			room.pc = body.pcCheck;
-
+			room.projector = body.projectorCheck === '1' ? '1' : '0';
+			room.whiteboard = body.whiteboardCheck === '1' ? '1' : '0';
+			room.flipchart = body.flipChartCheck === '1' ? '1' : '0';
+			room.audioConference = body.audioCheck === '1' ? '1' : '0';
+			room.videoConference = body.videoCheck === '1' ? '1' : '0';
+			room.surfaceHub = body.surfaceHubCheck === '1' ? '1' : '0';
+			room.pc = body.pcCheck === '1' ? '1' : '0';
 			// Upload process - Floor Plan
 			const floorPlanImage = request.file('floorPlan', {
 				types: ['image'],
@@ -90,10 +135,8 @@ class RoomController {
 			// Populates the room object's values
 			room.floorplan = `uploads/floorPlans/${room.name}.png`;
 			room.picture = `uploads/roomPictures/${room.name}.png`;
-			room.extraEquipment = body.extraEquipment;
-			room.comment = body.comment;
-			room.state = body.state === undefined ? 2 : 1;
-
+			room.extraEquipment = body.extraEquipment == null ? ' ' : body.extraEquipment;
+			room.comment = body.comment == null ? ' ' : body.extraEquipment;
 			await room.save();
 			session.flash({ notification: 'Room Added!' });
 
@@ -111,8 +154,8 @@ class RoomController {
 	async edit ({ params, view }) {
 		// Retrieves room object
 		const room = await Room.findBy('id', params.id);
-
-		return view.render('adminDash.editRoom', { room: room });
+		const actionType = 'Edit Room';
+		return view.render('adminDash.addEditRoom', { room: room, actionType });
 	}
 
 	/**
@@ -120,15 +163,12 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async update ({ request, session, params, response, view }) {
+	async update ({ request, session, params, response }) {
 		// Retrieves room object
 		let room = await Room.findBy('id', params.id);
 
 		// Retrieves user input
 		const body = request.all();
-
-		await Drive.delete('uploads/floorPlans/' + `${room.name}_floorPlan.png`);
-		await Drive.delete('uploads/roomPictures/' + `${room.name}_roomPicture.png`);
 
 		// Upload process - Floor Plan
 		const floorPlanImage = request.file('floorPlan', {
@@ -136,7 +176,8 @@ class RoomController {
 			size: '2mb'
 		});
 		await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-			name: `${body.name}_floorPlan.png`
+			name: `${body.name}_floorPlan.png`,
+			overwrite: true
 		});
 
 		// Upload process - Room Picture
@@ -145,11 +186,9 @@ class RoomController {
 			size: '2mb'
 		});
 		await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-			name: `${body.name}_roomPicture.png`
+			name: `${body.name}_roomPicture.png`,
+			overwrite: true
 		});
-
-		body.state = body.state === undefined ? 2 : 1;
-
 		// Updates room information in database
 		await Room
 			.query()
@@ -159,23 +198,22 @@ class RoomController {
 				fullName: body.fullName,
 				floor: body.floor,
 				tower: body.tower,
-				telephone: body.seats,
+				telephone: body.telephoneNumber,
 				seats: body.tableSeats,
 				capacity: body.maximumCapacity,
-				projector: body.projectorCheck,
-				whiteboard: body.whiteboardCheck,
-				flipchart: body.flipchart,
-				audioConference: body.audioCheck,
-				videoConference: body.videoCheck,
-				surfaceHub: body.surfaceHubCheck,
-				pc: body.pcCheck,
+				projector: body.projectorCheck === '1' ? '1' : '0',
+				whiteboard: body.whiteboardCheck === '1' ? '1' : '0',
+				flipchart: body.flipChartCheck === '1' ? '1' : '0',
+				audioConference: body.audioCheck === '1' ? '1' : '0',
+				videoConference: body.videoCheck === '1' ? '1' : '0',
+				surfaceHub: body.surfaceHubCheck === '1' ? '1' : '0',
+				pc: body.pcCheck === '1' ? '1' : '0',
 				floorplan: `uploads/floorPlans/${body.name}.png`,
 				picture: `uploads/roomPictures/${body.name}.png`,
-				extraEquipment: body.extraEquipment,
-				comment: body.comment,
+				extraEquipment: body.extraEquipment == null ? ' ' : body.extraEquipment,
+				comment: body.comment == null ? ' ' : body.comment,
 				state: body.state
 			});
-
 		room = await Room.findBy('name', body.name);
 		session.flash({ notification: 'Room Updated!' });
 
@@ -292,6 +330,7 @@ class RoomController {
 		const from = form.from;
 		const to = form.to;
 		const location = form.location;
+		const seats = form.seats;
 		const capacity = form.capacity;
 
 		// check boxes input
@@ -314,6 +353,13 @@ class RoomController {
 				.where('floor', location)
 				.clone();
 		}
+		// if the "number of seats" is selected then add to query, else ignore it
+		if (seats) {
+			searchResults = searchResults
+				.where('seats', '>=', seats)
+				.clone();
+		}
+
 		// if the "number of people" is selected then add to query, else ignore it
 		if (capacity) {
 			searchResults = searchResults
@@ -460,48 +506,35 @@ class RoomController {
 	}
 
 	/**
+	 * Retrives all of the bookings that correspond to a specific room.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getBookings ({ params, view }) {
+		// Queries the database fr the bookings associated to a specific room
+		let searchResults = await Booking
+			.query()
+			.where('room_id', params.id)
+			.fetch();
+
+		searchResults = searchResults.toJSON();
+		const bookings = await populateBookings(searchResults);
+		var layoutType = 'layouts/adminLayout';
+
+		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
+	}
+
+	/**
 	 * Create a list of all bookings under the current user and render a view for it.
 	 *
 	 * @param {Object} Context The context object.
 	 */
 	async viewBookings ({ auth, view }) {
 		const results = (await auth.user.bookings().fetch()).toJSON();
+		const bookings = await populateBookings(results);
+		var layoutType = 'layouts/mainLayout';
 
-		const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-		const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-		async function asyncMap (arr, callback) {
-			let arr2 = [];
-
-			for (let i = 0; i < arr.length; i++) {
-				arr2.push(await callback(arr[i], i, arr));
-			}
-
-			return arr2;
-		}
-
-		let bookings = [];
-		const populateBookings = async () => {
-			bookings = await asyncMap(results, async (result) => {
-				const booking = {};
-
-				const from = new Date(result.from);
-				const to = new Date(result.to);
-				booking.subject = result.subject;
-				booking.status = result.status;
-				booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
-				booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-				booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
-				booking.roomId = result.room_id;
-				booking.id = result.id;
-
-				return booking;
-			});
-		};
-
-		await populateBookings();
-
-		return view.render('userPages.manageBookings', { bookings: bookings });
+		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
 	}
 
 	/**

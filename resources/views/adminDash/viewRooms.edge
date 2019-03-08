@@ -17,7 +17,6 @@ View Rooms
             <div>There are currently no rooms in the database. To add a room, click <a href='{{ route('addRoom')}}'>here</a></div>
         @else
             {{--  All Rooms button  --}}
-
             <div class='row'> 
                 <div class="col card text-white bg-primary mr-3 mb-3" style="max-width: 20rem;">
                     <div class="card-header">Number of Rooms</div>
@@ -25,7 +24,6 @@ View Rooms
                         <h4 class="card-title">{{ stats['total'] }}</h4>
                     </div>
                 </div>
-
                 <div class="col card text-white bg-success mr-3 mb-3" style="max-width: 20rem;">
                     <div class="card-header">Active Rooms</div>
                     <div class="card-body">
@@ -71,8 +69,10 @@ View Rooms
                             <td class='text-center'>{{ room.capacity }}</td>
                             @if(room.state == 1)
                                 <td class='text-center td-{{ room.state }}'>Active</td>
-                            @else
+                            @elseif(room.state == 2)
                                 <td class='text-center td-{{ room.state }}'>Deactive</td>
+                            @else
+                                <td class='text-center td-{{ room.state }}'>Under Maintenance</td>
                             @endif 
                         </tr>
                         @endeach

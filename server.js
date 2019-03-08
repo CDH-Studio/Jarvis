@@ -21,5 +21,6 @@ const { Ignitor } = require('@adonisjs/ignitor');
 
 new Ignitor(require('@adonisjs/fold'))
 	.appRoot(__dirname)
+	.preLoad('start/scheduler') // Run the scheduler on boot of the web sever.
 	.fireHttpServer()
 	.catch(console.error);

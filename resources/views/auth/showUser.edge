@@ -12,10 +12,12 @@
             </p>
             @if(user.role==2)
                 <p><b>Floor:</b> {{ user.floor }}</p>
-                <p><b>Tower:</b> {{ user.tower }}</p>
+                <p><b>Tower:</b> {{ user.tower }}</p>              
             @endif
+
             @if(canEdit)
-                <a class='btn btn-primary mb-4' href='/user/{{ user.id }}/edit'><i class='fas fa-pen'></i> Edit Profile</a>
+                <button type='button' class='btn btn-primary mb-3' onclick="window.location='{{ route('editUser', { id: user.id }) }}';"><i class='fas fa-pen'></i> Edit Profile</button>
+                <button type='button' class='btn btn-info mb-3' onclick="window.location='{{ route('userBookings', { id: user.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
                 <hr>
                 <br>
                 <h4>Change Password</h4>
@@ -29,17 +31,27 @@
                         {{ old('success') }}
                     </div>
                 @endif
-                <form action='{{ route('changePassword', {id: user.id}) }}' method='POST'>
-                    {{ csrfField() }}
-                    <div class="form-group">
-                        <label for="newPassword">New Password</label>
-                        <input type="password" class="form-control" id="newPassword" name="newPassword" placeholder="Enter new password">
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmNewPassword">Confirm New Password</label>
-                        <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" placeholder="Confirm new password">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                <form action='{{ route('changePassword') }}' method='POST'>
+					{{ csrfField() }}
+					<input type='hidden' name='userId' value='{{ user.id }}' />
+				
+					<div class='form-group mb-2'>
+						<label for='password'>New Password</label>
+						<input type='password' class='form-control' name='newPassword' id='newPassword' />
+						@if(hasErrorFor('newPassword'))        
+							<div class='invalid-feedback d-block'>{{ getErrorFor('newPassword') }}</div>
+						@endif
+					</div>
+					
+					<div class='form-group mb-2'>
+						<label for='password'>Confirm New Password</label>
+						<input type='password' class='form-control' name='confirmPassword' id='confirmPassword' />
+						@if(hasErrorFor('confirmPassword'))        
+							<div class='invalid-feedback d-block'>{{ getErrorFor('confirmPassword') }}</div>
+						@endif
+					</div>
+				
+					<button type='submit' class='btn btn-primary'>Submit</button>
                 </form> 
             @endif          
         </div>

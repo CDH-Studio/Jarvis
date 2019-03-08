@@ -47,8 +47,8 @@ Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetReq
 // Authentication
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['auth']);
-Route.get('/user/:id/edit', 'UserController.edit').middleware(['auth']);
-Route.post('/user/:id/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']);
+Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
+Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 
 //= ========================================================================
 //  [ Admin ] Rooms
@@ -57,16 +57,16 @@ Route.post('/user/:id/updatepassword', 'UserController.changePassword').as('chan
 // admin
 Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['admin']);
 Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('AddRoom').middleware(['admin']);
-Route.on('/removeRoom').render('adminDash/removeRoomForm').as('removeRoom').middleware(['admin']);
 Route.on('/adminDash').render('adminDash').as('adminDash').middleware(['admin']);
 
 Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['admin']);
-Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').middleware(['admin']);
+Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['admin']);
 
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
-Route.post('/userResults', 'UserController.adminSearchUsers').as('userResults').middleware(['auth']);
+Route.get('/roomBookings/:id', 'RoomController.getBookings').as('roomBookings').middleware(['auth']);
+Route.get('/userBookings/:id', 'UserController.getBookings').as('userBookings').middleware(['auth']);
 
 //= ========================================================================
 // Bookings

@@ -8,29 +8,9 @@ body {
     padding-top: 65px; 
     font-family: 'Lato', sans-serif;
 }
-
-/* Tooltip coloor changes */
-.tooltip-inner {
-    background-color: rgb(115, 146, 187);
+.search-room-content{
+    max-width: 600px;
 }
-
-.tooltip.bs-tooltip-auto[x-placement^=left] .arrow::before, .tooltip.bs-tooltip-left .arrow::before {
-    border-left-color: rgb(115, 146, 187);
-}
-
-.tooltip.bs-tooltip-auto[x-placement^=bottom] .arrow::before, .tooltip.bs-tooltip-bottom .arrow::before {
-    border-bottom-color:  rgb(115, 146, 187);
-}
-
-.tooltip.bs-tooltip-auto[x-placement^=right] .arrow::before, .tooltip.bs-tooltip-right .arrow::before {
-
-    border-right-color:  rgb(115, 146, 187);
-}
-
-.tooltip.bs-tooltip-auto[x-placement^=top] .arrow::before, .tooltip.bs-tooltip-top .arrow::before {
-    border-top-color:  rgb(115, 146, 187);
-}
-
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Navbar changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/

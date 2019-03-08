@@ -1,8 +1,9 @@
 @layout(layoutType)
 
 @section('title')
-    Details
+    {{room.name}}
 @endsection
+
 {{--  Manage bookings page content  --}}
 @section('content')
 
@@ -12,7 +13,6 @@
         @endslot
     @endcomponent
 
-    {{ csrfField() }}
     {{--  Loading page header  --}}
 
     {{--  Actual page content  --}}
@@ -25,9 +25,8 @@
                 </div>
                 <div class='col text-right'>
                     @if(isAdmin)
+                        <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
                         <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit</button>
-                    @else
-                        {{--  <button type='button' class='btn btn-primary' data-dismiss='modal' data-toggle='modal' data-target='#successModal'>Book Room</button>  --}}
                     @endif
                 </div>
                 </div>
@@ -251,7 +250,7 @@
             {{--  Footer buttons to cancel and book room  --}}
             <div class='modal-footer'>
                 <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                <button type='submit' class='btn btn-primary'  {{-- data-dismiss='modal' data-toggle='modal' data-target='#successModal' --}}>Book Room</button>
+                <button type='submit' class='btn btn-primary'>Book Room</button>
             </div>
         </form>
     @endif

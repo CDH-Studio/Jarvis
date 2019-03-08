@@ -11,7 +11,7 @@ Jarvis - Login
 @section('content')
 	<div class='row'>
 		<div class='col-md-4 text-center image-bar d-none d-md-block p-0'></div>
-		<div class='col-md-8 shadow form-bar p-0'>   
+		<div class='col-md-8 shadow form-bar p-0 notify-error'>   
 			<form action='{{ route('UserController.login') }}' method='POST' class='mb-4'>
 				<img class='brand-logo mb-3' src='door_logo.png'>
 				<h3 class='mb-3'>Login</h3>
@@ -50,4 +50,22 @@ Jarvis - Login
 			</form>
 		</div>
 	</div>
+
+@if(flashMessage('notification'))
+	<script type='module'>
+		import {notify} from '/js/notify.js';
+		$(window).on('load', () => {
+			notify({ $: $, message: '{{ flashMessage('notification') }}' });
+		});
+	</script>
+@elseif(hasErrorFor('password') || hasErrorFor('email'))
+	<script type='module'>
+		import {notify} from '/js/notify.js';
+		$(window).on('load', () => {
+			notify({ $: $, message: 'One or more errors occurred.', type: 'danger', align: 'center',
+							 enter: 'bounceIn', exit: 'bounceOut', element: '.notify-error'
+			});
+		});
+	</script>
+@endif
 @endsection

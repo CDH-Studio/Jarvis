@@ -8,6 +8,12 @@
     <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700|Roboto:300,400,700' rel='stylesheet'>
     <link href='https://stackpath.bootstrapcdn.com/bootswatch/4.2.1/flatly/bootstrap.min.css' rel='stylesheet' integrity='sha384-9dACWymWSkhCeCgbjV6xqS20Luu4ue6QnEvr+nMXpPMwIq/OB89AoRh27Flsrxzs' crossorigin='anonymous'>
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.1/css/all.css' integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous'>
+    {{ style('css/vendor/animate') }}
+    <script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
+    {{script('js/vendor/popper.js')}}
+    <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js' integrity='sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k' crossorigin='anonymous'></script>
+    {{ script('js/vendor/bootstrap-notify') }}
+    {{ script('js/vendor/bootstrap-notify.min') }}
 
     @!section('extracss')
 
@@ -21,10 +27,5 @@
         @!section('content')
     </div>
 </body>
-
-
-<script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
-{{script('js/vendor/popper.js')}}
-<script src='https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js' integrity='sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k' crossorigin='anonymous'></script>
     
 </html>
