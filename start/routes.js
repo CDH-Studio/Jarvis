@@ -16,7 +16,7 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route');
 
-Route.get('/', 'HomeController.dashboard').as('home');
+Route.get('/', 'HomeController.home').as('home');
 Route.on('/welcome').render('welcome');
 Route.on('/sample').render('sample');
 
@@ -55,12 +55,12 @@ Route.post('/user/updatepassword', 'UserController.changePassword').as('changePa
 //= ========================================================================
 
 // admin
-Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['admin']);
-Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('AddRoom').middleware(['admin']);
-Route.on('/adminDash').render('adminDash').as('adminDash').middleware(['admin']);
+Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['isAdmin']);
+Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('AddRoom').middleware(['isAdmin']);
+Route.get('/adminDash', 'HomeController.adminDashboard').as('adminDash').middleware(['isAdmin']);
 
-Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['admin']);
-Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['admin']);
+Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['isAdmin']);
+Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['isAdmin']);
 
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
@@ -76,15 +76,15 @@ Route.get('/viewBookings', 'RoomController.viewBookings').as('viewBookings');
 Route.get('/cancelBooking/:id', 'RoomController.cancelBooking').as('cancelBooking');
 
 // Employee user pages
-Route.on('/booking').render('userPages/booking').as('booking');
-Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms');
-Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking');
+Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);
+Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms').middleware(['isUser']);
+Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking').middleware(['isUser']);
 
 // Rendering Results
-Route.get('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('SearchRoom');
+Route.get('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
 
 // Booking a Room
-Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBooking').validator('BookRoom');
+Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);
 
 // Outlook
 Route.get('/authenticate', 'TokenController.getAuthUrl');
