@@ -49,13 +49,16 @@
 }
 
 /* Form Focus color and style */
+.form-control{
+    color: #000000;
+}
 .form-control:focus{
-      color: #495057;
-  background-color: #fff;
-  border-color: #80bdff;
-  outline: 0;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    color: #000000;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Colors */

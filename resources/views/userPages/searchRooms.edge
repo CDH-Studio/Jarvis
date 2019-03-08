@@ -4,6 +4,7 @@
     Search Room
 @endsection
 
+
 {{--  search room page content  --}}
 @section('content')
     {{--  Loading Page Header  --}}
@@ -18,6 +19,8 @@
                     {{--  Date form  --}}
                     <div class='row'>
                         <div class='col form-group mb-4 '>
+                        <input class='form-control' type="text" data-role="datebox" data-options='{"mode":"calbox"}'>
+
                             <label for='date' data-toggle='tooltip' data-placement='right' title='' data-original-title='Must follow the following format: mm/dd/yyyy (02/20/2019)'>Select Date: <b class='text-danger'>*</b></label>
                             {{--  If field is not filled correctly show an error box  --}}
                             @if(hasErrorFor('date'))
