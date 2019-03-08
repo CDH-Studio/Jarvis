@@ -2,9 +2,9 @@
 
 const Model = use('Model');
 
-class UserType extends Model {
+class UserRole extends Model {
 	static get table () {
-		return 'user_types';
+		return 'user_roles';
 	}
 
 	user () {
@@ -22,4 +22,4 @@ class UserType extends Model {
 	}
 }
 
-module.exports = UserType;
+module.exports = UserRole;

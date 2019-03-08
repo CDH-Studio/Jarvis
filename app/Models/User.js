@@ -5,7 +5,7 @@ const Hash = use('Hash');
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model');
-const UserRole = use('App/Models/UserType');
+const UserRole = use('App/Models/UserRole');
 const logger = use('Logger');
 
 class User extends Model {

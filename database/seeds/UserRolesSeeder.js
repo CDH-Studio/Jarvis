@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| UserTypeSeeder
+| UserRolesSeeder
 |--------------------------------------------------------------------------
 |
 | seed user Roles table
@@ -10,17 +10,17 @@
 |
 */
 
-const UserTypes = use('App/Models/UserType');
+const UserRole = use('App/Models/UserRole');
 
-class UserTypeSeeder {
+class UserRolesSeeder {
 	async run () {
-		var userTypesFiller = ['admin', 'user'];
-		var count = await UserTypes.getCount();
+		var userRolesFiller = ['admin', 'user'];
+		var count = await UserRole.getCount();
 
 		if (count === 0) {
-			for (var i = 0; i < userTypesFiller.length; i++) {
-				const type = new UserTypes();
-				type.role_name = userTypesFiller[i];
+			for (var i = 0; i < userRolesFiller.length; i++) {
+				const type = new UserRole();
+				type.role_name = userRolesFiller[i];
 				await type.save();
 			}
 			console.log('User Type DB: Finished Seeding');
@@ -30,4 +30,4 @@ class UserTypeSeeder {
 	}
 }
 
-module.exports = UserTypeSeeder;
+module.exports = UserRolesSeeder;

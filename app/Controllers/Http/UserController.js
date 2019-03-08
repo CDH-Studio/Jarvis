@@ -3,7 +3,7 @@
 const User = use('App/Models/User');
 const Room = use('App/Models/Room');
 const Booking = use('App/Models/Booking');
-const UserType = use('App/Models/UserType');
+const UserRole = use('App/Models/UserRole');
 const AccountRequest = use('App/Models/AccountRequest');
 const Mail = use('Mail');
 const Hash = use('Hash');
@@ -160,7 +160,7 @@ class UserController {
 	 */
 	async createWithoutVerifyingEmail ({ request, response, auth }) {
 		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
-		userInfo.role_id = await UserType.getRoleID('user');
+		userInfo.role_id = await UserRole.getRoleID('user');
 		userInfo.verified = true;
 		const user = await User.create(userInfo);
 
@@ -175,7 +175,7 @@ class UserController {
 	 */
 	async createWithVerifyingEmail ({ request, response, auth }) {
 		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
-		userInfo.role_id = await UserType.getRoleID('user');
+		userInfo.role_id = await UserRole.getRoleID('user');
 		userInfo.verified = false;
 
 		let hash = random(4);
@@ -237,7 +237,7 @@ class UserController {
 	 */
 	async createAdmin ({ request, response, auth }) {
 		var adminInfo = request.only(['firstname', 'lastname', 'email', 'password']);
-		adminInfo.role_id = await UserType.getRoleID('admin');
+		adminInfo.role_id = await UserRole.getRoleID('admin');
 		adminInfo['verified'] = 1;
 		const user = await User.create(adminInfo);
 
