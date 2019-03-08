@@ -44,7 +44,7 @@ class User extends Model {
 
 	async getUserRole () {
 		try{
-			var role = await UserRole.find(this.role);
+			var role = await UserRole.findOrFail(this.role_id);
 			return role.role_name;
 		}catch(error){
 			logger.error("Role Lookup Failed");
@@ -55,10 +55,10 @@ class User extends Model {
 	async setUserRole (role) {
 		try{
 			role = await UserRole.findByOrFail('role_name', role);
-			this.role=role.id;
-			this.save;
-			console.log(this.role);
-			return (1);
+			this.role_id=role.id;
+			this.save();
+			console.log(this.role_id);
+			return 1;
 		}catch(error){
 			logger.error("Role Set Failed");
 			return 0;

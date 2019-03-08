@@ -5,10 +5,9 @@
 
 const debug = require('debug')('adonis:auth');
 
-class CheckAdminUserType {
+class CheckAdminUserRole {
 	constructor (Config) {
 		Config = use('Config');
-		// console.log(Config);
 		const authenticator = Config.get('auth.authenticator');
 		this.scheme = Config.get(`auth.${authenticator}.scheme`, null);
 	}
@@ -103,4 +102,4 @@ class CheckAdminUserType {
 	}
 }
 
-module.exports = CheckAdminUserType;
+module.exports = CheckAdminUserRole;

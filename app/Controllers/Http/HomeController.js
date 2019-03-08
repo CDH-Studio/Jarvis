@@ -5,8 +5,10 @@ class HomeController {
 		try {
 			await auth.check();
 			var d = new Date();
-			var date = d.toLocaleDateString();			
-		if (await auth.user.getUserRole() == 'admin') {
+			var date = d.toLocaleDateString();	
+			const userRole = await auth.user.getUserRole();
+
+			if (userRole === 'admin') {
 				return response.route('adminDash', { auth, date });
 			} else {
 				return response.route('booking');

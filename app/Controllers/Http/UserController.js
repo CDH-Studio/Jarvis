@@ -3,6 +3,7 @@
 const User = use('App/Models/User');
 const Room = use('App/Models/Room');
 const Booking = use('App/Models/Booking');
+const UserType = use('App/Models/UserType');
 const AccountRequest = use('App/Models/AccountRequest');
 const Mail = use('Mail');
 const Hash = use('Hash');
@@ -134,15 +135,16 @@ class UserController {
 		// Retrieves user object
 		const user = await User.findBy('id', params.id);
 		var layoutType = '';
+		const userRole = await auth.user.getUserRole();
 
 		// check if admin is editing their own profile
-		if (auth.user.role === 1) {
+		if (userRole === 'admin') {
 			layoutType = 'layouts/adminLayout';
 		// check if user is editing their own profile
-		} else if (auth.user.id === Number(params.id) && auth.user.role === 2) {
+		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
 			layoutType = 'layouts/mainLayout';
 		// check if user is editing someone elses profile
-		} else if (auth.user.id !== Number(params.id) && auth.user.role === 2) {
+		} else if (auth.user.id !== Number(params.id) && userRole === 'user') {
 			layoutType = 'layouts/mainLayout';
 		} else {
 			return response.redirect('/');
@@ -157,13 +159,15 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async createWithoutVerifyingEmail ({ request, response, auth }) {
-		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
-		userInfo.role = 2;
-		userInfo.verified = true;
-		const user = await User.create(userInfo);
 
-		await auth.login(user);
-		return response.redirect('/');
+			var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
+			userInfo.role_id = await UserType.getRoleID('user');
+			userInfo.verified = true;
+			const user = await User.create(userInfo);
+
+			await auth.login(user);
+			return response.redirect('/');
+
 	}
 
 	/**
@@ -173,8 +177,7 @@ class UserController {
 	 */
 	async createWithVerifyingEmail ({ request, response, auth }) {
 		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
-		console.log(userInfo);
-		userInfo.role = 2;
+		userInfo.role_id = await UserType.getRoleID('user');
 		userInfo.verified = false;
 
 		let hash = random(4);
@@ -236,7 +239,7 @@ class UserController {
 	 */
 	async createAdmin ({ request, response, auth }) {
 		var adminInfo = request.only(['firstname', 'lastname', 'email', 'password']);
-		adminInfo['role'] = 1;
+		userInfo.role_id = await UserType.getRoleID('admin');
 		adminInfo['verified'] = 1;
 		const user = await User.create(adminInfo);
 
@@ -274,9 +277,9 @@ class UserController {
 
 		try {
 			await auth.attempt(user.email, password);
-			if (auth.user.role === 2) {
+			if (auth.user.getUserRole() === 'User') {
 				session.flash({
-					notification: 'You are logged in as an Employee user.'
+					notification: 'Welcome! You are logged in'
 				});
 				return response.redirect('/booking');
 			} else {
@@ -305,24 +308,23 @@ class UserController {
 		const user = await User.find(Number(params.id));
 		var canEdit = 0;
 		var layoutType = '';
+		const userRole= await auth.user.getUserRole();
 		// check if admin is viewing their own profile
-		if (auth.user.role === 1) {
+		if (userRole === 'admin') {
 			layoutType = 'layouts/adminLayout';
 			canEdit = 1;
 		// check if user is viewing their own profile
-		} else if (auth.user.id === Number(params.id) && auth.user.role === 2) {
+		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
 			layoutType = 'layouts/mainLayout';
 			canEdit = 1;
 
 		// check if user is viewing someone elses profile
-		} else if (auth.user.id !== Number(params.id) && auth.user.role === 2) {
+		} else if (auth.user.id !== Number(params.id) && userRole === 'user') {
 			layoutType = 'layouts/mainLayout';
 			canEdit = 0;
 		} else {
 			return response.redirect('/');
 		}
-
-		console.log(auth.user.role);
 
 		const options = {
 			redirect: '/user/updatepassword',
@@ -429,7 +431,8 @@ class UserController {
 	 */
 	async changePassword ({ request, response, auth, session }) {
 		const { newPassword, userId } = request.only(['newPassword', 'userId']);
-		if (auth.user.role === 1 || (auth.user.id === Number(userId) && auth.user.role === 2)) {
+		const userRole = await auth.user.getUserRole();
+		if (userRole === 'admin' || (auth.user.id === Number(userId) && aauth.user.getUserRole() === 'user')) {
 			try {
 				if (updatePassword(newPassword, 'id', userId)) {
 					session.flash({ success: 'Password Updated Successfully' });
