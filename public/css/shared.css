@@ -3,6 +3,7 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* General */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .wrapper-center {
     text-align: center;
 }
@@ -11,15 +12,48 @@
     padding:0px;
 }
 
+.no-margin{
+    margin:0px;
+}
+
 .shadow{
     box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2) !important;
+}
+
+/* checkboxes */
+.custom-control-input:checked ~ .custom-control-label::before {
+    color: #fff;
+    border-color: #001642;
+    background-color: #001642;
+}
+
+/* Form Focus color and style */
+.form-control{
+    color: #000000;
+}
+.form-control:focus{
+    color: #000000;
+    background-color: #fff !important;
+    border-color: #80bdff;
+    outline: 0;
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.date-form:disabled, .date-form:read-only{
+    background: #fff !important;
 }
 
 .dropdown-item:hover{
     background-color:#001642;
 }
-
+/* showing invalid validator display */
+.show-invalid{
+    display: block;
+}
+/*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Tooltip color changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
 .tooltip-inner {
     background-color: rgb(115, 146, 187);
 }
@@ -41,25 +75,6 @@
     border-top-color:  rgb(115, 146, 187);
 }
 
-/* checkboxes */
-.custom-control-input:checked ~ .custom-control-label::before {
-    color: #fff;
-    border-color: #001642;
-    background-color: #001642;
-}
-
-/* Form Focus color and style */
-.form-control{
-    color: #000000;
-}
-.form-control:focus{
-    color: #000000;
-    background-color: #fff;
-    border-color: #80bdff;
-    outline: 0;
-    -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Colors */
 /*+++++++++++++++++++++++++++++++++++++++++++*/

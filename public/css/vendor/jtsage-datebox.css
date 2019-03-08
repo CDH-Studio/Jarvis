@@ -16,13 +16,29 @@
  * These styles are used for the basic control,
  * and are not specific to any one mode.
  */
+.btn-sm{
+	background-color: rgb(243, 243, 243);
+	color: #000000;
+	box-shadow: none;
+ }
+.btn-info, .btn-info:hover, .btn-info:active, .btn-info:focus, .btn-info:visited{
+	background-color: #223851;
+	color: #ffffff;
 
- .input-group-addon{
+}
+.btn-disabled, .btn-disabled:hover, .btn-disabled:active, .btn-disabled:focus, .btn-disabled:visited{
+	background-color: rgb(207, 207, 207);
+	color: #8d8d8d;
+ }
+.button-datebox{
+	height: 0px;
+}
+.input-group-addon{
 	 padding: 6px 12px 6px 12px;
-	 border-bottom-color: rgb(4, 126, 248);
+	 border-bottom-color: rgb(206, 212, 218);
 	 background-color: none;
  }
- .ui-datebox-container { 
+.ui-datebox-container { 
 	width: 290px;
 	-webkit-transform:translate3d(0,0,0);
 }
@@ -59,6 +75,7 @@ div.ui-datebox-container.ui-datebox-inline {
 
 .ui-datebox-gridheader { 
 	text-align: center;
+	
 }
 
 .ui-datebox-gridheader a {

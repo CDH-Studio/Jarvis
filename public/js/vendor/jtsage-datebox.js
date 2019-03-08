@@ -36,8 +36,8 @@
             clickEvent: "click",
             clickEventAlt: "click",
             useKinetic: true,
-            defaultValue: false,
-            showInitialValue: false,
+            defaultValue: true,
+            showInitialValue: true,
             linkedField: false,
             linkedFieldFormat: "%J",
             popupPosition: false,
@@ -69,7 +69,7 @@
             startOffsetYears: false,
             startOffsetMonths: false,
             startOffsetDays: false,
-            afterToday: false,
+            afterToday: true,
             beforeToday: false,
             notToday: false,
             maxDays: false,
@@ -152,8 +152,8 @@
             bootstrapDropdown: true,
             bootstrapDropdownRight: true,
             bootstrapModal: false,
-            calNextMonthIcon: "plus",
-            calPrevMonthIcon: "minus",
+            calNextMonthIcon: "angle-right",
+            calPrevMonthIcon: "angle-left",
             useInlineAlign: "left",
             btnCls: " btn btn-sm btn-",
             icnCls: " far fa-",
@@ -330,7 +330,7 @@
                 input: this.element,
                 wrap: this.element.parent(),
                 mainWrap: $("<div>", {
-                    "class": "ui-datebox-container"
+                    "class": "ui-datebox-container shadow"
                 }).css("zIndex", o.zindex),
                 intHTML: false
             }, evtid = ".datebox" + this.uuid, touch = typeof window.ontouchstart !== "undefined", drag = {
@@ -540,20 +540,6 @@
                 return false;
             }
             w.d.mainWrap.empty();
-            if (o.useHeader) {
-                w.d.mainWrap.append($(w._spf("<div class='{c1}'><h5 class='{c2}'>{text}</h5>" + "<button type='button' class='btn btn-sm btn-secondary closer'>" + "<span aria-hidden='true'>&times;</span></button></div>", {
-                    c1: "modal-header",
-                    c2: "modal-title",
-                    c3: "closer" + o.icnCls + "remove pull-" + o.popupButtonPosition,
-                    text: w.d.headerText
-                }))).find(".closer").on(o.clickEventAlt, function(e) {
-                    e.preventDefault();
-                    w._t({
-                        method: "close",
-                        closeCancel: true
-                    });
-                });
-            }
             w.d.mainWrap.append(w.d.intHTML).css("zIndex", o.zindex);
             w._t({
                 method: "postrefresh"
@@ -1560,7 +1546,7 @@
                 }
                 w.d.headerText = w._grabLabel() !== false ? w._grabLabel() : w.__("titleDateDialogLabel");
                 w.d.intHTML = $("<span>");
-                $(w._spf("<div class='{cl1}'><div class='{cl2}'><h4>{content}</h4></div></div>", {
+                $(w._spf("<div class='{cl1}'><div class='{cl2}'><h4 style='margin: 6px 0 0 0;'>{content}</h4></div></div>", {
                     cl1: uid + "gridheader",
                     cl2: uid + "gridlabel",
                     content: w._formatter(w.__("calHeaderFormat"), w.theDate)
@@ -2794,7 +2780,7 @@
         _cal_prev_next: function(container) {
             var w = this, o = this.options, uid = "ui-datebox-";
             $(w._spf("<div class='{class}'><a href='#'>{name}</a></div>", {
-                "class": uid + "gridplus" + (w.__("isRTL") ? "-rtl" : ""),
+                "class": uid + "gridplus text-right button-datebox" + (w.__("isRTL") ? "-rtl" : ""),
                 name: w._spf(o.s.cal.nextMonth, {
                     text: w.__("nextMonth"),
                     icon: o.calNextMonthIcon
@@ -2826,7 +2812,7 @@
                 return false;
             });
             $(w._spf("<div class='{class}'><a href='#'>{name}</a></div>", {
-                "class": uid + "gridminus" + (w.__("isRTL") ? "-rtl" : ""),
+                "class": uid + "gridminus text-left button-datebox" + (w.__("isRTL") ? "-rtl" : ""),
                 name: w._spf(o.s.cal.prevMonth, {
                     text: w.__("prevMonth"),
                     icon: o.calPrevMonthIcon
