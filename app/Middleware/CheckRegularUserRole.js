@@ -3,7 +3,7 @@
 /**
 *
 * Middleware: CheckRegularUserRole
-* Check if user is logged-in and user role is "USER"
+* Check if user is logged-in and user role is "User"
 *
 */
 
@@ -29,7 +29,7 @@ class CheckRegularUserRole {
 	* @return valid Auth = 1
 	*
 	*/
-	async _authenticate ({ auth }, schemes) {
+	async _authenticate (auth, schemes, response) {
 		let lastError = null;
 
 		schemes = Array.isArray(schemes) && schemes.length ? schemes : [this.scheme];
@@ -46,7 +46,7 @@ class CheckRegularUserRole {
 				await authenticator.check();
 
 				if (await auth.user.getUserRole() !== 'user') {
-					throw Error('This User is an Admin!');
+					throw Error('not User Role!');
 				}
 
 				debug('authenticated using %s scheme', scheme);
@@ -78,8 +78,8 @@ class CheckRegularUserRole {
 	/**
 	*
 	* Check if user is logged in and admin.
-	* User: continue;
-	* Not User: Redirect to landing page
+	* USER: continue;
+	* Not USER: Redirect to landing page
 	*
 	* @param {object} ctx
 	* @param {Request} ctx.request

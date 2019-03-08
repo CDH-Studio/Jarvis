@@ -46,7 +46,7 @@ class CheckAdminUserRole {
 				await authenticator.check();
 
 				if (await auth.user.getUserRole() !== 'admin') {
-					throw Error('not Admin!');
+					throw Error('not Admin Role!');
 				}
 
 				debug('authenticated using %s scheme', scheme);
