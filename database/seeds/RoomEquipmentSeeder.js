@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| EquipmentSeeder
+| RoomEquipmentSeeder
 |--------------------------------------------------------------------------
 |
 | Make use of the Factory instance to seed database with dummy data or
@@ -11,7 +11,7 @@
 */
 
 /** @type {import('@adonisjs/lucid/src/Factory')} */
-const Equipment = use('App/Models/Equipment');
+const Room = use('App/Models/Room');
 
 // ForEach function for async callbacks
 async function asyncForEach (arr, callback) {
@@ -20,9 +20,9 @@ async function asyncForEach (arr, callback) {
 	}
 }
 
-class EquipmentSeeder {
+class RoomEquipmentSeeder {
 	async run () {
-		const equipments = ['Projector', 'Whiteboard', 'Flip Chart', 'Audio Conf.', 'Video Conf.', 'Surface Hub', 'PC', 'Plasma', 'Smartboard', 'LCD Smart TV', 'Writeable Wall'];
+		const rooms = ['Projector', 'Whiteboard', 'Flip Chart', 'Audio Conf.', 'Video Conf.', 'Surface Hub', 'PC'];
 		const populateEquipments = async () => {
 			await asyncForEach(equipments, async (item) => {
 				const equipment = { name: item };
@@ -35,4 +35,4 @@ class EquipmentSeeder {
 	}
 }
 
-module.exports = EquipmentSeeder;
+module.exports = RoomEquipmentSeeder;
