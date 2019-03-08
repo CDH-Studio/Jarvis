@@ -309,6 +309,8 @@
 }
 
 
+/* Styling for the stars in the rating system */
+
 /* @import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css); */
 
 fieldset, label { margin: 0; padding: 0; }
@@ -317,25 +319,28 @@ h1 { font-size: 1.5em; margin: 10px; }
 /****** Style Star Rating Widget *****/
 
 .rating { 
-  border: none;
-  float: left;
+    border: none;
+    float: left;
 }
 
 .rating > input { display: none; } 
 .rating > label:before { 
-  margin: 5px;
-  font-size: 1.25em;
-  font-family: FontAwesome;
-  display: inline-block;
+    margin: 5px;
+    font-size: 1.25em;
+    font-family: FontAwesome;
+    display: inline-block;
+    content: "\f005";
 }
 
 .rating > .half:before { 
-  position: absolute;
+    content: "\f005";
+    font-family: FontAwesome; 
+    position: absolute;
 }
 
 .rating > label { 
-  color: #ddd; 
-float: right; 
+    color: #ddd; 
+    float: right; 
 }
 
 /***** CSS Magic to Highlight Stars on Hover *****/

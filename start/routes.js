@@ -69,7 +69,7 @@ Route.get('/roomBookings/:id', 'RoomController.getBookings').as('roomBookings').
 Route.get('/userBookings/:id', 'UserController.getBookings').as('userBookings').middleware(['auth']);
 
 // user
-Route.on('/ratingandreview').render('userPages/ratingReview').as('ratingAndReview').middleware(['auth']);
+Route.on('/ratingAndReview').render('userPages/ratingReview').as('ratingAndReview');
 
 //= ========================================================================
 // Bookings
