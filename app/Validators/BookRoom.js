@@ -55,8 +55,8 @@ class BookRoom {
 			 * reqrecurringSelected: if the "reccuring" field is selected as YES, these fields are mandatory
 			 *
 			 */
-			interval: 'recurringSelected:recurringSelect',
-			numberOfTimes: 'recurringSelected:recurringSelect'
+			// interval: 'recurringSelected:recurringSelect',
+			// numberOfTimes: 'recurringSelected:recurringSelect'
 
 		};
 	}
