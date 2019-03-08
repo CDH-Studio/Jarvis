@@ -22,7 +22,7 @@ async function asyncForEach (arr, callback) {
 
 class RoomEquipmentSeeder {
 	async run () {
-		const rooms = ['Projector', 'Whiteboard', 'Flip Chart', 'Audio Conf.', 'Video Conf.', 'Surface Hub', 'PC'];
+		const equipments = ['Projector', 'Whiteboard', 'Flip Chart', 'Audio Conf.', 'Video Conf.', 'Surface Hub', 'PC', 'Plasma', 'Smartboard', 'LCD Smart TV', 'Writeable Wall'];
 		const populateEquipments = async () => {
 			await asyncForEach(equipments, async (item) => {
 				const equipment = { name: item };

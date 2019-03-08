@@ -11,7 +11,7 @@ class Room extends Model {
 	}
 
 	equipments () {
-		return this.hasMany('App/Models/Equipment');
+		return this.belongsToMany('App/Models/Equipment');
 	} 
 }
 
