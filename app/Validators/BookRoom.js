@@ -48,7 +48,7 @@ class BookRoom {
 			 *
 			 */
 			from: 'required|timeFormat|isAfterToday:date',
-			to: 'required|timeFormat|isAfter:from|isAfterToday:date',
+			to: 'required|timeFormat|isAfter:from|isAfterToday:date'
 			/**
 			 * Recurring Validation
 			 *
