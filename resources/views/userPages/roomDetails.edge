@@ -19,12 +19,13 @@
     <div class='row justify-content-center'>
         <div class='col room-details-card shadow' style='margin-top:10px;'>
 
-            {{--  Displays "Room Added!" success message  --}}
+            {{--  Displays "Room Added/Updated!" success message  --}}
             @if(old('notification'))
                 <div class='alert alert-success'>
                     {{ old('notification') }}
-                    To add another room, click  
-                    <a href='{{ route('addRoom')}}'>here</a>
+                    @if(isAdmin)
+                        To add another room, click <a href='{{ route('addRoom')}}'>here</a>
+                    @endif
                 </div>
             @endif
 
