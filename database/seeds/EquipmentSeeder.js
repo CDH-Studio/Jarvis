@@ -26,8 +26,7 @@ class EquipmentSeeder {
 		const populateEquipments = async () => {
 			await asyncForEach(equipments, async (item) => {
 				const equipment = { name: item };
-				const result = await Equipment.create(equipment);
-				console.log(result);
+				await Equipment.create(equipment);
 			});
 		};
 
