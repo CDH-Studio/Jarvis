@@ -19,17 +19,31 @@
 .btn-sm{
 	background-color: rgb(243, 243, 243);
 	color: #000000;
-	box-shadow: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
  }
-.btn-info, .btn-info:hover, .btn-info:active, .btn-info:focus, .btn-info:visited{
+.btn-cal-info, .btn-cal-info:hover, .btn-cal-info:active, .btn-cal-info:focus, .btn-cal-info:visited{
 	background-color: #223851;
 	color: #ffffff;
-
 }
-.btn-disabled, .btn-disabled:hover, .btn-disabled:active, .btn-disabled:focus, .btn-disabled:visited{
+.btn-cal-disabled, .btn-cal-disabled:hover, .btn-cal-disabled:active, .btn-cal-disabled:focus, .btn-cal-disabled:visited{
 	background-color: rgb(207, 207, 207);
 	color: #8d8d8d;
  }
+
+ .btn-cal-info:hover,  .btn-cal-secondary:hover{
+    position: relative; 
+    top: -1px;
+    box-shadow: 0 2px 8px 0 #00000033 !important;
+}
+
+.btn-cal-month{
+    box-shadow: 0 2px 6px 0 #00000033 ;
+	border-radius: 3.2px;
+	margin: 0 5px 0 5px !important;
+ }
+
 .button-datebox{
 	height: 0px;
 }

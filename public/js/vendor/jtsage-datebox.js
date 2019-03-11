@@ -155,7 +155,7 @@
             calNextMonthIcon: "angle-right",
             calPrevMonthIcon: "angle-left",
             useInlineAlign: "left",
-            btnCls: " btn btn-sm btn-",
+            btnCls: " btn btn-sm btn-cal-",
             icnCls: " far fa-",
             s: {
                 cal: {
@@ -2792,7 +2792,7 @@
 
                   case "bootstrap":
                   case "bootstrap4":
-                    return o.btnCls + o.themeDate + " pull-" + (w.__("isRTL") ? "left" : "right");
+                    return o.btnCls + o.themeDate + " btn-cal-month pull-" + (w.__("isRTL") ? "left" : "right");
 
                   default:
                     return null;
@@ -2824,7 +2824,7 @@
 
                   case "bootstrap":
                   case "bootstrap4":
-                    return o.btnCls + o.themeDate + " pull-" + (w.__("isRTL") ? "right" : "left");
+                    return o.btnCls + o.themeDate + " btn-cal-month pull-" + (w.__("isRTL") ? "right" : "left");
 
                   default:
                     return null;
