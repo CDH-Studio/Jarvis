@@ -18,6 +18,16 @@
     {{--  Actual page content  --}}
     <div class='row justify-content-center'>
         <div class='col room-details-card shadow' style='margin-top:10px;'>
+
+            {{--  Displays "Room Added!" success message  --}}
+            @if(old('notification'))
+                <div class='alert alert-success'>
+                    {{ old('notification') }}
+                    To add another room, click  
+                    <a href='{{ route('addRoom')}}'>here</a>
+                </div>
+            @endif
+
             <div class='room-details-card-title'>
                 <div class='row'>
                 <div class='col'>
