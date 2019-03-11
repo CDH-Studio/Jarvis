@@ -41,10 +41,10 @@ class User extends Model {
 		return this.hasMany('App/Models/Booking');
 	}
 
-<<<<<<< HEAD
 	reviews () {
 		return this.hasMany('App/Models/Review');
-=======
+	}
+
 	async getUserRole () {
 		try {
 			var role = await UserRole.findOrFail(this.role_id);
@@ -66,7 +66,6 @@ class User extends Model {
 			logger.error('Role Set Failed');
 			return 0;
 		}
->>>>>>> 377cb7f100308971edababe12be9fd071431eb32
 	}
 }
 
