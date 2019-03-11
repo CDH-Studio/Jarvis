@@ -9,6 +9,7 @@
 |
 */
 const Status = use('App/Models/RoomSatus');
+const Logger = use('Logger');
 
 class RoomSatusSeeder {
 	async run () {
@@ -21,9 +22,9 @@ class RoomSatusSeeder {
 				status.name = StatusFiller[i];
 				await status.save();
 			}
-			console.log('Room Status DB: Finished Seeding');
+			Logger.info('Room Status DB: Finished Seeding');
 		} else {
-			console.log('Room Status DB: Already Seeded');
+			Logger.info('Room Status DB: Already Seeded');
 		}
 	}
 }

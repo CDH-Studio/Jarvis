@@ -11,6 +11,7 @@
 */
 
 const UserRole = use('App/Models/UserRole');
+const Logger = use('Logger');
 
 class UserRolesSeeder {
 	async run () {
@@ -23,9 +24,9 @@ class UserRolesSeeder {
 				type.role_name = userRolesFiller[i];
 				await type.save();
 			}
-			console.log('User Type DB: Finished Seeding');
+			Logger.info('User Type DB: Finished Seeding');
 		} else {
-			console.log('User Type DB: Already Seeded');
+			Logger.info('User Type DB: Already Seeded');
 		}
 	}
 }
