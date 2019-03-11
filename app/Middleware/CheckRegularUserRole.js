@@ -1,19 +1,23 @@
 'use strict';
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+
+/**
+*
+* Middleware: CheckRegularUserRole
+* Check if user is logged-in and user role is "User"
+*
+*/
 
 const debug = require('debug')('adonis:auth');
 
-class CheckAdminUserType {
+class CheckRegularUserRole {
 	constructor (Config) {
 		Config = use('Config');
-		// console.log(Config);
 		const authenticator = Config.get('auth.authenticator');
 		this.scheme = Config.get(`auth.${authenticator}.scheme`, null);
 	}
 
 	/**
+	*
 	* Attempts to authenticate the user using defined multiple schemes and
 	* stops on the first one
 	*
@@ -22,10 +26,12 @@ class CheckAdminUserType {
 	* @param  {Object}      auth
 	* @param  {Array}      schemes
 	*
-	* @return {void}
+	* @return valid Auth = 1
+	*
 	*/
 	async _authenticate (auth, schemes, response) {
 		let lastError = null;
+
 		schemes = Array.isArray(schemes) && schemes.length ? schemes : [this.scheme];
 
 		debug('attempting to authenticate via %j scheme(s)', schemes);
@@ -39,8 +45,8 @@ class CheckAdminUserType {
 				const authenticator = auth.authenticator(scheme);
 				await authenticator.check();
 
-				if (auth.user.role !== 1) {
-					throw Error('not Admin!');
+				if (await auth.user.getUserRole() !== 'user') {
+					throw Error('not User Role!');
 				}
 
 				debug('authenticated using %s scheme', scheme);
@@ -64,17 +70,28 @@ class CheckAdminUserType {
 		* then throw it back
 		*/
 		if (lastError) {
-			response.redirect('/');
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
+	*
+	* Check if user is logged in and admin.
+	* USER: continue;
+	* Not USER: Redirect to landing page
+	*
 	* @param {object} ctx
 	* @param {Request} ctx.request
 	* @param {Function} next
+	*
 	*/
 	async handle ({ auth, view, response }, next, schemes) {
-		await this._authenticate(auth, schemes, response);
+		var authValid = await this._authenticate(auth, schemes, response);
+
+		if (!authValid) {
+			return response.redirect('/');
+		}
 
 		/**
 		 * For compatibility with the old API
@@ -96,4 +113,4 @@ class CheckAdminUserType {
 	}
 }
 
-module.exports = CheckAdminUserType;
+module.exports = CheckRegularUserRole;

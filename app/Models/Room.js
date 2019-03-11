@@ -1,8 +1,5 @@
 'use strict';
 
-/** @type {import('@adonisjs/framework/src/Hash')} */
-// const Hash = use('Hash');  UNUSED, un-comment if you want to use it
-/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model');
 
 class Room extends Model {
@@ -10,8 +7,13 @@ class Room extends Model {
 		return this.hasMany('App/Models/Booking');
 	}
 
+<<<<<<< HEAD
 	reviews () {
 		return this.hasMany('App/Models/Review');
+=======
+	static get table () {
+		return 'rooms';
+>>>>>>> 377cb7f100308971edababe12be9fd071431eb32
 	}
 }
 
