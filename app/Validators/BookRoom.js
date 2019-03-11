@@ -48,15 +48,15 @@ class BookRoom {
 			 *
 			 */
 			from: 'required|timeFormat|isAfterToday:date',
-			to: 'required|timeFormat|isAfter:from|isAfterToday:date',
+			to: 'required|timeFormat|isAfter:from|isAfterToday:date'
 			/**
 			 * Recurring Validation
 			 *
 			 * reqrecurringSelected: if the "reccuring" field is selected as YES, these fields are mandatory
 			 *
 			 */
-			interval: 'recurringSelected:recurringSelect',
-			numberOfTimes: 'recurringSelected:recurringSelect'
+			// interval: 'recurringSelected:recurringSelect',
+			// numberOfTimes: 'recurringSelected:recurringSelect'
 
 		};
 	}
