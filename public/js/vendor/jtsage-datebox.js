@@ -36,7 +36,7 @@
             clickEvent: "click",
             clickEventAlt: "click",
             useKinetic: true,
-            defaultValue: true,
+            defaultValue: false,
             showInitialValue: true,
             linkedField: false,
             linkedFieldFormat: "%J",
@@ -111,9 +111,9 @@
                     monthsOfYearShort: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ],
                     durationLabel: [ "Days", "Hours", "Minutes", "Seconds" ],
                     durationDays: [ "Day", "Days" ],
-                    timeFormat: 24,
+                    timeFormat: 12,
                     headerFormat: "%A, %B %-d, %Y",
-                    tooltip: "Open Date Picker",
+                    tooltip: "",
                     nextMonth: "Next Month",
                     prevMonth: "Previous Month",
                     dateFieldOrder: [ "m", "d", "y" ],
@@ -147,7 +147,7 @@
             themeTomorrowButton: "secondary",
             themeTodayButton: "secondary",
             buttonIconDate: "calendar-alt fa-lg",
-            buttonIconTime: "clock-o",
+            buttonIconTime: "clock",
             disabledState: "disabled",
             bootstrapDropdown: true,
             bootstrapDropdownRight: true,
@@ -271,7 +271,7 @@
                 if (typeof trigger === "undefined") {
                     trigger = false;
                 }
-                return $("<a href='#' role='button' class='btn btn-" + o.themeCloseButton + "'><span class='" + o.icnCls + "check'></span> " + txt + "</a>").addClass("" + (w.dateOK === true ? "" : "disabled")).on(o.clickEventAlt, function(e) {
+                return $("<a href='#' role='button' class='btn btn-" + o.themeCloseButton + "'><span class= 'far fa-clock mr-1'></span>  " + txt + "</a>").addClass("" + (w.dateOK === true ? "" : "disabled")).on(o.clickEventAlt, function(e) {
                     e.preventDefault();
                     if (w.dateOK === true) {
                         if (trigger === false) {
@@ -282,10 +282,13 @@
                             });
                         } else {
                             w._t(trigger);
+                            console.log('here3');
                         }
                         w._t({
-                            method: "close"
+                            method: "close",
+                            closeCancel: true
                         });
+                        console.log('here4');
                     }
                 });
             },
@@ -389,7 +392,7 @@
                 }
             }
             if (o.useButton) {
-                $("<div class='input-group-addon' " + "style='border-right:1px solid rgba(206, 212, 218); border-top:1px solid rgba(206, 212, 218); border-bottom:1px solid rgba(206, 212, 218); border-radius: 0px 4px 4px 0px;'>" + "<span class='" + o.icnCls + o.buttonIcon + "'></span>" + "</div>").attr("title", w.__("tooltip")).on(o.clickEvent, function(e) {
+                $("<div class='input-group-addon' " + "style='border-right:1px solid rgba(206, 212, 218); cursor: pointer; border-top:1px solid rgba(206, 212, 218); border-bottom:1px solid rgba(206, 212, 218); border-radius: 0px 4px 4px 0px;'>" + "<span class='" + o.icnCls + o.buttonIcon + "'></span>" + "</div>").attr("title", w.__("tooltip")).on(o.clickEvent, function(e) {
                     e.preventDefault();
                     if (o.useFocus) {
                         w.d.input.focus();
@@ -3182,7 +3185,7 @@
                   case "jqm":
                   case "bootstrap":
                   case "bootstrap4":
-                    return o.icnCls + (direction > 0 ? o.calNextMonthIcon : o.calPrevMonthIcon);
+                    return 'fas fa-' + (direction > 0 ? 'chevron-up' : 'chevron-down');
 
                   default:
                     return null;

@@ -22,14 +22,11 @@
                             <label for='date' data-toggle='tooltip' data-placement='right' title='' data-original-title='Pick a date for the room booking'>Date <b class='text-danger'>*</b></label>
                             {{--  If field is not filled correctly show an error box  --}}
                             @if(hasErrorFor('date'))
-                                {{--  ######## Need to Change value to the current date #############  --}}
-                                <input name='date'  id='date' class='form-control date-form is-invalid' type="text" data-role="datebox" data-options='{"mode":"calbox"}' value='{{ old('date', 'Select a Date') }}' onchange='removeErrorClass("date")'>
-                        
+                                <input name='date'  id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
                                 <div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
                             {{--  Otherwise show a normal input  --}}
                             @else
-                                {{--  ######## Need to Change value to the current date #############  --}}
-                                <input name='date' id='date' class='form-control date-form' type="text" data-role="datebox" data-options='{"mode":"calbox"}'>
+                                <input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
                             @endif
 
                         </div>
@@ -40,26 +37,23 @@
                             <label for='from' data-toggle='tooltip' data-placement='right' title='' data-original-title='Pick a start time for the room booking'>From <b class='text-danger'>*</b></label>
                             {{--  If field is not filled correctly show an error box  --}}
                             @if(hasErrorFor('from'))
-                                {{--  ######## Need to Change value to the current date #############  --}}
-                                <input type='time' id='from' name='from' class='form-control is-invalid' placeholder='HH:MM AM' step='1800' value='{{ old('from', '') }}' oninput='removeErrorClass("from")'/>
-                                <div class='invalid-feedback'>{{ getErrorFor('from')}}</div>
+                                <input name='from'  id='from' class='form-control date-form is-invalid' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }' onchange='removeErrorClass("from")'>
+                                <div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
                             {{--  Otherwise show a normal input  --}}
                             @else
-                                {{--  ######## Need to Change value to the current date #############  --}}
-                                <input type='time' name='from' class='form-control' placeholder='HH:MM AM' step='1800' value='{{ old('from', '') }}'/>
-                            @endif
+                                <input name='from' id='from' class='form-control date-form' type="time" data-role="datebox" onchange='removeErrorClass("from")'>
+                                @endif
                         </div>
                         <div class='col form-group mb-4'>
-                            <label for='to' data-toggle='tooltip' data-placement='right' title='' data-original-title='Pick an end time for the room booking)'>To <b class='text-danger'>*</b></label>
+                            <label for='to' data-toggle='tooltip' data-placement='right' title='' data-original-title='Pick an end time for the room booking'>To <b class='text-danger'>*</b></label>
                             {{--  If field is not filled correctly show an error box  --}}
                             @if(hasErrorFor('to'))
                                 {{--  ######## Need to Change value to the current date #############  --}}
-                                <input type='time'  id='to' name='to' class='form-control is-invalid' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}' oninput='removeErrorClass("to")'/>
-                                <div class='invalid-feedback'>{{ getErrorFor('to')}}</div>
+                                <input name='to'  id='to' class='form-control date-form is-invalid' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }' onchange='removeErrorClass("to")'>
+                                <div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
                             {{--  Otherwise show a normal input  --}}
                             @else
-                                {{--  ######## Need to Change value to the current date #############  --}}
-                                <input type='time' name='to' class='form-control' placeholder='HH:MM AM' step='1800' value='{{ old('to', '') }}'/>
+                                <input name='to'  id='to' class='form-control date-form' type="time" data-role="datebox" onchange='removeErrorClass("to")'>
                             @endif                  
                         </div>
                     </div>
@@ -147,7 +141,42 @@
             if (idOfInput == 'date') {
                 $('#date-error').removeClass('show-invalid');
             }
+            else if (idOfInput == 'from') {
+                $('#from-error').removeClass('show-invalid');
+            }
+            else if (idOfInput == 'to' ) {
+                $('#to-error').removeClass('show-invalid');
+            }
         }
     </script>
+    {{--  Setting from and to times  --}}
+    <script>
+        const currentTime = new Date();
+        const currentHour = currentTime.getHours();
+        const currentMinutes = currentTime.getMinutes();
+        let fromTime;
+        let toTime;
+        if (currentMinutes <= 30) {
+            fromTime = currentHour + ":30"
+            toTime = currentHour + 1 + ":30"
+        } else {
+            fromTime = currentHour + 1 + ":00"
+            toTime = currentHour + 2 + ":00"
+
+        }
+        $('#from').datebox({
+            mode: "timebox", 
+            defaultValue: fromTime,
+            minuteStep: "30",
+            minuteStepRound: "1"
+        });
+        $('#to').datebox({
+            mode: "timebox", 
+            defaultValue: toTime,
+            minuteStep: "30",
+            minuteStepRound: "1",
+        });
+    </script>
+
 @endsection
 
