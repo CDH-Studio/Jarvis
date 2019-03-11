@@ -7,7 +7,7 @@ class EquipmentSchema extends Schema {
 	up () {
 		this.create('equipments', (table) => {
 			table.increments();
-			table.string('name', 100).notNullable();
+			table.string('name', 100).notNullable().unique();
 			table.timestamps();
 		});
 	}

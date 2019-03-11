@@ -12,6 +12,7 @@
 
 /** @type {import('@adonisjs/lucid/src/Factory')} */
 const Equipment = use('App/Models/Equipment');
+const Logger = use('Logger');
 
 // ForEach function for async callbacks
 async function asyncForEach (arr, callback) {
@@ -31,6 +32,7 @@ class EquipmentSeeder {
 		};
 
 		await populateEquipments();
+		Logger.info('Equipment DB: Finished Seeding');
 	}
 }
 

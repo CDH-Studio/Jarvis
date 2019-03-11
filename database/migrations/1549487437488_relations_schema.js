@@ -9,8 +9,8 @@ class RelationsSchema extends Schema {
 			table.integer('room_id').notNullable();
 			table.integer('equipment_id').notNullable();
 			table.primary('room_id', 'equipment_id');
-			// table.foreign('equipment_id').references('id').on('equipments').onDelete('cascade');
-			// table.foreign('room_id').references('id').on('rooms').onDelete('cascade');
+			table.foreign('equipment_id').references('id').on('equipments').onDelete('cascade');
+			table.foreign('room_id').references('id').on('rooms').onDelete('cascade');
 		});
 	}
 

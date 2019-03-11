@@ -21,6 +21,9 @@ class RoomsSchema extends Schema {
 			table.integer('state').notNullable();
 			table.timestamps();
 		});
+
+		const query = require('../rawQueries/populateRooms');
+		this.raw(query);
 	}
 
 	down () {
