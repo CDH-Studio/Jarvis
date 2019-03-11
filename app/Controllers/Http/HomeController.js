@@ -1,19 +1,52 @@
 'use strict';
 
 class HomeController {
-	async dashboard ({ response, auth }) {
+	/**
+	*
+	* Render landing page based on user type.
+	* Admin: gets admin dashboard
+	* User: gets User dashboard
+	*
+	* @param {response}
+	* @param {auth}
+	*
+	*/
+	async home ({ response, auth }) {
 		try {
+			// cheack user is logged-in and role
 			await auth.check();
-			var d = new Date();
-			var date = d.toLocaleDateString();
-			if (auth.user.role === 1) {
-				return response.route('adminDash', { auth, date });
+			const userRole = await auth.user.getUserRole();
+
+			if (userRole === 'admin') {
+				return response.route('adminDash', { auth });
 			} else {
-				return response.route('booking', { auth });
+				return response.route('booking');
 			}
 		} catch (error) {
-			return response.redirect('/login');
+			return response.route('login');
 		}
+	}
+
+	/**
+	*
+	* Render admin dashboard
+	*
+	* @param {view}
+	*
+	*/
+	async adminDashboard ({ view }) {
+		return view.render('adminDash');
+	}
+
+	/**
+	*
+	* Render user dashboard
+	*
+	* @param {view}
+	*
+	*/
+	async userDashboard ({ view }) {
+		return view.render('booking');
 	}
 }
 

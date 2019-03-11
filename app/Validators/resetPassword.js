@@ -21,8 +21,9 @@ class ResetPassword {
 			 * required: required field, to register an account, these fields are required
 			 * same: password and confirmation passwords must match
 			 */
-			confirmPassword: 'required|same:password',
-			newPassword: "required|regex: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$" // eslint-disable-line
+			confirmPassword: 'required|same:newPassword',
+			newPassword: 'required'
+			// |regex: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$" // eslint-disable-line
 		};
 	}
 

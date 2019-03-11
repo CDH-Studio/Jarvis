@@ -11,14 +11,10 @@
             @endif
             <p><b>Floor:</b> {{ user.floor }}</p>
 
-            @if( user.tower == 0)
+            @if(user.tower == 1)
                 <p><b>Tower:</b> West</p>
             @else
                 <p><b>Tower:</b> East</p>
-            @endif
-
-            @if(canEdit)
-                <a class='btn btn-primary' href='/user/{{user.id}}/edit'><i class='fas fa-pen'></i> Edit Profile</a>
             @endif
 
             <form>
@@ -29,36 +25,33 @@
                 </div>
                 <div class='form-group'>
                     <label for='lastName'>Last Name</label>
-                    <input type='text' class='form-control' id='lastName' value='{{ user.lastname }}'>
+                    <input type='text' class='form-control' id='lastName' value='{{ user.lastname }}'>  
                 </div>
                 <div class='form-group'>
                     <label for='exampleInputEmail1'>Email</label>
-                    <input type='email' class='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' value='{{user.email}}'>
+                    <input type='email' class='form-control' id='exampleInputEmail1' aria-describedby='emailHelp' value='{{ user.email }}'>
                     <small id='emailHelp' class='form-text text-muted'>We'll never share your email with anyone else.</small>
                 </div>
                 <div class='form-row'>
                     <div class='col'>
-                        <label for='tower'>Tower</label>
-                        <select class='form-control' name='tower' >
-                            <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected=''>Select a Tower</option>
-                            <option value='0' {{ old('tower') == '0' ? 'selected' : '' }}>West</option>
-                            <option value='1' {{ old('tower') == '1' ? 'selected' : '' }}>East</option>
+                        <label for='floor'>Floor</label>
+                        <select class='form-control' id='floor' name='floor'>
+                            <option {{ user.floor == '1' ? 'selected' : '' }}>1</option>
+                            <option {{ user.floor == '2' ? 'selected' : '' }}>2</option>
+                            <option {{ user.floor == '3' ? 'selected' : '' }}>3</option>
+                            <option {{ user.floor == '4' ? 'selected' : '' }}>4</option>
+                            <option {{ user.floor == '5' ? 'selected' : '' }}>5</option>
+                            <option {{ user.floor == '6' ? 'selected' : '' }}>6</option>
+                            <option {{ user.floor == '7' ? 'selected' : '' }}>7</option>
+                            <option {{ user.floor == '8' ? 'selected' : '' }}>8</option>
+                            <option {{ user.floor == '9' ? 'selected' : '' }}>9</option>
                         </select>
                     </div>
                     <div class='col'>
-                        <label for='inputState'>Floor</label>
-                        <select id='inputState' class='form-control'>
-                            <option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected=''>Select a Floor</option>
-                            <option value='0' {{ old('floor') == '0' ? 'selected' : '' }}>0</option>
-                            <option value='1' {{ old('floor') == '1' ? 'selected' : '' }}>1</option>
-                            <option value='2' {{ old('floor') == '2' ? 'selected' : '' }}>2</option>
-                            <option value='3' {{ old('floor') == '3' ? 'selected' : '' }}>3</option>
-                            <option value='4' {{ old('floor') == '4' ? 'selected' : '' }}>4</option>
-                            <option value='5' {{ old('floor') == '5' ? 'selected' : '' }}>5</option>
-                            <option value='6' {{ old('floor') == '6' ? 'selected' : '' }}>6</option>
-                            <option value='7' {{ old('floor') == '7' ? 'selected' : '' }}>7</option>
-                            <option value='8' {{ old('floor') == '8' ? 'selected' : '' }}>8</option>
-                            <option value='9' {{ old('floor') == '9' ? 'selected' : '' }}>9</option>
+                        <label for='tower'>Tower</label>
+                        <select class='form-control' id='tower' name='tower' >
+                            <option {{ user.tower == 1 ? 'selected' : '' }}>West</option>
+                            <option {{ user.tower == 2 ? 'selected' : '' }}>East</option>
                         </select>
                     </div>
                 </div>
