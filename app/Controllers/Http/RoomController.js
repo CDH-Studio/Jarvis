@@ -232,14 +232,16 @@ class RoomController {
 			// get the search form data if employee view
 			const form = request.only(['date', 'from', 'to']);
 			const room = await Room.findOrFail(params.id);
+			const userRole = await auth.user.getUserRole();
+
 			var isAdmin = 0;
-			var layoutType = 'll';
+			var layoutType = ' ';
 			// if user is admin
-			if (auth.user.role === 1) {
+			if (userRole === 'admin') {
 				layoutType = 'layouts/adminLayout';
 				isAdmin = 1;
 				// check if user is viewing their own profile
-			} else if (auth.user.role === 2) {
+			} else if (userRole === 'user') {
 				layoutType = 'layouts/mainLayout';
 				isAdmin = 0;
 				// check if user is viewing someone elses profile
@@ -260,6 +262,7 @@ class RoomController {
 	async getAllRooms ({ auth, view }) {
 		const results = await Room.all();
 		const rooms = results.toJSON();
+		const userRole = await auth.user.getUserRole();
 
 		// Sort the results by name
 		rooms.sort((a, b) => {
@@ -292,7 +295,7 @@ class RoomController {
 		stats['maintenance'] = countMaint[0]['count(*)'];
 
 		// if user is admin
-		if (auth.user.role === 1) {
+		if (userRole === 'admin') {
 			return view.render('adminDash.viewRooms', { rooms, stats });
 		} else {
 			return view.render('userPages.results', { rooms });
