@@ -38,6 +38,10 @@ class User extends Model {
 	bookings () {
 		return this.hasMany('App/Models/Booking');
 	}
+
+	reviews () {
+		return this.hasMany('App/Models/Review');
+	}
 }
 
 module.exports = User;

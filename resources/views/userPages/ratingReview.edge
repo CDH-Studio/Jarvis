@@ -7,21 +7,25 @@
 @section('content')
 
     <div class='col'>
-        <div class='row'>
-            <div class='col form-group'>
-                <label for='rating' data-original-title='Enter the rating for this room'>Rating</b></label>
-                <input type='text' name='fullName' class='form-control' id='fullName' placeholder='Ex: 2' value='{{ old('fullName', room.fullName) }}'/>
+        <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+            {{ csrfField() }}
+        
+            <div class='row'>
+                <div class='col form-group'>
+                    <label for='rating' data-original-title='Enter the rating for this room'>Rating:</b></label>
+                    <input type='text' class='form-control' name='rating' id='rating' placeholder='Ex: 5'/>
+                </div>
             </div>
-        </div>
-
-        <div class='row'>
-            <div class='col form-group'>
-                <label for='extraEquipment'>Review</label>
-                <textarea class='form-control' name='comment' id='comment' rows='5' ></textarea>
+        
+            <div class='row'>
+                <div class='col form-group'>
+                    <label for='review'>Review:</label>
+                    <textarea class='form-control' name='review' id='review' rows='5' ></textarea>
+                </div>
             </div>
-        </div>
-
-        <button type='submit' class='btn btn-primary mb-3'>Add</button>                
+        
+            <button type='submit' class='btn btn-primary mb-3'>Add</button>   
+        </form>             
     </div>
     
 @endsection

@@ -28,13 +28,13 @@
                         <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
                         <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit</button>
                     @else
-                        <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview') }}';"><i class="fas fa-plus"></i> Write a Review</button>
+                        <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-plus"></i> Write a Review</button>
                     @endif
                 </div>
                 </div>
             </div>
             <div class='card-body'>
-                <div class='row'>
+                <div class='row'>  
                     {{--  Room Image and Map  --}}
                     <div class='col-sm-12 col-md-5 col-lg-4'>
                         <img class='room-details-image' src='/images/meeting.jpeg'>
