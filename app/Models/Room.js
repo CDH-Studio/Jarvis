@@ -7,6 +7,10 @@ class Room extends Model {
 		return this.hasMany('App/Models/Booking');
 	}
 
+	reviews () {
+		return this.hasMany('App/Models/Review');
+	}
+
 	static get table () {
 		return 'rooms';
 	}
