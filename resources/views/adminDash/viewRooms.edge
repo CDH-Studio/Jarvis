@@ -60,7 +60,8 @@ View Rooms
                     {{--  Loops through the rooms array and displays every room's content  --}}
                     <tbody>
                         @each(room in rooms) 
-                             <td class='text-center'>{{ room.name }}</td>
+                        <tr class='table-light' id='roomRow' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
+                            <td class='text-center'>{{ room.name }}</td>
                             <td class='text-center'>{{ room.fullName }}</td>
                             <td class='text-center'>{{ room.telephone }}</td>
                             <td class='text-center'>{{ room.floor }}</td>
