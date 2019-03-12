@@ -1,5 +1,6 @@
 'use strict';
 const Room = use('App/Models/Room');
+const Review = use('App/Models/Review');
 const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
@@ -730,6 +731,41 @@ class RoomController {
 			} catch (err) {
 				console.log(err);
 			}
+		}
+	}
+
+	/**
+	 * Render the ratings and review page.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async renderReviewPage ({ params, view }) {
+		return view.render('userPages.ratingReview', { id: params.id });
+	}
+
+	/**
+	 * Adds a review Object into the Database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async addReview ({ request, response, session, auth, params }) {
+		try {
+			// Retrieves user input
+			const body = request.all();
+
+			// Populates the review object's values
+			const review = new Review();
+			review.user_id = auth.user.id;
+			review.room_id = params.id;
+			review.rating = body.rating;
+			review.review = body.review;
+
+			await review.save();
+			session.flash({ notification: 'Review Added!' });
+
+			return response.route('showRoom', { id: params.id });
+		} catch (err) {
+			console.log(err);
 		}
 	}
 }
