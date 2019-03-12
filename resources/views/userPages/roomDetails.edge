@@ -148,46 +148,46 @@
                             <table class='table table-hover'>  
                                 <tbody>
                                     <tr>
-                                        <th class='confirmation-modal-text' scope='row'>*Meeting Name</th>
+                                        <th class='confirmation-modal-text' scope='row'>Meeting Name <b class='text-danger'>*</b></th>
                                         <td class='confirmation-modal-column'>
                                             @if(hasErrorFor('meeting'))
-                                                <input type='text' name='meeting' class='form-control confirmation-form is-invalid' placeholder='Please enter booking name' value='{{ old('meeting', '') }}'/>
+                                                <input type='text' id='meeting' name='meeting' class='form-control confirmation-form is-invalid' placeholder='Please enter booking name' value='{{ old('meeting', '') }}' onchange='removeErrorClass("meeting")'/>
                                                 <div class="invalid-feedback">{{ getErrorFor('meeting')}}</div>
                                             @else
-                                                <input type='text' name='meeting' class='form-control confirmation-form' placeholder='Please enter booking name' value='{{ old('meeting', '') }}'/>
+                                                <input type='text' id='meeting' name='meeting' class='form-control confirmation-form' placeholder='Please enter booking name' value='{{ old('meeting', '') }}'/>
                                             @endif
                                         </td>
                                     </tr> 
                                     <tr>
-                                        <th class='confirmation-modal-text' scope='row'>*Date</th>
+                                        <th class='confirmation-modal-text' scope='row'>Date <b class='text-danger'>*</b></th>
                                         <td class='confirmation-modal-column'>
                                             @if(hasErrorFor('date'))
-                                                <input class='form-control confirmation-form is-invalid' type='date' name='date' value='{{form.date}}' id='date'>
-                                                <div class="invalid-feedback">{{ getErrorFor('date')}}</div>
+                                                <input class='form-control confirmation-form is-invalid' type='date' name='date' value='{{form.date}}' id='date' onchange='removeErrorClass("date")'>
+                                                <div id='date-error' class="invalid-feedback show-invalid">{{ getErrorFor('date')}}</div>
                                             @else
-                                                <input class='form-control confirmation-form' type='date' name='date' value='{{form.date}}' id='date'>
+                                                <input class='form-control confirmation-form' type='date' name='date' value='{{form.date}}' id='date' onchange='removeErrorClass("date")'>
                                             @endif
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class='confirmation-modal-text' scope='row'>*From</th>
+                                        <th class='confirmation-modal-text' scope='row'>From <b class='text-danger'>*</b></th>
                                         <td class='confirmation-modal-column'>
                                             @if(hasErrorFor('from'))
-                                                <input class='form-control confirmation-form is-invalid' type='time' name='from' value='{{form.from}}' id='from'> 
-                                                <div class="invalid-feedback">{{ getErrorFor('from')}}</div>
+                                                <input class='form-control confirmation-form is-invalid' type='time' name='from' value='{{form.from}}' id='from' onchange='removeErrorClass("from")'> 
+                                                <div id='from-error' class="invalid-feedback show-invalid">{{ getErrorFor('from')}}</div>
                                             @else
-                                                <input class='form-control confirmation-form' type='time' name='from' value='{{form.from}}' id='from'>
+                                                <input class='form-control confirmation-form' type='time' name='from' value='{{form.from}}' id='from' onchange='removeErrorClass("from")'>
                                             @endif
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th class='confirmation-modal-text' scope='row'>*To</th>
+                                        <th class='confirmation-modal-text' scope='row'>To <b class='text-danger'>*</b></th>
                                         <td class='confirmation-modal-column'>
                                             @if(hasErrorFor('to'))
-                                                <input class='form-control confirmation-form is-invalid' type='time' name='to' value='{{form.to}}' id='to'>
-                                                <div class="invalid-feedback">{{ getErrorFor('to')}}</div>
+                                                <input class='form-control confirmation-form is-invalid' type='time' name='to' value='{{form.to}}' id='to' onchange='removeErrorClass("to")'>
+                                                <div id='to-error' class="invalid-feedback show-invalid">{{ getErrorFor('to')}}</div>
                                             @else
-                                                <input class='form-control confirmation-form' type='time' name='to' value='{{form.to}}' id='to'>
+                                                <input class='form-control confirmation-form' type='time' name='to' value='{{form.to}}' id='to' onchange='removeErrorClass("to")'>
                                             @endif
                                         </td>
                                     </tr>
@@ -201,7 +201,7 @@
                                             {{--  NOTE: This only shows when the user selects 'Yes' in the Reccuring Dropdown  --}}
                                             <div id='recurringInfo' style='display:none'>
                                                 @if(hasErrorFor('interval'))
-                                                    <select class='form-control confirmation-form is-invalid' name='interval' style='margin-top: 20px;'>
+                                                    <select class='form-control confirmation-form is-invalid' name='interval' style='margin-top: 20px;' id='interval' onchange='removeErrorClass("interval")'>
                                                         <option value='0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
                                                         <option value='daily' {{ old('interval') == 'daily' ? 'selected' : '' }}>Daily</option>
                                                         <option value='weekly' {{ old('interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
@@ -209,9 +209,9 @@
                                                         <option value='monthly' {{ old('interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
                                                         <option value='yearly' {{ old('interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
                                                     </select>
-                                                    <div class="invalid-feedback">{{ getErrorFor('interval')}}</div>
+                                                    <div class="invalid-feedback show-invalid">{{ getErrorFor('interval')}}</div>
                                                 @else
-                                                    <select class='form-control confirmation-form' name='interval' style='margin-top: 20px;'>
+                                                    <select class='form-control confirmation-form' name='interval' id='interval' style='margin-top: 20px;'>
                                                         <option value= '0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
                                                         <option value='daily' {{ old('interval') == 'daily' ? 'selected' : '' }}>Daily</option>
                                                         <option value='weekly' {{ old('interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
@@ -221,16 +221,16 @@
                                                     </select>
                                                 @endif
                                                 @if(hasErrorFor('numberOfTimes'))
-                                                    <select class='form-control confirmation-form is-invalid' name='numberOfTimes' style='margin-top: 20px;'>
+                                                    <select class='form-control confirmation-form is-invalid' name='numberOfTimes' id='numberOfTimes' style='margin-top: 20px;' onchange='removeErrorClass("numberOfTimes")'>
                                                         <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
                                                         <option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
                                                         <option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
                                                         <option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
                                                         <option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
                                                     </select> 
-                                                    <div class="invalid-feedback">{{ getErrorFor('numberOfTimes')}}</div>
+                                                    <div class="invalid-feedback show-invalid">{{ getErrorFor('numberOfTimes')}}</div>
                                                 @else
-                                                    <select class='form-control confirmation-form' name='numberOfTimes' style='margin-top: 20px;'>
+                                                    <select class='form-control confirmation-form' name='numberOfTimes' id='numberOfTimes' style='margin-top: 20px;' >
                                                         <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
                                                         <option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
                                                         <option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
@@ -270,6 +270,21 @@
             }
             else{
                 document.getElementById('recurringInfo').style.display='none';
+            }
+        }
+    </script>
+    <script>
+        function removeErrorClass(idOfInput){
+            $('#'+idOfInput).removeClass('is-invalid');
+            // Ih field is the calendar, then remove styling from erorr message
+            if (idOfInput == 'date') {
+                $('#date-error').removeClass('show-invalid');
+            }
+            else if (idOfInput == 'from') {
+                $('#from-error').removeClass('show-invalid');
+            }
+            else if (idOfInput == 'to' ) {
+                $('#to-error').removeClass('show-invalid');
             }
         }
     </script>
