@@ -294,6 +294,12 @@ class RoomController {
 		stats['deactive'] = countDeactive[0]['count(*)'];
 		stats['maintenance'] = countMaint[0]['count(*)'];
 
+		// Sets average rating for each room
+		for (var i = 0; i < rooms.length; i++) {
+			// Adds new attribute - rating - to every room object
+			rooms[i].rating = await this.getAverageRating(rooms[i].id);
+		}
+
 		// if user is admin
 		if (userRole === 'admin') {
 			return view.render('adminDash.viewRooms', { rooms, stats });
@@ -381,6 +387,12 @@ class RoomController {
 		searchResults = await searchResults.fetch();
 
 		const rooms = searchResults.toJSON();
+
+		// Sets average rating for each room
+		for (var i = 0; i < rooms.length; i++) {
+			// Adds new attribute - rating - to every room object
+			rooms[i].rating = await this.getAverageRating(rooms[i].id);
+		}
 
 		// iterate through the rooms
 		async function asyncForEach (arr, callback) {
@@ -764,6 +776,40 @@ class RoomController {
 			session.flash({ notification: 'Review Added!' });
 
 			return response.route('showRoom', { id: params.id });
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	/**
+	 * Adds a review Object into the Database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getAverageRating (roomId) {
+		try {
+			// Retrieves all review associated to the roomId
+			let searchResults = await Review
+				.query()
+				.where('room_id', roomId)
+				// .avg('rating')
+				.fetch();
+
+			searchResults = searchResults.toJSON();
+			var averageRating = 0;
+
+			if (searchResults.length === 0) {
+				return 'No Rating';
+			}
+
+			for (var i = 0; i < searchResults.length; i++) {
+				averageRating += searchResults[i].rating;
+			}
+
+			averageRating = averageRating - averageRating % 0.5 + (averageRating % 0.5 <= 0.2 ? 0 : 0.5);
+			averageRating = averageRating / searchResults.length;
+
+			return averageRating;
 		} catch (err) {
 			console.log(err);
 		}
