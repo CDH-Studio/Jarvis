@@ -769,6 +769,34 @@ class RoomController {
 			console.log(err);
 		}
 	}
+
+	/**
+	 * Adds a review Object into the Database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getAverageRating (roomId) {
+		try {
+			// Retrieves all review associated to the roomId
+			let searchResults = await Review
+				.query()
+				.where('room_id', roomId)
+				.fetch();
+
+			searchResults = searchResults.toJSON();
+			var avergaRating = 0;
+
+			for (var i = 0; i < searchResults.length; i++) {
+				avergaRating += searchResults[i].rating;
+			}
+
+			avergaRating = avergaRating / searchResults.length;
+
+			return avergaRating;
+		} catch (err) {
+			console.log(err);
+		}
+	}
 }
 
 module.exports = RoomController;
