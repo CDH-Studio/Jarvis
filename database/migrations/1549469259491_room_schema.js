@@ -30,7 +30,6 @@ class RoomsSchema extends Schema {
 			table.timestamps();
 
 			const query = require('../rawQueries/populateRooms');
-			console.log(query);
 			this.raw(query);
 		});
 	}
