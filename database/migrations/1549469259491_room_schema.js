@@ -28,6 +28,9 @@ class RoomsSchema extends Schema {
 			table.string('calendar', 250).defaultTo('insertCalendarHere');
 			table.integer('state').notNullable();
 			table.timestamps();
+
+			const query = require('../rawQueries/populateRooms');
+			this.raw(query);
 		});
 	}
 
