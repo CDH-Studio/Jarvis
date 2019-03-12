@@ -336,7 +336,6 @@ class RoomController {
 		const location = form.location;
 		const seats = form.seats;
 		const capacity = form.capacity;
-
 		// check boxes input
 		let checkBox = [{ checkName: 'projector', checkValue: form.projectorCheck },
 			{ checkName: 'whiteboard', checkValue: form.whiteboardCheck },
