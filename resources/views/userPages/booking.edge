@@ -4,6 +4,10 @@
     Booking
 @endsection
 
+@section('extracss')
+  {{ style('css/booking') }}
+@endsection
+
 {{--  book room page content  --}}
 @section('content')
     {{--  Loading page header  --}}
@@ -24,7 +28,33 @@
                 <button type='button' class='btn btn-secondary large-buttons' onclick="window.location='{{ route('allRooms') }}';">View All Rooms</button>
             </div>
         </div>
+
+        <div class='row'>
+            <button class='open-button' onclick='openChat()'>Chat</button>
+
+            <div class='chat-popup' id='chat-popup'>
+                <form action='/action_page.php' class='chat-window'>
+                    <h1>Chat</h1>
+
+                    <label for='message'><b>Message</b></label>
+                    <textarea placeholder='Type message..' name='msmessageg' required></textarea>
+
+                    <button type='submit' class='btn'>Send</button>
+                    <button type='button' class='btn cancel' onclick='closeChat()'>Close</button>
+                </form>
+            </div>
+        </div>
     </div>
+
+    <script>
+        function openChat() {
+            document.getElementById('chat-popup').style.display = 'block';
+        }
+        
+        function closeChat() {
+            document.getElementById('chat-popup').style.display = 'none';
+        }
+    </script>
 
     @if(flashMessage('notification'))
         <script type='module'>
