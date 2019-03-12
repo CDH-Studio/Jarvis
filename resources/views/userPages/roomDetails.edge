@@ -227,7 +227,7 @@
                                                         <option value='monthly' {{ old('interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
                                                         <option value='yearly' {{ old('interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
                                                     </select>
-                                                    <div class="invalid-feedback show-invalid">{{ getErrorFor('interval')}}</div>
+                                                    <div class='invalid-feedback show-invalid'>{{ getErrorFor('interval')}}</div>
                                                 @else
                                                     <select class='form-control confirmation-form' name='interval' id='interval' style='margin-top: 20px;'>
                                                         <option value= '0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
@@ -246,7 +246,7 @@
                                                         <option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
                                                         <option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
                                                     </select> 
-                                                    <div class="invalid-feedback show-invalid">{{ getErrorFor('numberOfTimes')}}</div>
+                                                    <div class='invalid-feedback show-invalid'>{{ getErrorFor('numberOfTimes')}}</div>
                                                 @else
                                                     <select class='form-control confirmation-form' name='numberOfTimes' id='numberOfTimes' style='margin-top: 20px;' >
                                                         <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>

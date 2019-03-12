@@ -36,30 +36,28 @@
                             <label for='from' data-toggle='tooltip' data-placement='right' title='' data-original-title='Pick a start time for the room booking'>From <b class='text-danger'>*</b></label>
                             {{--  If field is not filled correctly show an error box  --}}
                             @if(hasErrorFor('from'))
-                                <input name='from'  id='from' class='form-control date-form is-invalid' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }' onchange='removeErrorClass("from")'>
+                                <input name='from'  id='from' class='form-control date-form is-invalid' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }' onchange='removeErrorClass("from")'>
                                 <div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
                             {{--  If another field is invalid show the previous value  --}}
                             @elseif(hasErrorFor())
-                                <input name='from'  id='from' class='form-control date-form' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }'>
+                                <input name='from'  id='from' class='form-control date-form' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }'>
                             {{--  Otherwise show a normal input  --}}
                             @else
-                                <input name='from' id='from' class='form-control date-form' type="time" data-role="datebox" onchange='removeErrorClass("from")'>
+                                <input name='from' id='from' class='form-control date-form' type='time' data-role='datebox' onchange='removeErrorClass("from")'>
                             @endif
-                            {{--  If another field throws an error thhen display old value instead of   --}}
                         </div>
                         <div class='col form-group mb-4'>
                             <label for='to' data-toggle='tooltip' data-placement='right' title='' data-original-title='Pick an end time for the room booking'>To <b class='text-danger'>*</b></label>
                             {{--  If field is not filled correctly show an error box  --}}
                             @if(hasErrorFor('to'))
-                                {{--  ######## Need to Change value to the current date #############  --}}
-                                <input name='to'  id='to' class='form-control date-form is-invalid' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }' onchange='removeErrorClass("to")'>
+                                <input name='to'  id='to' class='form-control date-form is-invalid' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }' onchange='removeErrorClass("to")'>
                                 <div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
                             {{--  If another field is invalid show the previous value  --}}
                             @elseif(hasErrorFor())
-                                <input name='to'  id='to' class='form-control date-form' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }'>
+                                <input name='to'  id='to' class='form-control date-form' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }'>
                             {{--  Otherwise show a normal input  --}}
                             @else
-                                <input name='to'  id='to' class='form-control date-form' type="time" data-role="datebox" onchange='removeErrorClass("to")'>
+                                <input name='to'  id='to' class='form-control date-form' type='time' data-role='datebox' onchange='removeErrorClass("to")'>
                             @endif                  
                         </div>
                     </div>
