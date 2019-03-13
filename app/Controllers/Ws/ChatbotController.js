@@ -1,6 +1,7 @@
 'use strict';
 
 const Axios = require('axios');
+const Room = use('App/Models/Room');
 
 class ChatbotController {
 	constructor ({ socket, request }) {
@@ -25,10 +26,20 @@ class ChatbotController {
 			headers: headers,
 			params: params
 		});
-		console.log(result.data.entities);
+		const entities = result.data.entities;
+
+		let room;
+		if (entities.room_number) {
+			room = (await Room
+				.query()
+				.whereRaw(`name LIKE '${entities.room_number[0].value}%'`)
+				.fetch()).toJSON()[0];
+		}
+
+		console.log(entities);
 		console.log();
 
-		this.socket.broadcastToAll('message', message);
+		this.socket.broadcastToAll('message', { body: room.name });
 	}
 }
 
