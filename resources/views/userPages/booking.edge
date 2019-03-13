@@ -33,11 +33,12 @@
             <button class='open-button' onclick='openChat()'>Chat</button>
 
             <div class='chat-popup' id='chat-popup'>
-                <form action='/action_page.php' class='chat-window'>
-                    <h1>Chat</h1>
+                <p id='test'></p>
+                <form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>
+                    {{ csrfField() }}
 
                     <label for='message'><b>Message</b></label>
-                    <textarea placeholder='Type message..' name='msmessageg' required></textarea>
+                    <textarea placeholder='Type message..' name='message'></textarea>
 
                     <button type='submit' class='btn'>Send</button>
                     <button type='button' class='btn cancel' onclick='closeChat()'>Close</button>

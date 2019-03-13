@@ -98,3 +98,8 @@ Route.get('/events', 'RoomController.getEvents');
 Route.get('/event', 'RoomController.createEvent');
 Route.get('/calendars', 'RoomController.getCalendars');
 Route.get('/calendar', 'RoomController.getCalendar');
+
+//= ========================================================================
+// Chatbot
+//= ========================================================================
+Route.post('/message', 'Roomcontroller.sendMessage').as('message');

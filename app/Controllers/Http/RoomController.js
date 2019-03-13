@@ -768,6 +768,13 @@ class RoomController {
 			console.log(err);
 		}
 	}
+
+	async sendMessage ({ request }) {
+		const body = request.all();
+		console.log(body);
+
+		return 'null';
+	}
 }
 
 module.exports = RoomController;
