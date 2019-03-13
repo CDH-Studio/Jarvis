@@ -8,6 +8,12 @@
   {{ style('css/booking') }}
 @endsection
 
+@section('extrajs')
+    {{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
+    {{ script('https://unpkg.com/@adonisjs/websocket-client@1.0.9/dist/Ws.browser.js') }}
+    {{ script('js/chatbot.js') }}
+@endsection
+
 {{--  book room page content  --}}
 @section('content')
     {{--  Loading page header  --}}
@@ -35,7 +41,7 @@
             <div class='chat-popup' id='chat-popup'>
                 <form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>
                     {{ csrfField() }}
-                    
+
                     <div class='messages'></div>
                     <label for='message'><b>Message</b></label>
                     <textarea placeholder='Type message..' name='message' id='message'></textarea>
@@ -46,10 +52,6 @@
             </div>
         </div>
     </div>
-
-    {{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
-    {{ script('https://unpkg.com/@adonisjs/websocket-client@1.0.9/dist/Ws.browser.js') }}
-    {{ script('js/chatbot.js') }}
 
     <script>
         function openChat() {
