@@ -23,9 +23,31 @@
                     <textarea class='form-control' name='review' id='review' rows='5' ></textarea>
                 </div>
             </div>
+
+            <div id='reviewPicture'>
+                <label class='row'>Floor Plan</label>
+                <div class='form-group'>
+                    <div class='custom-file row'>
+                        @if(hasErrorFor('floorPlan'))
+                            <input type='file' class='custom-file-input is-invalid' id='reviewPicture' name='floorPlan' oninput='removeErrorClass("reviewPicture")'>
+                            <div class='invalid-feedback'>{{ getErrorFor('floorPlan') }}</div>
+                        @else
+                            <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
+                        @endif
+                        <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose File</label>
+                    </div>
+                </div>
+            </div>
         
             <button type='submit' class='btn btn-primary mb-3'>Add</button>   
         </form>             
     </div>
+
+    <script>
+        $('#reviewPicture').change(function(e){
+            var fileName = e.target.files[0].name;
+            $('#reviewPictureLabel').html(fileName);
+        });
+    </script>
     
 @endsection

@@ -214,6 +214,13 @@
     vertical-align: center;
 }
 
+.room-card-title h4{
+    line-height: 50px;
+    margin-top: 3px;
+    margin-bottom: 0px;
+    vertical-align: center;
+}
+
 .room-card-body{
     border-bottom-right-radius: 2px;
     border-bottom-left-radius: 2px;
