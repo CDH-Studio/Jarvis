@@ -11,15 +11,22 @@ class ChatbotController {
 	async onMessage (message) {
 		console.log(message);
 
-		const url = 'https://api.wit.ai/message?v=20190313&q=I%20want%20to%20book%20a%20room.';
+		const url = 'https://api.wit.ai/message';
 		const headers = {
 			'Authorization': 'Bearer D2TSQTSEYR7I3S7J53S6R7FVNORMRYFO'
 		};
 
+		const params = {
+			v: '20190313',
+			q: message
+		};
+
 		const result = await Axios.get(url, {
-			headers: headers
+			headers: headers,
+			params: params
 		});
 		console.log(result.data.entities);
+		console.log();
 
 		this.socket.broadcastToAll('message', message);
 	}
