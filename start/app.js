@@ -23,7 +23,8 @@ const providers = [
 	'@adonisjs/mail/providers/MailProvider',
 	'adonis-scheduler/providers/SchedulerProvider',
 	'@adonisjs/drive/providers/DriveProvider',
-	path.join(__dirname, '..', 'providers', 'CustomValidationProvider')
+	path.join(__dirname, '..', 'providers', 'CustomValidationProvider'),
+	'@adonisjs/websocket/providers/WsProvider'
 ];
 
 /*
