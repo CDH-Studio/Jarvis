@@ -46,7 +46,7 @@
                     <label for='message'><b>Message</b></label>
                     <textarea placeholder='Type message..' name='message' id='message'></textarea>
 
-                    <button type='button' class='btn' onclick='send()'>Send</button>
+                    <button id='sub' type='button' class='btn' onclick='send()'>Send</button>
                     <button type='button' class='btn cancel' onclick='closeChat()'>Close</button>
                 </form>
             </div>
@@ -54,13 +54,13 @@
     </div>
 
     <script>
-        function openChat() {
-            document.getElementById('chat-popup').style.display = 'block';
-        }
-        
-        function closeChat() {
-            document.getElementById('chat-popup').style.display = 'none';
-        }
+        $('#message').keypress((e) => {
+	        if (e.which === 13 && !e.shiftKey) {
+                $('#sub').click();
+                e.preventDefault();
+                return false;
+            }
+        });
     </script>
 
     @if(flashMessage('notification'))

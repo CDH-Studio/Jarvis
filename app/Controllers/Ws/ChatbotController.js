@@ -18,7 +18,7 @@ class ChatbotController {
 
 		const params = {
 			v: '20190313',
-			q: message
+			q: message.body
 		};
 
 		const result = await Axios.get(url, {

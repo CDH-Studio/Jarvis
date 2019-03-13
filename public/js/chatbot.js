@@ -31,7 +31,15 @@ function subscribeToChannel () {
 	});
 }
 
-function send() {
+function openChat () {
+	document.getElementById('chat-popup').style.display = 'block';
+}
+
+function closeChat () {
+	document.getElementById('chat-popup').style.display = 'none';
+}
+
+function send () {
 	const message = $('#message').val();
 	$('#message').val('');
 
