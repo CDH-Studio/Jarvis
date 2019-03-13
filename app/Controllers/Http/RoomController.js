@@ -232,7 +232,6 @@ class RoomController {
 			const room = await Room.findOrFail(params.id);
 			const userRole = await auth.user.getUserRole();
 			const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
-			console.log(hasReview);
 
 			var isAdmin = 0;
 			var layoutType = ' ';
@@ -751,8 +750,18 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async renderReviewPage ({ params, view }) {
-		return view.render('userPages.ratingReview', { id: params.id });
+	async renderReviewPage ({ request, params, view, auth }) {
+		// Retrieves room object
+		const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
+		var actionType = '';
+
+		if (hasReview) {
+			actionType = 'Edit Review';
+		} else {
+			actionType = 'Add Review';
+		}
+
+		return view.render('userPages.ratingReview', { id: params.id, actionType });
 	}
 
 	/**
@@ -774,6 +783,34 @@ class RoomController {
 
 			await review.save();
 			session.flash({ notification: 'Review Added!' });
+
+			return response.route('showRoom', { id: params.id });
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	/**
+	 * Edits a review Object into the Database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async editReview ({ request, response, session, auth, params }) {
+		try {
+			// Retrieves user input
+			const body = request.all();
+
+			// Update the review in the database
+			await Review
+				.query()
+				.where('user_id', auth.user.id)
+				.where('room_id', params.id)
+				.update({
+					rating: body.rating,
+					review: body.review
+				});
+
+			session.flash({ notification: 'Review Updated!' });
 
 			return response.route('showRoom', { id: params.id });
 		} catch (err) {
