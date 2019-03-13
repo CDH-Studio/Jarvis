@@ -8,23 +8,23 @@
 
     <div class='col'>
         @if(actionType == 'Add Review') 
-            <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+        <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
         @else
-            <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+        <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
         @endif
 
             {{ csrfField() }}
             <div class='row'>
                 <div class='col form-group'>
                     <label for='rating' data-original-title='Enter the rating for this room'>Rating <b class='text-danger'>*</b></b></label>
-                    <input type='text' class='form-control' name='rating' id='rating' placeholder='Ex: 5'/>
+                    <input type='text' class='form-control' name='rating' id='rating' placeholder='Ex: 5' value='{{ old('rating', review.rating) }}'/>
                 </div>
             </div>
         
             <div class='row'>
                 <div class='col form-group'>
                     <label for='review'>Review <b class='text-danger'>*</b></label>
-                    <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  room.comment) }}</textarea>
+                    <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
                 </div>
             </div>
 

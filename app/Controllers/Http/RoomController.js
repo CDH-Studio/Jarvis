@@ -750,8 +750,17 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async renderReviewPage ({ request, params, view, auth }) {
-		// Retrieves room object
+	async renderReviewPage ({ params, view, auth }) {
+		// Retrieves review
+		let searchResult = await Review
+			.query()
+			.where('user_id', auth.user.id)
+			.where('room_id', params.id)
+			.fetch();
+
+		const review = searchResult.toJSON();
+
+		// Check to see if there is an existing review
 		const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
 		var actionType = '';
 
@@ -761,7 +770,7 @@ class RoomController {
 			actionType = 'Add Review';
 		}
 
-		return view.render('userPages.ratingReview', { id: params.id, actionType });
+		return view.render('userPages.ratingReview', { id: params.id, review, actionType });
 	}
 
 	/**
