@@ -8,6 +8,8 @@ class ChatbotController {
 
 	onMessage (message) {
 		console.log(message);
+
+		this.socket.broadcastToAll('message', message);
 	}
 }
 
