@@ -15,7 +15,7 @@ public/uploads/
 .vscode
 
 # The development sqlite file
-database/jasper_dev.db
+*.db
 
 # Database scripts
 *.sql

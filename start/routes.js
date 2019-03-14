@@ -77,7 +77,7 @@ Route.post('/deleteReview/:id', 'RoomController.deleteReview').as('deleteReview'
 // Bookings
 //= ========================================================================
 Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails').middleware(['auth']); // needs to be changed to get
-Route.get('/user/:id/bookings', 'RoomController.viewBookings').as('viewBookings').middleware(['auth']);
+Route.get('/user/:id/bookings', 'RoomController.viewUserBookings').as('viewBookings').middleware(['auth']);
 Route.get('/cancelBooking/:id', 'RoomController.cancelBooking').as('cancelBooking').middleware(['auth']);
 
 // Employee user pages

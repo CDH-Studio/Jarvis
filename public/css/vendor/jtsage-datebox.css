@@ -22,7 +22,9 @@
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
 	border-radius: 0;
+	margin:0;
  }
+
 .btn-cal-info, .btn-cal-info:hover, .btn-cal-info:active, .btn-cal-info:focus, .btn-cal-info:visited{
 	background-color: #223851;
 	color: #ffffff;
@@ -50,7 +52,7 @@
 .input-group-addon{
 	 padding: 6px 12px 6px 12px;
 	 border-bottom-color: rgb(206, 212, 218);
-	 background-color: none;
+	 background-color: 0;
  }
 .ui-datebox-container { 
 	width: 290px;
