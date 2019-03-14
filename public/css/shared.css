@@ -3,7 +3,9 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* General */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-
+.text-muted{
+    color:#cccccc !important;
+}
 .wrapper-center {
     text-align: center;
 }
@@ -370,5 +372,6 @@
 .room-details-image{
     width:100%;
 }
+
 
 

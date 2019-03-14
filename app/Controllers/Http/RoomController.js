@@ -562,12 +562,31 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async viewBookings ({ auth, view }) {
+	async viewUserBookings ({ params, auth, view, response }) {
+		var canEdit = 0;
+		var layoutType = '';
+		const userRole = await auth.user.getUserRole();
+
+		if (userRole === 'admin') {
+			layoutType = 'layouts/adminLayout';
+			canEdit = 1;
+		// check if user is viewing their own profile
+		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
+			layoutType = 'layouts/mainLayout';
+			canEdit = 1;
+
+		// check if user is viewing someone elses profile
+		} else if (auth.user.id !== Number(params.id) && userRole === 'user') {
+			layoutType = 'layouts/mainLayout';
+			canEdit = 0;
+		} else {
+			return response.redirect('/');
+		}
+
 		const results = (await auth.user.bookings().fetch()).toJSON();
 		const bookings = await populateBookings(results);
-		var layoutType = 'layouts/mainLayout';
 
-		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
+		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });
 	}
 
 	/**
