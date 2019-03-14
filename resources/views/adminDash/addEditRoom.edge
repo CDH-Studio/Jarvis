@@ -23,7 +23,7 @@
                             <input type='text' name='name' class='form-control is-invalid' id='name' aria-describedby='nameHelp' placeholder='Ex: 101A (E)' value='{{ old('name', room.name) }}' oninput='removeErrorClass("name")'/>
                             <div class='invalid-feedback'>{{ getErrorFor('name') }}</div>
                         @else
-                            <input type='text' name='name' class='form-control' id='name' aria-describedby='nameHelp' placeholder='Ex: 101A (E)' value='{{ old('name',room.name) }}' />
+                            <input type='text' name='name' class='form-control' id='name' aria-describedby='nameHelp' placeholder='Ex: 101A (E)' value='{{ old('name', room.name) }}' />
                         @endif
                     </div>
                 </div>
