@@ -762,7 +762,7 @@ class RoomController {
 
 		// Check to see if there is an existing review
 		const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
-		var actionType = '';
+		var actionType;
 
 		if (hasReview) {
 			actionType = 'Edit Review';
