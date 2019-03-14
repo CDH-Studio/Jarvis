@@ -524,7 +524,11 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getBookings ({ params, view }) {
+	async getBookings ({ params, view, auth, response }) {
+		var canEdit = 0;
+		var layoutType = '';
+		const userRole = await auth.user.getUserRole();
+
 		if (userRole === 'admin') {
 			layoutType = 'layouts/adminLayout';
 			canEdit = 1;
@@ -549,9 +553,8 @@ class RoomController {
 
 		searchResults = searchResults.toJSON();
 		const bookings = await populateBookings(searchResults);
-		var layoutType = 'layouts/adminLayout';
 
-		return view.render('userPages.manageBookings', {bookings,layoutType,userRole});
+		return view.render('userPages.manageBookings', { bookings, layoutType, canEdit });
 	}
 
 	/**

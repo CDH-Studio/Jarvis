@@ -72,8 +72,6 @@ Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndRevi
 Route.post('/addReview/:id', 'RoomController.addReview').as('addReview').validator('AddReview').middleware(['isUser']);
 Route.post('/editReview/:id', 'RoomController.editReview').as('editReview').middleware(['isUser']);
 
-
-
 //= ========================================================================
 // Bookings
 //= ========================================================================
