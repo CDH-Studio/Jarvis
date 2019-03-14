@@ -562,8 +562,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async viewUserBookings ({params, auth, view, response }) {
-
+	async viewUserBookings ({ params, auth, view, response }) {
 		var canEdit = 0;
 		var layoutType = '';
 		const userRole = await auth.user.getUserRole();
@@ -584,11 +583,10 @@ class RoomController {
 			return response.redirect('/');
 		}
 
-
 		const results = (await auth.user.bookings().fetch()).toJSON();
 		const bookings = await populateBookings(results);
 
-		return view.render('userPages.manageUserBookings', {bookings, layoutType, canEdit});
+		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });
 	}
 
 	/**
