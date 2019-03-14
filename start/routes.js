@@ -46,7 +46,7 @@ Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetReq
 
 // Authentication
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
-Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['auth']);
+Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
 Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 
@@ -71,6 +71,8 @@ Route.get('/userBookings/:id', 'UserController.getBookings').as('userBookings').
 // user
 Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
 Route.post('/addReview/:id', 'RoomController.addReview').as('addReview').middleware(['isUser']);
+
+
 
 //= ========================================================================
 // Bookings
