@@ -40,29 +40,6 @@ function subscribeToChannel () {
 				</div>
 			`);
 		}
-
-		// $('.messages').append(`
-		// 	<div>
-		// 	@!component('components.card',
-		// 	id=${room.id},
-		// 	title=${room.name},
-		// 	fullName=${room.fullName},
-		// 	phoneNumber=${room.telephone},
-		// 	seats=${room.seats},
-		// 	maxCapacity=${room.capacity},
-		// 	floor=${room.floor},
-		// 	tower=${room.tower},
-		// 	projector=${room.projector},
-		// 	flipChart=${room.flipchart},
-		// 	whiteBoard=${room.whiteboard},
-		// 	audioConference=${room.audioConference},
-		// 	videoConference=${room.videoConference},
-		// 	pc=${room.pc},
-		// 	surfaceHub=${room.surfaceHub},
-		// 	extraEquipment=${room.extraEquipment},
-		// 	comment=${room.comment})
-		// 	</div>
-		// `);
 	});
 }
 

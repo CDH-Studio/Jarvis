@@ -10,11 +10,7 @@
         {{ style('css/user') }}
     @endsection
     {{--  Loading page header  --}}
-    @component('components.pageHeader', title='Results')
-        @slot('body')
-        @endslot
-    @endcomponent
-    
+    @!component('components.pageHeader', title='Results')
     {{--  where result cards will be displayed --}}
     <div class='row'>
         @each(room in rooms)
@@ -39,7 +35,8 @@
                     surfaceHub=room.surfaceHub,
                     extraEquipment=room.extraEquipment,
                     comment=room.comment,
-                    token=csrfToken)
+                    token=csrfToken,
+                    rating=room.rating)
             </div>
         @endeach
     </div>

@@ -1,6 +1,4 @@
 {{--  Room car component that takes: title, phoneNumber, seats, maxCapacity, equipment, standardEquipment[array] --}}
-@!component('components.roomConfirmationModal', id='roomModal', title=title)
-
 {{--  Routing to rooom details when clicked  --}}
 <form action='{{ route('showRoom', {id}) }}' method='GET'>
     <input type='hidden' name='_csrf' value={{ token }} />
@@ -13,19 +11,16 @@
         <div class='room-card-title'>
             <div class='row'>
                 <div class='col'>
-                    <h4>{{ title }} </h4>
+                    <h4>{{ title }} </h4> 
                 </div>
 
-                <fieldset>
-                    <label class="full fas fa-star" for="star5"></label>
-                    <label class="full fas fa-star" for="star4"></label>
-                    <label class="full fas fa-star" for="star3"></label>
-                    <label class="full fas fa-star" for="star2"></label>
-                    <label class="full fas fa-star" for="star1"></label>
-                </fieldset>
+                <div class='text-left'>
+                    <i class='full fas fa-star mr-1'></i> <span> <strong>{{ rating }}</strong></span>
+                </div> 
 
                 <div class='col text-right'>
                     <i class="fas fa-plus"></i>
+
                 </div>  
             </div>
         </div>
