@@ -122,7 +122,6 @@ class RoomController {
 			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
 				name: `${room.name}_floorPlan.png`
 			});
-			console.log(Helpers.publicPath);
 
 			// Upload process - Room Picture
 			const roomImage = request.file('roomPicture', {
@@ -227,12 +226,12 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async show ({ response, auth, params, view, request }) {
-		// Retrieves room object
 		try {
 			// get the search form data if employee view
 			const form = request.only(['date', 'from', 'to']);
 			const room = await Room.findOrFail(params.id);
 			const userRole = await auth.user.getUserRole();
+			const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
 
 			var isAdmin = 0;
 			var layoutType = ' ';
@@ -248,7 +247,7 @@ class RoomController {
 			} else {
 				return response.redirect('/');
 			}
-			return view.render('userPages.roomDetails', { room, layoutType, isAdmin, form });
+			return view.render('userPages.roomDetails', { room, layoutType, isAdmin, form, hasReview });
 		} catch (error) {
 			return response.redirect('/');
 		}
@@ -525,7 +524,27 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getBookings ({ params, view }) {
+	async getBookings ({ params, view, auth, response }) {
+		var canEdit = 0;
+		var layoutType = '';
+		const userRole = await auth.user.getUserRole();
+
+		if (userRole === 'admin') {
+			layoutType = 'layouts/adminLayout';
+			canEdit = 1;
+		// check if user is viewing their own profile
+		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
+			layoutType = 'layouts/mainLayout';
+			canEdit = 1;
+
+		// check if user is viewing someone elses profile
+		} else if (auth.user.id !== Number(params.id) && userRole === 'user') {
+			layoutType = 'layouts/mainLayout';
+			canEdit = 0;
+		} else {
+			return response.redirect('/');
+		}
+
 		// Queries the database fr the bookings associated to a specific room
 		let searchResults = await Booking
 			.query()
@@ -534,9 +553,8 @@ class RoomController {
 
 		searchResults = searchResults.toJSON();
 		const bookings = await populateBookings(searchResults);
-		var layoutType = 'layouts/adminLayout';
 
-		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
+		return view.render('userPages.manageBookings', { bookings, layoutType, canEdit });
 	}
 
 	/**
@@ -751,8 +769,27 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async renderReviewPage ({ params, view }) {
-		return view.render('userPages.ratingReview', { id: params.id });
+	async renderReviewPage ({ params, view, auth }) {
+		// Retrieves review
+		let searchResult = await Review
+			.query()
+			.where('user_id', auth.user.id)
+			.where('room_id', params.id)
+			.fetch();
+
+		const review = searchResult.toJSON();
+
+		// Check to see if there is an existing review
+		const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
+		var actionType;
+
+		if (hasReview) {
+			actionType = 'Edit Review';
+		} else {
+			actionType = 'Add Review';
+		}
+
+		return view.render('userPages.ratingReview', { id: params.id, review, actionType });
 	}
 
 	/**
@@ -782,34 +819,76 @@ class RoomController {
 	}
 
 	/**
-	 * Adds a review Object into the Database.
+	 * Edits a review Object into the Database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async editReview ({ request, response, session, auth, params }) {
+		try {
+			// Retrieves user input
+			const body = request.all();
+
+			// Update the review in the database
+			await Review
+				.query()
+				.where('user_id', auth.user.id)
+				.where('room_id', params.id)
+				.update({
+					rating: body.rating,
+					review: body.review
+				});
+
+			session.flash({ notification: 'Review Updated!' });
+
+			return response.route('showRoom', { id: params.id });
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	/**
+	 * Calcualtes the average rating of a specific room, based off of the room Id
 	 *
 	 * @param {Object} Context The context object.
 	 */
 	async getAverageRating (roomId) {
 		try {
-			// Retrieves all review associated to the roomId
+			// Retrive all the ratings and calculates the average
 			let searchResults = await Review
 				.query()
 				.where('room_id', roomId)
-				// .avg('rating')
-				.fetch();
+				.avg('rating');
 
-			searchResults = searchResults.toJSON();
-			var averageRating = 0;
-
-			if (searchResults.length === 0) {
+			// If there is no averge rating, return 'No Rating'
+			if (searchResults[0]['avg(`rating`)'] == null) {
 				return 'No Rating';
 			}
 
-			for (var i = 0; i < searchResults.length; i++) {
-				averageRating += searchResults[i].rating;
-			}
+			// Returns the rating, thus searchResults[0]['avg(`rating`)']
+			return searchResults[0]['avg(`rating`)'];
+		} catch (err) {
+			console.log(err);
+		}
+	}
 
-			averageRating = averageRating - averageRating % 0.5 + (averageRating % 0.5 <= 0.2 ? 0 : 0.5);
-			averageRating = averageRating / searchResults.length;
+	/**
+	 * Returns true if the user has a review in the database, else false.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async hasRatingAndReview (userId, roomId) {
+		try {
+			// Retrive all the reviews associated to a specific user
+			let searchResults = await Review
+				.query()
+				.where('user_id', userId)
+				.where('room_id', roomId)
+				.fetch();
 
-			return averageRating;
+			const reviews = searchResults.toJSON();
+
+			// return true if the user has a review, else false
+			return reviews.length > 0;
 		} catch (err) {
 			console.log(err);
 		}
