@@ -41,7 +41,6 @@
             <div class='chat-popup' id='chat-popup'>
                 <form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>
                     {{ csrfField() }}
-
                     <div class='messages'></div>
                     <label for='message'><b>Message</b></label>
                     <textarea placeholder='Type message..' name='message' id='message'></textarea>

@@ -25,9 +25,44 @@ function subscribeToChannel () {
 	});
 
 	chat.on('message', (message) => {
-		$('.messages').append(`
-			<p> ${message.body} </p> </div>
-		`);
+		const room = message.room;
+		const datetime = message.datetime;
+		console.log(datetime);
+
+		if (room) {
+			$('.messages').html(`
+				<div class="card">
+					<img src="/images/meeting.jpeg" alt="Avatar" style="width:100%">
+					<div class="card-container">
+						<h4><b>${room.name}</b></h4> 
+						<p></p> 
+					</div>
+				</div>
+			`);
+		}
+
+		// $('.messages').append(`
+		// 	<div>
+		// 	@!component('components.card',
+		// 	id=${room.id},
+		// 	title=${room.name},
+		// 	fullName=${room.fullName},
+		// 	phoneNumber=${room.telephone},
+		// 	seats=${room.seats},
+		// 	maxCapacity=${room.capacity},
+		// 	floor=${room.floor},
+		// 	tower=${room.tower},
+		// 	projector=${room.projector},
+		// 	flipChart=${room.flipchart},
+		// 	whiteBoard=${room.whiteboard},
+		// 	audioConference=${room.audioConference},
+		// 	videoConference=${room.videoConference},
+		// 	pc=${room.pc},
+		// 	surfaceHub=${room.surfaceHub},
+		// 	extraEquipment=${room.extraEquipment},
+		// 	comment=${room.comment})
+		// 	</div>
+		// `);
 	});
 }
 

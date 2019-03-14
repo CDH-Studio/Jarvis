@@ -36,10 +36,16 @@ class ChatbotController {
 				.fetch()).toJSON()[0];
 		}
 
+		let datetime;
+		if (entities.datetime) {
+			datetime = entities.datetime[0];
+			console.log(datetime);
+		}
+
 		console.log(entities);
 		console.log();
 
-		this.socket.broadcastToAll('message', { body: room.name });
+		this.socket.broadcastToAll('message', { room: room, datetime: datetime });
 	}
 }
 
