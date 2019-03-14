@@ -34,7 +34,7 @@
     {{--  Navbar  --}}
     <nav class='navbar navbar-expand-lg fixed-top navbar-dark bg-primary stroke'>
         <div class='container'>
-          <a href='../' class='navbar-brand'><img src='/door_logo.png'></a>
+          <a href='{{ route('home') }}' class='navbar-brand'><img src='/door_logo.png'></a>
           <button class='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarResponsive' aria-controls='navbarResponsive' aria-expanded='false' aria-label='Toggle navigation'>
             <span class='navbar-toggler-icon'></span>
           </button>
@@ -43,7 +43,7 @@
             <ul class='navbar-nav'>
               <li class='nav-item dropdown'>
               <a class='nav-link mr-2 user-nav-link hvr-underline-from-center' href='{{ route('home') }}'>Book a Room <span className='sr-only'></span></a>
-                <a class='nav-link mr-2 user-nav-link hvr-underline-from-center' href='{{ route('viewBookings') }}'>Manage Bookings <span className='sr-only'></span></a>
+                <a class='nav-link mr-2 user-nav-link hvr-underline-from-center' href='{{ route('viewBookings',{id: auth.user.id}) }}'>Manage Bookings <span className='sr-only'></span></a>
               </li>
             </ul>
             {{--  Header drop down for user settings, logout  --}}

@@ -46,7 +46,7 @@ Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetReq
 
 // Authentication
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
-Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['auth']);
+Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
 Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 
@@ -66,7 +66,6 @@ Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware([
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
 Route.get('/roomBookings/:id', 'RoomController.getBookings').as('roomBookings').middleware(['auth']);
-Route.get('/userBookings/:id', 'UserController.getBookings').as('userBookings').middleware(['auth']);
 
 // user
 Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
@@ -76,9 +75,9 @@ Route.post('/editReview/:id', 'RoomController.editReview').as('editReview').midd
 //= ========================================================================
 // Bookings
 //= ========================================================================
-Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails'); // needs to be changed to get
-Route.get('/viewBookings', 'RoomController.viewBookings').as('viewBookings');
-Route.get('/cancelBooking/:id', 'RoomController.cancelBooking').as('cancelBooking');
+Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails').middleware(['auth']); // needs to be changed to get
+Route.get('/user/:id/bookings', 'RoomController.viewBookings').as('viewBookings').middleware(['auth']);
+Route.get('/cancelBooking/:id', 'RoomController.cancelBooking').as('cancelBooking').middleware(['auth']);
 
 // Employee user pages
 Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);

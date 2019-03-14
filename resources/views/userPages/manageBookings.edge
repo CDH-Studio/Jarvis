@@ -27,7 +27,9 @@
 						<th scope='col'>Date</th>
 						<th scope='col'>Time</th>
 						<th scope='col'>Status</th>
-						<th scope='col'></th>
+						@if(booking.status == 'Approved' && canEdit)
+							<th scope='col'></th>
+						@endif
 					</tr>
 				</thead>
 				{{--  Loops through the bookings array and displays every booking  --}}
@@ -39,10 +41,8 @@
 							<td>{{ booking.date }}</td>
 							<td>{{ booking.time }}</td>
 							<td class='td-{{ booking.status }}'>{{ booking.status }}</td>
-							@if(booking.status == 'Approved')
+							@if(booking.status == 'Approved' && canEdit)
 								<td><a class='btn btn-secondary' name='cancel' id='cancelButton' href='{{ route('cancelBooking', {id: booking.id}) }}'>Cancel</a></td>
-							@else
-								<td></td>
 							@endif
 						</tr>
 					</tbody>
