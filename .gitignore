@@ -15,7 +15,7 @@ public/uploads/
 .vscode
 
 # The development sqlite file
-.db
+*.db
 
 # Database scripts
 *.sql
