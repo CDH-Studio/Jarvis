@@ -495,7 +495,7 @@ class RoomController {
 
 		session.flash({
 			notification: `Room ${name} has been booked. Please click here to view your bookings.`,
-			url: '/viewBookings'
+			url: `/user/${auth.user.id}/bookings`
 		});
 
 		return response.redirect('/booking');
@@ -576,7 +576,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async cancelBooking ({ params, response }) {
+	async cancelBooking ({ params, response, auth }) {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
 		const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
@@ -586,7 +586,7 @@ class RoomController {
 		booking.status = 'Cancelled';
 		await booking.save();
 
-		return response.redirect('/viewBookings');
+		return response.redirect(`/user/${auth.user.id}/bookings`);
 	}
 
 	/**
