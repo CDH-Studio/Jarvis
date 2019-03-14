@@ -1,6 +1,4 @@
 {{--  Room car component that takes: title, phoneNumber, seats, maxCapacity, equipment, standardEquipment[array] --}}
-@!component('components.roomConfirmationModal', id='roomModal', title=title)
-
 {{--  Routing to rooom details when clicked  --}}
 <form action='{{ route('showRoom', {id}) }}' method='GET'>
     <input type='hidden' name='_csrf' value={{ token }} />
@@ -22,6 +20,7 @@
 
                 <div class='col text-right'>
                     <i class="fas fa-plus"></i>
+
                 </div>  
             </div>
         </div>
