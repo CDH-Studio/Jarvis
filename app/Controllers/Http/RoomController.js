@@ -847,6 +847,29 @@ class RoomController {
 	}
 
 	/**
+	 * Deletes a review Object from the Database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async deleteReview ({ request, response, session, auth, params }) {
+		try {
+			// Update the review in the database
+			await Review
+				.query()
+				.where('user_id', auth.user.id)
+				.where('room_id', params.id);
+
+			console.log(Review);
+
+			session.flash({ notification: 'Review Deleted!' });
+
+			return response.route('showRoom', { id: params.id });
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	/**
 	 * Calcualtes the average rating of a specific room, based off of the room Id
 	 *
 	 * @param {Object} Context The context object.

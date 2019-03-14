@@ -68,7 +68,7 @@
             @else
                 <div>
                     <button type='submit' class='btn btn-primary mb-3'>Update</button>   
-                    <button type='submit' class='btn btn-danger mb-3'>Delete</button>   
+                    <button type='submit' class='btn btn-danger mb-3 float-right' onclick="window.location='{{ route('deleteReview', { id: id }) }}';">Delete</button>   
                 </div> 
             @endif
         </form>             
