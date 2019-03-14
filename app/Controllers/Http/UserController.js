@@ -144,8 +144,6 @@ class UserController {
 		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
 			layoutType = 'layouts/mainLayout';
 		// check if user is editing someone elses profile
-		} else if (auth.user.id !== Number(params.id) && userRole === 'user') {
-			layoutType = 'layouts/mainLayout';
 		} else {
 			return response.redirect('/');
 		}
