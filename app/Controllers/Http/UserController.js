@@ -39,7 +39,7 @@ function sendMail (subject, body, to, from) {
 			.from(from)
 			.subject(subject);
 	});
-	console.log('mail sent');
+	Logger.info('mail sent');
 }
 
 /**
@@ -214,7 +214,7 @@ class UserController {
 				.where('hash', '=', hash)
 				.fetch();
 			let rows = results.toJSON();
-			console.log(rows);
+			Logger.debug(rows);
 			const email = rows[0].email;
 
 			await User
@@ -224,7 +224,7 @@ class UserController {
 
 			return response.redirect('/');
 		} catch (err) {
-			console.log(err);
+			Logger.debug(err);
 		}
 	}
 
@@ -347,7 +347,7 @@ class UserController {
 				hash: hash,
 				type: 1
 			};
-			console.log(row);
+			Logger.debug(row);
 			await AccountRequest.create(row);
 
 			let body = `
@@ -382,7 +382,7 @@ class UserController {
 				.where('hash', '=', hash)
 				.fetch();
 			const rows = results.toJSON();
-			console.log(hash);
+			Logger.debug(hash);
 
 			if (rows.length !== 0 && rows[0].type === 1) {
 				const email = rows[0].email;
@@ -416,7 +416,7 @@ class UserController {
 	async changePassword ({ request, response, auth, session }) {
 		const { newPassword, userId } = request.only(['newPassword', 'userId']);
 		const userRole = await auth.user.getUserRole();
-		if (userRole === 'admin' || (auth.user.id === Number(userId) && auth.user.getUserRole() === 'user')) {
+		if (userRole === 'admin' || (auth.user.id === Number(userId) && userRole === 'user')) {
 			try {
 				if (updatePassword(newPassword, 'id', userId)) {
 					session.flash({ success: 'Password Updated Successfully' });
