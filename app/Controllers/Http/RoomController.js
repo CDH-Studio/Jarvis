@@ -402,34 +402,8 @@ class RoomController {
 
 		const checkRoomAvailability = async () => {
 			await asyncForEach(rooms, async (item, index, items) => {
-				const startTime = date + 'T' + from;
-				const endTime = date + 'T' + to;
-
-				// if there is a calendar for the room
-				if (item.calendar !== 'insertCalendarHere' && item.calendar !== null) {
-					// query the events within the search time range
-					const calendarViews = (await this.getCalendarView(
-						item.calendar,
-						startTime,
-						endTime
-					)).value;
-
-					// if event end time is the same as search start time, remove the event
-					calendarViews.forEach((item, index, items) => {
-						const eventEndTime = new Date(item.end.dateTime);
-						const searchStartTime = new Date(startTime);
-
-						if (+eventEndTime === +searchStartTime) {
-							items.splice(index, 1);
-						}
-					});
-
-					// remove the room if it is not available
-					const available = calendarViews.length === 0;
-
-					if (!available) {
-						items.splice(index, 1);
-					}
+				if (!await this.getRoomAvailability(date, from, to, item.calendar)) {
+					items.splice(index, 1);
 				}
 			});
 		};
@@ -472,6 +446,14 @@ class RoomController {
 		const row = results.toJSON();
 		const calendar = row.calendar;
 		const name = row.name;
+
+		if (!await this.getRoomAvailability(date, from, to, calendar)) {
+			session.flash({
+				error: `Room ${name} has already been booked for the time selected!`
+			});
+
+			return response.route('showRoom', { id: room });
+		}
 
 		// Information of the event
 		const eventInfo = {
@@ -780,6 +762,42 @@ class RoomController {
 			} catch (err) {
 				console.log(err);
 			}
+		}
+	}
+
+	/**
+	 *
+	 * @param {String} date     Date
+	 * @param {String} from     Starting time
+	 * @param {String} to       Ending time
+	 * @param {String} calendar Calendar ID
+	 *
+	 * @returns {Boolean} Whether or not the room is available
+	 */
+	async getRoomAvailability (date, from, to, calendar) {
+		const startTime = date + 'T' + from;
+		const endTime = date + 'T' + to;
+
+		// if there is a calendar for the room
+		if (calendar !== 'insertCalendarHere' && calendar !== null) {
+			// query the events within the search time range
+			const calendarViews = (await this.getCalendarView(
+				calendar,
+				startTime,
+				endTime
+			)).value;
+
+			// if event end time is the same as search start time, remove the event
+			calendarViews.forEach((item, index, items) => {
+				const eventEndTime = new Date(item.end.dateTime);
+				const searchStartTime = new Date(startTime);
+
+				if (+eventEndTime === +searchStartTime) {
+					items.splice(index, 1);
+				}
+			});
+
+			return calendarViews.length === 0;
 		}
 	}
 
