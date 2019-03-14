@@ -70,8 +70,7 @@ Route.get('/userBookings/:id', 'UserController.getBookings').as('userBookings').
 
 // user
 Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
-// Route.on('/ratingAndReview/:id').render('userPages/ratingReview').as('ratingAndReview');
-Route.post('/addReview/:id', 'RoomController.addReview').as('addReview').middleware(['admin']);
+Route.post('/addReview/:id', 'RoomController.addReview').as('addReview').middleware(['isUser']);
 
 //= ========================================================================
 // Bookings

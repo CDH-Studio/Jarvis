@@ -11,16 +11,12 @@
         <div class='room-card-title'>
             <div class='row'>
                 <div class='col'>
-                    <h4>{{ title }} </h4>
+                    <h4>{{ title }} </h4> 
                 </div>
 
-                <fieldset>
-                    <label class="full fas fa-star" for="star5"></label>
-                    <label class="full fas fa-star" for="star4"></label>
-                    <label class="full fas fa-star" for="star3"></label>
-                    <label class="full fas fa-star" for="star2"></label>
-                    <label class="full fas fa-star" for="star1"></label>
-                </fieldset>
+                <div class='col text-left'>
+                    <i class="full fas fa-star"></i> <span>{{ rating }}</span>
+                </div>  
 
                 <div class='col text-right'>
                     <i class="fas fa-plus"></i>
