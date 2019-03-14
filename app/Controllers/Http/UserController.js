@@ -305,6 +305,7 @@ class UserController {
 		var canEdit = 0;
 		var layoutType = '';
 		const userRole = await auth.user.getUserRole();
+		const profileUserRole = await user.getUserRole();
 		// check if admin is viewing their own profile
 		if (userRole === 'admin') {
 			layoutType = 'layouts/adminLayout';
@@ -322,20 +323,7 @@ class UserController {
 			return response.redirect('/');
 		}
 
-		const options = {
-			redirect: '/user/updatepassword',
-			method: 'POST',
-			hidden: [
-				{
-					name: 'userId',
-					value: user.id
-				}
-			],
-			buttonName: 'Submit',
-			buttonClass: 'btn btn-primary'
-		};
-
-		return view.render('auth.showUser', { auth, user, layoutType, canEdit, options });
+		return view.render('auth.showUser', { auth, user, layoutType, canEdit, profileUserRole });
 	}
 
 	/**

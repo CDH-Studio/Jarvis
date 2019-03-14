@@ -526,6 +526,22 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async getBookings ({ params, view }) {
+		if (userRole === 'admin') {
+			layoutType = 'layouts/adminLayout';
+			canEdit = 1;
+		// check if user is viewing their own profile
+		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
+			layoutType = 'layouts/mainLayout';
+			canEdit = 1;
+
+		// check if user is viewing someone elses profile
+		} else if (auth.user.id !== Number(params.id) && userRole === 'user') {
+			layoutType = 'layouts/mainLayout';
+			canEdit = 0;
+		} else {
+			return response.redirect('/');
+		}
+
 		// Queries the database fr the bookings associated to a specific room
 		let searchResults = await Booking
 			.query()
@@ -536,7 +552,7 @@ class RoomController {
 		const bookings = await populateBookings(searchResults);
 		var layoutType = 'layouts/adminLayout';
 
-		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
+		return view.render('userPages.manageBookings', {bookings,layoutType,userRole});
 	}
 
 	/**

@@ -1,25 +1,45 @@
 @layout(layoutType)
 
 @section('content')
+    @!component('components.pageTitle', title='User Profile')
+    
     <div class='row'>
-        <div class= 'col-5'>
-            @!component('components.pageTitle', title='User Profile')
+        <div class="col-md-2 text-center">
+            <i class="fas fa-user-circle fa-6x mb-3"></i>
+            <h4>{{ user.firstname }} {{ user.lastname }}<h4>
+        </div>    
+
+        <div class= 'col-md-5'>
+            
             <p><b>Name:</b> {{ user.firstname }} {{ user.lastname }}</p>
             <p><b>Email:</b> {{ user.email }}
+
             @if(user.verified)
-                <i>verified</i>
+                <span class="badge badge-pill badge-success">verified</span>
+            @else
+                <span class="badge badge-pill badge-warning">verification needed</span>
             @endif
             </p>
-            @if(user.role==2)
+            {{userRole}}
+            @if(profileUserRole==='user')
                 <p><b>Floor:</b> {{ user.floor }}</p>
-                <p><b>Tower:</b> {{ user.tower }}</p>              
+                <p><b>Tower:</b> {{ user.tower }}</p>
+                <button type='button' class='btn btn-info mb-3' onclick="window.location='{{ route('viewBookings',{id: auth.user.id}) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>              
             @endif
-
+           
             @if(canEdit)
                 <button type='button' class='btn btn-primary mb-3' onclick="window.location='{{ route('editUser', { id: user.id }) }}';"><i class='fas fa-pen'></i> Edit Profile</button>
-                <button type='button' class='btn btn-info mb-3' onclick="window.location='{{ route('userBookings', { id: user.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
-                <hr>
-                <br>
+            @endif
+
+        </div>
+    </div>
+    
+    <div class='row'>
+        <div class= 'col-12'>
+            <hr>
+        </div>
+        <div class= 'col-5'>
+            @if(canEdit)
                 <h4>Change Password</h4>
                 @if(old('error'))
                     <div class='alert alert-danger'>
