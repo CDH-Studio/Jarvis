@@ -604,7 +604,7 @@ class RoomController {
 		booking.status = 'Cancelled';
 		await booking.save();
 
-		return response.redirect('/viewBookings');
+		return response.route('viewBookings', { id: params.id });
 	}
 
 	/**
