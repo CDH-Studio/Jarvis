@@ -314,7 +314,6 @@ class UserController {
 		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
 			layoutType = 'layouts/mainLayout';
 			canEdit = 1;
-
 		} else {
 			return response.redirect('/');
 		}
