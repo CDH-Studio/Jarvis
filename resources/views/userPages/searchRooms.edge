@@ -19,7 +19,12 @@
                     {{--  Date form  --}}
                     <div class='row'>
                         <div class='col form-group mb-4 '>
-                            <label for='date' data-toggle='tooltip' data-placement='right' title='' data-original-title='Pick a date for the room booking'>Date <b class='text-danger'>*</b></label>
+                            <div class='row'>
+                                <label class='col' for='date'>Date <b class='text-danger'>*</b></label>
+                                <div class='col text-right'>
+                                    <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
+                                </div>
+                            </div>
                             {{--  If field is not filled correctly show an error box  --}}
                             @if(hasErrorFor('date'))
                                 <input name='date'  id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
@@ -33,7 +38,7 @@
                     {{--  Meeting time from  --}}
                     <div class='row'>
                         <div class='col form-group mb-4'>
-                            <label for='from' data-toggle='tooltip' data-placement='right' title='' data-original-title='Pick a start time for the room booking'>From <b class='text-danger'>*</b></label>
+                            <label for='from'>From <b class='text-danger'>*</b></label>
                             {{--  If field is not filled correctly show an error box  --}}
                             @if(hasErrorFor('from'))
                                 <input name='from'  id='from' class='form-control date-form is-invalid' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }' onchange='removeErrorClass("from")'>
@@ -47,7 +52,7 @@
                             @endif
                         </div>
                         <div class='col form-group mb-4'>
-                            <label for='to' data-toggle='tooltip' data-placement='right' title='' data-original-title='Pick an end time for the room booking'>To <b class='text-danger'>*</b></label>
+                            <label for='to' data-toggle='tooltip'>To <b class='text-danger'>*</b></label>
                             {{--  If field is not filled correctly show an error box  --}}
                             @if(hasErrorFor('to'))
                                 <input name='to'  id='to' class='form-control date-form is-invalid' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }' onchange='removeErrorClass("to")'>
@@ -64,7 +69,7 @@
                     {{--  Location form  --}}
                     <div class='row'>
                         <div class='col form-group mb-4'>
-                            <label for='location' data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Enter the preferred location'>Location</label>
+                            <label for='location'>Location</label>
                             <select name='location' class='form-control'>
                                 <option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>Select a floor</option>
                                 <option value='0' {{ old('location') == '0' ? 'selected' : '' }}>Floor 0</option>
@@ -83,12 +88,12 @@
                     <div class='row'>
                         {{--  Table Seats form  --}}
                         <div class='col form-group mb-4'>
-                            <label for='seats' data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Please enter the estimated number of seats that need to be accommodated for'>Number of Table Seats</label>
+                            <label for='seats'>Number of Table Seats</label>
                             <input class='form-control' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
                         </div>
                         {{--  Max Capacity  --}}
                         <div class='col form-group mb-4'>
-                            <label for='capacity' data-toggle='tooltip' data-placement='right' title='' data-original-title='[Optional] Please enter the estimated number of people that need to be accommodated for'>Number of People</label>
+                            <label for='capacity'>Number of People</label>
                             <input class='form-control' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
                         </div>
                     </div>
@@ -129,10 +134,10 @@
                         </div>
                     </div>
                     {{--  Page buttons  --}}
-                    <div class='row'>
-                        <div class='col-sm-12'>
+                    <div class='row mt-5'>
+                        <div class='col-sm-12 text-right'>
                             <button type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
-                            <button type='submit' class='btn btn-primary'>Search</button>
+                            <button type='submit' class='btn btn-primary no-margin'>Search</button>
                         </div>
                     </div>
                 </form>

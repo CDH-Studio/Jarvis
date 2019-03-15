@@ -16,6 +16,7 @@ public/uploads/
 
 # The development sqlite file
 *.db
+/database/japser_dev.db
 
 # Database scripts
 *.sql

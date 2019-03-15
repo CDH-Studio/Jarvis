@@ -24,11 +24,11 @@
             @if(profileUserRole==='user')
                 <p><b>Floor:</b> {{ user.floor }}</p>
                 <p><b>Tower:</b> {{ user.tower }}</p>
-                <button type='button' class='btn btn-info mb-3' onclick='window.location='{{ route('viewBookings',{id: auth.user.id}) }}';'><i class='fas fa-list-ul'></i> View Bookings</button>              
+                <button type='button' class='btn btn-info mb-3' onclick="window.location='{{ route('viewBookings',{id: auth.user.id}) }}';"><i class='fas fa-list-ul'></i> View Bookings</button>              
             @endif
            
             @if(canEdit)
-                <button type='button' class='btn btn-primary mb-3' onclick='window.location='{{ route('editUser', { id: user.id }) }}';'><i class='fas fa-pen'></i> Edit Profile</button>
+                <button type='button' class='btn btn-primary mb-3' onclick="window.location='{{ route('editUser', { id: user.id }) }}';"><i class='fas fa-pen'></i> Edit Profile</button>
             @endif
 
         </div>
