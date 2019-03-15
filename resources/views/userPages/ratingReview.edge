@@ -68,10 +68,16 @@
             @else
                 <div>
                     <button type='submit' class='btn btn-primary mb-3'>Update</button>   
-                    <button type='submit' class='btn btn-danger mb-3'>Delete</button>   
+                    {{--  <button type='button' class='btn btn-danger mb-3 float-right' onclick="window.location='{{ route('deleteReview', { id: id }) }}';" method='POST'>Delete</button>     --}}
                 </div> 
-            @endif
-        </form>             
+            @endif            
+        </form> 
+
+        <form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+            {{ csrfField() }}
+            <button type='submit' class='btn btn-danger mb-3 float-right'>Delete</button>   
+        </form>
+        
     </div>
 
     {{--  Script to display file name on upload  --}}
