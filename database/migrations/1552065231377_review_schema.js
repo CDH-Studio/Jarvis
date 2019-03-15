@@ -7,10 +7,10 @@ class ReviewSchema extends Schema {
 	up () {
 		this.create('reviews', (table) => {
 			table.increments();
-			table.integer('user_id').unsigned().references('id').inTable('users');
-			table.integer('room_id').unsigned().references('id').inTable('rooms');
-			table.integer('rating');
-			table.string('review', 2000);
+			table.integer('user_id').unsigned().references('id').inTable('users').notNullable();
+			table.integer('room_id').unsigned().references('id').inTable('rooms').notNullable();
+			table.integer('rating').notNullable();
+			table.string('review', 2000).notNullable();
 			table.timestamps();
 		});
 	}

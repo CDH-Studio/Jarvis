@@ -11,6 +11,10 @@ class Room extends Model {
 		return this.hasMany('App/Models/Review');
 	}
 
+	reports () {
+		return this.hasMany('App/Models/Report');
+	}
+
 	static get table () {
 		return 'rooms';
 	}

@@ -1,6 +1,7 @@
 'use strict';
 const Room = use('App/Models/Room');
 const Review = use('App/Models/Review');
+const Report = use('App/Models/Report');
 const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
@@ -965,6 +966,28 @@ class RoomController {
 		} catch (err) {
 			console.log(err);
 		}
+	}
+	/**
+	 * Reports a room
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async reportRoom ({ request, response, session, auth }) {
+		const { issueType, comment, room } = request.only(['issueType', 'comment', 'room']);
+		console.log(room);
+		const results = await Room
+			.findBy('id', room);
+		const row = results.toJSON();
+		// Populates the review object's values
+		const report = new Report();
+		report.user_id = auth.user.id;
+		report.room_id = row.id;
+		report.report_type_id = issueType;
+		report.comment = comment;
+		report.report_status_id = 1;
+		await report.save();
+
+		session.flash({ notification: 'Your report has been submitted' });
 	}
 }
 
