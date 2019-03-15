@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 /*
 |--------------------------------------------------------------------------
@@ -9,7 +9,7 @@
 |
 */
 module.exports = {
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Path
   |--------------------------------------------------------------------------
@@ -17,9 +17,9 @@ module.exports = {
   | The base path on which the websocket server will accept connections.
   |
   */
-  path: '/adonis-ws',
+	path: '/adonis-ws',
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Server Interval
   |--------------------------------------------------------------------------
@@ -28,9 +28,9 @@ module.exports = {
   | connections.
   |
   */
-  serverInterval: 30000,
+	serverInterval: 30000,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Server Attempts
   |--------------------------------------------------------------------------
@@ -40,9 +40,9 @@ module.exports = {
   | will be made before terminating the client connection.
   |
   */
-  serverAttempts: 3,
+	serverAttempts: 3,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Client Interval
   |--------------------------------------------------------------------------
@@ -50,9 +50,9 @@ module.exports = {
   | This interval is used by client to send ping frames to the server.
   |
   */
-  clientInterval: 25000,
+	clientInterval: 25000,
 
-  /*
+	/*
   |--------------------------------------------------------------------------
   | Client Attempts
   |--------------------------------------------------------------------------
@@ -62,5 +62,5 @@ module.exports = {
   | been elapsed, the client will consider server as dead.
   |
   */
-  clientAttempts: 3
-}
+	clientAttempts: 3
+};
