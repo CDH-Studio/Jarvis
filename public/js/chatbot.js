@@ -30,14 +30,19 @@ function subscribeToChannel () {
 		console.log(datetime);
 
 		if (room) {
-			$('.messages').html(`
+			$('.messages').empty().html(`
+				<b>I have found a room for you!</b>
 				<div class="card">
 					<img src="/images/meeting.jpeg" alt="Avatar" style="width:100%">
 					<div class="card-container">
 						<h4><b>${room.name}</b></h4> 
-						<p></p> 
+						<p>${datetime? datetime.value : ''}</p> 
 					</div>
 				</div>
+			`);
+		} else {
+			$('.messages').empty().html(`
+				<b>I did not find any rooms. Sorry.</b>
 			`);
 		}
 	});

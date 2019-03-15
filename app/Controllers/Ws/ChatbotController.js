@@ -39,7 +39,6 @@ class ChatbotController {
 		let datetime;
 		if (entities.datetime) {
 			datetime = entities.datetime[0];
-			console.log(datetime);
 		}
 
 		console.log(entities);
