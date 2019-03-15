@@ -171,7 +171,12 @@
                             {{--  Meeting Name  --}}
                             <div class='row'>
                                 <div class='col form-group'>
-                                    <label for='meeting' data-toggle='tooltip' data-placement='right' title='' data-original-title='Select a name for the room booking'>Meeting Name <b class='text-danger'>*</b></label>
+                                    <div class='row'>
+                                        <label class='col' for='meeting'>Meeting Name <b class='text-danger'>*</b></label>
+                                        <div class='col text-right'>
+                                            <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='Select a name for the room booking'></i>
+                                        </div>
+                                    </div>
                                     <td class='confirmation-modal-column'>
                                         @if(hasErrorFor('meeting'))
                                             <input type='text' id='meeting' name='meeting' class='form-control is-invalid' placeholder='Please enter booking name' value='{{ old('meeting', '') }}' onchange='removeErrorClass("meeting")'/>
@@ -184,7 +189,12 @@
                             {{--  Date form  --}}
                             <div class='row'>
                                 <div class='col form-group'>
-                                    <label for='date' data-toggle='tooltip' data-placement='right' title='' data-original-title='Pick a date for the room booking'>Date <b class='text-danger'>*</b></label>
+                                    <div class='row'>
+                                        <label class='col' for='date'>Date <b class='text-danger'>*</b></label>
+                                        <div class='col text-right'>
+                                            <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='The date may not occur more than 3 months in advance'></i>
+                                        </div>
+                                    </div>
                                     {{--  If field is not filled correctly show an error box  --}}
                                     @if(hasErrorFor('date'))
                                         <input name='date'  id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', form.date) }}"}' onchange='removeErrorClass("date")'>
@@ -199,7 +209,7 @@
                             <div class='row'>
                                 {{--  From  --}}
                                 <div class='col form-group mb-4'>
-                                    <label for='from' data-toggle='tooltip' data-placement='right' title='' data-original-title='Pick a start time for the room booking'>From <b class='text-danger'>*</b></label>
+                                    <label for='from'>From <b class='text-danger'>*</b></label>
                                     {{--  If field is not filled correctly show an error box  --}}
                                     @if(hasErrorFor('from'))
                                     <input name='from'  id='from' class='form-control date-form is-invalid' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue":"{{ old('from', form.from) }}", "minuteStep":"30", "minuteStepRound":"1" }' onchange='removeErrorClass("from")'>
@@ -219,7 +229,7 @@
                                 </div>
                                 {{--  To  --}}
                                 <div class='col form-group mb-4'>
-                                    <label for='to' data-toggle='tooltip' data-placement='right' title='' data-original-title='Pick an end time for the room booking'>To <b class='text-danger'>*</b></label>
+                                    <label for='to'>To <b class='text-danger'>*</b></label>
                                     {{--  If field is not filled correctly show an error box  --}}
                                     @if(hasErrorFor('to'))
                                     <input name='to'  id='to' class='form-control date-form is-invalid' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue": "{{ old('to', form.to) }}", "minuteStep":"30" }' onchange='removeErrorClass("to")'>
