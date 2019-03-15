@@ -381,7 +381,6 @@
     @endif
     @if(flashMessage('error'))
 	<script type='module'>
-        console.log('hi')
 		import {notify} from '/js/notify.js';
 		$(window).on('load', () => {
 			notify({ $: $, message: '{{ flashMessage('error') }}', type: 'danger', align: 'center',
