@@ -18,7 +18,12 @@
                 {{ csrfField() }}
                 <div class='row'>
                     <div class='col form-group has-danger'>
-                        <label for='name' data-toggle='tooltip' data-placement='left' data-original-title='Enter the short name of the meeting room you wish to add (Ex. 101A (E))'><i class="fas fa-question-circle fa-sm"></i> Room Name <b class='text-danger'>*</b></label>
+                        <div class='row'>
+                            <label class='col' for='name'>Room Name <b class='text-danger'>*</b></label>
+                            <div class='col text-right'>
+                                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right' data-original-title='Enter the short name of the meeting room you wish to add (Ex. 101A (E))'></i>
+                            </div>
+                        </div>
                         @if(hasErrorFor('name'))
                             <input type='text' name='name' class='form-control is-invalid' id='name' aria-describedby='nameHelp' placeholder='Ex: 101A (E)' value='{{ old('name', room.name) }}' oninput='removeErrorClass("name")'/>
                             <div class='invalid-feedback'>{{ getErrorFor('name') }}</div>
@@ -30,7 +35,12 @@
                 {{--  Full Room Name form  --}}
                 <div class='row'>
                     <div class='col form-group'>
-                        <label for='fullName' data-toggle='tooltip' data-placement='left' data-original-title='Please enter the full name of the room (Ex. IC CONF OTT-235 Queen-Oasis CONF IC)'><i class="fas fa-question-circle fa-sm"></i> Full Room Name <b class='text-danger'>*</b></label>
+                        <div class='row'>
+                            <label class='col' for='fullName'>Full Room Name <b class='text-danger'>*</b></label>
+                            <div class='col text-right'>
+                                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right' data-original-title='Please enter the full name of the room (Ex. IC CONF OTT-235 Queen-Oasis CONF IC)'></i>
+                            </div>
+                        </div>
                         @if(hasErrorFor('fullName'))
                             <input type='text' name='fullName' class='form-control is-invalid' id='fullName' placeholder='Ex: IC CONF OTT-235 Queen-Oasis CONF IC' value='{{ old('fullName', room.fullName) }}'  oninput='removeErrorClass("fullName")'/>
                             <div class='invalid-feedback'>{{ getErrorFor('fullName') }}</div>
@@ -43,7 +53,12 @@
                 {{--  Room Status form  --}} 
                 <div class='row'>                
                     <div class='col form-group'>
-                        <label for='state' data-toggle='tooltip' data-placement='left' data-original-title='(Active: available for booking, Deactive & Maintenance: unavailable for booking)'><i class="fas fa-question-circle fa-sm"></i> Room Status <b class='text-danger'>*</b></label>
+                        <div class='row'>
+                            <label class='col' for='state'>Room Status <b class='text-danger'>* </b></label>
+                            <div class='col text-right'>
+                                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right' data-original-title='Active: available for booking, Deactive & Maintenance: unavailable for booking'></i>
+                            </div>
+                        </div>
                         @if(hasErrorFor('state'))
                             <select class='form-control is-invalid' name='state' id='state' onchange='removeErrorClass("state")'>
                                 <option value='undefined' {{ old('state', room.state) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Room Status</option>
@@ -248,9 +263,9 @@
                     <div class='col text-right'>
                         <button type='button' class='btn btn-secondary mb-3' onclick="window.location='{{ route('adminDash')}}';">Cancel</button>      
                         @if(actionType =='Add Room')
-                            <button type='submit' class='btn btn-primary mb-3'>Add Room</button>                
+                            <button type='submit' class='btn btn-primary mb-3 mr-0'>Add Room</button>                
                         @else
-                            <button type='submit' class='btn btn-primary mb-3'>Update</button>  
+                            <button type='submit' class='btn btn-primary mb-3 mr-0'>Update</button>  
                         @endif
                     </div>
                 </div>

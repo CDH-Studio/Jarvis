@@ -71,6 +71,7 @@ Route.get('/roomBookings/:id', 'RoomController.getBookings').as('roomBookings').
 Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
 Route.post('/addReview/:id', 'RoomController.addReview').as('addReview').validator('AddReview').middleware(['isUser']);
 Route.post('/editReview/:id', 'RoomController.editReview').as('editReview').middleware(['isUser']);
+Route.post('/deleteReview/:id', 'RoomController.deleteReview').as('deleteReview').middleware(['isUser']);
 
 //= ========================================================================
 // Bookings

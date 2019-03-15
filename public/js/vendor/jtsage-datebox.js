@@ -147,7 +147,7 @@
             themeTomorrowButton: "secondary",
             themeTodayButton: "secondary",
             buttonIconDate: "calendar-alt fa-lg",
-            buttonIconTime: "clock",
+            buttonIconTime: "clock ",
             disabledState: "disabled",
             bootstrapDropdown: true,
             bootstrapDropdownRight: true,
@@ -271,7 +271,7 @@
                 if (typeof trigger === "undefined") {
                     trigger = false;
                 }
-                return $("<a href='#' role='button' class='ssss btn btn-" + o.themeCloseButton + "'><span class= 'far fa-clock mr-1'></span>  " + txt + "</a>").addClass("" + (w.dateOK === true ? "" : "disabled")).on(o.clickEventAlt, function(e) {
+                return $("<a href='#' role='button' class='btn btn-" + o.themeCloseButton + "'><span class= 'far fa-clock mr-1'></span>  " + txt + "</a>").addClass("" + (w.dateOK === true ? "" : "disabled")).on(o.clickEventAlt, function(e) {
                     e.preventDefault();
                     if (w.dateOK === true) {
                         if (trigger === false) {

@@ -402,34 +402,8 @@ class RoomController {
 
 		const checkRoomAvailability = async () => {
 			await asyncForEach(rooms, async (item, index, items) => {
-				const startTime = date + 'T' + from;
-				const endTime = date + 'T' + to;
-
-				// if there is a calendar for the room
-				if (item.calendar !== 'insertCalendarHere' && item.calendar !== null) {
-					// query the events within the search time range
-					const calendarViews = (await this.getCalendarView(
-						item.calendar,
-						startTime,
-						endTime
-					)).value;
-
-					// if event end time is the same as search start time, remove the event
-					calendarViews.forEach((item, index, items) => {
-						const eventEndTime = new Date(item.end.dateTime);
-						const searchStartTime = new Date(startTime);
-
-						if (+eventEndTime === +searchStartTime) {
-							items.splice(index, 1);
-						}
-					});
-
-					// remove the room if it is not available
-					const available = calendarViews.length === 0;
-
-					if (!available) {
-						items.splice(index, 1);
-					}
+				if (!await this.getRoomAvailability(date, from, to, item.calendar)) {
+					items.splice(index, 1);
 				}
 			});
 		};
@@ -473,6 +447,14 @@ class RoomController {
 		const calendar = row.calendar;
 		const name = row.name;
 
+		if (!await this.getRoomAvailability(date, from, to, calendar)) {
+			session.flash({
+				error: `Room ${name} has already been booked for the time selected!`
+			});
+
+			return response.route('showRoom', { id: room });
+		}
+
 		// Information of the event
 		const eventInfo = {
 			'subject': meeting,
@@ -513,7 +495,7 @@ class RoomController {
 
 		session.flash({
 			notification: `Room ${name} has been booked. Please click here to view your bookings.`,
-			url: '/viewBookings'
+			url: `/user/${auth.user.id}/bookings`
 		});
 
 		return response.redirect('/booking');
@@ -574,11 +556,6 @@ class RoomController {
 		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
 			layoutType = 'layouts/mainLayout';
 			canEdit = 1;
-
-		// check if user is viewing someone elses profile
-		} else if (auth.user.id !== Number(params.id) && userRole === 'user') {
-			layoutType = 'layouts/mainLayout';
-			canEdit = 0;
 		} else {
 			return response.redirect('/');
 		}
@@ -594,7 +571,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async cancelBooking ({ params, response }) {
+	async cancelBooking ({ params, response, auth }) {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
 		const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
@@ -604,7 +581,7 @@ class RoomController {
 		booking.status = 'Cancelled';
 		await booking.save();
 
-		return response.route('viewBookings', { id: params.id });
+		return response.redirect(`/user/${auth.user.id}/bookings`);
 	}
 
 	/**
@@ -784,6 +761,42 @@ class RoomController {
 	}
 
 	/**
+	 *
+	 * @param {String} date     Date
+	 * @param {String} from     Starting time
+	 * @param {String} to       Ending time
+	 * @param {String} calendar Calendar ID
+	 *
+	 * @returns {Boolean} Whether or not the room is available
+	 */
+	async getRoomAvailability (date, from, to, calendar) {
+		const startTime = date + 'T' + from;
+		const endTime = date + 'T' + to;
+
+		// if there is a calendar for the room
+		if (calendar !== 'insertCalendarHere' && calendar !== null) {
+			// query the events within the search time range
+			const calendarViews = (await this.getCalendarView(
+				calendar,
+				startTime,
+				endTime
+			)).value;
+
+			// if event end time is the same as search start time, remove the event
+			calendarViews.forEach((item, index, items) => {
+				const eventEndTime = new Date(item.end.dateTime);
+				const searchStartTime = new Date(startTime);
+
+				if (+eventEndTime === +searchStartTime) {
+					items.splice(index, 1);
+				}
+			});
+
+			return calendarViews.length === 0;
+		}
+	}
+
+	/**
 	 * Render the ratings and review page.
 	 *
 	 * @param {Object} Context The context object.
@@ -796,7 +809,19 @@ class RoomController {
 			.where('room_id', params.id)
 			.fetch();
 
-		const review = searchResult.toJSON();
+		const reviews = searchResult.toJSON();
+		var review;
+
+		if (reviews.length === 0) {
+			review = [];
+		} else {
+			// stores the unique review id in reviewId
+			const reviewId = reviews[0].id;
+
+			// find the review object
+			review = await Review.findBy('id', reviewId);
+			await review.delete();
+		}
 
 		// Check to see if there is an existing review
 		const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
@@ -858,6 +883,37 @@ class RoomController {
 				});
 
 			session.flash({ notification: 'Review Updated!' });
+
+			return response.route('showRoom', { id: params.id });
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	/**
+	 * Deletes a review Object from the Database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async deleteReview ({ request, response, session, auth, params }) {
+		try {
+			// retrives the reviews in the database
+			let searchResults = await Review
+				.query()
+				.where('user_id', auth.user.id)
+				.where('room_id', params.id)
+				.fetch();
+
+			const reviews = searchResults.toJSON();
+
+			// stores the unique review id in reviewId
+			const reviewId = reviews[0].id;
+
+			// find the review object
+			const review = await Review.findBy('id', reviewId);
+			await review.delete();
+
+			session.flash({ notification: 'Review Deleted!' });
 
 			return response.route('showRoom', { id: params.id });
 		} catch (err) {
