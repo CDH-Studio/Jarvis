@@ -45,6 +45,10 @@ class User extends Model {
 		return this.hasMany('App/Models/Review');
 	}
 
+	reports () {
+		return this.hasMany('App/Models/Report');
+	}
+
 	async getUserRole () {
 		try {
 			var role = await UserRole.findOrFail(this.role_id);

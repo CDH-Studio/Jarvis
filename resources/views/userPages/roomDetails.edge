@@ -36,15 +36,16 @@
                 </div>
                 <div class='col text-right'>
                     @if(isAdmin)
-                        <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
-                        <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit</button>
+                        <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';"><i class="fas fa-list-ul"></i>View Bookings</button>
+                        <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i>Edit</button>
                     @else
                         @if(hasReview)
-                            <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit Review</button>
+                            <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-pen"></i>Edit Review</button>
                         @else
                             <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-plus"></i> Write a Review</button>
                         @endif
-                        <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#confirmModal'> Book Room</button>                    
+                        <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#confirmModal'>Book Room</button>  
+                        <button type='button' class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i> Report</button>
                     @endif
                 </div>
                 </div>
@@ -167,7 +168,6 @@
                         </div>
                         {{--  Body content  --}}
                         <div class='body' style='margin:0 20px 0 20px;'>
-                      
                             {{--  Meeting Name  --}}
                             <div class='row'>
                                 <div class='col form-group'>
@@ -315,6 +315,62 @@
                 </div>
             </div>
         </div>
+        {{--  Reporting Modal Box  --}}
+        <div class='modal' id='reportModal'>
+            <div class='modal-dialog confirmation-modal' role='document'>
+                <div class='modal-content' >
+                    {{--  Form Content  --}}
+                    
+                    <form action='{{ route('reportRoom') }}' method='POST' enctype='multipart/form-data'>
+                        {{ csrfField() }}
+                        <input type='hidden' name='room' value={{ room.id }} /> 
+                        <div class='modal-highlight'></div>
+                        {{--  Header  --}}
+                        <div class='modal-header'>
+                            <h4 class='no-margin'>Report</h4>
+                        </div>
+                        {{--  Body Information  --}}
+                        <div class='body' style='margin: 20px;'>
+                            <div class='row'>
+                                <div class='col form-group'>
+                                    <label for='issueType'>Issue Type <b class='text-danger'>*</b></label>
+                                    @if(hasErrorFor('issueType'))
+                                        <select class='form-control is-invalid' name='issueType' id='issueType' onchange='removeErrorClass("issueType")'>
+                                            <option value='undefined' {{ old('rating', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select an issue</option>
+                                            <option value='1' {{ old('issueType',) == '1' ? 'selected' : '' }}>Facilities</option>
+                                            <option value='2' {{ old('issueType', ) == '2' ? 'selected' : '' }}>Furniture</option>
+                                            <option value='3' {{ old('issueType',) == '3' ? 'selected' : '' }}>Incorrect Information</option>
+                                            <option value='4' {{ old('issueType',) == '4' ? 'selected' : '' }}>Technical Equipment</option>
+                                            <option value='5' {{ old('issueType',) == '5' ? 'selected' : '' }}>Other</option>
+                                        </select>
+                                        <div class='invalid-feedback'>{{ getErrorFor('issueType') }}</div>
+                                    @else
+                                        <select class='form-control' name='issueType' id='issueType' onchange='removeErrorClass("issueType")'>
+                                            <option value='undefined' {{ old('issueType', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select an issue</option>
+                                            <option value='1' {{ old('issueType',) == '1' ? 'selected' : '' }}>Facilities</option>
+                                            <option value='2' {{ old('issueType', ) == '2' ? 'selected' : '' }}>Furniture</option>
+                                            <option value='3' {{ old('issueType',) == '3' ? 'selected' : '' }}>Incorrect Information</option>
+                                            <option value='4' {{ old('issueType',) == '4' ? 'selected' : '' }}>Technical Equipment</option>
+                                            <option value='5' {{ old('issueType',) == '5' ? 'selected' : '' }}>Other</option>
+                                        </select>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col form-group'>
+                                    <label for='comment'>Comment <b class='text-danger'>*</b></label>
+                                    <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  review.review) }}</textarea>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class='modal-footer text-right'>
+                            <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
+                            <button type='submit' class='btn btn-primary'>Book Room</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     
         <h4 class='mt-4'>Rating and Reviews</h4>
         @if(reviews.length == 0)
@@ -420,12 +476,12 @@
         </script>
     @endif
     @if(flashMessage('error'))
-	<script type='module'>
-		import {notify} from '/js/notify.js';
-		$(window).on('load', () => {
-			notify({ $: $, message: '{{ flashMessage('error') }}', type: 'danger', align: 'center',
-                    enter: 'bounceIn', exit: 'bounceOut'});
-		});
-	</script>
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', () => {
+                notify({ $: $, message: '{{ flashMessage('error') }}', type: 'danger', align: 'center',
+                        enter: 'bounceIn', exit: 'bounceOut'});
+            });
+        </script>
     @endif
 @endsection

@@ -8,7 +8,7 @@ class UserRole extends Model {
 	}
 
 	user () {
-		return this.belongsToMany('App/Model/user');
+		return this.belongsToMany('App/Model/User');
 	}
 
 	static async getRoleID (role_name) {
