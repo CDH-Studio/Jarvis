@@ -247,7 +247,15 @@ class RoomController {
 			} else {
 				return response.redirect('/');
 			}
-			return view.render('userPages.roomDetails', { room, layoutType, isAdmin, form, hasReview });
+
+			// retreives all of the reviews associated to this room
+			let searchResults = await Review
+				.query()
+				.where('room_id', params.id)
+				.fetch();
+			const reviews = searchResults.toJSON();
+
+			return view.render('userPages.roomDetails', { room, layoutType, isAdmin, form, hasReview, reviews });
 		} catch (error) {
 			return response.redirect('/');
 		}
@@ -312,7 +320,6 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-
 	async searchRooms ({ request, view }) {
 		const form = request.all();
 		const name = form.searchField;
