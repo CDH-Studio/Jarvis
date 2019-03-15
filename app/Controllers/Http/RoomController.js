@@ -797,18 +797,9 @@ class RoomController {
 			.fetch();
 
 		const reviews = searchResult.toJSON();
-		var review;
 
-		if (reviews.length === 0) {
-			review = [];
-		} else {
-			// stores the unique review id in reviewId
-			const reviewId = reviews[0].id;
-
-			// find the review object
-			review = await Review.findBy('id', reviewId);
-			await review.delete();
-		}
+		// retreive the correspondinf review object
+		var review = reviews[0];
 
 		// Check to see if there is an existing review
 		const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
