@@ -26,7 +26,7 @@ function subscribeToChannel () {
 
 	chat.on('message', (message) => {
 		const room = message.room;
-		let datetime = message.datetime.value;
+		let datetime = message.datetime;
 
 		let date = '';
 		let time = '';
@@ -34,6 +34,7 @@ function subscribeToChannel () {
 			const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 			const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+			datetime = datetime.value;
 			datetime = datetime.substring(0, datetime.length - 6);
 			datetime = new Date(datetime);
 			date = days[datetime.getDay()] + ', ' + months[datetime.getMonth()] + ' ' + datetime.getDate() + ', ' + datetime.getFullYear();
