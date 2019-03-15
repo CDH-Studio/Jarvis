@@ -796,7 +796,19 @@ class RoomController {
 			.where('room_id', params.id)
 			.fetch();
 
-		const review = searchResult.toJSON();
+		const reviews = searchResult.toJSON();
+		var review;
+
+		if (reviews.length === 0) {
+			review = [];
+		} else {
+			// stores the unique review id in reviewId
+			const reviewId = reviews[0].id;
+
+			// find the review object
+			review = await Review.findBy('id', reviewId);
+			await review.delete();
+		}
 
 		// Check to see if there is an existing review
 		const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
@@ -858,6 +870,37 @@ class RoomController {
 				});
 
 			session.flash({ notification: 'Review Updated!' });
+
+			return response.route('showRoom', { id: params.id });
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	/**
+	 * Deletes a review Object from the Database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async deleteReview ({ request, response, session, auth, params }) {
+		try {
+			// retrives the reviews in the database
+			let searchResults = await Review
+				.query()
+				.where('user_id', auth.user.id)
+				.where('room_id', params.id)
+				.fetch();
+
+			const reviews = searchResults.toJSON();
+
+			// stores the unique review id in reviewId
+			const reviewId = reviews[0].id;
+
+			// find the review object
+			const review = await Review.findBy('id', reviewId);
+			await review.delete();
+
+			session.flash({ notification: 'Review Deleted!' });
 
 			return response.route('showRoom', { id: params.id });
 		} catch (err) {
