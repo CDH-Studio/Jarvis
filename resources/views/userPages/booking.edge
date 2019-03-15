@@ -4,6 +4,16 @@
     Booking
 @endsection
 
+@section('extracss')
+  {{ style('css/booking') }}
+@endsection
+
+@section('extrajs')
+    {{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
+    {{ script('https://unpkg.com/@adonisjs/websocket-client@1.0.9/dist/Ws.browser.js') }}
+    {{ script('js/chatbot.js') }}
+@endsection
+
 {{--  book room page content  --}}
 @section('content')
     {{--  Loading page header  --}}
@@ -24,7 +34,32 @@
                 <button type='button' class='btn btn-secondary large-buttons' onclick="window.location='{{ route('allRooms') }}';">View All Rooms</button>
             </div>
         </div>
+
+        <div class='row'>
+            <button class='open-button' onclick='openChat()'>Chat</button>
+
+            <div class='chat-popup' id='chat-popup'>
+                <form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>
+                    {{ csrfField() }}
+                    <div class='messages'></div>
+                    <textarea placeholder='Type message..' name='message' id='message'></textarea>
+
+                    <button id='sub' type='button' class='btn' onclick='send()'>Send</button>
+                    <button type='button' class='btn cancel' onclick='closeChat()'>Close</button>
+                </form>
+            </div>
+        </div>
     </div>
+
+    <script>
+        $('#message').keypress((e) => {
+	        if (e.which === 13 && !e.shiftKey) {
+                $('#sub').click();
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
 
     @if(flashMessage('notification'))
         <script type='module'>
