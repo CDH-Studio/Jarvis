@@ -21,7 +21,7 @@
 
             {{--  Displays "Room Added/Updated!" success message  --}}
             @if(old('notification'))
-                <div class='alert alert-success'>
+                <div class='alert alert-success mb-2'>
                     {{ old('notification') }}
                     @if(isAdmin)
                         To add another room, click <a href='{{ route('addRoom')}}'>here</a>
@@ -315,6 +315,36 @@
                 </div>
             </div>
         </div>
+    
+        <h4 class='mt-4'>Rating and Reviews</h4>
+        @if(reviews.length == 0)
+            <div class='row'>
+                <div class='col-12 text-center'>
+                    <p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p>
+                    <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
+                </div>			
+            </div>
+        @else
+            <div class='table table-responsive mt-1'>
+                <table id='reviewsTable' class='table table-hover' style='width:100%;'>
+                    <thead class='thead-dark'>
+                        <tr>
+                            <th scope='col' class='text-center' style='width:5%'>Rating</th>
+                            <th scope='col' class='text-center' style='width:95%'>Review</th>
+                        </tr>
+                    </thead>
+                    {{--  Loops through the rooms array and displays every room's content  --}}
+                    <tbody>
+                        @each(review in reviews) 
+                            <tr class='table-light' id='roomRow'>
+                                <td class='text-center'>{{ review.rating }}</td>
+                                <td class='text-center'>{{ review.review }}</td>
+                            </tr>
+                        @endeach
+                    </tbody>
+                </table>
+            </div> 
+        @endif
     @endif
 
     {{--  Run this on load incase the page reloaded with field 'recurringSelect' set to YES --}}
