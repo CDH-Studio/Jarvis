@@ -248,7 +248,15 @@ class RoomController {
 			} else {
 				return response.redirect('/');
 			}
-			return view.render('userPages.roomDetails', { room, layoutType, isAdmin, form, hasReview });
+
+			// retreives all of the reviews associated to this room
+			let searchResults = await Review
+				.query()
+				.where('room_id', params.id)
+				.fetch();
+			const reviews = searchResults.toJSON();
+
+			return view.render('userPages.roomDetails', { room, layoutType, isAdmin, form, hasReview, reviews });
 		} catch (error) {
 			return response.redirect('/');
 		}
@@ -313,7 +321,6 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-
 	async searchRooms ({ request, view }) {
 		const form = request.all();
 		const name = form.searchField;
@@ -811,18 +818,9 @@ class RoomController {
 			.fetch();
 
 		const reviews = searchResult.toJSON();
-		var review;
 
-		if (reviews.length === 0) {
-			review = [];
-		} else {
-			// stores the unique review id in reviewId
-			const reviewId = reviews[0].id;
-
-			// find the review object
-			review = await Review.findBy('id', reviewId);
-			await review.delete();
-		}
+		// retreive the correspondinf review object
+		var review = reviews[0];
 
 		// Check to see if there is an existing review
 		const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
