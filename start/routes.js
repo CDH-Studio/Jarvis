@@ -51,7 +51,7 @@ Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['a
 Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 
 //= ========================================================================
-//  [ Admin ] Rooms
+//  Rooms
 //= ========================================================================
 
 // admin
@@ -72,6 +72,7 @@ Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndRevi
 Route.post('/addReview/:id', 'RoomController.addReview').as('addReview').validator('AddReview').middleware(['isUser']);
 Route.post('/editReview/:id', 'RoomController.editReview').as('editReview').middleware(['isUser']);
 Route.post('/deleteReview/:id', 'RoomController.deleteReview').as('deleteReview').middleware(['isUser']);
+Route.post('/reportRoom', 'RoomController.reportRoom').as('reportRoom').middleware(['isUser']);
 
 //= ========================================================================
 // Bookings
