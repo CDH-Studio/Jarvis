@@ -33,11 +33,7 @@
 							<th scope='col'>Date</th>
 							<th scope='col'>Time</th>
 							<th scope='col'>Status</th>
-							@if(booking.status == 'Approved' && canEdit)
-								<th scope='col'></th>
-							}
-							}
-							@endif
+							<th scope='col'></th>
 						</tr>
 					</thead>
 					{{--  Loops through the bookings array and displays every booking  --}}
@@ -50,8 +46,11 @@
 								<td>{{ booking.time }}</td>
 								<td class='td-{{ booking.status }}'>{{ booking.status }}</td>
 								@if(booking.status == 'Approved' && canEdit)
-									<td><a class='btn btn-secondary' name='cancel' id='cancelButton' href='{{ route('cancelBooking', {id: booking.id}) }}'>Cancel</a></td>
+									<td><a class='text-danger' name='cancel' id='cancelButton' href='{{ route('cancelBooking', {id: booking.id}) }}'><i class="fas fa-times"></i> Cancel</a></td>
+								@else
+									<td></td>
 								@endif
+
 							</tr>
 						</tbody>
 					@endeach
