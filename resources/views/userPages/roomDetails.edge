@@ -336,10 +336,10 @@
                     {{--  Loops through the rooms array and displays every room's content  --}}
                     <tbody>
                         @each(review in reviews) 
-                        <tr class='table-light' id='roomRow'>
-                            <td class='text-center'>{{ review.rating }}</td>
-                            <td class='text-center'>{{ review.review }}</td>
-                        </tr>
+                            <tr class='table-light' id='roomRow'>
+                                <td class='text-center'>{{ review.rating }}</td>
+                                <td class='text-center'>{{ review.review }}</td>
+                            </tr>
                         @endeach
                     </tbody>
                 </table>
@@ -428,18 +428,4 @@
 		});
 	</script>
     @endif
-@endsection
-
-{{--  Deals with the search functionality of the table above- searches all fields   --}}
-@section('extrajs') 
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-    <script>$(document).ready(function() {
-            $('#roomsTable').DataTable( {
-                "paging":   false,
-                "ordering": true,
-                "info":     false
-            });
-        });
-    </script>
 @endsection
