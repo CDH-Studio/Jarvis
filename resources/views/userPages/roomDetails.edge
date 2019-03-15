@@ -40,7 +40,7 @@
                         <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i>Edit</button>
                     @else
                         @if(hasReview)
-                            <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-pen"></i>Edit Review</button>
+                            <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit Review</button>
                         @else
                             <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-plus"></i> Write a Review</button>
                         @endif
