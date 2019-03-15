@@ -379,4 +379,13 @@
             });
         </script>
     @endif
+    @if(flashMessage('error'))
+	<script type='module'>
+		import {notify} from '/js/notify.js';
+		$(window).on('load', () => {
+			notify({ $: $, message: '{{ flashMessage('error') }}', type: 'danger', align: 'center',
+                    enter: 'bounceIn', exit: 'bounceOut'});
+		});
+	</script>
+    @endif
 @endsection
