@@ -314,11 +314,6 @@ class UserController {
 		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
 			layoutType = 'layouts/mainLayout';
 			canEdit = 1;
-
-		// check if user is viewing someone elses profile
-		} else if (auth.user.id !== Number(params.id) && userRole === 'user') {
-			layoutType = 'layouts/mainLayout';
-			canEdit = 0;
 		} else {
 			return response.redirect('/');
 		}
@@ -347,7 +342,7 @@ class UserController {
 				hash: hash,
 				type: 1
 			};
-			Logger.debug(row);
+
 			await AccountRequest.create(row);
 
 			let body = `
