@@ -26,8 +26,19 @@ function subscribeToChannel () {
 
 	chat.on('message', (message) => {
 		const room = message.room;
-		const datetime = message.datetime;
-		console.log(datetime);
+		let datetime = message.datetime.value;
+
+		let date = '';
+		let time = '';
+		if (datetime) {
+			const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+			const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+			datetime = datetime.substring(0, datetime.length - 6);
+			datetime = new Date(datetime);
+			date = days[datetime.getDay()] + ', ' + months[datetime.getMonth()] + ' ' + datetime.getDate() + ', ' + datetime.getFullYear();
+			time = datetime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+		}
 
 		if (room) {
 			$('.messages').empty().html(`
@@ -36,7 +47,8 @@ function subscribeToChannel () {
 					<img src="/images/meeting.jpeg" alt="Avatar" style="width:100%">
 					<div class="card-container">
 						<h4><b>${room.name}</b></h4> 
-						<p>${datetime? datetime.value : ''}</p> 
+						<p>${date}</p> 
+						<p>${time}</p> 
 					</div>
 				</div>
 			`);
