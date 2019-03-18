@@ -163,7 +163,8 @@ class UserController {
 		// Retrieves user input
 		const body = request.all();
 
-		console.log('came here');
+		console.log('THIS IS THE BODY');
+		console.log(body);
 
 		// Updates user information in database
 		await User
