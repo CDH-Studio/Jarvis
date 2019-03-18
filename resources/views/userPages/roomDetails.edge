@@ -18,17 +18,6 @@
     {{--  Actual page content  --}}
     <div class='row justify-content-center'>
         <div class='col room-details-card shadow' style='margin-top:10px;'>
-
-            {{--  Displays "Room Added/Updated!" success message  --}}
-            @if(old('notification'))
-                <div class='alert alert-success mb-2'>
-                    {{ old('notification') }}
-                    @if(isAdmin)
-                        To add another room, click <a href='{{ route('addRoom')}}'>here</a>
-                    @endif
-                </div>
-            @endif
-
             <div class='room-details-card-title'>
                 <div class='row'>
                 <div class='col'>
@@ -492,12 +481,15 @@
             });
         </script>
     @endif
-    @if(flashMessage('notification2'))
+    {{--  Displays "Room Added/Updated!" success message  --}}
+    @if(flashMessage('notification'))
         <script type='module'>
             import {notify} from '/js/notify.js';
             $(window).on('load', () => {
-                notify({ $: $, message: '{{ flashMessage('notification2') }}' });
+                var url = '{{ flashMessage('url') }}';
+                notify({$: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
             });
         </script>
     @endif
+    
 @endsection

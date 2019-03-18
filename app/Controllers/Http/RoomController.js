@@ -139,7 +139,11 @@ class RoomController {
 			room.extraEquipment = body.extraEquipment == null ? ' ' : body.extraEquipment;
 			room.comment = body.comment == null ? ' ' : body.extraEquipment;
 			await room.save();
-			session.flash({ notification: 'Room Added!' });
+
+			session.flash({
+				notification: 'Room Added! To add another room, click here',
+				url: '/addRoom'
+			});
 
 			return response.route('showRoom', { id: room.id });
 		} catch (err) {
@@ -987,7 +991,7 @@ class RoomController {
 		report.report_status_id = 1;
 		await report.save();
 
-		session.flash({ notification2: 'Your report has been submitted' });
+		session.flash({ notification: 'Your report has been submitted' });
 		return response.route('showRoom', { id: row.id });
 	}
 }
