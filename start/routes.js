@@ -72,7 +72,7 @@ Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndRevi
 Route.post('/addReview/:id', 'RoomController.addReview').as('addReview').validator('AddReview').middleware(['isUser']);
 Route.post('/editReview/:id', 'RoomController.editReview').as('editReview').middleware(['isUser']);
 Route.post('/deleteReview/:id', 'RoomController.deleteReview').as('deleteReview').middleware(['isUser']);
-Route.post('/reportRoom', 'RoomController.reportRoom').as('reportRoom').middleware(['isUser']);
+Route.post('/reportRoom', 'RoomController.reportRoom').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
 
 //= ========================================================================
 // Bookings
