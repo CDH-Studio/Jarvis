@@ -1,0 +1,95 @@
+@layout('layouts/mainLayout')
+
+@section('title')
+    Ratings and Reviews
+@endsection
+
+@section('content')
+
+    <div class='col'>
+        @if(actionType == 'Add Review') 
+            <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+        @else
+            <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+        @endif
+
+            {{ csrfField() }}
+            <div class='row'>
+                <div class='col form-group'>
+                    <label for='rating' data-original-title='Enter a rating for this room'>Rating <b class='text-danger'>*</b></b></label>
+
+                    @if(hasErrorFor('rating'))
+                        <select class='form-control is-invalid' name='rating' id='rating' onchange='removeErrorClass("rating")'>
+                            <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Rating</option>
+                            <option value='1' {{ old('rating', review.rating) == '1' ? 'selected' : '' }}>1</option>
+                            <option value='2' {{ old('rating', review.rating) == '2' ? 'selected' : '' }}>2</option>
+                            <option value='3' {{ old('rating', review.rating) == '3' ? 'selected' : '' }}>3</option>
+                            <option value='4' {{ old('rating', review.rating) == '4' ? 'selected' : '' }}>4</option>
+                            <option value='5' {{ old('rating', review.rating) == '5' ? 'selected' : '' }}>5</option>
+                        </select>
+                        <div class='invalid-feedback'>{{ getErrorFor('rating') }}</div>
+                    @else
+                        <select class='form-control' name='rating' id='rating' onchange='removeErrorClass("rating")'>
+                            <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Rating</option>
+                            <option value='1' {{ old('rating', review.rating) == '1' ? 'selected' : '' }}>1</option>
+                            <option value='2' {{ old('rating', review.rating) == '2' ? 'selected' : '' }}>2</option>
+                            <option value='3' {{ old('rating', review.rating) == '3' ? 'selected' : '' }}>3</option>
+                            <option value='4' {{ old('rating', review.rating) == '4' ? 'selected' : '' }}>4</option>
+                            <option value='5' {{ old('rating', review.rating) == '5' ? 'selected' : '' }}>5</option>
+                        </select>
+                    @endif
+                </div>
+            </div>
+        
+            <div class='row'>
+                <div class='col form-group'>
+                    <label for='review'>Review</label>
+                    <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
+                </div> 
+            </div>
+
+            <div id='reviewPicture'>
+                <label class='row'>Picture</label>
+                <div class='form-group'>
+                    <div class='custom-file row'>
+                        @if(hasErrorFor('reviewPicture'))
+                            <input type='file' class='custom-file-input is-invalid' id='reviewPicture' name='floorPlan' oninput='removeErrorClass("reviewPicture")'>
+                            <div class='invalid-feedback'>{{ getErrorFor('reviewPicture') }}</div>
+                        @else
+                            <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
+                        @endif
+                        <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose File</label>
+                    </div>
+                </div>
+            </div>
+
+            @if(actionType == 'Add Review') 
+                <button type='submit' class='btn btn-primary mb-3'>Add</button>   
+            @else
+                <button type='submit' class='btn btn-primary mb-3'>Update</button>   
+            @endif            
+        </form> 
+
+        <form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+            {{ csrfField() }}
+            <button type='submit' class='btn btn-danger mb-3 float-right'>Delete</button>   
+        </form>
+        
+    </div>
+
+    {{--  Script to display file name on upload  --}}
+    <script>
+        $('#reviewPicture').change(function(e){
+            var fileName = e.target.files[0].name;
+            $('#reviewPictureLabel').html(fileName);
+        });
+    </script>
+
+    {{--  Remove the is-invalid class when input changes  --}}
+    <script>
+        function removeErrorClass(idOfInput){
+            $('#'+idOfInput).removeClass('is-invalid');
+        }
+    </script>
+    
+@endsection

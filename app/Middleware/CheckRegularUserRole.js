@@ -2,14 +2,14 @@
 
 /**
 *
-* Middleware: CheckLoggedIn
-* Check if user is logged-in and user role is "Admin"
+* Middleware: CheckRegularUserRole
+* Check if user is logged-in and user role is "User"
 *
 */
 
 const debug = require('debug')('adonis:auth');
 
-class CheckLoggedIn {
+class CheckRegularUserRole {
 	constructor (Config) {
 		Config = use('Config');
 		const authenticator = Config.get('auth.authenticator');
@@ -31,6 +31,7 @@ class CheckLoggedIn {
 	*/
 	async _authenticate (auth, schemes, response) {
 		let lastError = null;
+
 		schemes = Array.isArray(schemes) && schemes.length ? schemes : [this.scheme];
 
 		debug('attempting to authenticate via %j scheme(s)', schemes);
@@ -43,6 +44,10 @@ class CheckLoggedIn {
 			try {
 				const authenticator = auth.authenticator(scheme);
 				await authenticator.check();
+
+				if (await auth.user.getUserRole() !== 'user') {
+					throw Error('not User Role!');
+				}
 
 				debug('authenticated using %s scheme', scheme);
 
@@ -73,8 +78,8 @@ class CheckLoggedIn {
 	/**
 	*
 	* Check if user is logged in and admin.
-	* Loggedin: continue;
-	* Not Loggedin: Redirect to login
+	* USER: continue;
+	* Not USER: Redirect to landing page
 	*
 	* @param {object} ctx
 	* @param {Request} ctx.request
@@ -85,7 +90,7 @@ class CheckLoggedIn {
 		var authValid = await this._authenticate(auth, schemes, response);
 
 		if (!authValid) {
-			return response.redirect('/login');
+			return response.redirect('/');
 		}
 
 		/**
@@ -108,4 +113,4 @@ class CheckLoggedIn {
 	}
 }
 
-module.exports = CheckLoggedIn;
+module.exports = CheckRegularUserRole;

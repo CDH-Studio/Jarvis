@@ -1,0 +1,346 @@
+/*
+ * JTSage-DateBox : the full featured Date and Time Picker
+ * Date: 2017-06-18T10:28:16-04:00
+ * http://dev.jtsage.com/DateBox/
+ * https://github.com/jtsage/jquery-mobile-datebox
+ *
+ * Copyright 2010, 2015 JTSage. and other contributors
+ * Released under the MIT license.
+ * https://github.com/jtsage/jquery-mobile-datebox/blob/master/LICENSE.txt
+ *
+ */
+ 
+/* 
+ * Shared Styles 
+ * 
+ * These styles are used for the basic control,
+ * and are not specific to any one mode.
+ */
+.btn-sm{
+	background-color: rgb(243, 243, 243);
+	color: #000000;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	margin:0;
+ }
+
+.btn-cal-info, .btn-cal-info:hover, .btn-cal-info:active, .btn-cal-info:focus, .btn-cal-info:visited{
+	background-color: #223851;
+	color: #ffffff;
+}
+.btn-cal-disabled, .btn-cal-disabled:hover, .btn-cal-disabled:active, .btn-cal-disabled:focus, .btn-cal-disabled:visited{
+	background-color: rgb(207, 207, 207);
+	color: #8d8d8d;
+ }
+
+ .btn-cal-info:hover,  .btn-cal-secondary:hover{
+    position: relative; 
+    top: -1px;
+    box-shadow: 0 2px 8px 0 #00000033 !important;
+}
+
+.btn-cal-month{
+    box-shadow: 0 2px 6px 0 #00000033 ;
+	border-radius: 3.2px;
+	margin: 0 5px 0 5px !important;
+ }
+
+.button-datebox{
+	height: 0px;
+}
+.input-group-addon{
+	 padding: 6px 12px 6px 12px;
+	 border-bottom-color: rgb(206, 212, 218);
+	 background-color: 0;
+ }
+.ui-datebox-container { 
+	width: 290px;
+	-webkit-transform:translate3d(0,0,0);
+}
+.ui-datebox-header {
+	padding-top: .5rem;
+}
+/*.ui-datebox-container .modal-header {
+	padding: 8px 15px;
+} */
+
+
+
+.ui-datebox-collapse { 
+	text-align: center;
+}
+
+
+div.ui-datebox-inline.ui-datebox-inline-has-input {
+	float: none;
+	clear: both;
+	position: relative;
+	top: 5px;
+}
+div.ui-datebox-container.ui-datebox-inline {
+	width: 290px;
+
+}
+
+/* 
+ * Calendar Mode Styles
+ * 
+ * These are specific to CalBox
+ */
+
+.ui-datebox-gridheader { 
+	text-align: center;
+	
+}
+
+.ui-datebox-gridheader a {
+	margin: 3px;
+}
+
+.ui-datebox-gridheader h4 { 
+	display: inline-block;
+}
+
+.ui-datebox-grid { 
+	clear: both; 
+	margin-bottom: 5px; 
+}
+.ui-datebox-inline .ui-datebox-gridrow .ui-controlgroup-controls {
+	width: 100%;
+	text-align: center;
+}
+.ui-datebox-inline .ui-datebox-gridrow .ui-controlgroup-controls .ui-btn {
+	float: none;
+	clear: both;
+}
+
+.ui-datebox-gridrow { 
+	margin-left: auto; 
+	margin-right: auto;
+	display: table;
+	margin-bottom: 0px;
+}
+.ui-datebox-gridrow-last {
+	margin-bottom: 5px;
+}
+
+.ui-datebox-controls {
+	padding: 0px 3px;
+	width: 100%;
+}
+
+.ui-datebox-griddate { 
+	width: 40px;
+	height: 30px;
+	line-height: 30px;
+	padding: 0;
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+	font-weight: bold;
+	font-size: 12px;
+	zoom: 1;
+	*display: inline;
+}
+
+.ui-datebox-griddate-week { 
+	width: 35px;
+	height: 30px;
+	line-height: 30px; 
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+	font-weight: bold;
+	font-size: 12px;
+	zoom: 1;
+	*display: inline;
+}
+.ui-datebox-gridrow div.ui-datebox-griddate-empty { 
+	border: 1px solid transparent;
+	color: #888888;
+}
+.ui-datebox-griddate.ui-datebox-griddate-label {
+	border: 1px solid transparent;
+	height: 15px;
+	line-height: 15px;
+}
+
+/* 
+ * Android Mode Styles
+ * 
+ * These are specific to datebox, timebox, and durationbox
+ */
+
+.ui-datebox-datebox-groups.row {
+	margin-right: 5px;
+	margin-left: 5px;
+	margin-bottom: 10px;
+}
+
+.ui-datebox-datebox-group.col-xs-3, .ui-datebox-datebox-group.col-xs-4 {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+div.ui-datebox-datebox-button {
+	width: 100%;
+	margin: 0;
+}
+
+.ui-datebox-datebox-groups input {
+	text-align: center;
+}
+
+.ui-datebox-datebox-groups label {
+	text-align: center;
+	width: 100%;
+	margin-bottom: 0px;
+	border: 1px solid #ccc;
+}
+div.ui-datebox-datebox-button.glyphicon-plus {
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	-webkit-border-bottom-right-radius: 0;
+	-webkit-border-bottom-left-radius: 0;
+	top: 0px;
+}
+div.ui-datebox-datebox-button.glyphicon-minus {
+	border-top-right-radius: 0;
+	border-top-left-radius: 0;
+	-webkit-border-top-right-radius: 0;
+	-webkit-border-top-left-radius: 0;
+	top: 0px;
+}
+.ui-datebox-header h4 {
+	text-align: center;
+}
+
+/* 
+ * Flip Mode Styles
+ * 
+ * These are specific to flipbox, timeflipbox, durationflipbox, and 
+ * customflip
+ */
+
+.ui-datebox-fliplab {
+	text-align: center;
+}
+.ui-datebox-flipcenter {
+	width: 260px;
+	height: 40px;
+	border: 1px solid #EEEEEE;
+	margin-right: auto;
+	margin-left: auto;
+	position: relative;
+	-webkit-box-shadow: 0 0 12px rgba(0,0,0,.6);
+    -moz-box-shadow: 0 0 12px rgba(0,0,0,.6);
+    box-shadow: 0 0 12px rgba(0,0,0,.6);
+}
+
+.ui-datebox-flipcontent {
+	text-align: center;
+	height: 135px;
+	margin-bottom: -40px;
+}
+.ui-datebox-flipcontent li {
+	border: 1px solid #ccc;
+}
+
+.ui-datebox-flipcontent div {
+	margin-left: 3px;
+	margin-right: 3px;
+	width: 77px;
+	height: 130px;
+	display: inline-block;
+	text-align: center;
+	zoom: 1;
+	*display: inline;
+	overflow: hidden;
+}
+.ui-datebox-flipcontentd div {
+	width: 60px;
+}
+.ui-datebox-flipcontent ul {
+	list-style-type: none;
+	display: inline;
+	border:1px solid rgba(0,0,0,0);
+}
+.ui-datebox-flipcontent li {
+	height: 30px;
+}
+.ui-datebox-flipcontent li span {
+	margin-top: 7px;
+	display: block;
+}
+
+/* 
+ * Slide Mode Styles
+ * 
+ * Used solely for SlideBox.  Damn this is a lot of extra CSS.
+ */
+
+.ui-datebox-slide { 
+	width: 290px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.ui-datebox-sliderow-int {
+	display: inline-block;
+	white-space: nowrap;
+}
+
+.ui-datebox-sliderow {
+	margin-bottom: 5px;
+	text-align: center;
+	overflow: hidden;
+	width: 290px;
+}
+.ui-datebox-slide .ui-btn {
+	margin: 0;
+	padding: 0px 1em;
+}
+
+.ui-datebox-slidebox {
+	text-align: center;
+	display: inline-block;
+	zoom:1;
+	*display:inline;
+	vertical-align: middle;
+	font-weight: bold;
+	border: 1px solid #ccc;
+	box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+.ui-datebox-slideyear {
+	width: 84px;
+	line-height: 30px;
+	font-size: 14px;
+}
+.ui-datebox-slidemonth {
+	width: 51px;
+	line-height: 30px;
+	font-size: 12px;
+}
+.ui-datebox-slideday {
+	width: 40px; 
+	line-height: 20px;
+	font-size: 14px;
+}
+.ui-datebox-slidehour {
+	width: 60px;
+	line-height: 22px;
+	font-size: 14px;
+}
+.ui-datebox-slidemins {
+	width: 40px; 
+	line-height: 22px;
+	font-size: 14px;
+}
+.ui-datebox-slidewday {
+	font-size: 10px;
+	font-weight: normal;
+}
+
+span.ui-datebox-nopad { margin: 0 }

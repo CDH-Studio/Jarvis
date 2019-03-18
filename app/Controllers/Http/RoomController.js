@@ -1,5 +1,7 @@
 'use strict';
 const Room = use('App/Models/Room');
+const Review = use('App/Models/Review');
+const Report = use('App/Models/Report');
 const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
@@ -121,7 +123,6 @@ class RoomController {
 			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
 				name: `${room.name}_floorPlan.png`
 			});
-			console.log(Helpers.publicPath);
 
 			// Upload process - Room Picture
 			const roomImage = request.file('roomPicture', {
@@ -138,7 +139,11 @@ class RoomController {
 			room.extraEquipment = body.extraEquipment == null ? ' ' : body.extraEquipment;
 			room.comment = body.comment == null ? ' ' : body.extraEquipment;
 			await room.save();
-			session.flash({ notification: 'Room Added!' });
+
+			session.flash({
+				notification: 'Room Added! To add another room, click here',
+				url: '/addRoom'
+			});
 
 			return response.route('showRoom', { id: room.id });
 		} catch (err) {
@@ -226,26 +231,36 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async show ({ response, auth, params, view, request }) {
-		// Retrieves room object
 		try {
 			// get the search form data if employee view
 			const form = request.only(['date', 'from', 'to']);
 			const room = await Room.findOrFail(params.id);
+			const userRole = await auth.user.getUserRole();
+			const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
+
 			var isAdmin = 0;
-			var layoutType = 'll';
+			var layoutType = ' ';
 			// if user is admin
-			if (auth.user.role === 1) {
+			if (userRole === 'admin') {
 				layoutType = 'layouts/adminLayout';
 				isAdmin = 1;
 				// check if user is viewing their own profile
-			} else if (auth.user.role === 2) {
+			} else if (userRole === 'user') {
 				layoutType = 'layouts/mainLayout';
 				isAdmin = 0;
 				// check if user is viewing someone elses profile
 			} else {
 				return response.redirect('/');
 			}
-			return view.render('userPages.roomDetails', { room, layoutType, isAdmin, form });
+
+			// retreives all of the reviews associated to this room
+			let searchResults = await Review
+				.query()
+				.where('room_id', params.id)
+				.fetch();
+			const reviews = searchResults.toJSON();
+
+			return view.render('userPages.roomDetails', { room, layoutType, isAdmin, form, hasReview, reviews });
 		} catch (error) {
 			return response.redirect('/');
 		}
@@ -259,6 +274,7 @@ class RoomController {
 	async getAllRooms ({ auth, view }) {
 		const results = await Room.all();
 		const rooms = results.toJSON();
+		const userRole = await auth.user.getUserRole();
 
 		// Sort the results by name
 		rooms.sort((a, b) => {
@@ -290,8 +306,14 @@ class RoomController {
 		stats['deactive'] = countDeactive[0]['count(*)'];
 		stats['maintenance'] = countMaint[0]['count(*)'];
 
+		// Sets average rating for each room
+		for (var i = 0; i < rooms.length; i++) {
+			// Adds new attribute - rating - to every room object
+			rooms[i].rating = await this.getAverageRating(rooms[i].id);
+		}
+
 		// if user is admin
-		if (auth.user.role === 1) {
+		if (userRole === 'admin') {
 			return view.render('adminDash.viewRooms', { rooms, stats });
 		} else {
 			return view.render('userPages.results', { rooms });
@@ -303,7 +325,6 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-
 	async searchRooms ({ request, view }) {
 		const form = request.all();
 		const name = form.searchField;
@@ -332,7 +353,6 @@ class RoomController {
 		const location = form.location;
 		const seats = form.seats;
 		const capacity = form.capacity;
-
 		// check boxes input
 		let checkBox = [{ checkName: 'projector', checkValue: form.projectorCheck },
 			{ checkName: 'whiteboard', checkValue: form.whiteboardCheck },
@@ -379,6 +399,12 @@ class RoomController {
 
 		const rooms = searchResults.toJSON();
 
+		// Sets average rating for each room
+		for (var i = 0; i < rooms.length; i++) {
+			// Adds new attribute - rating - to every room object
+			rooms[i].rating = await this.getAverageRating(rooms[i].id);
+		}
+
 		// iterate through the rooms
 		async function asyncForEach (arr, callback) {
 			for (let i = 0; i < arr.length; i++) {
@@ -388,34 +414,8 @@ class RoomController {
 
 		const checkRoomAvailability = async () => {
 			await asyncForEach(rooms, async (item, index, items) => {
-				const startTime = date + 'T' + from;
-				const endTime = date + 'T' + to;
-
-				// if there is a calendar for the room
-				if (item.calendar !== 'insertCalendarHere' && item.calendar !== null) {
-					// query the events within the search time range
-					const calendarViews = (await this.getCalendarView(
-						item.calendar,
-						startTime,
-						endTime
-					)).value;
-
-					// if event end time is the same as search start time, remove the event
-					calendarViews.forEach((item, index, items) => {
-						const eventEndTime = new Date(item.end.dateTime);
-						const searchStartTime = new Date(startTime);
-
-						if (+eventEndTime === +searchStartTime) {
-							items.splice(index, 1);
-						}
-					});
-
-					// remove the room if it is not available
-					const available = calendarViews.length === 0;
-
-					if (!available) {
-						items.splice(index, 1);
-					}
+				if (!await this.getRoomAvailability(date, from, to, item.calendar)) {
+					items.splice(index, 1);
 				}
 			});
 		};
@@ -459,6 +459,14 @@ class RoomController {
 		const calendar = row.calendar;
 		const name = row.name;
 
+		if (!await this.getRoomAvailability(date, from, to, calendar)) {
+			session.flash({
+				error: `Room ${name} has already been booked for the time selected!`
+			});
+
+			return response.route('showRoom', { id: room });
+		}
+
 		// Information of the event
 		const eventInfo = {
 			'subject': meeting,
@@ -499,7 +507,7 @@ class RoomController {
 
 		session.flash({
 			notification: `Room ${name} has been booked. Please click here to view your bookings.`,
-			url: '/viewBookings'
+			url: `/user/${auth.user.id}/bookings`
 		});
 
 		return response.redirect('/booking');
@@ -510,7 +518,27 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getBookings ({ params, view }) {
+	async getBookings ({ params, view, auth, response }) {
+		var canEdit = 0;
+		var layoutType = '';
+		const userRole = await auth.user.getUserRole();
+
+		if (userRole === 'admin') {
+			layoutType = 'layouts/adminLayout';
+			canEdit = 1;
+		// check if user is viewing their own profile
+		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
+			layoutType = 'layouts/mainLayout';
+			canEdit = 1;
+
+		// check if user is viewing someone elses profile
+		} else if (auth.user.id !== Number(params.id) && userRole === 'user') {
+			layoutType = 'layouts/mainLayout';
+			canEdit = 0;
+		} else {
+			return response.redirect('/');
+		}
+
 		// Queries the database fr the bookings associated to a specific room
 		let searchResults = await Booking
 			.query()
@@ -519,9 +547,8 @@ class RoomController {
 
 		searchResults = searchResults.toJSON();
 		const bookings = await populateBookings(searchResults);
-		var layoutType = 'layouts/adminLayout';
 
-		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
+		return view.render('userPages.manageBookings', { bookings, layoutType, canEdit });
 	}
 
 	/**
@@ -529,12 +556,26 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async viewBookings ({ auth, view }) {
+	async viewUserBookings ({ params, auth, view, response }) {
+		var canEdit = 0;
+		var layoutType = '';
+		const userRole = await auth.user.getUserRole();
+
+		if (userRole === 'admin') {
+			layoutType = 'layouts/adminLayout';
+			canEdit = 1;
+		// check if user is viewing their own profile
+		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
+			layoutType = 'layouts/mainLayout';
+			canEdit = 1;
+		} else {
+			return response.redirect('/');
+		}
+
 		const results = (await auth.user.bookings().fetch()).toJSON();
 		const bookings = await populateBookings(results);
-		var layoutType = 'layouts/mainLayout';
 
-		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
+		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });
 	}
 
 	/**
@@ -542,7 +583,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async cancelBooking ({ params, response }) {
+	async cancelBooking ({ params, response, auth }) {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
 		const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
@@ -552,7 +593,7 @@ class RoomController {
 		booking.status = 'Cancelled';
 		await booking.save();
 
-		return response.redirect('/viewBookings');
+		return response.redirect(`/user/${auth.user.id}/bookings`);
 	}
 
 	/**
@@ -729,6 +770,229 @@ class RoomController {
 				console.log(err);
 			}
 		}
+	}
+
+	/**
+	 *
+	 * @param {String} date     Date
+	 * @param {String} from     Starting time
+	 * @param {String} to       Ending time
+	 * @param {String} calendar Calendar ID
+	 *
+	 * @returns {Boolean} Whether or not the room is available
+	 */
+	async getRoomAvailability (date, from, to, calendar) {
+		const startTime = date + 'T' + from;
+		const endTime = date + 'T' + to;
+
+		// if there is a calendar for the room
+		if (calendar !== 'insertCalendarHere' && calendar !== null) {
+			// query the events within the search time range
+			const calendarViews = (await this.getCalendarView(
+				calendar,
+				startTime,
+				endTime
+			)).value;
+
+			// if event end time is the same as search start time, remove the event
+			calendarViews.forEach((item, index, items) => {
+				const eventEndTime = new Date(item.end.dateTime);
+				const searchStartTime = new Date(startTime);
+
+				if (+eventEndTime === +searchStartTime) {
+					items.splice(index, 1);
+				}
+			});
+
+			return calendarViews.length === 0;
+		}
+	}
+
+	/**
+	 * Render the ratings and review page.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async renderReviewPage ({ params, view, auth }) {
+		// Retrieves review
+		let searchResult = await Review
+			.query()
+			.where('user_id', auth.user.id)
+			.where('room_id', params.id)
+			.fetch();
+
+		const reviews = searchResult.toJSON();
+
+		// retreive the correspondinf review object
+		var review = reviews[0];
+
+		// Check to see if there is an existing review
+		const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
+		var actionType;
+
+		if (hasReview) {
+			actionType = 'Edit Review';
+		} else {
+			actionType = 'Add Review';
+		}
+
+		return view.render('userPages.ratingReview', { id: params.id, review, actionType });
+	}
+
+	/**
+	 * Adds a review Object into the Database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async addReview ({ request, response, session, auth, params }) {
+		try {
+			// Retrieves user input
+			const body = request.all();
+
+			// Populates the review object's values
+			const review = new Review();
+			review.user_id = auth.user.id;
+			review.room_id = params.id;
+			review.rating = body.rating;
+			review.review = body.review;
+
+			await review.save();
+			session.flash({ notification: 'Review Added!' });
+
+			return response.route('showRoom', { id: params.id });
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	/**
+	 * Edits a review Object into the Database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async editReview ({ request, response, session, auth, params }) {
+		try {
+			// Retrieves user input
+			const body = request.all();
+
+			// Update the review in the database
+			await Review
+				.query()
+				.where('user_id', auth.user.id)
+				.where('room_id', params.id)
+				.update({
+					rating: body.rating,
+					review: body.review
+				});
+
+			session.flash({ notification: 'Review Updated!' });
+
+			return response.route('showRoom', { id: params.id });
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	/**
+	 * Deletes a review Object from the Database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async deleteReview ({ request, response, session, auth, params }) {
+		try {
+			// retrives the reviews in the database
+			let searchResults = await Review
+				.query()
+				.where('user_id', auth.user.id)
+				.where('room_id', params.id)
+				.fetch();
+
+			const reviews = searchResults.toJSON();
+
+			// stores the unique review id in reviewId
+			const reviewId = reviews[0].id;
+
+			// find the review object
+			const review = await Review.findBy('id', reviewId);
+			await review.delete();
+
+			session.flash({ notification: 'Review Deleted!' });
+
+			return response.route('showRoom', { id: params.id });
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	/**
+	 * Calcualtes the average rating of a specific room, based off of the room Id
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getAverageRating (roomId) {
+		try {
+			// Retrive all the ratings and calculates the average
+			let searchResults = await Review
+				.query()
+				.where('room_id', roomId)
+				.avg('rating');
+
+			// If there is no averge rating, return 'No Rating'
+			if (searchResults[0]['avg(`rating`)'] == null) {
+				return 'No Rating';
+			}
+
+			// Returns the rating, thus searchResults[0]['avg(`rating`)']
+			return searchResults[0]['avg(`rating`)'];
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	/**
+	 * Returns true if the user has a review in the database, else false.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async hasRatingAndReview (userId, roomId) {
+		try {
+			// Retrive all the reviews associated to a specific user
+			let searchResults = await Review
+				.query()
+				.where('user_id', userId)
+				.where('room_id', roomId)
+				.fetch();
+
+			const reviews = searchResults.toJSON();
+
+			// return true if the user has a review, else false
+			return reviews.length > 0;
+		} catch (err) {
+			console.log(err);
+		}
+	}
+	/**
+	 * Reports a room
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async reportRoom ({ request, response, session, auth }) {
+		const { issueType, comment, room } = request.only(['issueType', 'comment', 'room']);
+		console.log(room);
+		const results = await Room
+			.findBy('id', room);
+		const row = results.toJSON();
+		// Populates the review object's values
+		const report = new Report();
+		report.user_id = auth.user.id;
+		report.room_id = row.id;
+		report.report_type_id = issueType;
+		report.comment = comment;
+		report.report_status_id = 1;
+		await report.save();
+
+		session.flash({ notification: 'Your report has been submitted' });
+		return response.route('showRoom', { id: row.id });
 	}
 }
 

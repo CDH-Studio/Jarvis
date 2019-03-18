@@ -5,6 +5,8 @@ const Hash = use('Hash');
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model');
+const UserRole = use('App/Models/UserRole');
+const logger = use('Logger');
 
 class User extends Model {
 	static boot () {
@@ -37,6 +39,37 @@ class User extends Model {
 
 	bookings () {
 		return this.hasMany('App/Models/Booking');
+	}
+
+	reviews () {
+		return this.hasMany('App/Models/Review');
+	}
+
+	reports () {
+		return this.hasMany('App/Models/Report');
+	}
+
+	async getUserRole () {
+		try {
+			var role = await UserRole.findOrFail(this.role_id);
+			return role.role_name;
+		} catch (error) {
+			logger.error('Role Lookup Failed');
+			return 0;
+		}
+	}
+
+	async setUserRole (role) {
+		try {
+			role = await UserRole.findByOrFail('role_name', role);
+			this.role_id = role.id;
+			this.save();
+			console.log(this.role_id);
+			return 1;
+		} catch (error) {
+			logger.error('Role Set Failed');
+			return 0;
+		}
 	}
 }
 
