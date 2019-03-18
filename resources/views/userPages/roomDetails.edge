@@ -320,7 +320,6 @@
             <div class='modal-dialog confirmation-modal' role='document'>
                 <div class='modal-content' >
                     {{--  Form Content  --}}
-                    
                     <form action='{{ route('reportRoom') }}' method='POST' enctype='multipart/form-data'>
                         {{ csrfField() }}
                         <input type='hidden' name='room' value={{ room.id }} /> 
