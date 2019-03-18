@@ -21,14 +21,15 @@ class ReportRoom {
 			 * requiredDropdown: this field is required and cannot be selected on "Select a ___" which has a value of 'undefined'
 			 *
 			 */
-			issueType: 'required|requiredDropdown'
-			// comment: ''
+			issueType: 'required|requiredDropdown',
+			comment: 'required'
 		};
 	}
 
 	// Custom error messages
 	get messages () {
 		return {
+			'required': 'This field is required.',
 			'requiredDropdown': 'This field is required.'
 		};
 	}

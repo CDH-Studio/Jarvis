@@ -987,8 +987,7 @@ class RoomController {
 		report.report_status_id = 1;
 		await report.save();
 
-		session.flash({ notification: 'Your report has been submitted' });
-
+		session.flash({ notification2: 'Your report has been submitted' });
 		return response.route('showRoom', { id: row.id });
 	}
 }

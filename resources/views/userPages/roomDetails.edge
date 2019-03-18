@@ -359,7 +359,7 @@
                                 <div class='col form-group'>
                                     <label for='comment'>Comment <b class='text-danger'>*</b></label>
                                     @if(hasErrorFor('comment'))
-                                        <textarea class='form-control' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
+                                        <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
                                     @else
                                         <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  review.review) }}</textarea>
@@ -471,20 +471,32 @@
             minuteStepRound: "1",
         });
     </script>
+    {{--  If the report validations fails display this modal  --}}
+    @if(hasErrorFor('issueType'))
+        <script>
+            $(window).on('load',function(){
+                $('#reportModal').modal('show');
+            });
+        </script>
+    @elseif(hasErrorFor('comment'))
+        <script>
+            $(window).on('load',function(){
+                $('#reportModal').modal('show');
+            });
+        </script>
     {{--  If a validation error is thrown show the modal box  --}}
-    @if(hasErrorFor())
+    @elseif(hasErrorFor())
         <script>
             $(window).on('load',function(){
                 $('#confirmModal').modal('show');
             });
         </script>
     @endif
-    @if(flashMessage('notification'))
+    @if(flashMessage('notification2'))
         <script type='module'>
             import {notify} from '/js/notify.js';
             $(window).on('load', () => {
-                notify({ $: $, message: '{{ flashMessage('error') }}', type: 'danger', align: 'center',
-                        enter: 'bounceIn', exit: 'bounceOut'});
+                notify({ $: $, message: '{{ flashMessage('notification2') }}' });
             });
         </script>
     @endif
