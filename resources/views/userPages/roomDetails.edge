@@ -25,8 +25,8 @@
                 </div>
                 <div class='col text-right'>
                     @if(isAdmin)
-                        <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';"><i class="fas fa-list-ul"></i>View Bookings</button>
-                        <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i>Edit</button>
+                        <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
+                        <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit</button>
                     @else
                         @if(hasReview)
                             <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit Review</button>
@@ -358,7 +358,7 @@
                         </div>
                         <div class='modal-footer text-right'>
                             <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                            <button type='submit' class='btn btn-primary'>Book Room</button>
+                            <button type='submit' class='btn btn-primary'>Report</button>
                         </div>
                     </form>
                 </div>
