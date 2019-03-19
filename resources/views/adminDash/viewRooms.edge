@@ -19,27 +19,27 @@ View Rooms
             {{--  All Rooms button  --}}
             <div class='row'> 
                 <div class="col card text-white bg-primary mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Number of Rooms</div>
+                    <div class="card-header">Total Rooms</div>
                     <div class="card-body">
                         <h4 class="card-title">{{ stats['total'] }}</h4>
                     </div>
                 </div>
                 <div class="col card text-white bg-success mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Active Rooms</div>
+                    <div class="card-header">Active</div>
                     <div class="card-body">
                         <h4 class="card-title">{{ stats['active'] }}</h4>
-                    </div>
-                </div>
-                <div class="col card text-white bg-danger mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Deactive Rooms</div>
-						<div class="card-body">
-						<h4 class="card-title">{{ stats['deactive'] }}</h4>
                     </div>
                 </div>
                 <div class="col card text-white bg-warning mr-3 mb-3" style="max-width: 20rem;">
                     <div class="card-header">Maintenance</div>
                     <div class="card-body">
 					<h4 class="card-title">{{ stats['maintenance'] }}</h4>
+                    </div>
+                </div>
+                <div class="col card text-white bg-danger mr-3 mb-3" style="max-width: 20rem;">
+                    <div class="card-header">Deactive</div>
+						<div class="card-body">
+						<h4 class="card-title">{{ stats['deactive'] }}</h4>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@ View Rooms
                     {{--  Loops through the rooms array and displays every room's content  --}}
                     <tbody>
                         @each(room in rooms) 
-                        <tr class='table-light' id='roomRow' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
+                        <tr class='table-light row-hover' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
                             <td class='text-center'>{{ room.name }}</td>
                             <td class='text-center'>{{ room.fullName }}</td>
                             <td class='text-center'>{{ room.telephone }}</td>

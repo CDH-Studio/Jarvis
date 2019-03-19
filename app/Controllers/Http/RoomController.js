@@ -2,8 +2,11 @@
 const Room = use('App/Models/Room');
 const Review = use('App/Models/Review');
 const Report = use('App/Models/Report');
+const ReportStatus = use('App/Models/ReportStatus');
+const ReportType = use('App/Models/ReportType');
 const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
+const User = use('App/Models/User');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
 /**
@@ -320,6 +323,56 @@ class RoomController {
 		}
 	}
 
+	/**
+	 * Query all the rooms from the database and render a page to display all current user reports for rooms (ADMIN only)
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getAllIssues ({ auth, view, response }) {
+		const results = await Report.all();
+		const reports = results.toJSON();
+
+		// Sort the results by name
+		reports.sort((a, b) => {
+			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+		});
+
+		// Retrieve number of issues that are pending
+		let countPending = await Report
+			.query()
+			.where('report_status_id', 1)
+			.count();
+
+		// Retrieve number of issues that are under review
+		let countUnderReview = await Report
+			.query()
+			.where('report_status_id', 2)
+			.count();
+
+		// Retrieve number of issues that are resolved
+		let countResolved = await Report
+			.query()
+			.where('report_status_id', 3)
+			.count();
+
+		// Create statistic array with custom keys
+		var stats = {};
+		stats['total'] = reports.length;
+		stats['pending'] = countPending[0]['count(*)'];
+		stats['underReview'] = countUnderReview[0]['count(*)'];
+		stats['resolved'] = countResolved[0]['count(*)'];
+
+		// loop through and change ids to the actual names in the tables
+		for (let i = 0; i < reports.length; i++) {
+			reports[i].status = await ReportStatus.getName(reports[i].report_status_id);
+			reports[i].room = await Room.getName(reports[i].room_id);
+			reports[i].user = await User.getName(reports[i].user_id);
+			reports[i].type = await ReportType.getName(reports[i].report_type_id);
+		}
+
+		// if user is admin
+		return view.render('adminDash.viewIssues', { reports, stats });
+	}
 	/**
 	 * Query the room from the database which matches the search input.
 	 *
@@ -988,6 +1041,7 @@ class RoomController {
 		report.room_id = row.id;
 		report.report_type_id = issueType;
 		report.comment = comment;
+		// Setting default issue status as open
 		report.report_status_id = 1;
 		await report.save();
 

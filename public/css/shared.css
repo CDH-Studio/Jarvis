@@ -150,6 +150,10 @@
     background-color: #3498db !important;
 }
 
+.bg-muted{
+    background-color: #777777 !important;
+}
+
 .bg-light{
     background-color: #ecf0f1 !important;
 }
