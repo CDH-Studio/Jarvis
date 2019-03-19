@@ -14,13 +14,34 @@
                     <h4>{{ title }} </h4> 
                 </div>
 
-                <div class='text-left'>
-                    <i class='full fas fa-star mr-1'></i> <span> <strong>{{ rating }}</strong></span>
-                </div> 
+                @if(rating == 1)
+                    <div class='text-left'>
+                        <i class='full fas fa-star mr-1'></i> 
+                    </div> 
+                @elseif(rating == 2)
+                    <div class='text-left'>
+                        <i class='full fas fa-star mr-1'></i> <i class='full fas fa-star mr-1'></i> 
+                    </div> 
+                @elseif(rating == 3)
+                    <div class='text-left'>
+                        <i class='full fas fa-star mr-1'></i> <i class='full fas fa-star mr-1'></i> <i class='full fas fa-star mr-1'></i> 
+                    </div> 
+                @elseif(rating == 4)
+                    <div class='text-left'>
+                        <i class='full fas fa-star mr-1'></i> <i class='full fas fa-star mr-1'></i> <i class='full fas fa-star mr-1'></i> <i class='full fas fa-star mr-1'></i> 
+                    </div> 
+                @elseif(rating == 5) 
+                    <div class='text-left'>
+                        <i class='full fas fa-star mr-1'></i> <i class='full fas fa-star mr-1'></i> <i class='full fas fa-star mr-1'></i> <i class='full fas fa-star mr-1'></i> <i class='full fas fa-star mr-1'></i> 
+                    </div> 
+                @elseif(rating == 'No Rating')
+                    <div class='text-left'>
+                        <span> <strong>{{ rating }}</strong></span>
+                    </div> 
+                @endif
 
                 <div class='col text-right'>
                     <i class="fas fa-plus"></i>
-
                 </div>  
             </div>
         </div>
