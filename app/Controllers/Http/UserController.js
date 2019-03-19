@@ -157,8 +157,13 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async update ({ request, session, params, response }) {
+		let user = await User.findBy('id', params.id);
+
+		console.log('User tower value: ' + user.tower);
 		// Retrieves user input
 		const body = request.all();
+
+		console.log('User Input value ' + body.tower);
 
 		// Updates user information in database
 		await User
@@ -171,6 +176,11 @@ class UserController {
 				floor: body.floor,
 				tower: body.tower
 			});
+
+		user = await User.findBy('id', params.id);
+
+		console.log('After update ' + user.tower);
+		console.log('');
 
 		session.flash({ notification: 'User Updated!' });
 
@@ -332,6 +342,7 @@ class UserController {
 		var layoutType = '';
 		const userRole = await auth.user.getUserRole();
 		const profileUserRole = await user.getUserRole();
+		console.log('In the show method: ' + user.tower);
 		// check if admin is viewing their own profile
 		if (userRole === 'admin') {
 			layoutType = 'layouts/adminLayout';

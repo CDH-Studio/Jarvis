@@ -55,8 +55,8 @@
                     <div class='col'>
                         <label for='tower'>Tower</label>
                         <select class='form-control' id='tower' name='tower' >
-                            <option {{ user.tower == 1 ? 'selected' : '' }}>West</option>
-                            <option {{ user.tower == 2 ? 'selected' : '' }}>East</option>
+                            <option value=1 {{ user.tower == 1 ? 'selected' : '' }}>East</option>
+                            <option value=2 {{ user.tower == 2 ? 'selected' : '' }}>West</option>
                         </select>
                     </div>
                 </div>
