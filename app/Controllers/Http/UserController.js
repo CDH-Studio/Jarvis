@@ -157,14 +157,8 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async update ({ request, session, params, response }) {
-		let user = await User.findBy('id', params.id);
-		console.log(user);
-
 		// Retrieves user input
 		const body = request.all();
-
-		console.log('THIS IS THE BODY');
-		console.log(body);
 
 		// Updates user information in database
 		await User
@@ -177,9 +171,6 @@ class UserController {
 				floor: body.floor,
 				tower: body.tower
 			});
-
-		user = await User.findBy('id', params.id);
-		console.log(user);
 
 		session.flash({ notification: 'User Updated!' });
 
