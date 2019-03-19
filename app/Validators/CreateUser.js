@@ -43,7 +43,7 @@ class CreateUser {
 			'required': 'This field is required.',
 			'requiredDropdown': 'This field is required.',
 			'same': 'Passwords do not match',
-			'unique': 'The {{ field }} already exists, try logging in instead'
+			'unique': 'The {{ field }} already exists.'
 		};
 	}
 
