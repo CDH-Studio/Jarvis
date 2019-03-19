@@ -18,17 +18,6 @@
     {{--  Actual page content  --}}
     <div class='row justify-content-center'>
         <div class='col room-details-card shadow' style='margin-top:10px;'>
-
-            {{--  Displays "Room Added/Updated!" success message  --}}
-            @if(old('notification'))
-                <div class='alert alert-success mb-2'>
-                    {{ old('notification') }}
-                    @if(isAdmin)
-                        To add another room, click <a href='{{ route('addRoom')}}'>here</a>
-                    @endif
-                </div>
-            @endif
-
             <div class='room-details-card-title'>
                 <div class='row'>
                 <div class='col'>
@@ -358,7 +347,12 @@
                             <div class='row'>
                                 <div class='col form-group'>
                                     <label for='comment'>Comment <b class='text-danger'>*</b></label>
-                                    <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  review.review) }}</textarea>
+                                    @if(hasErrorFor('comment'))
+                                        <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
+                                        <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
+                                    @else
+                                        <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  review.review) }}</textarea>
+                                    @endif                                    
                                 </div> 
                             </div>
                         </div>
@@ -466,21 +460,36 @@
             minuteStepRound: "1",
         });
     </script>
+    {{--  If the report validations fails display this modal  --}}
+    @if(hasErrorFor('issueType'))
+        <script>
+            $(window).on('load',function(){
+                $('#reportModal').modal('show');
+            });
+        </script>
+    @elseif(hasErrorFor('comment'))
+        <script>
+            $(window).on('load',function(){
+                $('#reportModal').modal('show');
+            });
+        </script>
     {{--  If a validation error is thrown show the modal box  --}}
-    @if(hasErrorFor())
+    @elseif(hasErrorFor())
         <script>
             $(window).on('load',function(){
                 $('#confirmModal').modal('show');
             });
         </script>
     @endif
-    @if(flashMessage('error'))
+    {{--  Displays "Room Added/Updated!" success message  --}}
+    @if(flashMessage('notification'))
         <script type='module'>
             import {notify} from '/js/notify.js';
             $(window).on('load', () => {
-                notify({ $: $, message: '{{ flashMessage('error') }}', type: 'danger', align: 'center',
-                        enter: 'bounceIn', exit: 'bounceOut'});
+                var url = '{{ flashMessage('url') }}';
+                notify({$: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
             });
         </script>
     @endif
+    
 @endsection
