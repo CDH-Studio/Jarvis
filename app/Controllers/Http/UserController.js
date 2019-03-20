@@ -110,6 +110,23 @@ async function populateBookings (results) {
 }
 
 class UserController {
+
+	/**
+	 * Render Register page
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async registerRender ({ request, auth, view, response }) {
+		// present login to logged out users only
+		if (auth.user) {
+			return response.redirect('/');
+		} else {
+			var numb= Math.floor(Math.random() * 8)+1;
+			var photoName='login_'+numb+'.jpg'; 
+			return view.render('auth.register', {photoName});
+		}
+	}
+
 	/**
 	 * Create a new Enployee user. There is an option to verify the user directly
 	 * or to make them verify their email address.
@@ -255,6 +272,20 @@ class UserController {
 	}
 
 	/**
+	 * Render Register page
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async registerAdminRender ({ request, auth, view, response }) {
+		// present login to logged out users only
+		if (auth.user) {
+			return response.redirect('/');
+		} else {
+			return view.render('auth.registerAdmin');
+		}
+	}
+
+	/**
 	 * Create and verify a new Admin user. Save them to the database and log them in.
 	 *
 	 * @param {Object} Context The context object.
@@ -279,7 +310,9 @@ class UserController {
 		if (auth.user) {
 			return response.redirect('/');
 		} else {
-			return view.render('auth.login');
+			var numb= Math.floor(Math.random() * 8)+1;
+			var photoName='login_'+numb+'.jpg'; 
+			return view.render('auth.login', {photoName});
 		}
 	}
 
@@ -310,6 +343,22 @@ class UserController {
 		} catch (error) {
 			session.flash({ loginError: 'Invalid email/password' });
 			return response.redirect('/login');
+		}
+	}
+
+	/**
+	 * Render login page
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async forgotPasswordRender ({ request, auth, view, response }) {
+		// present login to logged out users only
+		if (auth.user) {
+			return response.redirect('/');
+		} else {
+			var numb= Math.floor(Math.random() * 8)+1;
+			var photoName='login_'+numb+'.jpg'; 
+			return view.render('auth.forgotPassword', {photoName});
 		}
 	}
 

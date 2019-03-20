@@ -1,93 +1,101 @@
 <!DOCTYPE html>
 <html lang='en'>
+
 <head>
-  <meta charset='UTF-8' />
-  <title>Hello Adonis</title>
 
-    <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.2.1/flatly/bootstrap.min.css" rel="stylesheet" integrity="sha384-9dACWymWSkhCeCgbjV6xqS20Luu4ue6QnEvr+nMXpPMwIq/OB89AoRh27Flsrxzs" crossorigin="anonymous">
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+  <meta name='description' content=''>
+  <meta name='author' content=''>
 
-    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.1/css/all.css' integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous'>
-    <style>
-  .btn-login{
-    border: solid 1px #04163F;
-    width:100%;
-    border-radius: 20px;
-  }
+  <title>SB Admin 2 - Login</title>
 
-  .btn-register{
-    border: solid 1px #04163F;
-    width:100%;
-    border-radius: 20px;
-    background-color: #04163f;
-    color:white;
-  }
-  html {
-    height: 100%;
-  }
-  body{
-    height:100%;
-    background-color: #F8F8F8;
-  }
-  body .row{
-    height:100%;
-  }
-  .image-bar{
-    background:linear-gradient(rgba(4, 22, 63, 0.8), rgba(4, 22, 63, 0.8), rgba(4, 22, 63, 0.7)), url("images/login.jpg") no-repeat center top;background-size:cover;  height:100%;
-    background:linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.5)), url("images/login.jpg") no-repeat center top;background-size:cover;  height:100%;
-  }
-  .form-bar{
-    ;
-  }
+  <!-- Custom fonts for this template-->
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.1/css/all.css' integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous'>
+  <link href='https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i' rel='stylesheet'>
 
-  .form-bar form{
-    margin-top:150px;
-    width:40%;
-    margin-right: auto; 
-    margin-left:auto;
-  }
+  <!-- Custom styles for this template-->
+  <link href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T' crossorigin='anonymous'>
+  <link href='css/vendor/sb-admin-2.css' rel='stylesheet'>
+  <link href='css/sb-admin-login.css' rel='stylesheet'>
 
-  .form-bar form img{
-    width:45%;
-    background-color:#04163F;
-    padding:15px 15px;
-  }
-}
-
-    </style>
 </head>
-<body>
-    <div class="row">
-      <div class="col-lg-4  text-center  image-bar"></div>
-      <div class="col-lg-8 shadow form-bar" style="">   
 
-          <form action='{{ route('UserController.login') }}' method='POST' class="mb-4">
-            <img class='brand-logo mb-3' src='door_logo.png'>
-            <h3 class="mb-3">Login</h3>
-            {{ csrfField() }}
+<body class='bg-gradient-primary'>
 
-            <div class='form-group mb-2'>
-              <label for='email'>Email address</label>
-              <input type='email' class='form-control' name='email' id='email' aria-describedby='emailHelp' placeholder='Enter email'>
-              @if(hasErrorFor('email'))        
-                  <div class="invalid-feedback" style="display:block">{{ getErrorFor('email') }}</div>
-              @endif
+  <div class='container'>
+
+    <!-- Outer Row -->
+    <div class='row justify-content-center'>
+
+      <div class='col-xl-10 col-lg-12 col-md-9'>
+
+        <div class='card o-hidden border-0 shadow-lg my-5'>
+          <div class='card-body p-0'>
+            <!-- Nested Row within Card Body -->
+            <div class='row'>
+              <div class='col-lg-6 d-none d-lg-block bg-login-image'></div>
+              <div class='col-lg-6'>
+                <div class='p-5'>
+                  <div class='text-left'>
+                    <img class='login-logo mb-3' src='door_logo.png'>
+                  </div>
+                  <div class='text-left'>
+                    <h1 class='h4 text-gray-900 mb-4'>Login</h1>
+                  </div>
+                  @if(flashMessage('loginError'))
+                    <div class='alert alert-dismissible alert-danger'>
+                      <button type='button' class='close' data-dismiss='alert'>&times;</button>
+                      <strong>{{ flashMessage('loginError') }}</strong>
+                    </div>
+                  @endif
+                  <form action='{{ route('UserController.login') }}' method='POST' class='user'>
+                    {{ csrfField() }}
+                    <div class='form-group'>
+                      <input type='email' class='form-control form-control-user' name='email' id='email' aria-describedby='emailHelp' placeholder='Enter email'>
+                      @if(hasErrorFor('email'))        
+                        <div class='invalid-feedback d-block'>{{ getErrorFor('email') }}</div>
+                      @endif
+                    </div>
+
+                    <div class='form-group'>
+                      <input type='password' class='form-control form-control-user' name='password' id='password' placeholder='Password'>
+                      @if(hasErrorFor('password'))
+                        <span>
+                            <div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>
+                        </span>
+                      @endif
+                      <a class='small text-right' href='{{ route('forgotPassword') }}'>Forgot password</a>
+                    </div>
+                    <button type='submit' class='btn btn-primary btn-user btn-block'>
+                      Login
+                    </button>
+                    <hr>
+                  </form>
+                  <div class='text-center'>
+                    <a class='small' href='{{route('register')}}'>Create an Account!</a>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class='form-group mb-2'>
-              <label for='password'>Password</label>
-              <input type='password' class='form-control' name='password' id='password' placeholder='Password'>
-              @if(hasErrorFor('password'))
-                <span>
-                  <div class="invalid-feedback" style="display:block">{{ getErrorFor('password') }}</div>
-                </span>
-              @endif
-              <a class='forgot-password' href='{{ route('forgotPassword') }}'>Forgot password</a>
-            </div>
-            <button type='submit' class='btn btn-login mt-3'>Login</button>
+          </div>
+        </div>
 
-            <p class='mb-1 mt-3'>Don't have an account?</p>
-            <a class='btn btn-register text-center mb-2' href='{{ route('register') }}'>Register</a>
-          </form>
       </div>
+
     </div>
+
+  </div>
+
+  <!-- Bootstrap core JavaScript-->
+  <script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
+  {{script('js/vendor/popper.js')}}
+  <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js' integrity='sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k' crossorigin='anonymous'></script>
+
+  <!-- Custom scripts for all pages-->
+  <script src='js/vendor/sb-admin-2.min.js'></script>
+
 </body>
+
 </html>

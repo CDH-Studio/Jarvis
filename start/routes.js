@@ -25,11 +25,11 @@ Route.on('/sample').render('sample');
 //= ========================================================================
 
 // User Authentication
-Route.on('/register').render('auth.signup').as('register');
+Route.get('/register', 'UserController.registerRender').as('register');
 Route.post('/register', 'UserController.create').validator('CreateUser');
 
 // Admin Authentication
-Route.on('/admin/register').render('auth.signupAdmin').as('registerAdmin');
+Route.get('/admin/register', 'UserController.registerAdminRender').as('registerAdmin');
 Route.post('/admin/register', 'UserController.createAdmin').as('CreateAdmin').validator('CreateAdmin');
 
 // Logout
@@ -38,7 +38,7 @@ Route.post('/login', 'UserController.login').validator('LoginUser');
 Route.get('/logout', 'UserController.logout').as('logout');
 
 // Forgot password
-Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
+Route.get('/forgotPassword','UserController.forgotPasswordRender').as('forgotPassword');
 Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword').validator('ResetPassword');
 Route.get('/newPassword', 'UserController.verifyHash');
 Route.get('/newUser', 'UserController.verifyEmail');
