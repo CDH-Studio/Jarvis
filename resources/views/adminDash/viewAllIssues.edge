@@ -22,36 +22,93 @@ View Room Issues
             </div>
         @else
             {{--  room Reports/Issues Stats  --}}
-            <div class='row'> 
-                <div class="col card text-white bg-primary mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Total Issues</div>
-                    <div class="card-body">
-                        <h4 class="card-title">{{ stats['total'] }}</h4>
+            <div class='row text-center'> 
+                <div class='col no-padding'>
+                    <div class="room-card shadow mr-3 mb-3">
+                        <div class='card-highlight-primary'></div>
+                        <div class="card-body">
+                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                                <div class='col-md-auto no-padding'>
+                                    <i class="color-info card-icon far fa-flag fa-2x"></i>
+                                </div>
+                                <div class='col-md-auto no-padding text-left' style='padding-left:15px;'>
+                                    <div class='row'>
+                                        <h4 class="col no-margin"><b>{{ stats['total'] }}</b></h4>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='col text-grey'>
+                                            Total Issues
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col card text-white bg-success mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Open</div>
-                    <div class="card-body">
-					<h4 class="card-title">{{ stats['pending'] }}</h4>
+                <div class='col no-padding'>
+                    <div class="room-card shadow mr-3 mb-3">
+                        <div class='card-highlight-success'></div>
+                        <div class="card-body">
+                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                                <i class="col-md-auto card-icon color-success no-padding fas fa-door-open fa-2x"></i>
+                                <div class='col-md-auto no-padding text-left' style='padding-left:15px;'>
+                                    <div class='row'>
+                                        <h4 class="col no-margin"><b>{{ stats['pending'] }}</b></h4>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='col text-grey'>
+                                            Open
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col card text-white bg-warning mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Pending</div>
-						<div class="card-body">
-						<h4 class="card-title">{{ stats['underReview'] }}</h4>
+                <div class='col no-padding'>
+                    <div class="room-card shadow mr-3 mb-3">
+                        <div class='card-highlight-warning'></div>
+                        <div class="card-body">
+                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                                <i class="col-md-auto card-icon color-warning no-padding fas fa-sync-alt fa-2x"></i>
+                                <div class='col-md-auto no-padding text-left' style='padding-left:15px;'>
+                                    <div class='row'>
+                                        <h4 class="col no-margin"><b>{{ stats['underReview'] }}</b></h4>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='col text-grey'>
+                                            Pending
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="col card text-white bg-danger mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Closed</div>
-                    <div class="card-body">
-                        <h4 class="card-title">{{ stats['resolved'] }}</h4>
+                <div class='col no-padding'>
+                    <div class="room-card shadow mr-3 mb-3">
+                        <div class='card-highlight-danger'></div>
+                        <div class="card-body">
+                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                                <i class="col-md-auto card-icon color-danger no-padding fas fa-door-closed fa-2x"></i>
+                                <div class='col-md-auto no-padding text-left' style='padding-left:15px;'>
+                                    <div class='row'>
+                                        <h4 class="col no-margin"><b>{{ stats['resolved'] }}</b></h4>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='col text-grey'>
+                                            Closed
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class='table table-responsive'>
                 <table id='reportsTable' class='table table-hover' style='width:100%;'>
-                    <thead class='thead-dark'>
+                    <thead class='table table-hover mt-4'>
                         <tr>
                             <th scope='col' class='text-center' style='width:10%'>Ticket #</th>
                             <th scope='col' class='text-center' style='width:15%'>Room</th>

@@ -6,6 +6,11 @@
 .text-muted{
     color:#cccccc !important;
 }
+
+.text-grey{
+    color:#707070 ;
+}
+
 .wrapper-center {
     text-align: center;
 }
@@ -81,12 +86,52 @@
     border-top:none;
     background-color: hsl(210,9%, 96%);
 }
+
 .modal-highlight{
     background: rgb(43,81,124);
     background: linear-gradient(90deg, rgba(43,81,124,1) 0%, rgba(34,56,81,1) 100%);
     height: 6px;
     border-top-left-radius: .25rem;
     border-top-right-radius: .25rem;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Card hightlights */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.card-highlight-primary{
+    background: rgb(88,136,189);
+    background: linear-gradient(90deg, rgba(88,136,189,1) 0%, rgba(15,172,243,1) 100%);
+    height: 6px;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
+.card-highlight-success{
+    background: linear-gradient(90deg, rgba(0,22,66,1) 0%, rgba(94,144,136,1) 0%, rgba(24,188,156,1) 100%);
+    height: 6px;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
+.card-highlight-warning{
+    background: rgb(219,194,120);
+    background: linear-gradient(90deg, rgba(219,194,120,1) 0%, rgba(243,156,18,1) 100%);
+    height: 6px;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
+.card-highlight-danger{
+    background: rgb(201,122,122);
+    background: linear-gradient(90deg, rgba(201,122,122,1) 0%, rgba(231,76,60,1) 100%);
+    height: 6px;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
+.card-icon{
+    margin: 10px 0 10px 0;
 }
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Tooltip color changes */
@@ -115,7 +160,6 @@
 }
 
 .tooltip.bs-tooltip-auto[x-placement^=right] .arrow::before, .tooltip.bs-tooltip-right .arrow::before {
-
     border-right-color:  #001642;
 }
 
@@ -147,7 +191,7 @@
 }
 
 .bg-info{
-    background-color: #3498db !important;
+    background-color: #0facf3 !important;
 }
 
 .bg-muted{
@@ -159,6 +203,41 @@
 }
 .bg-dark{
     background-color: #001642 !important;
+}
+
+.color-primary{
+    color: #001642 !important;
+}
+
+.color-secondary{
+    color: #95a5a6 !important;
+}
+
+.color-success{
+    color: #18bc9c !important;
+}
+
+.color-danger{
+    color: #e74c3c !important;
+}
+
+.color-warning{
+    color: #f39c12 !important;
+}
+
+.color-info{
+    color: #0facf3 !important;
+}
+
+.color-muted{
+    color: #777777 !important;
+}
+
+.color-light{
+    color: #ecf0f1 !important;
+}
+.color-dark{
+    color: #001642 !important;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
