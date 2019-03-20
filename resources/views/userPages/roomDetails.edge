@@ -216,7 +216,7 @@
                     @if(hasReview) 
                         <form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data' style='position:absolute; bottom:10px; left:20px'>
                             {{ csrfField() }}
-                            <button type='submit' class='btn btn-danger' title='Delet review'><i class="fas fa-trash-alt"></i></button>   
+                            <button type='submit' class='btn' title='Delet review'><i class='fas fa-trash-alt' style='color:red'></i></button>   
                         </form>     
                     @endif
                 </div>
