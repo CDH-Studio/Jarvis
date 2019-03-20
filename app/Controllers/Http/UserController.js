@@ -110,7 +110,6 @@ async function populateBookings (results) {
 }
 
 class UserController {
-
 	/**
 	 * Render Register page
 	 *
@@ -121,9 +120,9 @@ class UserController {
 		if (auth.user) {
 			return response.redirect('/');
 		} else {
-			var numb= Math.floor(Math.random() * 8)+1;
-			var photoName='login_'+numb+'.jpg'; 
-			return view.render('auth.register', {photoName});
+			var numb = Math.floor(Math.random() * 8) + 1;
+			var photoName = 'login_' + numb + '.jpg';
+			return view.render('auth.register', { photoName });
 		}
 	}
 
@@ -310,9 +309,9 @@ class UserController {
 		if (auth.user) {
 			return response.redirect('/');
 		} else {
-			var numb= Math.floor(Math.random() * 8)+1;
-			var photoName='login_'+numb+'.jpg'; 
-			return view.render('auth.login', {photoName});
+			var numb = Math.floor(Math.random() * 8) + 1;
+			var photoName = 'login_' + numb + '.jpg';
+			return view.render('auth.login', { photoName });
 		}
 	}
 
@@ -356,9 +355,9 @@ class UserController {
 		if (auth.user) {
 			return response.redirect('/');
 		} else {
-			var numb= Math.floor(Math.random() * 8)+1;
-			var photoName='login_'+numb+'.jpg'; 
-			return view.render('auth.forgotPassword', {photoName});
+			var numb = Math.floor(Math.random() * 8) + 1;
+			var photoName = 'login_' + numb + '.jpg';
+			return view.render('auth.forgotPassword', { photoName });
 		}
 	}
 
