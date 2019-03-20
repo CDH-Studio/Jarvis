@@ -53,7 +53,8 @@ View Room Issues
                 <table id='reportsTable' class='table table-hover' style='width:100%;'>
                     <thead class='thead-dark'>
                         <tr>
-                            <th scope='col' class='text-center' style='width:20%'>Room</th>
+                            <th scope='col' class='text-center' style='width:10%'>Ticket #</th>
+                            <th scope='col' class='text-center' style='width:15%'>Room</th>
                             <th scope='col' class='text-center' style='width:20%'>Submitted By</th>
                             <th scope='col' class='text-center' style='width:20%'>Report Type</th>
                             <th scope='col' class='text-center' style='width:30%'>Comment</th>
@@ -64,6 +65,7 @@ View Room Issues
                     <tbody>
                         @each(report in reports) 
                         <tr class='table-light'>
+                            <td class='text-center'>{{ report.id }}</td>
                             <td class='text-center'>{{ report.room }}</td>
                             <td class='text-center'>{{ report.user }}</td>
                             <td class='text-center'>{{ report.type }}</td>
