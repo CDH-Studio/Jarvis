@@ -10,7 +10,7 @@
 */
 const Users = use('App/Models/User');
 
-class ReportStatusSeeder {
+class TempUserSeeder {
 	async run () {
 		var userFiller = [{ firstname: 'Peter', lastname: 'Admin', email: 'plamq068@uottawa.ca', password: '123', floor: '3', tower: '1', role_id: '1', verified: 1 },
 			{ firstname: 'Peter', lastname: 'User', email: 'peter.quach.lam@gmail.com', password: '1234', floor: '2', tower: '2', role_id: '2', verified: 1 },
@@ -41,4 +41,4 @@ class ReportStatusSeeder {
 	}
 }
 
-module.exports = ReportStatusSeeder;
+module.exports = TempUserSeeder;
