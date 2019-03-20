@@ -20,23 +20,25 @@
         <div class='col room-details-card shadow' style='margin-top:10px;'>
             <div class='room-details-card-title'>
                 <div class='row'>
-                <div class='col'>
-                    <h3>{{room.name}}</h3>
-                </div>
-                <div class='col text-right'>
-                    @if(isAdmin)
-                        <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
-                        <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit</button>
-                    @else
-                        @if(hasReview)
-                            <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit Review</button>
+                    <div class='col'>
+                        <h3>{{room.name}}</h3>
+                    </div>
+                    <div class='col text-right'>
+                        @if(isAdmin)
+                            <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
+                            <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit</button>
                         @else
-                            <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-plus"></i> Write a Review</button>
+                            @if(hasReview)
+                                {{--  <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit Review</button>  --}}
+                                <button type='button' class='btn btn-info' data-toggle='modal' data-target='#reviewModal'><i class="fas fa-pen"></i> Edit Review</button>
+                            @else
+                                {{--  <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-plus"></i> Write a Review</button>  --}}
+                                <button type='button' class='btn btn-info' data-toggle='modal' data-target='#reviewModal'><i class="fas fa-plus"></i> Write a Review</button>
+                            @endif
+                            <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#confirmModal'><i class="fas fa-book"></i> Book Room</button>  
+                            <button type='button' class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i> Report</button>
                         @endif
-                        <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#confirmModal'>Book Room</button>  
-                        <button type='button' class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i> Report</button>
-                    @endif
-                </div>
+                    </div>
                 </div>
             </div>
             <div class='card-body'>
@@ -144,6 +146,83 @@
     </div>
     {{--  Only show to non-admin users  --}}
     @if(!isAdmin)
+        {{--  Review Modal Box  --}}
+        <div class='modal' id='reviewModal'>
+            <div class='modal-dialog confirmation-modal' role='document'>
+                <div class='modal-content'>
+                    @if(!hasReview) 
+                        <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                    @else
+                        <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                    @endif
+                        {{ csrfField() }}
+                        <div class='modal-highlight'></div>
+                        {{--  Header  --}}
+                        <div class='modal-header'>
+                            <h4 class='no-margin'>Review</h4>
+                        </div>
+
+                        {{--  Body  --}}
+                        <div class='body' style='margin:20px;'>
+                            <div class='row'>
+                                <div class='col form-group'>
+                                    <label for='rating' data-original-title='Enter a rating for this room'>Rating <b class='text-danger'>*</b></b></label>
+    
+                                    @if(hasErrorFor('rating'))
+                                        <select class='form-control is-invalid' name='rating' id='rating' onchange='removeErrorClass("rating")'>
+                                            <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Rating</option>
+                                            <option value='1' {{ old('rating', review.rating) == '1' ? 'selected' : '' }}>1</option>
+                                            <option value='2' {{ old('rating', review.rating) == '2' ? 'selected' : '' }}>2</option>
+                                            <option value='3' {{ old('rating', review.rating) == '3' ? 'selected' : '' }}>3</option>
+                                            <option value='4' {{ old('rating', review.rating) == '4' ? 'selected' : '' }}>4</option>
+                                            <option value='5' {{ old('rating', review.rating) == '5' ? 'selected' : '' }}>5</option>
+                                        </select>
+                                        <div class='invalid-feedback'>{{ getErrorFor('rating') }}</div>
+                                    @else
+                                        <select class='form-control' name='rating' id='rating' onchange='removeErrorClass("rating")'>
+                                            <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Rating</option>
+                                            <option value='1' {{ old('rating', review.rating) == '1' ? 'selected' : '' }}>1</option>
+                                            <option value='2' {{ old('rating', review.rating) == '2' ? 'selected' : '' }}>2</option>
+                                            <option value='3' {{ old('rating', review.rating) == '3' ? 'selected' : '' }}>3</option>
+                                            <option value='4' {{ old('rating', review.rating) == '4' ? 'selected' : '' }}>4</option>
+                                            <option value='5' {{ old('rating', review.rating) == '5' ? 'selected' : '' }}>5</option>
+                                        </select>
+                                    @endif
+                                </div>
+                            </div>
+                        
+                            <div class='row'>
+                                <div class='col form-group no-margin'>
+                                    <label for='review'>Review</label>
+                                    <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
+                                </div> 
+                            </div>           
+                        </div>
+
+                        {{--  Footer buttons to cancel and book room  --}}
+                        @if(!hasReview)
+                            <div class='modal-footer text-right'>
+                                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
+                                <button type='submit' class='btn btn-primary'>Add</button>   
+                            </div> 
+                        @else
+                            <div class='modal-footer text-right'>
+                                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
+                                <button type='submit' class='btn btn-primary'>Update</button>   
+                            </div>
+                        @endif 
+                    </form> 
+                        
+                    @if(hasReview) 
+                        <form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data' style='position:absolute; bottom:10px; left:20px'>
+                            {{ csrfField() }}
+                            <button type='submit' class='btn btn-danger' title='Delet review'><i class="fas fa-trash-alt"></i></button>   
+                        </form>     
+                    @endif
+                </div>
+            </div>
+        </div>
+        {{--  Room Booking Modal Box  --}}
         <div class='modal' id='confirmModal'>
             <div class='modal-dialog confirmation-modal' role='document'>
                 <div class='modal-content' >
@@ -345,7 +424,7 @@
                                 </div>
                             </div>
                             <div class='row'>
-                                <div class='col form-group'>
+                                <div class='col form-group no-margin'>
                                     <label for='comment'>Comment <b class='text-danger'>*</b></label>
                                     @if(hasErrorFor('comment'))
                                         <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
@@ -395,6 +474,13 @@
             </div> 
         @endif
     @endif
+    
+    {{--  Remove the is-invalid class when input changes  --}}
+    <script>
+        function removeErrorClass(idOfInput){
+            $('#'+idOfInput).removeClass('is-invalid');
+        }
+    </script>
 
     {{--  Run this on load incase the page reloaded with field 'recurringSelect' set to YES --}}
     <script>
