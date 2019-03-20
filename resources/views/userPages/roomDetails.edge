@@ -207,20 +207,34 @@
                             </div> 
                         @else
                             <div class='modal-footer text-right'>
+								<button type='button' class='btn' style='position:absolute; top:10px; right:0;' title='Delete review' data-toggle='modal' data-target='#deleteModal' ><i class='far fa-trash-alt' style='color:red; font-size:20px;'></i></button>   
                                 <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
                                 <button type='submit' class='btn btn-primary'>Update</button>   
                             </div>
                         @endif 
                     </form> 
-                        
-                    @if(hasReview) 
-                        {{--  style='position:absolute; bottom:10px; left:20px;'  --}}
-                        <form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data' style='position:absolute; top:10px; right:0;'>
-                            {{ csrfField() }}
-                            <button type='submit' class='btn' title='Delet review'><i class='far fa-trash-alt' style='color:red; font-size:20px;'></i></button>   
-                        </form>     
-                    @endif
                 </div>
+            </div>
+        </div>
+        <!--  Logout Modal  -->
+        <div class='modal' id='deleteModal' role='dialog' aria-hidden='true'>
+            <div class='modal-dialog' role='document'>
+				<div class='modal-content'>
+					<div class='modal-header'>
+						<h5 class='modal-title' id='exampleModalLabel'>Are you sure?</h5>
+						<button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+							<span aria-hidden='true'>×</span>
+						</button>
+					</div>
+					<div class='modal-body'>Are you sure you want to delete your review?</div>
+					<form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+						{{ csrfField() }}
+						<div class='modal-footer'>
+							<button class='btn btn-secondary' type='button' data-dismiss='modal'>Cancel</button>
+							<button type='submit' class='btn btn-danger'>Delete</button>   
+						</div>					
+					</form> 
+				</div>
             </div>
         </div>
         {{--  Room Booking Modal Box  --}}
@@ -546,7 +560,12 @@
             minuteStep: "30",
             minuteStepRound: "1",
         });
-    </script>
+	</script>
+
+	<script>
+		document.getElementById('reviewModal').style['z-indez'] = 1040;
+	</script>
+
     {{--  If the report validations fails display this modal  --}}
     @if(hasErrorFor('issueType'))
         <script>
