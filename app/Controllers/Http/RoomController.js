@@ -670,6 +670,29 @@ class RoomController {
 		return view.render('adminDash.viewRoomIssues', { issues, layoutType, id: issues[0].room, stats });
 	}
 	/**
+	 * Render a specific room details page depending on the room Id.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async showIssue ({ response, auth, params, view, request }) {
+		try {
+			// get the search form data if employee view
+			const report = await Report.findOrFail(params.id);
+			const userRole = await auth.user.getUserRole();
+			var layoutType;
+			// if user is admin
+			if (userRole === 'admin') {
+				layoutType = 'layouts/adminLayout';
+			} else {
+				return response.redirect('/');
+			}
+
+			return view.render('adminDash.editIssue', { id: params.id, report, layoutType });
+		} catch (error) {
+			return response.redirect('/');
+		}
+	}
+	/**
 	 * Create a list of all bookings under the current user and render a view for it.
 	 *
 	 * @param {Object} Context The context object.
