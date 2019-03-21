@@ -194,7 +194,13 @@
                             <div class='row'>
                                 <div class='col form-group no-margin'>
                                     <label for='review'>Review</label>
-                                    <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
+
+                                    @if(hasErrorFor('review'))
+                                        <textarea class='form-control is-invalid' name='review' id='review' rows='5' onchange='removeErrorClass("review")'> {{ old('review',  review.review) }}</textarea>
+                                        <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
+                                    @else
+                                        <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
+                                    @endif
                                 </div> 
                             </div>           
                         </div>
@@ -577,6 +583,19 @@
         <script>
             $(window).on('load',function(){
                 $('#reportModal').modal('show');
+            });
+        </script>
+    {{--  If the review validations fails display this modal  --}}
+    @elseif(hasErrorFor('rating'))
+        <script>
+            $(window).on('load',function(){
+                $('#reviewModal').modal('show');
+            });
+        </script>
+    @elseif(hasErrorFor('review'))
+        <script>
+            $(window).on('load',function(){
+                $('#reviewModal').modal('show');
             });
         </script>
     {{--  If a validation error is thrown show the modal box  --}}
