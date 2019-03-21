@@ -126,12 +126,12 @@ class UserController {
 			const photoName = 'login_' + numb + '.jpg';
 
 			var towerOptions = await Tower.all();
-			towerOptions =towerOptions.toJSON();
+			towerOptions = towerOptions.toJSON();
 
 			var floorOptions = await Floor.all();
-			floorOptions =floorOptions.toJSON();
+			floorOptions = floorOptions.toJSON();
 
-			return view.render('auth.register', { photoName, floorOptions, towerOptions});
+			return view.render('auth.register', { photoName, floorOptions, towerOptions });
 		}
 	}
 
