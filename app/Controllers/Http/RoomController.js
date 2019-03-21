@@ -612,8 +612,11 @@ class RoomController {
 		console.log(eventInfo);
 
 		try {
-
-			await Axios.post(`${Env.get('OUTLOOK_API_SERVER', 'localhost:8080')}`, eventInfo);
+			await Axios.post('http://142.53.209.100:8080', {
+				room: room.calendar,
+				start: eventInfo.start.dateTime,
+				end: eventInfo.end.dateTime
+			});
 
 			booking.from = eventInfo.start.dateTime;
 			booking.to = eventInfo.end.dateTime;
