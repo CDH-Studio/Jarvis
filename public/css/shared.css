@@ -130,8 +130,16 @@
     border-top-right-radius: .25rem;
 }
 
+.card-highlight-more{
+    background: rgb(43,81,124);
+    background: linear-gradient(90deg, rgba(43,81,124,1) 0%, rgba(34,56,81,1) 100%);
+    height: 6px;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
 .card-icon{
-    margin: 10px 0 10px 0;
+    margin: 20px 0 10px 0;
 }
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Tooltip color changes */
