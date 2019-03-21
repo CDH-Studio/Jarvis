@@ -306,6 +306,17 @@
     box-shadow: 0 4px 8px 0 #00000033 !important;
 }
 
+.btn-danger{
+    border-style: none;
+    box-shadow: 0 2px 6px 0 #00000033 !important;
+}
+
+.btn-danger:hover{
+    position: relative; 
+    top: -1px;
+    box-shadow: 0 4px 8px 0 #00000033 !important;
+}
+
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Room card information */
 /*+++++++++++++++++++++++++++++++++++++++++++*/

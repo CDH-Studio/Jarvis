@@ -240,6 +240,7 @@ class RoomController {
 			const room = await Room.findOrFail(params.id);
 			const userRole = await auth.user.getUserRole();
 			const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
+			const review = await this.getRatingAndReview(auth.user.id, params.id);
 
 			var isAdmin = 0;
 			var layoutType = ' ';
@@ -256,14 +257,14 @@ class RoomController {
 				return response.redirect('/');
 			}
 
-			// retreives all of the reviews associated to this room
+			// retrieves all of the reviews associated to this room
 			let searchResults = await Review
 				.query()
 				.where('room_id', params.id)
 				.fetch();
 			const reviews = searchResults.toJSON();
 
-			return view.render('userPages.roomDetails', { room, layoutType, isAdmin, form, hasReview, reviews });
+			return view.render('userPages.roomDetails', { id: params.id, room, layoutType, isAdmin, form, hasReview, reviews, review });
 		} catch (error) {
 			return response.redirect('/');
 		}
@@ -926,37 +927,6 @@ class RoomController {
 	}
 
 	/**
-	 * Render the ratings and review page.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async renderReviewPage ({ params, view, auth }) {
-		// Retrieves review
-		let searchResult = await Review
-			.query()
-			.where('user_id', auth.user.id)
-			.where('room_id', params.id)
-			.fetch();
-
-		const reviews = searchResult.toJSON();
-
-		// retreive the correspondinf review object
-		var review = reviews[0];
-
-		// Check to see if there is an existing review
-		const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
-		var actionType;
-
-		if (hasReview) {
-			actionType = 'Edit Review';
-		} else {
-			actionType = 'Add Review';
-		}
-
-		return view.render('userPages.ratingReview', { id: params.id, review, actionType });
-	}
-
-	/**
 	 * Adds a review Object into the Database.
 	 *
 	 * @param {Object} Context The context object.
@@ -1088,6 +1058,30 @@ class RoomController {
 			console.log(err);
 		}
 	}
+
+	/**
+	 * Returns a user's review for a specific room
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getRatingAndReview (userId, roomId) {
+		try {
+			// Retrive all the reviews associated to a specific user
+			let searchResults = await Review
+				.query()
+				.where('user_id', userId)
+				.where('room_id', roomId)
+				.fetch();
+
+			const reviews = searchResults.toJSON();
+
+			// returns a user's review for a specific room
+			return reviews[0];
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
 	/**
 	 * Reports a room
 	 *

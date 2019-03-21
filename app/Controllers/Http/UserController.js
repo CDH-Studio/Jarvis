@@ -152,6 +152,32 @@ class UserController {
 	}
 
 	/**
+	 * Updates a user's information in the database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async update ({ request, session, params, response }) {
+		// Retrieves user input
+		const body = request.all();
+
+		// Updates user information in database
+		await User
+			.query()
+			.where('id', params.id)
+			.update({
+				firstname: body.firstName,
+				lastname: body.lastName,
+				email: body.email,
+				floor: body.floor,
+				tower: body.tower
+			});
+
+		session.flash({ notification: 'User Updated!' });
+
+		return response.route('editUser', { id: params.id });
+	}
+
+	/**
 	 * Create and verify a new Enployee user. Save them to the database and log them in.
 	 *
 	 * @param {Object} Context The context object.

@@ -48,6 +48,7 @@ Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetReq
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
+Route.post('/user/:id/edit', 'UserController.update').as('saveUser').middleware(['auth']);
 Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 
 //= ========================================================================
@@ -71,7 +72,7 @@ Route.get('/roomIssues/:id', 'RoomController.getIssues').as('roomIssues').middle
 // user
 Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
 Route.post('/addReview/:id', 'RoomController.addReview').as('addReview').validator('AddReview').middleware(['isUser']);
-Route.post('/editReview/:id', 'RoomController.editReview').as('editReview').middleware(['isUser']);
+Route.post('/editReview/:id', 'RoomController.editReview').as('editReview').validator('AddReview').middleware(['isUser']);
 Route.post('/deleteReview/:id', 'RoomController.deleteReview').as('deleteReview').middleware(['isUser']);
 Route.post('/reportRoom', 'RoomController.reportRoom').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
 
