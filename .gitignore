@@ -6,7 +6,7 @@ package-lock.json
 tmp
 
 # Environment variables, never commit this file
-.env
+# .env
 
 # Uploads 
 public/uploads/
