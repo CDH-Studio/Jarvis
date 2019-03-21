@@ -398,9 +398,10 @@ class RoomController {
 				await callback(arr[i], i, arr);
 			}
 		}
-
+		console.log('Number of rooms:', rooms.length);
 		const checkRoomAvailability = async () => {
 			await asyncForEach(rooms, async (item, index, items) => {
+				console.log(index, item.name);
 				if (!await this.getRoomAvailability(date, from, to, item.calendar)) {
 					items.splice(index, 1);
 				}
