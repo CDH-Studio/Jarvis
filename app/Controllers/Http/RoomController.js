@@ -6,6 +6,8 @@ const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
+const Axios = require('axios');
+const Env = use('Env');
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -607,37 +609,27 @@ class RoomController {
 	 * @param {Object} room The Room (Lucid) Model.
 	 */
 	async createEvent (eventInfo, calendarId, booking, user, room) {
-		const accessToken = await getAccessToken();
+		console.log(eventInfo);
 
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
+		try {
 
-			try {
-				const newEvent = await client
-					.api(`/me/calendars/${calendarId}/events`)
-					.post(eventInfo);
+			await Axios.post(`${Env.get('OUTLOOK_API_SERVER', 'localhost:8080')}`, eventInfo);
 
-				if (newEvent) {
-					booking.from = newEvent.start.dateTime;
-					booking.to = newEvent.end.dateTime;
-					booking.event_id = newEvent.id;
-					booking.status = 'Approved';
-					await user.bookings().save(booking);
-					await room.bookings().save(booking);
+			booking.from = eventInfo.start.dateTime;
+			booking.to = eventInfo.end.dateTime;
+			booking.event_id = eventInfo.id;
+			booking.status = 'Approved';
+			await user.bookings().save(booking);
+			await room.bookings().save(booking);
 
-					return newEvent;
-				}
-			} catch (err) {
-				console.log(err);
-				booking.status = 'Failed';
-				await user.bookings().save(booking);
-				await room.bookings().save(booking);
-			}
+			return eventInfo;
+		} catch (err) {
+			console.log(err);
+			booking.status = 'Failed';
+			await user.bookings().save(booking);
+			await room.bookings().save(booking);
 		}
+
 	}
 
 	/**
