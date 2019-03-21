@@ -8,22 +8,6 @@ const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
 const Axios = require('axios');
 const Env = use('Env');
-/**
- * Retrieve access token for Microsoft Graph from the data basebase.
- *
- * @returns {Object} The access token.
- *
- */
-async function getAccessToken () {
-	try {
-		const results = await Token.findBy('type', 'access');
-		const accessToken = results.toJSON().token;
-		return accessToken;
-	} catch (err) {
-		console.log(err);
-		return null;
-	}
-}
 
 /**
  * Populate bookings from booking query results.
@@ -595,12 +579,11 @@ class RoomController {
 	 * Create an event on the specified room calendar.
 	 *
 	 * @param {String} eventInfo Information of the event.
-	 * @param {String} calendarId The id of the room calendar.
 	 * @param {Object} booking The Booking (Lucid) Model.
 	 * @param {Object} user The User (Lucid) Model.
 	 * @param {Object} room The Room (Lucid) Model.
 	 */
-	async createEvent (eventInfo, calendarId, booking, user, room) {
+	async createEvent (eventInfo, booking, user, room) {
 		console.log(eventInfo);
 
 		try {
@@ -609,13 +592,15 @@ class RoomController {
 				start: eventInfo.start.dateTime,
 				end: eventInfo.end.dateTime,
 				subject: eventInfo.subject,
-				body: eventInfo.body.content
+				body: eventInfo.body.content,
+				attendees: ['yunwei.li@canada.ca']
 			});
 
 			booking.from = eventInfo.start.dateTime;
 			booking.to = eventInfo.end.dateTime;
-			booking.event_id = eventInfo.id;
+			booking.event_id = eventInfo.id ? eventInfo.id : '';
 			booking.status = 'Approved';
+			console.log(booking);
 			await user.bookings().save(booking);
 			await room.bookings().save(booking);
 
@@ -627,175 +612,6 @@ class RoomController {
 			await room.bookings().save(booking);
 		}
 
-	}
-
-	/**
-	 * Query all events of the specified room calendar.
-	 *
-	 * @param {String} calendarId The id of the room calendar.
-	 */
-	async getEvents (calendarId) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const events = await client
-					.api(`/me/calendars/${calendarId}/events`)
-					.select('subject,organizer,start,end')
-					// .orderby('createdDateTime DESC')
-					.get();
-
-				return events;
-			} catch (err) {
-				console.log(err);
-			}
-		}
-	}
-
-	/**
-	 * Delete an event from the room calendar.
-	 *
-	 * @param {String} calendarId The id of the room calendar.
-	 * @param {String} eventId The id of the event to delete.
-	 */
-	async deleteEvent (calendarId, eventId) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				await client
-					.api(`/me/calendars/${calendarId}/events/${eventId}`)
-					.delete();
-			} catch (err) {
-				console.log(err);
-			}
-		}
-	}
-
-	/**
-	 * Query all the room calendars.
-	 */
-	async getCalendars () {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const calendars = await client
-					.api('/me/calendars?top=100')
-					// .orderby('createdDateTime DESC')
-					.get();
-
-				return calendars;
-			} catch (err) {
-				console.log(err);
-			}
-		}
-	}
-
-	/**
-	 * Query the specified room calendar.
-	 *
-	 * @param {String} calendarId The id of the room calendar.
-	 */
-	async getCalendar (calendarId) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const calendar = await client
-					.api(`/me/calendars/${calendarId}`)
-					// .orderby('createdDateTime DESC')
-					.get();
-
-				return calendar;
-			} catch (err) {
-				console.log(err);
-			}
-		}
-	}
-
-	async getCalendarView (calendarId, start, end) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const calendarView = await client
-					.api(`/me/calendars/${calendarId}/calendarView?startDateTime=${start}&endDateTime=${end}`)
-					// .orderby('start DESC')
-					.header('Prefer', 'outlook.timezone="Eastern Standard Time"')
-					.get();
-
-				return calendarView;
-			} catch (err) {
-				console.log(err);
-			}
-		}
-	}
-
-	/**
-	 *
-	 * @param {String} date     Date
-	 * @param {String} from     Starting time
-	 * @param {String} to       Ending time
-	 * @param {String} calendar Calendar ID
-	 *
-	 * @returns {Boolean} Whether or not the room is available
-	 */
-	async getRoomAvailability (date, from, to, calendar) {
-		const startTime = date + 'T' + from;
-		const endTime = date + 'T' + to;
-
-		// if there is a calendar for the room
-		if (calendar !== 'insertCalendarHere' && calendar !== null) {
-			// query the events within the search time range
-			const calendarViews = (await this.getCalendarView(
-				calendar,
-				startTime,
-				endTime
-			)).value;
-
-			// if event end time is the same as search start time, remove the event
-			calendarViews.forEach((item, index, items) => {
-				const eventEndTime = new Date(item.end.dateTime);
-				const searchStartTime = new Date(startTime);
-
-				if (+eventEndTime === +searchStartTime) {
-					items.splice(index, 1);
-				}
-			});
-
-			return calendarViews.length === 0;
-		}
 	}
 
 	/**
