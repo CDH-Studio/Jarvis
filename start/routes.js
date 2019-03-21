@@ -64,10 +64,11 @@ Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['i
 Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['isAdmin']);
 
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
+Route.get('/allIssues', 'RoomController.getAllIssues').as('allIssues').middleware(['isAdmin']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
 Route.get('/roomBookings/:id', 'RoomController.getBookings').as('roomBookings').middleware(['auth']);
-
+Route.get('/roomIssues/:id', 'RoomController.getIssues').as('roomIssues').middleware(['auth']);
 // user
 Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
 Route.post('/addReview/:id', 'RoomController.addReview').as('addReview').validator('AddReview').middleware(['isUser']);

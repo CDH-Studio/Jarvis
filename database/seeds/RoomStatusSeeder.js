@@ -8,9 +8,9 @@
 | Seed table with room statuses
 |
 */
-const Status = use('App/Models/RoomSatus');
+const Status = use('App/Models/RoomStatus');
 
-class RoomSatusSeeder {
+class RoomStatusSeeder {
 	async run () {
 		var StatusFiller = ['available', 'deactive', 'maintenance'];
 		var count = await Status.getCount();
@@ -28,4 +28,4 @@ class RoomSatusSeeder {
 	}
 }
 
-module.exports = RoomSatusSeeder;
+module.exports = RoomStatusSeeder;

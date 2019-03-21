@@ -8,13 +8,13 @@ class ReportStatus extends Model {
 		return 'report_statuses';
 	}
 
-	static async getReportSatusID (report_status_name) {
+	static async getID (report_status_name) {
 		var reportStatus = await this.findByOrFail('name', report_status_name);
 		return reportStatus.id;
 	}
 
-	static async getReportStatusName (report_status_id) {
-		var reportStatus = await this.findOrFail(this.report_status_id);
+	static async getName (report_status_id) {
+		var reportStatus = await this.findOrFail(report_status_id);
 		return reportStatus.name;
 	}
 }
