@@ -215,7 +215,7 @@ class UserController {
 			<h2> Welcome to Jarvis, ${userInfo.firstname} </h2>
     		<p>
       			Please click the following URL into your browser: 
-      			http://localhost:3333/newUser?hash=${hash}
+      			${Env.get('APP_URL')}/newUser?hash=${hash}
     		</p>
     	`;
 
@@ -375,7 +375,7 @@ class UserController {
       			<h2> Password Reset Request </h2>
       			<p>
         			We received a request to reset your password. If you asked to reset your password, please click the following URL: 
-        			http://localhost:3333/newPassword?hash=${hash}
+        			${Env.get('APP_URL')}/newPassword?hash=${hash}
       			</p>
 			`;
 
