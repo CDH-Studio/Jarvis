@@ -67,7 +67,7 @@ Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware([
 Route.get('/allIssues', 'IssueController.getAllIssues').as('allIssues').middleware(['isAdmin']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
-Route.get('/roomBookings/:id', 'BookingController.getBookings').as('roomBookings').middleware(['auth']);
+Route.get('/roomBookings/:id', 'BookingController.getRoomBookings').as('roomBookings').middleware(['auth']);
 Route.get('/roomIssues/:id', 'IssueController.getIssues').as('roomIssues').middleware(['auth']);
 // user
 Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
@@ -98,7 +98,7 @@ Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBoo
 Route.get('/authenticate', 'TokenController.getAuthUrl');
 Route.get('/authorize', 'TokenController.authorize');
 Route.get('/events', 'RoomController.getEvents');
-Route.get('/event', 'RoomController.createEvent');
+Route.get('/event', 'BookingController.createEvent');
 Route.get('/calendars', 'RoomController.getCalendars');
 Route.get('/calendar', 'RoomController.getCalendar');
 

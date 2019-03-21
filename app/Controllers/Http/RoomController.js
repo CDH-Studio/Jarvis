@@ -384,49 +384,6 @@ class RoomController {
 	}
 
 	/**
-	 * Create an event on the specified room calendar.
-	 *
-	 * @param {String} eventInfo Information of the event.
-	 * @param {String} calendarId The id of the room calendar.
-	 * @param {Object} booking The Booking (Lucid) Model.
-	 * @param {Object} user The User (Lucid) Model.
-	 * @param {Object} room The Room (Lucid) Model.
-	 */
-	async createEvent (eventInfo, calendarId, booking, user, room) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const newEvent = await client
-					.api(`/me/calendars/${calendarId}/events`)
-					.post(eventInfo);
-
-				if (newEvent) {
-					booking.from = newEvent.start.dateTime;
-					booking.to = newEvent.end.dateTime;
-					booking.event_id = newEvent.id;
-					booking.status = 'Approved';
-					await user.bookings().save(booking);
-					await room.bookings().save(booking);
-
-					return newEvent;
-				}
-			} catch (err) {
-				console.log(err);
-				booking.status = 'Failed';
-				await user.bookings().save(booking);
-				await room.bookings().save(booking);
-			}
-		}
-	}
-
-	/**
 	 * Query all events of the specified room calendar.
 	 *
 	 * @param {String} calendarId The id of the room calendar.
