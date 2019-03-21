@@ -481,7 +481,7 @@
                                         <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
                                     @else
-                                        <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  review.review) }}</textarea>
+                                        <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  '') }}</textarea>
                                     @endif                                    
                                 </div> 
                             </div>
