@@ -583,11 +583,9 @@ class RoomController {
 	 * @param {Object} room The Room (Lucid) Model.
 	 */
 	async createEvent (eventInfo, booking, user, room) {
-		console.log(eventInfo);
-
 		try {
 			console.log(room);
-			await Axios.post('http://142.53.209.100:8080', {
+			await Axios.post('http://142.53.209.100:8080/booking', {
 				room: room.calendar,
 				start: eventInfo.start.dateTime,
 				end: eventInfo.end.dateTime,
@@ -791,6 +789,18 @@ class RoomController {
 
 		session.flash({ notification: 'Your report has been submitted' });
 		return response.route('showRoom', { id: row.id });
+	}
+
+	async getRoomAvailability (date, from, to, calendar) {
+		console.log(date, from, to, calendar);
+
+		const res = await Axios.post('http://142.53.209.100:8080/avail', {
+			room: calendar,
+			start: date + 'T' + from,
+			end: date + 'T' + to
+		});
+
+		return res.data === 'free';
 	}
 }
 
