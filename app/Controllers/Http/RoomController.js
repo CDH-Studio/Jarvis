@@ -384,7 +384,7 @@ class RoomController {
 		// fetch the query
 		searchResults = await searchResults.fetch();
 
-		const rooms = searchResults.toJSON();
+		let rooms = searchResults.toJSON();
 
 		// Sets average rating for each room
 		for (var i = 0; i < rooms.length; i++) {
@@ -393,18 +393,20 @@ class RoomController {
 		}
 
 		// iterate through the rooms
-		async function asyncForEach (arr, callback) {
+		async function asyncFilter (arr, callback) {
+			let arr2 = [];
 			for (let i = 0; i < arr.length; i++) {
-				await callback(arr[i], i, arr);
+				if (await callback(arr[i])) {
+					arr2.push(arr[i]);
+				}
+
+				return arr2;
 			}
 		}
-		console.log('Number of rooms:', rooms.length);
+
 		const checkRoomAvailability = async () => {
-			await asyncForEach(rooms, async (item, index, items) => {
-				console.log(index, item.name);
-				if (!await this.getRoomAvailability(date, from, to, item.calendar)) {
-					items.splice(index, 1);
-				}
+			await asyncFilter(rooms, async (item) => { 
+				return this.getRoomAvailability(date, from, to, item.calendar);
 			});
 		};
 
