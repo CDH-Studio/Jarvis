@@ -57,31 +57,31 @@ Route.post('/user/updatepassword', 'UserController.changePassword').as('changePa
 
 // admin
 Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['isAdmin']);
-Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('AddRoom').middleware(['isAdmin']);
+Route.post('/addRoom', 'RoomController.add').as('addRoom').validator('AddRoom').middleware(['isAdmin']);
 Route.get('/adminDash', 'HomeController.adminDashboard').as('adminDash').middleware(['isAdmin']);
 
 Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['isAdmin']);
 Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['isAdmin']);
 
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
-Route.get('/allIssues', 'RoomController.getAllIssues').as('allIssues').middleware(['isAdmin']);
+Route.get('/allIssues', 'IssueController.getAllIssues').as('allIssues').middleware(['isAdmin']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
-Route.get('/roomBookings/:id', 'RoomController.getBookings').as('roomBookings').middleware(['auth']);
-Route.get('/roomIssues/:id', 'RoomController.getIssues').as('roomIssues').middleware(['auth']);
+Route.get('/roomBookings/:id', 'BookingController.getBookings').as('roomBookings').middleware(['auth']);
+Route.get('/roomIssues/:id', 'IssueController.getIssues').as('roomIssues').middleware(['auth']);
 // user
 Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
-Route.post('/addReview/:id', 'RoomController.addReview').as('addReview').validator('AddReview').middleware(['isUser']);
-Route.post('/editReview/:id', 'RoomController.editReview').as('editReview').validator('AddReview').middleware(['isUser']);
-Route.post('/deleteReview/:id', 'RoomController.deleteReview').as('deleteReview').middleware(['isUser']);
-Route.post('/reportRoom', 'RoomController.reportRoom').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
+Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('AddReview').middleware(['isUser']);
+Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('AddReview').middleware(['isUser']);
+Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['isUser']);
+Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
 
 //= ========================================================================
 // Bookings
 //= ========================================================================
 Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails').middleware(['auth']); // needs to be changed to get
-Route.get('/user/:id/bookings', 'RoomController.viewUserBookings').as('viewBookings').middleware(['auth']);
-Route.get('/cancelBooking/:id', 'RoomController.cancelBooking').as('cancelBooking').middleware(['auth']);
+Route.get('/user/:id/bookings', 'BookingController.viewUserBookings').as('viewBookings').middleware(['auth']);
+Route.get('/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth']);
 
 // Employee user pages
 Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);
@@ -92,7 +92,7 @@ Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking
 Route.get('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
 
 // Booking a Room
-Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);
+Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);
 
 // Outlook
 Route.get('/authenticate', 'TokenController.getAuthUrl');
