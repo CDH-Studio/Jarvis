@@ -14,24 +14,24 @@ View Room Issues
     <div>
         {{--  Displays all of the reports in the database in a table  --}}
         @if(reports.length == 0)
-            <div class="row">
-                <div class="col-12 text-center mt-5">
-                    <p class="fas fa-glass-cheers fa-10x mb-5 mt-5 text-muted"></p>
-                    <h3 class="text-muted">There are currently no issues regarding any rooms :)</h3>
+            <div class='row'>
+                <div class='col-12 text-center mt-5'>
+                    <p class='fas fa-glass-cheers fa-10x mb-5 mt-5 text-muted'></p>
+                    <h3 class='text-muted'>There are currently no issues regarding any rooms :)</h3>
                 </div>
             </div>
         @else
             {{--  room Reports/Issues Stats  --}}
             <div class='row text-center'> 
                 <div class='col no-padding'>
-                    <div class="room-card shadow mr-3 mb-3" style='height: 156px; min-width: 204px;'>
+                    <div class='stats-card shadow'>
                         <div class='card-highlight-primary'></div>
-                        <div class="card-body">
+                        <div class='card-body'>
                             <div class='row justify-content-center' style='margin: 20px 0 20px 0;115093'>
-                                <i class='"d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
-                                <div class='"d-inline-flex no-padding text-left' style='padding-left:15px;'>
+                                <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
+                                <div class='no-padding text-left' style='padding-left:15px;'>
                                     <div class='row'>
-                                        <h2 class="col no-margin"><b>{{ stats['total'] }}</b></h2>
+                                        <h2 class='col no-margin'><b>{{ stats['total'] }}</b></h2>
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total Issues</h5>
@@ -42,14 +42,14 @@ View Room Issues
                     </div>
                 </div>
                 <div class='col no-padding'>
-                    <div class="room-card shadow mr-3 mb-3" style='height: 156px; min-width: 204px;'>
+                    <div class='stats-card shadow'>
                         <div class='card-highlight-success'></div>
-                        <div class="card-body">
+                        <div class='card-body'>
                             <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                                <i class="d-inline-flex card-icon color-success no-padding fas fa-door-open fa-2x"></i>
-                                <div class='"d-inline-flex no-padding text-left' style='padding-left:15px;'>
+                                <i class='d-inline-flex card-icon color-success no-padding fas fa-door-open fa-2x'></i>
+                                <div class='no-padding text-left' style='padding-left:15px;'>
                                     <div class='row'>
-                                        <h2 class="col no-margin"><b>{{ stats['pending'] }}</b></h2>
+                                        <h2 class='col no-margin'><b>{{ stats['pending'] }}</b></h2>
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Open</h5>
@@ -60,14 +60,14 @@ View Room Issues
                     </div>
                 </div>
                 <div class='col no-padding'>
-                    <div class="room-card shadow mr-3 mb-3" style='height: 156px; min-width: 204px;'>
+                    <div class='stats-card shadow'>
                         <div class='card-highlight-warning'></div>
-                        <div class="card-body">
+                        <div class='card-body'>
                             <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                                <i class="d-inline-flex card-icon color-warning no-padding fas fa-sync-alt fa-2x"></i>
-                                <div class='"d-inline-flex no-padding text-left' style='padding-left:15px;'>
+                                <i class='d-inline-flex card-icon color-warning no-padding fas fa-sync-alt fa-2x'></i>
+                                <div class='no-padding text-left' style='padding-left:15px;'>
                                     <div class='row'>
-                                        <h2 class="col no-margin"><b>{{ stats['underReview'] }}</b></h2>
+                                        <h2 class='col no-margin'><b>{{ stats['underReview'] }}</b></h2>
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Pending</h5>
@@ -78,14 +78,14 @@ View Room Issues
                     </div>
                 </div>
                 <div class='col no-padding'>
-                    <div class="room-card shadow mr-3 mb-3" style='height: 156px; min-width: 204px;'>
+                    <div class='stats-card shadow'>
                         <div class='card-highlight-danger'></div>
-                        <div class="card-body">
+                        <div class='card-body'>
                             <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                                <i class="d-inline-flex card-icon color-danger no-padding fas fa-door-closed fa-2x"></i>
-                                <div class='"d-inline-flex no-padding text-left' style='padding-left:15px;'>
+                                <i class='d-inline-flex card-icon color-danger no-padding fas fa-door-closed fa-2x'></i>
+                                <div class='no-padding text-left' style='padding-left:15px;'>
                                     <div class='row'>
-                                        <h2 class="col no-margin"><b>{{ stats['resolved'] }}</b></h2>
+                                        <h2 class='col no-margin'><b>{{ stats['resolved'] }}</b></h2>
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Closed</h5>
@@ -131,8 +131,8 @@ View Room Issues
 
 {{--  Deals with the search functionality of the table above- searches all fields   --}}
 @section('extrajs') 
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
+    <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
     <script>$(document).ready(function() {
             $('#reportsTable').DataTable( {
                 "paging":   false,
