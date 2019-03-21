@@ -1,5 +1,5 @@
 /* This file is for ADMIN view specific changes */
-@import url('defaultAdminDash.css');
+/*@import url('defaultAdminDash.css');*/
 @import url('shared.css');
 
 /*****************************************************/
@@ -98,10 +98,6 @@
     background-color: #F5F5F5;
 }
 /* Addding shadow to drop down */
-    .show .nav-link{
-    box-shadow: 
-    0 4px 2px -2px rgba(0,0,0,0.1);
-}
 
 /*****************************************************/
 /* Add/Edit Room Page */
@@ -119,4 +115,15 @@
 
 td{
     border-bottom:1px solid #fbfcfc !important;
+}
+
+
+.navbar-brand img{
+  height:26px;
+    margin:0px;
+}
+
+.navbar-nav .dropdown-menu {
+  position: static;
+  float: none;
 }

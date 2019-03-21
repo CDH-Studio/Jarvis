@@ -6,10 +6,16 @@
 
 @section('content')
     @!component('components.pageTitle', title=actionType)
+    <p>Add Rooms to database. Rooms added here can be booked by users.</p>
+
     <div class='row'>
-        <div class= 'col roomForm'>
-            {{--  If user is adding a room post to that on submition, otherwise post to saveing room  --}}
-            @if(actionType =='Add Room')
+        <div class= 'col-md-9'>
+            <div class="card shadow mb-4 p-3">
+                <div class="card-body">
+                    <div class='row'>
+                        <div class='col-md-12'>
+                            <h4 class="mb-3">New Room</h4>
+                                   @if(actionType =='Add Room')
                 <form action={{ route('addRoom') }} method='POST' enctype='multipart/form-data'>
             @else
                 <form action='{{ route('saveRoom', {id: room.id}) }}' method='POST' enctype='multipart/form-data'>
@@ -270,8 +276,13 @@
                     </div>
                 </div>
             </form>
-        </div>
-    </div> 
+                    </div>
+                    </div>
+                </div> 
+            </div>
+        </div>         
+    </div>
+
     {{--  Script to display file name on upload  --}}
     <script>
         $('#floorPlan').change(function(e){
