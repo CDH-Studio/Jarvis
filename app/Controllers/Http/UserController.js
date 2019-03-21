@@ -211,6 +211,7 @@ class UserController {
 		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
 		userInfo.role_id = await UserRole.getRoleID('user');
 		userInfo.verified = true;
+		userInfo.email = userInfo.email.toLowerCase();
 		const user = await User.create(userInfo);
 
 		await auth.login(user);
@@ -299,11 +300,11 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async createAdmin ({ request, response, auth }) {
-		var adminInfo = request.only(['firstname', 'lastname', 'email', 'password']);
+		var adminInfo = request.only(['firstname', 'lastname', 'email'.toLowerCase(), 'password']);
 		adminInfo.role_id = await UserRole.getRoleID('admin');
 		adminInfo['verified'] = 1;
+		adminInfo.email = adminInfo.email.toLowerCase();
 		const user = await User.create(adminInfo);
-
 		await auth.login(user);
 		return response.redirect('/');
 	}
