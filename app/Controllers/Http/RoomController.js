@@ -462,14 +462,6 @@ class RoomController {
 		const calendar = row.calendar;
 		const name = row.name;
 
-		if (!await this.getRoomAvailability(date, from, to, calendar)) {
-			session.flash({
-				error: `Room ${name} has already been booked for the time selected!`
-			});
-
-			return response.route('showRoom', { id: room });
-		}
-
 		// Information of the event
 		const eventInfo = {
 			'subject': meeting,
@@ -615,7 +607,9 @@ class RoomController {
 			await Axios.post('http://142.53.209.100:8080', {
 				room: room.calendar,
 				start: eventInfo.start.dateTime,
-				end: eventInfo.end.dateTime
+				end: eventInfo.end.dateTime,
+				subject: eventInfo.subject,
+				body: eventInfo.body.content
 			});
 
 			booking.from = eventInfo.start.dateTime;
