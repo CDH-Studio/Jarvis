@@ -83,14 +83,14 @@ class IssueController {
 	}
 
 	/**
-	 * Retrives all of the bookings that correspond to a specific room.
+	 * Retrives all of the issues that correspond to a specific room.
 	 *
 	 * @param {Object} Context The context object.
 	 */
 	async getIssues ({ params, view, auth, response }) {
 		var layoutType;
 		const userRole = await auth.user.getUserRole();
-		// checking ifu ser is admin, otherwise redirect to home
+		// checking if user is admin, otherwise redirect to home
 		if (userRole === 'admin') {
 			layoutType = 'layouts/adminLayout';
 		} else {

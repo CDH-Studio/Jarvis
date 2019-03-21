@@ -14,8 +14,8 @@ class TempUserSeeder {
 	async run () {
 		var userFiller = [{ firstname: 'Peter', lastname: 'Admin', email: 'plamq068@uottawa.ca', password: '123', floor: '3', tower: '1', role_id: '1', verified: 1 },
 			{ firstname: 'Peter', lastname: 'User', email: 'peter.quach.lam@gmail.com', password: '1234', floor: '2', tower: '2', role_id: '2', verified: 1 },
-			{ firstname: 'Majd', lastname: 'Admin', email: 'Majd.khodr15@gmail.com', password: '123', floor: '5', tower: '1', role_id: '1', verified: 1 },
-			{ firstname: 'Majd', lastname: 'User', email: 'Majd.khodr@hotmail.com', password: '123', floor: '6', tower: '2', role_id: '2', verified: 1 },
+			{ firstname: 'Majd', lastname: 'Admin', email: 'majd.khodr15@gmail.com', password: '123', floor: '5', tower: '1', role_id: '1', verified: 1 },
+			{ firstname: 'Majd', lastname: 'User', email: 'majd.khodr@hotmail.com', password: '123', floor: '6', tower: '2', role_id: '2', verified: 1 },
 			{ firstname: 'Yunwei', lastname: 'Admin', email: 'yunwei.li@carleton.ca', password: '123', floor: '8', tower: '1', role_id: '1', verified: 1 },
 			{ firstname: 'Yunwei', lastname: 'User', email: 'liyunwei10@gmail.com', password: '123', floor: '8', tower: '2', role_id: '2', verified: 1 },
 			{ firstname: 'Ali', lastname: 'Admin', email: 'Admin@gmail.com', password: '123456', floor: '5', tower: '2', role_id: '1', verified: 1 },
