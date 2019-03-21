@@ -86,31 +86,6 @@ class ReviewController {
 			console.log(err);
 		}
 	}
-
-	/**
-	 * Calcualtes the average rating of a specific room, based off of the room Id
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async getAverageRating (roomId) {
-		try {
-			// Retrive all the ratings and calculates the average
-			let searchResults = await Review
-				.query()
-				.where('room_id', roomId)
-				.avg('rating');
-
-			// If there is no averge rating, return 'No Rating'
-			if (searchResults[0]['avg(`rating`)'] == null) {
-				return 'No Rating';
-			}
-
-			// Returns the rating, thus searchResults[0]['avg(`rating`)']
-			return searchResults[0]['avg(`rating`)'];
-		} catch (err) {
-			console.log(err);
-		}
-	}
 }
 
 module.exports = ReviewController;
