@@ -16,25 +16,20 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 
 /* Hover-over a row for the view all rooms table */
-#roomRow:hover {
-    cursor:pointer;
-}
-    
-/* Hover-over a row for the view all users table */
-#userRow:hover {
+.table-hover:hover {
     cursor:pointer;
 }
 
 /* Deactie and Active room state colours */
-.td-2 {
+.td-2, .td-Closed{
     color: #d9534f;
 }
 
-.td-1 {
+.td-1, .td-Open{
     color: #5cb85c;
 }
 
-.td-3 {
+.td-3, .td-Pending {
     color: #ffb007;
 }
 /*+++++++++++++++++++++++++++++++++++++++++++*/  

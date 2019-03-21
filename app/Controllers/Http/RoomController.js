@@ -2,8 +2,11 @@
 const Room = use('App/Models/Room');
 const Review = use('App/Models/Review');
 const Report = use('App/Models/Report');
+const ReportStatus = use('App/Models/ReportStatus');
+const ReportType = use('App/Models/ReportType');
 const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
+const User = use('App/Models/User');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
 /**
@@ -237,6 +240,7 @@ class RoomController {
 			const room = await Room.findOrFail(params.id);
 			const userRole = await auth.user.getUserRole();
 			const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
+			const review = await this.getRatingAndReview(auth.user.id, params.id);
 
 			var isAdmin = 0;
 			var layoutType = ' ';
@@ -253,14 +257,14 @@ class RoomController {
 				return response.redirect('/');
 			}
 
-			// retreives all of the reviews associated to this room
+			// retrieves all of the reviews associated to this room
 			let searchResults = await Review
 				.query()
 				.where('room_id', params.id)
 				.fetch();
 			const reviews = searchResults.toJSON();
 
-			return view.render('userPages.roomDetails', { room, layoutType, isAdmin, form, hasReview, reviews });
+			return view.render('userPages.roomDetails', { id: params.id, room, layoutType, isAdmin, form, hasReview, reviews, review });
 		} catch (error) {
 			return response.redirect('/');
 		}
@@ -320,6 +324,56 @@ class RoomController {
 		}
 	}
 
+	/**
+	 * Query all the rooms from the database and render a page to display all current user reports for rooms (ADMIN only)
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getAllIssues ({ auth, view, response }) {
+		const results = await Report.all();
+		const reports = results.toJSON();
+
+		// Sort the results by name
+		reports.sort((a, b) => {
+			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+		});
+
+		// Retrieve number of issues that are pending
+		let countPending = await Report
+			.query()
+			.where('report_status_id', 1)
+			.count();
+
+		// Retrieve number of issues that are under review
+		let countUnderReview = await Report
+			.query()
+			.where('report_status_id', 2)
+			.count();
+
+		// Retrieve number of issues that are resolved
+		let countResolved = await Report
+			.query()
+			.where('report_status_id', 3)
+			.count();
+
+		// Create statistic array with custom keys
+		var stats = {};
+		stats['total'] = reports.length;
+		stats['pending'] = countPending[0]['count(*)'];
+		stats['underReview'] = countUnderReview[0]['count(*)'];
+		stats['resolved'] = countResolved[0]['count(*)'];
+
+		// loop through and change ids to the actual names in the tables
+		for (let i = 0; i < reports.length; i++) {
+			reports[i].status = await ReportStatus.getName(reports[i].report_status_id);
+			reports[i].room = await Room.getName(reports[i].room_id);
+			reports[i].user = await User.getName(reports[i].user_id);
+			reports[i].type = await ReportType.getName(reports[i].report_type_id);
+		}
+
+		// if user is admin
+		return view.render('adminDash.viewAllIssues', { reports, stats });
+	}
 	/**
 	 * Query the room from the database which matches the search input.
 	 *
@@ -520,7 +574,7 @@ class RoomController {
 	 */
 	async getBookings ({ params, view, auth, response }) {
 		var canEdit = 0;
-		var layoutType = '';
+		var layoutType;
 		const userRole = await auth.user.getUserRole();
 
 		if (userRole === 'admin') {
@@ -550,7 +604,71 @@ class RoomController {
 
 		return view.render('userPages.manageBookings', { bookings, layoutType, canEdit });
 	}
+	/**
+	 * Retrives all of the bookings that correspond to a specific room.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getIssues ({ params, view, auth, response }) {
+		var layoutType;
+		const userRole = await auth.user.getUserRole();
+		// checking ifu ser is admin, otherwise redirect to home
+		if (userRole === 'admin') {
+			layoutType = 'layouts/adminLayout';
+		} else {
+			return response.redirect('/');
+		}
 
+		// Queries the database for the issues/reports associated to a specific room
+		let issues = await Report
+			.query()
+			.where('room_id', params.id)
+			.fetch();
+
+		issues = issues.toJSON();
+
+		// Sort the isssues by date
+		issues.sort((a, b) => {
+			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+		});
+
+		// Retrieve number of issues that are pending
+		let countPending = await Report
+			.query()
+			.where('room_id', params.id)
+			.where('report_status_id', 1)
+			.count();
+
+		// Retrieve number of issues that are under review
+		let countUnderReview = await Report
+			.query()
+			.where('room_id', params.id)
+			.where('report_status_id', 2)
+			.count();
+
+		// Retrieve number of issues that are resolved
+		let countResolved = await Report
+			.query()
+			.where('room_id', params.id)
+			.where('report_status_id', 3)
+			.count();
+
+		// Create statistic array with custom keys
+		var stats = {};
+		stats['total'] = issues.length;
+		stats['pending'] = countPending[0]['count(*)'];
+		stats['underReview'] = countUnderReview[0]['count(*)'];
+		stats['resolved'] = countResolved[0]['count(*)'];
+
+		// loop through and change ids to the actual names in the tables
+		for (let i = 0; i < issues.length; i++) {
+			issues[i].status = await ReportStatus.getName(issues[i].report_status_id);
+			issues[i].room = await Room.getName(issues[i].room_id);
+			issues[i].user = await User.getName(issues[i].user_id);
+			issues[i].type = await ReportType.getName(issues[i].report_type_id);
+		}
+		return view.render('adminDash.viewRoomIssues', { issues, layoutType, id: issues[0].room, stats });
+	}
 	/**
 	 * Create a list of all bookings under the current user and render a view for it.
 	 *
@@ -809,37 +927,6 @@ class RoomController {
 	}
 
 	/**
-	 * Render the ratings and review page.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async renderReviewPage ({ params, view, auth }) {
-		// Retrieves review
-		let searchResult = await Review
-			.query()
-			.where('user_id', auth.user.id)
-			.where('room_id', params.id)
-			.fetch();
-
-		const reviews = searchResult.toJSON();
-
-		// retreive the correspondinf review object
-		var review = reviews[0];
-
-		// Check to see if there is an existing review
-		const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
-		var actionType;
-
-		if (hasReview) {
-			actionType = 'Edit Review';
-		} else {
-			actionType = 'Add Review';
-		}
-
-		return view.render('userPages.ratingReview', { id: params.id, review, actionType });
-	}
-
-	/**
 	 * Adds a review Object into the Database.
 	 *
 	 * @param {Object} Context The context object.
@@ -971,6 +1058,30 @@ class RoomController {
 			console.log(err);
 		}
 	}
+
+	/**
+	 * Returns a user's review for a specific room
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getRatingAndReview (userId, roomId) {
+		try {
+			// Retrive all the reviews associated to a specific user
+			let searchResults = await Review
+				.query()
+				.where('user_id', userId)
+				.where('room_id', roomId)
+				.fetch();
+
+			const reviews = searchResults.toJSON();
+
+			// returns a user's review for a specific room
+			return reviews[0];
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
 	/**
 	 * Reports a room
 	 *
@@ -988,6 +1099,7 @@ class RoomController {
 		report.room_id = row.id;
 		report.report_type_id = issueType;
 		report.comment = comment;
+		// Setting default issue status as open
 		report.report_status_id = 1;
 		await report.save();
 
