@@ -5,14 +5,29 @@
  **/
 'use strict';
 
+const Tower = use('App/Models/Tower');
+const Floor = use('App/Models/Floor');
+
 class CreateUser {
+
+	// async getTowers() {
+	// 	const towers = await Tower.all();
+	// 	towers=towers.toJSON();
+	// 	return tower;
+	// }
+	
 	// Validate and return all fields
 	get validateAll () {
 		return true;
 	}
 
 	// Validation rules
-	get rules () {
+	get rules() {
+		// this.getTowers().then( => {
+		// 	console.log('data', data);
+		// });
+		// console.log("in rules ",towermax);
+
 		return {
 			/**
 			 * Validation Rules
@@ -26,14 +41,15 @@ class CreateUser {
 			 * unique: email must be unique and must not already exist within the database
 			 *
 			 */
+			
 			confirmPassword: 'required|same:password',
 			email: 'required|email|unique:users',
 			firstname: 'required|max:50',
-			floor: 'required|requiredDropdown',
 			lastname: 'required|max:50',
 			password:"required", // eslint-disable-line
 			// regex: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$
-			tower: 'required|requiredDropdown'
+			floor: 'required|integer|requiredDropdown',
+			tower: 'required|integer|requiredDropdown'
 		};
 	}
 	// Custom error messages

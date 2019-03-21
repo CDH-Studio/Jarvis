@@ -80,30 +80,26 @@ Jarvis - Login
 						        <div class='col'>
 						        	<div class='form-group mb-2'>
 						                <label for='tower'>Tower</label>
-						                <select id='tower' name='tower' class='form-control'>
-						                    <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Tower</option>
-						                    <option value='1' {{ old('tower') == '1' ? 'selected' : '' }}>East</option>
-						                    <option value='2' {{ old('tower') == '2' ? 'selected' : '' }}>West</option>
+						                <select id='tower' name='tower' class='form-control text-capitalize'>
+						                    <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Tower</option>
+						                    @each(towerOption in towerOptions)
+							                    <option value='{{towerOption.id}}' {{ old('tower') == towerOption.id ? 'selected' : '' }}>{{towerOption.name}}</option>
+						                    @endeach
 						                </select>
 						                @if(hasErrorFor('tower'))
 											<div class='invalid-feedback d-block'>{{ getErrorFor('tower') }}</div>
 										@endif
 									</div>
 						        </div>
+						        
 						        <div class='col'>
 						        	<div class='form-group mb-2'>
 						                <label for='floor'>Floor</label>
-						                <select id='floor' name='floor' class='form-control'>
-						                    <option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Floor</option>
-						                    <option value='1' {{ old('floor') == '1' ? 'selected' : '' }}>1</option>
-						                    <option value='2' {{ old('floor') == '2' ? 'selected' : '' }}>2</option>
-						                    <option value='3' {{ old('floor') == '3' ? 'selected' : '' }}>3</option>
-						                    <option value='4' {{ old('floor') == '4' ? 'selected' : '' }}>4</option>
-						                    <option value='5' {{ old('floor') == '5' ? 'selected' : '' }}>5</option>
-						                    <option value='6' {{ old('floor') == '6' ? 'selected' : '' }}>6</option>
-						                    <option value='7' {{ old('floor') == '7' ? 'selected' : '' }}>7</option>
-						                    <option value='8' {{ old('floor') == '8' ? 'selected' : '' }}>8</option>
-						                    <option value='9' {{ old('floor') == '9' ? 'selected' : '' }}>9</option>
+						                <select id='floor' name='floor' class='form-control text-capitalize'>
+						                    <option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Floor</option>
+						                    @each(floorOption in floorOptions)
+												 <option value='{{floorOption.id}}' {{ old('floor') == floorOption.id ? 'selected' : '' }}>{{floorOption.name}}</option>
+											@endeach
 						                </select>
 						                @if(hasErrorFor('floor'))
 											<div class='invalid-feedback d-block'>{{ getErrorFor('floor') }}</div>
