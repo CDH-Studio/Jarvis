@@ -443,7 +443,6 @@ class RoomController {
 		const results = await Room
 			.findBy('id', room);
 		const row = results.toJSON();
-		const calendar = row.calendar;
 		const name = row.name;
 
 		// Information of the event
@@ -482,7 +481,7 @@ class RoomController {
 		await auth.user.bookings().save(booking);
 		await results.bookings().save(booking);
 
-		this.createEvent(eventInfo, calendar, booking, auth.user, results);
+		this.createEvent(eventInfo, booking, auth.user, results);
 
 		session.flash({
 			notification: `Room ${name} has been booked. Please click here to view your bookings.`,
@@ -587,6 +586,7 @@ class RoomController {
 		console.log(eventInfo);
 
 		try {
+			console.log(room);
 			await Axios.post('http://142.53.209.100:8080', {
 				room: room.calendar,
 				start: eventInfo.start.dateTime,
@@ -600,7 +600,6 @@ class RoomController {
 			booking.to = eventInfo.end.dateTime;
 			booking.event_id = eventInfo.id ? eventInfo.id : '';
 			booking.status = 'Approved';
-			console.log(booking);
 			await user.bookings().save(booking);
 			await room.bookings().save(booking);
 
