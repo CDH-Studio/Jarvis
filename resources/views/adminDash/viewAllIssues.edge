@@ -23,79 +23,70 @@ View Room Issues
         @else
             {{--  room Reports/Issues Stats  --}}
             <div class='row text-center'> 
-                <div class='col no-padding'>
-                    <div class='stats-card shadow'>
-                        <div class='card-highlight-primary'></div>
-                        <div class='card-body'>
-                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;115093'>
-                                <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
-                                <div class='no-padding text-left' style='padding-left:15px;'>
-                                    <div class='row'>
-                                        <h2 class='col no-margin'><b>{{ stats['total'] }}</b></h2>
-                                    </div>
-                                    <div class='row'>
-                                        <h5 class='col text-grey'>Total Issues</h5>
-                                    </div>
+                <div class='col stats-card shadow no-padding'>
+                    <div class='card-highlight-primary'></div>
+                    <div class='card-body'>
+                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;115093'>
+                            <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
+                            <div class='no-padding text-left' style='padding-left:15px;'>
+                                <div class='row'>
+                                    <h2 class='col no-margin'><b>{{ stats['total'] }}</b></h2>
+                                </div>
+                                <div class='row'>
+                                    <h5 class='col text-grey'>Total Issues</h5>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class='col no-padding'>
-                    <div class='stats-card shadow'>
-                        <div class='card-highlight-success'></div>
-                        <div class='card-body'>
-                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                                <i class='d-inline-flex card-icon color-success no-padding fas fa-door-open fa-2x'></i>
-                                <div class='no-padding text-left' style='padding-left:15px;'>
-                                    <div class='row'>
-                                        <h2 class='col no-margin'><b>{{ stats['pending'] }}</b></h2>
-                                    </div>
-                                    <div class='row'>
-                                        <h5 class='col text-grey'>Open</h5>
-                                    </div>
+                <div class='col stats-card shadow no-padding'>
+                    <div class='card-highlight-success'></div>
+                    <div class='card-body'>
+                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                            <i class='d-inline-flex card-icon color-success no-padding fas fa-door-open fa-2x'></i>
+                            <div class='no-padding text-left' style='padding-left:15px;'>
+                                <div class='row'>
+                                    <h2 class='col no-margin'><b>{{ stats['pending'] }}</b></h2>
+                                </div>
+                                <div class='row'>
+                                    <h5 class='col text-grey'>Open</h5>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class='col no-padding'>
-                    <div class='stats-card shadow'>
-                        <div class='card-highlight-warning'></div>
-                        <div class='card-body'>
-                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                                <i class='d-inline-flex card-icon color-warning no-padding fas fa-sync-alt fa-2x'></i>
-                                <div class='no-padding text-left' style='padding-left:15px;'>
-                                    <div class='row'>
-                                        <h2 class='col no-margin'><b>{{ stats['underReview'] }}</b></h2>
-                                    </div>
-                                    <div class='row'>
-                                        <h5 class='col text-grey'>Pending</h5>
-                                    </div>
+                <div class='col stats-card shadow no-padding'>
+                    <div class='card-highlight-warning'></div>
+                    <div class='card-body'>
+                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                            <i class='d-inline-flex card-icon color-warning no-padding fas fa-sync-alt fa-2x'></i>
+                            <div class='no-padding text-left' style='padding-left:15px;'>
+                                <div class='row'>
+                                    <h2 class='col no-margin'><b>{{ stats['underReview'] }}</b></h2>
+                                </div>
+                                <div class='row'>
+                                    <h5 class='col text-grey'>Pending</h5>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class='col no-padding'>
-                    <div class='stats-card shadow'>
-                        <div class='card-highlight-danger'></div>
-                        <div class='card-body'>
-                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                                <i class='d-inline-flex card-icon color-danger no-padding fas fa-door-closed fa-2x'></i>
-                                <div class='no-padding text-left' style='padding-left:15px;'>
-                                    <div class='row'>
-                                        <h2 class='col no-margin'><b>{{ stats['resolved'] }}</b></h2>
-                                    </div>
-                                    <div class='row'>
-                                        <h5 class='col text-grey'>Closed</h5>
-                                    </div>
+                <div class='col stats-card shadow no-padding'>
+                    <div class='card-highlight-danger'></div>
+                    <div class='card-body'>
+                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                            <i class='d-inline-flex card-icon color-danger no-padding fas fa-door-closed fa-2x'></i>
+                            <div class='no-padding text-left' style='padding-left:15px;'>
+                                <div class='row'>
+                                    <h2 class='col no-margin'><b>{{ stats['resolved'] }}</b></h2>
+                                </div>
+                                <div class='row'>
+                                    <h5 class='col text-grey'>Closed</h5>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
             <div class='table table-responsive'>
                 <table id='reportsTable' class='table table-hover' style='width:100%;'>
