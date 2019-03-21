@@ -325,7 +325,7 @@ class UserController {
 
 		const user = await User
 			.query()
-			.where('email', email)
+			.where('email', email.toLowerCase())
 			.where('verified', true)
 			.first();
 
