@@ -2,6 +2,8 @@
 
 const User = use('App/Models/User');
 const Room = use('App/Models/Room');
+const Tower = use('App/Models/Tower');
+const Floor = use('App/Models/Floor');
 const Booking = use('App/Models/Booking');
 const UserRole = use('App/Models/UserRole');
 const AccountRequest = use('App/Models/AccountRequest');
@@ -120,9 +122,16 @@ class UserController {
 		if (auth.user) {
 			return response.redirect('/');
 		} else {
-			var numb = Math.floor(Math.random() * 8) + 1;
-			var photoName = 'login_' + numb + '.jpg';
-			return view.render('auth.register', { photoName });
+			const numb = Math.floor(Math.random() * 8) + 1;
+			const photoName = 'login_' + numb + '.jpg';
+
+			var towerOptions = await Tower.all();
+			towerOptions = towerOptions.toJSON();
+
+			var floorOptions = await Floor.all();
+			floorOptions = floorOptions.toJSON();
+
+			return view.render('auth.register', { photoName, floorOptions, towerOptions });
 		}
 	}
 
