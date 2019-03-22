@@ -15,7 +15,7 @@ values("0ASIS", "IC CONF OTT-235 Queen-Oasis CONF IC", 0, "East", "Contact IT Se
 ("255D (W)", "IC CONF OTT-235 Queen255D CONF IC", 2, "West", "343-291-2768", 8, 8, 0, 0, 0, 0, 0, 0, 1,"Plasma"," ","ic.conf-ott-235queen-255d-conf.ic@canada.ca", 1),
 ("259A (W)", "IC CONF OTT-235 Queen259A CONF IC", 2, "West", "343-291-2776", 8, 9, 0, 1, 0, 1, 0, 0, 1,"Plasma"," ","ic.conf-ott-235queen-259a-conf.ic@canada.ca", 1),
 ("298B (W)", "IC CONF OTT-235 Queen298B CONF IC", 2, "West", "343-291-3040", 5, 5, 0, 0, 0, 1, 1, 0, 1,"LCD Smart TV","(Collaboration Room)","ic.conf-ott-235queen-298b-conf.ic@canada.ca", 1),
-("298C (W)", "IC CONF OTT-235 Queen298C CONF IC", 2, "West", "343-291-3041", 6, 10, 0, 0, 0, 1, 0, 0, 1,"TV"," ","", 1),
+("298C (W)", "IC CONF OTT-235 Queen298C CONF IC", 2, "West", "343-291-3041", 6, 10, 0, 0, 0, 1, 0, 0, 1,"TV"," ","ic.conf-ott-235queen-298ca-conf.ic@canada.ca", 1),
 ("299A (W)", "IC CONF OTT-235 Queen299A CONF IC", 2, "West", "343-291-1545", 12, 24, 0, 1, 0, 1, 0, 0, 1,"2 PCS, 2 Plasmas, Blueray"," ","ic.conf-ott-235queen-299a-conf.ic@canada.ca", 1),
 ("331A (E)", "IC CONF OTT-235 Queen331A CONF IC", 3, "East", "343-291-6464", 12, 37, 1, 0, 0, 1, 1, 0, 1,"2 PCS, 2 Projectors, VOIP # 343-291-2205"," ","ic.conf-ott-235queen-331a-conf.ic@canada.ca", 1),
 ("353A (W)", "IC CONF OTT-235 Queen353A CONF IC", 3, "West", "343-291-1409", 10, 25, 0, 1, 0, 1, 1, 0, 1,"LED Display"," ","ic.conf-ott-235queen-353a-conf.ic@canada.ca", 1),

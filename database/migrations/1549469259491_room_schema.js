@@ -29,7 +29,7 @@ class RoomsSchema extends Schema {
 			table.integer('state').notNullable();
 			table.timestamps();
 
-			const query = require('../rawQueries/populateRooms');
+			const query = require('../rawQueries/populateRoomsOutlook');
 			this.raw(query);
 		});
 	}
