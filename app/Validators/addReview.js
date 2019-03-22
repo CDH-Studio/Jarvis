@@ -26,7 +26,7 @@ class AddReview {
 			 */
 			rating: 'required|requiredDropdown|integer|min:1|max:5',
 			review: 'max:250',
-			reviewPicture: 'required|file|file_ext:png,jpg,jpeg|file_size:2mb|file_types:image'
+			reviewPicture: 'file|file_ext:png,jpg,jpeg|file_size:2mb|file_types:image'
 		};
 	}
 
