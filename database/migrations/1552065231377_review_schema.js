@@ -11,6 +11,7 @@ class ReviewSchema extends Schema {
 			table.integer('room_id').unsigned().references('id').inTable('rooms').notNullable();
 			table.integer('rating').notNullable();
 			table.string('review', 250);
+			table.string('reviewPicture', 100);
 			table.timestamps();
 		});
 	}

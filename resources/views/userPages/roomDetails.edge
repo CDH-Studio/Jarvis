@@ -222,7 +222,7 @@
                             </div>
                         
                             <div class='row'>
-                                <div class='col form-group no-margin'>
+                                <div class='col form-group'>
                                     <label for='review'>Review</label>
 
                                     @if(hasErrorFor('review'))
@@ -232,7 +232,25 @@
                                         <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
                                     @endif
                                 </div> 
-                            </div>           
+                            </div> 
+                            
+                            <div class='row'>
+                                {{--  Floor Plan Picture --}}
+                                <div class='col form-group no-margin' id='reviewPictureContent'>
+                                    <label>Picture</label>
+                                    <div class='form-group'>
+                                        <div class='custom-file'>
+                                            @if(hasErrorFor('reviewPicture'))
+                                                <input type='file' class='custom-file-input is-invalid' id='reviewPicture' name='reviewPicture' oninput='removeErrorClass("reviewPicture")'>
+                                                <div class='invalid-feedback'>{{ getErrorFor('reviewPicture') }}</div>
+                                            @else
+                                                <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
+                                            @endif
+                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose File</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         {{--  Footer buttons to cancel and book room  --}}
@@ -496,7 +514,15 @@
         </div>
 
     @endif
-    
+
+    {{--  Script to display file name on upload  --}}
+    <script>
+        $('#reviewPicture').change(function(e){
+            var fileName = e.target.files[0].name;
+            $('#reviewPictureLabel').html(fileName);
+        });
+    </script>
+
     {{--  Remove the is-invalid class when input changes  --}}
     <script>
         function removeErrorClass(idOfInput){
@@ -594,6 +620,12 @@
             });
         </script>
     @elseif(hasErrorFor('review'))
+        <script>
+            $(window).on('load',function(){
+                $('#reviewModal').modal('show');
+            });
+        </script>
+    @elseif(hasErrorFor('reviewPicture'))
         <script>
             $(window).on('load',function(){
                 $('#reviewModal').modal('show');
