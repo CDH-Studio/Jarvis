@@ -26,9 +26,17 @@ class ReviewController {
 				types: ['image'],
 				size: '2mb'
 			});
-			await reviewPicture.move(Helpers.publicPath('uploads/reviewPictures/'), {
-				name: `${auth.user.id}_reviewPicture.png`
-			});
+
+			if (reviewPicture == null) {
+				review.reviewPicture = null;
+			} else {
+				await reviewPicture.move(Helpers.publicPath('uploads/reviewPictures/'), {
+					name: `${auth.user.id}_reviewPicture.png`
+				});
+
+				// Populates the review object's values
+				review.reviewPicture = `uploads/reviewPictures/${auth.user.id}_reviewPicture.png`;
+			}
 
 			// Populates the review object's values
 			review.reviewPicture = `uploads/reviewPictures/${auth.user.id}_reviewPicture.png`;
@@ -57,10 +65,20 @@ class ReviewController {
 				types: ['image'],
 				size: '2mb'
 			});
-			await reviewPicture.move(Helpers.publicPath('uploads/reviewPictures/'), {
-				name: `${auth.user.id}_reviewPicture.png`,
-				overwrite: true
-			});
+
+			// sets the value of the reviewPicture depending on wether it is null or not
+			var reviewPictureString;
+			if (reviewPicture == null) {
+				reviewPictureString = null;
+			} else {
+				await reviewPicture.move(Helpers.publicPath('uploads/reviewPictures/'), {
+					name: `${auth.user.id}_reviewPicture.png`,
+					overwrite: true
+				});
+
+				// Populates the review object's values
+				reviewPictureString = `uploads/reviewPictures/${auth.user.id}_reviewPicture.png`;
+			}
 
 			// Update the review in the database
 			await Review
@@ -70,7 +88,7 @@ class ReviewController {
 				.update({
 					rating: body.rating,
 					review: body.review,
-					reviewPicture: `uploads/reviewPictures/${auth.user.id}_reviewPicture.png`
+					reviewPicture: reviewPictureString
 				});
 
 			session.flash({ notification: 'Review Updated!' });

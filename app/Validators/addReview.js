@@ -26,14 +26,13 @@ class AddReview {
 			 */
 			rating: 'required|requiredDropdown|integer|min:1|max:5',
 			review: 'max:250',
-			reviewPicture: 'file|file_ext:png,jpg,jpeg|file_size:2mb|file_types:image'
+			reviewPicture: 'file_ext:png,jpg,jpeg|file_size:2mb|file_types:image'
 		};
 	}
 
 	// Custom error messages
 	get messages () {
 		return {
-			'file': 'This field must be an image file',
 			'file_ext': 'The file must be .png, .jpg, or jpeg',
 			'file_types': 'This field must be an image file',
 			'required': 'This field is required.',
