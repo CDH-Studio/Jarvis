@@ -1,6 +1,7 @@
 'use strict';
 const Review = use('App/Models/Review');
 const Helpers = use('Helpers');
+const Drive = use('Drive');
 
 class ReviewController {
 	/**
@@ -101,6 +102,7 @@ class ReviewController {
 
 			// find the review object
 			const review = await Review.findBy('id', reviewId);
+			await Drive.delete(review.reviewPicture);
 			await review.delete();
 
 			session.flash({ notification: 'Review Deleted!' });
