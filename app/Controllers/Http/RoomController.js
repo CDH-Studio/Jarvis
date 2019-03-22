@@ -399,13 +399,13 @@ class RoomController {
 				if (await callback(arr[i])) {
 					arr2.push(arr[i]);
 				}
-
-				return arr2;
 			}
+
+			return arr2;
 		}
 
 		const checkRoomAvailability = async () => {
-			await asyncFilter(rooms, async (item) => { 
+			rooms = await asyncFilter(rooms, async (item) => { 
 				return this.getRoomAvailability(date, from, to, item.calendar);
 			});
 		};
