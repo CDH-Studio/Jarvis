@@ -71,4 +71,7 @@ form.user .form-control {
 	background-color:#04163F;
 	padding:15px 15px;
 }
-	
+
+.navbar-brand{
+  margin-right:3px;
+	}
