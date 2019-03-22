@@ -320,6 +320,32 @@ class BookingController {
 			}
 		}
 	}
+
+	/**
+	 * Delete an event from the room calendar.
+	 *
+	 * @param {String} calendarId The id of the room calendar.
+	 * @param {String} eventId The id of the event to delete.
+	 */
+	async deleteEvent (calendarId, eventId) {
+		const accessToken = await getAccessToken();
+
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				await client
+					.api(`/me/calendars/${calendarId}/events/${eventId}`)
+					.delete();
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	}
 }
 
 module.exports = BookingController;
