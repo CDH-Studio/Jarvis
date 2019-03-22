@@ -27,6 +27,7 @@ class ReviewController {
 				size: '2mb'
 			});
 
+			// set the value of the reviewPicture depending on wether it is null or not
 			if (reviewPicture == null) {
 				review.reviewPicture = null;
 			} else {
