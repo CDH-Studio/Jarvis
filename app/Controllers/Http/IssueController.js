@@ -13,7 +13,6 @@ class IssueController {
 	 */
 	async submit ({ request, response, session, auth }) {
 		const { issueType, comment, room } = request.only(['issueType', 'comment', 'room']);
-		console.log(room);
 		const results = await Room
 			.findBy('id', room);
 		const row = results.toJSON();
@@ -87,7 +86,7 @@ class IssueController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getIssues ({ params, view, auth, response }) {
+	async getRoomIssues ({ params, view, auth, response }) {
 		var layoutType;
 		const userRole = await auth.user.getUserRole();
 		// checking if user is admin, otherwise redirect to home
@@ -146,6 +145,55 @@ class IssueController {
 			issues[i].type = await ReportType.getName(issues[i].report_type_id);
 		}
 		return view.render('adminDash.viewRoomIssues', { issues, layoutType, id: issues[0].room, stats });
+	}
+
+	/**
+	 * Render a issue and its information.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async showIssue ({ response, auth, params, view, request }) {
+		try {
+			// get the search form data if employee view
+			const issue = await Report.findOrFail(params.id);
+			const userRole = await auth.user.getUserRole();
+			var layoutType;
+			// if user is admin
+			if (userRole === 'admin') {
+				layoutType = 'layouts/adminLayout';
+			} else {
+				return response.redirect('/');
+			}
+			return view.render('adminDash.editIssue', { id: params.id, issue, layoutType });
+		} catch (error) {
+			return response.redirect('/');
+		}
+	}
+
+	/**
+	* Update the database with new issue information and render's rooms issue page afterwards
+	*
+	* @param {Object} Context The context object.
+	*/
+	async updateIssue ({ response, auth, params, view, request, session }) {
+		try {
+			const { issueType, comment, roomID, issueStatus } = request.only(['issueType', 'comment', 'roomID', 'userID', 'issueStatus']);
+			const date = new Date();
+			// Updates room information in database
+			await Report
+				.query()
+				.where('id', params.id)
+				.update({
+					report_type_id: issueType,
+					comment: comment,
+					report_status_id: issueStatus,
+					updated_at: date
+				});
+			session.flash({ notification: 'Issue Updated!' });
+			return response.route('roomIssues', { id: roomID });
+		} catch (error) {
+			return response.redirect('/');
+		}
 	}
 }
 
