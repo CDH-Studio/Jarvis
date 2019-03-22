@@ -134,8 +134,8 @@ class RoomController {
 			});
 
 			// Populates the room object's values
-			room.floorplan = `uploads/floorPlans/${room.name}.png`;
-			room.picture = `uploads/roomPictures/${room.name}.png`;
+			room.floorplan = `uploads/floorPlans/${room.name}_floorPlan.png`;
+			room.picture = `uploads/roomPictures/${room.name}_roomPicture.png`;
 			room.extraEquipment = body.extraEquipment == null ? ' ' : body.extraEquipment;
 			room.comment = body.comment == null ? ' ' : body.extraEquipment;
 			await room.save();
@@ -213,8 +213,8 @@ class RoomController {
 				videoConference: body.videoCheck === '1' ? '1' : '0',
 				surfaceHub: body.surfaceHubCheck === '1' ? '1' : '0',
 				pc: body.pcCheck === '1' ? '1' : '0',
-				floorplan: `uploads/floorPlans/${body.name}.png`,
-				picture: `uploads/roomPictures/${body.name}.png`,
+				floorplan: `uploads/floorPlans/${body.name}_floorPlan.png`,
+				picture: `uploads/roomPictures/${body.name}_roomPicture.png`,
 				extraEquipment: body.extraEquipment == null ? ' ' : body.extraEquipment,
 				comment: body.comment == null ? ' ' : body.comment,
 				state: body.state
