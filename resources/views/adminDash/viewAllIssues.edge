@@ -103,7 +103,7 @@ View Room Issues
                     {{--  Loops through the reports array and displays every report's content  --}}
                     <tbody>
                         @each(report in reports) 
-                        <tr class='table-light'>
+                        <tr class='table-light' onclick="window.location='{{ route('showIssue', { id: report.id }) }}';">
                             <td class='text-center'>{{ report.id }}</td>
                             <td class='text-center'>{{ report.room }}</td>
                             <td class='text-center'>{{ report.user }}</td>

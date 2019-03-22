@@ -102,7 +102,7 @@
                     {{--  Loops through the reports array and displays every report's content  --}}
                     <tbody>
                         @each(issue in issues) 
-                        <tr class='table-light'>
+                        <tr class='table-light' onclick="window.location='{{ route('showIssue', { id: issue.id }) }}';">
                             <td class='text-center'>{{ issue.id }}</td>
                             <td class='text-center'>{{ issue.user }}</td>
                             <td class='text-center'>{{ issue.type }}</td>
@@ -129,4 +129,15 @@
             });
         });
     </script>
+
+    {{--  Displays "Room Added/Updated!" success message  --}}
+    @if(flashMessage('notification'))
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', () => {
+                var url = '{{ flashMessage('url') }}';
+                notify({$: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
+            });
+    </script>
+    @endif
 @endsection
