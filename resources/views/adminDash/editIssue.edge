@@ -1,7 +1,7 @@
 @layout('layouts.adminLayout')
 
 @section('title')
-Issue 2156
+Issue #{{ issue.id }}
 @endsection
 
 @section('extracss')
@@ -10,40 +10,54 @@ Issue 2156
 
 
 @section('content')
-    @!component('components.pageTitle', title='Issue 1234')
-    <div class='body'>
-        {{--  Form Content  --}}
-        <form action='{{ route('reportRoom') }}' method='POST' enctype='multipart/form-data'>
-            {{ csrfField() }}
-            <input type='hidden' name='room' value={{ room.id }} /> 
-            <div class='modal-highlight'></div>
-            {{--  Header  --}}
-            <div class='modal-header'>
-                <h4 class='no-margin'>Report</h4>
-            </div>
-            {{--  Body Information  --}}
-            <div class='body' style='margin: 20px;'>
+    @!component('components.pageTitle', title='Issue #' + issue.id)
+    <div class='row'>
+        <div class='col roomForm'>
+            {{--  Form Content  --}}
+            <form action='{{ route('updateIssue', {id: id}) }}' method='POST' enctype='multipart/form-data'>
+                {{ csrfField() }}
+                <input type='hidden' name='roomID' value={{ issue.room_id }} /> 
+                {{--  Body Information  --}}
                 <div class='row'>
+                    <div class='col form-group'>
+                        <label for='issueStatus'>Status <b class='text-danger'>*</b></label>
+                        @if(hasErrorFor('issueStatus'))
+                            <select class='form-control is-invalid' name='issueStatus' id='issueStatus' onchange='removeErrorClass("issueStatus")'>
+                                <option value='undefined' {{ old('rating', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a status</option>
+                                <option value='1' {{ old('issueStatus', issue.report_status_id) == '1' ? 'selected' : '' }}>Open</option>
+                                <option value='2' {{ old('issueStatus', issue.report_status_id) == '2' ? 'selected' : '' }}>Pending</option>
+                                <option value='3' {{ old('issueStatus', issue.report_status_id) == '3' ? 'selected' : '' }}>Closed</option>
+                            </select>
+                            <div class='invalid-feedback'>{{ getErrorFor('issueStatus') }}</div>
+                        @else
+                            <select class='form-control' name='issueStatus' id='issueStatus' onchange='removeErrorClass("issueStatus")'>
+                                <option value='undefined' {{ old('issueStatus', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a status</option>
+                                <option value='1' {{ old('issueStatus', issue.report_status_id) == '1' ? 'selected' : '' }}>Open</option>
+                                <option value='2' {{ old('issueStatus', issue.report_status_id) == '2' ? 'selected' : '' }}>Pending</option>
+                                <option value='3' {{ old('issueStatus', issue.report_status_id) == '3' ? 'selected' : '' }}>Closed</option>
+                            </select>
+                        @endif
+                    </div>
                     <div class='col form-group'>
                         <label for='issueType'>Issue Type <b class='text-danger'>*</b></label>
                         @if(hasErrorFor('issueType'))
                             <select class='form-control is-invalid' name='issueType' id='issueType' onchange='removeErrorClass("issueType")'>
                                 <option value='undefined' {{ old('rating', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select an issue</option>
-                                <option value='1' {{ old('issueType',) == '1' ? 'selected' : '' }}>Facilities</option>
-                                <option value='2' {{ old('issueType', ) == '2' ? 'selected' : '' }}>Furniture</option>
-                                <option value='3' {{ old('issueType',) == '3' ? 'selected' : '' }}>Incorrect Information</option>
-                                <option value='4' {{ old('issueType',) == '4' ? 'selected' : '' }}>Technical Equipment</option>
-                                <option value='5' {{ old('issueType',) == '5' ? 'selected' : '' }}>Other</option>
+                                <option value='1' {{ old('issueType', issue.report_type_id) == '1' ? 'selected' : '' }}>Facilities</option>
+                                <option value='2' {{ old('issueType', issue.report_type_id) == '2' ? 'selected' : '' }}>Furniture</option>
+                                <option value='3' {{ old('issueType', issue.report_type_id) == '3' ? 'selected' : '' }}>Incorrect Information</option>
+                                <option value='4' {{ old('issueType', issue.report_type_id) == '4' ? 'selected' : '' }}>Technical Equipment</option>
+                                <option value='5' {{ old('issueType', issue.report_type_id) == '5' ? 'selected' : '' }}>Other</option>
                             </select>
                             <div class='invalid-feedback'>{{ getErrorFor('issueType') }}</div>
                         @else
                             <select class='form-control' name='issueType' id='issueType' onchange='removeErrorClass("issueType")'>
                                 <option value='undefined' {{ old('issueType', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select an issue</option>
-                                <option value='1' {{ old('issueType',) == '1' ? 'selected' : '' }}>Facilities</option>
-                                <option value='2' {{ old('issueType', ) == '2' ? 'selected' : '' }}>Furniture</option>
-                                <option value='3' {{ old('issueType',) == '3' ? 'selected' : '' }}>Incorrect Information</option>
-                                <option value='4' {{ old('issueType',) == '4' ? 'selected' : '' }}>Technical Equipment</option>
-                                <option value='5' {{ old('issueType',) == '5' ? 'selected' : '' }}>Other</option>
+                                <option value='1' {{ old('issueType', issue.report_type_id) == '1' ? 'selected' : '' }}>Facilities</option>
+                                <option value='2' {{ old('issueType', issue.report_type_id) == '2' ? 'selected' : '' }}>Furniture</option>
+                                <option value='3' {{ old('issueType', issue.report_type_id) == '3' ? 'selected' : '' }}>Incorrect Information</option>
+                                <option value='4' {{ old('issueType', issue.report_type_id) == '4' ? 'selected' : '' }}>Technical Equipment</option>
+                                <option value='5' {{ old('issueType', issue.report_type_id) == '5' ? 'selected' : '' }}>Other</option>
                             </select>
                         @endif
                     </div>
@@ -52,20 +66,23 @@ Issue 2156
                     <div class='col form-group no-margin'>
                         <label for='comment'>Comment <b class='text-danger'>*</b></label>
                         @if(hasErrorFor('comment'))
-                            <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
+                            <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment', issue.comment) }}</textarea>
                             <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
                         @else
-                            <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  review.review) }}</textarea>
+                            <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  issue.comment) }}</textarea>
                         @endif                                    
                     </div> 
                 </div>
-            </div>
-            <div class='modal-footer text-right'>
-                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                <button type='submit' class='btn btn-primary'>Report</button>
-            </div>
-        </form>
+                <div class='row' style='margin-top:20px;'>
+                    <div class='col text-right'>
+                        <button type='button' class='btn btn-secondary' onclick="goBack()">Cancel</button>
+                        <button type='submit' class='btn btn-primary no-margin'>Update</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
+
 @endsection
 
 {{--  Deals with the search functionality of the table above- searches all fields   --}}
@@ -80,9 +97,29 @@ Issue 2156
             });
         });
     </script>
+    {{--  Back button functionality  --}}
+    <script type="text/javascript">
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+    {{--  remove the is-invalid output when the user inputs a new value  --}}
+    <script>
+            function removeErrorClass(idOfInput){
+                $('#'+idOfInput).removeClass('is-invalid');
+                // Ih field is the calendar, then remove styling from erorr message
+                if (idOfInput == 'date') {
+                    $('#date-error').removeClass('show-invalid');
+                }
+                else if (idOfInput == 'from') {
+                    $('#from-error').removeClass('show-invalid');
+                }
+                else if (idOfInput == 'to' ) {
+                    $('#to-error').removeClass('show-invalid');
+                }
+            }
+        </script>
 @endsection
-
-
 
 
 
