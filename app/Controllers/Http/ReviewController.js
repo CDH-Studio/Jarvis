@@ -69,7 +69,24 @@ class ReviewController {
 			// sets the value of the reviewPicture depending on wether it is null or not
 			var reviewPictureString;
 			if (reviewPicture == null) {
+				// if its null, set the value of reviewPicture to null and delete the current picture from the file system
 				reviewPictureString = null;
+
+				// retrives the reviews in the database
+				let searchResults = await Review
+					.query()
+					.where('user_id', auth.user.id)
+					.where('room_id', params.id)
+					.fetch();
+
+				const reviews = searchResults.toJSON();
+
+				// stores the unique review id in reviewId
+				const reviewId = reviews[0].id;
+
+				// find the review object
+				const review = await Review.findBy('id', reviewId);
+				await Drive.delete(review.reviewPicture);
 			} else {
 				await reviewPicture.move(Helpers.publicPath('uploads/reviewPictures/'), {
 					name: `${auth.user.id}_reviewPicture.png`,
