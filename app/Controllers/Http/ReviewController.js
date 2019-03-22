@@ -1,5 +1,6 @@
 'use strict';
 const Review = use('App/Models/Review');
+const Helpers = use('Helpers');
 
 class ReviewController {
 	/**
@@ -18,6 +19,18 @@ class ReviewController {
 			review.room_id = params.id;
 			review.rating = body.rating;
 			review.review = body.review;
+
+			// Upload process - Review Picture
+			const reviewPicture = request.file('reviewPicture', {
+				types: ['image'],
+				size: '2mb'
+			});
+			await reviewPicture.move(Helpers.publicPath('uploads/reviewPictures/'), {
+				name: `${auth.user.id}_reviewPicture.png`
+			});
+
+			// Populates the review object's values
+			review.reviewPicture = `uploads/reviewPictures/${auth.user.id}_reviewPicture.png`;
 
 			await review.save();
 			session.flash({ notification: 'Review Added!' });
@@ -38,6 +51,16 @@ class ReviewController {
 			// Retrieves user input
 			const body = request.all();
 
+			// Upload process - Review Picture
+			const reviewPicture = request.file('reviewPicture', {
+				types: ['image'],
+				size: '2mb'
+			});
+			await reviewPicture.move(Helpers.publicPath('uploads/reviewPictures/'), {
+				name: `${auth.user.id}_reviewPicture.png`,
+				overwrite: true
+			});
+
 			// Update the review in the database
 			await Review
 				.query()
@@ -45,7 +68,8 @@ class ReviewController {
 				.where('room_id', params.id)
 				.update({
 					rating: body.rating,
-					review: body.review
+					review: body.review,
+					reviewPicture: `uploads/reviewPictures/${auth.user.id}_reviewPicture.png`
 				});
 
 			session.flash({ notification: 'Review Updated!' });
