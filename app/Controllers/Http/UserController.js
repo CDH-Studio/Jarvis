@@ -1,8 +1,8 @@
 'use strict';
 
 const User = use('App/Models/User');
-const Room = use('App/Models/Room');
-const Booking = use('App/Models/Booking');
+const Tower = use('App/Models/Tower');
+const Floor = use('App/Models/Floor');
 const UserRole = use('App/Models/UserRole');
 const AccountRequest = use('App/Models/AccountRequest');
 const Mail = use('Mail');
@@ -63,53 +63,30 @@ async function updatePassword (newPassword, columnName, columnValue) {
 	}
 }
 
-/**
- * Populate bookings from booking query results.
- *
- * @param {Object} results Results from bookings query.
- *
- * @returns {Object} The access token.
- *
- */
-async function populateBookings (results) {
-	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+class UserController {
+	/**
+	 * Render Register page
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async registerRender ({ request, auth, view, response }) {
+		// present login to logged out users only
+		if (auth.user) {
+			return response.redirect('/');
+		} else {
+			const numb = Math.floor(Math.random() * 8) + 1;
+			const photoName = 'login_' + numb + '.jpg';
 
-	async function asyncMap (arr, callback) {
-		let arr2 = [];
+			var towerOptions = await Tower.all();
+			towerOptions = towerOptions.toJSON();
 
-		for (let i = 0; i < arr.length; i++) {
-			arr2.push(await callback(arr[i], i, arr));
+			var floorOptions = await Floor.all();
+			floorOptions = floorOptions.toJSON();
+
+			return view.render('auth.register', { photoName, floorOptions, towerOptions });
 		}
-
-		return arr2;
 	}
 
-	let bookings = [];
-	const populate = async () => {
-		bookings = await asyncMap(results, async (result) => {
-			const booking = {};
-
-			const from = new Date(result.from);
-			const to = new Date(result.to);
-			booking.subject = result.subject;
-			booking.status = result.status;
-			booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
-			booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-			booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
-			booking.roomId = result.room_id;
-			booking.id = result.id;
-
-			return booking;
-		});
-	};
-
-	await populate();
-
-	return bookings;
-}
-
-class UserController {
 	/**
 	 * Create a new Enployee user. There is an option to verify the user directly
 	 * or to make them verify their email address.
@@ -152,6 +129,32 @@ class UserController {
 	}
 
 	/**
+	 * Updates a user's information in the database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async update ({ request, session, params, response }) {
+		// Retrieves user input
+		const body = request.all();
+
+		// Updates user information in database
+		await User
+			.query()
+			.where('id', params.id)
+			.update({
+				firstname: body.firstName,
+				lastname: body.lastName,
+				email: body.email,
+				floor: body.floor,
+				tower: body.tower
+			});
+
+		session.flash({ notification: 'User Updated!' });
+
+		return response.route('editUser', { id: params.id });
+	}
+
+	/**
 	 * Create and verify a new Enployee user. Save them to the database and log them in.
 	 *
 	 * @param {Object} Context The context object.
@@ -160,6 +163,7 @@ class UserController {
 		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
 		userInfo.role_id = await UserRole.getRoleID('user');
 		userInfo.verified = true;
+		userInfo.email = userInfo.email.toLowerCase();
 		const user = await User.create(userInfo);
 
 		await auth.login(user);
@@ -229,16 +233,30 @@ class UserController {
 	}
 
 	/**
+	 * Render Register page
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async registerAdminRender ({ request, auth, view, response }) {
+		// present login to logged out users only
+		if (auth.user) {
+			return response.redirect('/');
+		} else {
+			return view.render('auth.registerAdmin');
+		}
+	}
+
+	/**
 	 * Create and verify a new Admin user. Save them to the database and log them in.
 	 *
 	 * @param {Object} Context The context object.
 	 */
 	async createAdmin ({ request, response, auth }) {
-		var adminInfo = request.only(['firstname', 'lastname', 'email', 'password']);
+		var adminInfo = request.only(['firstname', 'lastname', 'email'.toLowerCase(), 'password']);
 		adminInfo.role_id = await UserRole.getRoleID('admin');
 		adminInfo['verified'] = 1;
+		adminInfo.email = adminInfo.email.toLowerCase();
 		const user = await User.create(adminInfo);
-
 		await auth.login(user);
 		return response.redirect('/');
 	}
@@ -253,7 +271,9 @@ class UserController {
 		if (auth.user) {
 			return response.redirect('/');
 		} else {
-			return view.render('auth.login');
+			var numb = Math.floor(Math.random() * 8) + 1;
+			var photoName = 'login_' + numb + '.jpg';
+			return view.render('auth.login', { photoName });
 		}
 	}
 
@@ -267,7 +287,7 @@ class UserController {
 
 		const user = await User
 			.query()
-			.where('email', email)
+			.where('email', email.toLowerCase())
 			.where('verified', true)
 			.first();
 
@@ -284,6 +304,22 @@ class UserController {
 		} catch (error) {
 			session.flash({ loginError: 'Invalid email/password' });
 			return response.redirect('/login');
+		}
+	}
+
+	/**
+	 * Render login page
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async forgotPasswordRender ({ request, auth, view, response }) {
+		// present login to logged out users only
+		if (auth.user) {
+			return response.redirect('/');
+		} else {
+			var numb = Math.floor(Math.random() * 8) + 1;
+			var photoName = 'login_' + numb + '.jpg';
+			return view.render('auth.forgotPassword', { photoName });
 		}
 	}
 
@@ -443,31 +479,6 @@ class UserController {
 		});
 
 		return view.render('adminDash.viewUsers', { users });
-	}
-
-	/**
-	 * Retrives all of the bookings that are associated to a specific user.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async getBookings ({ params, view, auth }) {
-		// Queries the database for the bookings associated to a specific user
-		let searchResults = await Booking
-			.query()
-			.where('user_id', params.id)
-			.fetch();
-
-		searchResults = searchResults.toJSON();
-		const bookings = await populateBookings(searchResults);
-		var layoutType = '';
-
-		if (auth.user.role === 1) {
-			layoutType = 'layouts/adminLayout';
-		} else {
-			layoutType = 'layouts/mainLayout';
-		}
-
-		return view.render('userPages.manageBookings', { bookings: bookings, layoutType: layoutType });
 	}
 }
 

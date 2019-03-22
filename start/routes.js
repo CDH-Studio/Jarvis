@@ -25,11 +25,11 @@ Route.on('/sample').render('sample');
 //= ========================================================================
 
 // User Authentication
-Route.on('/register').render('auth.signup').as('register');
+Route.get('/register', 'UserController.registerRender').as('register');
 Route.post('/register', 'UserController.create').validator('CreateUser');
 
 // Admin Authentication
-Route.on('/admin/register').render('auth.signupAdmin').as('registerAdmin');
+Route.get('/admin/register', 'UserController.registerAdminRender').as('registerAdmin');
 Route.post('/admin/register', 'UserController.createAdmin').as('CreateAdmin').validator('CreateAdmin');
 
 // Logout
@@ -38,7 +38,7 @@ Route.post('/login', 'UserController.login').validator('LoginUser');
 Route.get('/logout', 'UserController.logout').as('logout');
 
 // Forgot password
-Route.on('/forgotPassword').render('forgotPassword').as('forgotPassword');
+Route.get('/forgotPassword', 'UserController.forgotPasswordRender').as('forgotPassword');
 Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword').validator('ResetPassword');
 Route.get('/newPassword', 'UserController.verifyHash');
 Route.get('/newUser', 'UserController.verifyEmail');
@@ -48,6 +48,7 @@ Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetReq
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
+Route.post('/user/:id/edit', 'UserController.update').as('saveUser').middleware(['auth']);
 Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 
 //= ========================================================================
@@ -56,30 +57,33 @@ Route.post('/user/updatepassword', 'UserController.changePassword').as('changePa
 
 // admin
 Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['isAdmin']);
-Route.post('/addRoom', 'RoomController.addRoom').as('addRoom').validator('AddRoom').middleware(['isAdmin']);
+Route.post('/addRoom', 'RoomController.add').as('addRoom').validator('AddRoom').middleware(['isAdmin']);
 Route.get('/adminDash', 'HomeController.adminDashboard').as('adminDash').middleware(['isAdmin']);
 
 Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['isAdmin']);
 Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['isAdmin']);
 
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
+Route.get('/allIssues', 'IssueController.getAllIssues').as('allIssues').middleware(['isAdmin']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 
-Route.get('/roomBookings/:id', 'RoomController.getBookings').as('roomBookings').middleware(['auth']);
-
+Route.get('/roomBookings/:id', 'BookingController.getRoomBookings').as('roomBookings').middleware(['auth']);
+Route.get('/roomIssues/:id', 'IssueController.getRoomIssues').as('roomIssues').middleware(['auth']);
+Route.get('/issue/:id', 'IssueController.showIssue').as('showIssue').middleware(['auth']);
+Route.post('/issue/:id', 'IssueController.updateIssue').as('updateIssue').middleware(['auth']).validator('EditIssue');
 // user
 Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
-Route.post('/addReview/:id', 'RoomController.addReview').as('addReview').validator('AddReview').middleware(['isUser']);
-Route.post('/editReview/:id', 'RoomController.editReview').as('editReview').middleware(['isUser']);
-Route.post('/deleteReview/:id', 'RoomController.deleteReview').as('deleteReview').middleware(['isUser']);
-Route.post('/reportRoom', 'RoomController.reportRoom').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
+Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('AddReview').middleware(['isUser']);
+Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('AddReview').middleware(['isUser']);
+Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['isUser']);
+Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
 
 //= ========================================================================
 // Bookings
 //= ========================================================================
 Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails').middleware(['auth']); // needs to be changed to get
-Route.get('/user/:id/bookings', 'RoomController.viewUserBookings').as('viewBookings').middleware(['auth']);
-Route.get('/cancelBooking/:id', 'RoomController.cancelBooking').as('cancelBooking').middleware(['auth']);
+Route.get('/user/:id/bookings', 'BookingController.getUserBookings').as('viewBookings').middleware(['auth']);
+Route.get('/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth']);
 
 // Employee user pages
 Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);
@@ -90,13 +94,13 @@ Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking
 Route.get('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
 
 // Booking a Room
-Route.post('/confirmBooking', 'RoomController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);
+Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);
 
 // Outlook
 Route.get('/authenticate', 'TokenController.getAuthUrl');
 Route.get('/authorize', 'TokenController.authorize');
 Route.get('/events', 'RoomController.getEvents');
-Route.get('/event', 'RoomController.createEvent');
+Route.get('/event', 'BookingController.createEvent');
 Route.get('/calendars', 'RoomController.getCalendars');
 Route.get('/calendar', 'RoomController.getCalendar');
 

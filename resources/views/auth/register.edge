@@ -1,0 +1,124 @@
+@layout('layouts.loginLayout')
+
+@section('title')
+Jarvis - Login
+@endsection
+
+@section('content')
+	<div class="card o-hidden border-0 shadow-lg my-5">
+  		<div class="card-body p-0">
+        	<!-- Nested Row within Card Body -->
+        	<div class="row">
+          		<div class="col-lg-5 d-none d-lg-block bg-register-image" style="background:url('images/{{photoName}}');background-position: center; background-size: cover;"></div>
+      			<div class="col-lg-7">
+	        		<div class="p-5">
+	        			<div class='text-left'>
+                    		<img class='login-logo mb-3' src='\door_logo.png'>
+                  		</div>
+						<div class="text-left">
+							<h1 class="h4 text-gray-900 mb-4">Register</h1>
+						</div>
+						<form class='needs-validation user' action='{{ route('UserController.create') }}' method='POST'>
+							{{ csrfField() }}
+
+							<div class='form-row'>
+							    <div class='col-md-6'>
+							      	<div class='form-group mb-2'>
+										<label for='firstname'>First Name</label>
+										<input type='text' class='form-control' name='firstname' id='firstname' placeholder='John' value='{{ old('firstname', '') }}'>
+										@if(hasErrorFor('firstname'))
+											<div class='invalid-feedback d-block'>{{ getErrorFor('firstname') }}</div>
+										@endif
+									</div>
+								</div>
+								<div class='col-md-6'>
+								    <div class='form-group mb-2'>
+										<label for='lastname'>Last Name</label>
+										<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe' value='{{ old('lastname', '') }}'>
+										@if(hasErrorFor('lastname'))        
+						              		<div class='invalid-feedback d-block'>{{ getErrorFor('lastname') }}</div>
+						          		@endif
+									</div>
+							    </div>
+							 </div>
+
+								
+							<div class='form-group mb-2'>
+								<label for='email'>Email address</label>
+								<input type='email' class='form-control' name='email' id='email' placeholder='Enter email' value='{{ old('email', '') }}'>
+								@if(hasErrorFor('email'))        
+						      		<div class='invalid-feedback d-block'>{{ getErrorFor('email') }}</div>
+						  		@endif
+							</div>
+
+							<div class='form-row'>
+								<div class='col-md-6'>
+									<div class='form-group mb-2'>
+										<label for='password'>Password</label>
+										<input type='password' class='form-control' name='password' id='password' placeholder='Password'>
+										@if(hasErrorFor('password'))
+											<div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>
+										@endif
+									</div>
+								</div>
+								<div class='col-md-6'>
+								    <div class='form-group mb-2'>
+							      		<label for='confirmPassword'>Confirm Password</label>
+							      		<input type='password' class='form-control' name='confirmPassword' id='confirmPassword' placeholder='Password'>
+										@if(hasErrorFor('confirmPassword'))
+										  <div class='invalid-feedback d-block'>{{ getErrorFor('confirmPassword') }}</div>
+										@endif
+								    </div>
+							    </div>
+							 </div>
+
+
+							<div class='form-row'>
+						        <div class='col'>
+						        	<div class='form-group mb-2'>
+						                <label for='tower'>Tower</label>
+						                <select id='tower' name='tower' class='form-control text-capitalize'>
+						                    <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Tower</option>
+						                    @each(towerOption in towerOptions)
+							                    <option value='{{towerOption.id}}' {{ old('tower') == towerOption.id ? 'selected' : '' }}>{{towerOption.name}}</option>
+						                    @endeach
+						                </select>
+						                @if(hasErrorFor('tower'))
+											<div class='invalid-feedback d-block'>{{ getErrorFor('tower') }}</div>
+										@endif
+									</div>
+						        </div>
+						        
+						        <div class='col'>
+						        	<div class='form-group mb-2'>
+						                <label for='floor'>Floor</label>
+						                <select id='floor' name='floor' class='form-control text-capitalize'>
+						                    <option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Floor</option>
+						                    @each(floorOption in floorOptions)
+												 <option value='{{floorOption.id}}' {{ old('floor') == floorOption.id ? 'selected' : '' }}>{{floorOption.name}}</option>
+											@endeach
+						                </select>
+						                @if(hasErrorFor('floor'))
+											<div class='invalid-feedback d-block'>{{ getErrorFor('floor') }}</div>
+										@endif
+									</div>
+						        </div>
+						    </div>
+							<button type='submit' class='btn btn-primary btn-user btn-block mt-3 mb-2'>Register</button>
+						</form>
+						<hr>
+
+						<div class="text-center">
+							<a class="small" href='{{ route('login') }}'>Already have an account? Login!</a>
+						</div>
+
+				</div>
+
+
+			</div>
+
+      	</div>
+    </div>
+
+  
+@endsection

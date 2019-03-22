@@ -71,6 +71,11 @@ class User extends Model {
 			return 0;
 		}
 	}
+
+	static async getName (user_id) {
+		var user = await this.findOrFail(user_id);
+		return user.firstname + ' ' + user.lastname;
+	}
 }
 
 module.exports = User;
