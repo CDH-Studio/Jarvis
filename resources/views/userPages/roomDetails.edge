@@ -156,7 +156,7 @@
     @else
         <div class='table table-responsive mt-1'>
             <table id='reviewsTable' class='table table-hover' style='width:100%;'>
-                <thead class='thead-dark'>
+                <thead class='table table-hover mt-4'>
                     <tr>
                         <th scope='col' class='text-center' style='width:5%'>Rating</th>
                         <th scope='col' class='text-center' style='width:95%'>Review</th>
@@ -481,7 +481,7 @@
                                         <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
                                     @else
-                                        <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  review.review) }}</textarea>
+                                        <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  '') }}</textarea>
                                     @endif                                    
                                 </div> 
                             </div>
