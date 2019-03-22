@@ -178,7 +178,7 @@ class BookingController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async viewUserBookings ({ params, auth, view, response }) {
+	async getUserBookings ({ params, auth, view, response }) {
 		var canEdit = 0;
 		var layoutType = '';
 		const userRole = await auth.user.getUserRole();
