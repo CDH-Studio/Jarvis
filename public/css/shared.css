@@ -259,19 +259,14 @@
 .btn{
     margin-right:10px;
 }
+
 .btn-primary{
     /* #0FACF3 old color */
     border-style: none;
-    
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
-.btn-primary:hover{
-    background-color: #152333;
-    position: relative; 
-    top: -1px;
-    box-shadow: 0 4px 8px 0 #00000033 !important;
-}
+
 
 .btn-secondary{
     color: #223851;
@@ -280,36 +275,21 @@
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
-.btn-secondary:hover{
-    background-color:#dde3e9;
-    border-color: #dde3e9;
-    color: #223851;
-    position: relative; 
-    top: -1px;
-    box-shadow: 0 4px 8px 0 #00000033 !important;
-}
+
 
 .btn-info{
     border-style: none;
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
-.btn-info:hover{
-    position: relative; 
-    top: -1px;
-    box-shadow: 0 4px 8px 0 #00000033 !important;
-}
+
 
 .btn-danger{
     border-style: none;
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
-.btn-danger:hover{
-    position: relative; 
-    top: -1px;
-    box-shadow: 0 4px 8px 0 #00000033 !important;
-}
+
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Room card information */

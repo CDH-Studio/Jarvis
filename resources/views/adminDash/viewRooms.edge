@@ -16,37 +16,90 @@ View Rooms
         @if(rooms.length == 0)
             <div>There are currently no rooms in the database. To add a room, click <a href='{{ route('addRoom')}}'>here</a></div>
         @else
-            {{--  All Rooms button  --}}
-            <div class='row'> 
-                <div class="col card text-white bg-primary mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Total Rooms</div>
-                    <div class="card-body">
-                        <h4 class="card-title">{{ stats['total'] }}</h4>
+            {{--  room Reports/Issues Stats  --}}
+            <div class='row text-center'> 
+                <div class='col'>
+                    <div class='stats-card shadow'>
+                        <div class='card-highlight-primary'></div>
+                        <div class='card-body'>
+                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                                <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
+                                <div class='no-padding text-left' style='padding-left:15px;'>
+                                    <div class='row mt-2'>
+                                        <h3 class='col no-margin'><b>{{ stats['total'] }}</b></h3>
+                                    </div>
+                                    <div class='row'>
+                                        <h5 class='col text-grey'>Total Rooms</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col card text-white bg-success mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Active</div>
-                    <div class="card-body">
-                        <h4 class="card-title">{{ stats['active'] }}</h4>
+                <div class='col no-padding'>
+                    <div class='stats-card shadow'>
+                        <div class='card-highlight-success'></div>
+                        <div class='card-body'>
+                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                                <i class='d-inline-flex card-icon color-success no-padding fas fa-door-open fa-2x'></i>
+                                <div class='no-padding text-left' style='padding-left:15px;'>
+                                    <div class='row mt-2'>
+                                        <h3 class='col no-margin'><b>{{ stats['active'] }}</b></h3>
+                                    </div>
+                                    <div class='row'>
+                                        <h5 class='col text-grey'>Open</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col card text-white bg-warning mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Maintenance</div>
-                    <div class="card-body">
-					<h4 class="card-title">{{ stats['maintenance'] }}</h4>
+                <div class='col no-padding'>
+                    <div class='stats-card shadow'>
+                        <div class='card-highlight-warning'></div>
+                        <div class='card-body'>
+                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                                <i class='d-inline-flex card-icon color-warning no-padding fas fa-wrench fa-2x'></i>
+                                <div class='no-padding text-left' style='padding-left:15px;'>
+                                    <div class='row mt-2'>
+                                        <h3 class='col no-margin'><b>{{ stats['maintenance'] }}</b></h3>
+                                    </div>
+                                    <div class='row'>
+                                        <h5 class='col text-grey'>Maintenance</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col card text-white bg-danger mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Deactive</div>
-						<div class="card-body">
-						<h4 class="card-title">{{ stats['deactive'] }}</h4>
+                <div class='col no-padding'>
+                    <div class='stats-card shadow'>
+                        <div class='card-highlight-danger'></div>
+                        <div class='card-body'>
+                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                                <i class='d-inline-flex card-icon color-danger no-padding fas fa-door-closed fa-2x'></i>
+                                <div class='no-padding text-left' style='padding-left:15px;'>
+                                    <div class='row mt-2'>
+                                        <h3 class='col no-margin'><b>{{ stats['deactive'] }}</b></h3>
+                                    </div>
+                                    <div class='row'>
+                                        <h5 class='col text-grey'>Closed</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class='table table-responsive'>
+            <div class="card shadow  mt-4 mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">All Rooms</h6>
+                </div>
+                <div class="card-body">
+                    <div class='table table-responsive'>
                 <table id='roomsTable' class='table table-hover' style='width:100%;'>
-                    <thead class='thead-dark'>
+                    <thead>
                         <tr>
                             <th scope='col' class='text-center' style='width:10%'>Name</th>
                             <th scope='col' class='text-center' style='width:25%'>Full Name</th>
@@ -54,7 +107,7 @@ View Rooms
                             <th scope='col' class='text-center' style='width:10%'>Floor</th>
                             <th scope='col' class='text-center' style='width:10%'>Tower</th>
                             <th scope='col' class='text-center' style='width:10%'>Capacity</th>
-                            <th scope='col' class='text-center' style='width:15%'>State</th>
+                            <th scope='col' class='text-center' style='width:15%'>Room Status</th>
                         </tr>
                     </thead>
                     {{--  Loops through the rooms array and displays every room's content  --}}
@@ -78,7 +131,10 @@ View Rooms
                         @endeach
                     </tbody>
                 </table>
-            </div> 
+                    </div> {{-- end table --}}
+
+                </div>
+            </div>
             
         @endif
     </div> 

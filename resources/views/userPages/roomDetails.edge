@@ -6,7 +6,7 @@
 
 {{--  Manage bookings page content  --}}
 @section('content')
-
+    @!component('components.pageTitle', title='Room Details')
     @component('components.generalModal', id='mapModal', title='Map')
         @slot('body')
             <img class='room-details-image' src='/images/temp_floor_map.png'>
