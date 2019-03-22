@@ -32,98 +32,14 @@
 .td-3, .td-Pending {
     color: #ffb007;
 }
-/*+++++++++++++++++++++++++++++++++++++++++++*/  
-/* Navbar changes */
-/*+++++++++++++++++++++++++++++++++++++++++++*/
-.side-nav-icons{
-    width: 16px !important;
-    height: 24px;
-    text-align: center;
-    margin-right: 0px;
-}
 
-/*  Changing icon width to match all */
-.fa-map-marker-alt{
-    text-align: center;
-    width:25px;
-}
 
-.fa-user-friends{
-    text-align: center;
-    width:25px;
-}
-  .fa-book{
-    text-align: center;
-    width:25px;
-}
-  
-.nav-link{
-    position: relative;
-    z-index: 20;
-}
-
-#header-nav-link{
-    color: #FFFF;
-}
-
-#header-dropdown-item:hover{
-    color: #FFFF;
-}
-#side-nav-link{
-    color: rgba(0, 0, 0, 0.5);
-}
-/* Side nav drop down */
-#side-nav-dropdown{
-    position: relative;
-    border:None ;
-    width:100%;
-    margin:0px;
-    z-index: 15;
-    background-color:#F5F5F5;
-}
-
-#side-nav-dropdown-item:visited, #side-nav-dropdown-item:active{
-    color:#001642 !important;
-}
-#side-nav-dropdown-item:hover{
-    /* color:#F5F5F5; */
-    background-color:rgb(216, 215, 223);
-}
-/* Small side nav view */
-.sidebar-toggled #side-nav-dropdown{
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 0.25rem;
-    width:100%;
-    margin:0px;
-    background-color: #F5F5F5;
-}
-/* Addding shadow to drop down */
-
-/*****************************************************/
-/* Add/Edit Room Page */
-/*****************************************************/
-.roomForm{
-    max-width: 720px;
-}
 
 /*****************************************************/
 /* etc */
 /*****************************************************/
-.page-title{
-    padding:10px 0px;
-}
-
-td{
-    border-bottom:1px solid #fbfcfc !important;
-}
-
-
 .navbar-brand img{
   height:26px;
     margin:0px;
 }
 
-.navbar-nav .dropdown-menu {
-  position: static;
-  float: none;
-}

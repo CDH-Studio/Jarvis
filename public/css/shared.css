@@ -50,9 +50,6 @@
     background: #fff !important;
 }
 
-.dropdown-item:hover{
-    background-color:#001642;
-}
 /* showing invalid validator display */
 .show-invalid{
     display: block;
@@ -265,7 +262,7 @@
 .btn-primary{
     /* #0FACF3 old color */
     border-style: none;
-    background-color: #223851;
+    
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
