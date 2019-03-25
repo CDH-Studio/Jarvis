@@ -86,43 +86,49 @@ View Rooms
                     </div>
                 </div>
             </div>
-            {{--  End of Stat Cards  --}}
-            {{--  Table Content  --}}
-            <div class='table table-responsive'>
-                <table id='roomsTable' class='table table-hover' style='width:100%;'>
-                    <thead class='table table-hover mt-4'>
-                        <tr>
-                            <th scope='col' class='text-center' style='width:10%'>Name</th>
-                            <th scope='col' class='text-center' style='width:25%'>Full Name</th>
-                            <th scope='col' class='text-center' style='width:15%'>Phone Number</th>
-                            <th scope='col' class='text-center' style='width:10%'>Floor</th>
-                            <th scope='col' class='text-center' style='width:10%'>Tower</th>
-                            <th scope='col' class='text-center' style='width:10%'>Capacity</th>
-                            <th scope='col' class='text-center' style='width:15%'>State</th>
-                        </tr>
-                    </thead>
-                    {{--  Loops through the rooms array and displays every room's content  --}}
-                    <tbody>
-                        @each(room in rooms) 
-                        <tr class='table-light row-hover' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
-                            <td class='text-center'>{{ room.name }}</td>
-                            <td class='text-center'>{{ room.fullName }}</td>
-                            <td class='text-center'>{{ room.telephone }}</td>
-                            <td class='text-center'>{{ room.floor }}</td>
-                            <td class='text-center'>{{ room.tower }} </td>
-                            <td class='text-center'>{{ room.capacity }}</td>
-                            @if(room.state == 1)
-                                <td class='text-center td-{{ room.state }}'>Active</td>
-                            @elseif(room.state == 2)
-                                <td class='text-center td-{{ room.state }}'>Deactive</td>
-                            @else
-                                <td class='text-center td-{{ room.state }}'>Under Maintenance</td>
-                            @endif 
-                        </tr>
-                        @endeach
-                    </tbody>
-                </table>
-            </div> 
+
+            <div class="card shadow mt-4 mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">All Rooms</h6>
+                </div>
+                <div class="card-body">
+                    <div class='table table-responsive'>
+                        <table id='roomsTable' class='table table-hover' style='width:100%;'>
+                            <thead>
+                                <tr>
+                                    <th scope='col' class='text-center' style='width:10%'>Name</th>
+                                    <th scope='col' class='text-center' style='width:25%'>Full Name</th>
+                                    <th scope='col' class='text-center' style='width:15%'>Phone Number</th>
+                                    <th scope='col' class='text-center' style='width:10%'>Floor</th>
+                                    <th scope='col' class='text-center' style='width:10%'>Tower</th>
+                                    <th scope='col' class='text-center' style='width:10%'>Capacity</th>
+                                    <th scope='col' class='text-center' style='width:15%'>Room Status</th>
+                                </tr>
+                            </thead>
+                            {{--  Loops through the rooms array and displays every room's content  --}}
+                            <tbody>
+                                @each(room in rooms) 
+                                    <tr class='table-light row-hover' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
+                                        <td class='text-center'>{{ room.name }}</td>
+                                        <td class='text-center'>{{ room.fullName }}</td>
+                                        <td class='text-center'>{{ room.telephone }}</td>
+                                        <td class='text-center'>{{ room.floor }}</td>
+                                        <td class='text-center'>{{ room.tower }} </td>
+                                        <td class='text-center'>{{ room.capacity }}</td>
+                                        @if(room.state == 1)
+                                            <td class='text-center td-{{ room.state }}'>Active</td>
+                                        @elseif(room.state == 2)
+                                            <td class='text-center td-{{ room.state }}'>Deactive</td>
+                                        @else
+                                            <td class='text-center td-{{ room.state }}'>Under Maintenance</td>
+                                        @endif 
+                                    </tr>
+                                @endeach
+                            </tbody>
+                        </table>
+                    </div> {{-- end table --}}
+                </div>
+            </div>
         @endif
     </div> 
 @endsection
