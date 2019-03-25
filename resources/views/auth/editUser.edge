@@ -28,29 +28,32 @@
                                 <small id='emailHelp' class='form-text text-muted'>We'll never share your email with anyone else.</small>
                             @endif
                         </div>
-                        <div class='form-row'>
-                            <div class='col'>
-                                <label for='floor'>Floor</label>
-                                <select class='form-control' id='floor' name='floor'>
-                                    <option {{ user.floor == '1' ? 'selected' : '' }}>1</option>
-                                    <option {{ user.floor == '2' ? 'selected' : '' }}>2</option>
-                                    <option {{ user.floor == '3' ? 'selected' : '' }}>3</option>
-                                    <option {{ user.floor == '4' ? 'selected' : '' }}>4</option>
-                                    <option {{ user.floor == '5' ? 'selected' : '' }}>5</option>
-                                    <option {{ user.floor == '6' ? 'selected' : '' }}>6</option>
-                                    <option {{ user.floor == '7' ? 'selected' : '' }}>7</option>
-                                    <option {{ user.floor == '8' ? 'selected' : '' }}>8</option>
-                                    <option {{ user.floor == '9' ? 'selected' : '' }}>9</option>
-                                </select>
+
+                        @if(!isAdmin)
+                            <div class='form-row'>
+                                <div class='col'>
+                                    <label for='floor'>Floor</label>
+                                    <select class='form-control' id='floor' name='floor'>
+                                        <option {{ user.floor == '1' ? 'selected' : '' }}>1</option>
+                                        <option {{ user.floor == '2' ? 'selected' : '' }}>2</option>
+                                        <option {{ user.floor == '3' ? 'selected' : '' }}>3</option>
+                                        <option {{ user.floor == '4' ? 'selected' : '' }}>4</option>
+                                        <option {{ user.floor == '5' ? 'selected' : '' }}>5</option>
+                                        <option {{ user.floor == '6' ? 'selected' : '' }}>6</option>
+                                        <option {{ user.floor == '7' ? 'selected' : '' }}>7</option>
+                                        <option {{ user.floor == '8' ? 'selected' : '' }}>8</option>
+                                        <option {{ user.floor == '9' ? 'selected' : '' }}>9</option>
+                                    </select>
+                                </div>
+                                <div class='col'>
+                                    <label for='tower'>Tower</label>
+                                    <select class='form-control' id='tower' name='tower' >
+                                        <option value=1 {{ user.tower == 1 ? 'selected' : '' }}>East</option>
+                                        <option value=2 {{ user.tower == 2 ? 'selected' : '' }}>West</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class='col'>
-                                <label for='tower'>Tower</label>
-                                <select class='form-control' id='tower' name='tower' >
-                                    <option value=1 {{ user.tower == 1 ? 'selected' : '' }}>East</option>
-                                    <option value=2 {{ user.tower == 2 ? 'selected' : '' }}>West</option>
-                                </select>
-                            </div>
-                        </div>
+                        @endif
                         <button type='submit' class='btn btn-primary mt-3'>Update</button>
                     </form> 
                 </div>
