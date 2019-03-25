@@ -28,7 +28,7 @@
                 @else
                     <p><b>Tower:</b> West</p>
                 @endif
-                <button type='button' class='btn btn-info mb-3' onclick="window.location='{{ route('viewBookings',{id: auth.user.id}) }}';"><i class='fas fa-list-ul'></i> View Bookings</button>              
+                <button type='button' class='btn btn-info mb-3' onclick="window.location='{{ route('viewBookings', {id: user.id}) }}';"><i class='fas fa-list-ul'></i> View Bookings</button>              
             @endif
            
             @if(canEdit)
