@@ -70,7 +70,7 @@
     
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-              <a class="nav-link collapsed" data-toggle="collapse" data-target="#collapseRooms" aria-expanded="true" aria-controls="collapseRooms">
+              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRooms" aria-expanded="true" aria-controls="collapseRooms">
                 <i class="fas fa-fw fa-map-marker-alt"></i>
                 <span>Rooms</span>
               </a>
@@ -84,8 +84,8 @@
             </li>
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-              <a class="nav-link" href="{{route('home')}}">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
+              <a class="nav-link"  href='{{ route('viewBookings',{id: auth.user.id}) }}'>
+                <i class="fas fa-tasks"></i>
                 <span>Manage Bookings</span>
               </a>
             </li>
