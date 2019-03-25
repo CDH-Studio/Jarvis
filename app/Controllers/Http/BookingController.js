@@ -1,5 +1,6 @@
 'use strict';
 const Room = use('App/Models/Room');
+const User = use('App/Models/User');
 const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const graph = require('@microsoft/microsoft-graph-client');
@@ -57,6 +58,9 @@ async function populateBookings (results) {
 			booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
 			booking.roomId = result.room_id;
 			booking.id = result.id;
+			const userInfo = (await User.findBy('id', result.user_id)).toJSON();
+			booking.userName = userInfo.firstname + ' ' + userInfo.lastname;
+			booking.userId = userInfo.id;
 
 			return booking;
 		});
