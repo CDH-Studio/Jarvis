@@ -28,7 +28,7 @@
 				<table class='table table-hover mt-4' id='table' >
 					<thead>
 						<tr>
-							<th scope='col'>Room</th>
+							<th scope='col'>User Name</th>
 							<th scope='col'>Meeting Name</th>
 							<th scope='col'>Date</th>
 							<th scope='col'>Time</th>
@@ -40,7 +40,7 @@
 					@each(booking in bookings) 
 						<tbody>
 							<tr>
-								<td><a href='{{ route('showRoom', {id: booking.roomId}) }}'>{{ booking.room }}</a></td>
+								<td><a href='{{ route('viewProfile', {id: booking.userId}) }}'>{{ booking.userName }}</a></td>
 								<td>{{ booking.subject }}</td>
 								<td>{{ booking.date }}</td>
 								<td>{{ booking.time }}</td>
