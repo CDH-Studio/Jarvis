@@ -3,13 +3,6 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* General */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-.text-muted{
-    color:#cccccc !important;
-}
-
-.text-grey{
-    color:#707070 ;
-}
 
 .wrapper-center {
     text-align: center;
@@ -24,7 +17,6 @@
 .no-margin{
     margin: 0 !important;
 }
-
 
 /* checkboxes */
 .custom-control-input:checked ~ .custom-control-label::before {
@@ -54,6 +46,30 @@
 .show-invalid{
     display: block;
 }
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Text */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.text-primary{
+    color: #004680 !important;
+}
+
+.text-muted{
+    color:#cccccc !important;
+}
+
+.text-grey{
+    color:#707070 ;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Navagation Changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.bg-gradient-primary {
+    background-image:  linear-gradient(180deg, #003968 0%, rgb(0, 50, 92) 100%);
+}
+
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Modal box changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -97,39 +113,39 @@
     background: rgb(88,136,189);
     background: linear-gradient(90deg, rgba(88,136,189,1) 0%, rgba(15,172,243,1) 100%);
     height: 6px;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
 }
 
 .card-highlight-success{
     background: linear-gradient(90deg, rgba(0,22,66,1) 0%, rgba(94,144,136,1) 0%, rgba(24,188,156,1) 100%);
     height: 6px;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
 }
 
 .card-highlight-warning{
     background: rgb(219,194,120);
     background: linear-gradient(90deg, rgba(219,194,120,1) 0%, rgba(243,156,18,1) 100%);
     height: 6px;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
 }
 
 .card-highlight-danger{
     background: rgb(201,122,122);
     background: linear-gradient(90deg, rgba(201,122,122,1) 0%, rgba(231,76,60,1) 100%);
     height: 6px;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
 }
 
 .card-highlight-more{
     background: rgb(43,81,124);
     background: linear-gradient(90deg, rgba(43,81,124,1) 0%, rgba(34,56,81,1) 100%);
     height: 6px;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
 }
 
 .card-icon{
@@ -144,6 +160,7 @@
     margin: 0 16px 16px 0;
     height: 156px;
     min-width: 240px;
+    background-color: #FFFFFF;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -262,11 +279,16 @@
 
 .btn-primary{
     /* #0FACF3 old color */
+    
+    background-color: #004680;
     border-style: none;
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
-
+.btn-primary:hover, .btn-primary:visited, .btn-primary:active{
+    /* #0FACF3 old color */
+    background-color: #023258 !important;
+}
 
 .btn-secondary{
     color: #223851;
@@ -275,14 +297,10 @@
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
-
-
 .btn-info{
     border-style: none;
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
-
-
 
 .btn-danger{
     border-style: none;
