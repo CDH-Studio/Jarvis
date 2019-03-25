@@ -13,7 +13,10 @@
         @endslot
     @endcomponent
         {{--  Page content  --}}
-            <div class='search-room-content'>
+        <div class='row'>
+                <div class= 'col-md-5'>
+        <div class="card shadow">
+            <div class="card-body">
                 <form action='/results' method='GET' enctype='multipart/form-data'>
                     {{ csrfField() }}
                     {{--  Date form  --}}
@@ -141,7 +144,9 @@
                         </div>
                     </div>
                 </form>
-            </div> 
+            </div>
+        </div>
+                </div></div>
     {{--  Remove the is-invalid class when input changes  --}}
     <script>
         function removeErrorClass(idOfInput){
