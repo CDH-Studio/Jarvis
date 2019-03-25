@@ -24,19 +24,23 @@ class AddReview {
 			 * requiredDropdown: this field is required and cannot be selected on "Select a ___" which has a value of 'undefined'
 			 *
 			 */
-			rating: 'required|requiredDropdown|integer|min:1|max:5'
-			// reviewPicture: 'required|file|file_ext:png,jpg,jpeg|file_size:2mb|file_types:image',
+			rating: 'required|requiredDropdown|integer|min:1|max:5',
+			review: 'max:250',
+			reviewPicture: 'file_ext:png,jpg,jpeg|file_size:2mb|file_types:image'
 		};
 	}
 
 	// Custom error messages
 	get messages () {
 		return {
-			'rating.required': 'This field is required.',
+			'file_ext': 'The file must be .png, .jpg, or jpeg',
+			'file_types': 'This field must be an image file',
+			'required': 'This field is required.',
 			'rating.requiredDropdown': 'This field is required.',
 			'rating.integer': 'This field must be a number',
 			'rating.min': 'The rating must be a least 1.',
-			'rating.max': 'The rating must be a most 5.'
+			'rating.max': 'The rating must be a most 5.',
+			'review.max': 'Please limit your review to 250 characters.'
 		};
 	}
 

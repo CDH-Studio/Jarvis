@@ -1,13 +1,28 @@
 'use strict';
 const Room = use('App/Models/Room');
 const Review = use('App/Models/Review');
-const Report = use('App/Models/Report');
-const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
+const Booking = use('App/Models/Booking');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
-const Axios = require('axios');
-const Env = use('Env');
+// const Env = use('Env');
+
+/**
+ * Retrieve access token for Microsoft Graph from the data basebase.
+ *
+ * @returns {Object} The access token.
+ *
+ */
+async function getAccessToken () {
+	try {
+		const results = await Token.findBy('type', 'access');
+		const accessToken = results.toJSON().token;
+		return accessToken;
+	} catch (err) {
+		console.log(err);
+		return null;
+	}
+}
 
 /**
  * Populate bookings from booking query results.
@@ -79,7 +94,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async addRoom ({ request, response, session }) {
+	async add ({ request, response, session }) {
 		try {
 			// Retrieves user input
 			const body = request.all();
@@ -405,7 +420,7 @@ class RoomController {
 		}
 
 		const checkRoomAvailability = async () => {
-			rooms = await asyncFilter(rooms, async (item) => { 
+			rooms = await asyncFilter(rooms, async (item) => {
 				return this.getRoomAvailability(date, from, to, item.calendar);
 			});
 		};
@@ -435,64 +450,6 @@ class RoomController {
 	// const room = searchResults.toJSON();
 	// return view.render('userPages.roomDetails', { room });
 	// }
-
-	/**
-	 * Create the requested event on the room calendar.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async confirmBooking ({ request, response, session, auth }) {
-		const { meeting, date, from, to, room } = request.only(['meeting', 'date', 'from', 'to', 'room']);
-		const results = await Room
-			.findBy('id', room);
-		const row = results.toJSON();
-		const name = row.name;
-
-		// Information of the event
-		const eventInfo = {
-			'subject': meeting,
-			'body': {
-				'contentType': 'HTML',
-				'content': 'Jarvis Daily Standup'
-			},
-			'start': {
-				'dateTime': `${date}T${from}`,
-				'timeZone': 'Eastern Standard Time'
-			},
-			'end': {
-				'dateTime': `${date}T${to}`,
-				'timeZone': 'Eastern Standard Time'
-			},
-			'location': {
-				'displayName': name
-			},
-			'attendees': [
-				{
-					'emailAddress': {
-						'address': '',
-						'name': 'Yunwei Li'
-					},
-					'type': 'required'
-				}
-			]
-		};
-
-		// Create the event
-		const booking = new Booking();
-		booking.subject = meeting;
-		booking.status = 'Pending';
-		await auth.user.bookings().save(booking);
-		await results.bookings().save(booking);
-
-		this.createEvent(eventInfo, booking, auth.user, results);
-
-		session.flash({
-			notification: `Room ${name} has been booked. Please click here to view your bookings.`,
-			url: `/user/${auth.user.id}/bookings`
-		});
-
-		return response.redirect('/booking');
-	}
 
 	/**
 	 * Retrives all of the bookings that correspond to a specific room.
@@ -557,146 +514,6 @@ class RoomController {
 		const bookings = await populateBookings(results);
 
 		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });
-	}
-
-	/**
-	 * Create a list of all bookings under the current user and render a view for it.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async cancelBooking ({ params, response, auth }) {
-		const booking = await Booking.findBy('id', params.id);
-		const roomId = booking.toJSON().room_id;
-		const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
-		const eventId = booking.toJSON().event_id;
-
-		await this.deleteEvent(calendarId, eventId);
-		booking.status = 'Cancelled';
-		await booking.save();
-
-		return response.redirect(`/user/${auth.user.id}/bookings`);
-	}
-
-	/**
-	 * Create an event on the specified room calendar.
-	 *
-	 * @param {String} eventInfo Information of the event.
-	 * @param {Object} booking The Booking (Lucid) Model.
-	 * @param {Object} user The User (Lucid) Model.
-	 * @param {Object} room The Room (Lucid) Model.
-	 */
-	async createEvent (eventInfo, booking, user, room) {
-		try {
-			console.log(room);
-			await Axios.post('http://142.53.209.100:8080/booking', {
-				room: room.calendar,
-				start: eventInfo.start.dateTime,
-				end: eventInfo.end.dateTime,
-				subject: eventInfo.subject,
-				body: eventInfo.body.content,
-				attendees: ['yunwei.li@canada.ca']
-			});
-
-			booking.from = eventInfo.start.dateTime;
-			booking.to = eventInfo.end.dateTime;
-			booking.event_id = eventInfo.id ? eventInfo.id : '';
-			booking.status = 'Approved';
-			await user.bookings().save(booking);
-			await room.bookings().save(booking);
-
-			return eventInfo;
-		} catch (err) {
-			console.log(err);
-			booking.status = 'Failed';
-			await user.bookings().save(booking);
-			await room.bookings().save(booking);
-		}
-
-	}
-
-	/**
-	 * Adds a review Object into the Database.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async addReview ({ request, response, session, auth, params }) {
-		try {
-			// Retrieves user input
-			const body = request.all();
-
-			// Populates the review object's values
-			const review = new Review();
-			review.user_id = auth.user.id;
-			review.room_id = params.id;
-			review.rating = body.rating;
-			review.review = body.review;
-
-			await review.save();
-			session.flash({ notification: 'Review Added!' });
-
-			return response.route('showRoom', { id: params.id });
-		} catch (err) {
-			console.log(err);
-		}
-	}
-
-	/**
-	 * Edits a review Object into the Database.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async editReview ({ request, response, session, auth, params }) {
-		try {
-			// Retrieves user input
-			const body = request.all();
-
-			// Update the review in the database
-			await Review
-				.query()
-				.where('user_id', auth.user.id)
-				.where('room_id', params.id)
-				.update({
-					rating: body.rating,
-					review: body.review
-				});
-
-			session.flash({ notification: 'Review Updated!' });
-
-			return response.route('showRoom', { id: params.id });
-		} catch (err) {
-			console.log(err);
-		}
-	}
-
-	/**
-	 * Deletes a review Object from the Database.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async deleteReview ({ request, response, session, auth, params }) {
-		try {
-			// retrives the reviews in the database
-			let searchResults = await Review
-				.query()
-				.where('user_id', auth.user.id)
-				.where('room_id', params.id)
-				.fetch();
-
-			const reviews = searchResults.toJSON();
-
-			// stores the unique review id in reviewId
-			const reviewId = reviews[0].id;
-
-			// find the review object
-			const review = await Review.findBy('id', reviewId);
-			await review.delete();
-
-			session.flash({ notification: 'Review Deleted!' });
-
-			return response.route('showRoom', { id: params.id });
-		} catch (err) {
-			console.log(err);
-		}
 	}
 
 	/**
@@ -771,39 +588,57 @@ class RoomController {
 	}
 
 	/**
-	 * Reports a room
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async reportRoom ({ request, response, session, auth }) {
-		const { issueType, comment, room } = request.only(['issueType', 'comment', 'room']);
-		console.log(room);
-		const results = await Room
-			.findBy('id', room);
-		const row = results.toJSON();
-		// Populates the review object's values
-		const report = new Report();
-		report.user_id = auth.user.id;
-		report.room_id = row.id;
-		report.report_type_id = issueType;
-		report.comment = comment;
-		report.report_status_id = 1;
-		await report.save();
+	* Query all the room calendars.
+	*/
+	async getCalendars () {
+		const accessToken = await getAccessToken();
 
-		session.flash({ notification: 'Your report has been submitted' });
-		return response.route('showRoom', { id: row.id });
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const calendars = await client
+					.api('/me/calendars?top=100')
+					// .orderby('createdDateTime DESC')
+					.get();
+
+				return calendars;
+			} catch (err) {
+				console.log(err);
+			}
+		}
 	}
 
-	async getRoomAvailability (date, from, to, calendar) {
-		console.log(date, from, to, calendar);
+	/**
+	* Query the specified room calendar.
+	*
+	* @param {String} calendarId The id of the room calendar.
+	*/
+	async getCalendar (calendarId) {
+		const accessToken = await getAccessToken();
 
-		const res = await Axios.post('http://142.53.209.100:8080/avail', {
-			room: calendar,
-			start: date + 'T' + from,
-			end: date + 'T' + to
-		});
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
 
-		return res.data === 'free';
+			try {
+				const calendar = await client
+					.api(`/me/calendars/${calendarId}`)
+					// .orderby('createdDateTime DESC')
+					.get();
+
+				return calendar;
+			} catch (err) {
+				console.log(err);
+			}
+		}
 	}
 }
 

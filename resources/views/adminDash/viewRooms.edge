@@ -5,7 +5,7 @@ View Rooms
 @endsection
 
 @section('extracss')
-<link href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css' rel='stylesheet'>
+    <link href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css' rel='stylesheet'>
 @endsection
 
 
@@ -14,39 +14,83 @@ View Rooms
     <div>
         {{--  Displays all of the rooms in the database in a table  --}}
         @if(rooms.length == 0)
-            <div>There are currently no rooms in the database. To add a room, click <a href='{{ route('addRoom')}}'>here</a></div>
+            <div class="row">
+                <p class="fas fa-ghost fa-10x mb-5 mt-5 text-muted"></p>
+				<h3 class="text-muted">There are currently no rooms in the database. To add a room, click <a href='{{ route('addRoom')}}'>here</h3>
+            </div>
         @else
-            {{--  All Rooms button  --}}
+            {{-- Room Stat Cards  --}}
             <div class='row'> 
-                <div class="col card text-white bg-primary mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Number of Rooms</div>
+                <div class='col stats-card shadow no-padding'>
+                    <div class='card-highlight-primary'></div>
                     <div class="card-body">
-                        <h4 class="card-title">{{ stats['total'] }}</h4>
+                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                            <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
+                            <div class='no-padding text-left' style='padding-left:15px;'>
+                                <div class='row'>
+                                    <h2 class='col no-margin'><b>{{ stats['total'] }}</b></h2>
+                                </div>
+                                <div class='row'>
+                                    <h5 class='col text-grey'>Total Rooms</h5>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col card text-white bg-success mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Active Rooms</div>
+                <div class='col stats-card shadow no-padding'>
+                    <div class='card-highlight-success'></div>
                     <div class="card-body">
-                        <h4 class="card-title">{{ stats['active'] }}</h4>
+                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                            <i class='d-inline-flex no-padding color-success card-icon fas fa-door-open fa-2x'></i>
+                            <div class='no-padding text-left' style='padding-left:15px;'>
+                                <div class='row'>
+                                    <h2 class='col no-margin'><b>{{ stats['active'] }}</b></h2>
+                                </div>
+                                <div class='row'>
+                                    <h5 class='col text-grey'>Active</h5>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col card text-white bg-danger mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Deactive Rooms</div>
-						<div class="card-body">
-						<h4 class="card-title">{{ stats['deactive'] }}</h4>
+                <div class='col stats-card shadow no-padding'>
+                    <div class='card-highlight-warning'></div>
+                    <div class="card-body">
+                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                            <i class='d-inline-flex no-padding color-warning card-icon fas fa-sync-alt fa-2x'></i>
+                            <div class='no-padding text-left' style='padding-left:15px;'>
+                                <div class='row'>
+                                    <h2 class='col no-margin'><b>{{ stats['maintenance'] }}</b></h2>
+                                </div>
+                                <div class='row'>
+                                    <h5 class='col text-grey'>Maintenance</h5>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col card text-white bg-warning mr-3 mb-3" style="max-width: 20rem;">
-                    <div class="card-header">Maintenance</div>
+                <div class='col stats-card shadow no-padding'>
+                    <div class='card-highlight-danger'></div>
                     <div class="card-body">
-					<h4 class="card-title">{{ stats['maintenance'] }}</h4>
+                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                            <i class='d-inline-flex no-padding color-danger card-icon fas fa-door-closed fa-2x'></i>
+                            <div class='no-padding text-left' style='padding-left:15px;'>
+                                <div class='row'>
+                                    <h2 class='col no-margin'><b>{{ stats['deactive'] }}</b></h2>
+                                </div>
+                                <div class='row'>
+                                    <h5 class='col text-grey'>Deactive</h5>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
+            {{--  End of Stat Cards  --}}
+            {{--  Table Content  --}}
             <div class='table table-responsive'>
                 <table id='roomsTable' class='table table-hover' style='width:100%;'>
-                    <thead class='thead-dark'>
+                    <thead class='table table-hover mt-4'>
                         <tr>
                             <th scope='col' class='text-center' style='width:10%'>Name</th>
                             <th scope='col' class='text-center' style='width:25%'>Full Name</th>
@@ -60,7 +104,7 @@ View Rooms
                     {{--  Loops through the rooms array and displays every room's content  --}}
                     <tbody>
                         @each(room in rooms) 
-                        <tr class='table-light' id='roomRow' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
+                        <tr class='table-light row-hover' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
                             <td class='text-center'>{{ room.name }}</td>
                             <td class='text-center'>{{ room.fullName }}</td>
                             <td class='text-center'>{{ room.telephone }}</td>
@@ -79,7 +123,6 @@ View Rooms
                     </tbody>
                 </table>
             </div> 
-            
         @endif
     </div> 
 @endsection

@@ -1,11 +1,11 @@
 /**
- * File Name: ReportRoom.js
- * Description: Validator used to validate input fields in Report Room modal(User)
- * Instructions: Use this validator by adding ".validator('ReportRoom')" to your route in /routes.js
+ * File Name: EditIssue.js
+ * Description: Validator used to validate input fields in editing an existing Issue
+ * Instructions: Use this validator by adding ".validator('EditIssue')" to your route in /routes.js
  **/
 'use strict';
 
-class ReportRoom {
+class EditIssue {
 	// Validate and return all fields
 	get validateAll () {
 		return true;
@@ -21,6 +21,8 @@ class ReportRoom {
 			 * requiredDropdown: this field is required and cannot be selected on "Select a ___" which has a value of 'undefined'
 			 *
 			 */
+
+			issueStatus: 'required',
 			issueType: 'required|requiredDropdown',
 			comment: 'required|max:250'
 		};
@@ -41,4 +43,4 @@ class ReportRoom {
 	}
 }
 
-module.exports = ReportRoom;
+module.exports = EditIssue;

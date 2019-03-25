@@ -25,8 +25,9 @@
                     </div>
                     <div class='col text-right'>
                         @if(isAdmin)
-                            <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
-                            <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit</button>
+                            <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';"><i class="fas fa-list-ul mr-1"></i> View Bookings</button>
+                            <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomIssues', { id: room.id }) }}';"><i class="fas fa-pen mr-1"></i> View Reports</button>
+                            <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen mr-1"></i> Edit</button>
                         @else
                             @if(hasReview)
                                 {{--  <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit Review</button>  --}}
@@ -144,6 +145,35 @@
             </div>
         </div>
     </div>
+    <h4 class='mt-4'>Rating and Reviews</h4>
+    @if(reviews.length == 0)
+        <div class='row'>
+            <div class='col-12 text-center'>
+                <p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p>
+                <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
+            </div>			
+        </div>
+    @else
+        <div class='table table-responsive mt-1'>
+            <table id='reviewsTable' class='table table-hover' style='width:100%;'>
+                <thead class='table table-hover mt-4'>
+                    <tr>
+                        <th scope='col' class='text-center' style='width:5%'>Rating</th>
+                        <th scope='col' class='text-center' style='width:95%'>Review</th>
+                    </tr>
+                </thead>
+                {{--  Loops through the rooms array and displays every room's content  --}}
+                <tbody>
+                    @each(review in reviews) 
+                        <tr class='table-light' id='roomRow'>
+                            <td class='text-center'>{{ review.rating }}</td>
+                            <td class='text-center'>{{ review.review }}</td>
+                        </tr>
+                    @endeach
+                </tbody>
+            </table>
+        </div> 
+    @endif
     {{--  Only show to non-admin users  --}}
     @if(!isAdmin)
         {{--  Review Modal Box  --}}
@@ -192,11 +222,35 @@
                             </div>
                         
                             <div class='row'>
-                                <div class='col form-group no-margin'>
+                                <div class='col form-group'>
                                     <label for='review'>Review</label>
-                                    <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
+
+                                    @if(hasErrorFor('review'))
+                                        <textarea class='form-control is-invalid' name='review' id='review' rows='5' onchange='removeErrorClass("review")'> {{ old('review',  review.review) }}</textarea>
+                                        <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
+                                    @else
+                                        <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
+                                    @endif
                                 </div> 
-                            </div>           
+                            </div> 
+                            
+                            <div class='row'>
+                                {{--  Floor Plan Picture --}}
+                                <div class='col form-group no-margin' id='reviewPictureContent'>
+                                    <label>Picture</label>
+                                    <div class='form-group'>
+                                        <div class='custom-file'>
+                                            @if(hasErrorFor('reviewPicture'))
+                                                <input type='file' class='custom-file-input is-invalid' id='reviewPicture' name='reviewPicture' oninput='removeErrorClass("reviewPicture")'>
+                                                <div class='invalid-feedback'>{{ getErrorFor('reviewPicture') }}</div>
+                                            @else
+                                                <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
+                                            @endif
+                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose File</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         {{--  Footer buttons to cancel and book room  --}}
@@ -445,7 +499,7 @@
                                         <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
                                     @else
-                                        <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  review.review) }}</textarea>
+                                        <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  '') }}</textarea>
                                     @endif                                    
                                 </div> 
                             </div>
@@ -458,38 +512,17 @@
                 </div>
             </div>
         </div>
-    
-        <h4 class='mt-4'>Rating and Reviews</h4>
-        @if(reviews.length == 0)
-            <div class='row'>
-                <div class='col-12 text-center'>
-                    <p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p>
-                    <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
-                </div>			
-            </div>
-        @else
-            <div class='table table-responsive mt-1'>
-                <table id='reviewsTable' class='table table-hover' style='width:100%;'>
-                    <thead class='thead-dark'>
-                        <tr>
-                            <th scope='col' class='text-center' style='width:5%'>Rating</th>
-                            <th scope='col' class='text-center' style='width:95%'>Review</th>
-                        </tr>
-                    </thead>
-                    {{--  Loops through the rooms array and displays every room's content  --}}
-                    <tbody>
-                        @each(review in reviews) 
-                            <tr class='table-light' id='roomRow'>
-                                <td class='text-center'>{{ review.rating }}</td>
-                                <td class='text-center'>{{ review.review }}</td>
-                            </tr>
-                        @endeach
-                    </tbody>
-                </table>
-            </div> 
-        @endif
+
     @endif
-    
+
+    {{--  Script to display file name on upload  --}}
+    <script>
+        $('#reviewPicture').change(function(e){
+            var fileName = e.target.files[0].name;
+            $('#reviewPictureLabel').html(fileName);
+        });
+    </script>
+
     {{--  Remove the is-invalid class when input changes  --}}
     <script>
         function removeErrorClass(idOfInput){
@@ -577,6 +610,25 @@
         <script>
             $(window).on('load',function(){
                 $('#reportModal').modal('show');
+            });
+        </script>
+    {{--  If the review validations fails display this modal  --}}
+    @elseif(hasErrorFor('rating'))
+        <script>
+            $(window).on('load',function(){
+                $('#reviewModal').modal('show');
+            });
+        </script>
+    @elseif(hasErrorFor('review'))
+        <script>
+            $(window).on('load',function(){
+                $('#reviewModal').modal('show');
+            });
+        </script>
+    @elseif(hasErrorFor('reviewPicture'))
+        <script>
+            $(window).on('load',function(){
+                $('#reviewModal').modal('show');
             });
         </script>
     {{--  If a validation error is thrown show the modal box  --}}

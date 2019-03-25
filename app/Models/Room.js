@@ -18,6 +18,12 @@ class Room extends Model {
 	static get table () {
 		return 'rooms';
 	}
+
+	// Getter to retreive the room name by it's id
+	static async getName (room_id) {
+		var room = await this.findOrFail(room_id);
+		return room.name;
+	}
 }
 
 module.exports = Room;
