@@ -11,7 +11,7 @@
     {{--  where result cards will be displayed --}}
     <div class='row'>
         @each(room in rooms)
-            <div class='col-lg-6'>
+            <div class='col-lg-4 no-padding'>
                 {{ csrfField() }}
                 @!component('components.card',
                     form=form,

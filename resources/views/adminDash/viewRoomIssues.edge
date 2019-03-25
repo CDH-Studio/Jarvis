@@ -10,7 +10,7 @@
 
 {{--  Manage bookings page content  --}}
 @section('content')
-    @!component('components.pageTitle', title = 'Issues - ' + id)
+    @!component('components.pageHeader', title = 'Issues - ' + id)
     <div>
         {{--  Displays all of the reports in the database in a table  --}}
         @if(issues.length == 0)

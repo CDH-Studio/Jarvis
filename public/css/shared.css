@@ -18,6 +18,13 @@
     margin: 0 !important;
 }
 
+.border-primary {
+    border-color: #383838 !important;
+}
+
+.custom-shadow{
+    box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2);
+}
 /* checkboxes */
 .custom-control-input:checked ~ .custom-control-label::before {
     color: #fff;
@@ -25,7 +32,10 @@
     background-color: #001642;
 }
 
-/* Form Focus color and style */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Forms  */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .form-control{
     color: #000000;
 }
@@ -46,6 +56,7 @@
 .show-invalid{
     display: block;
 }
+
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Text */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -70,6 +81,11 @@
     background-image:  linear-gradient(180deg, #003968 0%, rgb(0, 50, 92) 100%);
 }
 
+.navbar-brand img{
+    height:26px;
+      margin:0px;
+  }
+  
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Modal box changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -277,6 +293,10 @@
     margin-right:10px;
 }
 
+.btn:disabled{
+    background-color: #383838;
+    color:#cccccc !important;
+}
 .btn-primary{
     /* #0FACF3 old color */
     
@@ -314,7 +334,7 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 
 .link-color{
-    color:rgb(18, 201, 164) !important;
+    color:rgb(6, 179, 223) !important;
 }
 
 .room-card{
@@ -341,7 +361,7 @@
 }
 
 .room-card:hover .room-card-title{
-    background-color: #001642 ;
+    background-color: #004680 ;
     color: #FFFFFF;
 }
 
@@ -355,9 +375,7 @@
     border-top-left-radius: 2px;
     height: 50px;
     background-color: #f7f7f7;
-    /* background-color: #3c5585;  OLD Color*/
     color: #000000;
-    /* margin-top: 3px; */
     margin-bottom: 0px;
     vertical-align: center;
     padding:0 15px;
@@ -445,13 +463,14 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 .room-details-card{
     padding:0px !important;
+    background-color: #FFFFFF;
 }
 
 .room-details-card-title{
-    border-top-right-radius: 2px;
-    border-top-left-radius: 2px;
+    border-top-right-radius: 0.35rem;
+    border-top-left-radius: 0.35rem;
     height: 55px;
-    background-color: #f1f1f1;
+    background-color: #f7f7f7;
     color: #000000;
     margin-bottom: 0px;
     vertical-align: center;

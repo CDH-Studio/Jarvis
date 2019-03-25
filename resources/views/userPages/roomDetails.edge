@@ -6,7 +6,7 @@
 
 {{--  Manage bookings page content  --}}
 @section('content')
-    @!component('components.pageTitle', title='Room Details')
+    @!component('components.pageHeader', title='Room Details')
     @component('components.generalModal', id='mapModal', title='Map')
         @slot('body')
             <img class='room-details-image' src='/images/temp_floor_map.png'>
@@ -16,12 +16,20 @@
     {{--  Loading page header  --}}
 
     {{--  Actual page content  --}}
-    <div class='row justify-content-center'>
-        <div class='col room-details-card shadow' style='margin-top:10px;'>
-            <div class='room-details-card-title'>
+    <div class='roomDetails'>
+        <div class='col card room-details-card shadow' style='margin-top:10px;'>
+            <div class='card-header py-3'>
                 <div class='row'>
-                    <div class='col'>
-                        <h3>{{room.name}}</h3>
+                    <div class='col' style='padding-top:6px;'>
+                        <h4 class="m-0 font-weight-bold text-primary">
+                            {{--  If the room is closed or under maintence then display info  --}}
+                            @if(room.state == 2)
+                                <i class='fa fa-times-circle color-danger'></i> Closed - 
+                            @elseif(room.state == 3)
+                                <i class="fas fa-tools color-warning"></i> Under Maintenance -  
+                            @endif
+                            {{room.name}}
+                        </h4>
                     </div>
                     <div class='col text-right'>
                         @if(isAdmin)
@@ -36,8 +44,12 @@
                                 {{--  <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-plus"></i> Write a Review</button>  --}}
                                 <button type='button' class='btn btn-info' data-toggle='modal' data-target='#reviewModal'><i class="fas fa-plus"></i> Write a Review</button>
                             @endif
-                            <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#confirmModal'><i class="fas fa-book"></i> Book Room</button>  
-                            <button type='button' class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i> Report</button>
+                            @if( room.state != 1)
+                                <button disabled type='button' class='btn btn-primary' data-toggle='modal' data-target='#confirmModal'><i class="fas fa-book"></i> Book Room</button>  
+                            @else
+                                <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#confirmModal'><i class="fas fa-book"></i> Book Room</button>  
+                            @endif
+                            <button type='button' class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i></button>
                         @endif
                     </div>
                 </div>
@@ -59,13 +71,6 @@
                             <div class='table-responsive'>
                                 <table class='table table-hover'>  
                                     <tbody> 
-                                        {{--  If the room is deactivated then display info  --}}
-                                        @if(room.state == 0)
-                                            <tr>
-                                                <th scope='row'>Room Status</th>
-                                                <td class='spec-warning'><i class='fa fa-times-circle'></i> DEACTIVE</td>
-                                            </tr>
-                                        @endif
                                         <tr>
                                             <th scope='row'>Full Name</th>
                                             <td>{{ room.fullName }}</td>
@@ -145,35 +150,42 @@
             </div>
         </div>
     </div>
-    <h4 class='mt-4'>Rating and Reviews</h4>
-    @if(reviews.length == 0)
-        <div class='row'>
-            <div class='col-12 text-center'>
-                <p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p>
-                <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
-            </div>			
+    <div class="card shadow mt-4 mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Rating and Reviews</h6>
         </div>
-    @else
-        <div class='table table-responsive mt-1'>
-            <table id='reviewsTable' class='table table-hover' style='width:100%;'>
-                <thead class='table table-hover mt-4'>
-                    <tr>
-                        <th scope='col' class='text-center' style='width:5%'>Rating</th>
-                        <th scope='col' class='text-center' style='width:95%'>Review</th>
-                    </tr>
-                </thead>
-                {{--  Loops through the rooms array and displays every room's content  --}}
-                <tbody>
-                    @each(review in reviews) 
-                        <tr class='table-light' id='roomRow'>
-                            <td class='text-center'>{{ review.rating }}</td>
-                            <td class='text-center'>{{ review.review }}</td>
-                        </tr>
-                    @endeach
-                </tbody>
-            </table>
-        </div> 
-    @endif
+        <div class="card-body">
+            @if(reviews.length == 0)
+                <div class='row'>
+                    <div class='col-12 text-center'>
+                        <p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p>
+                        <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
+                    </div>			
+                </div>
+            @else
+                <div class='table table-responsive mt-1'>
+                    <table id='reviewsTable' class='table table-hover' style='width:100%;'>
+                        <thead class='table table-hover mt-4'>
+                            <tr>
+                                <th scope='col' class='text-center' style='width:5%'>Rating</th>
+                                <th scope='col' class='text-center' style='width:95%'>Review</th>
+                            </tr>
+                        </thead>
+                        {{--  Loops through the rooms array and displays every room's content  --}}
+                        <tbody>
+                            @each(review in reviews) 
+                                <tr class='table-light' id='roomRow'>
+                                    <td class='text-center'>{{ review.rating }}</td>
+                                    <td class='text-center'>{{ review.review }}</td>
+                                </tr>
+                            @endeach
+                        </tbody>
+                    </table>
+                </div> 
+            @endif
+            
+        </div>
+    </div>
     {{--  Only show to non-admin users  --}}
     @if(!isAdmin)
         {{--  Review Modal Box  --}}
@@ -649,5 +661,15 @@
             });
         </script>
     @endif
-    
+    {{--  Table Filter  --}}
+    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
+    <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
+    <script>$(document).ready(function() {
+            $('#reviewsTable').DataTable( {
+                "paging":   false,
+                "ordering": true,
+                "info":     false
+            });
+        });
+    </script>
 @endsection
