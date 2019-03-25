@@ -48,9 +48,8 @@
             <div class='row'>
                 {{--  Room Picture  --}}
                 <div href='../' class='room-card-photo wrapper-center col-sm-5'>
-                    {{--  <img src='/uploads/roomPictures/{{ title }}_roomPicture.png'>  --}}
                     @if(roomPicture) 
-                        <img src='{{ roomPicture }}'>
+                        <img width='183.75' height='137.27' src='{{ roomPicture }}'>
                     @else
                         <img src='/images/meeting.jpeg'>
                     @endif
