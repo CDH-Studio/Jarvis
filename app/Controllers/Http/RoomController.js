@@ -5,6 +5,7 @@ const Token = use('App/Models/Token');
 const Booking = use('App/Models/Booking');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
+const Axios = require('axios');
 // const Env = use('Env');
 
 /**
@@ -639,6 +640,27 @@ class RoomController {
 				console.log(err);
 			}
 		}
+	}
+
+	/**
+	 *
+	 * @param {String} date     Date
+	 * @param {String} from     Starting time
+	 * @param {String} to       Ending time
+	 * @param {String} calendar Calendar ID
+	 *
+	 * @returns {Boolean} Whether or not the room is available
+	 */
+	async getRoomAvailability (date, from, to, calendar) {
+		console.log(date, from, to, calendar);
+
+		const res = await Axios.post('http://142.53.209.100:8080/avail', {
+			room: calendar,
+			start: date + 'T' + from,
+			end: date + 'T' + to
+		});
+
+		return res.data === 'free';
 	}
 }
 
