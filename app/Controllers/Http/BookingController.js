@@ -186,7 +186,6 @@ class BookingController {
 		var canEdit = 0;
 		var layoutType = '';
 		const userRole = await auth.user.getUserRole();
-		console.log(userRole);
 
 		if (userRole === 'admin') {
 			layoutType = 'layouts/adminLayout';
@@ -198,10 +197,6 @@ class BookingController {
 		} else {
 			return response.redirect('/');
 		}
-
-		console.log('user id is: ' + auth.user.id);
-		console.log('params id is: ' + params.id);
-		console.log('came through here');
 
 		const results = (await Booking.query().where('user_id', params.id).fetch()).toJSON();
 		const bookings = await populateBookings(results);
