@@ -63,4 +63,22 @@ Jarvis - Login
       </div>
     </div>
 
+    @if(flashMessage('notification'))
+    <script type='module'>
+        import {notify} from '/js/notify.js';
+        $(window).on('load', () => {
+            notify({ $: $, message: '{{ flashMessage('notification') }}' });
+        });
+    </script>
+    @elseif(hasErrorFor('password') || hasErrorFor('email'))
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', () => {
+                notify({ $: $, message: 'One or more errors occurred.', type: 'danger', align: 'center',
+                                 enter: 'bounceIn', exit: 'bounceOut', element: '.notify-error'
+                });
+            });
+        </script>
+    @endif
+
 @endsection
