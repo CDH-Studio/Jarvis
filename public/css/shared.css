@@ -3,13 +3,6 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* General */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-.text-muted{
-    color:#cccccc !important;
-}
-
-.text-grey{
-    color:#707070 ;
-}
 
 .wrapper-center {
     text-align: center;
@@ -24,7 +17,6 @@
 .no-margin{
     margin: 0 !important;
 }
-
 
 /* checkboxes */
 .custom-control-input:checked ~ .custom-control-label::before {
@@ -54,6 +46,30 @@
 .show-invalid{
     display: block;
 }
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Text */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.text-primary{
+    color: #004680 !important;
+}
+
+.text-muted{
+    color:#cccccc !important;
+}
+
+.text-grey{
+    color:#707070 ;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Navagation Changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.bg-gradient-primary {
+    background-image:  linear-gradient(180deg, #003968 0%, rgb(0, 50, 92) 100%);
+}
+
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Modal box changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -263,11 +279,17 @@
 
 .btn-primary{
     /* #0FACF3 old color */
+    
+    background-color: #004680;
     border-style: none;
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
+.btn-primary:hover{
+    /* #0FACF3 old color */
+    background-color: #023258;
 
+}
 
 .btn-secondary{
     color: #223851;
