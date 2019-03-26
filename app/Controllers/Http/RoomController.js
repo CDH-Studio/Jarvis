@@ -374,7 +374,7 @@ class RoomController {
 			});
 		};
 
-		checkRoomAvailability();
+		setTimeout(checkRoomAvailability, 500);
 
 		// Sort the results by name
 		rooms.sort((a, b) => {
