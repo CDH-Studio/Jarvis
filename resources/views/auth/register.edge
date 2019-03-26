@@ -36,8 +36,8 @@ Jarvis - Login
 										<label for='lastname'>Last Name</label>
 										<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe' value='{{ old('lastname', '') }}'>
 										@if(hasErrorFor('lastname'))        
-						              		<div class='invalid-feedback d-block'>{{ getErrorFor('lastname') }}</div>
-						          		@endif
+						          <div class='invalid-feedback d-block'>{{ getErrorFor('lastname') }}</div>
+						        @endif
 									</div>
 							    </div>
 							 </div>
