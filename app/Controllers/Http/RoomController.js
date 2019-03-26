@@ -270,6 +270,7 @@ class RoomController {
 		if (userRole === 'admin') {
 			return view.render('adminDash.viewRooms', { rooms, stats });
 		} else {
+			console.log(rooms[0])
 			return view.render('userPages.results', { rooms });
 		}
 	}
