@@ -35,7 +35,7 @@
         let channel = pusher.subscribe('adonis-channel')
 
         //Listen for events on the channel
-        channel.bind('send-message', (data) => {
+        channel.bind('send-room', (data) => {
             let listItem = $("<div class='col-lg-6'>" + data.message + "</div>")
             $('#results').append(listItem)
         })

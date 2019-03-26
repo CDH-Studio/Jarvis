@@ -369,7 +369,7 @@ class RoomController {
 		const checkRoomAvailability = async () => {
 			await asyncForEach(rooms, async (item) => {
 				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
-					Event.fire('send.message', view.render('components.card', { form, room: item, token: request.csrfToken }));
+					Event.fire('send.room', view.render('components.card', { form, room: item, token: request.csrfToken }));
 				}
 			});
 		};

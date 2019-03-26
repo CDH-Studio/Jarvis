@@ -10,8 +10,8 @@ let pusher = new Pusher({
 	useTLS: true
 });
 
-Event.when('send.message', async (message) => {
-	pusher.trigger('adonis-channel', 'send-message', {
+Event.when('send.room', async (message) => {
+	pusher.trigger('adonis-channel', 'send-room', {
 		message
 	});
 });
