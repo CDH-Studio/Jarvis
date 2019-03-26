@@ -7,7 +7,7 @@ const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
 const Axios = require('axios');
 // const Env = use('Env');
-
+const Event = use('Event');
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -421,19 +421,21 @@ class RoomController {
 		}
 
 		const checkRoomAvailability = async () => {
-			rooms = await asyncFilter(rooms, async (item) => {
-				return this.getRoomAvailability(date, from, to, item.calendar);
+			await asyncForEach(rooms, async (item) => {
+				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
+					Event.fire('send.room', view.render('components.card', { form, room: item, token: request.csrfToken }));
+				}
 			});
 		};
 
-		await checkRoomAvailability();
+		setTimeout(checkRoomAvailability, 500);
 
 		// Sort the results by name
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
 
-		return view.render('userPages.results', { rooms, form });
+		return view.render('userPages.searchResults');
 	}
 
 	/**

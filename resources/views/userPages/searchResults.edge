@@ -1,0 +1,43 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+    Results
+@endsection
+
+{{--  Manage bookings page content  --}}
+@section('content')
+    @section('extracss')
+        {{ style('css/user') }}
+    @endsection
+    {{--  Loading page header  --}}
+    @!component('components.pageHeader', title='Results')
+    {{--  where result cards will be displayed --}}
+    <div class='row' id='results'>
+        {{--  @each(room in rooms)  --}}
+            {{--  <div class='col-lg-6'>  --}}
+                {{--  {{ csrfField() }}  --}}
+                {{--  @!component('components.card',  --}}
+                    {{--  form=form,  --}}
+                    {{--  room=room,  --}}
+                    {{--  token=csrfToken)  --}}
+            {{--  </div>  --}}
+        {{--  @endeach  --}}
+    </div>
+
+    {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
+    <script>
+        let pusher = new Pusher('aca8a920ad0e3d8ac09f', {
+            cluster: 'us2',
+            useTLS: true
+        });
+
+        //Subscribe to the channel we specified in our Adonis Application
+        let channel = pusher.subscribe('adonis-channel')
+
+        //Listen for events on the channel
+        channel.bind('send-room', (data) => {
+            let listItem = $("<div class='col-lg-6'>" + data.message + "</div>")
+            $('#results').append(listItem)
+        })
+        </script>
+@endsection
