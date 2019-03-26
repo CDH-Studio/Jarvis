@@ -12,32 +12,34 @@
     {{--  Loading page header  --}}
     @!component('components.pageHeader', title='Results')
     {{--  where result cards will be displayed --}}
-    <div class='row' id='results'>
-        {{--  @each(room in rooms)  --}}
-            {{--  <div class='col-lg-6'>  --}}
-                {{--  {{ csrfField() }}  --}}
-                {{--  @!component('components.card',  --}}
-                    {{--  form=form,  --}}
-                    {{--  room=room,  --}}
-                    {{--  token=csrfToken)  --}}
-            {{--  </div>  --}}
-        {{--  @endeach  --}}
+    <div class='row'>
+        @each(room in rooms)
+            <div class='col-lg-6'>
+                {{ csrfField() }}
+                @!component('components.card',
+                    form=form,
+                    id=room.id,
+                    title=room.name,
+                    fullName=room.fullName,
+                    phoneNumber=room.telephone,
+                    seats=room.seats,
+                    maxCapacity=room.capacity,
+                    floor=room.floor,
+                    tower=room.tower,
+                    projector=room.projector,
+                    flipChart=room.flipchart,
+                    whiteBoard=room.whiteboard,
+                    audioConference=room.audioConference,
+                    videoConference=room.videoConference,
+                    pc=room.pc,
+                    surfaceHub=room.surfaceHub,
+                    extraEquipment=room.extraEquipment,
+                    comment=room.comment,
+                    floorPlan=room.floorPlan,
+                    roomPicture=room.picture,
+                    token=csrfToken,
+                    rating=room.rating)
+            </div>
+        @endeach
     </div>
-
-    {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
-    <script>
-        let pusher = new Pusher('aca8a920ad0e3d8ac09f', {
-            cluster: 'us2',
-            useTLS: true
-        });
-
-        //Subscribe to the channel we specified in our Adonis Application
-        let channel = pusher.subscribe('adonis-channel')
-
-        //Listen for events on the channel
-        channel.bind('send-room', (data) => {
-            let listItem = $("<div class='col-lg-6'>" + data.message + "</div>")
-            $('#results').append(listItem)
-        })
-        </script>
 @endsection
