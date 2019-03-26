@@ -83,9 +83,14 @@
 
 .navbar-brand img{
     height:26px;
-      margin:0px;
-  }
-  
+    margin:0px;
+}
+
+.dropdown-item:hover, .dropdown-item:focus, .dropdown-item:active, .dropdown-item:visited {
+    background-color: #eceff3;
+    color: black;
+
+}
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Modal box changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
