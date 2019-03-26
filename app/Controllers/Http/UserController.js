@@ -193,7 +193,7 @@ class UserController {
 			<h2> Welcome to Jarvis, ${userInfo.firstname} </h2>
     		<p>
       			Please click the following URL into your browser: 
-      			https://jarvis-outlook-jarvis.apps.ic.gc.ca/newUser?hash=${hash}
+      			${Env.get('REGISTRATION_CONFIRMATION', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newUser?hash=${hash}
     		</p>
     	`;
 
@@ -385,7 +385,7 @@ class UserController {
       			<h2> Password Reset Request </h2>
       			<p>
         			We received a request to reset your password. If you asked to reset your password, please click the following URL: 
-        			https://jarvis-outlook-jarvis.apps.ic.gc.ca/newPassword?hash=${hash}
+        			${Env.get('REGISTRATION_CONFIRMATION', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newPassword?hash=${hash}
       			</p>
 			`;
 
