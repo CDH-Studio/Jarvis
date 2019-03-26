@@ -85,7 +85,7 @@
                                 {{--  Floor Location form  --}} 
                                 <div class='row'>
                                     <div class='col-6 form-group'>
-                                        <label for='floor'>Floor Number <b class='text-danger'>*</b></label>
+                                        <label for='floor'>Floor <b class='text-danger'>*</b></label>
                                         @if(hasErrorFor('floor'))
                                             <select class='form-control is-invalid' name='floor' id='floor' onchange='removeErrorClass("floor")'>
                                                 <option value='undefined' {{ old('floor', room.floor) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Floor</option>
