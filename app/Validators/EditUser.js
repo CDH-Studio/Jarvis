@@ -41,7 +41,7 @@ class EditUser {
 			'integer': 'Must be a number.',
 			'required': 'This field is required.',
 			'requiredDropdown': 'This field is required.',
-			'unique': 'The {{ field }} already exists.',
+			'unique': 'The {{ field }} already exists.'
 		};
 	}
 

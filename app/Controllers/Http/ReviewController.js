@@ -32,15 +32,12 @@ class ReviewController {
 				review.reviewPicture = null;
 			} else {
 				await reviewPicture.move(Helpers.publicPath('uploads/reviewPictures/'), {
-					name: `${auth.user.id}_reviewPicture.png`
+					name: `${params.id}_${auth.user.id}_reviewPicture.png`
 				});
 
 				// Populates the review object's values
-				review.reviewPicture = `uploads/reviewPictures/${auth.user.id}_reviewPicture.png`;
+				review.reviewPicture = `uploads/reviewPictures/${params.id}_${auth.user.id}_reviewPicture.png`;
 			}
-
-			// Populates the review object's values
-			review.reviewPicture = `uploads/reviewPictures/${auth.user.id}_reviewPicture.png`;
 
 			await review.save();
 			session.flash({ notification: 'Review Added!' });
@@ -90,12 +87,12 @@ class ReviewController {
 				await Drive.delete(review.reviewPicture);
 			} else {
 				await reviewPicture.move(Helpers.publicPath('uploads/reviewPictures/'), {
-					name: `${auth.user.id}_reviewPicture.png`,
+					name: `${params.id}_${auth.user.id}_reviewPicture.png`,
 					overwrite: true
 				});
 
 				// Populates the review object's values
-				reviewPictureString = `uploads/reviewPictures/${auth.user.id}_reviewPicture.png`;
+				reviewPictureString = `uploads/reviewPictures/${params.id}_${auth.user.id}_reviewPicture.png`;
 			}
 
 			// Update the review in the database
