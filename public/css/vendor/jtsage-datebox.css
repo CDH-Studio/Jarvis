@@ -26,7 +26,7 @@
  }
 
 .btn-cal-info, .btn-cal-info:hover, .btn-cal-info:active, .btn-cal-info:focus, .btn-cal-info:visited{
-	background-color: #223851 !important;
+	background-color: #004680 !important;
 	color: #ffffff !important;
 
 }
@@ -37,7 +37,8 @@
 
  .btn-cal-info:hover,  .btn-cal-secondary:hover{
 	position: relative !important; 
-	color: #223851 !important;
+	background-color: #023258 !important;
+	color: #ffffff !important;
     box-shadow: 0 2px 8px 0 #00000033 !important;
 }
 
