@@ -4,6 +4,9 @@
 /* General */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 
+.vertical-center{
+    align-items: center;
+}
 .wrapper-center {
     text-align: center;
 }
