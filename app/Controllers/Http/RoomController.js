@@ -409,15 +409,10 @@ class RoomController {
 		}
 
 		// iterate through the rooms
-		async function asyncFilter (arr, callback) {
-			let arr2 = [];
+		async function asyncForEach (arr, callback) {
 			for (let i = 0; i < arr.length; i++) {
-				if (await callback(arr[i])) {
-					arr2.push(arr[i]);
-				}
+				await callback(arr[i], i, arr);
 			}
-
-			return arr2;
 		}
 
 		const checkRoomAvailability = async () => {
