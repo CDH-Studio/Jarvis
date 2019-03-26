@@ -2,6 +2,7 @@
 const Env = use('Env');
 const Token = use('App/Models/Token');
 const JWT = require('jsonwebtoken');
+const Event = use('Event');
 
 // The credentials for Microsoft Graph
 const credentials = {
@@ -147,6 +148,40 @@ class TokenController {
 			maxAge: 3600000,
 			httpOnly: true
 		});
+	}
+
+	async test ({ request, session, response }) {
+		this.show();
+		return response.redirect('back');
+	}
+
+	show () {
+		console.log('hi')
+		const message = ['1', '2', '3', '4', '5'];
+		setTimeout(() => {
+			console.log('yo')
+			Event.fire('send.message', message[0]);
+		}, 1000);
+
+		setTimeout(() => {
+			console.log('yo')
+			Event.fire('send.message', message[1]);
+		}, 1500);
+
+		setTimeout(() => {
+			console.log('yo')
+			Event.fire('send.message', message[2]);
+		}, 2000);
+
+		setTimeout(() => {
+			console.log('yo')
+			Event.fire('send.message', message[3]);
+		}, 2500);
+
+		setTimeout(() => {
+			console.log('yo')
+			Event.fire('send.message', message[4]);
+		}, 3000);
 	}
 }
 
