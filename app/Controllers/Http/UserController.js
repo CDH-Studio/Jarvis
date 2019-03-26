@@ -113,19 +113,22 @@ class UserController {
 		const user = await User.findBy('id', params.id);
 		var layoutType = '';
 		const userRole = await auth.user.getUserRole();
+		var isAdmin;
 
 		// check if admin is editing their own profile
 		if (userRole === 'admin') {
 			layoutType = 'layouts/adminLayout';
+			isAdmin = true;
 		// check if user is editing their own profile
 		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
 			layoutType = 'layouts/mainLayout';
+			isAdmin = false;
 		// check if user is editing someone elses profile
 		} else {
 			return response.redirect('/');
 		}
 
-		return view.render('auth.editUser', { user: user, layoutType: layoutType });
+		return view.render('auth.editUser', { user: user, layoutType: layoutType, isAdmin: isAdmin });
 	}
 
 	/**
@@ -151,7 +154,7 @@ class UserController {
 
 		session.flash({ notification: 'User Updated!' });
 
-		return response.route('editUser', { id: params.id });
+		return response.route('viewProfile', { id: params.id });
 	}
 
 	/**

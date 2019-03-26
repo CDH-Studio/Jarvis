@@ -1,5 +1,10 @@
 @layout('layouts.adminLayout')
 
+@section('title')
+View Users
+@endsection
+
+
 @section('extracss')
 <link href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css' rel='stylesheet'>
 @endsection
@@ -9,27 +14,60 @@
     <div>
         {{--  Displays all of the users in the database in a table  --}}
         @if(users.length == 0)
-            <div>There are currently no users in the database.</div>
+            <div class="row">
+                <div class="col-12 text-center mt-5">
+                    <p class="fas fa-ghost fa-10x mb-5 mt-5 text-muted"></p>
+                    <h3 class="text-muted">No Users Found</h3>
+                </div>
+            </div>
         @else
-            {{--  All Users table  --}}
-            <div class='table-responsive'>
-                <table class='table table-hover' style='width:100%'> 
-                    <thead class='table table-hover mt-4'>
-                        <tr>
-                        <th scope='col' style='width:50%'>Name</th>
-                        <th scope='col' style='width:50%'>Email Address</th>
-                        </tr>
-                    </thead>
-                    {{--  Loops through the users array and displays every user's information  --}}
-                    <tbody>
-                        @each(user in users) 
-                            <tr id='userRow' class='table-light' onclick="window.location='{{ route('viewProfile', { id: user.id }) }}';">
-                            <td>{{ user.firstname }} {{ user.lastname }}</td>
-                            <td>{{ user.email }}</td>
-                            </tr>
-                        @endeach
-                    <tbody>
-                </table>
+            {{--  room Reports/Issues Stats  --}}
+            <div class='row text-center' style='padding-left: 15px;'> 
+                <div class='col-3 card stats-card shadow no-padding'>
+                    <div class='card-highlight-primary'></div>
+                    <div class='card-body'>
+                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                            <i class='d-inline-flex no-padding color-info card-icon fas fa-user fa-2x'></i>
+                            <div class='no-padding text-left' style='padding-left:15px;'>
+                                <div class='row'>
+                                    <h2 class='col no-margin'><b>{{ users.length }}</b></h2>
+                                </div>
+                                <div class='row'>
+                                    <h5 class='col text-grey'>Total Users</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="card shadow mt-4 mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">All Users</h6>
+                </div>
+                <div class="card-body">
+                    {{--  All Users table  --}}
+                    <div class='table-responsive'>
+                        <table id='usersTable' class='table table-hover mt-4' style='width:100%'> 
+                            <thead>
+                                <tr>
+                                <th scope='col' style='width:50%'>Name</th>
+                                <th scope='col' style='width:50%'>Email Address</th>
+                                </tr>
+                            </thead>
+                            {{--  Loops through the users array and displays every user's information  --}}
+                            <tbody>
+                                @each(user in users) 
+                                    <tr id='userRow' class='table-light' onclick="window.location='{{ route('viewProfile', { id: user.id }) }}';">
+                                    <td>{{ user.firstname }} {{ user.lastname }}</td>
+                                    <td>{{ user.email }}</td>
+                                    </tr>
+                                @endeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         @endif
     </div> 

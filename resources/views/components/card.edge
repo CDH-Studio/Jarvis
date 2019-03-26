@@ -48,7 +48,11 @@
             <div class='row'>
                 {{--  Room Picture  --}}
                 <div href='../' class='room-card-photo wrapper-center col-sm-5'>
-                    <img src='/images/meeting.jpeg'>
+                    @if(roomPicture) 
+                        <img width='183.75' height='137.27' src='{{ roomPicture }}'>
+                    @else
+                        <img src='/images/meeting.jpeg'>
+                    @endif
                 </div>
                 {{--  Room information  --}}
                 <div class='checkbox-content col row'>
