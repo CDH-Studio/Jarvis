@@ -292,15 +292,13 @@
             $('#roomPictureLabel').html(fileName);
         });
     </script>
-    {{--  Script to display old file  --}}
+    {{--  Script to display old file  --}}  
     <script>
         $('#floorPlan').change(function(e){
-            var file = e.target.files[0];
-            $('#floorPlan').html(file);
+            $('#floorPlan').html($(this).val());
         });
         $('#roomPicture').change(function(e){
-            var file = e.target.files[0];
-            $('#roomPicture').html(file);
+            $('#roomPicture').html($(this).val());
         });
     </script>
     {{--  Remove the is-invalid class when input changes  --}}

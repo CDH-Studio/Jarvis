@@ -649,5 +649,14 @@
             });
         </script>
     @endif
+    {{--  Displays "Room Added/Updated!" success message  --}}
+    @if(flashMessage('error'))
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', () => {
+                notify({$: $, message: '{{ flashMessage('error') }}', type: 'danger', x: 10, y: 60 });
+            });
+        </script>
+    @endif
     
 @endsection
