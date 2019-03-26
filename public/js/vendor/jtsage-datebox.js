@@ -11,7 +11,6 @@
  *
  */
 
-
 (function($) {
     $.widget("jtsage.datebox", {
         initSelector: "input[data-role='datebox']",
