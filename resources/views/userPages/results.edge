@@ -29,17 +29,15 @@
         let pusher = new Pusher('aca8a920ad0e3d8ac09f', {
             cluster: 'us2',
             useTLS: true
-            });
+        });
 
-            //Subscribe to the channel we specified in our Adonis Application
-            let channel = pusher.subscribe('adonis-channel')
+        //Subscribe to the channel we specified in our Adonis Application
+        let channel = pusher.subscribe('adonis-channel')
 
-            //Listen for events on the channel
-            channel.bind('send-message', (data) => {
-
-                console.log(data);
-                let listItem = $("<div class='col-lg-6'>" + data.message + "</div>")
-                $('#results').append(listItem)
-            })
+        //Listen for events on the channel
+        channel.bind('send-message', (data) => {
+            let listItem = $("<div class='col-lg-6'>" + data.message + "</div>")
+            $('#results').append(listItem)
+        })
         </script>
 @endsection

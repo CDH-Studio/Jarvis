@@ -369,7 +369,7 @@ class RoomController {
 		const checkRoomAvailability = async () => {
 			await asyncForEach(rooms, async (item) => {
 				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
-					Event.fire('send.message', view.render('components.card', { form, room: item, token: '' }));
+					Event.fire('send.message', view.render('components.card', { form, room: item, token: request.csrfToken }));
 				}
 			});
 		};
@@ -380,8 +380,8 @@ class RoomController {
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
-		// console.log(view.render('components.card', { form, room: rooms[0], token: '' }));
-		return view.render('userPages.results', { rooms, form });
+
+		return view.render('userPages.results');
 	}
 
 	/**
