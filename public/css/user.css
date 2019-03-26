@@ -45,3 +45,7 @@
 .confirmation-form{
     max-width: 240px;
 }
+
+.room-card {
+    animation: fadeIn 1s ease-in;
+}
