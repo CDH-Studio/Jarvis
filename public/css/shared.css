@@ -1,6 +1,19 @@
 /*  This file is for CSS changes that are used by both ADMIN and USER views */
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
+/* EI Compatibilitie Changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/*  */
+@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {  
+    /* IE10+ specific styles go here */  
+    .stats-card-content{
+        min-width:75px;
+        width:135px;
+    }
+ }
+
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
 /* General */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 
