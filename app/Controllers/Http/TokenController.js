@@ -157,30 +157,30 @@ class TokenController {
 	}
 
 	show () {
-		console.log('hi')
+		console.log('hi');
 		const message = ['1', '2', '3', '4', '5'];
 		setTimeout(() => {
-			console.log('yo')
+			console.log('yo');
 			Event.fire('send.message', message[0]);
 		}, 1000);
 
 		setTimeout(() => {
-			console.log('yo')
+			console.log('yo');
 			Event.fire('send.message', message[1]);
 		}, 1500);
 
 		setTimeout(() => {
-			console.log('yo')
+			console.log('yo');
 			Event.fire('send.message', message[2]);
 		}, 2000);
 
 		setTimeout(() => {
-			console.log('yo')
+			console.log('yo');
 			Event.fire('send.message', message[3]);
 		}, 2500);
 
 		setTimeout(() => {
-			console.log('yo')
+			console.log('yo');
 			Event.fire('send.message', message[4]);
 		}, 3000);
 	}
