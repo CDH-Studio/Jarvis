@@ -150,7 +150,7 @@ class TokenController {
 		});
 	}
 
-	async test ({ request, session, response, view }) {
+	async push ({ request, session, response, view }) {
 		this.show();
 		console.log(view.render('components.pageHeader', { title: '1' }));
 		return response.redirect('back');

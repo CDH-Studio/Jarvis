@@ -108,5 +108,8 @@ Route.get('/calendar', 'RoomController.getCalendar');
 // Chatbot
 //= ========================================================================
 Route.post('/message', 'Roomcontroller.sendMessage').as('message');
-Route.get('/test', 'TokenController.test').as('test');
-Route.get('/test2', 'TokenController.show').as('test2');
+
+//= ========================================================================
+// Pusher
+//= ========================================================================
+Route.get('/push', 'TokenController.push').as('push');
