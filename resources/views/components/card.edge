@@ -109,9 +109,9 @@
             <div class='room-card-info row wrapper-center'>
                 <div class='col'>
                     @if(floor == 0)
-                        <b>Location:</b><span>  0-{{ tower }} </span>
+                        <b>Location:</b><span>  0-{{ room.tower }} </span>
                     @else 
-                        <b>Location:</b><span>  {{ floor }}-{{ tower }} </span>
+                        <b>Location:</b><span>  {{ room.floor }}-{{ room.tower }} </span>
                     @endif
                 </div>
                 <div class='col'>
