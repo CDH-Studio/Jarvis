@@ -36,7 +36,7 @@
 
         //Listen for events on the channel
         channel.bind('send-room', (data) => {
-            let listItem = $("<div class='col-lg-6'>" + data.message + "</div>")
+            let listItem = $("<div class='col-lg-4 no-padding'>" + data.message + "</div>")
             $('#results').append(listItem)
         })
         </script>

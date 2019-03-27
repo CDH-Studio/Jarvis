@@ -1,43 +1,3 @@
-<!DOCTYPE html>
-<html lang='en'>
-  <head>
-    <meta charset='UTF-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
-    <meta name='description' content=''>
-    <meta name='author' content=''>
-
-    
-
-    <!-- Custom fonts for this template-->
-    {{--  <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700|Roboto:300,400,700' rel='stylesheet'>  --}}
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-    
-    {{--  Datepicker Imports  --}}
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
-    {{ style('css/vendor/jtsage-datebox') }}
-    {{ script('js/vendor/jtsage-datebox') }}
-
-    <!-- Custom styles for this template-->
-    {{ style('css/vendor/sb-admin-2') }}
-    {{ style('css/sb-admin-login') }}
-    {{ style('css/user') }}
-    {{ style('css/vendor/animate') }}
-
-    {{--  Icons  --}}
-    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.1/css/all.css' integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous'>
-
-
-    
-    @!section('extracss')
-    @!section('extrajs')
-
-    <title>
-        @!section('title')
-    </title>
-  </head>
-
 <body id='page-top'>
         <div id='wrapper'>
           <!-- Sidebar -->
@@ -70,25 +30,20 @@
     
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-              <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRooms" aria-expanded="true" aria-controls="collapseRooms">
+              <a class="nav-link collapsed" href="{{ route('home') }}" data-toggle="collapse" data-target="#collapseRooms" aria-expanded="true" aria-controls="collapseRooms">
                 <i class="fas fa-fw fa-map-marker-alt"></i>
-                <span>Rooms</span>
+                <span>Book a Room</span>
               </a>
-              <div id="collapseRooms" class="collapse" aria-labelledby="headingRooms" data-parent="#accordionSidebar">
-                  <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Room Pages:</h6>
-                    <a id="side-nav-dropdown-item" class='dropdown-item' href="{{ route('searchRooms') }}">Search</a>
-                    <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('allRooms') }}'>View All Rooms</a>
-                  </div>
-                </div>
             </li>
-            <!-- Nav Item - Dashboard -->
+    
+            <!-- Nav Item - Utilities Collapse Menu -->
             <li class="nav-item">
-              <a class="nav-link"  href='{{ route('viewBookings',{id: auth.user.id}) }}'>
-                <i class="fas fa-tasks"></i>
-                <span>Manage Bookings</span>
+              <a class="nav-link collapsed" href="{{ route('viewBookings',{id: auth.user.id}) }} data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
+                <i class="fas fa-fw fa-user-friends"></i>
+                <span>Users</span>
               </a>
             </li>
+    
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
     
