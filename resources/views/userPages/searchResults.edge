@@ -12,17 +12,7 @@
     {{--  Loading page header  --}}
     @!component('components.pageHeader', title='Results')
     {{--  where result cards will be displayed --}}
-    <div class='row' id='results'>
-        {{--  @each(room in rooms)  --}}
-            {{--  <div class='col-lg-6'>  --}}
-                {{--  {{ csrfField() }}  --}}
-                {{--  @!component('components.card',  --}}
-                    {{--  form=form,  --}}
-                    {{--  room=room,  --}}
-                    {{--  token=csrfToken)  --}}
-            {{--  </div>  --}}
-        {{--  @endeach  --}}
-    </div>
+    <div class='row' id='results'></div>
 
     {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
     <script>
