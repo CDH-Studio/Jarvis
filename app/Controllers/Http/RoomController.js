@@ -381,7 +381,6 @@ class RoomController {
 		}
 
 		const code = random(4);
-		console.log(code);
 		const checkRoomAvailability = async () => {
 			await asyncForEach(rooms, async (item) => {
 				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
