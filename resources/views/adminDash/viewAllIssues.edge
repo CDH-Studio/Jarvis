@@ -23,7 +23,7 @@ View Room Issues
         @else
             {{--  room Reports/Issues Stats  --}}
             <div class='row text-center' style='padding-left: 15px;'> 
-                <div class='col card stats-card shadow no-padding'>
+                <a class='col card stats-card shadow no-padding issue-stats-card-link' href='{{ route('renderIssues', { issueStatus: 'allIssues' }) }}'>
                     <div class='card-highlight-primary'></div>
                     <div class='card-body'>
                         <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -38,8 +38,8 @@ View Room Issues
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class='col card stats-card shadow no-padding'>
+                </a>
+                <a class='col card stats-card shadow no-padding issue-stats-card-link' href='{{ route('renderIssues', { issueStatus: 'open' }) }}'>
                     <div class='card-highlight-success'></div>
                     <div class='card-body'>
                         <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -54,8 +54,8 @@ View Room Issues
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class='col card stats-card shadow no-padding'>
+                </a>
+                <a class='col card stats-card shadow no-padding issue-stats-card-link' href='{{ route('renderIssues', { issueStatus: 'pending' }) }}'>
                     <div class='card-highlight-warning'></div>
                     <div class='card-body'>
                         <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -70,8 +70,8 @@ View Room Issues
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class='col card stats-card shadow no-padding'>
+                </a>
+                <a class='col card stats-card shadow no-padding issue-stats-card-link' href='{{ route('renderIssues', { issueStatus: 'closed' }) }}'>
                     <div class='card-highlight-danger'></div>
                     <div class='card-body'>
                         <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -86,7 +86,7 @@ View Room Issues
                             </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
             <div class="card shadow mt-4 mb-4">
                 <div class="card-header py-3">
