@@ -11,9 +11,6 @@
                         <div class='col-md-5'>
                             @if(isAdmin)
                                 <form action='{{ route('saveAdmin', {id: user.id}) }}' method='POST' enctype='multipart/form-data'>
-                                @if(hasErrorFor())
-                                    {{ getErrorFor() }}
-                                @endif
                             @else
                                 <form action='{{ route('saveUser', {id: user.id}) }}' method='POST' enctype='multipart/form-data'>
                             @endif
