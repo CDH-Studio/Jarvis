@@ -229,8 +229,10 @@
         {{ script('js/vendor/bootstrap-notify.min') }}
             {{--  Mouseover Tooltip  --}}
         <script> $(document).ready(function(){ $('[data-toggle="tooltip"]').tooltip(); });</script>
-    
+	
+		<!-- Chart plugins -->
+		<script src="vendor/chart.js/Chart.min.js"></script>
+
         @!section('extrajs')
-    
       </body>
     </html>

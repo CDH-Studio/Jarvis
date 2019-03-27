@@ -21,33 +21,24 @@
         @slot('body')
         @endslot
     @endcomponent
-    {{--  Content  --}}
-    <div class='book-room-content wrapper-center'>
+    {{--  Page Content  --}}
+    <div class='book-room-content wrapper-center'>    
         <div class='row'>
-            <div class='col-sm-12'>
-                <h1>Create Booking</h1>
-            </div>
-        </div>    
-        <div class='row'>
-            <div class='col-sm-12'>
-                <button type='button' class='btn btn-primary large-buttons' onclick="window.location='{{ route('searchRooms') }}';">Search</button>
-                <button type='button' class='btn btn-secondary large-buttons' onclick="window.location='{{ route('allRooms') }}';">View All Rooms</button>
-            </div>
-
+			{{--  Chatbot  --}}
             <div class='row'>
-                    <i class='open-button fas fa-robot fa-2x' onclick='openChat()'></i>
-        
-                    <div class='chat-popup' id='chat-popup'>
-                        <form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>
-                            {{ csrfField() }}
-                            <div class='messages'></div>
-                            <textarea placeholder='Type message..' name='message' id='message'></textarea>
-        
-                            <button id='sub' type='button' class='btn' onclick='send()'>Send</button>
-                            <button type='button' class='btn cancel' onclick='closeChat()'>Close</button>
-                        </form>
-                    </div>
-                </div>
+				<i class='open-button fas fa-robot fa-2x' onclick='openChat()'></i>
+	
+				<div class='chat-popup' id='chat-popup'>
+					<form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>
+						{{ csrfField() }}
+						<div class='messages'></div>
+						<textarea placeholder='Type message..' name='message' id='message'></textarea>
+	
+						<button id='sub' type='button' class='btn' onclick='send()'>Send</button>
+						<button type='button' class='btn cancel' onclick='closeChat()'>Close</button>
+					</form>
+				</div>
+			</div>
         </div>
     </div>
 
