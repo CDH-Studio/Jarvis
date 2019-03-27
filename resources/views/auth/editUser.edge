@@ -1,7 +1,6 @@
 @layout(layoutType)
 
 @section('content')
-
     @!component('components.pageHeader', title='Edit Profile')
 
     <div class='row'>
@@ -10,7 +9,14 @@
                 <div class="card-body">
                     <div class="row">
                         <div class='col-md-5'>
-                            <form action='{{ route('saveUser', {id: user.id}) }}' method='POST' enctype='multipart/form-data'>
+                            @if(isAdmin)
+                                <form action='{{ route('saveAdmin', {id: user.id}) }}' method='POST' enctype='multipart/form-data'>
+                                @if(hasErrorFor())
+                                    {{ getErrorFor() }}
+                                @endif
+                            @else
+                                <form action='{{ route('saveUser', {id: user.id}) }}' method='POST' enctype='multipart/form-data'>
+                            @endif
                                 {{ csrfField() }}
                                 <div class='form-group'>
                                     <label for='firstName'>First Name</label>
@@ -116,7 +122,7 @@
 		function goBack() {
 			window.history.back();
 		}
-	</script>
+    </script>
 @endsection
 
 
