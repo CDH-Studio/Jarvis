@@ -85,6 +85,16 @@ class BookingController {
 		const row = results.toJSON();
 		const name = row.name;
 
+		console.log(await this.getRoomAvailability(date, from, to, row.calendar));
+
+		if (!await this.getRoomAvailability(date, from, to, row.calendar)) {
+			session.flash({
+				error: `Room ${name} has already been booked for the time selected!`
+			});
+
+			return response.route('showRoom', { id: room });
+		}
+
 		// Information of the event
 		const eventInfo = {
 			'subject': meeting,

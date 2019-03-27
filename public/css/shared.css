@@ -41,6 +41,9 @@
 .custom-shadow{
     box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2);
 }
+.shadow{
+    box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2) !important;
+}
 /* checkboxes */
 .custom-control-input:checked ~ .custom-control-label::before {
     color: #fff;

@@ -108,7 +108,11 @@
             <hr style='margin-top:0px;'>
             <div class='room-card-info row wrapper-center'>
                 <div class='col'>
-                    <b>Location:</b><span>  {{ room.floor }}-{{ room.tower }} </span>
+                    @if(floor == 0)
+                        <b>Location:</b><span>  0-{{ room.tower }} </span>
+                    @else 
+                        <b>Location:</b><span>  {{ room.floor }}-{{ room.tower }} </span>
+                    @endif
                 </div>
                 <div class='col'>
                     <b>Seats:</b><span> {{ room.seats }}</span>

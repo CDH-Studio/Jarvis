@@ -152,7 +152,7 @@ class UserController {
 				tower: body.tower
 			});
 
-		session.flash({ notification: 'User Updated!' });
+		session.flash({ notification: 'Your profile has been updated!' });
 
 		return response.route('viewProfile', { id: params.id });
 	}

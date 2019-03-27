@@ -680,6 +680,16 @@
             });
         </script>
     @endif
+    {{--  Displays "Room has already been booked!" error message  --}}
+    @if(flashMessage('error'))
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', () => {
+                notify({$: $, message: '{{ flashMessage('error') }}', type: 'danger', x: 10, y: 60 });
+            });
+        </script>
+    @endif
+    
     {{--  Table Filter  --}}
     <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
     <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
