@@ -22,6 +22,20 @@ async function getAccessToken () {
 	}
 }
 
+/**
+ * Generating a random string.
+ *
+ * @param {Integer} times Each time a string of 5 to 6 characters is generated.
+ */
+function random (times) {
+	let result = '';
+	for (let i = 0; i < times; i++) {
+		result += Math.random().toString(36).substring(2);
+	}
+
+	return result;
+}
+
 class RoomController {
 	/**
 	 * Takes in a variable and converts the value to 0 if it's null (Used for checkboxes)
@@ -366,10 +380,15 @@ class RoomController {
 			}
 		}
 
+		const code = random(4);
+		console.log(code);
 		const checkRoomAvailability = async () => {
 			await asyncForEach(rooms, async (item) => {
 				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
-					Event.fire('send.room', view.render('components.card', { form, room: item, token: request.csrfToken }));
+					Event.fire('send.room', {
+						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
+						code: code
+					});
 				}
 			});
 		};
@@ -381,7 +400,7 @@ class RoomController {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
 
-		return view.render('userPages.searchResults');
+		return view.render('userPages.searchResults', { code: code });
 	}
 
 	/**

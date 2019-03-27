@@ -10,6 +10,7 @@
         {{ style('css/user') }}
     @endsection
     {{--  Loading page header  --}}
+    {{ code }}
     @!component('components.pageHeader', title='Results')
     {{--  where result cards will be displayed --}}
     <div class='row' id='results'>
@@ -36,7 +37,8 @@
 
         //Listen for events on the channel
         channel.bind('send-room', (data) => {
-            let listItem = $("<div class='col-lg-4 no-padding'>" + data.message + "</div>")
+            console.log('{{ code }}');
+            let listItem = $("<div class='col-lg-4 no-padding'>" + data.message.card + "</div>")
             $('#results').append(listItem)
         })
         </script>
