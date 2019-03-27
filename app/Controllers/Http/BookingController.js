@@ -285,8 +285,8 @@ class BookingController {
 				start: eventInfo.start.dateTime,
 				end: eventInfo.end.dateTime,
 				subject: eventInfo.subject,
-				body: eventInfo.body.content,
-				attendees: ['yunwei.li@canada.ca']
+				body: eventInfo.body.content
+				//attendees: ['yunwei.li@canada.ca']
 			});
 
 			booking.from = eventInfo.start.dateTime;
