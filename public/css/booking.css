@@ -1,14 +1,11 @@
 .open-button {
-	background-color: #555;
-	color: white;
-	padding: 16px 20px;
+	color: #555;
 	border: none;
 	cursor: pointer;
 	opacity: 0.8;
 	position: fixed;
-	bottom: 23px;
+	bottom: 90px;
 	right: 28px;
-	width: 280px;
 }
 
 .chat-popup {
