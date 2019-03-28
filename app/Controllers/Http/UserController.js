@@ -117,11 +117,9 @@ class UserController {
 
 		// check if admin is editing their own profile
 		if (userRole === 'admin') {
-			layoutType = 'layouts/adminLayout';
 			isAdmin = true;
 		// check if user is editing their own profile
 		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
-			layoutType = 'layouts/mainLayout';
 			isAdmin = false;
 		// check if user is editing someone elses profile
 		} else {
