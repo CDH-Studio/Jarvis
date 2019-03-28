@@ -344,12 +344,9 @@ class UserController {
 		const userRole = await auth.user.getUserRole();
 		const profileUserRole = await user.getUserRole();
 		// check if admin is viewing their own profile
-		if (userRole === 'admin') {
-			layoutType = 'layouts/adminLayout';
-			canEdit = 1;
-		// check if user is viewing their own profile
-		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
-			layoutType = 'layouts/mainLayout';
+
+		// check if user is viewing their own profile or is admin
+		if ((auth.user.id === Number(params.id) || userRole === 'admin')) {
 			canEdit = 1;
 		} else {
 			return response.redirect('/');
