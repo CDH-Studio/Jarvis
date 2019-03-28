@@ -33,21 +33,21 @@
                 <button type='button' class='btn btn-primary large-buttons' onclick="window.location='{{ route('searchRooms') }}';">Search</button>
                 <button type='button' class='btn btn-secondary large-buttons' onclick="window.location='{{ route('allRooms') }}';">View All Rooms</button>
             </div>
-        </div>
 
-        <div class='row'>
-            <button class='open-button' onclick='openChat()'>Chat</button>
-
-            <div class='chat-popup' id='chat-popup'>
-                <form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>
-                    {{ csrfField() }}
-                    <div class='messages'></div>
-                    <textarea placeholder='Type message..' name='message' id='message'></textarea>
-
-                    <button id='sub' type='button' class='btn' onclick='send()'>Send</button>
-                    <button type='button' class='btn cancel' onclick='closeChat()'>Close</button>
-                </form>
-            </div>
+            <div class='row'>
+                    <i class='open-button fas fa-robot fa-2x' onclick='openChat()'></i>
+        
+                    <div class='chat-popup' id='chat-popup'>
+                        <form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>
+                            {{ csrfField() }}
+                            <div class='messages'></div>
+                            <textarea placeholder='Type message..' name='message' id='message'></textarea>
+        
+                            <button id='sub' type='button' class='btn' onclick='send()'>Send</button>
+                            <button type='button' class='btn cancel' onclick='closeChat()'>Close</button>
+                        </form>
+                    </div>
+                </div>
         </div>
     </div>
 

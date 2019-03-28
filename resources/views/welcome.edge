@@ -50,7 +50,7 @@
                       <strong>{{ flashMessage('loginError') }}</strong>
                     </div>
                   @endif
-                  <form action='{{ route('UserController.login') }}' method='POST' class='user'>
+                  <form action='{{ route('test') }}' method='GET' class='user'>
                     {{ csrfField() }}
                     <div class='form-group'>
                       <input type='email' class='form-control form-control-user' name='email' id='email' aria-describedby='emailHelp' placeholder='Enter email'>
@@ -86,10 +86,33 @@
 
     </div>
 
+    <div>
+      <ul id='messages' class='list-group'></ul>
+    </div>
+
   </div>
 
   <!-- Bootstrap core JavaScript-->
   <script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
+  {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
+
+  <script>
+      let pusher = new Pusher('aca8a920ad0e3d8ac09f', {
+              cluster: 'us2',
+              useTLS: true
+            });
+
+            //Subscribe to the channel we specified in our Adonis Application
+            let channel = pusher.subscribe('adonis-channel')
+
+            //Listen for events on the channel
+            // channel.bind('send-message', (data) => {
+
+            //   console.log();
+            //   let listItem = $("<li class='list-group-item'>" + data.message + "</li>")
+            //   $('#messages').append(listItem)
+            // })
+  </script>
   {{script('js/vendor/popper.js')}}
   <script src='https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js' integrity='sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k' crossorigin='anonymous'></script>
 

@@ -48,7 +48,8 @@ Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetReq
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
-Route.post('/user/:id/edit', 'UserController.update').as('saveUser').middleware(['auth']);
+Route.post('/user/:id/editUser', 'UserController.update').as('saveUser').validator('EditUser').middleware(['isUser']);
+Route.post('/user/:id/editAdmin', 'UserController.update').as('saveAdmin').validator('EditAdmin').middleware(['isAdmin']);
 Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 
 //= ========================================================================
@@ -66,6 +67,7 @@ Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 Route.get('/allIssues', 'IssueController.getAllIssues').as('allIssues').middleware(['isAdmin']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
+Route.get('/issues/:issueStatus', 'IssueController.renderIssuePage').as('renderIssues').middleware(['isAdmin']);
 
 Route.get('/roomBookings/:id', 'BookingController.getRoomBookings').as('roomBookings').middleware(['auth']);
 Route.get('/roomIssues/:id', 'IssueController.getRoomIssues').as('roomIssues').middleware(['auth']);
@@ -108,3 +110,8 @@ Route.get('/calendar', 'RoomController.getCalendar');
 // Chatbot
 //= ========================================================================
 Route.post('/message', 'Roomcontroller.sendMessage').as('message');
+
+//= ========================================================================
+// Pusher
+//= ========================================================================
+Route.get('/push', 'TokenController.push').as('push');

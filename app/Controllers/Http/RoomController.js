@@ -4,6 +4,7 @@ const Review = use('App/Models/Review');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
+const Event = use('Event');
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -19,6 +20,20 @@ async function getAccessToken () {
 		console.log(err);
 		return null;
 	}
+}
+
+/**
+ * Generating a random string.
+ *
+ * @param {Integer} times Each time a string of 5 to 6 characters is generated.
+ */
+function random (times) {
+	let result = '';
+	for (let i = 0; i < times; i++) {
+		result += Math.random().toString(36).substring(2);
+	}
+
+	return result;
 }
 
 class RoomController {
@@ -86,8 +101,8 @@ class RoomController {
 			});
 
 			// Populates the room object's values
-			room.floorplan = `uploads/floorPlans/${room.name}.png`;
-			room.picture = `uploads/roomPictures/${room.name}.png`;
+			room.floorplan = `uploads/floorPlans/${room.name}_floorPlan.png`;
+			room.picture = `uploads/roomPictures/${room.name}_roomPicture.png`;
 			room.extraEquipment = body.extraEquipment == null ? ' ' : body.extraEquipment;
 			room.comment = body.comment == null ? ' ' : body.extraEquipment;
 			await room.save();
@@ -165,8 +180,8 @@ class RoomController {
 				videoConference: body.videoCheck === '1' ? '1' : '0',
 				surfaceHub: body.surfaceHubCheck === '1' ? '1' : '0',
 				pc: body.pcCheck === '1' ? '1' : '0',
-				floorplan: `uploads/floorPlans/${body.name}.png`,
-				picture: `uploads/roomPictures/${body.name}.png`,
+				floorplan: `uploads/floorPlans/${body.name}_floorPlan.png`,
+				picture: `uploads/roomPictures/${body.name}_roomPicture.png`,
 				extraEquipment: body.extraEquipment == null ? ' ' : body.extraEquipment,
 				comment: body.comment == null ? ' ' : body.comment,
 				state: body.state
@@ -365,22 +380,26 @@ class RoomController {
 			}
 		}
 
+		const code = random(4);
 		const checkRoomAvailability = async () => {
-			await asyncForEach(rooms, async (item, index, items) => {
-				if (!await this.getRoomAvailability(date, from, to, item.calendar)) {
-					items.splice(index, 1);
+			await asyncForEach(rooms, async (item) => {
+				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
+					Event.fire('send.room', {
+						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
+						code: code
+					});
 				}
 			});
 		};
 
-		await checkRoomAvailability();
+		setTimeout(checkRoomAvailability, 500);
 
 		// Sort the results by name
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
 
-		return view.render('userPages.results', { rooms, form });
+		return view.render('userPages.searchResults', { code: code });
 	}
 
 	/**

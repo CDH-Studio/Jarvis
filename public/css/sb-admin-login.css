@@ -17,13 +17,14 @@
 .bg-login-image{
 	background: url("../images/login_3.jpg");
 	background-position: center;
-    background-size: cover;
+  background-size: cover;
 }
 
 .bg-gradient-primary {
   background-color: #001642;
   background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #4e73df), to(#224abe));
-  background-image: linear-gradient(180deg, #001642 10%, #0f1b33 100%);
+  /*background-image: linear-gradient(180deg, #001642 10%, #0f1b33 100%);*/
+  background-image: linear-gradient(180deg, #242582 10%, #2F2FA2 100%);
   background-size: cover;
 }
 
@@ -66,7 +67,8 @@ form.user .form-control {
 .login-logo{
 	width:45%;
   max-width: 180px;
-	background-color:#04163F;
-	padding:15px 15px;
 }
-	
+
+.navbar-brand{
+  margin-right:3px;
+	}

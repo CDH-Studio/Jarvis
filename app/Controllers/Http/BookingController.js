@@ -1,5 +1,6 @@
 'use strict';
 const Room = use('App/Models/Room');
+const User = use('App/Models/User');
 const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const graph = require('@microsoft/microsoft-graph-client');
@@ -57,6 +58,9 @@ async function populateBookings (results) {
 			booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
 			booking.roomId = result.room_id;
 			booking.id = result.id;
+			const userInfo = (await User.findBy('id', result.user_id)).toJSON();
+			booking.userName = userInfo.firstname + ' ' + userInfo.lastname;
+			booking.userId = userInfo.id;
 
 			return booking;
 		});
@@ -80,6 +84,8 @@ class BookingController {
 		const row = results.toJSON();
 		const calendar = row.calendar;
 		const name = row.name;
+
+		console.log(await this.getRoomAvailability(date, from, to, calendar));
 
 		if (!await this.getRoomAvailability(date, from, to, calendar)) {
 			session.flash({
@@ -194,7 +200,7 @@ class BookingController {
 			return response.redirect('/');
 		}
 
-		const results = (await auth.user.bookings().fetch()).toJSON();
+		const results = (await Booking.query().where('user_id', params.id).fetch()).toJSON();
 		const bookings = await populateBookings(results);
 
 		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });

@@ -56,6 +56,8 @@ class CustomValidationProvider extends ServiceProvider {
 		if (before <= after) {
 			if (after.slice(0, 2) < 12) {
 				after += ' AM';
+			} else if (after.slice(0, 2) === '12') {
+				after = after.substr(0, 2) + after.substr(2) + ' PM';
 			} else {
 				after = (after.substr(0, 2) - 12) + after.substr(2) + ' PM';
 			}

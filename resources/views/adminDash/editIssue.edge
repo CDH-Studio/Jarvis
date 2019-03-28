@@ -10,76 +10,85 @@ Issue #{{ issue.id }}
 
 
 @section('content')
-    @!component('components.pageTitle', title='Issue #' + issue.id)
+    @!component('components.pageHeader', title='Issue #' + issue.id)
+    
     <div class='row'>
-        <div class='col roomForm'>
-            {{--  Form Content  --}}
-            <form action='{{ route('updateIssue', {id: id}) }}' method='POST' enctype='multipart/form-data'>
-                {{ csrfField() }}
-                <input type='hidden' name='roomID' value={{ issue.room_id }} /> 
-                {{--  Body Information  --}}
-                <div class='row'>
-                    <div class='col form-group'>
-                        <label for='issueStatus'>Status <b class='text-danger'>*</b></label>
-                        @if(hasErrorFor('issueStatus'))
-                            <select class='form-control is-invalid' name='issueStatus' id='issueStatus' onchange='removeErrorClass("issueStatus")'>
-                                <option value='undefined' {{ old('rating', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a status</option>
-                                <option value='1' {{ old('issueStatus', issue.report_status_id) == '1' ? 'selected' : '' }}>Open</option>
-                                <option value='2' {{ old('issueStatus', issue.report_status_id) == '2' ? 'selected' : '' }}>Pending</option>
-                                <option value='3' {{ old('issueStatus', issue.report_status_id) == '3' ? 'selected' : '' }}>Closed</option>
-                            </select>
-                            <div class='invalid-feedback'>{{ getErrorFor('issueStatus') }}</div>
-                        @else
-                            <select class='form-control' name='issueStatus' id='issueStatus' onchange='removeErrorClass("issueStatus")'>
-                                <option value='undefined' {{ old('issueStatus', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a status</option>
-                                <option value='1' {{ old('issueStatus', issue.report_status_id) == '1' ? 'selected' : '' }}>Open</option>
-                                <option value='2' {{ old('issueStatus', issue.report_status_id) == '2' ? 'selected' : '' }}>Pending</option>
-                                <option value='3' {{ old('issueStatus', issue.report_status_id) == '3' ? 'selected' : '' }}>Closed</option>
-                            </select>
-                        @endif
-                    </div>
-                    <div class='col form-group'>
-                        <label for='issueType'>Issue Type <b class='text-danger'>*</b></label>
-                        @if(hasErrorFor('issueType'))
-                            <select class='form-control is-invalid' name='issueType' id='issueType' onchange='removeErrorClass("issueType")'>
-                                <option value='undefined' {{ old('rating', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select an issue</option>
-                                <option value='1' {{ old('issueType', issue.report_type_id) == '1' ? 'selected' : '' }}>Facilities</option>
-                                <option value='2' {{ old('issueType', issue.report_type_id) == '2' ? 'selected' : '' }}>Furniture</option>
-                                <option value='3' {{ old('issueType', issue.report_type_id) == '3' ? 'selected' : '' }}>Incorrect Information</option>
-                                <option value='4' {{ old('issueType', issue.report_type_id) == '4' ? 'selected' : '' }}>Technical Equipment</option>
-                                <option value='5' {{ old('issueType', issue.report_type_id) == '5' ? 'selected' : '' }}>Other</option>
-                            </select>
-                            <div class='invalid-feedback'>{{ getErrorFor('issueType') }}</div>
-                        @else
-                            <select class='form-control' name='issueType' id='issueType' onchange='removeErrorClass("issueType")'>
-                                <option value='undefined' {{ old('issueType', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select an issue</option>
-                                <option value='1' {{ old('issueType', issue.report_type_id) == '1' ? 'selected' : '' }}>Facilities</option>
-                                <option value='2' {{ old('issueType', issue.report_type_id) == '2' ? 'selected' : '' }}>Furniture</option>
-                                <option value='3' {{ old('issueType', issue.report_type_id) == '3' ? 'selected' : '' }}>Incorrect Information</option>
-                                <option value='4' {{ old('issueType', issue.report_type_id) == '4' ? 'selected' : '' }}>Technical Equipment</option>
-                                <option value='5' {{ old('issueType', issue.report_type_id) == '5' ? 'selected' : '' }}>Other</option>
-                            </select>
-                        @endif
+        <div class= 'col-md-9'>
+            <div class="card shadow mb-4 p-3">
+                <div class="card-body">
+                    <div class='row'>
+                        <div class='col-md-12'>
+                            {{--  Form Content  --}}
+                            <form action='{{ route('updateIssue', {id: id}) }}' method='POST' enctype='multipart/form-data'>
+                                {{ csrfField() }}
+                                <input type='hidden' name='roomID' value={{ issue.room_id }} /> 
+                                {{--  Body Information  --}}
+                                <div class='row'>
+                                    <div class='col form-group'>
+                                        <label for='issueStatus'>Status <b class='text-danger'>*</b></label>
+                                        @if(hasErrorFor('issueStatus'))
+                                            <select class='form-control is-invalid' name='issueStatus' id='issueStatus' onchange='removeErrorClass("issueStatus")'>
+                                                <option value='undefined' {{ old('rating', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a status</option>
+                                                <option value='1' {{ old('issueStatus', issue.report_status_id) == '1' ? 'selected' : '' }}>Open</option>
+                                                <option value='2' {{ old('issueStatus', issue.report_status_id) == '2' ? 'selected' : '' }}>Pending</option>
+                                                <option value='3' {{ old('issueStatus', issue.report_status_id) == '3' ? 'selected' : '' }}>Closed</option>
+                                            </select>
+                                            <div class='invalid-feedback'>{{ getErrorFor('issueStatus') }}</div>
+                                        @else
+                                            <select class='form-control' name='issueStatus' id='issueStatus' onchange='removeErrorClass("issueStatus")'>
+                                                <option value='undefined' {{ old('issueStatus', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a status</option>
+                                                <option value='1' {{ old('issueStatus', issue.report_status_id) == '1' ? 'selected' : '' }}>Open</option>
+                                                <option value='2' {{ old('issueStatus', issue.report_status_id) == '2' ? 'selected' : '' }}>Pending</option>
+                                                <option value='3' {{ old('issueStatus', issue.report_status_id) == '3' ? 'selected' : '' }}>Closed</option>
+                                            </select>
+                                        @endif
+                                    </div>
+                                    <div class='col form-group'>
+                                        <label for='issueType'>Issue Type <b class='text-danger'>*</b></label>
+                                        @if(hasErrorFor('issueType'))
+                                            <select class='form-control is-invalid' name='issueType' id='issueType' onchange='removeErrorClass("issueType")'>
+                                                <option value='undefined' {{ old('rating', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select an issue</option>
+                                                <option value='1' {{ old('issueType', issue.report_type_id) == '1' ? 'selected' : '' }}>Facilities</option>
+                                                <option value='2' {{ old('issueType', issue.report_type_id) == '2' ? 'selected' : '' }}>Furniture</option>
+                                                <option value='3' {{ old('issueType', issue.report_type_id) == '3' ? 'selected' : '' }}>Incorrect Information</option>
+                                                <option value='4' {{ old('issueType', issue.report_type_id) == '4' ? 'selected' : '' }}>Technical Equipment</option>
+                                                <option value='5' {{ old('issueType', issue.report_type_id) == '5' ? 'selected' : '' }}>Other</option>
+                                            </select>
+                                            <div class='invalid-feedback'>{{ getErrorFor('issueType') }}</div>
+                                        @else
+                                            <select class='form-control' name='issueType' id='issueType' onchange='removeErrorClass("issueType")'>
+                                                <option value='undefined' {{ old('issueType', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select an issue</option>
+                                                <option value='1' {{ old('issueType', issue.report_type_id) == '1' ? 'selected' : '' }}>Facilities</option>
+                                                <option value='2' {{ old('issueType', issue.report_type_id) == '2' ? 'selected' : '' }}>Furniture</option>
+                                                <option value='3' {{ old('issueType', issue.report_type_id) == '3' ? 'selected' : '' }}>Incorrect Information</option>
+                                                <option value='4' {{ old('issueType', issue.report_type_id) == '4' ? 'selected' : '' }}>Technical Equipment</option>
+                                                <option value='5' {{ old('issueType', issue.report_type_id) == '5' ? 'selected' : '' }}>Other</option>
+                                            </select>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='col form-group no-margin'>
+                                        <label for='comment'>Comment <b class='text-danger'>*</b></label>
+                                        @if(hasErrorFor('comment'))
+                                            <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment', issue.comment) }}</textarea>
+                                            <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
+                                        @else
+                                            <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  issue.comment) }}</textarea>
+                                        @endif                                    
+                                    </div> 
+                                </div>
+                                <div class='row' style='margin-top:20px;'>
+                                    <div class='col text-right'>
+                                        <button type='button' class='btn btn-secondary' onclick="goBack()">Cancel</button>
+                                        <button type='submit' class='btn btn-primary no-margin'>Update</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-                <div class='row'>
-                    <div class='col form-group no-margin'>
-                        <label for='comment'>Comment <b class='text-danger'>*</b></label>
-                        @if(hasErrorFor('comment'))
-                            <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment', issue.comment) }}</textarea>
-                            <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
-                        @else
-                            <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  issue.comment) }}</textarea>
-                        @endif                                    
-                    </div> 
-                </div>
-                <div class='row' style='margin-top:20px;'>
-                    <div class='col text-right'>
-                        <button type='button' class='btn btn-secondary' onclick="goBack()">Cancel</button>
-                        <button type='submit' class='btn btn-primary no-margin'>Update</button>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 

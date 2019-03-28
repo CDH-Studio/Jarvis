@@ -11,7 +11,6 @@
  *
  */
 
-
 (function($) {
     $.widget("jtsage.datebox", {
         initSelector: "input[data-role='datebox']",
@@ -155,7 +154,7 @@
             calNextMonthIcon: "angle-right",
             calPrevMonthIcon: "angle-left",
             useInlineAlign: "left",
-            btnCls: " btn btn-sm btn-cal-",
+            btnCls: "btn btn-sm btn-cal-",
             icnCls: " far fa-",
             s: {
                 cal: {
