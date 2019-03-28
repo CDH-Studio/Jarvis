@@ -1,10 +1,73 @@
 @layout('layouts.adminLayout')
 
 @section('title')
-Jarvis
+    Jarvis
+@endsection
+
+@section('extrajs')
+    {{ script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js') }}
 @endsection
 
 @section('content')
+    <div class='col-4'>
+        @component('components.generalCard', title='Rooms')
+            @slot('body')
+                <div class='chart-bar'>
+                    <canvas id="myPieChart" width="400" height="400"></canvas>
+                </div>
+
+                <script>
+                    // Set new default font family and font color to mimic Bootstrap's default styling
+                    Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+                    Chart.defaults.global.defaultFontColor = '#858796';
+
+                    // Pie Chart Example
+                    var ctx = document.getElementById("myPieChart");
+                    var myPieChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ["Active", "Maintenance", "Deactived"],
+                        datasets: [{
+                            data: [ {{ stats['active'] }}, {{ stats['maintenance'] }}, {{ stats['deactive'] }} ],
+                            backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                            hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                            hoverBorderColor: "rgba(234, 236, 244, 1)",
+                        }],
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        tooltips: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            xPadding: 15,
+                            yPadding: 15,
+                            displayColors: false,
+                            caretPadding: 10,
+                        },
+                        legend: {
+                            display: false
+                        },
+                        cutoutPercentage: 80,
+                    },
+                    });
+                </script>
+                <div class="mt-4 text-center small">
+                    <span class="mr-2">
+                      <i class="fas fa-circle text-primary"></i> Active
+                    </span>
+                    <span class="mr-2">
+                      <i class="fas fa-circle text-success"></i> Maintenance
+                    </span>
+                    <span class="mr-2">
+                      <i class="fas fa-circle text-info"></i> Deactivated
+                    </span>
+                </div>
+            @endslot
+        @endcomponent
+    </div>
+
     @if(flashMessage('notification'))
         <script type='module'>
             import {notify} from '/js/notify.js';
@@ -13,4 +76,7 @@ Jarvis
             });
         </script>
     @endif
+    
+
 @endsection
+
