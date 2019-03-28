@@ -11,9 +11,9 @@
     {{--  Page content  --}}
     <div class='row'>
         <div class='col search-room-content'>
-            <div class="card shadow mb-4">
-                <div class="card-body">
-                    <form action='/results' method='GET' enctype='multipart/form-data'>
+            <form action='/results' method='GET' enctype='multipart/form-data'>
+                <div class="card shadow mb-4">
+                    <div class="card-body">
                         {{ csrfField() }}
                         {{--  Date form  --}}
                         <div class='row'>
@@ -112,7 +112,7 @@
                                     <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck') ? 'checked' : '' }}/>
                                     <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
                                 </div>  
-    
+            
                                 <div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
                                     <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck') ? 'checked' : '' }}/>
                                     <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
@@ -139,9 +139,9 @@
                                 <button type='submit' class='btn btn-primary no-margin'>Search</button>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
     {{--  Remove the is-invalid class when input changes  --}}
