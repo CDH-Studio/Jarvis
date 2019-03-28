@@ -346,7 +346,7 @@ class UserController {
 		// check if admin is viewing their own profile
 
 		// check if user is viewing their own profile or is admin
-		if ((auth.user.id === Number(params.id) || userRole === 'admin')) {
+		if (auth.user.id === Number(params.id) || userRole === 'admin') {
 			canEdit = 1;
 		} else {
 			return response.redirect('/');
