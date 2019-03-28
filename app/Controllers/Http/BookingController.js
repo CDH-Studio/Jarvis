@@ -151,7 +151,7 @@ class BookingController {
 		var layoutType;
 		const userRole = await auth.user.getUserRole();
 
-		if ( auth.user.id === Number(params.id) || userRole === 'admin' ) {
+		if (auth.user.id === Number(params.id) || userRole === 'admin') {
 			canEdit = 1;
 		}
 
@@ -178,7 +178,7 @@ class BookingController {
 		const userRole = await auth.user.getUserRole();
 
 		// check if user is viewing their own profile
-		if ( auth.user.id === Number(params.id) || userRole === 'admin' ) {
+		if (auth.user.id === Number(params.id) || userRole === 'admin') {
 			layoutType = 'layouts/mainLayout';
 			canEdit = 1;
 		}

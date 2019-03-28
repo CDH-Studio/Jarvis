@@ -64,8 +64,6 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async getRoomIssues ({ params, view, auth, response }) {
-		const userRole = await auth.user.getUserRole();
-
 		// Queries the database for the issues/reports associated to a specific room
 		let issues = await Report
 			.query()
@@ -126,9 +124,6 @@ class IssueController {
 		try {
 			// get the search form data if employee view
 			const issue = await Report.findOrFail(params.id);
-			const userRole = await auth.user.getUserRole();
-			// if user is admin
-
 			return view.render('adminDash.editIssue', { id: params.id, issue });
 		} catch (error) {
 			return response.redirect('/');
