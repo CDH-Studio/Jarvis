@@ -397,10 +397,13 @@
 }
 
 .room-card:hover .room-card-title{
-    background-color: #004680 ;
+    background-color: #004680;
     color: #FFFFFF;
 }
 
+.room-card:hover #stars{
+    color: #FFFFFF;
+}
 
 .room-card hr{
     margin: 15px 0 5px 0;
@@ -543,6 +546,4 @@
 .room-details-image{
     width:100%;
 }
-
-
 
