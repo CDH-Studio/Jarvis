@@ -12,17 +12,7 @@
     {{--  Loading page header  --}}
     @!component('components.pageHeader', title='Results')
     {{--  where result cards will be displayed --}}
-    <div class='row' id='results'>
-        {{--  @each(room in rooms)  --}}
-            {{--  <div class='col-lg-6'>  --}}
-                {{--  {{ csrfField() }}  --}}
-                {{--  @!component('components.card',  --}}
-                    {{--  form=form,  --}}
-                    {{--  room=room,  --}}
-                    {{--  token=csrfToken)  --}}
-            {{--  </div>  --}}
-        {{--  @endeach  --}}
-    </div>
+    <div class='row' id='results'></div>
 
     {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
     <script>
@@ -35,9 +25,11 @@
         let channel = pusher.subscribe('adonis-channel')
 
         //Listen for events on the channel
-        channel.bind('send-room', (data) => {
-            let listItem = $("<div class='col-lg-4 no-padding'>" + data.message + "</div>")
-            $('#results').append(listItem)
-        })
-        </script>
+        channel.bind('send-room', function (data) {
+            if (data.message.code == '{{ code }}') {
+                let listItem = $("<div class='cno-padding ie-room-margin'>" + data.message.card + "</div>")
+                $('#results').append(listItem)
+            }
+        });
+    </script>
 @endsection

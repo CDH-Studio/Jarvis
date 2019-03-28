@@ -66,6 +66,7 @@ Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 Route.get('/allIssues', 'IssueController.getAllIssues').as('allIssues').middleware(['isAdmin']);
 Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
+Route.get('/issues/:issueStatus', 'IssueController.renderIssuePage').as('renderIssues').middleware(['isAdmin']);
 
 Route.get('/roomBookings/:id', 'BookingController.getRoomBookings').as('roomBookings').middleware(['auth']);
 Route.get('/roomIssues/:id', 'IssueController.getRoomIssues').as('roomIssues').middleware(['auth']);

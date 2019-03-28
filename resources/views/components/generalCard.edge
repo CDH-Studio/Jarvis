@@ -1,0 +1,11 @@
+{{--  This is a general card with a custom body insert--}}
+<div class="card shadow">
+    {{--  grabs title from params and outputs within the header  --}}
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">{{ title }}</h6>
+    </div>
+    {{--  content of the card  --}}
+    <div class="card-body">
+        @!yield($slot.body)
+    </div>
+</div>
