@@ -9,7 +9,7 @@
     <a class='card room-card custom-shadow ie-room-card' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
         {{--  Title  --}}
         <div class='room-card-title'>
-            <div class='d-flex flex-wrap'>
+            <div class='d-flex'>
                 <div class=''>
                     <h4>{{ room.name }} </h4> 
                 </div>
@@ -48,7 +48,7 @@
                 {{--  Room Picture  --}}
                 <div href='../' class='room-card-photo wrapper-center col-sm-5'>
                     @if(room.picture) 
-                        <img width='183.75' height='137.27' src='{{ roomPicture }}'>
+                        <img src='{{ room.picture }}'>
                     @else
                         <img src='/images/meeting.jpeg'>
                     @endif

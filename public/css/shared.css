@@ -441,8 +441,10 @@
 }
 
 .room-card-photo img{
-    max-width:100%;
     padding-bottom: 15px;
+    min-width: 183.75px;
+    min-height: 137.27px;
+    max-width: 100%;
 }
 
 .room-card-info{
