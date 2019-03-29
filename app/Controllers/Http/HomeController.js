@@ -55,6 +55,7 @@ class HomeController {
 		const numberOfUsers = await this.getNumberofUsers();
 		const numberOfBookings = await this.getRoomPopularity();
 
+		console.log(numberOfBookings);
 		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers });
 	}
 
