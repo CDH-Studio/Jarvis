@@ -9,11 +9,10 @@
     <a class='card room-card custom-shadow ie-room-card' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
         {{--  Title  --}}
         <div class='room-card-title'>
-            <div class='d-flex'>
+            <div class='d-flex flex-wrap'>
                 <div class=''>
                     <h4>{{ room.name }} </h4> 
                 </div>
-
                 <div class='flex-grow-1 text-right spec-no' id='stars'>
                     @if(room.rating == 1)
                         <div>
