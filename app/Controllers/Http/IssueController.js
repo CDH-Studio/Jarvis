@@ -63,7 +63,7 @@ class IssueController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async showIssue ({ response, auth, params, view, request }) {
+	async editIssue ({ response, auth, params, view, request }) {
 		try {
 			// get the search form data if employee view
 			const issue = await Report.findOrFail(params.id);
