@@ -10,6 +10,13 @@
         min-width:75px;
         width:135px;
     }
+
+    .ie-room-card{
+        min-width: 530px;
+    }
+    .ie-room-margin{
+        margin: 0 13px 0 13px;
+    }
  }
 
 
@@ -370,7 +377,7 @@
     border-radius: 2px;
     box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2);
     width: 95%;
-    margin: 0px auto 40px auto;
+    margin: 0px auto 30px auto;
     display:block;
     text-decoration: none;
     color:#202428;
@@ -390,10 +397,13 @@
 }
 
 .room-card:hover .room-card-title{
-    background-color: #004680 ;
+    background-color: #004680;
     color: #FFFFFF;
 }
 
+.room-card:hover #stars{
+    color: #FFFFFF;
+}
 
 .room-card hr{
     margin: 15px 0 5px 0;

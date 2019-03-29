@@ -11223,6 +11223,10 @@ a:focus {
   .sidebar {
     width: 14rem !important;
   }
+  /* If it's E11 then up the width */
+  _:-ms-fullscreen, :root .sidebar { 
+    width: 16rem !important;
+  }
   .sidebar .nav-item .collapse {
     position: relative;
     left: 0;

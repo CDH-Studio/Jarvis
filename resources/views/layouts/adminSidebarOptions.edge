@@ -1,0 +1,58 @@
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+      <a class="nav-link" href="{{route('home')}}">
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Dashboard</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+      Tools
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRooms" aria-expanded="true" aria-controls="collapseRooms">
+        <i class="fas fa-fw fa-map-marker-alt"></i>
+        <span>Rooms</span>
+      </a>
+      <div id="collapseRooms" class="collapse" aria-labelledby="headingRooms" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Room Pages:</h6>
+          <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('addRoom') }}'>Add Room</a>
+          <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('allRooms') }}'>View Rooms</a>
+        </div>
+      </div>
+    </li>
+
+
+    <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
+        <i class="fas fa-fw fa-user-friends"></i>
+        <span>Users</span>
+      </a>
+      <div id="collapseUsers" class="collapse" aria-labelledby="collapseUsers" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Room Pages:</h6>
+          <a id="side-nav-dropdown-item" class="dropdown-item" href='{{ route('allUsers') }}'>View Users</a>
+        </div>
+      </div>
+    </li>
+
+          <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+        <i class="fas fa-fw fa-exclamation-circle"></i>
+        <span>Room Issues</span>
+      </a>
+      <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Room Issues:</h6>
+          <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('allIssues') }}'>View Issues</a>
+        </div>
+      </div>
+    </li>

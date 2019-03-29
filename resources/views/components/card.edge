@@ -1,39 +1,39 @@
 {{--  Room car component that takes: title, phoneNumber, seats, maxCapacity, equipment, standardEquipment[array] --}}
 {{--  Routing to rooom details when clicked  --}}
-<form action='{{ route('showRoom', {id: room.id}) }}' method='GET'>
+<form action='{{ route('showRoom', {id: room.id}) }}' method='GET' style='min-width: 250px; max-width:530px;'>
     <input type='hidden' name='_csrf' value={{ token }} />
     <input type='hidden' name='date' value={{ form.date }} />
     <input type='hidden' name='from' value={{ form.from }} />
     <input type='hidden' name='to' value={{ form.to }} />
     {{--  Room card  --}}
-    <a class='card room-card custom-shadow ' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
+    <a class='card room-card custom-shadow ie-room-card' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
         {{--  Title  --}}
         <div class='room-card-title'>
-            <div class='row'>
-                <div class='col'>
+            <div class='d-flex'>
+                <div class=''>
                     <h4>{{ room.name }} </h4> 
                 </div>
 
-                <div class='col text-right'>
+                <div class='flex-grow-1 text-right spec-no' id='stars'>
                     @if(room.rating == 1)
                         <div>
-                            <i class='fas fa-star mr-1'></i> <i class='far fa-star mr-1'></i> <i class='far fa-star mr-1'></i> <i class='far fa-star mr-1'></i> <i class='far fa-star mr-1'></i>
+                            <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
                         </div> 
                     @elseif(room.rating == 2)
                         <div>
-                            <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='far fa-star mr-1'></i> <i class='far fa-star mr-1'></i> <i class='far fa-star mr-1'></i>
+                            <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
                         </div> 
                     @elseif(room.rating == 3)
                         <div>
-                            <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='far fa-star mr-1'></i> <i class='far fa-star mr-1'></i>
+                            <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
                         </div> 
                     @elseif(room.rating == 4)
                         <div>
-                            <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='far fa-star mr-1'></i>
+                            <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
                         </div> 
                     @elseif(room.rating == 5) 
                         <div>
-                            <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> 
+                            <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> 
                         </div> 
                     @elseif(room.rating == 'No Rating')
                         <div>
@@ -55,7 +55,7 @@
                     @endif
                 </div>
                 {{--  Room information  --}}
-                <div class='checkbox-content col row'>
+                <div class='checkbox-content row'>
                     <div class='room-card-spec col'>
                         <ul class='space-evenly'>
                             @if(room.projector === 1)
@@ -98,7 +98,8 @@
                                 <li class='spec-no'><i class='fa fa-times-circle'></i><span> Surface Hub</span></li>
                             @endif
                             {{--  <li><span class='link-color'>More info...</span></li>  --}}
-                            <li class='spec-no' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Empty Check</span></li>
+                            <li class='spec-no' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Placeholder</span></li>
+
                         </ul>
                     </div>
                 </div>
@@ -108,7 +109,7 @@
             <hr style='margin-top:0px;'>
             <div class='room-card-info row wrapper-center'>
                 <div class='col'>
-                    @if(floor == 0)
+                    @if(room.floor == 0)
                         <b>Location:</b><span>  0-{{ room.tower }} </span>
                     @else 
                         <b>Location:</b><span>  {{ room.floor }}-{{ room.tower }} </span>

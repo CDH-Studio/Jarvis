@@ -17,9 +17,9 @@
         </div>
     @else
         {{--  where result cards will be displayed --}}
-        <div class='row'>
+        <div class='d-flex flex-wrap'>
             @each(room in rooms)
-                <div class='col-lg-4 no-padding'>
+                <div class='no-padding ie-room-margin' style='min-width: 250px; max-width:530px;'>
                     {{ csrfField() }}
                     @!component('components.card',
                         form=form,

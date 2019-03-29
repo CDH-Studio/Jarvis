@@ -64,15 +64,6 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async getRoomIssues ({ params, view, auth, response }) {
-		var layoutType;
-		const userRole = await auth.user.getUserRole();
-		// checking if user is admin, otherwise redirect to home
-		if (userRole === 'admin') {
-			layoutType = 'layouts/adminLayout';
-		} else {
-			return response.redirect('/');
-		}
-
 		// Queries the database for the issues/reports associated to a specific room
 		let issues = await Report
 			.query()
@@ -121,7 +112,7 @@ class IssueController {
 			issues[i].user = await User.getName(issues[i].user_id);
 			issues[i].type = await ReportType.getName(issues[i].report_type_id);
 		}
-		return view.render('adminDash.viewRoomIssues', { issues, layoutType, id: issues[0].room, stats });
+		return view.render('adminDash.viewRoomIssues', { issues, id: issues[0].room, stats });
 	}
 
 	/**
@@ -133,15 +124,7 @@ class IssueController {
 		try {
 			// get the search form data if employee view
 			const issue = await Report.findOrFail(params.id);
-			const userRole = await auth.user.getUserRole();
-			var layoutType;
-			// if user is admin
-			if (userRole === 'admin') {
-				layoutType = 'layouts/adminLayout';
-			} else {
-				return response.redirect('/');
-			}
-			return view.render('adminDash.editIssue', { id: params.id, issue, layoutType });
+			return view.render('adminDash.editIssue', { id: params.id, issue });
 		} catch (error) {
 			return response.redirect('/');
 		}
