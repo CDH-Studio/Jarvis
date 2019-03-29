@@ -2,6 +2,7 @@
 const Room = use('App/Models/Room');
 const User = use('App/Models/User');
 const Report = use('App/Models/Report');
+const Booking = use('App/Models/Booking');
 
 class HomeController {
 	/**
@@ -52,6 +53,7 @@ class HomeController {
 		const roomStatusStats = await this.getRoomStatusStats();
 		const roomIssueStats = await this.getRoomIssueStats();
 		const numberOfUsers = await this.getNumberofUsers();
+		const numberOfBookings = await this.getRoomPopularity();
 
 		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers });
 	}
@@ -142,6 +144,23 @@ class HomeController {
 		stats['resolved'] = countResolved[0]['count(*)'];
 
 		return stats;
+	}
+
+	/**
+	*
+	* Retrieve the number of pending, under review, and deactivated rooms in the database.
+	*
+	* @param {view}
+	*
+	*/
+	async getRoomPopularity () {
+		// Retrieve number of issues that are resolved
+		let bookings = await Booking
+			.query()
+			.groupBy('room_id')
+			.fetch();
+
+		console.log(bookings);
 	}
 }
 

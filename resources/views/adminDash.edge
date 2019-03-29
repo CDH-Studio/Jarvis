@@ -9,69 +9,72 @@
 @endsection
 
 @section('content')
-    <div class='col-4'>
-        <div class='row text-center' style='padding-left: 15px;'> 
-            <div class='col-3 card stats-card shadow no-padding'>
-                <div class='card-highlight-primary'></div>
-                <div class='card-body'>
-                    <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                        <i class='d-inline-flex no-padding color-info card-icon fas fa-user fa-2x'></i>
-                        <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
-                            <div class='row'>
-                                <h2 class='col no-margin'><b>{{ numberOfUsers }}</b></h2>
-                            </div>
-                            <div class='row'>
-                                <h5 class='col text-grey'>Total Users</h5>
+    <div class='row'>
+        <div class='col'>
+            <div class='row text-center' style='padding-left: 15px;'> 
+                <div class='col-3 card stats-card shadow no-padding'>
+                    <div class='card-highlight-primary'></div>
+                    <div class='card-body'>
+                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                            <i class='d-inline-flex no-padding color-info card-icon fas fa-user fa-2x'></i>
+                            <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+                                <div class='row'>
+                                    <h2 class='col no-margin'><b>{{ numberOfUsers }}</b></h2>
+                                </div>
+                                <div class='row'>
+                                    <h5 class='col text-grey'>Total Users</h5>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class='col-4'>
-        @component('components.generalCard', title='Rooms - Statuses')
-            @slot('body')
-                <div class='chart-bar'>
-                    <canvas id="roomStatuses" width="400" height="400"></canvas>
-                </div>
-
-                <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> Active
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-success"></i> Maintenance
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-info"></i> Deactivated
-                    </span>
-                </div>
-            @endslot
-        @endcomponent
-    </div>
-
-    <div class='col-4'>
-        @component('components.generalCard', title='Rooms - Issues')
-            @slot('body')
-                <div class='chart-bar'>
-                    <canvas id="roomIssues" width="400" height="400"></canvas>
-                </div>
-
-                <div class="mt-4 text-center small">
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-primary"></i> Pending
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-success"></i> Under Review
-                    </span>
-                    <span class="mr-2">
-                      <i class="fas fa-circle text-info"></i> Resolved
-                    </span>
-                </div>
-            @endslot
-        @endcomponent
-    </div>
+        <div class='col'>
+            @component('components.generalCard', title='Rooms - Statuses')
+                @slot('body')
+                    <div class='chart-bar'>
+                        <canvas id="roomStatuses" width="400" height="400"></canvas>
+                    </div>
+    
+                    <div class="mt-4 text-center small">
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-primary"></i> Active
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-success"></i> Maintenance
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-info"></i> Deactivated
+                        </span>
+                    </div>
+                @endslot
+            @endcomponent
+        </div>
+    
+        <div class='col'>
+            @component('components.generalCard', title='Rooms - Issues')
+                @slot('body')
+                    <div class='chart-bar'>
+                        <canvas id="roomIssues" width="400" height="400"></canvas>
+                    </div>
+    
+                    <div class="mt-4 text-center small">
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-primary"></i> Pending
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-success"></i> Under Review
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-info"></i> Resolved
+                        </span>
+                    </div>
+                @endslot
+            @endcomponent
+        </div>    
+    </div> 
+    
 
     @if(flashMessage('notification'))
         <script type='module'>
