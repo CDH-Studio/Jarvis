@@ -1,5 +1,7 @@
 'use strict';
 const Room = use('App/Models/Room');
+const User = use('App/Models/User');
+const Report = use('App/Models/Report');
 
 class HomeController {
 	/**
@@ -30,12 +32,54 @@ class HomeController {
 
 	/**
 	*
+	* Render user dashboard
+	*
+	* @param {view}
+	*
+	*/
+	async userDashboard ({ view }) {
+		return view.render('booking');
+	}
+
+	/**
+	*
 	* Render admin dashboard
 	*
 	* @param {view}
 	*
 	*/
 	async adminDashboard ({ view }) {
+		const roomStatusStats = await this.getRoomStatusStats();
+		const roomIssueStats = await this.getRoomIssueStats();
+		const numberOfUsers = await this.getNumberofUsers();
+
+		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers });
+	}
+
+	/**
+	*
+	* Retrieve the number of users using the application.
+	*
+	* @param {view}
+	*
+	*/
+	async getNumberofUsers () {
+		// retrieves all the users form the database
+		const results = await User.all();
+		const users = results.toJSON();
+
+		// return the number of users
+		return users.length;
+	}
+
+	/**
+	*
+	* Retrieve the number of active, under maintenance, and deactivated rooms in the database.
+	*
+	* @param {view}
+	*
+	*/
+	async getRoomStatusStats () {
 		// Retrieve number of active rooms
 		let countActive = await Room
 			.query()
@@ -61,18 +105,43 @@ class HomeController {
 		stats['deactive'] = countDeactive[0]['count(*)'];
 		stats['maintenance'] = countMaint[0]['count(*)'];
 
-		return view.render('adminDash', { stats: stats });
+		return stats;
 	}
 
 	/**
 	*
-	* Render user dashboard
+	* Retrieve the number of pending, under review, and deactivated rooms in the database.
 	*
 	* @param {view}
 	*
 	*/
-	async userDashboard ({ view }) {
-		return view.render('booking');
+	async getRoomIssueStats () {
+		// Retrieve number of issues that are pending
+		let countPending = await Report
+			.query()
+			.where('report_status_id', 1)
+			.count();
+
+		// Retrieve number of issues that are under review
+		let countUnderReview = await Report
+			.query()
+			.where('report_status_id', 2)
+			.count();
+
+		// Retrieve number of issues that are resolved
+		let countResolved = await Report
+			.query()
+			.where('report_status_id', 3)
+			.count();
+
+		// Create statistic array with custom keys
+		var stats = {};
+		stats['total'] = countPending[0]['count(*)'] + countUnderReview[0]['count(*)'] + countResolved[0]['count(*)'];
+		stats['pending'] = countPending[0]['count(*)'];
+		stats['underReview'] = countUnderReview[0]['count(*)'];
+		stats['resolved'] = countResolved[0]['count(*)'];
+
+		return stats;
 	}
 }
 
