@@ -158,10 +158,13 @@ class HomeController {
 		// Retrieve number of issues that are resolved
 		let bookings = await Booking
 			.query()
-			.groupBy('room_id')
-			.fetch();
+			.select('room_id')
+			.count('room_id as total')
+			.groupBy('room_id');
 
-		console.log(bookings);
+		console.log('count query before JSON', bookings);
+
+		return bookings;
 	}
 }
 
