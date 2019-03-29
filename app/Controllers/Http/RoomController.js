@@ -227,7 +227,6 @@ class RoomController {
 				.where('room_id', params.id)
 				.fetch();
 			const reviews = searchResults.toJSON();
-
 			return view.render('userPages.roomDetails', { id: params.id, room, layoutType, isAdmin, form, hasReview, reviews, review });
 		} catch (error) {
 			return response.redirect('/');

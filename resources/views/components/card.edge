@@ -1,6 +1,6 @@
 {{--  Room car component that takes: title, phoneNumber, seats, maxCapacity, equipment, standardEquipment[array] --}}
 {{--  Routing to rooom details when clicked  --}}
-<form action='{{ route('showRoom', {id: room.id}) }}' method='GET' style='min-width: 250px; max-width:530px;'>
+<form action='{{ route('showRoom', {id: room.id}) }}' method='GET'>
     <input type='hidden' name='_csrf' value={{ token }} />
     <input type='hidden' name='date' value={{ form.date }} />
     <input type='hidden' name='from' value={{ form.from }} />
@@ -43,19 +43,20 @@
 
             </div>
         </div>
-        <div class='room-card-body '>
-            <div class='row'>
+        <div class='room-card-body'>
+            <div class='d-flex flex-wrap justify-content-center'>
                 {{--  Room Picture  --}}
-                <div href='../' class='room-card-photo wrapper-center col-sm-5'>
+                <div class='room-card-photo-container'>
                     @if(room.picture) 
-                        <img src='{{ room.picture }}'>
+                        <img class='room-card-img' src='{{ room.picture }}'>
                     @else
-                        <img src='/images/meeting.jpeg'>
+                        <img class='room-card-img' src='/images/meeting.jpeg'>
                     @endif
                 </div>
                 {{--  Room information  --}}
-                <div class='checkbox-content row'>
-                    <div class='room-card-spec col' style='min-width:122px'>
+            
+                <div class='checkbox-content d-flex flex-wrap'>
+                    <div class='room-card-spec' style='min-width:122px'>
                         <ul class='space-evenly'>
                             @if(room.projector === 1)
                                 <li class='spec-yes'><i class='fas fa-check-circle'></i><span> Projector</span></li>
@@ -79,7 +80,7 @@
                             @endif
                         </ul>
                     </div>
-                    <div class='room-card-spec col'>
+                    <div class='room-card-spec'>
                         <ul class='space-evenly'>
                             @if(room.videoConference === 1)
                                 <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video Conf.</span></li> 
@@ -98,7 +99,6 @@
                             @endif
                             {{--  <li><span class='link-color'>More info...</span></li>  --}}
                             <li class='spec-no' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Placeholder</span></li>
-
                         </ul>
                     </div>
                 </div>
