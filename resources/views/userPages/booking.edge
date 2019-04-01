@@ -297,7 +297,7 @@
 			</div>
 		</div>
 		{{--  Chatbot  --}}
-		<div class='row'>
+		<div class='row' hidden>
 			<i class='open-button fas fa-robot fa-2x' onclick='openChat()'></i>
 			<div class='chat-popup' id='chat-popup'>
 				<form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>
