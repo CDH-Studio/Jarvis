@@ -12,8 +12,8 @@ View {{upperFirst(filterType)}} Room Issues
 @section('content')
     @!component('components.pageHeader', title=upperFirst(filterType)+ ' Room Issues')
     <div>
-        {{--  Displays all of the reports in the database in a table  --}}
-        @if(reports.length == 0)
+        {{--  Displays all of the issues in the database in a table  --}}
+        @if(issues.length == 0)
             <div class='row'>
                 <div class='col-12 text-center mt-5'>
                     <p class='fas fa-glass-cheers fa-10x mb-5 mt-5 text-muted'></p>
@@ -94,7 +94,7 @@ View {{upperFirst(filterType)}} Room Issues
                 </div>
                 <div class="card-body">
 					<div class='table table-responsive'>
-						<table id='reportsTable' class='table table-hover' style='width:100%;'>
+						<table id='issuesTable' class='table table-hover' style='width:100%;'>
 							<thead>
 								<tr>
 									<th scope='col' class='text-center' style='width:10%'>Ticket #</th>
@@ -104,15 +104,15 @@ View {{upperFirst(filterType)}} Room Issues
 									<th scope='col' class='text-center' style='width:10%'>Status</th>
 								</tr>
 							</thead>
-							{{--  Loops through the reports array and displays every report's content  --}}
+							{{--  Loops through the issues array and displays every report's content  --}}
 							<tbody>
-								@each(report in reports) 
-								<tr class='table-light' onclick="window.location='{{ route('editIssue', { id: report.id }) }}';">
-									<td class='text-center'>{{ report.id }}</td>
-									<td class='text-center'>{{ report.room }}</td>
-									<td class='text-center'>{{ report.user }}</td>
-									<td class='text-center'>{{ report.type }}</td>
-									<td class='text-center td-{{ report.status }}'>{{ report.status }}</td>
+								@each(issue in issues) 
+								<tr class='table-light' onclick="window.location='{{ route('editIssue', { id: issue.id }) }}';">
+									<td class='text-center'>{{ issue.id }}</td>
+									<td class='text-center'>{{ issue.room }}</td>
+									<td class='text-center'>{{ issue.user }}</td>
+									<td class='text-center'>{{ issue.type }}</td>
+									<td class='text-center td-{{ report.status }}'>{{ issue.status }}</td>
 								</tr>
 								@endeach
 							</tbody>
@@ -124,14 +124,12 @@ View {{upperFirst(filterType)}} Room Issues
     </div> 
 @endsection
 
-
-
 {{--  Deals with the search functionality of the table above- searches all fields   --}}
 @section('extrajs') 
     <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
     <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
     <script>$(document).ready(function() {
-            $('#reportsTable').DataTable( {
+            $('#issuesTable').DataTable( {
                 "paging":   false,
                 "ordering": true,
                 "info":     false

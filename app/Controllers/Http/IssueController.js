@@ -17,45 +17,17 @@ class IssueController {
 			.findBy('id', room);
 		const row = results.toJSON();
 		// Populates the review object's values
-		const report = new Report();
-		report.user_id = auth.user.id;
-		report.room_id = row.id;
-		report.report_type_id = issueType;
-		report.comment = comment;
+		const issue = new Report();
+		issue.user_id = auth.user.id;
+		issue.room_id = row.id;
+		issue.report_type_id = issueType;
+		issue.comment = comment;
 		// Setting default issue status as open
-		report.report_status_id = 1;
-		await report.save();
+		issue.report_status_id = 1;
+		await issue.save();
 
-		session.flash({ notification: 'Your report has been submitted' });
+		session.flash({ notification: 'Your issue has been submitted' });
 		return response.route('showRoom', { id: row.id });
-	}
-
-	/**
-	 * Query all the rooms from the database and render a page to display all current user reports for rooms (ADMIN only)
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async getAllIssues ({ auth, view, response }) {
-		const results = await Report.all();
-		const reports = results.toJSON();
-
-		// Sort the results by name
-		reports.sort((a, b) => {
-			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-		});
-
-		const stats = await this.getIssueStatistics();
-
-		// loop through and change ids to the actual names in the tables
-		for (let i = 0; i < reports.length; i++) {
-			reports[i].status = await ReportStatus.getName(reports[i].report_status_id);
-			reports[i].room = await Room.getName(reports[i].room_id);
-			reports[i].user = await User.getName(reports[i].user_id);
-			reports[i].type = await ReportType.getName(reports[i].report_type_id);
-		}
-
-		// if user is admin
-		return view.render('adminDash.viewAllIssues', { reports, stats });
 	}
 
 	/**
@@ -100,13 +72,70 @@ class IssueController {
 	}
 
 	/**
+	 * Retrives all of the issues that correspond to a specific room.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getRoomIssues ({ params, view, auth, response }) {
+		// Queries the database for the issues associated to a specific room
+		let issues = await Report
+			.query()
+			.where('room_id', params.id)
+			.fetch();
+
+		issues = issues.toJSON();
+
+		// Sort the isssues by date
+		issues.sort((a, b) => {
+			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+		});
+
+		// Retrieve number of issues that are open
+		let countPending = await Report
+			.query()
+			.where('room_id', params.id)
+			.where('report_status_id', 1)
+			.count();
+
+		// Retrieve number of issues that are under review
+		let countUnderReview = await Report
+			.query()
+			.where('room_id', params.id)
+			.where('report_status_id', 2)
+			.count();
+
+		// Retrieve number of issues that are resolved
+		let countResolved = await Report
+			.query()
+			.where('room_id', params.id)
+			.where('report_status_id', 3)
+			.count();
+
+		// Create statistic array with custom keys
+		var stats = {};
+		stats['total'] = issues.length;
+		stats['pending'] = countPending[0]['count(*)'];
+		stats['underReview'] = countUnderReview[0]['count(*)'];
+		stats['resolved'] = countResolved[0]['count(*)'];
+
+		// loop through and change ids to the actual names in the tables
+		for (let i = 0; i < issues.length; i++) {
+			issues[i].status = await ReportStatus.getName(issues[i].report_status_id);
+			issues[i].room = await Room.getName(issues[i].room_id);
+			issues[i].user = await User.getName(issues[i].user_id);
+			issues[i].type = await ReportType.getName(issues[i].report_type_id);
+		}
+		return view.render('adminDash.viewRoomIssues', { issues, id: issues[0].room, stats });
+	}
+
+	/**
 	* Renders a specific issue page depending on
 	*
 	* @param {Object} Context The context object.
 	*/
 	async renderIssuePage ({ response, params, view }) {
 		var results;
-		var reports;
+		var issues;
 		const filterType = params.issueStatus;
 
 		if (filterType === 'all') {
@@ -133,19 +162,24 @@ class IssueController {
 			return response.redirect('/');
 		}
 
-		reports = results.toJSON();
+		issues = results.toJSON();
+
+		// Sort the results by name
+		issues.sort((a, b) => {
+			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+		});
 
 		// loop through and change ids to the actual names in the tables
-		for (let i = 0; i < reports.length; i++) {
-			reports[i].status = await ReportStatus.getName(reports[i].report_status_id);
-			reports[i].room = await Room.getName(reports[i].room_id);
-			reports[i].user = await User.getName(reports[i].user_id);
-			reports[i].type = await ReportType.getName(reports[i].report_type_id);
+		for (let i = 0; i < issues.length; i++) {
+			issues[i].status = await ReportStatus.getName(issues[i].report_status_id);
+			issues[i].room = await Room.getName(issues[i].room_id);
+			issues[i].user = await User.getName(issues[i].user_id);
+			issues[i].type = await ReportType.getName(issues[i].report_type_id);
 		}
 
 		const stats = await this.getIssueStatistics();
 
-		return view.render('adminDash.viewRoomIssues', { filterType, reports, stats });
+		return view.render('adminDash.viewRoomIssues', { filterType, issues, stats });
 	}
 
 	/**
