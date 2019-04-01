@@ -151,20 +151,8 @@ class BookingController {
 		var layoutType;
 		const userRole = await auth.user.getUserRole();
 
-		if (userRole === 'admin') {
-			layoutType = 'layouts/adminLayout';
+		if (auth.user.id === Number(params.id) || userRole === 'admin') {
 			canEdit = 1;
-			// check if user is viewing their own profile
-		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
-			layoutType = 'layouts/mainLayout';
-			canEdit = 1;
-
-			// check if user is viewing someone elses profile
-		} else if (auth.user.id !== Number(params.id) && userRole === 'user') {
-			layoutType = 'layouts/mainLayout';
-			canEdit = 0;
-		} else {
-			return response.redirect('/');
 		}
 
 		// Queries the database fr the bookings associated to a specific room
@@ -189,15 +177,10 @@ class BookingController {
 		var layoutType = '';
 		const userRole = await auth.user.getUserRole();
 
-		if (userRole === 'admin') {
-			layoutType = 'layouts/adminLayout';
-			canEdit = 1;
 		// check if user is viewing their own profile
-		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
+		if (auth.user.id === Number(params.id) || userRole === 'admin') {
 			layoutType = 'layouts/mainLayout';
 			canEdit = 1;
-		} else {
-			return response.redirect('/');
 		}
 
 		const results = (await Booking.query().where('user_id', params.id).fetch()).toJSON();

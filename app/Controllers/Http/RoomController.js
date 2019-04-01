@@ -207,14 +207,11 @@ class RoomController {
 			const review = await this.getRatingAndReview(auth.user.id, params.id);
 
 			var isAdmin = 0;
-			var layoutType = ' ';
 			// if user is admin
 			if (userRole === 'admin') {
-				layoutType = 'layouts/adminLayout';
 				isAdmin = 1;
 				// check if user is viewing their own profile
 			} else if (userRole === 'user') {
-				layoutType = 'layouts/mainLayout';
 				isAdmin = 0;
 				// check if user is viewing someone elses profile
 			} else {
@@ -227,7 +224,8 @@ class RoomController {
 				.where('room_id', params.id)
 				.fetch();
 			const reviews = searchResults.toJSON();
-			return view.render('userPages.roomDetails', { id: params.id, room, layoutType, isAdmin, form, hasReview, reviews, review });
+
+			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review });
 		} catch (error) {
 			return response.redirect('/');
 		}

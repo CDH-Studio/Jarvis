@@ -1,32 +1,32 @@
-@layout(layoutType)
+@layout('layouts.mainLayout')
 
 @section('title')
- Issues - {{ id }} 
+View {{upperFirst(filterType)}} Room Issues
 @endsection
 
 @section('extracss')
-    <link href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css' rel='stylesheet'>
+<link href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css' rel='stylesheet'>
 @endsection
 
-{{--  Manage bookings page content  --}}
+
 @section('content')
-    @!component('components.pageHeader', title = 'Issues - ' + id)
+    @!component('components.pageHeader', title=upperFirst(filterType)+ ' Room Issues')
     <div>
         {{--  Displays all of the reports in the database in a table  --}}
-        @if(issues.length == 0)
-            <div class="row">
-                <div class="col-12 text-center mt-5">
-                    <p class="fas fa-glass-cheers fa-10x mb-5 mt-5 text-muted"></p>
-                    <h3 class="text-muted">There are currently no issues regarding {{ id }} :)</h3>
+        @if(reports.length == 0)
+            <div class='row'>
+                <div class='col-12 text-center mt-5'>
+                    <p class='fas fa-glass-cheers fa-10x mb-5 mt-5 text-muted'></p>
+                    <h3 class='text-muted'>There are currently no issues regarding any rooms :)</h3>
                 </div>
             </div>
         @else
             {{--  room Reports/Issues Stats  --}}
-            <div class='row text-center'> 
-                <div class='col stats-card shadow no-padding'>
+            <div class='row text-center' style='padding-left: 15px;'> 
+                <a class='col card stats-card shadow no-padding issue-stats-card-link' href='{{ route('roomIssues', { issueStatus: 'all' }) }}'>
                     <div class='card-highlight-primary'></div>
                     <div class='card-body'>
-                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;115093'>
+                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
                             <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
                             <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                 <div class='row'>
@@ -38,8 +38,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class='col stats-card shadow no-padding'>
+                </a>
+                <a class='col card stats-card shadow no-padding issue-stats-card-link' href='{{ route('roomIssues', { issueStatus: 'open' }) }}'>
                     <div class='card-highlight-success'></div>
                     <div class='card-body'>
                         <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -54,8 +54,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class='col stats-card shadow no-padding'>
+                </a>
+                <a class='col card stats-card shadow no-padding issue-stats-card-link' href='{{ route('roomIssues', { issueStatus: 'pending' }) }}'>
                     <div class='card-highlight-warning'></div>
                     <div class='card-body'>
                         <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -70,8 +70,8 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class='col stats-card shadow no-padding'>
+                </a>
+                <a class='col card stats-card shadow no-padding issue-stats-card-link' href='{{ route('roomIssues', { issueStatus: 'closed' }) }}'>
                     <div class='card-highlight-danger'></div>
                     <div class='card-body'>
                         <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -86,41 +86,50 @@
                             </div>
                         </div>
                     </div>
+                </a>
+            </div>
+            <div class="card shadow mt-4 mb-4">
+                <div class="card-header py-3">
+                	<h6 class="m-0 font-weight-bold text-primary">{{upperFirst(filterType)}} Issues</h6>
+                </div>
+                <div class="card-body">
+					<div class='table table-responsive'>
+						<table id='reportsTable' class='table table-hover' style='width:100%;'>
+							<thead>
+								<tr>
+									<th scope='col' class='text-center' style='width:10%'>Ticket #</th>
+									<th scope='col' class='text-center' style='width:15%'>Room</th>
+									<th scope='col' class='text-center' style='width:20%'>Submitted By</th>
+									<th scope='col' class='text-center' style='width:20%'>Report Type</th>
+									<th scope='col' class='text-center' style='width:10%'>Status</th>
+								</tr>
+							</thead>
+							{{--  Loops through the reports array and displays every report's content  --}}
+							<tbody>
+								@each(report in reports) 
+								<tr class='table-light' onclick="window.location='{{ route('editIssue', { id: report.id }) }}';">
+									<td class='text-center'>{{ report.id }}</td>
+									<td class='text-center'>{{ report.room }}</td>
+									<td class='text-center'>{{ report.user }}</td>
+									<td class='text-center'>{{ report.type }}</td>
+									<td class='text-center td-{{ report.status }}'>{{ report.status }}</td>
+								</tr>
+								@endeach
+							</tbody>
+						</table>
+					</div> 
                 </div>
             </div>
-            <div class='table table-responsive'>
-                <table id='reportsTable' class='table table-hover' style='width:100%;'>
-                    <thead class='table table-hover mt-4'>
-                        <tr>
-                            <th scope='col' class='text-center' style='width:10%'>Ticket #</th>
-                            <th scope='col' class='text-center' style='width:20%'>Submitted By</th>
-                            <th scope='col' class='text-center' style='width:20%'>Report Type</th>
-                            <th scope='col' class='text-center' style='width:30%'>Comment</th>
-                            <th scope='col' class='text-center' style='width:10%'>Status</th>
-                        </tr>
-                    </thead>
-                    {{--  Loops through the reports array and displays every report's content  --}}
-                    <tbody>
-                        @each(issue in issues) 
-                        <tr class='table-light' onclick="window.location='{{ route('showIssue', { id: issue.id }) }}';">
-                            <td class='text-center'>{{ issue.id }}</td>
-                            <td class='text-center'>{{ issue.user }}</td>
-                            <td class='text-center'>{{ issue.type }}</td>
-                            <td class='text-center'>{{ issue.comment }}</td>
-                            <td class='text-center td-{{ issue.status }}'>{{ issue.status }}</td>
-                        </tr>
-                        @endeach
-                    </tbody>
-                </table>
-            </div> 
         @endif
     </div> 
 @endsection
 
+
+
 {{--  Deals with the search functionality of the table above- searches all fields   --}}
 @section('extrajs') 
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
+    <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
     <script>$(document).ready(function() {
             $('#reportsTable').DataTable( {
                 "paging":   false,
@@ -129,15 +138,11 @@
             });
         });
     </script>
-
-    {{--  Displays "Room Added/Updated!" success message  --}}
-    @if(flashMessage('notification'))
-        <script type='module'>
-            import {notify} from '/js/notify.js';
-            $(window).on('load', () => {
-                var url = '{{ flashMessage('url') }}';
-                notify({$: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
-            });
-    </script>
-    @endif
 @endsection
+
+
+
+
+
+
+
