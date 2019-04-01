@@ -1,4 +1,4 @@
-@layout(layoutType)
+@layout('layouts.mainLayout')
 
 @section('title')
     {{room.name}}
@@ -19,8 +19,8 @@
     <div class='roomDetails'>
         <div class='col card room-details-card shadow' style='margin-top:10px;'>
             <div class='card-header py-3'>
-                <div class='row'>
-                    <div class='col' style='padding-top:6px;'>
+                <div class='d-flex flex-wrap'>
+                    <div class='' style='padding-top:6px;'>
                         <h4 class="m-0 font-weight-bold text-primary">
                             {{--  If the room is closed or under maintence then display info  --}}
                             @if(room.state == 2)
@@ -31,13 +31,13 @@
                             {{room.name}}
                         </h4>
                     </div>
-                    <div class='col text-right'>
+                    <div class='flex-grow-1 text-right'>
                         @if(isAdmin)
                             <button type='button' class="btn btn-info btn-icon-split" onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';">
                                 <span class="icon text-white-50"><i class="fas fa-book"></i></span>
                                 <span class="text">View Bookings</span>
                             </button>
-                            <button type='button' class="btn btn-info btn-icon-split" onclick="window.location='{{ route('roomIssues', { id: room.id }) }}';">
+                            <button type='button' class="btn btn-info btn-icon-split" onclick="window.location='{{ route('showIssue', { id: room.id }) }}';">
                                 <span class="icon text-white-50"><i class="fas fa-flag"></i></span>
                                 <span class="text">View Issues</span>
                             </button>   
@@ -73,18 +73,23 @@
                     </div>
                 </div>
             </div>
-            <div class='card-body'>
-                <div class='row'>  
+            <div class='card-body no-padding'>
+                <div class='d-flex flex-wrap justify-content-center'>  
                     {{--  Room Image and Map  --}}
-                    <div class='col-sm-12 col-md-5 col-lg-4'>
-                        <img class='room-details-image' src='/images/meeting.jpeg'>
+                    <div class='d-flex flex-column room-details-image' style='margin:20px'>
+                        {{--  If there is a room picture then display it, else use default  --}}
+                        @if(room.picture) 
+                            <img class='room-details-image' src='../{{ room.picture }}'>
+                        @else
+                            <img class='room-details-image' src='/images/meeting.jpeg'>
+                        @endif
                         <a class='link-color' href='' style='display:block; text-align:center;'  data-toggle='modal' data-target='#mapModal'>
                             <i class='fas fa-external-link-alt'></i>
                             View Map
                         </a>
                     </div>  
                     {{--  Room Details  --}}
-                    <div class='col-sm-12 col-md-7 col-lg-8'>
+                    <div class='flex-grow-1' style='margin:20px'>
                         {{--  Table contents  --}}
                         <div class='row' style='padding-right:15px;'>
                             <div class='table-responsive'>
@@ -125,7 +130,7 @@
                     </div>
                 </div>
                 {{--  Checkboxes  --}}
-                <div class='row'>
+                <div class='row' style='margin:20px'>
                     <div class='col room-details-spec'>
                         <ul>
                             @if(room.projector == 1)
@@ -332,7 +337,12 @@
                         <div class='modal-highlight'></div>
                         {{--  Displaying room image and a link to full room details  --}}
                         <div class='wrapper-center mb-4' style='height: auto;'>
-                            <img class='room-details-image' src='/images/meeting.jpeg'>
+                            {{--  If there is a room picture then display it, else use default  --}}
+                            @if(room.picture) 
+                                <img class='room-confirm-image' src='../{{ room.picture }}'>
+                            @else
+                                <img class='room-confirm-image' src='/images/meeting.jpeg'>
+                            @endif
                         </div>
                         {{--  Body content  --}}
                         <div class='body' style='margin:0 20px 0 20px;'>

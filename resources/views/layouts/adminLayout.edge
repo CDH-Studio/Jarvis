@@ -23,7 +23,7 @@
 
 
     @!section('extracss')
-    
+    @!section('extrajs')
     <title>
         @!section('title')
     </title>
@@ -184,6 +184,7 @@
 
             <!-- Page Heading -->
             @!section('content')
+            
 
           </div>
           <!-- /.container-fluid -->
@@ -195,7 +196,7 @@
         <footer class="sticky-footer bg-white">
           <div class="container my-auto">
             <div class="copyright text-center my-auto">
-              <a class style='text-decoration:none' href='https://cdhstudio.ca/'>CDH Studio</a> <i class='fas fa-heart'></i> Jarvis
+              <a class='issue-stats-card-link' href='https://cdhstudio.ca/'>CDH Studio</a> <i class='fas fa-heart'></i> Jarvis
             </div>
           </div>
         </footer>
@@ -243,8 +244,6 @@
     {{ script('js/vendor/bootstrap-notify.min') }}
         {{--  Mouseover Tooltip  --}}
     <script> $(document).ready(function(){ $('[data-toggle="tooltip"]').tooltip(); });</script>
-
-    @!section('extrajs')
 
   </body>
 </html>

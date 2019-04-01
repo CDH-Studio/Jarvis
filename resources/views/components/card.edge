@@ -6,34 +6,33 @@
     <input type='hidden' name='from' value={{ form.from }} />
     <input type='hidden' name='to' value={{ form.to }} />
     {{--  Room card  --}}
-    <a class='card room-card custom-shadow ' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
+    <a class='card room-card custom-shadow ie-room-card' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
         {{--  Title  --}}
         <div class='room-card-title'>
-            <div class='row'>
-                <div class='col'>
+            <div class='d-flex'>
+                <div class=''>
                     <h4>{{ room.name }} </h4> 
                 </div>
-
-                <div class='col text-right'>
+                <div class='flex-grow-1 text-right spec-no' id='stars'>
                     @if(room.rating == 1)
                         <div>
-                            <i class='fas fa-star mr-1'></i> <i class='far fa-star mr-1'></i> <i class='far fa-star mr-1'></i> <i class='far fa-star mr-1'></i> <i class='far fa-star mr-1'></i>
+                            <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
                         </div> 
                     @elseif(room.rating == 2)
                         <div>
-                            <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='far fa-star mr-1'></i> <i class='far fa-star mr-1'></i> <i class='far fa-star mr-1'></i>
+                            <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
                         </div> 
                     @elseif(room.rating == 3)
                         <div>
-                            <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='far fa-star mr-1'></i> <i class='far fa-star mr-1'></i>
+                            <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
                         </div> 
                     @elseif(room.rating == 4)
                         <div>
-                            <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='far fa-star mr-1'></i>
+                            <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
                         </div> 
                     @elseif(room.rating == 5) 
                         <div>
-                            <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> <i class='fas fa-star mr-1'></i> 
+                            <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> 
                         </div> 
                     @elseif(room.rating == 'No Rating')
                         <div>
@@ -44,19 +43,20 @@
 
             </div>
         </div>
-        <div class='room-card-body '>
-            <div class='row'>
+        <div class='room-card-body'>
+            <div class='d-flex flex-wrap justify-content-center'>
                 {{--  Room Picture  --}}
-                <div href='../' class='room-card-photo wrapper-center col-sm-5'>
+                <div class='room-card-photo-container'>
                     @if(room.picture) 
-                        <img width='183.75' height='137.27' src='{{ roomPicture }}'>
+                        <img class='room-card-img' src='{{ room.picture }}'>
                     @else
-                        <img src='/images/meeting.jpeg'>
+                        <img class='room-card-img' src='/images/meeting.jpeg'>
                     @endif
                 </div>
                 {{--  Room information  --}}
-                <div class='checkbox-content col row'>
-                    <div class='room-card-spec col'>
+            
+                <div class='checkbox-content d-flex flex-wrap'>
+                    <div class='room-card-spec' style='min-width:122px'>
                         <ul class='space-evenly'>
                             @if(room.projector === 1)
                                 <li class='spec-yes'><i class='fas fa-check-circle'></i><span> Projector</span></li>
@@ -80,7 +80,7 @@
                             @endif
                         </ul>
                     </div>
-                    <div class='room-card-spec col'>
+                    <div class='room-card-spec'>
                         <ul class='space-evenly'>
                             @if(room.videoConference === 1)
                                 <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video Conf.</span></li> 
@@ -98,7 +98,7 @@
                                 <li class='spec-no'><i class='fa fa-times-circle'></i><span> Surface Hub</span></li>
                             @endif
                             {{--  <li><span class='link-color'>More info...</span></li>  --}}
-                            <li class='spec-no' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Empty Check</span></li>
+                            <li class='spec-no' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Placeholder</span></li>
                         </ul>
                     </div>
                 </div>
@@ -106,18 +106,18 @@
             
             {{--  Checkboxes  --}}
             <hr style='margin-top:0px;'>
-            <div class='room-card-info row wrapper-center'>
-                <div class='col'>
-                    @if(floor == 0)
+            <div class='d-flex flex-wrap wrapper-center'>
+                <div class='flex-fill'>
+                    @if(room.floor == 0)
                         <b>Location:</b><span>  0-{{ room.tower }} </span>
                     @else 
                         <b>Location:</b><span>  {{ room.floor }}-{{ room.tower }} </span>
                     @endif
                 </div>
-                <div class='col'>
-                    <b>Seats:</b><span> {{ room.seats }}</span>
+                <div class='flex-fill'>
+                    <b>Seats:</b><span> {{ room.seats }} </span>
                 </div>
-                <div class='col'>
+                <div class='flex-fill'>
                     <b>Capacity:</b><span> {{ room.capacity }}</span>
                 </div>
             </div>

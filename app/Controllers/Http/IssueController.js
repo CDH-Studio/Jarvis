@@ -17,45 +17,58 @@ class IssueController {
 			.findBy('id', room);
 		const row = results.toJSON();
 		// Populates the review object's values
-		const report = new Report();
-		report.user_id = auth.user.id;
-		report.room_id = row.id;
-		report.report_type_id = issueType;
-		report.comment = comment;
+		const issue = new Report();
+		issue.user_id = auth.user.id;
+		issue.room_id = row.id;
+		issue.report_type_id = issueType;
+		issue.comment = comment;
 		// Setting default issue status as open
-		report.report_status_id = 1;
-		await report.save();
+		issue.report_status_id = 1;
+		await issue.save();
 
-		session.flash({ notification: 'Your report has been submitted' });
+		session.flash({ notification: 'Your issue has been submitted' });
 		return response.route('showRoom', { id: row.id });
 	}
 
 	/**
-	 * Query all the rooms from the database and render a page to display all current user reports for rooms (ADMIN only)
+	 * Render a issue and its information.
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getAllIssues ({ auth, view, response }) {
-		const results = await Report.all();
-		const reports = results.toJSON();
-
-		// Sort the results by name
-		reports.sort((a, b) => {
-			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-		});
-
-		const stats = await this.getIssueStatistics();
-
-		// loop through and change ids to the actual names in the tables
-		for (let i = 0; i < reports.length; i++) {
-			reports[i].status = await ReportStatus.getName(reports[i].report_status_id);
-			reports[i].room = await Room.getName(reports[i].room_id);
-			reports[i].user = await User.getName(reports[i].user_id);
-			reports[i].type = await ReportType.getName(reports[i].report_type_id);
+	async editIssue ({ response, auth, params, view, request }) {
+		try {
+			// get the search form data if employee view
+			const issue = await Report.findOrFail(params.id);
+			return view.render('adminDash.editIssue', { id: params.id, issue });
+		} catch (error) {
+			return response.redirect('/');
 		}
+	}
 
-		// if user is admin
-		return view.render('adminDash.viewAllIssues', { reports, stats });
+	/**
+	* Update the database with new issue information and render's rooms issue page afterwards
+	*
+	* @param {Object} Context The context object.
+	*/
+	async updateIssue ({ response, auth, params, view, request, session }) {
+		try {
+			const { issueType, comment, roomID, issueStatus } = request.only(['issueType', 'comment', 'roomID', 'userID', 'issueStatus']);
+			const date = new Date();
+			// Updates room information in database
+			await Report
+				.query()
+				.where('id', params.id)
+				.update({
+					report_type_id: issueType,
+					comment: comment,
+					report_status_id: issueStatus,
+					updated_at: date
+				});
+			session.flash({ notification: 'Issue Updated!' });
+			return response.route('roomIssues', { id: roomID });
+		} catch (error) {
+			return response.redirect('/');
+		}
 	}
 
 	/**
@@ -64,16 +77,7 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async getRoomIssues ({ params, view, auth, response }) {
-		var layoutType;
-		const userRole = await auth.user.getUserRole();
-		// checking if user is admin, otherwise redirect to home
-		if (userRole === 'admin') {
-			layoutType = 'layouts/adminLayout';
-		} else {
-			return response.redirect('/');
-		}
-
-		// Queries the database for the issues/reports associated to a specific room
+		// Queries the database for the issues associated to a specific room
 		let issues = await Report
 			.query()
 			.where('room_id', params.id)
@@ -121,56 +125,7 @@ class IssueController {
 			issues[i].user = await User.getName(issues[i].user_id);
 			issues[i].type = await ReportType.getName(issues[i].report_type_id);
 		}
-		return view.render('adminDash.viewRoomIssues', { issues, layoutType, id: issues[0].room, stats });
-	}
-
-	/**
-	 * Render a issue and its information.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async showIssue ({ response, auth, params, view, request }) {
-		try {
-			// get the search form data if employee view
-			const issue = await Report.findOrFail(params.id);
-			const userRole = await auth.user.getUserRole();
-			var layoutType;
-			// if user is admin
-			if (userRole === 'admin') {
-				layoutType = 'layouts/adminLayout';
-			} else {
-				return response.redirect('/');
-			}
-			return view.render('adminDash.editIssue', { id: params.id, issue, layoutType });
-		} catch (error) {
-			return response.redirect('/');
-		}
-	}
-
-	/**
-	* Update the database with new issue information and render's rooms issue page afterwards
-	*
-	* @param {Object} Context The context object.
-	*/
-	async updateIssue ({ response, auth, params, view, request, session }) {
-		try {
-			const { issueType, comment, roomID, issueStatus } = request.only(['issueType', 'comment', 'roomID', 'userID', 'issueStatus']);
-			const date = new Date();
-			// Updates room information in database
-			await Report
-				.query()
-				.where('id', params.id)
-				.update({
-					report_type_id: issueType,
-					comment: comment,
-					report_status_id: issueStatus,
-					updated_at: date
-				});
-			session.flash({ notification: 'Issue Updated!' });
-			return response.route('roomIssues', { id: roomID });
-		} catch (error) {
-			return response.redirect('/');
-		}
+		return view.render('adminDash.viewRoomIssues', { issues, id: issues[0].room, stats });
 	}
 
 	/**
@@ -180,9 +135,10 @@ class IssueController {
 	*/
 	async renderIssuePage ({ response, params, view }) {
 		var results;
-		var reports;
+		var issues;
+		const filterType = params.issueStatus;
 
-		if (params.issueStatus === 'allIssues') {
+		if (filterType === 'all') {
 			results = await Report.all();
 		} else if (params.issueStatus === 'open') {
 			// Retrieve number of issues that are open
@@ -190,13 +146,13 @@ class IssueController {
 				.query()
 				.where('report_status_id', 1)
 				.fetch();
-		} else if (params.issueStatus === 'pending') {
+		} else if (filterType === 'pending') {
 			// Retrieve number of issues that are pendingss
 			results = await Report
 				.query()
 				.where('report_status_id', 2)
 				.fetch();
-		} else if (params.issueStatus === 'closed') {
+		} else if (filterType === 'closed') {
 			// Retrieve number of issues that are pending
 			results = await Report
 				.query()
@@ -206,19 +162,24 @@ class IssueController {
 			return response.redirect('/');
 		}
 
-		reports = results.toJSON();
+		issues = results.toJSON();
+
+		// Sort the results by name
+		issues.sort((a, b) => {
+			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+		});
 
 		// loop through and change ids to the actual names in the tables
-		for (let i = 0; i < reports.length; i++) {
-			reports[i].status = await ReportStatus.getName(reports[i].report_status_id);
-			reports[i].room = await Room.getName(reports[i].room_id);
-			reports[i].user = await User.getName(reports[i].user_id);
-			reports[i].type = await ReportType.getName(reports[i].report_type_id);
+		for (let i = 0; i < issues.length; i++) {
+			issues[i].status = await ReportStatus.getName(issues[i].report_status_id);
+			issues[i].room = await Room.getName(issues[i].room_id);
+			issues[i].user = await User.getName(issues[i].user_id);
+			issues[i].type = await ReportType.getName(issues[i].report_type_id);
 		}
 
 		const stats = await this.getIssueStatistics();
 
-		return view.render('adminDash.viewAllIssues', { reports, stats });
+		return view.render('adminDash.viewRoomIssues', { filterType, issues, stats });
 	}
 
 	/**

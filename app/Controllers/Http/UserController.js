@@ -117,11 +117,9 @@ class UserController {
 
 		// check if admin is editing their own profile
 		if (userRole === 'admin') {
-			layoutType = 'layouts/adminLayout';
 			isAdmin = true;
 		// check if user is editing their own profile
 		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
-			layoutType = 'layouts/mainLayout';
 			isAdmin = false;
 		// check if user is editing someone elses profile
 		} else {
@@ -346,12 +344,9 @@ class UserController {
 		const userRole = await auth.user.getUserRole();
 		const profileUserRole = await user.getUserRole();
 		// check if admin is viewing their own profile
-		if (userRole === 'admin') {
-			layoutType = 'layouts/adminLayout';
-			canEdit = 1;
-		// check if user is viewing their own profile
-		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
-			layoutType = 'layouts/mainLayout';
+
+		// check if user is viewing their own profile or is admin
+		if (auth.user.id === Number(params.id) || userRole === 'admin') {
 			canEdit = 1;
 		} else {
 			return response.redirect('/');
@@ -472,7 +467,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getAllUsers ({ auth, view, response }) {
+	async getAllUsers ({ view }) {
 		const results = await User.all();
 		const users = results.toJSON();
 

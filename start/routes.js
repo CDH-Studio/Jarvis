@@ -48,8 +48,7 @@ Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetReq
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
-Route.post('/user/:id/editUser', 'UserController.update').as('saveUser').validator('EditUser').middleware(['isUser']);
-Route.post('/user/:id/editAdmin', 'UserController.update').as('saveAdmin').validator('EditAdmin').middleware(['isAdmin']);
+Route.post('/user/:id/edit', 'UserController.update').as('saveUser').middleware(['auth']);
 Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 
 //= ========================================================================
@@ -61,18 +60,18 @@ Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['is
 Route.post('/addRoom', 'RoomController.add').as('addRoom').validator('AddRoom').middleware(['isAdmin']);
 Route.get('/adminDash', 'HomeController.adminDashboard').as('adminDash').middleware(['isAdmin']);
 
+Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
 Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['isAdmin']);
 Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['isAdmin']);
-
 Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
-Route.get('/allIssues', 'IssueController.getAllIssues').as('allIssues').middleware(['isAdmin']);
-Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
-Route.get('/issues/:issueStatus', 'IssueController.renderIssuePage').as('renderIssues').middleware(['isAdmin']);
 
 Route.get('/roomBookings/:id', 'BookingController.getRoomBookings').as('roomBookings').middleware(['auth']);
-Route.get('/roomIssues/:id', 'IssueController.getRoomIssues').as('roomIssues').middleware(['auth']);
-Route.get('/issue/:id', 'IssueController.showIssue').as('showIssue').middleware(['auth']);
-Route.post('/issue/:id', 'IssueController.updateIssue').as('updateIssue').middleware(['auth']).validator('EditIssue');
+
+Route.get('/issue/:id', 'IssueController.getRoomIssues').as('showIssue').middleware(['auth']);
+Route.get('/issue/:id/edit', 'IssueController.editIssue').as('editIssue').middleware(['isAdmin']);
+Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['auth']).validator('EditIssue');
+Route.get('/issues/:issueStatus', 'IssueController.renderIssuePage').as('roomIssues').middleware(['isAdmin']);
+
 // user
 Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
 Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('AddReview').middleware(['isUser']);

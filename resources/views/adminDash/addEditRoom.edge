@@ -1,4 +1,4 @@
-@layout('layouts.adminLayout')
+@layout('layouts.mainLayout')
 
 @section('title')
 {{ actionType }}
@@ -290,15 +290,6 @@
         $('#roomPicture').change(function(e){
             var fileName = e.target.files[0].name;
             $('#roomPictureLabel').html(fileName);
-        });
-    </script>
-    {{--  Script to display old file  --}}  
-    <script>
-        $('#floorPlan').change(function(e){
-            $('#floorPlan').html($(this).val());
-        });
-        $('#roomPicture').change(function(e){
-            $('#roomPicture').html($(this).val());
         });
     </script>
     {{--  Remove the is-invalid class when input changes  --}}
