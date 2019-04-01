@@ -467,7 +467,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getAllUsers ({ auth, view, response }) {
+	async getAllUsers ({ view }) {
 		const results = await User.all();
 		const users = results.toJSON();
 
