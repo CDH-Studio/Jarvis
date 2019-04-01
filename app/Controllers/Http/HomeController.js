@@ -53,10 +53,10 @@ class HomeController {
 		const roomStatusStats = await this.getRoomStatusStats();
 		const roomIssueStats = await this.getRoomIssueStats();
 		const numberOfUsers = await this.getNumberofUsers();
-		const numberOfBookings = await this.getRoomPopularity();
+		const topFiveRooms = await this.getRoomPopularity();
 
-		console.log(numberOfBookings);
-		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers });
+		console.log(topFiveRooms);
+		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers, topFiveRooms: topFiveRooms });
 	}
 
 	/**
@@ -160,9 +160,8 @@ class HomeController {
 			.query()
 			.select('room_id')
 			.count('room_id as total')
-			.groupBy('room_id');
-
-		console.log('count query before JSON', bookings);
+			.groupBy('room_id')
+			.limit(5);
 
 		return bookings;
 	}

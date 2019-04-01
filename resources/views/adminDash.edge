@@ -9,8 +9,8 @@
 
 @section('content')
     <div class='row'>
-        <div class='col'>
-            <div class='row text-center' style='padding-left: 15px;'> 
+        <div class='col-2' style='margin:10px'>
+            <div class='row text-center' > 
                 <div class='col-3 card stats-card shadow no-padding'>
                     <div class='card-highlight-primary'></div>
                     <div class='card-body'>
@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <div class='col'>
+        <div class='col' style='margin:10px'> 
             @component('components.generalCard', title='Rooms - Statuses')
                 @slot('body')
                     <div class='chart-bar'>
@@ -51,7 +51,7 @@
             @endcomponent
         </div>
     
-        <div class='col'>
+        <div class='col' style='margin:10px'>
             @component('components.generalCard', title='Rooms - Issues')
                 @slot('body')
                     <div class='chart-bar'>
@@ -60,19 +60,32 @@
     
                     <div class="mt-4 text-center small">
                         <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> Pending
+                            <i class="fas fa-circle text-primary"></i> Open
                         </span>
                         <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> Under Review
+                            <i class="fas fa-circle text-success"></i> Pending
                         </span>
                         <span class="mr-2">
-                            <i class="fas fa-circle text-info"></i> Resolved
+                            <i class="fas fa-circle text-info"></i> Closed
                         </span>
                     </div>
                 @endslot
             @endcomponent
         </div>    
     </div> 
+
+    <div class='row'>
+        <div class='col' style='margin:10px'>
+            @component('components.generalCard', title='Room Popularity')
+                @slot('body')
+                    <div class='chart-bar'>
+                        <canvas id="roomPopularity" width="400" height="400"></canvas>
+                    </div>
+                @endslot
+            @endcomponent
+        </div>
+
+    </div>
     
 
     @if(flashMessage('notification'))
@@ -130,34 +143,42 @@
         // Pie Chart Example
         var ctx = document.getElementById("roomIssues");
         var roomIssues = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ["Pending", "Under Review", "Resolved"],
-            datasets: [{
-                data: [ {{ roomIssueStats['pending'] }}, {{ roomIssueStats['underReview'] }}, {{ roomIssueStats['resolved'] }} ],
-                backgroundColor: ['#004680', '#1cc88a', '#36b9cc'],
-                hoverBackgroundColor: ['#204375', '#17a673', '#2c9faf'],
-                hoverBorderColor: "rgba(234, 236, 244, 1)",
-            }],
-        },
-        options: {
-            maintainAspectRatio: false,
-            tooltips: {
-                backgroundColor: "rgb(255,255,255)",
-                bodyFontColor: "#858796",
-                borderColor: '#dddfeb',
-                borderWidth: 1,
-                xPadding: 15,
-                yPadding: 15,
-                displayColors: false,
-                caretPadding: 10
+            type: 'horizontalBar',
+            data: {
+                labels: ["Open", "Pending", "Closed"],
+                datasets: [{
+                    data: [ {{ roomIssueStats['pending'] }}, {{ roomIssueStats['underReview'] }}, {{ roomIssueStats['resolved'] }} ],
+                    backgroundColor: ['#004680', '#1cc88a', '#36b9cc'],
+                    hoverBackgroundColor: ['#204375', '#17a673', '#2c9faf'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
             },
-            legend: {
-                display: false
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                        }
+                    }]
+                },
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10
+                },
+                legend: {
+                    display: false
+                },
+                cutoutPercentage: 80
             },
-            cutoutPercentage: 80
-        },
         });
     </script>
+
 @endsection
 
