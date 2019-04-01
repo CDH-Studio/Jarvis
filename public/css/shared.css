@@ -28,12 +28,15 @@
 .vertical-center{
     align-items: center;
 }
+
 .wrapper-center {
     text-align: center;
 }
+
 .no-border{
     border-style: none;
 }
+
 .no-padding{
     padding:0px;
 }
@@ -382,6 +385,12 @@
     display:block;
     text-decoration: none;
     color:#202428;
+}
+
+@media (max-width: 800px) {
+    .room-card{
+        margin: 0 0 30px auto;
+    }
 }
 
 .room-card:hover .room-card-body{

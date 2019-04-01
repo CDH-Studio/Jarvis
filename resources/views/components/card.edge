@@ -106,18 +106,18 @@
             
             {{--  Checkboxes  --}}
             <hr style='margin-top:0px;'>
-            <div class='room-card-info row wrapper-center'>
-                <div class='col'>
+            <div class='d-flex flex-wrap wrapper-center'>
+                <div class='flex-fill'>
                     @if(room.floor == 0)
                         <b>Location:</b><span>  0-{{ room.tower }} </span>
                     @else 
                         <b>Location:</b><span>  {{ room.floor }}-{{ room.tower }} </span>
                     @endif
                 </div>
-                <div class='col'>
-                    <b>Seats:</b><span> {{ room.seats }}</span>
+                <div class='flex-fill'>
+                    <b>Seats:</b><span> {{ room.seats }} </span>
                 </div>
-                <div class='col'>
+                <div class='flex-fill'>
                     <b>Capacity:</b><span> {{ room.capacity }}</span>
                 </div>
             </div>
