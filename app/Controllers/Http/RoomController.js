@@ -5,6 +5,7 @@ const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
 const Event = use('Event');
+const Logger = use('User');
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -227,6 +228,7 @@ class RoomController {
 
 			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review });
 		} catch (error) {
+			Logger.debug(error);
 			return response.redirect('/');
 		}
 	}
