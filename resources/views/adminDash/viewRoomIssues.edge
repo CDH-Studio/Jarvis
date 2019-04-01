@@ -112,7 +112,7 @@ View {{upperFirst(filterType)}} Room Issues
 									<td class='text-center'>{{ issue.room }}</td>
 									<td class='text-center'>{{ issue.user }}</td>
 									<td class='text-center'>{{ issue.type }}</td>
-									<td class='text-center td-{{ report.status }}'>{{ issue.status }}</td>
+									<td class='text-center td-{{ issue.status }}'>{{ issue.status }}</td>
 								</tr>
 								@endeach
 							</tbody>
