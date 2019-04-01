@@ -19,7 +19,7 @@
         {{--  where result cards will be displayed --}}
         <div class='d-flex flex-wrap'>
             @each(room in rooms)
-                <div class='no-padding ie-room-margin' style='min-width: 250px; max-width:530px;'>
+                <div class='no-padding ie-room-margin'>
                     {{ csrfField() }}
                     @!component('components.card',
                         form=form,

@@ -16,6 +16,21 @@
  * These styles are used for the basic control,
  * and are not specific to any one mode.
  */
+
+ .custom-date-btn{
+	border-right:1px solid;
+	border-top:1px solid;
+	/* border-bottom:1px solid; */
+	border-radius: 0px 4px 4px 0px;
+	background-color: #145f9c;
+	border-color:#145f9c;
+	color: #ffffff;
+	cursor: pointer;
+ }
+ .custom-date-btn:hover, .custom-date-btn:active{
+    background-color: #0f4674;
+	border-color:#0f4674;
+ }
 .btn-sm{
 	background-color: rgb(243, 243, 243) !important;
 	color: #000000;

@@ -327,9 +327,10 @@ class RoomController {
 			{ checkName: 'surfaceHub', checkValue: form.surfaceHubCheck },
 			{ checkName: 'pc', checkValue: form.pcCheck }
 		];
-		// basic search for mandatory input like (To,From and Date)
+		// only loook for roosm that are open
 		let searchResults = Room
 			.query()
+			.where('state', 1)
 			.clone();
 
 		// if the location is selected then query, else dont
@@ -351,6 +352,7 @@ class RoomController {
 				.where('capacity', '>=', capacity)
 				.clone();
 		}
+
 		// loop through the array of objects and add to query if checked
 		for (let i = 0; i < checkBox.length; i++) {
 			if (checkBox[i].checkValue === '1') {

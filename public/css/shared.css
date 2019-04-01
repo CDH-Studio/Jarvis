@@ -1,9 +1,9 @@
 /*  This file is for CSS changes that are used by both ADMIN and USER views */
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-/* EI Compatibilitie Changes */
+/* IE Compatibilitie Changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-/*  */
+
 @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {  
     /* IE10+ specific styles go here */  
     .stats-card-content{
@@ -12,10 +12,11 @@
     }
 
     .ie-room-card{
-        min-width: 530px;
+        min-width: 500px;
     }
     .ie-room-margin{
         margin: 0 13px 0 13px;
+        width: 500px;
     }
  }
 
@@ -27,12 +28,15 @@
 .vertical-center{
     align-items: center;
 }
+
 .wrapper-center {
     text-align: center;
 }
+
 .no-border{
     border-style: none;
 }
+
 .no-padding{
     padding:0px;
 }
@@ -376,11 +380,17 @@
 .room-card{
     border-radius: 2px;
     box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2);
-    width: 95%;
-    margin: 0px auto 30px auto;
+    margin: 0 30px 30px auto;
+    max-width: 500px;
     display:block;
     text-decoration: none;
     color:#202428;
+}
+
+@media (max-width: 800px) {
+    .room-card{
+        margin: 0 0 30px auto;
+    }
 }
 
 .room-card:hover .room-card-body{
@@ -440,9 +450,12 @@
     padding:15px 15px;
 }
 
-.room-card-photo img{
-    max-width:100%;
+.room-card-img {
     padding-bottom: 15px;
+    min-width: 191px;
+    min-height: 142px;
+    max-width: 191px;
+    max-height: 142px;
 }
 
 .room-card-info{
@@ -464,7 +477,7 @@
     justify-content: space-between !important;
 }
 .room-card-spec{
-    width:100%;
+    width: 122px;
     display:inline-block;
     padding-right:0px;
 }
@@ -544,7 +557,20 @@
 }
 
 .room-details-image{
+    /* min-width: 505px; */
+    min-height: 336px;
+    max-height: 336px;
+    max-width: 505px;
     width:100%;
+    height:100%;
+
+}
+
+.room-confirm-image{
+    min-width: 448px;
+    min-height: 336px;
+    max-height: 336px;
+    max-width: 448px;
 }
 
 .issue-stats-card-link, .issue-stats-card-link:hover, .issue-stats-card-link:active, .issue-stats-card-link:visited {
