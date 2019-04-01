@@ -572,3 +572,13 @@
     max-height: 336px;
     max-width: 448px;
 }
+
+.issue-stats-card-link, .issue-stats-card-link:hover, .issue-stats-card-link:active, .issue-stats-card-link:visited {
+    border:none;
+    outline:none;
+    text-decoration:none;
+    color:inherit;
+    text-decoration:none;
+}
+
+

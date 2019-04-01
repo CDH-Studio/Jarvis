@@ -1,4 +1,4 @@
-@layout(layoutType)
+@layout('layouts.mainLayout')
 
 @section('title')
     Manage Bookings
@@ -27,10 +27,10 @@
 				<div class="row">
 					<div class="col-12">
 						{{--  Displays all of the bookings for the current user  --}}
-						<table class='table table-hover mt-4' id='table' >
+						<table class='table table-hover' id='manageBookingsTable'>
 							<thead>
 								<tr>
-									<th scope='col'>User Name</th>
+									<th scope='col'>User</th>
 									<th scope='col'>Meeting Name</th>
 									<th scope='col'>Date</th>
 									<th scope='col'>Time</th>
@@ -39,8 +39,8 @@
 								</tr>
 							</thead>
 							{{--  Loops through the bookings array and displays every booking  --}}
-							@each(booking in bookings) 
-								<tbody>
+							<tbody>
+								@each(booking in bookings) 
 									<tr>
 										<td><a href='{{ route('viewProfile', {id: booking.userId}) }}'>{{ booking.userName }}</a></td>
 										<td>{{ booking.subject }}</td>
@@ -54,8 +54,9 @@
 										@endif
 
 									</tr>
-								</tbody>
-							@endeach
+								@endeach
+							</tbody>
+
 						</table>
 					</div>
 				</div> 
@@ -64,3 +65,16 @@
 	</div>
 @endsection
 
+{{--  Deals with the search functionality of the table above- searches all fields   --}}
+@section('extrajs') 
+    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
+    <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
+    <script>$(document).ready(function() {
+            $('#manageBookingsTable').DataTable( {
+                "paging":   false,
+                "ordering": true,
+                "info":     false
+            });
+        });
+    </script>
+@endsection
