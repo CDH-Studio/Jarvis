@@ -1,4 +1,4 @@
-@layout(layoutType)
+@layout('layouts.mainLayout')
 
 @section('title')
     Manage Bookings
@@ -14,49 +14,67 @@
 	@component('components.pageHeader', title='Manage Bookings')
 	@endcomponent
 	
-	@if(bookings.length == 0)
-		<div class="row">
-			<div class="col-12 text-center">
-				<p class="fas fa-ghost fa-10x mb-5 mt-5 text-muted"></p>
-				<h3 class="text-muted">No Bookings Found</h3>
-			</div>
-		</div>
-	@else
-		<div class="row">
-			<div class="col-12">
-				{{--  Displays all of the bookings for the current user  --}}
-				<table class='table table-hover mt-4' id='table' >
-					<thead>
-						<tr>
-							<th scope='col'>Room</th>
-							<th scope='col'>Meeting Name</th>
-							<th scope='col'>Date</th>
-							<th scope='col'>Time</th>
-							<th scope='col'>Status</th>
-							<th scope='col'></th>
-						</tr>
-					</thead>
-					{{--  Loops through the bookings array and displays every booking  --}}
-					@each(booking in bookings) 
-						<tbody>
-							<tr>
-								<td><a href='{{ route('showRoom', {id: booking.roomId}) }}'>{{ booking.room }}</a></td>
-								<td>{{ booking.subject }}</td>
-								<td>{{ booking.date }}</td>
-								<td>{{ booking.time }}</td>
-								<td class='td-{{ booking.status }}'>{{ booking.status }}</td>
-								@if(booking.status == 'Approved' && canEdit)
-									<td><a class='text-danger' name='cancel' id='cancelButton' href='{{ route('cancelBooking', {id: booking.id}) }}'><i class="fas fa-times"></i> Cancel</a></td>
-								@else
-									<td></td>
-								@endif
+	<div class="card shadow">
+		<div class="card-body">
+			@if(bookings.length == 0)
+				<div class="row">
+					<div class="col-12 text-center mt-5 mb-5">
+						<p class="fas fa-ghost fa-10x mb-5 text-muted"></p>
+						<h3 class="text-muted">No Bookings Found</h3>
+					</div>
+				</div>
+			@else
+				<div class="row">
+					<div class="col-12">
+						{{--  Displays all of the bookings for the current user  --}}
+						<table class='table table-hover' id='manageBookingsTable'>
+							<thead>
+								<tr>
+									<th scope='col'>User</th>
+									<th scope='col'>Meeting Name</th>
+									<th scope='col'>Date</th>
+									<th scope='col'>Time</th>
+									<th scope='col'>Status</th>
+									<th scope='col'></th>
+								</tr>
+							</thead>
+							{{--  Loops through the bookings array and displays every booking  --}}
+							<tbody>
+								@each(booking in bookings) 
+									<tr>
+										<td><a href='{{ route('viewProfile', {id: booking.userId}) }}'>{{ booking.userName }}</a></td>
+										<td>{{ booking.subject }}</td>
+										<td>{{ booking.date }}</td>
+										<td>{{ booking.time }}</td>
+										<td class='td-{{ booking.status }}'>{{ booking.status }}</td>
+										@if(booking.status == 'Approved' && canEdit)
+											<td><a class='text-danger' name='cancel' id='cancelButton' href='{{ route('cancelBooking', {id: booking.id}) }}'><i class="fas fa-times"></i> Cancel</a></td>
+										@else
+											<td></td>
+										@endif
 
-							</tr>
-						</tbody>
-					@endeach
-				</table>
-			</div>
-		</div> 
-	@endif
+									</tr>
+								@endeach
+							</tbody>
+
+						</table>
+					</div>
+				</div> 
+			@endif
+		</div>
+	</div>
 @endsection
 
+{{--  Deals with the search functionality of the table above- searches all fields   --}}
+@section('extrajs') 
+    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
+    <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
+    <script>$(document).ready(function() {
+            $('#manageBookingsTable').DataTable( {
+                "paging":   false,
+                "ordering": true,
+                "info":     false
+            });
+        });
+    </script>
+@endsection

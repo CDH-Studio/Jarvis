@@ -1,11 +1,10 @@
 'use strict';
 const Room = use('App/Models/Room');
 const Review = use('App/Models/Review');
-const Report = use('App/Models/Report');
-const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
+const Event = use('Event');
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -24,49 +23,17 @@ async function getAccessToken () {
 }
 
 /**
- * Populate bookings from booking query results.
+ * Generating a random string.
  *
- * @param {Object} results Results from bookings query.
- *
- * @returns {Object} The access token.
- *
+ * @param {Integer} times Each time a string of 5 to 6 characters is generated.
  */
-async function populateBookings (results) {
-	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-	async function asyncMap (arr, callback) {
-		let arr2 = [];
-
-		for (let i = 0; i < arr.length; i++) {
-			arr2.push(await callback(arr[i], i, arr));
-		}
-
-		return arr2;
+function random (times) {
+	let result = '';
+	for (let i = 0; i < times; i++) {
+		result += Math.random().toString(36).substring(2);
 	}
 
-	let bookings = [];
-	const populate = async () => {
-		bookings = await asyncMap(results, async (result) => {
-			const booking = {};
-
-			const from = new Date(result.from);
-			const to = new Date(result.to);
-			booking.subject = result.subject;
-			booking.status = result.status;
-			booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
-			booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-			booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
-			booking.roomId = result.room_id;
-			booking.id = result.id;
-
-			return booking;
-		});
-	};
-
-	await populate();
-
-	return bookings;
+	return result;
 }
 
 class RoomController {
@@ -93,7 +60,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async addRoom ({ request, response, session }) {
+	async add ({ request, response, session }) {
 		try {
 			// Retrieves user input
 			const body = request.all();
@@ -134,8 +101,8 @@ class RoomController {
 			});
 
 			// Populates the room object's values
-			room.floorplan = `uploads/floorPlans/${room.name}.png`;
-			room.picture = `uploads/roomPictures/${room.name}.png`;
+			room.floorplan = `uploads/floorPlans/${room.name}_floorPlan.png`;
+			room.picture = `uploads/roomPictures/${room.name}_roomPicture.png`;
 			room.extraEquipment = body.extraEquipment == null ? ' ' : body.extraEquipment;
 			room.comment = body.comment == null ? ' ' : body.extraEquipment;
 			await room.save();
@@ -213,8 +180,8 @@ class RoomController {
 				videoConference: body.videoCheck === '1' ? '1' : '0',
 				surfaceHub: body.surfaceHubCheck === '1' ? '1' : '0',
 				pc: body.pcCheck === '1' ? '1' : '0',
-				floorplan: `uploads/floorPlans/${body.name}.png`,
-				picture: `uploads/roomPictures/${body.name}.png`,
+				floorplan: `uploads/floorPlans/${body.name}_floorPlan.png`,
+				picture: `uploads/roomPictures/${body.name}_roomPicture.png`,
 				extraEquipment: body.extraEquipment == null ? ' ' : body.extraEquipment,
 				comment: body.comment == null ? ' ' : body.comment,
 				state: body.state
@@ -237,30 +204,28 @@ class RoomController {
 			const room = await Room.findOrFail(params.id);
 			const userRole = await auth.user.getUserRole();
 			const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
+			const review = await this.getRatingAndReview(auth.user.id, params.id);
 
 			var isAdmin = 0;
-			var layoutType = ' ';
 			// if user is admin
 			if (userRole === 'admin') {
-				layoutType = 'layouts/adminLayout';
 				isAdmin = 1;
 				// check if user is viewing their own profile
 			} else if (userRole === 'user') {
-				layoutType = 'layouts/mainLayout';
 				isAdmin = 0;
 				// check if user is viewing someone elses profile
 			} else {
 				return response.redirect('/');
 			}
 
-			// retreives all of the reviews associated to this room
+			// retrieves all of the reviews associated to this room
 			let searchResults = await Review
 				.query()
 				.where('room_id', params.id)
 				.fetch();
 			const reviews = searchResults.toJSON();
 
-			return view.render('userPages.roomDetails', { room, layoutType, isAdmin, form, hasReview, reviews });
+			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review });
 		} catch (error) {
 			return response.redirect('/');
 		}
@@ -362,9 +327,10 @@ class RoomController {
 			{ checkName: 'surfaceHub', checkValue: form.surfaceHubCheck },
 			{ checkName: 'pc', checkValue: form.pcCheck }
 		];
-		// basic search for mandatory input like (To,From and Date)
+		// only loook for roosm that are open
 		let searchResults = Room
 			.query()
+			.where('state', 1)
 			.clone();
 
 		// if the location is selected then query, else dont
@@ -386,6 +352,7 @@ class RoomController {
 				.where('capacity', '>=', capacity)
 				.clone();
 		}
+
 		// loop through the array of objects and add to query if checked
 		for (let i = 0; i < checkBox.length; i++) {
 			if (checkBox[i].checkValue === '1') {
@@ -412,231 +379,26 @@ class RoomController {
 			}
 		}
 
+		const code = random(4);
 		const checkRoomAvailability = async () => {
-			await asyncForEach(rooms, async (item, index, items) => {
-				if (!await this.getRoomAvailability(date, from, to, item.calendar)) {
-					items.splice(index, 1);
+			await asyncForEach(rooms, async (item) => {
+				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
+					Event.fire('send.room', {
+						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
+						code: code
+					});
 				}
 			});
 		};
 
-		await checkRoomAvailability();
+		setTimeout(checkRoomAvailability, 500);
 
 		// Sort the results by name
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
 
-		return view.render('userPages.results', { rooms, form });
-	}
-
-	/**
-	 * Navigate to the details page of specified room.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	// async goToDetails ({ request, view }) {
-	// //  get all information from card view
-	// const results = request.all();
-	// // take the unique id from the rooom and search tyhe database for the rest of the information to display in room details
-	// let roomId = results.id;
-	// let searchResults = await Room
-	// .findBy('id', roomId);
-	// const room = searchResults.toJSON();
-	// return view.render('userPages.roomDetails', { room });
-	// }
-
-	/**
-	 * Create the requested event on the room calendar.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async confirmBooking ({ request, response, session, auth }) {
-		const { meeting, date, from, to, room } = request.only(['meeting', 'date', 'from', 'to', 'room']);
-		const results = await Room
-			.findBy('id', room);
-		const row = results.toJSON();
-		const calendar = row.calendar;
-		const name = row.name;
-
-		if (!await this.getRoomAvailability(date, from, to, calendar)) {
-			session.flash({
-				error: `Room ${name} has already been booked for the time selected!`
-			});
-
-			return response.route('showRoom', { id: room });
-		}
-
-		// Information of the event
-		const eventInfo = {
-			'subject': meeting,
-			'body': {
-				'contentType': 'HTML',
-				'content': 'Jarvis Daily Standup'
-			},
-			'start': {
-				'dateTime': `${date}T${from}`,
-				'timeZone': 'Eastern Standard Time'
-			},
-			'end': {
-				'dateTime': `${date}T${to}`,
-				'timeZone': 'Eastern Standard Time'
-			},
-			'location': {
-				'displayName': name
-			},
-			'attendees': [
-				{
-					'emailAddress': {
-						'address': '',
-						'name': 'Yunwei Li'
-					},
-					'type': 'required'
-				}
-			]
-		};
-
-		// Create the event
-		const booking = new Booking();
-		booking.subject = meeting;
-		booking.status = 'Pending';
-		await auth.user.bookings().save(booking);
-		await results.bookings().save(booking);
-
-		this.createEvent(eventInfo, calendar, booking, auth.user, results);
-
-		session.flash({
-			notification: `Room ${name} has been booked. Please click here to view your bookings.`,
-			url: `/user/${auth.user.id}/bookings`
-		});
-
-		return response.redirect('/booking');
-	}
-
-	/**
-	 * Retrives all of the bookings that correspond to a specific room.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async getBookings ({ params, view, auth, response }) {
-		var canEdit = 0;
-		var layoutType = '';
-		const userRole = await auth.user.getUserRole();
-
-		if (userRole === 'admin') {
-			layoutType = 'layouts/adminLayout';
-			canEdit = 1;
-		// check if user is viewing their own profile
-		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
-			layoutType = 'layouts/mainLayout';
-			canEdit = 1;
-
-		// check if user is viewing someone elses profile
-		} else if (auth.user.id !== Number(params.id) && userRole === 'user') {
-			layoutType = 'layouts/mainLayout';
-			canEdit = 0;
-		} else {
-			return response.redirect('/');
-		}
-
-		// Queries the database fr the bookings associated to a specific room
-		let searchResults = await Booking
-			.query()
-			.where('room_id', params.id)
-			.fetch();
-
-		searchResults = searchResults.toJSON();
-		const bookings = await populateBookings(searchResults);
-
-		return view.render('userPages.manageBookings', { bookings, layoutType, canEdit });
-	}
-
-	/**
-	 * Create a list of all bookings under the current user and render a view for it.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async viewUserBookings ({ params, auth, view, response }) {
-		var canEdit = 0;
-		var layoutType = '';
-		const userRole = await auth.user.getUserRole();
-
-		if (userRole === 'admin') {
-			layoutType = 'layouts/adminLayout';
-			canEdit = 1;
-		// check if user is viewing their own profile
-		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
-			layoutType = 'layouts/mainLayout';
-			canEdit = 1;
-		} else {
-			return response.redirect('/');
-		}
-
-		const results = (await auth.user.bookings().fetch()).toJSON();
-		const bookings = await populateBookings(results);
-
-		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });
-	}
-
-	/**
-	 * Create a list of all bookings under the current user and render a view for it.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async cancelBooking ({ params, response, auth }) {
-		const booking = await Booking.findBy('id', params.id);
-		const roomId = booking.toJSON().room_id;
-		const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
-		const eventId = booking.toJSON().event_id;
-
-		await this.deleteEvent(calendarId, eventId);
-		booking.status = 'Cancelled';
-		await booking.save();
-
-		return response.redirect(`/user/${auth.user.id}/bookings`);
-	}
-
-	/**
-	 * Create an event on the specified room calendar.
-	 *
-	 * @param {String} eventInfo Information of the event.
-	 * @param {String} calendarId The id of the room calendar.
-	 * @param {Object} booking The Booking (Lucid) Model.
-	 * @param {Object} user The User (Lucid) Model.
-	 * @param {Object} room The Room (Lucid) Model.
-	 */
-	async createEvent (eventInfo, calendarId, booking, user, room) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const newEvent = await client
-					.api(`/me/calendars/${calendarId}/events`)
-					.post(eventInfo);
-
-				if (newEvent) {
-					booking.from = newEvent.start.dateTime;
-					booking.to = newEvent.end.dateTime;
-					booking.event_id = newEvent.id;
-					booking.status = 'Approved';
-					await user.bookings().save(booking);
-					await room.bookings().save(booking);
-
-					return newEvent;
-				}
-			} catch (err) {
-				console.log(err);
-				booking.status = 'Failed';
-				await user.bookings().save(booking);
-				await room.bookings().save(booking);
-			}
-		}
+		return view.render('userPages.searchResults', { code: code });
 	}
 
 	/**
@@ -662,32 +424,6 @@ class RoomController {
 					.get();
 
 				return events;
-			} catch (err) {
-				console.log(err);
-			}
-		}
-	}
-
-	/**
-	 * Delete an event from the room calendar.
-	 *
-	 * @param {String} calendarId The id of the room calendar.
-	 * @param {String} eventId The id of the event to delete.
-	 */
-	async deleteEvent (calendarId, eventId) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				await client
-					.api(`/me/calendars/${calendarId}/events/${eventId}`)
-					.delete();
 			} catch (err) {
 				console.log(err);
 			}
@@ -809,122 +545,6 @@ class RoomController {
 	}
 
 	/**
-	 * Render the ratings and review page.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async renderReviewPage ({ params, view, auth }) {
-		// Retrieves review
-		let searchResult = await Review
-			.query()
-			.where('user_id', auth.user.id)
-			.where('room_id', params.id)
-			.fetch();
-
-		const reviews = searchResult.toJSON();
-
-		// retreive the correspondinf review object
-		var review = reviews[0];
-
-		// Check to see if there is an existing review
-		const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
-		var actionType;
-
-		if (hasReview) {
-			actionType = 'Edit Review';
-		} else {
-			actionType = 'Add Review';
-		}
-
-		return view.render('userPages.ratingReview', { id: params.id, review, actionType });
-	}
-
-	/**
-	 * Adds a review Object into the Database.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async addReview ({ request, response, session, auth, params }) {
-		try {
-			// Retrieves user input
-			const body = request.all();
-
-			// Populates the review object's values
-			const review = new Review();
-			review.user_id = auth.user.id;
-			review.room_id = params.id;
-			review.rating = body.rating;
-			review.review = body.review;
-
-			await review.save();
-			session.flash({ notification: 'Review Added!' });
-
-			return response.route('showRoom', { id: params.id });
-		} catch (err) {
-			console.log(err);
-		}
-	}
-
-	/**
-	 * Edits a review Object into the Database.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async editReview ({ request, response, session, auth, params }) {
-		try {
-			// Retrieves user input
-			const body = request.all();
-
-			// Update the review in the database
-			await Review
-				.query()
-				.where('user_id', auth.user.id)
-				.where('room_id', params.id)
-				.update({
-					rating: body.rating,
-					review: body.review
-				});
-
-			session.flash({ notification: 'Review Updated!' });
-
-			return response.route('showRoom', { id: params.id });
-		} catch (err) {
-			console.log(err);
-		}
-	}
-
-	/**
-	 * Deletes a review Object from the Database.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async deleteReview ({ request, response, session, auth, params }) {
-		try {
-			// retrives the reviews in the database
-			let searchResults = await Review
-				.query()
-				.where('user_id', auth.user.id)
-				.where('room_id', params.id)
-				.fetch();
-
-			const reviews = searchResults.toJSON();
-
-			// stores the unique review id in reviewId
-			const reviewId = reviews[0].id;
-
-			// find the review object
-			const review = await Review.findBy('id', reviewId);
-			await review.delete();
-
-			session.flash({ notification: 'Review Deleted!' });
-
-			return response.route('showRoom', { id: params.id });
-		} catch (err) {
-			console.log(err);
-		}
-	}
-
-	/**
 	 * Calcualtes the average rating of a specific room, based off of the room Id
 	 *
 	 * @param {Object} Context The context object.
@@ -971,28 +591,28 @@ class RoomController {
 			console.log(err);
 		}
 	}
+
 	/**
-	 * Reports a room
+	 * Returns a user's review for a specific room
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async reportRoom ({ request, response, session, auth }) {
-		const { issueType, comment, room } = request.only(['issueType', 'comment', 'room']);
-		console.log(room);
-		const results = await Room
-			.findBy('id', room);
-		const row = results.toJSON();
-		// Populates the review object's values
-		const report = new Report();
-		report.user_id = auth.user.id;
-		report.room_id = row.id;
-		report.report_type_id = issueType;
-		report.comment = comment;
-		report.report_status_id = 1;
-		await report.save();
+	async getRatingAndReview (userId, roomId) {
+		try {
+			// Retrive all the reviews associated to a specific user
+			let searchResults = await Review
+				.query()
+				.where('user_id', userId)
+				.where('room_id', roomId)
+				.fetch();
 
-		session.flash({ notification: 'Your report has been submitted' });
-		return response.route('showRoom', { id: row.id });
+			const reviews = searchResults.toJSON();
+
+			// returns a user's review for a specific room
+			return reviews[0];
+		} catch (err) {
+			console.log(err);
+		}
 	}
 }
 

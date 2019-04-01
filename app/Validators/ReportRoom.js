@@ -16,13 +16,13 @@ class ReportRoom {
 		return {
 			/**
 			 * Validation Rules
-			 *
+			 * max: 'comment' input field is limited to 250 characters
 			 * required: required field, to create a new room these fields are required
 			 * requiredDropdown: this field is required and cannot be selected on "Select a ___" which has a value of 'undefined'
 			 *
 			 */
 			issueType: 'required|requiredDropdown',
-			comment: 'required'
+			comment: 'required|max:250'
 		};
 	}
 
@@ -30,7 +30,8 @@ class ReportRoom {
 	get messages () {
 		return {
 			'required': 'This field is required.',
-			'requiredDropdown': 'This field is required.'
+			'requiredDropdown': 'This field is required.',
+			'comment.max': 'Please limit your comment to 250 characters.'
 		};
 	}
 

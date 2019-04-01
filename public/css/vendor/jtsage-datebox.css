@@ -16,36 +16,58 @@
  * These styles are used for the basic control,
  * and are not specific to any one mode.
  */
+
+ .custom-date-btn{
+	border-right:1px solid;
+	border-top:1px solid;
+	/* border-bottom:1px solid; */
+	border-radius: 0px 4px 4px 0px;
+	background-color: #145f9c;
+	border-color:#145f9c;
+	color: #ffffff;
+	cursor: pointer;
+ }
+ .custom-date-btn:hover, .custom-date-btn:active{
+    background-color: #0f4674;
+	border-color:#0f4674;
+ }
 .btn-sm{
-	background-color: rgb(243, 243, 243);
+	background-color: rgb(243, 243, 243) !important;
 	color: #000000;
-	-webkit-border-radius: 0;
-	-moz-border-radius: 0;
-	border-radius: 0;
-	margin:0;
+	-webkit-border-radius: 0 !important;
+	-moz-border-radius: 0 !important;
+	border-radius: 0 !important;
+	margin:0 !important;
  }
 
 .btn-cal-info, .btn-cal-info:hover, .btn-cal-info:active, .btn-cal-info:focus, .btn-cal-info:visited{
-	background-color: #223851;
-	color: #ffffff;
+	background-color: #004680 !important;
+	color: #ffffff !important;
+
 }
 .btn-cal-disabled, .btn-cal-disabled:hover, .btn-cal-disabled:active, .btn-cal-disabled:focus, .btn-cal-disabled:visited{
-	background-color: rgb(207, 207, 207);
-	color: #8d8d8d;
- }
+	background-color: rgb(207, 207, 207) !important;
+	color: #8d8d8d !important;
+}
 
  .btn-cal-info:hover,  .btn-cal-secondary:hover{
-    position: relative; 
-    top: -1px;
+	position: relative !important; 
+	background-color: #023258 !important;
+	color: #ffffff !important;
     box-shadow: 0 2px 8px 0 #00000033 !important;
 }
 
+.btn-cal-info, .btn-cal-disabled, .btn-cal-secondary{
+	margin-right:0px !important;
+}
 .btn-cal-month{
     box-shadow: 0 2px 6px 0 #00000033 ;
 	border-radius: 3.2px;
 	margin: 0 5px 0 5px !important;
  }
-
+.btn-cal-secondary{
+	color: #223851 !important;
+}
 .button-datebox{
 	height: 0px;
 }

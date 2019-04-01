@@ -1,17 +1,42 @@
 /*  This file is for CSS changes that are used by both ADMIN and USER views */
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
+/* IE Compatibilitie Changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {  
+    /* IE10+ specific styles go here */  
+    .stats-card-content{
+        min-width:75px;
+        width:135px;
+    }
+
+    .ie-room-card{
+        min-width: 500px;
+    }
+    .ie-room-margin{
+        margin: 0 13px 0 13px;
+        width: 500px;
+    }
+ }
+
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
 /* General */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-.text-muted{
-    color:#cccccc !important;
+
+.vertical-center{
+    align-items: center;
 }
+
 .wrapper-center {
     text-align: center;
 }
+
 .no-border{
     border-style: none;
 }
+
 .no-padding{
     padding:0px;
 }
@@ -20,10 +45,16 @@
     margin: 0 !important;
 }
 
+.border-primary {
+    border-color: #383838 !important;
+}
+
+.custom-shadow{
+    box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2);
+}
 .shadow{
     box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2) !important;
 }
-
 /* checkboxes */
 .custom-control-input:checked ~ .custom-control-label::before {
     color: #fff;
@@ -31,7 +62,10 @@
     background-color: #001642;
 }
 
-/* Form Focus color and style */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Forms  */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
 .form-control{
     color: #000000;
 }
@@ -48,12 +82,44 @@
     background: #fff !important;
 }
 
-.dropdown-item:hover{
-    background-color:#001642;
-}
 /* showing invalid validator display */
 .show-invalid{
     display: block;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Text */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.text-primary{
+    color: #004680 !important;
+}
+
+.text-muted{
+    color:#cccccc !important;
+}
+
+.text-grey{
+    color:#707070 ;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Navagation Changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.bg-gradient-primary {
+    background-image:  linear-gradient(180deg, #003968 0%, rgb(0, 50, 92) 100%);
+}
+
+.navbar-brand img{
+    height:26px;
+    margin:0px;
+}
+
+.dropdown-item:hover, .dropdown-item:focus, .dropdown-item:active, .dropdown-item:visited {
+    background-color: #eceff3;
+    color: black;
+
 }
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Modal box changes */
@@ -81,6 +147,7 @@
     border-top:none;
     background-color: hsl(210,9%, 96%);
 }
+
 .modal-highlight{
     background: rgb(43,81,124);
     background: linear-gradient(90deg, rgba(43,81,124,1) 0%, rgba(34,56,81,1) 100%);
@@ -88,6 +155,65 @@
     border-top-left-radius: .25rem;
     border-top-right-radius: .25rem;
 }
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Card hightlights */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.card-highlight-primary{
+    background: rgb(88,136,189);
+    background: linear-gradient(90deg, rgba(88,136,189,1) 0%, rgba(15,172,243,1) 100%);
+    height: 6px;
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
+}
+
+.card-highlight-success{
+    background: linear-gradient(90deg, rgba(0,22,66,1) 0%, rgba(94,144,136,1) 0%, rgba(24,188,156,1) 100%);
+    height: 6px;
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
+}
+
+.card-highlight-warning{
+    background: rgb(219,194,120);
+    background: linear-gradient(90deg, rgba(219,194,120,1) 0%, rgba(243,156,18,1) 100%);
+    height: 6px;
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
+}
+
+.card-highlight-danger{
+    background: rgb(201,122,122);
+    background: linear-gradient(90deg, rgba(201,122,122,1) 0%, rgba(231,76,60,1) 100%);
+    height: 6px;
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
+}
+
+.card-highlight-more{
+    background: rgb(43,81,124);
+    background: linear-gradient(90deg, rgba(43,81,124,1) 0%, rgba(34,56,81,1) 100%);
+    height: 6px;
+    border-top-left-radius: 0.35rem;
+    border-top-right-radius: 0.35rem;
+}
+
+.card-icon{
+    margin: 20px 0 10px 0;
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Stats Card */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+
+.stats-card{
+    margin: 0 16px 16px 0;
+    height: 156px;
+    min-width: 240px;
+    background-color: #FFFFFF;
+}
+
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Tooltip color changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -115,7 +241,6 @@
 }
 
 .tooltip.bs-tooltip-auto[x-placement^=right] .arrow::before, .tooltip.bs-tooltip-right .arrow::before {
-
     border-right-color:  #001642;
 }
 
@@ -147,7 +272,11 @@
 }
 
 .bg-info{
-    background-color: #3498db !important;
+    background-color: #0facf3 !important;
+}
+
+.bg-muted{
+    background-color: #777777 !important;
 }
 
 .bg-light{
@@ -157,24 +286,64 @@
     background-color: #001642 !important;
 }
 
+.color-primary{
+    color: #001642 !important;
+}
+
+.color-secondary{
+    color: #95a5a6 !important;
+}
+
+.color-success{
+    color: #18bc9c !important;
+}
+
+.color-danger{
+    color: #e74c3c !important;
+}
+
+.color-warning{
+    color: #f39c12 !important;
+}
+
+.color-info{
+    color: #0facf3 !important;
+}
+
+.color-muted{
+    color: #777777 !important;
+}
+
+.color-light{
+    color: #ecf0f1 !important;
+}
+.color-dark{
+    color: #001642 !important;
+}
+
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Changing button colors */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 .btn{
     margin-right:10px;
 }
+
+.btn:disabled{
+    background-color: #383838;
+    color:#cccccc !important;
+}
 .btn-primary{
     /* #0FACF3 old color */
+    background-color: #004680;
     border-style: none;
-    background-color: #223851;
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
-.btn-primary:hover{
-    background-color: #152333;
-    position: relative; 
-    top: -1px;
+.btn-primary:hover:enabled, .btn-primary:active:enabled{
+    /* #0FACF3 old color */
+    background-color: #023258 !important;
     box-shadow: 0 4px 8px 0 #00000033 !important;
+    
 }
 
 .btn-secondary{
@@ -184,12 +353,7 @@
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
-.btn-secondary:hover{
-    background-color:#dde3e9;
-    border-color: #dde3e9;
-    color: #223851;
-    position: relative; 
-    top: -1px;
+.btn-secondary:hover:enabled, .btn-secondary:active:enabled{
     box-shadow: 0 4px 8px 0 #00000033 !important;
 }
 
@@ -198,28 +362,35 @@
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
-.btn-info:hover{
-    position: relative; 
-    top: -1px;
-    box-shadow: 0 4px 8px 0 #00000033 !important;
+.btn-danger{
+    border-style: none;
+    box-shadow: 0 2px 6px 0 #00000033 !important;
 }
+
+
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Room card information */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 
 .link-color{
-    color:rgb(18, 201, 164) !important;
+    color:rgb(6, 179, 223) !important;
 }
 
 .room-card{
     border-radius: 2px;
     box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2);
-    width: 95%;
-    margin: 0px auto 40px auto;
+    margin: 0 30px 30px auto;
+    max-width: 500px;
     display:block;
     text-decoration: none;
     color:#202428;
+}
+
+@media (max-width: 800px) {
+    .room-card{
+        margin: 0 0 30px auto;
+    }
 }
 
 .room-card:hover .room-card-body{
@@ -236,10 +407,13 @@
 }
 
 .room-card:hover .room-card-title{
-    background-color: #001642 ;
+    background-color: #004680;
     color: #FFFFFF;
 }
 
+.room-card:hover #stars{
+    color: #FFFFFF;
+}
 
 .room-card hr{
     margin: 15px 0 5px 0;
@@ -250,9 +424,7 @@
     border-top-left-radius: 2px;
     height: 50px;
     background-color: #f7f7f7;
-    /* background-color: #3c5585;  OLD Color*/
     color: #000000;
-    /* margin-top: 3px; */
     margin-bottom: 0px;
     vertical-align: center;
     padding:0 15px;
@@ -278,9 +450,12 @@
     padding:15px 15px;
 }
 
-.room-card-photo img{
-    max-width:100%;
+.room-card-img {
     padding-bottom: 15px;
+    min-width: 191px;
+    min-height: 142px;
+    max-width: 191px;
+    max-height: 142px;
 }
 
 .room-card-info{
@@ -302,7 +477,7 @@
     justify-content: space-between !important;
 }
 .room-card-spec{
-    width:100%;
+    width: 122px;
     display:inline-block;
     padding-right:0px;
 }
@@ -340,13 +515,14 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 .room-details-card{
     padding:0px !important;
+    background-color: #FFFFFF;
 }
 
 .room-details-card-title{
-    border-top-right-radius: 2px;
-    border-top-left-radius: 2px;
+    border-top-right-radius: 0.35rem;
+    border-top-left-radius: 0.35rem;
     height: 55px;
-    background-color: #f1f1f1;
+    background-color: #f7f7f7;
     color: #000000;
     margin-bottom: 0px;
     vertical-align: center;
@@ -381,8 +557,28 @@
 }
 
 .room-details-image{
+    /* min-width: 505px; */
+    min-height: 336px;
+    max-height: 336px;
+    max-width: 505px;
     width:100%;
+    height:100%;
+
 }
 
+.room-confirm-image{
+    min-width: 448px;
+    min-height: 336px;
+    max-height: 336px;
+    max-width: 448px;
+}
+
+.issue-stats-card-link, .issue-stats-card-link:hover, .issue-stats-card-link:active, .issue-stats-card-link:visited {
+    border:none;
+    outline:none;
+    text-decoration:none;
+    color:inherit;
+    text-decoration:none;
+}
 
 

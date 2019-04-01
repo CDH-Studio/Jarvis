@@ -11,7 +11,6 @@
  *
  */
 
-
 (function($) {
     $.widget("jtsage.datebox", {
         initSelector: "input[data-role='datebox']",
@@ -155,7 +154,7 @@
             calNextMonthIcon: "angle-right",
             calPrevMonthIcon: "angle-left",
             useInlineAlign: "left",
-            btnCls: " btn btn-sm btn-cal-",
+            btnCls: "btn btn-sm btn-cal-",
             icnCls: " far fa-",
             s: {
                 cal: {
@@ -392,7 +391,7 @@
                 }
             }
             if (o.useButton) {
-                $("<div class='input-group-addon' " + "style='border-right:1px solid rgba(206, 212, 218); cursor: pointer; border-top:1px solid rgba(206, 212, 218); border-bottom:1px solid rgba(206, 212, 218); border-radius: 0px 4px 4px 0px;'>" + "<span class='" + o.icnCls + o.buttonIcon + "'></span>" + "</div>").attr("title", w.__("tooltip")).on(o.clickEvent, function(e) {
+                $("<div class='input-group-addon custom-date-btn'>" + "<span class='" + o.icnCls + o.buttonIcon + "'></span>" + "</div>").attr("title", w.__("tooltip")).on(o.clickEvent, function(e) {
                     e.preventDefault();
                     if (o.useFocus) {
                         w.d.input.focus();

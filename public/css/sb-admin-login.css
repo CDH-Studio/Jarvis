@@ -1,0 +1,74 @@
+/*option 1*/
+
+/*.bg-login-image{
+	background: url("../images/login_3.jpg");
+	background-position: center;
+    background-size: cover;
+}*/
+
+/*.bg-login-image{
+	background: url("../images/login_4.jpg");
+	background-position: center;
+    background-size: cover;
+}*/
+
+/*option 2*/
+
+.bg-login-image{
+	background: url("../images/login_3.jpg");
+	background-position: center;
+  background-size: cover;
+}
+
+.bg-gradient-primary {
+  background-color: #001642;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #4e73df), to(#224abe));
+  /*background-image: linear-gradient(180deg, #001642 10%, #0f1b33 100%);*/
+  background-image: linear-gradient(180deg, #242582 10%, #2F2FA2 100%);
+  background-size: cover;
+}
+
+
+
+/*option 3*/
+/*.bg-login-image{
+	background: url("../images/login.jpg");
+	background-position: center;
+    background-size: cover;
+}
+
+.bg-gradient-primary {
+  background-color: #001642;
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #4e73df), to(#224abe));
+  background-image: linear-gradient(180deg, #F0F0F0 10%, #DCDCDC 100%);
+  background-size: cover;
+}*/
+
+.bg-register-image{
+  background: url("../images/login_2.jpg");
+  background-position: center;
+  background-size: cover;
+}
+
+form.user .form-control-user {
+    font-size: 0.8rem;
+    border-radius: 0.5rem;
+    padding: 1.3rem 1rem;
+}
+
+form.user label {
+    font-size: 0.9rem;
+}
+
+form.user .form-control {
+    font-size: 0.9rem;
+}
+
+.login-logo{
+	width:45%;
+  max-width: 180px;
+}
+
+.navbar-brand{
+  margin-right:3px;
+	}

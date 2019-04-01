@@ -1,4 +1,4 @@
-@layout(layoutType)
+@layout('layouts.mainLayout')
 
 @section('title')
     {{room.name}}
@@ -6,7 +6,7 @@
 
 {{--  Manage bookings page content  --}}
 @section('content')
-
+    @!component('components.pageHeader', title='Room Details')
     @component('components.generalModal', id='mapModal', title='Map')
         @slot('body')
             <img class='room-details-image' src='/images/temp_floor_map.png'>
@@ -16,53 +16,85 @@
     {{--  Loading page header  --}}
 
     {{--  Actual page content  --}}
-    <div class='row justify-content-center'>
-        <div class='col room-details-card shadow' style='margin-top:10px;'>
-            <div class='room-details-card-title'>
-                <div class='row'>
-                <div class='col'>
-                    <h3>{{room.name}}</h3>
-                </div>
-                <div class='col text-right'>
-                    @if(isAdmin)
-                        <button type='button' class='btn btn-info' onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';"><i class="fas fa-list-ul"></i> View Bookings</button>
-                        <button type='button' class='btn btn-primary' onclick="window.location='{{ route('editRoom', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit</button>
-                    @else
-                        @if(hasReview)
-                            <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-pen"></i> Edit Review</button>
+    <div class='roomDetails'>
+        <div class='col card room-details-card shadow' style='margin-top:10px;'>
+            <div class='card-header py-3'>
+                <div class='d-flex flex-wrap'>
+                    <div class='' style='padding-top:6px;'>
+                        <h4 class="m-0 font-weight-bold text-primary">
+                            {{--  If the room is closed or under maintence then display info  --}}
+                            @if(room.state == 2)
+                                <i class='fa fa-times-circle color-danger'></i> Closed - 
+                            @elseif(room.state == 3)
+                                <i class="fas fa-tools color-warning"></i> Under Maintenance -  
+                            @endif
+                            {{room.name}}
+                        </h4>
+                    </div>
+                    <div class='flex-grow-1 text-right'>
+                        @if(isAdmin)
+                            <button type='button' class="btn btn-info btn-icon-split" onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';">
+                                <span class="icon text-white-50"><i class="fas fa-book"></i></span>
+                                <span class="text">View Bookings</span>
+                            </button>
+                            <button type='button' class="btn btn-info btn-icon-split" onclick="window.location='{{ route('showIssue', { id: room.id }) }}';">
+                                <span class="icon text-white-50"><i class="fas fa-flag"></i></span>
+                                <span class="text">View Issues</span>
+                            </button>   
+                            <button type='button' class="btn btn-primary btn-icon-split" onclick="window.location='{{ route('editRoom', { id: room.id }) }}';">
+                                <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
+                                <span class="text">Edit Room</span>
+                            </button>   
                         @else
-                            <button type='button' class='btn btn-info' onclick="window.location='{{ route('ratingAndReview', { id: room.id }) }}';"><i class="fas fa-plus"></i> Write a Review</button>
+                            @if(room.state != 1)
+                                <button disabled type='button' class="btn btn-primary btn-icon-split" data-toggle='modal' data-target='#confirmModal'>
+                                    <span class="icon text-white-50"><i class="fas fa-book"></i></span>
+                                    <span class="text">Book Room</span>
+                                </button>
+                            @else
+                                <button type='button' class="btn btn-primary btn-icon-split" data-toggle='modal' data-target='#confirmModal'>
+                                    <span class="icon text-white-50"><i class="fas fa-book"></i></span>
+                                    <span class="text">Book Room</span>
+                                </button>       
+                            @endif
+                            @if(hasReview)
+                                <button type='button' class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
+                                    <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
+                                    <span class="text">Edit Review</span>
+                                </button>
+                            @else
+                                <button type='button' class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
+                                    <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
+                                    <span class="text">Write Review</span>
+                                </button>   
+                            @endif
+                            <button type='button' class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i></button>
                         @endif
-                        <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#confirmModal'>Book Room</button>  
-                        <button type='button' class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i> Report</button>
-                    @endif
-                </div>
+                    </div>
                 </div>
             </div>
-            <div class='card-body'>
-                <div class='row'>  
+            <div class='card-body no-padding'>
+                <div class='d-flex flex-wrap justify-content-center'>  
                     {{--  Room Image and Map  --}}
-                    <div class='col-sm-12 col-md-5 col-lg-4'>
-                        <img class='room-details-image' src='/images/meeting.jpeg'>
+                    <div class='d-flex flex-column room-details-image' style='margin:20px'>
+                        {{--  If there is a room picture then display it, else use default  --}}
+                        @if(room.picture) 
+                            <img class='room-details-image' src='../{{ room.picture }}'>
+                        @else
+                            <img class='room-details-image' src='/images/meeting.jpeg'>
+                        @endif
                         <a class='link-color' href='' style='display:block; text-align:center;'  data-toggle='modal' data-target='#mapModal'>
                             <i class='fas fa-external-link-alt'></i>
                             View Map
                         </a>
                     </div>  
                     {{--  Room Details  --}}
-                    <div class='col-sm-12 col-md-7 col-lg-8'>
+                    <div class='flex-grow-1' style='margin:20px'>
                         {{--  Table contents  --}}
                         <div class='row' style='padding-right:15px;'>
                             <div class='table-responsive'>
                                 <table class='table table-hover'>  
                                     <tbody> 
-                                        {{--  If the room is deactivated then display info  --}}
-                                        @if(room.state == 0)
-                                            <tr>
-                                                <th scope='row'>Room Status</th>
-                                                <td class='spec-warning'><i class='fa fa-times-circle'></i> DEACTIVE</td>
-                                            </tr>
-                                        @endif
                                         <tr>
                                             <th scope='row'>Full Name</th>
                                             <td>{{ room.fullName }}</td>
@@ -98,7 +130,7 @@
                     </div>
                 </div>
                 {{--  Checkboxes  --}}
-                <div class='row'>
+                <div class='row' style='margin:20px'>
                     <div class='col room-details-spec'>
                         <ul>
                             @if(room.projector == 1)
@@ -142,8 +174,160 @@
             </div>
         </div>
     </div>
+    <div class="card shadow mt-4 mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Rating and Reviews</h6>
+        </div>
+        <div class="card-body">
+            @if(reviews.length == 0)
+                <div class='row'>
+                    <div class='col-12 text-center'>
+                        <p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p>
+                        <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
+                    </div>			
+                </div>
+            @else
+                <div class='table table-responsive mt-1'>
+                    <table id='reviewsTable' class='table table-hover' style='width:100%;'>
+                        <thead class='table table-hover mt-4'>
+                            <tr>
+                                <th scope='col' class='text-center' style='width:5%'>Rating</th>
+                                <th scope='col' class='text-center' style='width:95%'>Review</th>
+                            </tr>
+                        </thead>
+                        {{--  Loops through the rooms array and displays every room's content  --}}
+                        <tbody>
+                            @each(review in reviews) 
+                                <tr class='table-light' id='roomRow'>
+                                    <td class='text-center'>{{ review.rating }}</td>
+                                    <td class='text-center'>{{ review.review }}</td>
+                                </tr>
+                            @endeach
+                        </tbody>
+                    </table>
+                </div> 
+            @endif
+            
+        </div>
+    </div>
     {{--  Only show to non-admin users  --}}
     @if(!isAdmin)
+        {{--  Review Modal Box  --}}
+        <div class='modal' id='reviewModal'>
+            <div class='modal-dialog confirmation-modal' role='document'>
+                <div class='modal-content'>
+                    @if(!hasReview) 
+                        <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                    @else
+                        <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                    @endif
+                        {{ csrfField() }}
+                        <div class='modal-highlight'></div>
+                        {{--  Header  --}}
+                        <div class='modal-header'>
+                            <h4 class='no-margin'>Review</h4>
+                        </div>
+
+                        {{--  Body  --}}
+                        <div class='body' style='margin:20px;'>
+                            <div class='row'>
+                                <div class='col form-group'>
+                                    <label for='rating' data-original-title='Enter a rating for this room'>Rating <b class='text-danger'>*</b></b></label>
+    
+                                    @if(hasErrorFor('rating'))
+                                        <select class='form-control is-invalid' name='rating' id='rating' onchange='removeErrorClass("rating")'>
+                                            <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Rating</option>
+                                            <option value='1' {{ old('rating', review.rating) == '1' ? 'selected' : '' }}>1</option>
+                                            <option value='2' {{ old('rating', review.rating) == '2' ? 'selected' : '' }}>2</option>
+                                            <option value='3' {{ old('rating', review.rating) == '3' ? 'selected' : '' }}>3</option>
+                                            <option value='4' {{ old('rating', review.rating) == '4' ? 'selected' : '' }}>4</option>
+                                            <option value='5' {{ old('rating', review.rating) == '5' ? 'selected' : '' }}>5</option>
+                                        </select>
+                                        <div class='invalid-feedback'>{{ getErrorFor('rating') }}</div>
+                                    @else
+                                        <select class='form-control' name='rating' id='rating' onchange='removeErrorClass("rating")'>
+                                            <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Rating</option>
+                                            <option value='1' {{ old('rating', review.rating) == '1' ? 'selected' : '' }}>1</option>
+                                            <option value='2' {{ old('rating', review.rating) == '2' ? 'selected' : '' }}>2</option>
+                                            <option value='3' {{ old('rating', review.rating) == '3' ? 'selected' : '' }}>3</option>
+                                            <option value='4' {{ old('rating', review.rating) == '4' ? 'selected' : '' }}>4</option>
+                                            <option value='5' {{ old('rating', review.rating) == '5' ? 'selected' : '' }}>5</option>
+                                        </select>
+                                    @endif
+                                </div>
+                            </div>
+                        
+                            <div class='row'>
+                                <div class='col form-group'>
+                                    <label for='review'>Review</label>
+
+                                    @if(hasErrorFor('review'))
+                                        <textarea class='form-control is-invalid' name='review' id='review' rows='5' onchange='removeErrorClass("review")'> {{ old('review',  review.review) }}</textarea>
+                                        <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
+                                    @else
+                                        <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
+                                    @endif
+                                </div> 
+                            </div> 
+                            
+                            <div class='row'>
+                                {{--  Floor Plan Picture --}}
+                                <div class='col form-group no-margin' id='reviewPictureContent'>
+                                    <label>Picture</label>
+                                    <div class='form-group'>
+                                        <div class='custom-file'>
+                                            @if(hasErrorFor('reviewPicture'))
+                                                <input type='file' class='custom-file-input is-invalid' id='reviewPicture' name='reviewPicture' oninput='removeErrorClass("reviewPicture")'>
+                                                <div class='invalid-feedback'>{{ getErrorFor('reviewPicture') }}</div>
+                                            @else
+                                                <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
+                                            @endif
+                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose File</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{--  Footer buttons to cancel and book room  --}}
+                        @if(!hasReview)
+                            <div class='modal-footer text-right'>
+                                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
+                                <button type='submit' class='btn btn-primary'>Add</button>   
+                            </div> 
+                        @else
+                            <div class='modal-footer text-right'>
+								<button type='button' class='btn' style='position:absolute; top:10px; right:0;' title='Delete review' data-toggle='modal' data-target='#deleteModal' ><i class='far fa-trash-alt' style='color:red; font-size:20px;'></i></button>   
+                                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
+                                <button type='submit' class='btn btn-primary'>Update</button>   
+                            </div>
+                        @endif 
+                    </form> 
+                </div>
+            </div>
+        </div>
+        <!--  Logout Modal  -->
+        <div class='modal' id='deleteModal' role='dialog' aria-hidden='true'>
+            <div class='modal-dialog' role='document'>
+				<div class='modal-content'>
+					<div class='modal-header'>
+						<h5 class='modal-title' id='exampleModalLabel'>Are you sure?</h5>
+						<button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+							<span aria-hidden='true'>×</span>
+						</button>
+					</div>
+					<div class='modal-body'>Are you sure you want to delete your review?</div>
+					<form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+						{{ csrfField() }}
+						<div class='modal-footer'>
+							<button class='btn btn-secondary' type='button' data-dismiss='modal'>Cancel</button>
+							<button type='submit' class='btn btn-danger'>Delete</button>   
+						</div>					
+					</form> 
+				</div>
+            </div>
+        </div>
+        {{--  Room Booking Modal Box  --}}
         <div class='modal' id='confirmModal'>
             <div class='modal-dialog confirmation-modal' role='document'>
                 <div class='modal-content' >
@@ -153,7 +337,12 @@
                         <div class='modal-highlight'></div>
                         {{--  Displaying room image and a link to full room details  --}}
                         <div class='wrapper-center mb-4' style='height: auto;'>
-                            <img class='room-details-image' src='/images/meeting.jpeg'>
+                            {{--  If there is a room picture then display it, else use default  --}}
+                            @if(room.picture) 
+                                <img class='room-confirm-image' src='../{{ room.picture }}'>
+                            @else
+                                <img class='room-confirm-image' src='/images/meeting.jpeg'>
+                            @endif
                         </div>
                         {{--  Body content  --}}
                         <div class='body' style='margin:0 20px 0 20px;'>
@@ -345,13 +534,13 @@
                                 </div>
                             </div>
                             <div class='row'>
-                                <div class='col form-group'>
+                                <div class='col form-group no-margin'>
                                     <label for='comment'>Comment <b class='text-danger'>*</b></label>
                                     @if(hasErrorFor('comment'))
                                         <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
                                     @else
-                                        <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  review.review) }}</textarea>
+                                        <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  '') }}</textarea>
                                     @endif                                    
                                 </div> 
                             </div>
@@ -364,37 +553,23 @@
                 </div>
             </div>
         </div>
-    
-        <h4 class='mt-4'>Rating and Reviews</h4>
-        @if(reviews.length == 0)
-            <div class='row'>
-                <div class='col-12 text-center'>
-                    <p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p>
-                    <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
-                </div>			
-            </div>
-        @else
-            <div class='table table-responsive mt-1'>
-                <table id='reviewsTable' class='table table-hover' style='width:100%;'>
-                    <thead class='thead-dark'>
-                        <tr>
-                            <th scope='col' class='text-center' style='width:5%'>Rating</th>
-                            <th scope='col' class='text-center' style='width:95%'>Review</th>
-                        </tr>
-                    </thead>
-                    {{--  Loops through the rooms array and displays every room's content  --}}
-                    <tbody>
-                        @each(review in reviews) 
-                            <tr class='table-light' id='roomRow'>
-                                <td class='text-center'>{{ review.rating }}</td>
-                                <td class='text-center'>{{ review.review }}</td>
-                            </tr>
-                        @endeach
-                    </tbody>
-                </table>
-            </div> 
-        @endif
+
     @endif
+
+    {{--  Script to display file name on upload  --}}
+    <script>
+        $('#reviewPicture').change(function(e){
+            var fileName = e.target.files[0].name;
+            $('#reviewPictureLabel').html(fileName);
+        });
+    </script>
+
+    {{--  Remove the is-invalid class when input changes  --}}
+    <script>
+        function removeErrorClass(idOfInput){
+            $('#'+idOfInput).removeClass('is-invalid');
+        }
+    </script>
 
     {{--  Run this on load incase the page reloaded with field 'recurringSelect' set to YES --}}
     <script>
@@ -459,7 +634,12 @@
             minuteStep: "30",
             minuteStepRound: "1",
         });
-    </script>
+	</script>
+
+	<script>
+		document.getElementById('reviewModal').style['z-indez'] = 1040;
+	</script>
+
     {{--  If the report validations fails display this modal  --}}
     @if(hasErrorFor('issueType'))
         <script>
@@ -471,6 +651,25 @@
         <script>
             $(window).on('load',function(){
                 $('#reportModal').modal('show');
+            });
+        </script>
+    {{--  If the review validations fails display this modal  --}}
+    @elseif(hasErrorFor('rating'))
+        <script>
+            $(window).on('load',function(){
+                $('#reviewModal').modal('show');
+            });
+        </script>
+    @elseif(hasErrorFor('review'))
+        <script>
+            $(window).on('load',function(){
+                $('#reviewModal').modal('show');
+            });
+        </script>
+    @elseif(hasErrorFor('reviewPicture'))
+        <script>
+            $(window).on('load',function(){
+                $('#reviewModal').modal('show');
             });
         </script>
     {{--  If a validation error is thrown show the modal box  --}}
@@ -491,5 +690,25 @@
             });
         </script>
     @endif
+    {{--  Displays "Room has already been booked!" error message  --}}
+    @if(flashMessage('error'))
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', () => {
+                notify({$: $, message: '{{ flashMessage('error') }}', type: 'danger', x: 10, y: 60 });
+            });
+        </script>
+    @endif
     
+    {{--  Table Filter  --}}
+    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
+    <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
+    <script>$(document).ready(function() {
+            $('#reviewsTable').DataTable( {
+                "paging":   false,
+                "ordering": true,
+                "info":     false
+            });
+        });
+    </script>
 @endsection
