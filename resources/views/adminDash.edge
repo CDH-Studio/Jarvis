@@ -84,7 +84,9 @@
         <div class='col' style='margin:10px'>
             @component('components.generalCard', title='Highest Rated')
                 @slot('body')
-
+                <div class='chart-bar'>
+                    <canvas id="roomRatings" width="400" height="400"></canvas>
+                </div>
                 @endslot
             @endcomponent
         </div>
@@ -114,8 +116,7 @@
                 labels: ["Active", "Maintenance", "Deactived"],
                 datasets: [{
                     data: [ {{ roomStatusStats['active'] }}, {{ roomStatusStats['maintenance'] }}, {{ roomStatusStats['deactive'] }} ],
-                    backgroundColor: ['#004680', '#1cc88a', '#36b9cc'],
-                    hoverBackgroundColor: ['#204375', '#17a673', '#2c9faf'],
+                    backgroundColor: ['#004680', '#2C666E', '#90DDF0'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
                 }],
             },
@@ -153,8 +154,7 @@
                 labels: ["Open", "Pending", "Closed"],
                 datasets: [{
                     data: [ {{ roomIssueStats['pending'] }}, {{ roomIssueStats['underReview'] }}, {{ roomIssueStats['resolved'] }} ],
-                    backgroundColor: ['#004680', '#1cc88a', '#36b9cc'],
-                    hoverBackgroundColor: ['#204375', '#17a673', '#2c9faf'],
+                    backgroundColor: ['#004680', '#2C666E', '#90DDF0'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
                 }],
             },
@@ -191,10 +191,8 @@
             data: {
                 labels: [ "{{ topFiveRooms[0]['room'].name }}", "{{ topFiveRooms[1]['room'].name }}", "{{ topFiveRooms[2]['room'].name }}", "{{ topFiveRooms[3]['room'].name }}", "{{ topFiveRooms[4]['room'].name }}" ],
                 datasets: [{
-                    label: '# of Bookings',
                     data: [ {{ topFiveRooms[0]['bookings'] }}, {{ topFiveRooms[1]['bookings'] }}, {{ topFiveRooms[2]['bookings'] }}, {{ topFiveRooms[3]['bookings'] }}, {{ topFiveRooms[4]['bookings'] }} ],
-                    backgroundColor: ['#004680', '#1cc88a', '#36b9cc'],
-                    hoverBackgroundColor: ['#204375', '#17a673', '#2c9faf'],
+                    backgroundColor: ['#004680', '#2C666E', '#90DDF0', '#A9A9A9', '#D3F3EE'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
                 }],
             },
@@ -202,8 +200,13 @@
                 maintainAspectRatio: false,
                 scales: {
                     xAxes: [{
+                        display: true,
                         ticks: {
                             beginAtZero: true,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: '# of Bookings'
                         }
                     }]  
                 },
@@ -215,13 +218,58 @@
                     caretPadding: 10
                 },
                 legend: {
-                    display: true,
-                    position: 'bottom',
+                    display: false,
                 },
                 cutoutPercentage: 80
             },
         });
     </script>
 
+    {{--  Scrip tag responsible for the Highest Rated Rooms chart  --}}
+    <script>
+        // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
+
+        // Pie Chart Example
+        var ctx = document.getElementById("roomRatings");
+        var roomIssues = new Chart(ctx, {
+            type: 'horizontalBar',
+            data: {
+                labels: [ "{{ highestRatedRooms[0]['room'].name }}", "{{ highestRatedRooms[1]['room'].name }}", "{{ highestRatedRooms[2]['room'].name }}", "{{ highestRatedRooms[3]['room'].name }}", "{{ highestRatedRooms[4]['room'].name }}" ],
+                datasets: [{
+                    data: [ {{ highestRatedRooms[0]['averageRating'] }}, {{ highestRatedRooms[1]['averageRating'] }}, {{ highestRatedRooms[2]['averageRating'] }}, {{ highestRatedRooms[3]['averageRating'] }}, {{ highestRatedRooms[4]['averageRating'] }} ],
+                    backgroundColor: ['#004680', '#2C666E', '#90DDF0', '#A9A9A9', '#D3F3EE'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Average Rating'
+                        }
+                    }]  
+                },
+                tooltips: {
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10
+                },
+                legend: {
+                    display: false,
+                },
+                cutoutPercentage: 80
+            },
+        });
+    </script>
 @endsection
 

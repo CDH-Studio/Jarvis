@@ -3,6 +3,7 @@ const Room = use('App/Models/Room');
 const User = use('App/Models/User');
 const Report = use('App/Models/Report');
 const Booking = use('App/Models/Booking');
+const Review = use('App/Models/Review');
 
 class HomeController {
 	/**
@@ -55,8 +56,9 @@ class HomeController {
 		const numberOfUsers = await this.getNumberofUsers();
 		const numberOfRooms = await this.getNumberofRooms();
 		const topFiveRooms = await this.getRoomPopularity();
+		const highestRatedRooms = await this.getRoomRatings();
 
-		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers, numberOfRooms: numberOfRooms, topFiveRooms: topFiveRooms });
+		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers, numberOfRooms: numberOfRooms, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
 	}
 
 	/**
@@ -165,27 +167,59 @@ class HomeController {
 
 	/**
 	*
-	* Retrieve the number of pending, under review, and deactivated rooms in the database.
+	* Retrieve the top five rooms with the most bookings.
 	*
 	* @param {view}
 	*
 	*/
 	async getRoomPopularity () {
-		// Retrieve number of issues that are resolved
+		// Retrieves the top five rooms with the highest number of bookings
 		let bookings = await Booking
 			.query()
 			.select('room_id')
 			.count('room_id as total')
+			.orderBy('total', 'desc')
+			.groupBy('room_id')
+			.limit(5);
+
+		var topFiveRooms = [];
+
+		// Populate the rooms array with the top five room objects
+		for (var i = 0; i < bookings.length; i++) {
+			var rooms = {};
+			rooms['room'] = await Room.findBy('id', bookings[i]['room_id']);
+			rooms['bookings'] = bookings[i]['total'];
+
+			topFiveRooms.push(rooms);
+		}
+
+		return topFiveRooms;
+	}
+
+	/**
+	*
+	* Retrieve the top five highest rated rooms.
+	*
+	* @param {view}
+	*
+	*/
+	async getRoomRatings () {
+		// Retrieves the top five highest rated rooms
+		let ratings = await Review
+			.query()
+			.select('room_id')
+			.avg('rating as avgRating')
+			.orderBy('avgRating', 'desc')
 			.groupBy('room_id')
 			.limit(5);
 
 		var topFiveRooms = [];
 
 		// populate the rooms array with the top five room objects
-		for (var i = 0; i < bookings.length; i++) {
+		for (var i = 0; i < ratings.length; i++) {
 			var rooms = {};
-			rooms['room'] = await Room.findBy('id', bookings[i]['room_id']);
-			rooms['bookings'] = bookings[i]['total'];
+			rooms['room'] = await Room.findBy('id', ratings[i]['room_id']);
+			rooms['averageRating'] = ratings[i]['avgRating'];
 
 			topFiveRooms.push(rooms);
 		}
