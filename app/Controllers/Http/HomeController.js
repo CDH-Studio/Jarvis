@@ -53,10 +53,10 @@ class HomeController {
 		const roomStatusStats = await this.getRoomStatusStats();
 		const roomIssueStats = await this.getRoomIssueStats();
 		const numberOfUsers = await this.getNumberofUsers();
+		const numberOfRooms = await this.getNumberofRooms();
 		const topFiveRooms = await this.getRoomPopularity();
 
-		console.log(topFiveRooms);
-		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers, topFiveRooms: topFiveRooms });
+		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers, numberOfRooms: numberOfRooms, topFiveRooms: topFiveRooms });
 	}
 
 	/**
@@ -73,6 +73,22 @@ class HomeController {
 
 		// return the number of users
 		return users.length;
+	}
+
+	/**
+	*
+	* Retrieve the number of users using the application.
+	*
+	* @param {view}
+	*
+	*/
+	async getNumberofRooms () {
+		// retrieves all the users form the database
+		const results = await Room.all();
+		const rooms = results.toJSON();
+
+		// return the number of users
+		return rooms.length;
 	}
 
 	/**
@@ -163,7 +179,18 @@ class HomeController {
 			.groupBy('room_id')
 			.limit(5);
 
-		return bookings;
+		var topFiveRooms = [];
+
+		// populate the rooms array with the top five room objects
+		for (var i = 0; i < bookings.length; i++) {
+			var rooms = {};
+			rooms['room'] = await Room.findBy('id', bookings[i]['room_id']);
+			rooms['bookings'] = bookings[i]['total'];
+
+			topFiveRooms.push(rooms);
+		}
+
+		return topFiveRooms;
 	}
 }
 
