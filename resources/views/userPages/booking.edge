@@ -22,9 +22,9 @@
         @endslot
     @endcomponent
     {{--  Page Content  --}}
-    <div class='row content'>    
+    <div class='d-flex flex-wrap content'>    
 		{{--  Search room page content  --}}
-		<div class='col search-room-content'>
+		<div class='search-room-content mr-4'>
 			@section('search room')
 				<form action='/results' method='GET' enctype='multipart/form-data'>
 					<div class="card shadow mb-4">
@@ -207,55 +207,38 @@
 			
 			@endsection
 		</div>
-		<div class='col-4'>
-			@component('components.generalCard', title='Frequently Booked')
-				@slot('body')
-					<div class='chart-bar'>
-						<canvas id="myPieChart" width="400" height="400"></canvas>
-					</div>
-					<script>
-						// Set new default font family and font color to mimic Bootstrap's default styling
-						Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-						Chart.defaults.global.defaultFontColor = '#858796';
-
-						// Pie Chart Example
-						var ctx = document.getElementById("myPieChart");
-						var myPieChart = new Chart(ctx, {
-						type: 'doughnut',
-						data: {
-							labels: ["Direct", "Referral", "Social"],
-							datasets: [{
-							data: [55, 30, 15],
-							backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
-							hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
-							hoverBorderColor: "rgba(234, 236, 244, 1)",
-							}],
-						},
-						options: {
-							maintainAspectRatio: false,
-							tooltips: {
-							backgroundColor: "rgb(255,255,255)",
-							bodyFontColor: "#858796",
-							borderColor: '#dddfeb',
-							borderWidth: 1,
-							xPadding: 15,
-							yPadding: 15,
-							displayColors: false,
-							caretPadding: 10,
-							},
-							legend: {
-							display: false
-							},
-							cutoutPercentage: 80,
-						},
-						});
-					</script>
-				@endslot
-			@endcomponent
-		</div>
-		<div class='col'>
-			<div class='row'>
-				@component('components.generalCard', title='Available Now')
+		<div class='d-flex flex-column flex-fill' style="padding-right: 24px;">
+			<div id='myBookings'>
+				@component('components.generalCard', title='Upcomming Bookings')
+					@slot('body')
+						<div class='table table-responsive'>
+							<table id='bookNowTable' class='table table-hover' style='width:100%;'>
+								<thead>
+									<tr>
+										<th scope='col' class='text-center' style='width:10%'>Name</th>
+										<th scope='col' class='text-center' style='width:10%'>Room</th>
+										<th scope='col' class='text-center' style='width:10%'>Date</th>
+										<th scope='col' class='text-center' style='width:10%'>Time</th>
+									</tr>
+								</thead>
+								{{--  Loops through the rooms array and displays every room's content  --}}
+								<tbody>
+									@each(room in rooms) 
+										<tr class='table-light row-hover' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
+											<td class='text-center'>{{ room.name }}</td>
+											<td class='text-center'>{{ room.floor }}</td>
+											<td class='text-center'>{{ room.tower }} </td>
+											<td class='text-center'>{{ room.capacity }}</td> 
+										</tr>
+									@endeach
+								</tbody>
+							</table>
+						</div>
+					@endslot
+				@endcomponent
+			</div>
+			<div id='available' class='mt-4'>
+				@component('components.generalCard', title='Currently Available')
 					@slot('body')
 						<div class='table table-responsive'>
 							<table id='bookNowTable' class='table table-hover' style='width:100%;'>
@@ -283,8 +266,8 @@
 					@endslot
 				@endcomponent
 			</div>
-			<div class='row mt-4'>
-				@component('components.generalCard', title='Upcomming Bookings')
+			<div id='frequentlyBooked' class='mt-4'>
+				@component('components.generalCard', title='Frequently Booked')
 					@slot('body')
 						<div class='table table-responsive'>
 							<table id='bookNowTable' class='table table-hover' style='width:100%;'>
