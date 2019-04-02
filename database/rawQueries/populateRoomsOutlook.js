@@ -7,15 +7,12 @@ values("0ASIS", "IC CONF OTT-235 Queen-Oasis CONF IC", 0, "East", "Contact IT Se
 ("145A (E)", "IC CONF OTT-235 Queen145A CONF IC", 1, "East", "343-291-3248", 6, 7, 0, 0, 0, 1, 0, 1, 1," "," ","ic.conf-ott-235queen-145a-conf.ic@canada.ca", 1),
 ("165A (W)", "IC CONF OTT-235 Queen165A CONF IC", 1, "West", "343-291-2536", 6, 7, 0, 0, 0, 1, 0, 1, 1," ","(Collaboration Room)","ic.conf-ott-235queen-165a-conf.ic@canada.ca", 1),
 ("174A (W)", "IC CONF OTT-235 Queen174A CONF IC", 1, "West", "343-291-3723", 7, 9, 0, 0, 0, 1, 0, 1, 1," "," ","ic.conf-ott-235queen-174a-conf.ic@canada.ca", 1),
-("199B (W)", "IC CONF OTT-235 Queen199B CONF IC", 1, "West", "343-291-2424", 10, 14, 1, 1, 0, 1, 0, 0, 1,"Smartboard"," ","ic.conf-ott-235queen-199b-conf.ic@canada.ca", 1),
 ("199C (W)", "IC CONF OTT-235 Queen199C CONF IC", 1, "West", "Contact IT Service Desk", 9, 10, 0, 1, 0, 1, 1, 0, 1,"2 PCS, 2 LED Displays"," ","ic.conf-ott-235queen-199c-conf.ic@canada.ca", 1),
 ("231A (E)", "IC CONF OTT-235 Queen231A CONF IC", 2, "East", "343-291-2994", 10, 14, 0, 1, 0, 1, 0, 1, 1," "," ","ic.conf-ott-235queen-231a-conf.ic@canada.ca", 1),
 ("243A (E)", "IC CONF OTT-235 Queen243A CONF IC", 2, "East", "343-291-2738", 9, 17, 0, 1, 0, 1, 0, 1, 1," "," ","ic.conf-ott-235queen-243a-conf.ic@canada.ca", 1),
-("243C (E)", "IC CONF OTT-235 Queen243C CONF IC", 2, "East", "343-291-2736", 10, 20, 0, 1, 1, 1, 0, 0, 1,"Plasma, Writeable Wall"," ","ic.conf-ott-235queen-243c-conf.ic@canada.ca", 1),
 ("255D (W)", "IC CONF OTT-235 Queen255D CONF IC", 2, "West", "343-291-2768", 8, 8, 0, 0, 0, 0, 0, 0, 1,"Plasma"," ","ic.conf-ott-235queen-255d-conf.ic@canada.ca", 1),
 ("259A (W)", "IC CONF OTT-235 Queen259A CONF IC", 2, "West", "343-291-2776", 8, 9, 0, 1, 0, 1, 0, 0, 1,"Plasma"," ","ic.conf-ott-235queen-259a-conf.ic@canada.ca", 1),
 ("298B (W)", "IC CONF OTT-235 Queen298B CONF IC", 2, "West", "343-291-3040", 5, 5, 0, 0, 0, 1, 1, 0, 1,"LCD Smart TV","(Collaboration Room)","ic.conf-ott-235queen-298b-conf.ic@canada.ca", 1),
-("298C (W)", "IC CONF OTT-235 Queen298C CONF IC", 2, "West", "343-291-3041", 6, 10, 0, 0, 0, 1, 0, 0, 1,"TV"," ","ic.conf-ott-235queen-298ca-conf.ic@canada.ca", 1),
 ("299A (W)", "IC CONF OTT-235 Queen299A CONF IC", 2, "West", "343-291-1545", 12, 24, 0, 1, 0, 1, 0, 0, 1,"2 PCS, 2 Plasmas, Blueray"," ","ic.conf-ott-235queen-299a-conf.ic@canada.ca", 1),
 ("331A (E)", "IC CONF OTT-235 Queen331A CONF IC", 3, "East", "343-291-6464", 12, 37, 1, 0, 0, 1, 1, 0, 1,"2 PCS, 2 Projectors, VOIP # 343-291-2205"," ","ic.conf-ott-235queen-331a-conf.ic@canada.ca", 1),
 ("353A (W)", "IC CONF OTT-235 Queen353A CONF IC", 3, "West", "343-291-1409", 10, 25, 0, 1, 0, 1, 1, 0, 1,"LED Display"," ","ic.conf-ott-235queen-353a-conf.ic@canada.ca", 1),
@@ -70,4 +67,4 @@ values("0ASIS", "IC CONF OTT-235 Queen-Oasis CONF IC", 0, "East", "Contact IT Se
 ("903A (E)", "IC CONF OTT-235 Queen903A CONF IC", 9, "East", "343-291-1851", 6, 8, 0, 0, 0, 1, 0, 0, 1,"Smartboard"," ","ic.conf-ott-235queen-903a-conf.ic@canada.ca", 1);
 `;
 
-module.exports = queryLess;
+module.exports = query;
