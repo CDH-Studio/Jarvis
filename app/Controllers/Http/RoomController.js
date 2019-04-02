@@ -431,7 +431,7 @@ class RoomController {
 		const code = random(4);
 		const checkRoomAvailability = async () => {
 			await asyncForEach(rooms, async (item) => {
-				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
+				if (await this.getRoomAvailability(date, from, to, item.floor, item.calendar)) {
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
 						code: code
@@ -665,13 +665,14 @@ class RoomController {
 	 *
 	 * @returns {Boolean} Whether or not the room is available
 	 */
-	async getRoomAvailability (date, from, to, calendar) {
+	async getRoomAvailability (date, from, to, floor, calendar) {
 		console.log(date, from, to, calendar);
 
 		const res = await Axios.post('http://142.53.209.100:8080/avail', {
 			room: calendar,
 			start: date + 'T' + from,
-			end: date + 'T' + to
+			end: date + 'T' + to,
+			floor: floor
 		});
 
 		return res.data === 'free';

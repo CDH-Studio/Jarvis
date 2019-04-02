@@ -85,9 +85,7 @@ class BookingController {
 		const row = results.toJSON();
 		const name = row.name;
 
-		console.log(await this.getRoomAvailability(date, from, to, row.calendar));
-
-		if (!await this.getRoomAvailability(date, from, to, row.calendar)) {
+		if (!await this.getRoomAvailability(date, from, to, row.floor, row.calendar)) {
 			session.flash({
 				error: `Room ${name} has already been booked for the time selected!`
 			});
@@ -240,13 +238,14 @@ class BookingController {
 	 *
 	 * @returns {Boolean} Whether or not the room is available
 	 */
-	async getRoomAvailability (date, from, to, calendar) {
+	async getRoomAvailability (date, from, to, floor, calendar) {
 		console.log(date, from, to, calendar);
 
 		const res = await Axios.post('http://142.53.209.100:8080/avail', {
 			room: calendar,
 			start: date + 'T' + from,
-			end: date + 'T' + to
+			end: date + 'T' + to,
+			floor: floor
 		});
 
 		return res.data === 'free';
