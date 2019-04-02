@@ -1,0 +1,23 @@
+{{--  Room car component that takes: title, phoneNumber, seats, maxCapacity, equipment, standardEquipment[array] --}}
+{{--  Routing to rooom details when clicked  --}}
+{{--  href='{{ route('viewProfile', {id: auth.user.id}) }}'  --}}
+<div class=' upcoming-card border-left-primary custom-shadow'>
+    <div class='body d-flex flex-wrap justify-content-center'>
+        {{--  Room Picture  --}}
+        {{--  <div class='photo'>  --}}
+            @if(room.picture) 
+                <img src='{{ room.picture }}'>
+            @else
+                <img src='/images/meeting.jpeg'>
+            @endif
+        {{--  </div>  --}}
+        {{--  Room information  --}}
+        <div class='content flex-fill wrapper-center d-flex flex-wrap flex-column justify-content-center'>
+            <div class='title'>
+                <h5>Room Title</h5>
+            </div>
+            <div>April 5th 2018</div>
+            <div>2:30 - 3:30 PM</div>
+        </div>
+    </div>
+</div>
