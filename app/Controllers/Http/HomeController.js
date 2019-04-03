@@ -54,11 +54,13 @@ class HomeController {
 		const roomStatusStats = await this.getRoomStatusStats();
 		const roomIssueStats = await this.getRoomIssueStats();
 		const numberOfUsers = await this.getNumberofUsers();
-		const numberOfRooms = await this.getNumberofRooms();
+		const roomStats = await this.getRoomStats();
 		const topFiveRooms = await this.getRoomPopularity();
 		const highestRatedRooms = await this.getRoomRatings();
+		const issueStats = await this.getIssueStats();
 
-		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers, numberOfRooms: numberOfRooms, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
+		console.log(issueStats);
+		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers, roomStats: roomStats, issueStats: issueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
 	}
 
 	/**
@@ -79,18 +81,65 @@ class HomeController {
 
 	/**
 	*
-	* Retrieve the number of users using the application.
+	* Retrieve the number of rooms in the database.
 	*
 	* @param {view}
 	*
 	*/
-	async getNumberofRooms () {
+	async getRoomStats () {
 		// retrieves all the users form the database
 		const results = await Room.all();
 		const rooms = results.toJSON();
 
+		// Retrieve number of active rooms
+		let countActive = await Room
+			.query()
+			.where('state', 1)
+			.count();
+
+		var stats = {};
+		stats['numberOfRooms'] = rooms.length;
+		stats['percentageOfActiveRooms'] = Math.round((countActive[0]['count(*)'] / rooms.length) * 100);
+
 		// return the number of users
-		return rooms.length;
+		return stats;
+	}
+
+	/**
+	*
+	* Retrieve the number of rooms in the database.
+	*
+	* @param {view}
+	*
+	*/
+	async getIssueStats () {
+		// retrieves all the users form the database
+		const results = await Report.all();
+		const issues = results.toJSON();
+
+		var moment = require('moment');
+		moment().format();
+
+		// Retrieve number of active rooms
+		let countCurrentMonthIssues = await Report
+			.query()
+			.where('created_at', moment().month())
+			.count();
+
+		countCurrentMonthIssues = countCurrentMonthIssues[0]['count(*)'];
+
+		let countPreviousMonthIssues = await Report
+			.query()
+			.where('created_at', moment().subtract(1, 'months'))
+			.count();
+
+		countPreviousMonthIssues = countPreviousMonthIssues[0]['count(*)'];
+
+		console.log(countCurrentMonthIssues);
+		console.log(countPreviousMonthIssues);
+
+		// return the number of users
+		return issues.length;
 	}
 
 	/**
@@ -210,6 +259,7 @@ class HomeController {
 			.select('room_id')
 			.avg('rating as avgRating')
 			.orderBy('avgRating', 'desc')
+			.count('review as totalReviews')
 			.groupBy('room_id')
 			.limit(5);
 
@@ -220,7 +270,7 @@ class HomeController {
 			var rooms = {};
 			rooms['room'] = await Room.findBy('id', ratings[i]['room_id']);
 			rooms['averageRating'] = ratings[i]['avgRating'];
-
+			rooms['numberOfReviews'] = ratings[i]['totalReviews'];
 			topFiveRooms.push(rooms);
 		}
 
