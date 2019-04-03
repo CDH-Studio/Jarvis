@@ -9,8 +9,8 @@
 
 @section('content')
     <div class='row'>
-        <div class='col'>
-            <div class='row text-center' style='padding-left: 15px;'> 
+        <div class='col-2' style='margin:10px'>
+            <div class='row text-center' > 
                 <div class='col-3 card stats-card shadow no-padding'>
                     <div class='card-highlight-primary'></div>
                     <div class='card-body'>
@@ -28,51 +28,69 @@
                     </div>
                 </div>
             </div>
+
+            <div class='row text-center' > 
+                <div class='col-3 card stats-card shadow no-padding'>
+                    <div class='card-highlight-primary'></div>
+                    <div class='card-body'>
+                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                            <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
+                            <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+                                <div class='row'>
+                                    <h2 class='col no-margin'><b>{{ numberOfRooms }}</b></h2>
+                                </div>
+                                <div class='row'>
+                                    <h5 class='col text-grey'>Total Rooms</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class='col'>
+
+        <div class='col' style='margin:10px'> 
             @component('components.generalCard', title='Rooms - Statuses')
                 @slot('body')
                     <div class='chart-bar'>
                         <canvas id="roomStatuses" width="400" height="400"></canvas>
                     </div>
-    
-                    <div class="mt-4 text-center small">
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> Active
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> Maintenance
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-info"></i> Deactivated
-                        </span>
-                    </div>
                 @endslot
             @endcomponent
         </div>
     
-        <div class='col'>
+        <div class='col' style='margin:10px'>
             @component('components.generalCard', title='Rooms - Issues')
                 @slot('body')
                     <div class='chart-bar'>
                         <canvas id="roomIssues" width="400" height="400"></canvas>
                     </div>
-    
-                    <div class="mt-4 text-center small">
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-primary"></i> Pending
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-success"></i> Under Review
-                        </span>
-                        <span class="mr-2">
-                            <i class="fas fa-circle text-info"></i> Resolved
-                        </span>
-                    </div>
                 @endslot
             @endcomponent
         </div>    
     </div> 
+
+    <div class='row'>
+        <div class='col' style='margin:10px'>
+            @component('components.generalCard', title='Most Popular')
+                @slot('body')
+                    <div class='chart-bar'>
+                        <canvas id="roomPopularity" width="400" height="400"></canvas>
+                    </div>
+                @endslot
+            @endcomponent
+        </div>
+
+        <div class='col' style='margin:10px'>
+            @component('components.generalCard', title='Highest Rated')
+                @slot('body')
+                <div class='chart-bar'>
+                    <canvas id="roomRatings" width="400" height="400"></canvas>
+                </div>
+                @endslot
+            @endcomponent
+        </div>
+    </div>
     
 
     @if(flashMessage('notification'))
@@ -84,6 +102,7 @@
         </script>
     @endif
     
+    {{--  Scrip tag responsible for the Room Statuses chart  --}}
     <script>
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -92,36 +111,36 @@
         // Pie Chart Example
         var ctx = document.getElementById("roomStatuses");
         var roomStatuses = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ["Active", "Maintenance", "Deactived"],
-            datasets: [{
-                data: [ {{ roomStatusStats['active'] }}, {{ roomStatusStats['maintenance'] }}, {{ roomStatusStats['deactive'] }} ],
-                backgroundColor: ['#004680', '#1cc88a', '#36b9cc'],
-                hoverBackgroundColor: ['#204375', '#17a673', '#2c9faf'],
-                hoverBorderColor: "rgba(234, 236, 244, 1)",
-            }],
-        },
-        options: {
-            maintainAspectRatio: false,
-            tooltips: {
-                backgroundColor: "rgb(255,255,255)",
-                bodyFontColor: "#858796",
-                borderColor: '#dddfeb',
-                borderWidth: 1,
-                xPadding: 15,
-                yPadding: 15,
-                displayColors: false,
-                caretPadding: 10
+            type: 'pie',
+            data: {
+                labels: ["Active", "Maintenance", "Deactived"],
+                datasets: [{
+                    data: [ {{ roomStatusStats['active'] }}, {{ roomStatusStats['maintenance'] }}, {{ roomStatusStats['deactive'] }} ],
+                    backgroundColor: ['#004680', '#2C666E', '#90DDF0'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
             },
-            legend: {
-                display: false
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10
+                },
+                legend: {
+                    display: true
+                },
+                cutoutPercentage: 55
             },
-            cutoutPercentage: 80
-        },
         });
     </script>
 
+    {{--  Scrip tag responsible for the Room Issues chart  --}}
     <script>
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
@@ -130,33 +149,126 @@
         // Pie Chart Example
         var ctx = document.getElementById("roomIssues");
         var roomIssues = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ["Pending", "Under Review", "Resolved"],
-            datasets: [{
-                data: [ {{ roomIssueStats['pending'] }}, {{ roomIssueStats['underReview'] }}, {{ roomIssueStats['resolved'] }} ],
-                backgroundColor: ['#004680', '#1cc88a', '#36b9cc'],
-                hoverBackgroundColor: ['#204375', '#17a673', '#2c9faf'],
-                hoverBorderColor: "rgba(234, 236, 244, 1)",
-            }],
-        },
-        options: {
-            maintainAspectRatio: false,
-            tooltips: {
-                backgroundColor: "rgb(255,255,255)",
-                bodyFontColor: "#858796",
-                borderColor: '#dddfeb',
-                borderWidth: 1,
-                xPadding: 15,
-                yPadding: 15,
-                displayColors: false,
-                caretPadding: 10
+            type: 'pie',
+            data: {
+                labels: ["Open", "Pending", "Closed"],
+                datasets: [{
+                    data: [ {{ roomIssueStats['pending'] }}, {{ roomIssueStats['underReview'] }}, {{ roomIssueStats['resolved'] }} ],
+                    backgroundColor: ['#004680', '#2C666E', '#90DDF0'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
             },
-            legend: {
-                display: false
+            options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    backgroundColor: "rgb(255,255,255)",
+                    bodyFontColor: "#858796",
+                    borderColor: '#dddfeb',
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10
+                },
+                legend: {
+                    display: true
+                },
+                cutoutPercentage: 55
             },
-            cutoutPercentage: 80
-        },
+        });
+    </script>
+
+    {{--  Scrip tag responsible for the Room Popularity chart  --}}
+    <script>
+        // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
+
+        // Pie Chart Example
+        var ctx = document.getElementById("roomPopularity");
+        var roomIssues = new Chart(ctx, {
+            type: 'horizontalBar',
+            data: {
+                labels: [ "{{ topFiveRooms[0]['room'].name }}", "{{ topFiveRooms[1]['room'].name }}", "{{ topFiveRooms[2]['room'].name }}", "{{ topFiveRooms[3]['room'].name }}", "{{ topFiveRooms[4]['room'].name }}" ],
+                datasets: [{
+                    data: [ {{ topFiveRooms[0]['bookings'] }}, {{ topFiveRooms[1]['bookings'] }}, {{ topFiveRooms[2]['bookings'] }}, {{ topFiveRooms[3]['bookings'] }}, {{ topFiveRooms[4]['bookings'] }} ],
+                    backgroundColor: ['#004680', '#2C666E', '#90DDF0', '#A9A9A9', '#D3F3EE'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: '# of Bookings'
+                        }
+                    }]  
+                },
+                tooltips: {
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10
+                },
+                legend: {
+                    display: false,
+                },
+                cutoutPercentage: 80
+            },
+        });
+    </script>
+
+    {{--  Scrip tag responsible for the Highest Rated Rooms chart  --}}
+    <script>
+        // Set new default font family and font color to mimic Bootstrap's default styling
+        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+        Chart.defaults.global.defaultFontColor = '#858796';
+
+        // Pie Chart Example
+        var ctx = document.getElementById("roomRatings");
+        var roomIssues = new Chart(ctx, {
+            type: 'horizontalBar',
+            data: {
+                labels: [ "{{ highestRatedRooms[0]['room'].name }}", "{{ highestRatedRooms[1]['room'].name }}", "{{ highestRatedRooms[2]['room'].name }}", "{{ highestRatedRooms[3]['room'].name }}", "{{ highestRatedRooms[4]['room'].name }}" ],
+                datasets: [{
+                    data: [ {{ highestRatedRooms[0]['averageRating'] }}, {{ highestRatedRooms[1]['averageRating'] }}, {{ highestRatedRooms[2]['averageRating'] }}, {{ highestRatedRooms[3]['averageRating'] }}, {{ highestRatedRooms[4]['averageRating'] }} ],
+                    backgroundColor: ['#004680', '#2C666E', '#90DDF0', '#A9A9A9', '#D3F3EE'],
+                    hoverBorderColor: "rgba(234, 236, 244, 1)",
+                }],
+            },
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        ticks: {
+                            beginAtZero: true,
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Average Rating'
+                        }
+                    }]  
+                },
+                tooltips: {
+                    borderWidth: 1,
+                    xPadding: 15,
+                    yPadding: 15,
+                    displayColors: false,
+                    caretPadding: 10
+                },
+                legend: {
+                    display: false,
+                },
+                cutoutPercentage: 80
+            },
         });
     </script>
 @endsection
