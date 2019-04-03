@@ -84,9 +84,11 @@
         <div class='col' style='margin:10px'>
             @component('components.generalCard', title='Highest Rated')
                 @slot('body')
-                <div class='chart-bar'>
-                    <canvas id="roomRatings" width="400" height="400"></canvas>
-                </div>
+                    @each(room in highestRatedRooms) 
+                        <div class='row'>
+                            
+                        </div>
+                    @endeach
                 @endslot
             @endcomponent
         </div>
