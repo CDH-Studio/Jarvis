@@ -19,7 +19,7 @@
     {{--  Loading page header  --}}
     @!component('components.pageHeader', title= 'Hello, '+ auth.user.firstname)
     {{--  Page Content  --}}
-    <div class='row'>    
+    <div class='row d-flex flex-wrap'>    
 		{{--  Search room page content  --}}
 		<div class='col-xl-6 col-xxl-4'>
 			@section('search room')
@@ -204,7 +204,7 @@
 			
 			@endsection
 		</div>
-		<div class='col-xl-6 col-xxl-8'>
+		<div class='col-xl-6 col-xxl-8' >
 			<div class='row'>
 				<div id='myBookings' class='col-xl-12 col-xxl-6'>
 					@component('components.generalCard', title='Currently Available')
@@ -239,38 +239,43 @@
 					@endcomponent
 				</div>
 			</div>
-			<div class='row mt-4'>
-				<div id='frequentlyBooked' class='col'>
-					@component('components.generalCard', title='Upcomming Bookings')
-						@slot('body')
-							<div class='table table-responsive'>
-								<table id='bookNowTable' class='table table-hover' style='width:100%;'>
-									<thead>
-										<tr>
-											<th scope='col' class='text-center' style='width:10%'>Name</th>
-											<th scope='col' class='text-center' style='width:10%'>Room</th>
-											<th scope='col' class='text-center' style='width:10%'>Date</th>
-											<th scope='col' class='text-center' style='width:10%'>Time</th>
-										</tr>
-									</thead>
-									{{--  Loops through the rooms array and displays every room's content  --}}
-									<tbody>
-										@each(room in rooms) 
-											<tr class='table-light row-hover' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
-												<td class='text-center'>{{ room.name }}</td>
-												<td class='text-center'>{{ room.floor }}</td>
-												<td class='text-center'>{{ room.tower }} </td>
-												<td class='text-center'>{{ room.capacity }}</td> 
-											</tr>
-										@endeach
-									</tbody>
-								</table>
-							</div>
-						@endslot
-					@endcomponent
+			<div class='row'>
+				<div class='col'>
+					<div class='row mt-4'>
+						<div id='frequentlyBooked' class='col'>
+							@component('components.generalCard', title='Upcomming Bookings')
+								@slot('body')
+									<div class='table table-responsive'>
+										<table id='bookNowTable' class='table table-hover' style='width:100%;'>
+											<thead>
+												<tr>
+													<th scope='col' class='text-center' style='width:10%'>Name</th>
+													<th scope='col' class='text-center' style='width:10%'>Room</th>
+													<th scope='col' class='text-center' style='width:10%'>Date</th>
+													<th scope='col' class='text-center' style='width:10%'>Time</th>
+												</tr>
+											</thead>
+											{{--  Loops through the rooms array and displays every room's content  --}}
+											<tbody>
+												@each(room in rooms) 
+													<tr class='table-light row-hover' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
+														<td class='text-center'>{{ room.name }}</td>
+														<td class='text-center'>{{ room.floor }}</td>
+														<td class='text-center'>{{ room.tower }} </td>
+														<td class='text-center'>{{ room.capacity }}</td> 
+													</tr>
+												@endeach
+											</tbody>
+										</table>
+									</div>
+								@endslot
+							@endcomponent
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
+
 		{{--  Chatbot  --}}
 		<div class='row'>
 			<i class='open-button fas fa-robot fa-2x' onclick='openChat()'></i>
