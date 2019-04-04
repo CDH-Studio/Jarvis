@@ -19,7 +19,7 @@
     {{--  Loading page header  --}}
     @!component('components.pageHeader', title= 'Hello, '+ auth.user.firstname)
     {{--  Page Content  --}}
-    <div class='row d-flex flex-wrap'>    
+    <div class='row d-flex flex-wrap'>
 		{{--  Search room page content  --}}
 		<div class='col-xl-6 col-xxl-4'>
 			@section('search room')
@@ -204,39 +204,56 @@
 			
 			@endsection
 		</div>
-		<div class='col-xl-6 col-xxl-8' >
+		<div class='col-xl-6 col-xxl-8'>
 			<div class='row'>
 				<div id='available' class='col-xl-12 col-xxl-6'>
 					@component('components.generalCard', title='Currently Available')
 						@slot('body')
-							@each(room in availRooms)
-								<div class='row'>
-									<div class='col'>
-										@component('components.smallCard', room=room)
-											@slot('body')
-												<div>Date Here</div>
-												<div>Time Here</div>
-											@endslot
-										@endcomponent
+							{{--  If there are no avail rooms display a message accordingly  --}}
+							@if(!availRooms)
+								<div class="d-flex flex-wrap justify-content-center" style='height:244px;'>
+									<div class="d-flex flex-column justify-content-around">
+										<i class="fas fa-ghost fa-8x text-muted wrapper-center"></i>
+										<h3 class="text-muted no-margin">No Rooms Currently Available</h3>
 									</div>
 								</div>
-							@endeach
+							@else
+								@each(room in availRooms)
+									<div class='row'>
+										<div class='col'>
+											@component('components.smallCard', room=room)
+												@slot('body')
+													<div>Date Here</div>
+													<div>Time Here</div>
+												@endslot
+											@endcomponent
+										</div>
+									</div>
+								@endeach
+							@endif
 						@endslot
 					@endcomponent
 				</div>
 				<div id='frequentlyBooked' class='col-lg-12 col-xxl-6'>
 					@component('components.generalCard', title='Frequently Booked')
 						@slot('body')
-							<div class='row'>
-								<div class='col'>
-									@!component('components.smallCard')
-								</div>
-							</div>
-							<div class='row'>
+							@each(room in freqRooms)
+								<div class='row'>
 									<div class='col'>
-										@!component('components.smallCard')
+										@component('components.smallCard', room=room)
+											@slot('body')
+												<div class='color-primary mb-2'>
+													@!component('components.stars', rating= room.averageRating)
+												</div>
+												<div>
+													<i class="fas fa-chair color mr-1"></i> {{room.seats}}
+													<i class="fas fa-users color ml-4 mr-1"></i> {{room.capacity}}
+												</div>
+											@endslot
+										@endcomponent
 									</div>
 								</div>
+							@endeach
 						@endslot
 					@endcomponent
 				</div>
@@ -279,7 +296,7 @@
 		</div>
 
 		{{--  Chatbot  --}}
-		<div class='row'>
+		<div class='row' hidden>
 			<i class='open-button fas fa-robot fa-2x' onclick='openChat()'></i>
 			<div class='chat-popup' id='chat-popup'>
 				<form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>

@@ -43,7 +43,8 @@ class HomeController {
 	*/
 	async userDashboard ({ view, auth }) {
 		const availRooms = await this.getAvailableRooms({ auth });
-		return view.render('userPages.booking', { availRooms: availRooms });
+		const freqRooms = await this.getFreqBooked({ auth });
+		return view.render('userPages.booking', { availRooms, freqRooms });
 	}
 
 	/**
@@ -297,6 +298,7 @@ class HomeController {
 	/****************************************
 				User Functions
 	****************************************/
+
 	/**
 	*
 	* Retrieve currently available rooms and returns and array of size 2 with results
@@ -306,19 +308,16 @@ class HomeController {
 	*
 	*/
 	async getAvailableRooms ({ auth }) {
-		// only loook for roosm that are open
-		let searchResults = Room
-			.query()
-			.where('state', 1)
-			.clone();
-
 		let towerOrder;
 		// If the tower is West then set the order to descending, else ascending
 		towerOrder = (await auth.user.getUserTower() === 'West') ? 'desc' : 'asc';
 
+		// look for rooms that are open
 		// order all rooms in the database by closest to the user's floor and tower
 		// order by ascending seats number and fetch results
-		searchResults = await searchResults
+		let searchResults = await Room
+			.query()
+			.where('state', 1)
 			.orderByRaw('ABS(floor-' + auth.user.floor + ') ASC')
 			.orderBy('tower', towerOrder)
 			.orderBy('seats', 'asc')
@@ -326,6 +325,57 @@ class HomeController {
 			.fetch();
 
 		return searchResults.toJSON();
+	}
+
+	/**
+	*
+	* Retrieve the user's frew booked rooms and returns and array of size 2 with results and return results
+	*
+	* @param {view}
+	*
+	*/
+	async getFreqBooked ({ auth }) {
+		// get the top 2 freq booked rooms that are available and join with the rooms table to find the room name
+		let searchResults = await Booking
+			.query()
+			.where('user_id', auth.user.id)
+			.select('*')
+			.count('room_id as total')
+			.groupBy('room_id')
+			.orderBy('total', 'desc')
+			.limit(2)
+			.innerJoin('rooms', 'bookings.room_id', 'rooms.id');
+
+		// set the average rating for the rooms
+		for (let i = 0; i < searchResults.length; i++) {
+			searchResults[i].averageRating = await this.getAverageRating(searchResults[i].id);
+		}
+		return searchResults;
+	}
+
+	/**
+	 * Calcualtes the average rating of a specific room, based off of the room Id
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getAverageRating (roomId) {
+		try {
+			// Retrive all the ratings and calculates the average
+			let searchResults = await Review
+				.query()
+				.where('room_id', roomId)
+				.avg('rating');
+
+			// If there is no averge rating, return 'No Rating'
+			if (searchResults[0]['avg(`rating`)'] == null) {
+				return 'No Rating';
+			}
+
+			// Returns the rating, thus searchResults[0]['avg(`rating`)']
+			return searchResults[0]['avg(`rating`)'];
+		} catch (err) {
+			console.log(err);
+		}
 	}
 }
 
