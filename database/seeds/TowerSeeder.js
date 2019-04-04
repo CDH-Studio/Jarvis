@@ -15,7 +15,7 @@ const Tower = use('App/Models/Tower');
 
 class TowerSeeder {
 	async run () {
-		var TowerFiller = ['east', 'west'];
+		var TowerFiller = ['East', 'West'];
 		var count = await Tower.getCount();
 
 		if (count === 0) {
