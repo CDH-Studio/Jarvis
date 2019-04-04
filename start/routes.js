@@ -60,14 +60,14 @@ Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['is
 Route.post('/addRoom', 'RoomController.add').as('addRoom').validator('AddRoom').middleware(['isAdmin']);
 Route.get('/adminDash', 'HomeController.adminDashboard').as('adminDash').middleware(['isAdmin']);
 
-Route.get('/room/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
-Route.get('/room/:id/edit', 'RoomController.edit').as('editRoom').middleware(['isAdmin']);
-Route.post('/room/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['isAdmin']);
-Route.get('/allRooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
+Route.get('/rooms/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
+Route.get('/rooms/:id/edit', 'RoomController.edit').as('editRoom').middleware(['isAdmin']);
+Route.post('/rooms/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['isAdmin']);
+Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 
 Route.get('/roomBookings/:id', 'BookingController.getRoomBookings').as('roomBookings').middleware(['auth']);
 
-Route.get('/room/:id/issues/:issueStatus', 'IssueController.getRoomIssues').as('showIssue').middleware(['auth']);
+Route.get('/room/:roomID/issues/:issueStatus', 'IssueController.getRoomIssues').as('showIssue').middleware(['auth']);
 Route.get('/issue/:id', 'IssueController.getRoomIssues').as('showIssue').middleware(['auth']);
 Route.get('/issue/:id/edit', 'IssueController.editIssue').as('editIssue').middleware(['isAdmin']);
 Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['auth']).validator('EditIssue');

@@ -3,7 +3,7 @@ $(document).ready(function() {
 	    "paging":   false,
 	    "ordering": true,
 	    "info":     false,
-	    "processing": true
-	    "order": [[ 6, "desc" ]]
+	    "processing": true,
+	    "order": [[ 0, "desc" ]]
 	});
 });
