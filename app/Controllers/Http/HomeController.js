@@ -52,8 +52,6 @@ class HomeController {
 	*
 	*/
 	async adminDashboard ({ view }) {
-		console.log('suhjoais');
-
 		const roomStatusStats = await this.getRoomStatusStats();
 		const roomIssueStats = await this.getRoomIssueStats();
 		const numberOfUsers = await this.getNumberofUsers();
@@ -246,7 +244,6 @@ class HomeController {
 	*
 	*/
 	async getAvailableRooms ({ auth }) {
-
 		// only loook for roosm that are open
 		let searchResults = Room
 			.query()
