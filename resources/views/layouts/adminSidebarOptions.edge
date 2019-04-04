@@ -52,7 +52,7 @@
       <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
           <h6 class="collapse-header">Room Issues:</h6>
-          <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('roomIssues', { issueStatus: 'all' }) }}'>View Issues</a>
+          <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('showIssue', {roomID: 'all', issueStatus: 'all' }) }}'>View Issues</a>
         </div>
       </div>
     </li>

@@ -77,109 +77,79 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async getRoomIssues ({ params, view, auth, response }) {
-		// Queries the database for the issues associated to a specific room
-		let issues = await Report
-			.query()
-			.where('room_id', params.id)
-			.fetch();
-
-		issues = issues.toJSON();
-
-		// Sort the isssues by date
-		issues.sort((a, b) => {
-			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-		});
-
-		// Retrieve number of issues that are open
-		let countPending = await Report
-			.query()
-			.where('room_id', params.id)
-			.where('report_status_id', 1)
-			.count();
-
-		// Retrieve number of issues that are under review
-		let countUnderReview = await Report
-			.query()
-			.where('room_id', params.id)
-			.where('report_status_id', 2)
-			.count();
-
-		// Retrieve number of issues that are resolved
-		let countResolved = await Report
-			.query()
-			.where('room_id', params.id)
-			.where('report_status_id', 3)
-			.count();
-
-		// Create statistic array with custom keys
-		var stats = {};
-		stats['total'] = issues.length;
-		stats['pending'] = countPending[0]['count(*)'];
-		stats['underReview'] = countUnderReview[0]['count(*)'];
-		stats['resolved'] = countResolved[0]['count(*)'];
-
-		// loop through and change ids to the actual names in the tables
-		for (let i = 0; i < issues.length; i++) {
-			issues[i].status = await ReportStatus.getName(issues[i].report_status_id);
-			issues[i].room = await Room.getName(issues[i].room_id);
-			issues[i].user = await User.getName(issues[i].user_id);
-			issues[i].type = await ReportType.getName(issues[i].report_type_id);
-		}
-		return view.render('adminDash.viewRoomIssues', { issues, id: issues[0].room, stats });
-	}
-
-	/**
-	* Renders a specific issue page depending on
-	*
-	* @param {Object} Context The context object.
-	*/
-	async renderIssuePage ({ response, params, view }) {
 		var results;
 		var issues;
-		const filterType = params.issueStatus;
+		var currentTime;
+		var issuefilterType;
+		var roomName;
 
-		if (filterType === 'all') {
-			results = await Report.all();
+		// covert status string to int
+		if (params.issueStatus === 'all') {
+			issuefilterType = 0;
 		} else if (params.issueStatus === 'open') {
-			// Retrieve number of issues that are open
-			results = await Report
-				.query()
-				.where('report_status_id', 1)
-				.fetch();
-		} else if (filterType === 'pending') {
-			// Retrieve number of issues that are pendingss
-			results = await Report
-				.query()
-				.where('report_status_id', 2)
-				.fetch();
-		} else if (filterType === 'closed') {
-			// Retrieve number of issues that are pending
-			results = await Report
-				.query()
-				.where('report_status_id', 3)
-				.fetch();
+			issuefilterType = 1;
+		} else if (params.issueStatus === 'pending') {
+			issuefilterType = 2;
+		} else if (params.issueStatus === 'closed') {
+			issuefilterType = 3;
+		}
+
+		// refine filter by room requested
+		if (params.roomID === 'all') {
+			// filter based on status
+			if (issuefilterType > 0 && issuefilterType < 4) {
+				results = await Report
+					.query()
+					.where('report_status_id', issuefilterType)
+					.fetch();
+			} else {
+				results = await Report.all();
+			}
 		} else {
-			return response.redirect('/');
+			// for security check if room number is actually an int
+			params.roomID = parseInt(params.roomID);
+			if (isNaN(params.roomID)) {
+				return response.redirect('/');
+			}
+
+			// get room name
+			const roomResult = await Room.find(params.roomID);
+			roomName = roomResult.name;
+
+			if (issuefilterType > 0 && issuefilterType < 4) {
+				results = await Report
+					.query()
+					.where('room_id', params.roomID)
+					.where('report_status_id', issuefilterType)
+					.fetch();
+			} else {
+				results = await Report
+					.query()
+					.where('room_id', params.roomID)
+					.fetch();
+			}
 		}
 
 		issues = results.toJSON();
 
-		// Sort the results by name
-		issues.sort((a, b) => {
-			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-		});
+		// Retrieve issue stats
+		const stats = await this.getIssueStatistics(params.roomID);
+
+		// date formatting options
+		var options = { year: 'numeric', month: 'long', day: 'numeric' };
 
 		// loop through and change ids to the actual names in the tables
+		// TODO: needs to be changed to take advantage of relational database
 		for (let i = 0; i < issues.length; i++) {
 			issues[i].status = await ReportStatus.getName(issues[i].report_status_id);
 			issues[i].room = await Room.getName(issues[i].room_id);
 			issues[i].user = await User.getName(issues[i].user_id);
 			issues[i].type = await ReportType.getName(issues[i].report_type_id);
+			currentTime = new Date(issues[i].created_at);
+			issues[i].created_at = currentTime.toLocaleDateString('de-DE', options);
 		}
 
-		const stats = await this.getIssueStatistics();
-
-		return view.render('adminDash.viewRoomIssues', { filterType, issues, stats });
+		return view.render('adminDash.viewRoomIssues', { roomID: params.roomID, roomName, issues, stats, filterType: params.issueStatus });
 	}
 
 	/**
@@ -187,24 +157,51 @@ class IssueController {
 	*
 	* @param {Object} Context The context object.
 	*/
-	async getIssueStatistics () {
-		// Retrieve number of issues that are pending
-		let countPending = await Report
-			.query()
-			.where('report_status_id', 1)
-			.count();
+	async getIssueStatistics (roomID) {
+		var countPending;
+		var countUnderReview;
+		var countResolved;
 
-		// Retrieve number of issues that are under review
-		let countUnderReview = await Report
-			.query()
-			.where('report_status_id', 2)
-			.count();
+		if (roomID === 'all') {
+			// Retrieve number of issues that are pending
+			countPending = await Report
+				.query()
+				.where('report_status_id', 1)
+				.count();
 
-		// Retrieve number of issues that are resolved
-		let countResolved = await Report
-			.query()
-			.where('report_status_id', 3)
-			.count();
+			// Retrieve number of issues that are under review
+			countUnderReview = await Report
+				.query()
+				.where('report_status_id', 2)
+				.count();
+
+			// Retrieve number of issues that are resolved
+			countResolved = await Report
+				.query()
+				.where('report_status_id', 3)
+				.count();
+		} else {
+			// Retrieve number of issues that are open
+			countPending = await Report
+				.query()
+				.where('room_id', roomID)
+				.where('report_status_id', 1)
+				.count();
+
+			// Retrieve number of issues that are under review
+			countUnderReview = await Report
+				.query()
+				.where('room_id', roomID)
+				.where('report_status_id', 2)
+				.count();
+
+			// Retrieve number of issues that are resolved
+			countResolved = await Report
+				.query()
+				.where('room_id', roomID)
+				.where('report_status_id', 3)
+				.count();
+		}
 
 		// Create statistic array with custom keys
 		var stats = {};

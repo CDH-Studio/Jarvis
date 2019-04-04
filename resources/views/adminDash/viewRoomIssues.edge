@@ -10,84 +10,91 @@ View {{upperFirst(filterType)}} Room Issues
 
 
 @section('content')
-    @!component('components.pageHeader', title=upperFirst(filterType)+ ' Room Issues')
+    @if(roomName === undefined || roomName === null)
+        @!component('components.pageHeader', title=upperFirst(filterType)+ ' Issues')
+    @else
+        @!component('components.pageHeader', title=roomName, subtitle=upperFirst(filterType)+' Issues')
+    @endif
     <div>
+        {{--  room Reports/Issues Stats  --}}
+        <div class='row text-center' style='padding-left: 15px;'> 
+            <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('showIssue', {roomID: roomID, issueStatus: 'all' }) }}'>
+                <div class='card-highlight-primary'></div>
+                <div class='card-body'>
+                    <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                        <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
+                        <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+                            <div class='row'>
+                                <h2 class='col no-margin'><b>{{ stats['total'] }}</b></h2>
+                            </div>
+                            <div class='row'>
+                                <h5 class='col text-grey'>Total Issues</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('showIssue', { roomID: roomID, issueStatus: 'open' }) }}'>
+                <div class='card-highlight-success'></div>
+                <div class='card-body'>
+                    <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                        <i class='d-inline-flex card-icon color-success no-padding fas fa-door-open fa-2x'></i>
+                        <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+                            <div class='row'>
+                                <h2 class='col no-margin'><b>{{ stats['pending'] }}</b></h2>
+                            </div>
+                            <div class='row'>
+                                <h5 class='col text-grey'>Open</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('showIssue', { roomID: roomID, issueStatus: 'pending' }) }}'>
+                <div class='card-highlight-warning'></div>
+                <div class='card-body'>
+                    <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                        <i class='d-inline-flex card-icon color-warning no-padding fas fa-sync-alt fa-2x'></i>
+                        <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+                            <div class='row'>
+                                <h2 class='col no-margin'><b>{{ stats['underReview'] }}</b></h2>
+                            </div>
+                            <div class='row'>
+                                <h5 class='col text-grey'>Pending</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('showIssue', { roomID: roomID, issueStatus: 'closed' }) }}'>
+                <div class='card-highlight-danger'></div>
+                <div class='card-body'>
+                    <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                        <i class='d-inline-flex card-icon color-danger no-padding fas fa-door-closed fa-2x'></i>
+                        <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+                            <div class='row'>
+                                <h2 class='col no-margin'><b>{{ stats['resolved'] }}</b></h2>
+                            </div>
+                            <div class='row'>
+                                <h5 class='col text-grey'>Closed</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+
         {{--  Displays all of the issues in the database in a table  --}}
         @if(issues.length == 0)
             <div class='row'>
                 <div class='col-12 text-center mt-5'>
-                    <p class='fas fa-glass-cheers fa-10x mb-5 mt-5 text-muted'></p>
-                    <h3 class='text-muted'>There are currently no issues regarding any rooms :)</h3>
+                    <p class='fas fa-glass-cheers fa-6x mb-5 mt-5 text-muted'></p>
+                    <h4 class='text-muted'>There are currently no issues</h4>
                 </div>
             </div>
         @else
-            {{--  room Reports/Issues Stats  --}}
-            <div class='row text-center' style='padding-left: 15px;'> 
-                <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('roomIssues', { issueStatus: 'all' }) }}'>
-                    <div class='card-highlight-primary'></div>
-                    <div class='card-body'>
-                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                            <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
-                            <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
-                                <div class='row'>
-                                    <h2 class='col no-margin'><b>{{ stats['total'] }}</b></h2>
-                                </div>
-                                <div class='row'>
-                                    <h5 class='col text-grey'>Total Issues</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('roomIssues', { issueStatus: 'open' }) }}'>
-                    <div class='card-highlight-success'></div>
-                    <div class='card-body'>
-                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                            <i class='d-inline-flex card-icon color-success no-padding fas fa-door-open fa-2x'></i>
-                            <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
-                                <div class='row'>
-                                    <h2 class='col no-margin'><b>{{ stats['pending'] }}</b></h2>
-                                </div>
-                                <div class='row'>
-                                    <h5 class='col text-grey'>Open</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('roomIssues', { issueStatus: 'pending' }) }}'>
-                    <div class='card-highlight-warning'></div>
-                    <div class='card-body'>
-                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                            <i class='d-inline-flex card-icon color-warning no-padding fas fa-sync-alt fa-2x'></i>
-                            <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
-                                <div class='row'>
-                                    <h2 class='col no-margin'><b>{{ stats['underReview'] }}</b></h2>
-                                </div>
-                                <div class='row'>
-                                    <h5 class='col text-grey'>Pending</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('roomIssues', { issueStatus: 'closed' }) }}'>
-                    <div class='card-highlight-danger'></div>
-                    <div class='card-body'>
-                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                            <i class='d-inline-flex card-icon color-danger no-padding fas fa-door-closed fa-2x'></i>
-                            <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
-                                <div class='row'>
-                                    <h2 class='col no-margin'><b>{{ stats['resolved'] }}</b></h2>
-                                </div>
-                                <div class='row'>
-                                    <h5 class='col text-grey'>Closed</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+
             <div class="card shadow mt-4 mb-4">
                 <div class="card-header py-3">
                 	<h6 class="m-0 font-weight-bold text-primary">{{upperFirst(filterType)}} Issues</h6>
@@ -102,6 +109,7 @@ View {{upperFirst(filterType)}} Room Issues
 									<th scope='col' class='text-center' style='width:20%'>Submitted By</th>
 									<th scope='col' class='text-center' style='width:20%'>Report Type</th>
 									<th scope='col' class='text-center' style='width:10%'>Status</th>
+                                    <th scope='col' class='text-center' style='width:10%'>Created</th>
 								</tr>
 							</thead>
 							{{--  Loops through the issues array and displays every report's content  --}}
@@ -113,6 +121,7 @@ View {{upperFirst(filterType)}} Room Issues
 									<td class='text-center'>{{ issue.user }}</td>
 									<td class='text-center'>{{ issue.type }}</td>
 									<td class='text-center td-{{ issue.status }}'>{{ issue.status }}</td>
+                                    <td class='text-center'>{{ issue.created_at }}</td>
 								</tr>
 								@endeach
 							</tbody>
@@ -129,14 +138,7 @@ View {{upperFirst(filterType)}} Room Issues
 @section('extrajs') 
     <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
     <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
-    <script>$(document).ready(function() {
-            $('#issuesTable').DataTable( {
-                "paging":   false,
-                "ordering": true,
-                "info":     false
-            });
-        });
-    </script>
+    {{ script('js/vendor/dataTables.js') }}
 @endsection
 
 
