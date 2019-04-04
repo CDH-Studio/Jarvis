@@ -23,7 +23,7 @@ View {{upperFirst(filterType)}} Room Issues
         @else
             {{--  room Reports/Issues Stats  --}}
             <div class='row text-center' style='padding-left: 15px;'> 
-                <a class='col card stats-card shadow no-padding issue-stats-card-link' href='{{ route('roomIssues', { issueStatus: 'all' }) }}'>
+                <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('roomIssues', { issueStatus: 'all' }) }}'>
                     <div class='card-highlight-primary'></div>
                     <div class='card-body'>
                         <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -39,7 +39,7 @@ View {{upperFirst(filterType)}} Room Issues
                         </div>
                     </div>
                 </a>
-                <a class='col card stats-card shadow no-padding issue-stats-card-link' href='{{ route('roomIssues', { issueStatus: 'open' }) }}'>
+                <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('roomIssues', { issueStatus: 'open' }) }}'>
                     <div class='card-highlight-success'></div>
                     <div class='card-body'>
                         <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -55,7 +55,7 @@ View {{upperFirst(filterType)}} Room Issues
                         </div>
                     </div>
                 </a>
-                <a class='col card stats-card shadow no-padding issue-stats-card-link' href='{{ route('roomIssues', { issueStatus: 'pending' }) }}'>
+                <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('roomIssues', { issueStatus: 'pending' }) }}'>
                     <div class='card-highlight-warning'></div>
                     <div class='card-body'>
                         <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -71,7 +71,7 @@ View {{upperFirst(filterType)}} Room Issues
                         </div>
                     </div>
                 </a>
-                <a class='col card stats-card shadow no-padding issue-stats-card-link' href='{{ route('roomIssues', { issueStatus: 'closed' }) }}'>
+                <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('roomIssues', { issueStatus: 'closed' }) }}'>
                     <div class='card-highlight-danger'></div>
                     <div class='card-body'>
                         <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
