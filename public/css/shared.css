@@ -159,7 +159,12 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Card hightlights */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-
+.border-left-primary{
+    border-left: 0.25rem solid #145f9c !important;
+}
+.border-right-primary{
+    border-right: 0.25rem solid #145f9c !important;
+}
 .card-highlight-primary{
     background: rgb(88,136,189);
     background: linear-gradient(90deg, rgba(88,136,189,1) 0%, rgba(15,172,243,1) 100%);
@@ -573,7 +578,7 @@
     max-width: 448px;
 }
 
-.issue-stats-card-link, .issue-stats-card-link:hover, .issue-stats-card-link:active, .issue-stats-card-link:visited {
+.link-style-none, .link-style-none:hover, .link-style-none:active, .link-style-none:visited {
     border:none;
     outline:none;
     text-decoration:none;
@@ -581,4 +586,70 @@
     text-decoration:none;
 }
 
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Small Card Summary */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
 
+.small-card{
+    border-radius: 2px;
+    overflow:hidden;
+    margin: 0 0 12px 0;
+    width: inherit;
+    height: 110px;
+    max-width: inherit;
+    max-height: 110px;
+    display:block;
+    text-decoration: none;
+    color:#202428;
+    /* box-shadow: none !important; */
+}
+
+.small-card .body{
+    height: inherit;
+    max-height: inherit;
+    width: inherit;
+    max-width: inherit;
+}
+.small-card .content{
+    margin: 5px;
+}
+
+.small-card:hover{
+    text-decoration: none;
+    background-color:#F8F8F8;
+    border-color: #F8F8F8;
+}
+
+
+.small-card:hover {
+    text-decoration: none;
+    color:#202428;
+}
+
+.small-card:hover .upcoming-card-title{
+    background-color: #7999b3;
+    color: #FFFFFF;
+}
+
+.small-card img {
+    min-width: 160px;
+    max-height: inherit;
+    min-height: inherit;
+    max-width: 160px;
+}
+
+@media(max-width: 479px){
+    .small-card img {
+        display: none;
+    }
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* CustomFlex */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+@media (min-width: 20){
+    .col-xxl-6 {
+        background-color: #202428;
+
+    }
+}

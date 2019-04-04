@@ -25,7 +25,7 @@ class HomeController {
 			if (userRole === 'admin') {
 				return response.route('adminDash', { auth });
 			} else {
-				return response.route('booking');
+				return response.route('booking', { auth });
 			}
 		} catch (error) {
 			return response.route('login');
@@ -34,13 +34,14 @@ class HomeController {
 
 	/**
 	*
-	* Render user dashboard
+	* Render user dashboard and gather information for dashboard view
 	*
 	* @param {view}
 	*
 	*/
-	async userDashboard ({ view }) {
-		return view.render('booking');
+	async userDashboard ({ view, auth }) {
+		const availRooms = await this.getAvailableRooms({ auth });
+		return view.render('userPages.booking', { availRooms: availRooms });
 	}
 
 	/**
@@ -60,6 +61,10 @@ class HomeController {
 
 		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers, numberOfRooms: numberOfRooms, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
 	}
+
+	/****************************************
+				ADMIN Functions
+	****************************************/
 
 	/**
 	*
@@ -225,6 +230,40 @@ class HomeController {
 		}
 
 		return topFiveRooms;
+	}
+
+	/****************************************
+				User Functions
+	****************************************/
+	/**
+	*
+	* Retrieve currently available rooms and returns and array of size 2 with results
+	* User's Floor and Tower > User's Floor and ¬ Tower > User's Floor-1 and Tower > User's Floor+1 and Tower > User's Floor-1 and ¬ Tower
+	*
+	* @param {view}
+	*
+	*/
+	async getAvailableRooms ({ auth }) {
+		// only loook for roosm that are open
+		let searchResults = Room
+			.query()
+			.where('state', 1)
+			.clone();
+
+		let towerOrder;
+		// If the tower is West then set the order to descending, else ascending
+		towerOrder = (await auth.user.getUserTower() === 'West') ? 'desc' : 'asc';
+
+		// order all rooms in the database by closest to the user's floor and tower
+		// order by ascending seats number and fetch results
+		searchResults = await searchResults
+			.orderByRaw('ABS(floor-' + auth.user.floor + ') ASC')
+			.orderBy('tower', towerOrder)
+			.orderBy('seats', 'asc')
+			.limit(2)
+			.fetch();
+
+		return searchResults.toJSON();
 	}
 }
 
