@@ -33,42 +33,42 @@
                     </div>
                     <div class='flex-grow-1 text-right'>
                         @if(isAdmin)
-                            <button type='button' class="btn btn-info btn-icon-split" onclick="window.location='{{ route('roomBookings', { id: room.id }) }}';">
+                            <a class="btn btn-info btn-icon-split" href="{{route('roomBookings', { id: room.id}) }}">
                                 <span class="icon text-white-50"><i class="fas fa-book"></i></span>
                                 <span class="text">View Bookings</span>
-                            </button>
-                            <button type='button' class="btn btn-info btn-icon-split" onclick="window.location='{{ route('showIssue', { id: room.id }) }}';">
+                            </a>
+                            <a class="btn btn-info btn-icon-split" href="{{route('showIssue', { id: room.id, issueStatus: 'all'  }) }}">
                                 <span class="icon text-white-50"><i class="fas fa-flag"></i></span>
                                 <span class="text">View Issues</span>
-                            </button>   
-                            <button type='button' class="btn btn-primary btn-icon-split" onclick="window.location='{{ route('editRoom', { id: room.id }) }}';">
+                            </a>   
+                            <a class="btn btn-primary btn-icon-split" href="{{ route('editRoom', { id: room.id }) }}">
                                 <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
                                 <span class="text">Edit Room</span>
-                            </button>   
+                            </a>   
                         @else
                             @if(room.state != 1)
-                                <button disabled type='button' class="btn btn-primary btn-icon-split" data-toggle='modal' data-target='#confirmModal'>
+                                <a disabled class="btn btn-primary btn-icon-split" data-toggle='modal' data-target='#confirmModal'>
                                     <span class="icon text-white-50"><i class="fas fa-book"></i></span>
                                     <span class="text">Book Room</span>
-                                </button>
+                                </a>
                             @else
-                                <button type='button' class="btn btn-primary btn-icon-split" data-toggle='modal' data-target='#confirmModal'>
+                                <a class="btn btn-primary btn-icon-split" data-toggle='modal' data-target='#confirmModal'>
                                     <span class="icon text-white-50"><i class="fas fa-book"></i></span>
                                     <span class="text">Book Room</span>
-                                </button>       
+                                </a>       
                             @endif
                             @if(hasReview)
-                                <button type='button' class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
+                                <a class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
                                     <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
                                     <span class="text">Edit Review</span>
-                                </button>
+                                </a>
                             @else
-                                <button type='button' class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
+                                <a class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
                                     <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
                                     <span class="text">Write Review</span>
-                                </button>   
+                                </a>   
                             @endif
-                            <button type='button' class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i></button>
+                            <a class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i></a>
                         @endif
                     </div>
                 </div>

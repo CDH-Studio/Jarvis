@@ -77,46 +77,45 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async getRoomIssues ({ params, view, auth, response }) {
-		// Queries the database for the issues associated to a specific room
-		let issues = await Report
-			.query()
-			.where('room_id', params.id)
-			.fetch();
+		
+		var results;
+		var issues;
+		var currentTime;
+		const filterType = params.issueStatus;
 
-		issues = issues.toJSON();
 
-		// Sort the isssues by date
-		issues.sort((a, b) => {
-			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-		});
+		if (filterType === 'all') {
+			results = await Report.all();
+		} else if (params.issueStatus === 'open') {
+			// Retrieve number of issues that are open
+			results = await Report
+				.query()
+				.where('room_id', params.id)
+				.where('report_status_id', 1)
+				.fetch();
+		} else if (filterType === 'pending') {
+			// Retrieve number of issues that are pendingss
+			results = await Report
+				.query()
+				.where('room_id', params.id)
+				.where('report_status_id', 2)
+				.fetch();
+		} else if (filterType === 'closed') {
+			// Retrieve number of issues that are pending
+			results = await Report
+				.query()
+				.where('room_id', params.id)
+				.where('report_status_id', 3)
+				.fetch();
+		} else {
+			return response.redirect('/');
+		}
 
-		// Retrieve number of issues that are open
-		let countPending = await Report
-			.query()
-			.where('room_id', params.id)
-			.where('report_status_id', 1)
-			.count();
+		issues = results.toJSON();
 
-		// Retrieve number of issues that are under review
-		let countUnderReview = await Report
-			.query()
-			.where('room_id', params.id)
-			.where('report_status_id', 2)
-			.count();
-
-		// Retrieve number of issues that are resolved
-		let countResolved = await Report
-			.query()
-			.where('room_id', params.id)
-			.where('report_status_id', 3)
-			.count();
-
-		// Create statistic array with custom keys
-		var stats = {};
-		stats['total'] = issues.length;
-		stats['pending'] = countPending[0]['count(*)'];
-		stats['underReview'] = countUnderReview[0]['count(*)'];
-		stats['resolved'] = countResolved[0]['count(*)'];
+		// Retrieve issue stats
+		const stats = await this.getIssueStatistics(params.id);
+		var options = {year: 'numeric', month: 'long', day: 'numeric' };
 
 		// loop through and change ids to the actual names in the tables
 		for (let i = 0; i < issues.length; i++) {
@@ -124,6 +123,9 @@ class IssueController {
 			issues[i].room = await Room.getName(issues[i].room_id);
 			issues[i].user = await User.getName(issues[i].user_id);
 			issues[i].type = await ReportType.getName(issues[i].report_type_id);
+			currentTime = new Date(issues[i].created_at);
+			issues[i].created_at = currentTime.toLocaleDateString('de-DE', options);
+
 		}
 		return view.render('adminDash.viewRoomIssues', { issues, id: issues[0].room, stats });
 	}
@@ -165,9 +167,9 @@ class IssueController {
 		issues = results.toJSON();
 
 		// Sort the results by name
-		issues.sort((a, b) => {
-			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-		});
+		// issues.sort((a, b) => {
+		// 	return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+		// });
 
 		// loop through and change ids to the actual names in the tables
 		for (let i = 0; i < issues.length; i++) {
@@ -177,7 +179,7 @@ class IssueController {
 			issues[i].type = await ReportType.getName(issues[i].report_type_id);
 		}
 
-		const stats = await this.getIssueStatistics();
+		const stats = await this.getIssueStatistics(0);
 
 		return view.render('adminDash.viewRoomIssues', { filterType, issues, stats });
 	}
@@ -187,24 +189,52 @@ class IssueController {
 	*
 	* @param {Object} Context The context object.
 	*/
-	async getIssueStatistics () {
-		// Retrieve number of issues that are pending
-		let countPending = await Report
-			.query()
-			.where('report_status_id', 1)
-			.count();
+	async getIssueStatistics (roomID) {
+		var countPending;
+		var countUnderReview;
+		var countResolved;
 
-		// Retrieve number of issues that are under review
-		let countUnderReview = await Report
-			.query()
-			.where('report_status_id', 2)
-			.count();
+		if(roomID===0) {
+			// Retrieve number of issues that are pending
+			countPending = await Report
+				.query()
+				.where('report_status_id', 1)
+				.count();
 
-		// Retrieve number of issues that are resolved
-		let countResolved = await Report
-			.query()
-			.where('report_status_id', 3)
-			.count();
+			// Retrieve number of issues that are under review
+			countUnderReview = await Report
+				.query()
+				.where('report_status_id', 2)
+				.count();
+
+			// Retrieve number of issues that are resolved
+			countResolved = await Report
+				.query()
+				.where('report_status_id', 3)
+				.count();
+		} else {
+
+			// Retrieve number of issues that are open
+			countPending = await Report
+				.query()
+				.where('room_id', roomID)
+				.where('report_status_id', 1)
+				.count();
+
+			// Retrieve number of issues that are under review
+			countUnderReview = await Report
+				.query()
+				.where('room_id', roomID)
+				.where('report_status_id', 2)
+				.count();
+
+			// Retrieve number of issues that are resolved
+			countResolved = await Report
+				.query()
+				.where('room_id', roomID)
+				.where('report_status_id', 3)
+				.count();
+		}
 
 		// Create statistic array with custom keys
 		var stats = {};
