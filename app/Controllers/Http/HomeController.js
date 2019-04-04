@@ -41,7 +41,8 @@ class HomeController {
 	*/
 	async userDashboard ({ view, auth }) {
 		const availRooms = await this.getAvailableRooms({ auth });
-		return view.render('userPages.booking', { availRooms: availRooms });
+		const freqRooms = await this.getFreqBooked({ auth });
+		return view.render('userPages.booking', { availRooms, freqRooms });
 	}
 
 	/**
@@ -235,6 +236,7 @@ class HomeController {
 	/****************************************
 				User Functions
 	****************************************/
+
 	/**
 	*
 	* Retrieve currently available rooms and returns and array of size 2 with results
@@ -244,19 +246,16 @@ class HomeController {
 	*
 	*/
 	async getAvailableRooms ({ auth }) {
-		// only loook for roosm that are open
-		let searchResults = Room
-			.query()
-			.where('state', 1)
-			.clone();
-
 		let towerOrder;
 		// If the tower is West then set the order to descending, else ascending
 		towerOrder = (await auth.user.getUserTower() === 'West') ? 'desc' : 'asc';
 
+		// look for rooms that are open
 		// order all rooms in the database by closest to the user's floor and tower
 		// order by ascending seats number and fetch results
-		searchResults = await searchResults
+		let searchResults = await Room
+			.query()
+			.where('state', 1)
 			.orderByRaw('ABS(floor-' + auth.user.floor + ') ASC')
 			.orderBy('tower', towerOrder)
 			.orderBy('seats', 'asc')
@@ -264,6 +263,29 @@ class HomeController {
 			.fetch();
 
 		return searchResults.toJSON();
+	}
+
+	/**
+	*
+	* Retrieve the user's frew booked rooms and returns and array of size 2 with results and return results
+	*
+	* @param {view}
+	*
+	*/
+	async getFreqBooked ({ auth }) {
+		// get the top 2 freq booked rooms that are available and join with the rooms table to find the room name
+		let searchResults = await Booking
+			.query()
+			.where('user_id', auth.user.id)
+			.select('*')
+			.count('room_id as total')
+			.groupBy('room_id')
+			.orderBy('total', 'desc')
+			.limit(2)
+			.innerJoin('rooms', 'bookings.room_id', 'rooms.id');
+
+		console.log(searchResults);
+		return searchResults;
 	}
 }
 
