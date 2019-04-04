@@ -212,7 +212,12 @@
 							@each(room in availRooms)
 								<div class='row'>
 									<div class='col'>
-										@!component('components.bookingCard', room=room)
+										@component('components.smallCard', room=room)
+											@slot('body')
+												<div>Date Here</div>
+												<div>Time Here</div>
+											@endslot
+										@endcomponent
 									</div>
 								</div>
 							@endeach
@@ -224,12 +229,12 @@
 						@slot('body')
 							<div class='row'>
 								<div class='col'>
-									@!component('components.bookingCard')
+									@!component('components.smallCard')
 								</div>
 							</div>
 							<div class='row'>
 									<div class='col'>
-										@!component('components.bookingCard')
+										@!component('components.smallCard')
 									</div>
 								</div>
 						@endslot
