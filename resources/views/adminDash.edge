@@ -8,6 +8,8 @@
 @endsection
 
 @section('content')
+{{ bookings['months'] }}
+{{ bookings['numberOfBookings'] }}
     <div class='row'>
         <div class='col-2' style='margin:10px'>
             <div class='row text-center' > 
@@ -175,25 +177,19 @@
             var roomStatuses = new Chart(ctx, {
                 type: 'line',
                 data: {
+                    labels: {{ bookings['months'] }},
                     datasets: [{
-                        data: [ 10, 20 ],
-                        backgroundColor: ['#004680', '#2C666E', '#90DDF0'],
+                        data: {{ bookings['numberOfBookings'] }},
                     }],
                 },
                 options: {
                     maintainAspectRatio: false,
                     scales: {
-                        xAxes: [{
-                            type: 'time',
-                            time: {
-                                unit: 'month'
-                            }
-                        }],
                         yAxes: [{
                             ticks: {
                                 beginAtZero: true,
                             }
-                        }]
+                        }],
                     },
                     legend: {
                         display: false
@@ -235,7 +231,7 @@
                 legend: {
                     display: true
                 },
-                cutoutPercentage: 55
+                cutoutPercentage: 80
             },
         });
     </script>
@@ -273,7 +269,7 @@
                 legend: {
                     display: true
                 },
-                cutoutPercentage: 55
+                cutoutPercentage: 80
             },
         });
     </script>

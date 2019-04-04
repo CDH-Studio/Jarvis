@@ -5,6 +5,8 @@ const Report = use('App/Models/Report');
 const Booking = use('App/Models/Booking');
 const Review = use('App/Models/Review');
 
+var moment = require('moment');
+
 class HomeController {
 	/**
 	*
@@ -51,16 +53,17 @@ class HomeController {
 	*
 	*/
 	async adminDashboard ({ view }) {
-		const roomStatusStats = await this.getRoomStatusStats();
-		const roomIssueStats = await this.getRoomIssueStats();
 		const numberOfUsers = await this.getNumberofUsers();
 		const roomStats = await this.getRoomStats();
+		const issueStats = await this.getIssueStats();
+		const bookings = await this.getBookings();
+		const roomStatusStats = await this.getRoomStatusStats();
+		const roomIssueStats = await this.getRoomIssueStats();
 		const topFiveRooms = await this.getRoomPopularity();
 		const highestRatedRooms = await this.getRoomRatings();
-		const issueStats = await this.getIssueStats();
 
-		console.log(issueStats);
-		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers, roomStats: roomStats, issueStats: issueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
+		console.log(bookings);
+		return view.render('adminDash', { numberOfUsers: numberOfUsers, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
 	}
 
 	/**
@@ -117,29 +120,49 @@ class HomeController {
 		const results = await Report.all();
 		const issues = results.toJSON();
 
-		var moment = require('moment');
-		moment().format();
-
-		// Retrieve number of active rooms
-		let countCurrentMonthIssues = await Report
-			.query()
-			.where('created_at', moment().month())
-			.count();
-
-		countCurrentMonthIssues = countCurrentMonthIssues[0]['count(*)'];
-
-		let countPreviousMonthIssues = await Report
-			.query()
-			.where('created_at', moment().subtract(1, 'months'))
-			.count();
-
-		countPreviousMonthIssues = countPreviousMonthIssues[0]['count(*)'];
-
-		console.log(countCurrentMonthIssues);
-		console.log(countPreviousMonthIssues);
-
 		// return the number of users
 		return issues.length;
+	}
+
+	/**
+	*
+	* Retrieve the bookings every months for the past six months.
+	*
+	* @param {view}
+	*
+	*/
+	async getBookings () {
+		// initialize the moment.js object to act as our date
+		const date = moment();
+
+		// initialize two arrays- the first for the labels of the chart, and the second the data
+		const numberOfBookings = [];
+		const months = [];
+
+		// queries the bookings table to retrieve the bookings for the past 6 months
+		for (let i = 0; i < 6; i++) {
+			let bookings = await Booking
+				.query()
+				.whereRaw("strftime('%Y-%m', bookings.'from') < ?", [date.format('YYYY-MM')]) // eslint-disable-line
+				.count();
+
+			numberOfBookings.push(bookings[0]['count(*)']);
+			months.push(date.format('MMM YYYY'));
+
+			date.subtract(1, 'M');
+		}
+
+		// reverses the order of the array so the months are in ascending order
+		numberOfBookings.reverse();
+		months.reverse();
+
+		// store the arrays in a dictionary
+		var bookingsData = {};
+		bookingsData['numberOfBookings'] = numberOfBookings;
+		bookingsData['months'] = months;
+
+		// return the number of data
+		return bookingsData;
 	}
 
 	/**
