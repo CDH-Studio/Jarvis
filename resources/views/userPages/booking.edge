@@ -206,23 +206,20 @@
 		</div>
 		<div class='col-xl-6 col-xxl-8' >
 			<div class='row'>
-				<div id='myBookings' class='col-xl-12 col-xxl-6'>
+				<div id='available' class='col-xl-12 col-xxl-6'>
 					@component('components.generalCard', title='Currently Available')
 						@slot('body')
-							<div class='row'>
-								<div class='col'>
-									@!component('components.bookingCard')
-								</div>
-							</div>
-							<div class='row'>
+							@each(room in availRooms)
+								<div class='row'>
 									<div class='col'>
-										@!component('components.bookingCard')
+										@!component('components.bookingCard', room=room)
 									</div>
 								</div>
+							@endeach
 						@endslot
 					@endcomponent
 				</div>
-				<div id='available' class='col-lg-12 col-xxl-6'>
+				<div id='frequentlyBooked' class='col-lg-12 col-xxl-6'>
 					@component('components.generalCard', title='Frequently Booked')
 						@slot('body')
 							<div class='row'>
@@ -242,7 +239,7 @@
 			<div class='row'>
 				<div class='col'>
 					<div class='row mt-4'>
-						<div id='frequentlyBooked' class='col'>
+						<div id='myBookings' class='col'>
 							@component('components.generalCard', title='Upcomming Bookings')
 								@slot('body')
 									<div class='table table-responsive'>

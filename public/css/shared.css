@@ -159,7 +159,12 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Card hightlights */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-
+.border-left-primary{
+    border-left: 0.25rem solid #145f9c !important;
+}
+.border-right-primary{
+    border-right: 0.25rem solid #145f9c !important;
+}
 .card-highlight-primary{
     background: rgb(88,136,189);
     background: linear-gradient(90deg, rgba(88,136,189,1) 0%, rgba(15,172,243,1) 100%);
