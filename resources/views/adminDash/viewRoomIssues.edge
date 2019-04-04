@@ -10,7 +10,11 @@ View {{upperFirst(filterType)}} Room Issues
 
 
 @section('content')
-    @!component('components.pageHeader', title=upperFirst(filterType)+ ' Room Issues')
+    @if(roomName === undefined || roomName === null)
+        @!component('components.pageHeader', title=upperFirst(filterType)+ ' Issues')
+    @else
+        @!component('components.pageHeader', title=roomName, subtitle=upperFirst(filterType)+' Issues')
+    @endif
     <div>
         {{--  room Reports/Issues Stats  --}}
         <div class='row text-center' style='padding-left: 15px;'> 

@@ -82,10 +82,11 @@ class IssueController {
 		var issues;
 		var currentTime;
 		var issuefilterType;
+		var roomName;
 
 
 		//covert status string to int
-		if (issuefilterType === 'all') {
+		if (params.issueStatus === 'all') {
 			issuefilterType=0;
 		} else if (params.issueStatus === 'open') {
 			issuefilterType= 1;
@@ -114,6 +115,10 @@ class IssueController {
 			if (isNaN(params.roomID)) { 
 				return response.redirect('/');
 			}
+
+			//get room name
+			const roomResult= await Room.find(params.roomID);
+			roomName = roomResult.name;
 
 			if(issuefilterType>0 && issuefilterType<4){
 				results = await Report
@@ -150,7 +155,7 @@ class IssueController {
 
 		}
 
-		return view.render('adminDash.viewRoomIssues', {roomID: params.roomID, issues, stats });
+		return view.render('adminDash.viewRoomIssues', {roomID: params.roomID, roomName, issues, stats , filterType:params.issueStatus});
 	}
 
 
