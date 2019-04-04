@@ -242,12 +242,12 @@
 									<div class='col'>
 										@component('components.smallCard', room=room)
 											@slot('body')
-												<div>
-													Rating Here
+												<div class='color-primary mb-2'>
+													@!component('components.stars', rating= room.averageRating)
 												</div>
 												<div>
-													<i class="fas fa-chair color-primary"></i> {{room.seats}}
-													<i class="fas fa-users color-primary ml-4"></i> {{room.capacity}}
+													<i class="fas fa-chair color mr-1"></i> {{room.seats}}
+													<i class="fas fa-users color ml-4 mr-1"></i> {{room.capacity}}
 												</div>
 											@endslot
 										@endcomponent
@@ -296,7 +296,7 @@
 		</div>
 
 		{{--  Chatbot  --}}
-		<div class='row'>
+		<div class='row' hidden>
 			<i class='open-button fas fa-robot fa-2x' onclick='openChat()'></i>
 			<div class='chat-popup' id='chat-popup'>
 				<form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>
