@@ -8,8 +8,6 @@
 @endsection
 
 @section('content')
-{{ bookings['months'] }}
-{{ bookings['numberOfBookings'] }}
     <div class='row'>
         <div class='col-2' style='margin:10px'>
             <div class='row text-center' > 
@@ -177,9 +175,11 @@
             var roomStatuses = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: {{ bookings['months'] }},
+                    labels: [ "{{ bookings['months'][0] }}", "{{ bookings['months'][1] }}", "{{ bookings['months'][2] }}", "{{ bookings['months'][3] }}", "{{ bookings['months'][4] }}", "{{ bookings['months'][5] }}" ],
                     datasets: [{
-                        data: {{ bookings['numberOfBookings'] }},
+                        data: [ {{ bookings['numberOfBookings'][0] }}, {{ bookings['numberOfBookings'][1] }}, {{ bookings['numberOfBookings'][2] }}, {{ bookings['numberOfBookings'][3] }}, {{ bookings['numberOfBookings'][4] }}, {{ bookings['numberOfBookings'][5] }} ],
+                        backgroundColor: 'rgba(0, 70, 128, 0.2)',                        
+                        borderColor: 'rgba(0, 70, 128, 0.5)',
                     }],
                 },
                 options: {
@@ -196,7 +196,7 @@
                     },
                 },
             });
-        </script>
+    </script>
 
     {{--  Scrip tag responsible for the Room Statuses chart  --}}
     <script>
