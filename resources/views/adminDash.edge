@@ -117,37 +117,36 @@
             @component('components.generalCard', title='Highest Rated')
                 @slot('body')
                     @each(room in highestRatedRooms) 
-                        <div class='row'>
+                        @component('components.smallCard', room=room)
+                            @slot('body')
                             <div>
-                                <h2 class='col no-margin'><b>{{ room['room'].name }}</b></h2>
-                            </div>
-                            <div>
-                                @if(room['averageRating'] == 1)
+                                @if(room.avgRating == 1)
                                     <div>
                                         <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
                                     </div> 
-                                @elseif(room['averageRating'] == 2)
+                                @elseif(room.avgRating == 2)
                                     <div>
                                         <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
                                     </div> 
-                                @elseif(room['averageRating'] == 3)
+                                @elseif(room.avgRating == 3)
                                     <div>
                                         <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
                                     </div> 
-                                @elseif(room['averageRating'] == 4)
+                                @elseif(room.avgRating == 4)
                                     <div>
                                         <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
                                     </div> 
-                                @elseif(room['averageRating'] == 5) 
+                                @elseif(room.avgRating == 5) 
                                     <div>
                                         <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> 
                                     </div> 
                                 @endif
                             </div>
                             <div>
-                                <h6 class='col no-margin'><b> Number of Reviews: {{ room['numberOfReviews'] }}</b></h2>
+                                <h6 class='col no-margin'><b> Number of Reviews: {{ room.totalReviews }}</b></h2>
                             </div>
-                        </div>
+                            @endslot
+                        @endcomponent
                     @endeach
                 @endslot
             @endcomponent

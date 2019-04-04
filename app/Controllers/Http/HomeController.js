@@ -283,25 +283,15 @@ class HomeController {
 		// Retrieves the top five highest rated rooms
 		let ratings = await Review
 			.query()
-			.select('room_id')
+			.select('*')
 			.avg('rating as avgRating')
 			.orderBy('avgRating', 'desc')
 			.count('review as totalReviews')
 			.groupBy('room_id')
-			.limit(5);
+			.limit(5)
+			.innerJoin('rooms', 'reviews.room_id', 'rooms.id');
 
-		var topFiveRooms = [];
-
-		// populate the rooms array with the top five room objects
-		for (var i = 0; i < ratings.length; i++) {
-			var rooms = {};
-			rooms['room'] = await Room.findBy('id', ratings[i]['room_id']);
-			rooms['averageRating'] = ratings[i]['avgRating'];
-			rooms['numberOfReviews'] = ratings[i]['totalReviews'];
-			topFiveRooms.push(rooms);
-		}
-
-		return topFiveRooms;
+		return ratings;
 	}
 
 	/****************************************
