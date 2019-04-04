@@ -67,11 +67,10 @@ Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['au
 
 Route.get('/roomBookings/:id', 'BookingController.getRoomBookings').as('roomBookings').middleware(['auth']);
 
-Route.get('/room/:roomID/issues/:issueStatus', 'IssueController.getRoomIssues').as('showIssue').middleware(['auth']);
-Route.get('/issue/:id', 'IssueController.getRoomIssues').as('showIssue').middleware(['auth']);
+Route.get('/room/:roomID/issues/:issueStatus', 'IssueController.getRoomIssues').as('showIssue').middleware(['isAdmin']);
+Route.get('/issue/:id', 'IssueController.getRoomIssues').as('showIssue').middleware(['isAdmin']);
 Route.get('/issue/:id/edit', 'IssueController.editIssue').as('editIssue').middleware(['isAdmin']);
-Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['auth']).validator('EditIssue');
-Route.get('/issues/:issueStatus', 'IssueController.renderIssuePage').as('roomIssues').middleware(['isAdmin']);
+Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['isAdmin']).validator('EditIssue');
 
 // user
 Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
