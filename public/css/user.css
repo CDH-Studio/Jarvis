@@ -62,6 +62,19 @@
     animation: fadeIn 1s;
 }
 
+.spinner-border {
+    vertical-align: middle;
+    margin: auto;
+}
+
+.empty {
+    margin: auto;
+}
+
+.fa-ghost {
+    animation: fadeIn 1s;
+}
+
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* CustomFlex */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
