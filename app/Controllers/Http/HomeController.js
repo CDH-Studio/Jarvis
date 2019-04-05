@@ -337,7 +337,7 @@ class HomeController {
 			.where('user_id', auth.user.id)
 			.whereRaw("bookings.'from' >= date('now')") // eslint-disable-line
 			.select('*')
-			.orderBy('from', 'desc')
+			.orderBy('from', 'asc')
 			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
 			.limit(3)
 			.fetch();
