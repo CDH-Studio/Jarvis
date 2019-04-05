@@ -261,8 +261,7 @@ class BookingController {
 	 */
 	async createEvent (eventInfo, booking, user, room) {
 		try {
-			console.log(room);
-			await Axios.post('http://142.53.209.100:8080/booking', {
+			const res = await Axios.post('http://142.53.209.100:8080/booking', {
 				room: room.calendar,
 				start: eventInfo.start.dateTime,
 				end: eventInfo.end.dateTime,
@@ -271,6 +270,8 @@ class BookingController {
 				floor: room.floor
 				// attendees: ['yunwei.li@canada.ca']
 			});
+
+			console.log(res);
 
 			booking.from = eventInfo.start.dateTime;
 			booking.to = eventInfo.end.dateTime;
