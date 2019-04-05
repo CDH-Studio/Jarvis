@@ -138,9 +138,6 @@
     margin: 0 auto;
 }
 
-.modal-header{
-    padding: 10px;
-}
 
 .modal-footer{
     padding: 10px;
@@ -563,11 +560,10 @@
 
 .room-details-image{
     /* min-width: 505px; */
-    min-height: 336px;
-    max-height: 336px;
+    max-width: 305px;
     max-width: 505px;
     width:100%;
-    height:100%;
+    height:auto;
 
 }
 
