@@ -520,6 +520,10 @@
     background-color: #FFFFFF;
 }
 
+.room-details-card .fa-star{
+    color: #FFD700;
+}
+
 .room-details-card-title{
     border-top-right-radius: 0.35rem;
     border-top-left-radius: 0.35rem;

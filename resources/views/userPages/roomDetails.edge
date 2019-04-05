@@ -19,7 +19,7 @@
     <div class="row">
     
         <div class='col-8'>
-            <div class='card room-details-card shadow'>
+            <div class='card room-details-card shadow mb-4'>
                 <div class='card-header py-3'>
                     <div class='d-flex flex-wrap'>
                         <div class='' style='padding-top:6px;'>
@@ -48,17 +48,6 @@
                                     <span class="text">Edit Room</span>
                                 </button>   
                             @else
-                                @if(room.state != 1)
-                                    <button disabled class="btn btn-primary btn-icon-split" data-toggle='modal' data-target='#confirmModal'>
-                                        <span class="icon text-white-50"><i class="fas fa-book"></i></span>
-                                        <span class="text">Book Room</span>
-                                    </button>
-                                @else
-                                    <button class="btn btn-primary btn-icon-split" data-toggle='modal' data-target='#confirmModal'>
-                                        <span class="icon text-white-50"><i class="fas fa-book"></i></span>
-                                        <span class="text">Book Room</span>
-                                    </button>       
-                                @endif
                                 @if(hasReview)
                                     <button class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
                                         <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
@@ -85,23 +74,40 @@
                             @endif                     
                         </div>
                         <div class="col-7">
+                            <b>{{ room.fullName }}</b>
+                            <div class="">
+                                @!component('components/stars', rating=room.rating)
+                            </div>
 
-                                <div class="mb-3"><b>{{ room.fullName }}</b></div>
-                                <hr>
-                                <div class="mt-2 mb-2"><b><i class="fas fa-map-marker-alt fa-fw"></i></b> {{ room.floor }}  {{ room.tower }}</div>
-                                <div class="mt-2 mb-3"><b><i class="fas fa-phone fa-fw"></i></b> {{ room.telephone }}</div>
-                                <hr>
-                                <div class="mt-2 mb-2"><b>Table Seats:</b> {{ room.seats }} <b>Capacity:</b> {{ room.capacity }}</div>
-                                <div class="mt-2 mb-2"><b>Equipment:</b> {{ room.extraEquipment }}</div>
-                                @if(room.comment === undefined || room.comment === null)
-                                    <div class="mt-2 mb-2"><b>Comments:</b> {{ room.comment }}</div>
-                                @endif
-
+                            <div class="mt-2 mb-2">
+                                <b><i class="fas fa-map-marker-alt fa-fw"></i></b> {{ room.floor }}  {{ room.tower }}
+                            </div>
+                            <div class="mt-2 mb-3">
+                                <b><i class="fas fa-phone fa-fw"></i></b> {{ room.telephone }}
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-4"><b>Table Seats:</b> {{ room.seats }}</div>
+                                <div class="col-6"> <b>Capacity:</b> {{ room.capacity }}</div>
+                            </div>
+                            <div class="mt-2 mb-2"><b>Equipment:</b> {{ room.extraEquipment }}</div>
+                        </div>
+                        <div class="col-12">
+                            @if(room.comment === undefined || room.comment === null)
+                                <div class="mt-2 mb-2"><b>Comments:</b> {{ room.comment }}</div>
+                            @endif
                         </div>
                     </div>
-                    {{--  Checkboxes  --}}
-                    <div class='row' style='margin:20px'>
-                        <div class='col room-details-spec'>
+
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Key Features</h6>
+                </div>
+                <div class="card-body">
+                                            <div class='col room-details-spec'>
                             <ul>
                                 @if(room.projector == 1)
                                     <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Projector</span></li>
@@ -140,9 +146,12 @@
                                 @endif
                             </ul>
                         </div>
-                    </div> 
                 </div>
             </div>
+
+
+
+
         </div>
         
         <div class='col-4'>
