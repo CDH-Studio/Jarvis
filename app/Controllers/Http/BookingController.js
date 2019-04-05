@@ -271,11 +271,12 @@ class BookingController {
 				// attendees: ['yunwei.li@canada.ca']
 			});
 
-			console.log(res.data.eventId);
+			const eventId = res.data.eventId.UniqueId;
+			console.log(eventId);
 
 			booking.from = eventInfo.start.dateTime;
 			booking.to = eventInfo.end.dateTime;
-			booking.event_id = res.data.eventId ? res.data.eventId : '';
+			booking.event_id = eventId;
 			booking.status = 'Approved';
 			await user.bookings().save(booking);
 			await room.bookings().save(booking);
