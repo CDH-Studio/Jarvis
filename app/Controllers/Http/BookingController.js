@@ -195,10 +195,12 @@ class BookingController {
 	async cancelBooking ({ params, response, auth }) {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
-		const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
+		const room = (await Room.findBy('id', roomId)).toJSON();
+		const calendarId = room.calendar;
+		const floor = room.floor;
 		const eventId = booking.toJSON().event_id;
 
-		await this.deleteEvent(calendarId, eventId);
+		await this.deleteEvent(calendarId, eventId, floor);
 		booking.status = 'Cancelled';
 		await booking.save();
 
@@ -296,11 +298,12 @@ class BookingController {
 	* @param {String} calendarId The id of the room calendar.
 	* @param {String} eventId The id of the event to delete.
 	*/
-	async deleteEvent (calendarId, eventId) {
+	async deleteEvent (calendarId, eventId, floor) {
 		try {
 			const res = await Axios.post('http://142.53.209.100:8080/cancel', {
 				room: calendarId,
-				eventId: eventId
+				eventId: eventId,
+				floor: floor
 			});
 
 			console.log(res);
