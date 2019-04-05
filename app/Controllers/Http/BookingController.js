@@ -267,7 +267,8 @@ class BookingController {
 				start: eventInfo.start.dateTime,
 				end: eventInfo.end.dateTime,
 				subject: eventInfo.subject,
-				body: eventInfo.body.content
+				body: eventInfo.body.content,
+				floor: room.floor
 				// attendees: ['yunwei.li@canada.ca']
 			});
 
