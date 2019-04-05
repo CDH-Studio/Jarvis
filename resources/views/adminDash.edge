@@ -32,14 +32,16 @@
                 </div>
                 <div class='col'>
                     <div class='card stats-card shadow'>
-                        <div class='card-highlight-primary'></div>
+                        <div class='card-highlight-success'></div>
                         <div class='card-body'>
                             <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                                <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
+                                <i class='d-inline-flex no-padding color-success card-icon fas fa-door-open fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
                                         <h2 class='col no-margin'><b>{{ roomStats['numberOfRooms'] }}</b></h2>
-                                        <h6 >{{ roomStats['percentageOfActiveRooms'] }}% are Active</h6>
+                                        <div style='color:green; vertical-align:bottom;'>
+                                            <h6>{{ roomStats['percentageOfActiveRooms'] }}% are Active</h6>
+                                        </div>
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total Rooms</h5>
@@ -51,10 +53,10 @@
                 </div>
                 <div class='col'>
                     <div class='card stats-card shadow'>
-                        <div class='card-highlight-primary'></div>
+                        <div class='card-highlight-warning'></div>
                         <div class='card-body'>
                             <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                                <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
+                                <i class='d-inline-flex no-padding color-warning card-icon far fa-flag fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
                                         <h2 class='col no-margin'><b>{{ issueStats }}</b></h2>
@@ -144,7 +146,11 @@
                                         @endif
                                     </div>
                                     <div>
-                                        <h6 class='col no-margin'><b> Number of Reviews: {{ room.totalReviews }}</b></h2>
+                                        @if(room.totalReviews == 1)
+                                            <h6 class='col no-margin'>{{ room.totalReviews }} Review</h2>
+                                        @else
+                                            <h6 class='col no-margin'>{{ room.totalReviews }} Reviews</h2>
+                                        @endif
                                     </div>
                                     @endslot
                                 @endcomponent
