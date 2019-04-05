@@ -82,6 +82,22 @@
     background: #fff !important;
 }
 
+
+.time-form{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.time-button{
+    border-right: 1px solid;
+    border-top: 1px solid;
+    border-radius: 0px 4px 4px 0px;
+    background-color: #145f9c;
+    border-color: #145f9c;
+    color: #ffffff;
+    cursor: pointer;
+    margin: 0 !important;
+}
 /* showing invalid validator display */
 .show-invalid{
     display: block;

@@ -47,7 +47,10 @@
                                     <input name='from'  id='from' class='form-control date-form' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }'>
                                 {{--  Otherwise show a normal input  --}}
                                 @else
-                                    <input name='from' id='from' class='form-control date-form' type='time' data-role='datebox' onchange='removeErrorClass("from")'>
+                                    <div style='display: flex;'>
+                                        <input name='from' id='from' class='form-control time-form' type='time' onchange='removeErrorClass("from")'>
+                                        <button class='btn time-button' style='block;'><i class="far fa-clock"></i></button>
+                                    </div>
                                 @endif
                             </div>
                             <div class='col form-group mb-4'>
@@ -61,7 +64,10 @@
                                     <input name='to'  id='to' class='form-control date-form' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }'>
                                 {{--  Otherwise show a normal input  --}}
                                 @else
-                                    <input name='to'  id='to' class='form-control date-form' type='time' data-role='datebox' onchange='removeErrorClass("to")'>
+                                <div style='display: flex;'>
+                                    <input name='to'  id='to' class='form-control time-form' type='time' onchange='removeErrorClass("to")'>
+                                    <button class='btn time-button' style='block;'><i class="far fa-clock"></i></button>
+                                </div>
                                 @endif                  
                             </div>
                         </div>
@@ -175,19 +181,6 @@
             toTime = currentHour + 2 + ":00"
 
         }
-        $('#from').datebox({
-            mode: "timebox", 
-            defaultValue: fromTime,
-            minuteStep: "30",
-            minuteStepRound: "1"
-        });
-        $('#to').datebox({
-            mode: "timebox", 
-            defaultValue: toTime,
-            minuteStep: "30",
-            minuteStepRound: "1",
-        });
     </script>
-
 @endsection
 
