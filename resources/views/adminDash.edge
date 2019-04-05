@@ -8,90 +8,153 @@
 @endsection
 
 @section('content')
+
     <div class='row'>
-        <div class='col-2' style='margin:10px'>
-            <div class='row text-center' > 
-                <div class='col-3 card stats-card shadow no-padding'>
-                    <div class='card-highlight-primary'></div>
-                    <div class='card-body'>
-                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                            <i class='d-inline-flex no-padding color-info card-icon fas fa-user fa-2x'></i>
-                            <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
-                                <div class='row'>
-                                    <h2 class='col no-margin'><b>{{ numberOfUsers }}</b></h2>
+        <div class='col-7'>
+            <div class='row'>
+                <div class='col'>
+                    <div class='card stats-card shadow'>
+                        <div class='card-highlight-primary'></div>
+                        <div class='card-body'>
+                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                                <i class='d-inline-flex no-padding color-info card-icon fas fa-user fa-2x'></i>
+                                <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+                                    <div class='row'>
+                                        <h2 class='col no-margin'><b>{{ numberOfUsers }}</b></h2>
+                                    </div>
+                                    <div class='row'>
+                                        <h5 class='col text-grey'>Total Users</h5>
+                                    </div>
                                 </div>
-                                <div class='row'>
-                                    <h5 class='col text-grey'>Total Users</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col'>
+                    <div class='card stats-card shadow'>
+                        <div class='card-highlight-primary'></div>
+                        <div class='card-body'>
+                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                                <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
+                                <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+                                    <div class='row'>
+                                        <h2 class='col no-margin'><b>{{ roomStats['numberOfRooms'] }}</b></h2>
+                                        <h6 >{{ roomStats['percentageOfActiveRooms'] }}% are Active</h6>
+                                    </div>
+                                    <div class='row'>
+                                        <h5 class='col text-grey'>Total Rooms</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class='col'>
+                    <div class='card stats-card shadow'>
+                        <div class='card-highlight-primary'></div>
+                        <div class='card-body'>
+                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                                <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
+                                <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+                                    <div class='row'>
+                                        <h2 class='col no-margin'><b>{{ issueStats }}</b></h2>
+                                    </div>
+                                    <div class='row'>
+                                        <h5 class='col text-grey'>Total Issues</h5>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class='row text-center' > 
-                <div class='col-3 card stats-card shadow no-padding'>
-                    <div class='card-highlight-primary'></div>
-                    <div class='card-body'>
-                        <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                            <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
-                            <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
-                                <div class='row'>
-                                    <h2 class='col no-margin'><b>{{ numberOfRooms }}</b></h2>
-                                </div>
-                                <div class='row'>
-                                    <h5 class='col text-grey'>Total Rooms</h5>
-                                </div>
+            <div class='row'>
+                <div class='col' style='margin:10px'> 
+                    @component('components.generalCard', title='Bookings')
+                        @slot('body')
+                            <div class='chart-bar'>
+                                <canvas id="bookings" width="400" height="400"></canvas>
                             </div>
-                        </div>
-                    </div>
+                        @endslot
+                    @endcomponent
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col' style='margin:10px'>
+                    @component('components.generalCard', title='Most Popular')
+                        @slot('body')
+                            <div class='chart-bar'>
+                                <canvas id="roomPopularity" width="400" height="400"></canvas>
+                            </div>
+                        @endslot
+                    @endcomponent
                 </div>
             </div>
         </div>
 
-        <div class='col' style='margin:10px'> 
-            @component('components.generalCard', title='Rooms - Statuses')
-                @slot('body')
-                    <div class='chart-bar'>
-                        <canvas id="roomStatuses" width="400" height="400"></canvas>
-                    </div>
-                @endslot
-            @endcomponent
-        </div>
-    
-        <div class='col' style='margin:10px'>
-            @component('components.generalCard', title='Rooms - Issues')
-                @slot('body')
-                    <div class='chart-bar'>
-                        <canvas id="roomIssues" width="400" height="400"></canvas>
-                    </div>
-                @endslot
-            @endcomponent
-        </div>    
-    </div> 
-
-    <div class='row'>
-        <div class='col' style='margin:10px'>
-            @component('components.generalCard', title='Most Popular')
-                @slot('body')
-                    <div class='chart-bar'>
-                        <canvas id="roomPopularity" width="400" height="400"></canvas>
-                    </div>
-                @endslot
-            @endcomponent
-        </div>
-
-        <div class='col' style='margin:10px'>
-            @component('components.generalCard', title='Highest Rated')
-                @slot('body')
-                <div class='chart-bar'>
-                    <canvas id="roomRatings" width="400" height="400"></canvas>
+        <div class='col-5'>
+            <div class='row'>
+                <div class='col-6'>
+                    @component('components.generalCard', title='Room - Statuses')
+                        @slot('body')
+                            <div class='chart-bar'>
+                                <canvas id="roomStatuses" width="400" height="400"></canvas>
+                            </div>
+                        @endslot
+                    @endcomponent
                 </div>
-                @endslot
-            @endcomponent
+                <div class='col-6'>
+                    @component('components.generalCard', title='Room - Issues')
+                        @slot('body')
+                            <div class='chart-bar'>
+                                <canvas id="roomIssues" width="400" height="400"></canvas>
+                            </div>
+                        @endslot
+                    @endcomponent
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-12' style='margin:20px 0 20px 0'>
+                    @component('components.generalCard', title='Highest Rated')
+                        @slot('body')
+                            @each(room in highestRatedRooms) 
+                                @component('components.smallCard', room=room)
+                                    @slot('body')
+                                    <div>
+                                        @if(room.avgRating == 1)
+                                            <div>
+                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
+                                            </div> 
+                                        @elseif(room.avgRating == 2)
+                                            <div>
+                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
+                                            </div> 
+                                        @elseif(room.avgRating == 3)
+                                            <div>
+                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
+                                            </div> 
+                                        @elseif(room.avgRating == 4)
+                                            <div>
+                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
+                                            </div> 
+                                        @elseif(room.avgRating == 5) 
+                                            <div>
+                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> 
+                                            </div> 
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <h6 class='col no-margin'><b> Number of Reviews: {{ room.totalReviews }}</b></h2>
+                                    </div>
+                                    @endslot
+                                @endcomponent
+                            @endeach
+                        @endslot
+                    @endcomponent
+                </div>
+            </div>
         </div>
     </div>
-    
 
     @if(flashMessage('notification'))
         <script type='module'>
@@ -101,7 +164,41 @@
             });
         </script>
     @endif
+
+    {{--  Scrip tag responsible for the bookings time chart  --}}
+    <script>
+            // Set new default font family and font color to mimic Bootstrap's default styling
+            Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+            Chart.defaults.global.defaultFontColor = '#858796';
     
+            // Pie Chart Example
+            var ctx = document.getElementById("bookings");
+            var roomStatuses = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [ "{{ bookings['months'][0] }}", "{{ bookings['months'][1] }}", "{{ bookings['months'][2] }}", "{{ bookings['months'][3] }}", "{{ bookings['months'][4] }}", "{{ bookings['months'][5] }}" ],
+                    datasets: [{
+                        data: [ {{ bookings['numberOfBookings'][0] }}, {{ bookings['numberOfBookings'][1] }}, {{ bookings['numberOfBookings'][2] }}, {{ bookings['numberOfBookings'][3] }}, {{ bookings['numberOfBookings'][4] }}, {{ bookings['numberOfBookings'][5] }} ],
+                        backgroundColor: 'rgba(0, 70, 128, 0.2)',                        
+                        borderColor: 'rgba(0, 70, 128, 0.5)',
+                    }],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                            }
+                        }],
+                    },
+                    legend: {
+                        display: false
+                    },
+                },
+            });
+    </script>
+
     {{--  Scrip tag responsible for the Room Statuses chart  --}}
     <script>
         // Set new default font family and font color to mimic Bootstrap's default styling
@@ -135,7 +232,7 @@
                 legend: {
                     display: true
                 },
-                cutoutPercentage: 55
+                cutoutPercentage: 80
             },
         });
     </script>
@@ -173,7 +270,7 @@
                 legend: {
                     display: true
                 },
-                cutoutPercentage: 55
+                cutoutPercentage: 80
             },
         });
     </script>

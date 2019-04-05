@@ -5,6 +5,8 @@ const Report = use('App/Models/Report');
 const Booking = use('App/Models/Booking');
 const Review = use('App/Models/Review');
 
+var moment = require('moment');
+
 class HomeController {
 	/**
 	*
@@ -55,14 +57,16 @@ class HomeController {
 	*
 	*/
 	async adminDashboard ({ view }) {
+		const numberOfUsers = await this.getNumberofUsers();
+		const roomStats = await this.getRoomStats();
+		const issueStats = await this.getIssueStats();
+		const bookings = await this.getBookings();
 		const roomStatusStats = await this.getRoomStatusStats();
 		const roomIssueStats = await this.getRoomIssueStats();
-		const numberOfUsers = await this.getNumberofUsers();
-		const numberOfRooms = await this.getNumberofRooms();
 		const topFiveRooms = await this.getRoomPopularity();
 		const highestRatedRooms = await this.getRoomRatings();
 
-		return view.render('adminDash', { roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, numberOfUsers: numberOfUsers, numberOfRooms: numberOfRooms, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
+		return view.render('adminDash', { numberOfUsers: numberOfUsers, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
 	}
 
 	/****************************************
@@ -87,18 +91,85 @@ class HomeController {
 
 	/**
 	*
-	* Retrieve the number of users using the application.
+	* Retrieve the number of rooms in the database.
 	*
 	* @param {view}
 	*
 	*/
-	async getNumberofRooms () {
+	async getRoomStats () {
 		// retrieves all the users form the database
 		const results = await Room.all();
 		const rooms = results.toJSON();
 
+		// Retrieve number of active rooms
+		let countActive = await Room
+			.query()
+			.where('state', 1)
+			.count();
+
+		var stats = {};
+		stats['numberOfRooms'] = rooms.length;
+		stats['percentageOfActiveRooms'] = Math.round((countActive[0]['count(*)'] / rooms.length) * 100);
+
 		// return the number of users
-		return rooms.length;
+		return stats;
+	}
+
+	/**
+	*
+	* Retrieve the number of rooms in the database.
+	*
+	* @param {view}
+	*
+	*/
+	async getIssueStats () {
+		// retrieves all the users form the database
+		const results = await Report.all();
+		const issues = results.toJSON();
+
+		// return the number of users
+		return issues.length;
+	}
+
+	/**
+	*
+	* Retrieve the bookings every months for the past six months.
+	*
+	* @param {view}
+	*
+	*/
+	async getBookings () {
+		// initialize the moment.js object to act as our date
+		const date = moment();
+
+		// initialize two arrays- the first for the labels of the chart, and the second the data
+		const numberOfBookings = [];
+		const months = [];
+
+		// queries the bookings table to retrieve the bookings for the past 6 months
+		for (let i = 0; i < 6; i++) {
+			let bookings = await Booking
+				.query()
+				.whereRaw("strftime('%Y-%m', bookings.'from') < ?", [date.format('YYYY-MM')]) // eslint-disable-line
+				.count();
+
+			numberOfBookings.push(bookings[0]['count(*)']);
+			months.push(date.format('MMM YYYY'));
+
+			date.subtract(1, 'M');
+		}
+
+		// reverses the order of the array so the months are in ascending order
+		numberOfBookings.reverse();
+		months.reverse();
+
+		// store the arrays in a dictionary
+		var bookingsData = {};
+		bookingsData['numberOfBookings'] = numberOfBookings;
+		bookingsData['months'] = months;
+
+		// return the number of data
+		return bookingsData;
 	}
 
 	/**
@@ -215,24 +286,15 @@ class HomeController {
 		// Retrieves the top five highest rated rooms
 		let ratings = await Review
 			.query()
-			.select('room_id')
+			.select('*')
 			.avg('rating as avgRating')
 			.orderBy('avgRating', 'desc')
+			.count('review as totalReviews')
 			.groupBy('room_id')
-			.limit(5);
+			.limit(5)
+			.innerJoin('rooms', 'reviews.room_id', 'rooms.id');
 
-		var topFiveRooms = [];
-
-		// populate the rooms array with the top five room objects
-		for (var i = 0; i < ratings.length; i++) {
-			var rooms = {};
-			rooms['room'] = await Room.findBy('id', ratings[i]['room_id']);
-			rooms['averageRating'] = ratings[i]['avgRating'];
-
-			topFiveRooms.push(rooms);
-		}
-
-		return topFiveRooms;
+		return ratings;
 	}
 
 	/****************************************
