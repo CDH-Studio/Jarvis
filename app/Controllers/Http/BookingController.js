@@ -297,22 +297,15 @@ class BookingController {
 	* @param {String} eventId The id of the event to delete.
 	*/
 	async deleteEvent (calendarId, eventId) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
+		try {
+			const res = await Axios.post('http://142.53.209.100:8080/cancel', {
+				room: calendarId,
+				eventId: eventId
 			});
 
-			try {
-				await client
-					.api(`/me/calendars/${calendarId}/events/${eventId}`)
-					.delete();
-			} catch (err) {
-				console.log(err);
-			}
+			console.log(res);
+		} catch (err) {
+			console.log(err);
 		}
 	}
 }
