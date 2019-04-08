@@ -21,6 +21,10 @@
                 @if($slot.body)
                     @!yield($slot.body)
                 @endif
+                @if(datetime)
+                    <div>{{datetime.date}}</div>
+                    <div>{{datetime.time}}</div>
+                @endif
             </div>
         </div>
     </div>

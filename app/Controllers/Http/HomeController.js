@@ -367,6 +367,9 @@ class HomeController {
 		const date = moment().format('YYYY-MM-DD');
 		const from = moment().startOf('h').format('HH:mm');
 		const to = moment().startOf('h').add(2, 'h').format('HH:mm');
+		const formattedDate = moment().format('dddd, MMMM DD, YYYY');
+		const formattedFrom = moment().startOf('h').format('HH:mm A');
+		const formattedTo = moment().startOf('h').add(2, 'h').format('HH:mm A');
 
 		const code = random(4);
 		const checkRoomAvailability = async () => {
@@ -374,7 +377,7 @@ class HomeController {
 			await asyncForEach(rooms, async (item) => {
 				if (numberOfRooms !== 0 && await this.getRoomAvailability(date, from, to, item.calendar)) {
 					Event.fire('send.room', {
-						card: view.render('components.smallCard', { room: item }),
+						card: view.render('components.smallCard', { room: item, datetime: { date: formattedDate, time: formattedFrom + ' - ' + formattedTo } }),
 						code: code
 					});
 					numberOfRooms--;
