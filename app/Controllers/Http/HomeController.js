@@ -44,8 +44,10 @@ class HomeController {
 	async userDashboard ({ view, auth }) {
 		const availRooms = await this.getAvailableRooms({ auth });
 		const freqRooms = await this.getFreqBooked({ auth });
+		const upcomming = await this.getUpcomming({ auth });
+		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
-		return view.render('userPages.booking', { availRooms, freqRooms, fromTime: searchValues.fromTime, toTime: searchValues.toTime, dropdownSelection: searchValues.dropdownSelection });
+		return view.render('userPages.booking', { availRooms, freqRooms, upcomming, userId, fromTime: searchValues.fromTime, toTime: searchValues.toTime, dropdownSelection: searchValues.dropdownSelection });
 	}
 
 	/**
@@ -369,14 +371,19 @@ class HomeController {
 			.count('room_id as total')
 			.groupBy('room_id')
 			.orderBy('total', 'desc')
-			.limit(2)
-			.innerJoin('rooms', 'bookings.room_id', 'rooms.id');
+			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
+			.limit(2);
 
 		// set the average rating for the rooms
 		for (let i = 0; i < searchResults.length; i++) {
 			searchResults[i].averageRating = await this.getAverageRating(searchResults[i].id);
 		}
-		return searchResults;
+
+		if (searchResults <= 0) {
+			return null;
+		} else {
+			return searchResults;
+		}
 	}
 
 	/**
@@ -437,6 +444,80 @@ class HomeController {
 		}
 
 		return ({ fromTime, toTime, dropdownSelection });
+	}
+	/**
+	*
+	* Render Search Room Page and pass the current time for autofill purposes
+	* Retrieve the user's frew booked rooms and returns and array of size 2 with results and return results
+	*
+	* @param {view}
+	*
+	*/
+	async getUpcomming ({ auth }) {
+		// get the next 3 upcomming bookings
+		let searchResults = await Booking
+			.query()
+			.where('user_id', auth.user.id)
+			.whereRaw("bookings.'from' >= date('now')") // eslint-disable-line
+			.select('*')
+			.orderBy('from', 'asc')
+			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
+			.limit(3)
+			.fetch();
+		// Converting date formats
+		searchResults = searchResults.toJSON();
+		const bookings = await this.populateBookings(searchResults);
+
+		return bookings;
+	}
+
+	/**
+	 * Populate bookings from booking query results.
+	 *
+	 * @param {Object} results Results from bookings query.
+	 *
+	 * @returns {Object} The access token.
+	 *
+	 */
+	async populateBookings (results) {
+		const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+		async function asyncMap (arr, callback) {
+			let arr2 = [];
+
+			for (let i = 0; i < arr.length; i++) {
+				arr2.push(await callback(arr[i], i, arr));
+			}
+
+			return arr2;
+		}
+
+		let bookings = [];
+		const populate = async () => {
+			bookings = await asyncMap(results, async (result) => {
+				const booking = {};
+
+				const from = new Date(result.from);
+				const to = new Date(result.to);
+				booking.subject = result.subject;
+				booking.status = result.status;
+				booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
+				booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+				booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
+				booking.roomId = result.room_id;
+				booking.id = result.id;
+				const userInfo = (await User.findBy('id', result.user_id)).toJSON();
+				booking.userName = userInfo.firstname + ' ' + userInfo.lastname;
+				booking.userId = userInfo.id;
+
+				return booking;
+			});
+		};
+
+		await populate();
+
+		return bookings;
 	}
 }
 

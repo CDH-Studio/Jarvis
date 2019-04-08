@@ -242,23 +242,33 @@
 				<div id='frequentlyBooked' class='col-lg-12 col-xxl-6'>
 					@component('components.generalCard', title='Frequently Booked')
 						@slot('body')
-							@each(room in freqRooms)
-								<div class='row'>
-									<div class='col'>
-										@component('components.smallCard', room=room)
-											@slot('body')
-												<div class='color-primary mb-2'>
-													@!component('components.stars', rating= room.averageRating)
-												</div>
-												<div>
-													<i class="fas fa-chair color mr-1"></i> {{room.seats}}
-													<i class="fas fa-users color ml-4 mr-1"></i> {{room.capacity}}
-												</div>
-											@endslot
-										@endcomponent
+							{{--  if the user have not booked anythings display message, else display the freq booked  --}}
+							@if(!freqRooms)
+								<div class="d-flex flex-wrap justify-content-center" style='height:244px;'>
+									<div class="d-flex flex-column justify-content-around">
+										<i class="fas fa-ghost fa-8x text-muted wrapper-center"></i>
+										<h3 class="text-muted no-margin">No Frequently Booked Rooms</h3>
 									</div>
 								</div>
-							@endeach
+							@else
+								@each(room in freqRooms)
+									<div class='row'>
+										<div class='col'>
+											@component('components.smallCard', room=room)
+												@slot('body')
+													<div class='mb-2'>
+														@!component('components.stars', rating= room.averageRating)
+													</div>
+													<div>
+														<i class="fas fa-chair spec-no mr-1"></i> {{room.seats}}
+														<i class="fas fa-users spec-no ml-4 mr-1"></i> {{room.capacity}}
+													</div>
+												@endslot
+											@endcomponent
+										</div>
+									</div>
+								@endeach
+							@endif
 						@endslot
 					@endcomponent
 				</div>
@@ -268,30 +278,45 @@
 					<div class='row mt-4'>
 						<div id='myBookings' class='col'>
 							@component('components.generalCard', title='Upcomming Bookings')
+								@slot('titleRight')
+									<a class="color-primary"  href='{{ route('viewBookings',{id: userId}) }}' target='_blank'>
+										<i class="fas fa-external-link-alt"></i>
+									</a>
+								@endslot
 								@slot('body')
-									<div class='table table-responsive'>
-										<table id='bookNowTable' class='table table-hover' style='width:100%;'>
-											<thead>
-												<tr>
-													<th scope='col' class='text-center' style='width:10%'>Name</th>
-													<th scope='col' class='text-center' style='width:10%'>Room</th>
-													<th scope='col' class='text-center' style='width:10%'>Date</th>
-													<th scope='col' class='text-center' style='width:10%'>Time</th>
-												</tr>
-											</thead>
-											{{--  Loops through the rooms array and displays every room's content  --}}
-											<tbody>
-												@each(room in rooms) 
-													<tr class='table-light row-hover' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
-														<td class='text-center'>{{ room.name }}</td>
-														<td class='text-center'>{{ room.floor }}</td>
-														<td class='text-center'>{{ room.tower }} </td>
-														<td class='text-center'>{{ room.capacity }}</td> 
+									{{-- display message if there are no upcomming bookings --}}
+									@if(!freqRooms)
+										<div class="d-flex flex-wrap justify-content-center">
+											<div class="d-flex flex-column justify-content-around">
+												<i class="fas fa-book fa-8x text-muted wrapper-center"></i>
+												<h3 class="text-muted no-margin">No Bookings Found</h3>
+											</div>
+										</div>
+									@else
+										<div class='table table-responsive'>
+											<table id='bookNowTable' class='table' style='width:100%;'>
+												<thead>
+													<tr>
+														<th scope='col' class='text-center' style='width:10%'>Room</th>
+														<th scope='col' class='text-center' style='width:10%'>Name</th>
+														<th scope='col' class='text-center' style='width:10%'>Date</th>
+														<th scope='col' class='text-center' style='width:10%'>Time</th>
 													</tr>
-												@endeach
-											</tbody>
-										</table>
-									</div>
+												</thead>
+												{{--  Loops through the rooms array and displays every room's content  --}}
+												<tbody>
+													@each(room in upcomming) 
+														<tr class='table-light'>
+															<td class='text-center'><a href='{{ route('showRoom', {id: ""+room.roomId}) }}'>{{ room.room }}</a></td>
+															<td class='text-center'>{{ room.subject }}</td>
+															<td class='text-center'>{{ room.date }} </td>
+															<td class='text-center'>{{ room.time }}</td> 
+														</tr>
+													@endeach
+												</tbody>
+											</table>
+										</div>
+									@endif
 								@endslot
 							@endcomponent
 						</div>
