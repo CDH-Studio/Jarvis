@@ -55,7 +55,7 @@ class HomeController {
 	*
 	*/
 	async adminDashboard ({ view }) {
-		const numberOfUsers = await this.getNumberofUsers();
+		const userStats = await this.getUserStats();
 		const roomStats = await this.getRoomStats();
 		const issueStats = await this.getIssueStats();
 		const bookings = await this.getBookings();
@@ -64,7 +64,7 @@ class HomeController {
 		const topFiveRooms = await this.getRoomPopularity();
 		const highestRatedRooms = await this.getRoomRatings();
 
-		return view.render('adminDash', { numberOfUsers: numberOfUsers, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
+		return view.render('adminDash', { userStats: userStats, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
 	}
 
 	/****************************************
@@ -78,13 +78,38 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getNumberofUsers () {
+	async getUserStats () {
 		// retrieves all the users form the database
 		const results = await User.all();
-		const users = results.toJSON();
+		const allUsers = results.toJSON();
 
-		// return the number of users
-		return users.length;
+		// initialize the moment.js object to act as our date
+		const date = moment();
+
+		// queries the users table to retrieve the users for the current and previous month
+		let users = await User
+			.query()
+			.whereRaw("strftime('%Y-%m', created_at) = ?", [date.format('YYYY-MM')]) // eslint-disable-line
+			.count();
+
+		let usersRegisteredThisMonth = (users[0]['count(*)']);
+		let usersRegisteredBeforeThisMonth = allUsers.length - usersRegisteredThisMonth;
+
+		var stats = {};
+		stats['numberOfUsers'] = allUsers.length;
+		stats['haveUsersIncreased'] = true;
+
+		if (usersRegisteredBeforeThisMonth > allUsers.length) {
+			let differenceInUsers = usersRegisteredBeforeThisMonth - allUsers.length;
+
+			stats['increaseOfUsers'] = Math.round((differenceInUsers / allUsers.length) * 100);
+			stats['haveUsersIncreased'] = false;
+		} else {
+			stats['increaseOfUsers'] = Math.round((usersRegisteredThisMonth / usersRegisteredBeforeThisMonth) * 100);
+		}
+
+		// return the number of users and pourcentage of the increase of users from last month to the current one
+		return stats;
 	}
 
 	/**
@@ -148,7 +173,7 @@ class HomeController {
 		for (let i = 0; i < 6; i++) {
 			let bookings = await Booking
 				.query()
-				.whereRaw("strftime('%Y-%m', bookings.'from') < ?", [date.format('YYYY-MM')]) // eslint-disable-line
+				.whereRaw("strftime('%Y-%m', bookings.'from') = ?", [date.format('YYYY-MM')]) // eslint-disable-line
 				.count();
 
 			numberOfBookings.push(bookings[0]['count(*)']);
