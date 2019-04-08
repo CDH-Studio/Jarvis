@@ -4,8 +4,48 @@ const User = use('App/Models/User');
 const Report = use('App/Models/Report');
 const Booking = use('App/Models/Booking');
 const Review = use('App/Models/Review');
+const Event = use('Event');
+const Token = use('App/Models/Token');
 
 var moment = require('moment');
+const graph = require('@microsoft/microsoft-graph-client');
+
+/**
+ * Retrieve access token for Microsoft Graph from the data basebase.
+ *
+ * @returns {Object} The access token.
+ *
+ */
+async function getAccessToken () {
+	try {
+		const results = await Token.findBy('type', 'access');
+		const accessToken = results.toJSON().token;
+		return accessToken;
+	} catch (err) {
+		console.log(err);
+		return null;
+	}
+}
+
+/**
+ * Generating a random string.
+ *
+ * @param {Integer} times Each time a string of 5 to 6 characters is generated.
+ */
+function random (times) {
+	let result = '';
+	for (let i = 0; i < times; i++) {
+		result += Math.random().toString(36).substring(2);
+	}
+
+	return result;
+}
+
+async function asyncForEach (arr, callback) {
+	for (let i = 0; i < arr.length; i++) {
+		await callback(arr[i], i, arr);
+	}
+}
 
 class HomeController {
 	/**
@@ -42,12 +82,12 @@ class HomeController {
 	*
 	*/
 	async userDashboard ({ view, auth }) {
-		const availRooms = await this.getAvailableRooms({ auth });
+		const code = await this.getAvailableRooms({ auth, view });
 		const freqRooms = await this.getFreqBooked({ auth });
 		const upcomming = await this.getUpcomming({ auth });
 		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
-		return view.render('userPages.booking', { availRooms, freqRooms, upcomming, userId, fromTime: searchValues.fromTime, toTime: searchValues.toTime, dropdownSelection: searchValues.dropdownSelection });
+		return view.render('userPages.booking', { code, freqRooms, upcomming, userId, fromTime: searchValues.fromTime, toTime: searchValues.toTime, dropdownSelection: searchValues.dropdownSelection });
 	}
 
 	/**
@@ -335,7 +375,7 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getAvailableRooms ({ auth }) {
+	async getAvailableRooms ({ auth, view }) {
 		let towerOrder;
 		// If the tower is West then set the order to descending, else ascending
 		towerOrder = (await auth.user.getUserTower() === 'West') ? 'desc' : 'asc';
@@ -349,10 +389,39 @@ class HomeController {
 			.orderByRaw('ABS(floor-' + auth.user.floor + ') ASC')
 			.orderBy('tower', towerOrder)
 			.orderBy('seats', 'asc')
-			.limit(2)
 			.fetch();
+		const rooms = searchResults.toJSON();
 
-		return searchResults.toJSON();
+		const date = moment().format('YYYY-MM-DD');
+		const from = moment().startOf('h').format('HH:mm');
+		const to = moment().startOf('h').add(2, 'h').format('HH:mm');
+		const formattedDate = moment().format('dddd, MMMM DD, YYYY');
+		const formattedFrom = moment().startOf('h').format('HH:mm A');
+		const formattedTo = moment().startOf('h').add(2, 'h').format('HH:mm A');
+
+		const code = random(4);
+		const checkRoomAvailability = async () => {
+			let numberOfRooms = 2;
+			await asyncForEach(rooms, async (item) => {
+				if (numberOfRooms !== 0 && await this.getRoomAvailability(date, from, to, item.calendar)) {
+					Event.fire('send.room', {
+						card: view.render('components.smallCard', { room: item, datetime: { date: formattedDate, time: formattedFrom + ' - ' + formattedTo } }),
+						code: code
+					});
+					numberOfRooms--;
+				}
+			});
+
+			if (numberOfRooms === 2) {
+				Event.fire('send.empty', {
+					view: view.render('components.noAvailableRooms'),
+					code: code
+				});
+			}
+		};
+
+		setTimeout(checkRoomAvailability, 500);
+		return code;
 	}
 
 	/**
@@ -412,6 +481,66 @@ class HomeController {
 	}
 
 	/**
+	 *
+	 * @param {String} date     Date
+	 * @param {String} from     Starting time
+	 * @param {String} to       Ending time
+	 * @param {String} calendar Calendar ID
+	 *
+	 * @returns {Boolean} Whether or not the room is available
+	 */
+	async getRoomAvailability (date, from, to, calendar) {
+		const startTime = date + 'T' + from;
+		const endTime = date + 'T' + to;
+
+		// if there is a calendar for the room
+		if (calendar !== 'insertCalendarHere' && calendar !== null) {
+			// query the events within the search time range
+			const calendarViews = (await this.getCalendarView(
+				calendar,
+				startTime,
+				endTime
+			)).value;
+
+			// if event end time is the same as search start time, remove the event
+			calendarViews.forEach((item, index, items) => {
+				const eventEndTime = new Date(item.end.dateTime);
+				const searchStartTime = new Date(startTime);
+
+				if (+eventEndTime === +searchStartTime) {
+					items.splice(index, 1);
+				}
+			});
+
+			return calendarViews.length === 0;
+		}
+	}
+
+	async getCalendarView (calendarId, start, end) {
+		const accessToken = await getAccessToken();
+
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const calendarView = await client
+					.api(`/me/calendars/${calendarId}/calendarView?startDateTime=${start}&endDateTime=${end}`)
+					// .orderby('start DESC')
+					.header('Prefer', 'outlook.timezone="Eastern Standard Time"')
+					.get();
+
+				return calendarView;
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	}
+
+	/**
 	*
 	* Render Search Room Page and pass the current time for autofill purposes
 	*
@@ -445,6 +574,7 @@ class HomeController {
 
 		return ({ fromTime, toTime, dropdownSelection });
 	}
+
 	/**
 	*
 	* Render Search Room Page and pass the current time for autofill purposes
