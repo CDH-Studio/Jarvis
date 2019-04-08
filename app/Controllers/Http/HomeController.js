@@ -84,7 +84,10 @@ class HomeController {
 	async userDashboard ({ view, auth }) {
 		const code = await this.getAvailableRooms({ auth, view });
 		const freqRooms = await this.getFreqBooked({ auth });
-		return view.render('userPages.booking', { code, freqRooms });
+		const upcomming = await this.getUpcomming({ auth });
+		const userId = auth.user.id;
+		const searchValues = await this.loadSearchRoomsForm({ auth });
+		return view.render('userPages.booking', { code, freqRooms, upcomming, userId, fromTime: searchValues.fromTime, toTime: searchValues.toTime, dropdownSelection: searchValues.dropdownSelection });
 	}
 
 	/**
@@ -95,7 +98,7 @@ class HomeController {
 	*
 	*/
 	async adminDashboard ({ view }) {
-		const numberOfUsers = await this.getNumberofUsers();
+		const userStats = await this.getUserStats();
 		const roomStats = await this.getRoomStats();
 		const issueStats = await this.getIssueStats();
 		const bookings = await this.getBookings();
@@ -104,7 +107,7 @@ class HomeController {
 		const topFiveRooms = await this.getRoomPopularity();
 		const highestRatedRooms = await this.getRoomRatings();
 
-		return view.render('adminDash', { numberOfUsers: numberOfUsers, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
+		return view.render('adminDash', { userStats: userStats, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
 	}
 
 	/****************************************
@@ -118,13 +121,38 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getNumberofUsers () {
+	async getUserStats () {
 		// retrieves all the users form the database
 		const results = await User.all();
-		const users = results.toJSON();
+		const allUsers = results.toJSON();
 
-		// return the number of users
-		return users.length;
+		// initialize the moment.js object to act as our date
+		const date = moment();
+
+		// queries the users table to retrieve the users for the current and previous month
+		let users = await User
+			.query()
+			.whereRaw("strftime('%Y-%m', created_at) = ?", [date.format('YYYY-MM')]) // eslint-disable-line
+			.count();
+
+		let usersRegisteredThisMonth = (users[0]['count(*)']);
+		let usersRegisteredBeforeThisMonth = allUsers.length - usersRegisteredThisMonth;
+
+		var stats = {};
+		stats['numberOfUsers'] = allUsers.length;
+		stats['haveUsersIncreased'] = true;
+
+		if (usersRegisteredBeforeThisMonth > allUsers.length) {
+			let differenceInUsers = usersRegisteredBeforeThisMonth - allUsers.length;
+
+			stats['increaseOfUsers'] = Math.round((differenceInUsers / allUsers.length) * 100);
+			stats['haveUsersIncreased'] = false;
+		} else {
+			stats['increaseOfUsers'] = Math.round((usersRegisteredThisMonth / usersRegisteredBeforeThisMonth) * 100);
+		}
+
+		// return the number of users and pourcentage of the increase of users from last month to the current one
+		return stats;
 	}
 
 	/**
@@ -188,7 +216,7 @@ class HomeController {
 		for (let i = 0; i < 6; i++) {
 			let bookings = await Booking
 				.query()
-				.whereRaw("strftime('%Y-%m', bookings.'from') < ?", [date.format('YYYY-MM')]) // eslint-disable-line
+				.whereRaw("strftime('%Y-%m', bookings.'from') = ?", [date.format('YYYY-MM')]) // eslint-disable-line
 				.count();
 
 			numberOfBookings.push(bookings[0]['count(*)']);
@@ -412,14 +440,19 @@ class HomeController {
 			.count('room_id as total')
 			.groupBy('room_id')
 			.orderBy('total', 'desc')
-			.limit(2)
-			.innerJoin('rooms', 'bookings.room_id', 'rooms.id');
+			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
+			.limit(2);
 
 		// set the average rating for the rooms
 		for (let i = 0; i < searchResults.length; i++) {
 			searchResults[i].averageRating = await this.getAverageRating(searchResults[i].id);
 		}
-		return searchResults;
+
+		if (searchResults <= 0) {
+			return null;
+		} else {
+			return searchResults;
+		}
 	}
 
 	/**
@@ -505,6 +538,116 @@ class HomeController {
 				console.log(err);
 			}
 		}
+	}
+
+	/**
+	*
+	* Render Search Room Page and pass the current time for autofill purposes
+	*
+	* @param {view}
+	*
+	*/
+	async loadSearchRoomsForm ({ view, auth }) {
+		// Calculates the from and too times to pre fill in the search form
+		const currentTime = new Date();
+		const currentHour = currentTime.getHours();
+		const currentMinutes = currentTime.getMinutes();
+		let fromTime;
+		let toTime;
+		let dropdownSelection = [];
+		const start = moment().startOf('day');
+		const end = moment().endOf('day');
+
+		if (currentMinutes <= 30) {
+			fromTime = currentHour + ':30';
+			toTime = currentHour + 1 + ':30';
+		} else {
+			fromTime = currentHour + 1 + ':00';
+			toTime = currentHour + 2 + ':00';
+		}
+
+		// loop to fill the dropdown times
+		while (start.isBefore(end)) {
+			dropdownSelection.push({ dataValue: start.format('HH:mm'), name: start.format('h:mm A') });
+			start.add(30, 'm');
+		}
+
+		return ({ fromTime, toTime, dropdownSelection });
+	}
+
+	/**
+	*
+	* Render Search Room Page and pass the current time for autofill purposes
+	* Retrieve the user's frew booked rooms and returns and array of size 2 with results and return results
+	*
+	* @param {view}
+	*
+	*/
+	async getUpcomming ({ auth }) {
+		// get the next 3 upcomming bookings
+		let searchResults = await Booking
+			.query()
+			.where('user_id', auth.user.id)
+			.whereRaw("bookings.'from' >= date('now')") // eslint-disable-line
+			.select('*')
+			.orderBy('from', 'asc')
+			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
+			.limit(3)
+			.fetch();
+		// Converting date formats
+		searchResults = searchResults.toJSON();
+		const bookings = await this.populateBookings(searchResults);
+
+		return bookings;
+	}
+
+	/**
+	 * Populate bookings from booking query results.
+	 *
+	 * @param {Object} results Results from bookings query.
+	 *
+	 * @returns {Object} The access token.
+	 *
+	 */
+	async populateBookings (results) {
+		const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+		async function asyncMap (arr, callback) {
+			let arr2 = [];
+
+			for (let i = 0; i < arr.length; i++) {
+				arr2.push(await callback(arr[i], i, arr));
+			}
+
+			return arr2;
+		}
+
+		let bookings = [];
+		const populate = async () => {
+			bookings = await asyncMap(results, async (result) => {
+				const booking = {};
+
+				const from = new Date(result.from);
+				const to = new Date(result.to);
+				booking.subject = result.subject;
+				booking.status = result.status;
+				booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
+				booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+				booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
+				booking.roomId = result.room_id;
+				booking.id = result.id;
+				const userInfo = (await User.findBy('id', result.user_id)).toJSON();
+				booking.userName = userInfo.firstname + ' ' + userInfo.lastname;
+				booking.userId = userInfo.id;
+
+				return booking;
+			});
+		};
+
+		await populate();
+
+		return bookings;
 	}
 }
 

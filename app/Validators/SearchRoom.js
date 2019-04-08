@@ -39,10 +39,9 @@ class SearchRoom {
 			 * isAfterToday: 'from' and 'to' fields must occur after the current time if the date field is the current date
 			 * isWithinRange: 'to' field cannot be more than X hours after 'from'
 			 * required: require field, cannot search without a date entered
-			 * timeFormat: time must end in :00 or :30
 			 */
-			from: 'required|timeFormat|isAfterToday:date',
-			to: 'required|timeFormat|isAfter:from|isAfterToday:date'
+			from: 'required|isAfterToday:date',
+			to: 'required|isAfter:from|isAfterToday:date'
 		};
 	}
 
@@ -54,7 +53,6 @@ class SearchRoom {
 			'date.date': 'Please enter a valid date',
 			'date.dateFormat': 'Please enter a date with the following format: MM/DD/YYYY',
 			'from.isAfterToday': 'This field must occur after the current time',
-			'timeFormat': 'You may only search with 30 min time intervals, please enter a starting time that ends with 00 or 30',
 			'to.isAfterToday': 'This field must occur after the current time',
 			'required': 'This field is required'
 		};
