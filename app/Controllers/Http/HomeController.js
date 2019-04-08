@@ -7,6 +7,26 @@ const Review = use('App/Models/Review');
 
 var moment = require('moment');
 
+/**
+ * Generating a random string.
+ *
+ * @param {Integer} times Each time a string of 5 to 6 characters is generated.
+ */
+function random (times) {
+	let result = '';
+	for (let i = 0; i < times; i++) {
+		result += Math.random().toString(36).substring(2);
+	}
+
+	return result;
+}
+
+async function asyncForEach (arr, callback) {
+	for (let i = 0; i < arr.length; i++) {
+		await callback(arr[i], i, arr);
+	}
+}
+
 class HomeController {
 	/**
 	*
@@ -323,7 +343,28 @@ class HomeController {
 			.orderBy('seats', 'asc')
 			.limit(2)
 			.fetch();
+		const rooms = searchResults.toJSON();
 
+		const date = moment().format('YYYY-MM-DD');
+		const from = moment().startOf('h').format('HH:mm');
+		const to = moment().startOf('h').add(2, 'h').format('HH:mm');
+		console.log(date);
+		console.log(from);
+		console.log(to);
+
+		const code = random(4);
+		const checkRoomAvailability = async () => {
+			await asyncForEach(rooms, async (item) => {
+				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
+					Event.fire('send.room', {
+						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
+						code: code
+					});
+				}
+			});
+		};
+
+		setTimeout(checkRoomAvailability, 500);
 		return searchResults.toJSON();
 	}
 
@@ -375,6 +416,42 @@ class HomeController {
 			return searchResults[0]['avg(`rating`)'];
 		} catch (err) {
 			console.log(err);
+		}
+	}
+
+	/**
+	 *
+	 * @param {String} date     Date
+	 * @param {String} from     Starting time
+	 * @param {String} to       Ending time
+	 * @param {String} calendar Calendar ID
+	 *
+	 * @returns {Boolean} Whether or not the room is available
+	 */
+	async getRoomAvailability (date, from, to, calendar) {
+		const startTime = date + 'T' + from;
+		const endTime = date + 'T' + to;
+
+		// if there is a calendar for the room
+		if (calendar !== 'insertCalendarHere' && calendar !== null) {
+			// query the events within the search time range
+			const calendarViews = (await this.getCalendarView(
+				calendar,
+				startTime,
+				endTime
+			)).value;
+
+			// if event end time is the same as search start time, remove the event
+			calendarViews.forEach((item, index, items) => {
+				const eventEndTime = new Date(item.end.dateTime);
+				const searchStartTime = new Date(startTime);
+
+				if (+eventEndTime === +searchStartTime) {
+					items.splice(index, 1);
+				}
+			});
+
+			return calendarViews.length === 0;
 		}
 	}
 }
