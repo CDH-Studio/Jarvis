@@ -12,7 +12,11 @@
     {{--  Loading page header  --}}
     @!component('components.pageHeader', title='Results')
     {{--  where result cards will be displayed --}}
-    <div class='row' id='results'></div>
+    <div class='row' id='results'>
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
 
     {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
     <script>
@@ -29,6 +33,19 @@
             if (data.message.code == '{{ code }}') {
                 let listItem = $("<div class='cno-padding ie-room-margin'>" + data.message.card + "</div>")
                 $('#results').append(listItem)
+            }
+        });
+
+        channel.bind('send-hasResults', function (data) {
+            if (data.message.code == '{{ code }}') {
+                $('#results').empty();
+            }
+        });
+
+        channel.bind('send-empty', function (data) {
+            if (data.message.code == '{{ code }}') {
+                let listItem = $("<div class='empty'><p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p><div> No rooms found.</div></div>")
+                $('#results').empty().append(listItem)
             }
         });
     </script>
