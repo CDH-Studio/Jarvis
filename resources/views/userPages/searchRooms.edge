@@ -40,33 +40,61 @@
                                 <label for='from'>Start Time <b class='text-danger'>*</b></label>
                                 {{--  If field is not filled correctly show an error box  --}}
                                 @if(hasErrorFor('from'))
-                                    <input name='from'  id='from' class='form-control date-form is-invalid' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }' onchange='removeErrorClass("from")'>
+                                    <div class='timePicker' style='display: flex;'>
+                                        <input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
+                                        <div class='dropdown no-arrow'>
+                                            <button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+                                            <div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                                @each(item in dropdownSelection)
+                                                    <a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+                                                @endeach
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
-                                {{--  If another field is invalid show the previous value  --}}
-                                @elseif(hasErrorFor())
-                                    <input name='from'  id='from' class='form-control date-form' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }'>
-                                {{--  Otherwise show a normal input  --}}
                                 @else
-                                    <div style='display: flex;'>
-                                        <input name='from' id='from' class='form-control time-form' type='time' onchange='removeErrorClass("from")'>
-                                        <button class='btn time-button' style='block;'><i class="far fa-clock"></i></button>
+                                    <div class='timePicker' style='display: flex;'>
+                                        <input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
+                                        <div class='dropdown no-arrow'>
+                                            <button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+                                            <div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                                @each(item in dropdownSelection)
+                                                    <a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+                                                @endeach
+                                            </div>
+                                        </div>
                                     </div>
                                 @endif
+                                
                             </div>
                             <div class='col form-group mb-4'>
                                 <label for='to' data-toggle='tooltip'>End Time <b class='text-danger'>*</b></label>
                                 {{--  If field is not filled correctly show an error box  --}}
                                 @if(hasErrorFor('to'))
-                                    <input name='to'  id='to' class='form-control date-form is-invalid' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }' onchange='removeErrorClass("to")'>
+                                    <div style='display: flex;' class='timePicker'>
+                                        <input name='to'  id='to' class='form-control time-form is-invalid' type='time' value={{toTime}} value='{{ old('to', 'toTime') }}' onchange='removeErrorClass("to")'>
+                                        <div class='dropdown no-arrow'>
+                                            <button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+                                            <div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                                @each(item in dropdownSelection)
+                                                    <a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+                                                @endeach
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
-                                {{--  If another field is invalid show the previous value  --}}
-                                @elseif(hasErrorFor())
-                                    <input name='to'  id='to' class='form-control date-form' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }'>
-                                {{--  Otherwise show a normal input  --}}
+                               {{--  Otherwise show a normal input  --}}
                                 @else
-                                <div style='display: flex;'>
-                                    <input name='to'  id='to' class='form-control time-form' type='time' onchange='removeErrorClass("to")'>
-                                    <button class='btn time-button' style='block;'><i class="far fa-clock"></i></button>
+                                <div style='display: flex;' class='timePicker'>
+                                    <input name='to'  id='to' class='form-control time-form' type='time' value={{toTime}} value='{{ old('to', 'toTime') }}' onchange='removeErrorClass("to")'>
+                                    <div class='dropdown no-arrow'>
+                                        <button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+                                        <div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                            @each(item in dropdownSelection)
+                                                <a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+                                            @endeach
+                                        </div>
+                                    </div>
                                 </div>
                                 @endif                  
                             </div>
@@ -158,29 +186,21 @@
             if (idOfInput == 'date') {
                 $('#date-error').removeClass('show-invalid');
             }
-            else if (idOfInput == 'from') {
-                $('#from-error').removeClass('show-invalid');
-            }
-            else if (idOfInput == 'to' ) {
-                $('#to-error').removeClass('show-invalid');
-            }
         }
+        
+        // update from and to inputs from dropdown
+        $(document).on("click",".dropdown-menu a", function(ev) {
+            $(this).siblings().removeClass('active');
+            $(this).addClass("active");
+            $(this).parents(".timePicker").find('.time-form').val($(this).attr('data-value'));
+            $(this).parents(".timePicker").find('.time-form').removeClass('is-invalid');
+            $(this).parents(".timePicker").siblings('.invalid-feedback').removeClass('show-invalid');
+        });
+
     </script>
     {{--  Setting from and to times  --}}
     <script>
-        const currentTime = new Date();
-        const currentHour = currentTime.getHours();
-        const currentMinutes = currentTime.getMinutes();
-        let fromTime;
-        let toTime;
-        if (currentMinutes <= 30) {
-            fromTime = currentHour + ":30"
-            toTime = currentHour + 1 + ":30"
-        } else {
-            fromTime = currentHour + 1 + ":00"
-            toTime = currentHour + 2 + ":00"
 
-        }
     </script>
 @endsection
 

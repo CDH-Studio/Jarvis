@@ -62,6 +62,12 @@
     background-color: #001642;
 }
 
+.scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Forms  */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -97,6 +103,16 @@
     color: #ffffff;
     cursor: pointer;
     margin: 0 !important;
+}
+
+.time-button:hover{
+    background-color: #0f4674;
+	border-color:#0f4674;
+    color: #ffffff;
+}
+
+.time-dropdown{
+    min-width: 110px;
 }
 /* showing invalid validator display */
 .show-invalid{
