@@ -44,11 +44,10 @@ class BookRoom {
 			 * isAfterToday: 'from' and 'to' fields must occur after the current time if the date field is the current date
 			 * isWithinRange: 'to' field cannot be more than X hours after 'from'
 			 * required: require field, cannot book a room without a date entered
-			 * timeFormat: time must end in :00 or :30
 			 *
 			 */
-			from: 'required|timeFormat|isAfterToday:date',
-			to: 'required|timeFormat|isAfter:from|isAfterToday:date'
+			from: 'required|isAfterToday:date',
+			to: 'required|isAfter:from|isAfterToday:date'
 			/**
 			 * Recurring Validation
 			 *
