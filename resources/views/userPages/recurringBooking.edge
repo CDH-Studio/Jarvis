@@ -144,7 +144,67 @@
 										<label class='custom-control-label' for='pcCheck'>PC</label>
 									</div>                
 								</div>
-							</div>
+                            </div>
+                            
+                            {{---------------------------------------------------------------------------------------------}}
+                            {{--  Reccuring Form  --}}
+                            <div class='row'>
+                                    <div class='col form-group'>
+                                        <label for='recurringSelect' data-toggle='tooltip' data-placement='right' title='' data-original-title=''>Recurring</label>
+                                        <select class='form-control' id='recurringSelect' name='recurringSelect' onchange='showRecurring()'>
+                                                <option value='0' {{ old('recurringSelect') == 0 ? 'selected' : '' }}>No</option>
+                                                <option value='1' {{ old('recurringSelect') == 1 ? 'selected' : '' }}>Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+               
+                                {{--  NOTE: This only shows when the user selects 'Yes' in the Reccuring Dropdown  --}}
+                                <div class='row' id='recurringInfo' style='display:none'>
+                                    <div class='col form-group'>
+                                        @if(hasErrorFor('interval'))
+                                            <select class='form-control is-invalid' name='interval' id='interval' onchange='removeErrorClass("interval")'>
+                                                <option value='0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
+                                                <option value='daily' {{ old('interval') == 'daily' ? 'selected' : '' }}>Daily</option>
+                                                <option value='weekly' {{ old('interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
+                                                <option value='biWeekly' {{ old('interval') == 'biWeekly' ? 'selected' : '' }}>Bi-Weekly</option>
+                                                <option value='monthly' {{ old('interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
+                                                <option value='yearly' {{ old('interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
+                                            </select>
+                                            <div class='invalid-feedback show-invalid'>{{ getErrorFor('interval')}}</div>
+                                        @else
+                                            <select class='form-control' name='interval' id='interval'>
+                                                <option value= '0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
+                                                <option value='daily' {{ old('interval') == 'daily' ? 'selected' : '' }}>Daily</option>
+                                                <option value='weekly' {{ old('interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
+                                                <option value='biWeekly' {{ old('interval') == 'biWeekly' ? 'selected' : '' }}>Bi-Weekly</option>
+                                                <option value='monthly' {{ old('interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
+                                                <option value='yearly' {{ old('interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
+                                            </select>
+                                        @endif
+                                    </div>
+                                    <div class='col form-group'>
+                                        @if(hasErrorFor('numberOfTimes'))
+                                            <select class='form-control is-invalid' name='numberOfTimes' id='numberOfTimes' onchange='removeErrorClass("numberOfTimes")'>
+                                                <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
+                                                <option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
+                                                <option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
+                                                <option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
+                                                <option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
+                                            </select> 
+                                            <div class='invalid-feedback show-invalid'>{{ getErrorFor('numberOfTimes')}}</div>
+                                        @else
+                                            <select class='form-control' name='numberOfTimes' id='numberOfTimes'>
+                                                <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
+                                                <option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
+                                                <option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
+                                                <option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
+                                                <option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
+                                            </select> 
+                                        @endif
+                                    </div>
+                                </div>
+                            {{---------------------------------------------------------------------------------------------}}
+
 							{{--  Page buttons  --}}
 							<div class='row mt-5'>
 								<div class='col-sm-12 text-right'>
@@ -211,6 +271,18 @@
                 return false;
             }
         });
+    </script>
+
+    <script>
+        function showRecurring(){
+            var selection=document.getElementById("recurringSelect");
+            if (selection.value==='1'){
+                document.getElementById('recurringInfo').style.display='';
+            }
+            else{
+                document.getElementById('recurringInfo').style.display='none';
+            }
+        }
     </script>
 
     @if(flashMessage('notification'))

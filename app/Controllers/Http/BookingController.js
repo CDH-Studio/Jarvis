@@ -268,8 +268,6 @@ class BookingController {
 	}
 
 	async searchRecurring ({ view }) {
-		console.log('hi');
-
 		return view.render('userPages/recurringBooking');
 	}
 
