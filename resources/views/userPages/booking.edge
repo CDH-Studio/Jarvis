@@ -310,7 +310,6 @@
 
         //Listen for events on the channel
         channel.bind('send-room', function (data) {
-            console.log(data)
             if (data.message.code == '{{ code }}') {
                 let listItem = $("<div class='row'><div class='col'>" + data.message.card + "</div></div>")
                 $('#avail').prepend(listItem)
