@@ -1,0 +1,226 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+    Booking
+@endsection
+
+@section('extracss')
+  {{ style('css/booking') }}
+@endsection
+
+@section('extrajs')
+    {{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
+@endsection
+
+{{--  book room page content  --}}
+@section('content')
+    {{--  Loading page header  --}}
+    @!component('components.pageHeader', title= 'Hello, '+ auth.user.firstname)
+    {{--  Page Content  --}}
+    <div class='row d-flex flex-wrap'>
+		{{--  Search room page content  --}}
+		<div class='col-xl-6 col-xxl-4'>
+			@section('search room')
+				<form action='/results' method='GET' enctype='multipart/form-data'>
+					<div class="card shadow mb-4">
+						<div class="card-header py-3">
+							<h6 class="m-0 font-weight-bold text-primary">Search & Book</h6>
+						</div>
+						<div class="card-body">
+							{{ csrfField() }}
+							{{--  Date form  --}}
+							<div class='row'>
+								<div class='col form-group mb-4 '>
+									<div class='row'>
+										<label class='col' for='date'>Date <b class='text-danger'>*</b></label>
+										<div class='col text-right'>
+											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
+										</div>
+									</div>
+									{{--  If field is not filled correctly show an error box  --}}
+									@if(hasErrorFor('date'))
+										<input name='date'  id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
+										<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
+									{{--  Otherwise show a normal input  --}}
+									@else
+										<input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
+									@endif
+								</div>
+							</div>
+							{{--  Meeting time from  --}}
+							<div class='row'>
+								<div class='col form-group mb-4'>
+									<label for='from'>Start Time <b class='text-danger'>*</b></label>
+									{{--  If field is not filled correctly show an error box  --}}
+									@if(hasErrorFor('from'))
+										<input name='from'  id='from' class='form-control date-form is-invalid' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }' onchange='removeErrorClass("from")'>
+										<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
+									{{--  If another field is invalid show the previous value  --}}
+									@elseif(hasErrorFor())
+										<input name='from'  id='from' class='form-control date-form' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }'>
+									{{--  Otherwise show a normal input  --}}
+									@else
+										<input name='from' id='from' class='form-control date-form' type='time' data-role='datebox' onchange='removeErrorClass("from")'>
+									@endif
+								</div>
+								<div class='col form-group mb-4'>
+									<label for='to' data-toggle='tooltip'>End Time <b class='text-danger'>*</b></label>
+									{{--  If field is not filled correctly show an error box  --}}
+									@if(hasErrorFor('to'))
+										<input name='to'  id='to' class='form-control date-form is-invalid' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }' onchange='removeErrorClass("to")'>
+										<div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
+									{{--  If another field is invalid show the previous value  --}}
+									@elseif(hasErrorFor())
+										<input name='to'  id='to' class='form-control date-form' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }'>
+									{{--  Otherwise show a normal input  --}}
+									@else
+										<input name='to'  id='to' class='form-control date-form' type='time' data-role='datebox' onchange='removeErrorClass("to")'>
+									@endif                  
+								</div>
+							</div>
+							{{--  Location form  --}}
+							<div class='row'>
+								<div class='col form-group mb-4'>
+									<label for='location'>Location</label>
+									<select name='location' class='form-control'>
+										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>Select a floor</option>
+										<option value='0' {{ old('location') == '0' ? 'selected' : '' }}>Floor 0</option>
+										<option value='1' {{ old('location') == '1' ? 'selected' : '' }}>Floor 1</option>
+										<option value='2' {{ old('location') == '2' ? 'selected' : '' }}>Floor 2</option>
+										<option value='3' {{ old('location') == '3' ? 'selected' : '' }}>Floor 3</option>
+										<option value='4' {{ old('location') == '4' ? 'selected' : '' }}>Floor 4</option>
+										<option value='5' {{ old('location') == '5' ? 'selected' : '' }}>Floor 5</option>
+										<option value='6' {{ old('location') == '6' ? 'selected' : '' }}>Floor 6</option>
+										<option value='7' {{ old('location') == '7' ? 'selected' : '' }}>Floor 7</option>
+										<option value='8' {{ old('location') == '8' ? 'selected' : '' }}>Floor 8</option>
+										<option value='9' {{ old('location') == '9' ? 'selected' : '' }}>Floor 9</option>
+									</select>
+								</div>
+							</div>
+							<div class='row'>
+								{{--  Table Seats form  --}}
+								<div class='col form-group mb-4'>
+									<label for='seats'>Number of Table Seats</label>
+									<input class='form-control' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
+								</div>
+								{{--  Max Capacity  --}}
+								<div class='col form-group mb-4'>
+									<label for='capacity'>Number of People</label>
+									<input class='form-control' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
+								</div>
+							</div>
+							{{--  Equipment check box form  --}}
+							<div class='form-group'>
+								<h4>Equipment</h4>
+								<div class='row'>               
+									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
+										<input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value= '1' {{ old('projectorCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='projectorCheck'>Projector</label>
+									</div>
+									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
+										<input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1' {{ old('whiteboardCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
+									</div>
+									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
+										<input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
+									</div>  
+				
+									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
+										<input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
+									</div>
+									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
+										<input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
+									</div>
+									
+									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
+										<input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1' {{ old('surfaceHubCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
+									</div>              
+									<div class='custom-control custom-checkbox col ml-3'>
+										<input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1' {{ old('pcCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='pcCheck'>PC</label>
+									</div>                
+								</div>
+							</div>
+							{{--  Page buttons  --}}
+							<div class='row mt-5'>
+								<div class='col-sm-12 text-right'>
+									<button type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
+									<button type='submit' class='btn btn-primary no-margin'>Search</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+				{{--  Remove the is-invalid class when input changes  --}}
+				<script>
+					function removeErrorClass(idOfInput){
+						$('#'+idOfInput).removeClass('is-invalid');
+						// Ih field is the calendar, then remove styling from erorr message
+						if (idOfInput == 'date') {
+							$('#date-error').removeClass('show-invalid');
+						}
+						else if (idOfInput == 'from') {
+							$('#from-error').removeClass('show-invalid');
+						}
+						else if (idOfInput == 'to' ) {
+							$('#to-error').removeClass('show-invalid');
+						}
+					}
+				</script>
+				{{--  Setting from and to times  --}}
+				<script>
+					const currentTime = new Date();
+					const currentHour = currentTime.getHours();
+					const currentMinutes = currentTime.getMinutes();
+					let fromTime;
+					let toTime;
+					if (currentMinutes <= 30) {
+						fromTime = currentHour + ":30"
+						toTime = currentHour + 1 + ":30"
+					} else {
+						fromTime = currentHour + 1 + ":00"
+						toTime = currentHour + 2 + ":00"
+			
+					}
+					$('#from').datebox({
+						mode: "timebox", 
+						defaultValue: fromTime,
+						minuteStep: "30",
+						minuteStepRound: "1"
+					});
+					$('#to').datebox({
+						mode: "timebox", 
+						defaultValue: toTime,
+						minuteStep: "30",
+						minuteStepRound: "1",
+					});
+				</script>
+			
+			@endsection
+		</div>
+
+    <script>
+        $('#message').keypress((e) => {
+	        if (e.which === 13 && !e.shiftKey) {
+                $('#sub').click();
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+
+    @if(flashMessage('notification'))
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', () => {
+                var url = '{{ flashMessage('url') }}';
+                notify({ $: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
+            });
+        </script>
+	@endif
+
+@endsection
