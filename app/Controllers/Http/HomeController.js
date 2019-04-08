@@ -361,28 +361,24 @@ class HomeController {
 			.orderByRaw('ABS(floor-' + auth.user.floor + ') ASC')
 			.orderBy('tower', towerOrder)
 			.orderBy('seats', 'asc')
-			.limit(2)
 			.fetch();
 		const rooms = searchResults.toJSON();
 
 		const date = moment().format('YYYY-MM-DD');
 		const from = moment().startOf('h').format('HH:mm');
 		const to = moment().startOf('h').add(2, 'h').format('HH:mm');
-		console.log(date);
-		console.log(from);
-		console.log(to);
 
 		const code = random(4);
 		const checkRoomAvailability = async () => {
 			let numberOfRooms = 2;
 			await asyncForEach(rooms, async (item) => {
-				if ((numberOfRooms--) !== 0 && await this.getRoomAvailability(date, from, to, item.calendar)) {
-					console.log(item);
+				if (numberOfRooms !== 0 && await this.getRoomAvailability(date, from, to, item.calendar)) {
 					Event.fire('send.room', {
 						card: view.render('components.smallCard', { room: item }),
 						code: code
 					});
-				} 
+					numberOfRooms--;
+				}
 			});
 		};
 
