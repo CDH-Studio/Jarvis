@@ -383,6 +383,7 @@ class HomeController {
 
 			if (numberOfRooms === 2) {
 				Event.fire('send.empty', {
+					view: view.render('components.noAvailableRooms'),
 					code: code
 				});
 			}

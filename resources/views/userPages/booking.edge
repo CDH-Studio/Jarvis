@@ -319,8 +319,8 @@
 
         channel.bind('send-empty', function (data) {
             if (data.message.code == '{{ code }}') {
-                let listItem = $("<div class='empty'><p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p><div> No rooms found.</div></div>")
-                $('#results').empty().append(listItem)
+                let listItem = $(data.message.view)
+                $('#avail').empty().append(listItem)
             }
         });
     </script>
