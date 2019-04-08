@@ -72,7 +72,7 @@
                                 {{--  If field is not filled correctly show an error box  --}}
                                 @if(hasErrorFor('to'))
                                     <div style='display: flex;' class='timePicker'>
-                                        <input name='to'  id='to' class='form-control time-form is-invalid' type='time' value={{toTime}} value='{{ old('to', 'toTime') }}' onchange='removeErrorClass("to")'>
+                                        <input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
                                         <div class='dropdown no-arrow'>
                                             <button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
                                             <div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
@@ -86,7 +86,7 @@
                                {{--  Otherwise show a normal input  --}}
                                 @else
                                 <div style='display: flex;' class='timePicker'>
-                                    <input name='to'  id='to' class='form-control time-form' type='time' value={{toTime}} value='{{ old('to', 'toTime') }}' onchange='removeErrorClass("to")'>
+                                    <input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
                                     <div class='dropdown no-arrow'>
                                         <button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
                                         <div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
@@ -196,11 +196,6 @@
             $(this).parents(".timePicker").find('.time-form').removeClass('is-invalid');
             $(this).parents(".timePicker").siblings('.invalid-feedback').removeClass('show-invalid');
         });
-
-    </script>
-    {{--  Setting from and to times  --}}
-    <script>
-
     </script>
 @endsection
 

@@ -44,7 +44,8 @@ class HomeController {
 	async userDashboard ({ view, auth }) {
 		const availRooms = await this.getAvailableRooms({ auth });
 		const freqRooms = await this.getFreqBooked({ auth });
-		return view.render('userPages.booking', { availRooms, freqRooms });
+		const searchValues = await this.loadSearchRoomsForm({ auth });
+		return view.render('userPages.booking', { availRooms, freqRooms, fromTime: searchValues.fromTime, toTime: searchValues.toTime, dropdownSelection: searchValues.dropdownSelection });
 	}
 
 	/**
@@ -376,6 +377,41 @@ class HomeController {
 		} catch (err) {
 			console.log(err);
 		}
+	}
+
+	/**
+	*
+	* Render Search Room Page and pass the current time for autofill purposes
+	*
+	* @param {view}
+	*
+	*/
+	async loadSearchRoomsForm ({ view, auth }) {
+		// Calculates the from and too times to pre fill in the search form
+		const currentTime = new Date();
+		const currentHour = currentTime.getHours();
+		const currentMinutes = currentTime.getMinutes();
+		let fromTime;
+		let toTime;
+		let dropdownSelection = [];
+		const start = moment().startOf('day');
+		const end = moment().endOf('day');
+
+		if (currentMinutes <= 30) {
+			fromTime = currentHour + ':30';
+			toTime = currentHour + 1 + ':30';
+		} else {
+			fromTime = currentHour + 1 + ':00';
+			toTime = currentHour + 2 + ':00';
+		}
+
+		// loop to fill the dropdown times
+		while (start.isBefore(end)) {
+			dropdownSelection.push({ dataValue: start.format('HH:mm'), name: start.format('h:mm A') });
+			start.add(30, 'm');
+		}
+
+		return ({ fromTime, toTime, dropdownSelection });
 	}
 }
 

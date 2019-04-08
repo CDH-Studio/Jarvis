@@ -1,6 +1,7 @@
 'use strict';
 
 const { ServiceProvider } = require('@adonisjs/fold');
+const moment = require('moment');
 
 class CustomValidationProvider extends ServiceProvider {
 	/**
