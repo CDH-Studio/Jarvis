@@ -18,7 +18,9 @@
                 <div class='title'>
                     <h5>{{room.name}}</h5>
                 </div>
-                @!yield($slot.body)
+                @if($slot.body)
+                    @!yield($slot.body)
+                @endif
             </div>
         </div>
     </div>
