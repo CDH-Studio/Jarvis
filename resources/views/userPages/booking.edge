@@ -207,7 +207,8 @@
 		<div class='col-xl-6 col-xxl-8'>
 			<div class='row'>
 				<div id='available' class='col-xl-12 col-xxl-6'>
-					@component('components.generalCard', title='Currently Available')
+                    @component('components.generalCard', title='Currently Available')
+                        {{--  If there are no avail rooms display a message accordingly  --}}
 						@slot('body')
                             <div id='avail'></div>
 						@endslot
@@ -315,6 +316,13 @@
                 $('#avail').prepend(listItem)
             }
         });
+
+        channel.bind('send-empty', function (data) {
+            if (data.message.code == '{{ code }}') {
+                let listItem = $("<div class='empty'><p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p><div> No rooms found.</div></div>")
+                $('#results').empty().append(listItem)
+            }
+        });
     </script>
 
     @if(flashMessage('notification'))
@@ -326,19 +334,6 @@
             });
         </script>
     @endif
-    
-    {{--  If there are no avail rooms display a message accordingly  --}}
-@if(!availRooms)
-<div class="d-flex flex-wrap justify-content-center" style='height:244px;'>
-    <div class="d-flex flex-column justify-content-around">
-        <i class="fas fa-ghost fa-8x text-muted wrapper-center"></i>
-        <h3 class="text-muted no-margin">No Rooms Currently Available</h3>
-    </div>
-</div>
-@else
-<div id='avail'></div>
-@endif
-
 @endsection
 
 

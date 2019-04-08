@@ -380,6 +380,12 @@ class HomeController {
 					numberOfRooms--;
 				}
 			});
+
+			if (numberOfRooms === 2) {
+				Event.fire('send.empty', {
+					code: code
+				});
+			}
 		};
 
 		setTimeout(checkRoomAvailability, 500);
