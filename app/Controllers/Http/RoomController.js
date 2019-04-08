@@ -381,14 +381,31 @@ class RoomController {
 
 		const code = random(4);
 		const checkRoomAvailability = async () => {
+			let results = [];
+			let hasResults = false;
+
 			await asyncForEach(rooms, async (item) => {
 				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
+					if (!hasResults) {
+						Event.fire('send.hasResults', {
+							code: code
+						});
+						hasResults = true;
+					}
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
 						code: code
 					});
+
+					results.push(item);
 				}
 			});
+
+			if (results.length === 0) {
+				Event.fire('send.empty', {
+					code: code
+				});
+			}
 		};
 
 		setTimeout(checkRoomAvailability, 500);
