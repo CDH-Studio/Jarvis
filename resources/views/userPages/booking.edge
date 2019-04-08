@@ -209,28 +209,7 @@
 				<div id='available' class='col-xl-12 col-xxl-6'>
 					@component('components.generalCard', title='Currently Available')
 						@slot('body')
-							{{--  If there are no avail rooms display a message accordingly  --}}
-							@if(!availRooms)
-								<div class="d-flex flex-wrap justify-content-center" style='height:244px;'>
-									<div class="d-flex flex-column justify-content-around">
-										<i class="fas fa-ghost fa-8x text-muted wrapper-center"></i>
-										<h3 class="text-muted no-margin">No Rooms Currently Available</h3>
-									</div>
-								</div>
-							@else
-								@each(room in availRooms)
-									<div class='row'>
-										<div class='col'>
-											@component('components.smallCard', room=room)
-												@slot('body')
-													<div>Date Here</div>
-													<div>Time Here</div>
-												@endslot
-											@endcomponent
-										</div>
-									</div>
-								@endeach
-							@endif
+                            <div id='avail'></div>
 						@endslot
 					@endcomponent
 				</div>
@@ -311,12 +290,30 @@
 		</div>
 	</div>
 
+    {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
     <script>
         $('#message').keypress((e) => {
 	        if (e.which === 13 && !e.shiftKey) {
                 $('#sub').click();
                 e.preventDefault();
                 return false;
+            }
+        });
+
+        let pusher = new Pusher('aca8a920ad0e3d8ac09f', {
+            cluster: 'us2',
+            useTLS: true
+        });
+
+        //Subscribe to the channel we specified in our Adonis Application
+        let channel = pusher.subscribe('adonis-channel')
+
+        //Listen for events on the channel
+        channel.bind('send-room', function (data) {
+            console.log(data)
+            if (data.message.code == '{{ code }}') {
+                let listItem = $("<div class='row'><div class='col'>" + data.message.card + "</div></div>")
+                $('#avail').prepend(listItem)
             }
         });
     </script>
@@ -329,7 +326,19 @@
                 notify({ $: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
             });
         </script>
-	@endif
+    @endif
+    
+    {{--  If there are no avail rooms display a message accordingly  --}}
+@if(!availRooms)
+<div class="d-flex flex-wrap justify-content-center" style='height:244px;'>
+    <div class="d-flex flex-column justify-content-around">
+        <i class="fas fa-ghost fa-8x text-muted wrapper-center"></i>
+        <h3 class="text-muted no-margin">No Rooms Currently Available</h3>
+    </div>
+</div>
+@else
+<div id='avail'></div>
+@endif
 
 @endsection
 

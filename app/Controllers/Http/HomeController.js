@@ -4,8 +4,28 @@ const User = use('App/Models/User');
 const Report = use('App/Models/Report');
 const Booking = use('App/Models/Booking');
 const Review = use('App/Models/Review');
+const Event = use('Event');
+const Token = use('App/Models/Token');
 
 var moment = require('moment');
+const graph = require('@microsoft/microsoft-graph-client');
+
+/**
+ * Retrieve access token for Microsoft Graph from the data basebase.
+ *
+ * @returns {Object} The access token.
+ *
+ */
+async function getAccessToken () {
+	try {
+		const results = await Token.findBy('type', 'access');
+		const accessToken = results.toJSON().token;
+		return accessToken;
+	} catch (err) {
+		console.log(err);
+		return null;
+	}
+}
 
 /**
  * Generating a random string.
@@ -62,9 +82,9 @@ class HomeController {
 	*
 	*/
 	async userDashboard ({ view, auth }) {
-		const availRooms = await this.getAvailableRooms({ auth });
+		const code = await this.getAvailableRooms({ auth, view });
 		const freqRooms = await this.getFreqBooked({ auth });
-		return view.render('userPages.booking', { availRooms, freqRooms });
+		return view.render('userPages.booking', { code, freqRooms });
 	}
 
 	/**
@@ -327,7 +347,7 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getAvailableRooms ({ auth }) {
+	async getAvailableRooms ({ auth, view }) {
 		let towerOrder;
 		// If the tower is West then set the order to descending, else ascending
 		towerOrder = (await auth.user.getUserTower() === 'West') ? 'desc' : 'asc';
@@ -354,18 +374,20 @@ class HomeController {
 
 		const code = random(4);
 		const checkRoomAvailability = async () => {
+			let numberOfRooms = 2;
 			await asyncForEach(rooms, async (item) => {
-				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
+				if ((numberOfRooms--) !== 0 && await this.getRoomAvailability(date, from, to, item.calendar)) {
+					console.log(item);
 					Event.fire('send.room', {
-						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
+						card: view.render('components.smallCard', { room: item }),
 						code: code
 					});
-				}
+				} 
 			});
 		};
 
 		setTimeout(checkRoomAvailability, 500);
-		return searchResults.toJSON();
+		return code;
 	}
 
 	/**
@@ -452,6 +474,30 @@ class HomeController {
 			});
 
 			return calendarViews.length === 0;
+		}
+	}
+
+	async getCalendarView (calendarId, start, end) {
+		const accessToken = await getAccessToken();
+
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const calendarView = await client
+					.api(`/me/calendars/${calendarId}/calendarView?startDateTime=${start}&endDateTime=${end}`)
+					// .orderby('start DESC')
+					.header('Prefer', 'outlook.timezone="Eastern Standard Time"')
+					.get();
+
+				return calendarView;
+			} catch (err) {
+				console.log(err);
+			}
 		}
 	}
 }
