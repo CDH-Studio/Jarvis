@@ -7,7 +7,10 @@ const Review = use('App/Models/Review');
 const Event = use('Event');
 const Token = use('App/Models/Token');
 
-var moment = require('moment');
+// Used for time related calcuklations and formatting
+const moment = require('moment');
+require('moment-round');
+
 const graph = require('@microsoft/microsoft-graph-client');
 
 /**
@@ -551,22 +554,15 @@ class HomeController {
 	*/
 	async loadSearchRoomsForm ({ view, auth }) {
 		// Calculates the from and too times to pre fill in the search form
-		const currentTime = new Date();
-		const currentHour = currentTime.getHours();
-		const currentMinutes = currentTime.getMinutes();
-		let fromTime;
-		let toTime;
+		let fromTime = moment();
+		let toTime = moment();
 		let dropdownSelection = [];
 		const start = moment().startOf('day');
 		const end = moment().endOf('day');
 
-		if (currentMinutes <= 30) {
-			fromTime = currentHour + ':30';
-			toTime = currentHour + 1 + ':30';
-		} else {
-			fromTime = currentHour + 1 + ':00';
-			toTime = currentHour + 2 + ':00';
-		}
+		// round the autofill start and end times to the nearest 30mins
+		fromTime = fromTime.round(30, 'minutes').format('HH:mm');
+		toTime = toTime.round(30, 'minutes').add(1, 'h').format('hh:mm');
 
 		// loop to fill the dropdown times
 		while (start.isBefore(end)) {
