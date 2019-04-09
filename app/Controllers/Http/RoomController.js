@@ -264,7 +264,7 @@ class RoomController {
 			// Adds new attribute - rating - to every room object
 			room.rating = await this.getAverageRating(room.id);
 
-			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews });
+			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review });
 		} catch (error) {
 			return response.redirect('/');
 		}
