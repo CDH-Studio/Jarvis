@@ -100,7 +100,7 @@
   display: none;   
 }
 
-.content {
+.tab-content {
   position: absolute;
   top: 28px;
   left: 0;
@@ -121,7 +121,7 @@
   z-index: 2;
 }
 
-[type=radio]:checked ~ label ~ .content {
+[type=radio]:checked ~ label ~ .tab-content {
   z-index: 1;
 }
 
