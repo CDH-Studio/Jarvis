@@ -149,22 +149,22 @@
 							{{---------------------------------------------------------------------------------------------}}
 							
 							{{------- Recurring Tabs -------}}
-							<input type="hidden" id="type" name="type" value="" />
+							<input type="hidden" id="type" name="type" value="daily" />
 							<div class="tabs">
-								<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+								<ul class="nav nav-tabs mb-3" id="pills-tab" role="tablist">
 									<li class="nav-item">
-										<a class="nav-link active" id="pills-daily-tab" data-toggle="pill" href="#pills-daily" role="tab" aria-controls="pills-daily" aria-selected="true">Daily</a>
+										<a class="nav-link active" id="pills-daily-tab" data-toggle="tab" href="#daily">Daily</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" id="pills-weekly-tab" data-toggle="pill" href="#pills-weekly" role="tab" aria-controls="pills-weekly" aria-selected="false">Weekly</a>
+										<a class="nav-link" id="pills-weekly-tab" data-toggle="tab" href="#weekly">Weekly</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" id="pills-monthly-tab" data-toggle="pill" href="#pills-monthly" role="tab" aria-controls="pills-monthly" aria-selected="false">Monthly</a>
+										<a class="nav-link" id="pills-monthly-tab" data-toggle="tab" href="#monthly">Monthly</a>
 									</li>
 								</ul>
 								
 								<div class="tab-content" id="pills-tabContent">
-									<div class="tab-pane fade show active" id="pills-daily" role="tabpanel" aria-labelledby="pills-daily-tab">
+									<div class="tab-pane fade show active" id="daily" role="tabpanel">
 										<div>
 											<input type="radio" name="type" value="every"> Every <input type="number" name="interval"> day(s)
 										</div>
@@ -172,7 +172,7 @@
 											<input type="radio" name="type" value="every-weekday"> Every weekday
 										</div>
 									</div>
-									<div class="tab-pane fade" id="pills-weekly" role="tabpanel" aria-labelledby="pills-weekly-tab">
+									<div class="tab-pane fade" id="weekly" role="tabpanel">
 										<div>
 											<p>Every <input type="number" name="interval"> week(s) on:</p>
 										</div>
@@ -208,7 +208,7 @@
 											</div>
 										</div>
 									</div>
-									<div class="tab-pane fade" id="pills-monthly" role="tabpanel" aria-labelledby="pills-monthly-tab">
+									<div class="tab-pane fade" id="monthly" role="tabpanel">
 										<div>
 											<p>Day <input type="number" name="dayOfMonth" width="2"> of every <input type="number" name="interval"> month(s)</p>
 										</div>
@@ -216,30 +216,6 @@
 								</div>
 							</div>
 							{{------- END Recurring Tabs -------}}
-
-							{{--  NOTE: This only shows when the user selects 'Yes' in the Reccuring Dropdown  --}}				
-							<div class='row' id='recurringInfo' style='display:none'>
-								<div class='col form-group'>
-									@if(hasErrorFor('numberOfTimes'))
-										<select class='form-control is-invalid' name='numberOfTimes' id='numberOfTimes' onchange='removeErrorClass("numberOfTimes")'>
-											<option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
-											<option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
-											<option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
-											<option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
-											<option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
-										</select> 
-										<div class='invalid-feedback show-invalid'>{{ getErrorFor('numberOfTimes')}}</div>
-									@else
-										<select class='form-control' name='numberOfTimes' id='numberOfTimes'>
-											<option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
-											<option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
-											<option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
-											<option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
-											<option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
-										</select> 
-									@endif
-								</div>
-							</div>
                             {{---------------------------------------------------------------------------------------------}}
 							{{--  Page buttons  --}}
 							<div class='row mt-5'>
@@ -250,12 +226,6 @@
 							</div>
 						</div>
 					</div>
-				</form>
-				<form action='' method='GET' enctype='multipart/form-data'>
-				{{------- Recurring Tabs -------}}
-							{{-- Daily --}}
-							
-								{{------- END Recurring Tabs -------}}
 				</form>
 				{{--  Remove the is-invalid class when input changes  --}}
 				<script>
@@ -312,7 +282,7 @@
                 e.preventDefault();
                 return false;
             }
-        });
+		});
     </script>
 
     @if(flashMessage('notification'))
@@ -325,7 +295,13 @@
         </script>
 	@endif
 
+	{{ script('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js') }}
 	<script>
+		$(document).on('shown.bs.tab', "a[data-toggle='tab']", function (e) {
+			console.log('hi')
+			var target = $(e.target).attr("href")
+  			$('#type').val(target.substr(1));
+		});
 	</script>
 
 @endsection
