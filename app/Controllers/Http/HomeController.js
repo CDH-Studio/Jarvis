@@ -588,7 +588,8 @@ class HomeController {
 		let searchResults = await Booking
 			.query()
 			.where('user_id', auth.user.id)
-			.whereRaw("bookings.'from' >= date('now')") // eslint-disable-line
+			// .where('status', 'Approved')
+			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.select('*')
 			.orderBy('from', 'asc')
 			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
