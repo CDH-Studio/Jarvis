@@ -420,7 +420,7 @@ class HomeController {
 			}
 		};
 
-		setTimeout(checkRoomAvailability, 500);
+		setTimeout(checkRoomAvailability, 800);
 		return code;
 	}
 

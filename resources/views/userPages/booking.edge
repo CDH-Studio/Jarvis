@@ -323,7 +323,7 @@
 
     {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
     <script>
-        $('#message').keypress((e) => {
+        $('#message').keypress(function(e) {
 	        if (e.which === 13 && !e.shiftKey) {
                 $('#sub').click();
                 e.preventDefault();
@@ -358,7 +358,7 @@
     @if(flashMessage('notification'))
         <script type='module'>
             import {notify} from '/js/notify.js';
-            $(window).on('load', () => {
+            $(window).on('load', function() {
                 var url = '{{ flashMessage('url') }}';
                 notify({ $: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
             });
