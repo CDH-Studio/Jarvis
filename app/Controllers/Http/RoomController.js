@@ -5,7 +5,10 @@ const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
 const Event = use('Event');
+// Used for time related calcuklations and formatting
 const moment = require('moment');
+require('moment-round');
+
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -47,22 +50,15 @@ class RoomController {
 	*/
 	async loadSearchRoomsForm ({ view, auth }) {
 		// Calculates the from and too times to pre fill in the search form
-		const currentTime = new Date();
-		const currentHour = currentTime.getHours();
-		const currentMinutes = currentTime.getMinutes();
-		let fromTime;
-		let toTime;
+		let fromTime = moment();
+		let toTime = moment();
 		let dropdownSelection = [];
 		const start = moment().startOf('day');
 		const end = moment().endOf('day');
 
-		if (currentMinutes <= 30) {
-			fromTime = currentHour + ':30';
-			toTime = currentHour + 1 + ':30';
-		} else {
-			fromTime = currentHour + 1 + ':00';
-			toTime = currentHour + 2 + ':00';
-		}
+		// round the autofill start and end times to the nearest 30mins
+		fromTime = fromTime.round(30, 'minutes').format('HH:mm');
+		toTime = toTime.round(30, 'minutes').add(1, 'h').format('hh:mm');
 
 		// loop to fill the dropdown times
 		while (start.isBefore(end)) {
@@ -87,7 +83,7 @@ class RoomController {
 	}
 	async create ({ response, view, auth }) {
 		const actionType = 'Add Room';
-		return view.render('adminDash.addEditRoom', { actionType });
+		return view.render('adminPages.addEditRoom', { actionType });
 	}
 
 	/**
@@ -258,7 +254,11 @@ class RoomController {
 				.query()
 				.where('room_id', params.id)
 				.fetch();
+
 			const reviews = searchResults.toJSON();
+
+			// Adds new attribute - rating - to every room object
+			room.rating = await this.getAverageRating(room.id);
 
 			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review });
 		} catch (error) {
@@ -314,7 +314,7 @@ class RoomController {
 
 		// if user is admin
 		if (userRole === 'admin') {
-			return view.render('adminDash.viewRooms', { rooms, stats });
+			return view.render('adminPages.viewRooms', { rooms, stats });
 		} else {
 			return view.render('userPages.results', { rooms });
 		}

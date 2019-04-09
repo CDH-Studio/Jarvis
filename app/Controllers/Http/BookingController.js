@@ -138,7 +138,7 @@ class BookingController {
 			url: `/user/${auth.user.id}/bookings`
 		});
 
-		return response.redirect('/booking');
+		return response.redirect('/userDash');
 	}
 
 	/**

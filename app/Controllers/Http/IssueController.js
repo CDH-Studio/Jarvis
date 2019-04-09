@@ -39,7 +39,7 @@ class IssueController {
 		try {
 			// get the search form data if employee view
 			const issue = await Report.findOrFail(params.id);
-			return view.render('adminDash.editIssue', { id: params.id, issue });
+			return view.render('adminPages.editIssue', { id: params.id, issue });
 		} catch (error) {
 			return response.redirect('/');
 		}
@@ -149,7 +149,7 @@ class IssueController {
 			issues[i].created_at = currentTime.toLocaleDateString('de-DE', options);
 		}
 
-		return view.render('adminDash.viewRoomIssues', { roomID: params.roomID, roomName, issues, stats, filterType: params.issueStatus });
+		return view.render('adminPages.viewRoomIssues', { roomID: params.roomID, roomName, issues, stats, filterType: params.issueStatus });
 	}
 
 	/**
