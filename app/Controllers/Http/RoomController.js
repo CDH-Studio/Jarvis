@@ -258,7 +258,11 @@ class RoomController {
 				.query()
 				.where('room_id', params.id)
 				.fetch();
+
 			const reviews = searchResults.toJSON();
+
+			// Adds new attribute - rating - to every room object
+			room.rating = await this.getAverageRating(room.id);
 
 			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review });
 		} catch (error) {

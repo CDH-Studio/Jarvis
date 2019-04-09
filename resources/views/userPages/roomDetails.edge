@@ -16,483 +16,447 @@
     {{--  Loading page header  --}}
 
     {{--  Actual page content  --}}
-    <div class='roomDetails'>
-        <div class='col card room-details-card shadow' style='margin-top:10px;'>
-            <div class='card-header py-3'>
-                <div class='d-flex flex-wrap'>
-                    <div class='' style='padding-top:6px;'>
-                        <h4 class="m-0 font-weight-bold text-primary">
-                            {{--  If the room is closed or under maintence then display info  --}}
-                            @if(room.state == 2)
-                                <i class='fa fa-times-circle color-danger'></i> Closed - 
-                            @elseif(room.state == 3)
-                                <i class="fas fa-tools color-warning"></i> Under Maintenance -  
-                            @endif
-                            {{room.name}}
-                        </h4>
-                    </div>
-                    <div class='flex-grow-1 text-right'>
-                        @if(isAdmin)
-                            <button class="btn btn-info btn-icon-split" onclick="window.location='{{route('roomBookings', { id: room.id}) }}';">
-                                <span class="icon text-white-50"><i class="fas fa-book"></i></span>
-                                <span class="text">View Bookings</span>
-                            </button>
-                            <button class="btn btn-info btn-icon-split" onclick="window.location='{{ route('showIssue', { roomID: room.id, issueStatus: 'all' }) }}';">
-                                <span class="icon text-white-50"><i class="fas fa-flag"></i></span>
-                                <span class="text">View Issues</span>
-                            </button>   
-                            <button class="btn btn-primary btn-icon-split" onclick="window.location='{{ route('editRoom', { id: room.id }) }}';">
-                                <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
-                                <span class="text">Edit Room</span>
-                            </button>   
-                        @else
-                            @if(room.state != 1)
-                                <button disabled class="btn btn-primary btn-icon-split" data-toggle='modal' data-target='#confirmModal'>
+    <div class="row">
+    
+        <div class='col-8'>
+            <div class='card room-details-card shadow mb-4'>
+                <div class='card-header py-3'>
+                    <div class='d-flex flex-wrap'>
+                        <div class='' style='padding-top:6px;'>
+                            <h4 class="m-0 font-weight-bold text-primary">
+                                {{--  If the room is closed or under maintence then display info  --}}
+                                @if(room.state == 2)
+                                    <i class='fa fa-times-circle color-danger'></i> Closed - 
+                                @elseif(room.state == 3)
+                                    <i class="fas fa-tools color-warning"></i> Under Maintenance -  
+                                @endif
+                                {{room.name}}
+                            </h4>
+                        </div>
+                        <div class='flex-grow-1 text-right'>
+                            @if(isAdmin)
+                                <button class="btn btn-info btn-icon-split" onclick="window.location='{{route('roomBookings', { id: room.id}) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-book"></i></span>
-                                    <span class="text">Book Room</span>
+                                    <span class="text">View Bookings</span>
                                 </button>
-                            @else
-                                <button class="btn btn-primary btn-icon-split" data-toggle='modal' data-target='#confirmModal'>
-                                    <span class="icon text-white-50"><i class="fas fa-book"></i></span>
-                                    <span class="text">Book Room</span>
-                                </button>       
-                            @endif
-                            @if(hasReview)
-                                <button class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
-                                    <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
-                                    <span class="text">Edit Review</span>
-                                </button>
-                            @else
-                                <button class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
-                                    <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
-                                    <span class="text">Write Review</span>
+                                <button class="btn btn-info btn-icon-split" onclick="window.location='{{ route('showIssue', { roomID: room.id, issueStatus: 'all' }) }}';">
+                                    <span class="icon text-white-50"><i class="fas fa-flag"></i></span>
+                                    <span class="text">View Issues</span>
                                 </button>   
+                                <button class="btn btn-primary btn-icon-split" onclick="window.location='{{ route('editRoom', { id: room.id }) }}';">
+                                    <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
+                                    <span class="text">Edit Room</span>
+                                </button>   
+                            @else
+                                @if(hasReview)
+                                    <button class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
+                                        <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
+                                        <span class="text">Edit Review</span>
+                                    </button>
+                                @else
+                                    <button class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
+                                        <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
+                                        <span class="text">Write Review</span>
+                                    </button>   
+                                @endif
+                                <button class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i></button>
                             @endif
-                            <a class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i></a>
-                        @endif
+                        </div>
                     </div>
+                </div>
+                <div class='card-body'>
+                    <div class="row">
+                        <div class="col-5">
+                            @if(room.picture) 
+                                <img class='room-details-image' src='../{{ room.picture }}'>
+                            @else
+                                <img class='room-details-image' src='/images/meeting.jpeg'>
+                            @endif                     
+                        </div>
+                        <div class="col-7">
+                            <b>{{ room.fullName }}</b>
+                            <div class="">
+                                @!component('components/stars', rating=room.rating)
+                            </div>
+
+                            <div class="mt-2 mb-2">
+                                <b><i class="fas fa-map-marker-alt fa-fw"></i></b> {{ room.floor }}  {{ room.tower }}
+                            </div>
+                            <div class="mt-2 mb-3">
+                                <b><i class="fas fa-phone fa-fw"></i></b> {{ room.telephone }}
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-4"><b>Table Seats:</b> {{ room.seats }}</div>
+                                <div class="col-6"> <b>Capacity:</b> {{ room.capacity }}</div>
+                            </div>
+                            <div class="mt-2 mb-2"><b>Equipment:</b> {{ room.extraEquipment }}</div>
+                        </div>
+                        <div class="col-12">
+                            @if(room.comment === undefined || room.comment === null)
+                                <div class="mt-2 mb-2"><b>Comments:</b> {{ room.comment }}</div>
+                            @endif
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            <div class='card-body no-padding'>
-                <div class='d-flex flex-wrap justify-content-center'>  
-                    {{--  Room Image and Map  --}}
-                    <div class='d-flex flex-column room-details-image' style='margin:20px'>
-                        {{--  If there is a room picture then display it, else use default  --}}
-                        @if(room.picture) 
-                            <img class='room-details-image' src='../{{ room.picture }}'>
-                        @else
-                            <img class='room-details-image' src='/images/meeting.jpeg'>
-                        @endif
-                        <a class='link-color' href='' style='display:block; text-align:center;'  data-toggle='modal' data-target='#mapModal'>
-                            <i class='fas fa-external-link-alt'></i>
-                            View Map
-                        </a>
-                    </div>  
-                    {{--  Room Details  --}}
-                    <div class='flex-grow-1' style='margin:20px'>
-                        {{--  Table contents  --}}
-                        <div class='row' style='padding-right:15px;'>
-                            <div class='table-responsive'>
-                                <table class='table table-hover'>  
-                                    <tbody> 
-                                        <tr>
-                                            <th scope='row'>Full Name</th>
-                                            <td>{{ room.fullName }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope='row'>Location</th>
-                                            <td>{{ room.floor }}  {{ room.tower }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope='row'>Phone Number</th>
-                                            <td>{{ room.telephone }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope='row'>Table Seats</th>
-                                            <td>{{ room.seats }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope='row'>Max Capacity</th>
-                                            <td>{{ room.capacity }}</td>
-                                        </tr> 
-                                        <tr>
-                                            <th scope='row'>Equipment</th>
-                                            <td>{{ room.extraEquipment }}</td>
-                                        </tr>     
-                                        <tr>
-                                            <th scope='row'>Comments</th>
-                                            <td>{{ room.comment }}</td>
-                                        </tr>         
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>                 
-                    </div>
+
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Key Features</h6>
                 </div>
-                {{--  Checkboxes  --}}
-                <div class='row' style='margin:20px'>
-                    <div class='col room-details-spec'>
-                        <ul>
-                            @if(room.projector == 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Projector</span></li>
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Projector</span></li>
-                            @endif
-                            @if(room.flipchart == 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Flip Chart</span></li>
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Flip Chart</span></li>
-                            @endif
-                            @if(room.whiteboard == 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Whiteboard</span></li>
-                            @endif
-                            @if(room.audioConference == 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio Conf.</span></li>
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Audio Conf.</span></li>
-                            @endif
-                            @if(room.videoConference == 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video Conf.</span></li> 
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Video Conf.</span></li>
-                            @endif
-                            @if(room.pc == 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> PC</span></li>
-                            @endif
-                            @if(room.surfaceHub == 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Surface Hub</span></li>
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Surface Hub</span></li>
-                            @endif
-                        </ul>
-                    </div>
-                </div> 
+                <div class="card-body">
+                                            <div class='col room-details-spec'>
+                            <ul>
+                                @if(room.projector == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Projector</span></li>
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Projector</span></li>
+                                @endif
+                                @if(room.flipchart == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Flip Chart</span></li>
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Flip Chart</span></li>
+                                @endif
+                                @if(room.whiteboard == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Whiteboard</span></li>
+                                @endif
+                                @if(room.audioConference == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio Conf.</span></li>
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Audio Conf.</span></li>
+                                @endif
+                                @if(room.videoConference == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video Conf.</span></li> 
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Video Conf.</span></li>
+                                @endif
+                                @if(room.pc == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> PC</span></li>
+                                @endif
+                                @if(room.surfaceHub == 1)
+                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Surface Hub</span></li>
+                                @else
+                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Surface Hub</span></li>
+                                @endif
+                            </ul>
+                        </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        
+        <div class='col-4'>
+            <div class="card shadow">
+                <div class='card-header py-3'>
+                    <h4 class="m-0 font-weight-bold text-primary">Book Room</h4>
+                </div>
+                <div class="card-body">
+                    @if(!isAdmin || room.state != 1)
+                        <form action='{{ route('confirmBooking') }}' method='POST'>
+                            {{ csrfField() }}
+                            <input type='hidden' name='room' value={{ room.id }} /> 
+                            {{--  Body content  --}}
+                            <div class='body'>
+                                {{--  Meeting Name  --}}
+                                <div class='row'>
+                                    <div class='col form-group'>
+                                        <div class='row'>
+                                            <label class='col' for='meeting'>Meeting Name <b class='text-danger'>*</b></label>
+                                            <div class='col text-right'>
+                                                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='Select a name for the room booking'></i>
+                                            </div>
+                                        </div>
+                                        <td class='confirmation-modal-column'>
+                                            @if(hasErrorFor('meeting'))
+                                                <input type='text' id='meeting' name='meeting' class='form-control is-invalid' placeholder='Please enter booking name' value='{{ old('meeting', '') }}' onchange='removeErrorClass("meeting")'/>
+                                                <div class="invalid-feedback">{{ getErrorFor('meeting')}}</div>
+                                            @else
+                                                <input type='text' id='meeting' name='meeting' class='form-control' placeholder='Please enter booking name' value='{{ old('meeting', '') }}'/>
+                                            @endif
+                                    </div>
+                                </div>
+                                {{--  Date form  --}}
+                                <div class='row'>
+                                    <div class='col form-group'>
+                                        <div class='row'>
+                                            <label class='col' for='date'>Date <b class='text-danger'>*</b></label>
+                                            <div class='col text-right'>
+                                                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='The date may not occur more than 3 months in advance'></i>
+                                            </div>
+                                        </div>
+                                        {{--  If field is not filled correctly show an error box  --}}
+                                        @if(hasErrorFor('date'))
+                                            <input name='date'  id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', form.date) }}"}' onchange='removeErrorClass("date")'>
+                                            <div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
+                                        {{--  Otherwise show a normal input  --}}
+                                        @else
+                                            <input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', form.date) }}"}'>
+                                        @endif
+                                    </div>
+                                </div>
+                                {{--  From and To form  --}}
+                                <div class='row'>
+                                    {{--  From  --}}
+                                    <div class='col-12 form-group mb-4'>
+                                        <label for='from'>From <b class='text-danger'>*</b></label>
+                                        {{--  If field is not filled correctly show an error box  --}}
+                                        @if(hasErrorFor('from'))
+                                        <input name='from'  id='from' class='form-control date-form is-invalid' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue":"{{ old('from', form.from) }}", "minuteStep":"30", "minuteStepRound":"1" }' onchange='removeErrorClass("from")'>
+                                        <div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
+                                        {{--  If another field is invalid show the previous value  --}}
+                                        @elseif(hasErrorFor())
+                                            <input name='from'  id='from' class='form-control date-form' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue":"{{ old('from', form.from) }}", "minuteStep":"30", "minuteStepRound":"1" }'>
+                                        {{--  If there is no previous value then fill with current time --}}
+                                        @elseif(form.from == 'undefined')
+                                            <input name='from' id='from' class='form-control date-form' type="time" data-role="datebox" onchange='removeErrorClass("from")'>
+                                        @elseif(form.from == null)
+                                        <input name='from' id='from' class='form-control date-form' type="time" data-role="datebox" onchange='removeErrorClass("from")'> 
+                                        {{--  Otherwise show previous value or value from previous form  --}}
+                                        @else
+                                            <input name='from'  id='from' class='form-control date-form' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue":"{{ old('from', form.from) }}", "minuteStep":"30", "minuteStepRound":"1" }'>
+                                        @endif
+                                    </div>
+                                    {{--  To  --}}
+                                    <div class='col-12 form-group mb-4'>
+                                        <label for='to'>To <b class='text-danger'>*</b></label>
+                                        {{--  If field is not filled correctly show an error box  --}}
+                                        @if(hasErrorFor('to'))
+                                        <input name='to'  id='to' class='form-control date-form is-invalid' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue": "{{ old('to', form.to) }}", "minuteStep":"30" }' onchange='removeErrorClass("to")'>
+                                        <div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
+                                        {{--  If another field is invalid show the previous value  --}}
+                                        @elseif(hasErrorFor())
+                                            <input name='to'  id='to' class='form-control date-form' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue": "{{ old('to', form.to) }}", "minuteStep":"30" }'>
+                                        {{--  If another field is invalid show the previous value  --}}
+                                        @elseif(form.to == 'undefined')
+                                            <input name='to'  id='to' class='form-control date-form' type="time" data-role="datebox" onchange='removeErrorClass("to")'>
+                                        {{--  If there is no previous value then fill with current time --}}
+                                        @elseif(form.to == null)
+                                            <input name='to'  id='to' class='form-control date-form' type="time" data-role="datebox" onchange='removeErrorClass("to")'>
+                                        {{--  Otherwise show a normal input  --}}
+                                        @else
+                                            <input name='to'  id='to' class='form-control date-form' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue": "{{ old('to', form.to) }}", "minuteStep":"30" }'>
+                                        @endif
+                                    </div>
+                                </div>
+                                {{--  Reccuring Form  #### No functionality, Display:none for now --}}
+                                <div class='row' style='display:none'>
+                                    <div class='col form-group'>
+                                        <label for='recurringSelect' data-toggle='tooltip' data-placement='right' title='' data-original-title=''>Recurring</label>
+                                        <select class='form-control' id='recurringSelect' name='recurringSelect' onchange='showRecurring()'>
+                                                <option value='0' {{ old('recurringSelect') == 0 ? 'selected' : '' }}>No</option>
+                                                <option value='1' {{ old('recurringSelect') == 1 ? 'selected' : '' }}>Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+               
+                                {{--  NOTE: This only shows when the user selects 'Yes' in the Reccuring Dropdown  --}}
+                                <div class='row' id='recurringInfo' style='display:none'>
+                                    <div class='col form-group'>
+                                        @if(hasErrorFor('interval'))
+                                            <select class='form-control is-invalid' name='interval' id='interval' onchange='removeErrorClass("interval")'>
+                                                <option value='0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
+                                                <option value='daily' {{ old('interval') == 'daily' ? 'selected' : '' }}>Daily</option>
+                                                <option value='weekly' {{ old('interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
+                                                <option value='biWeekly' {{ old('interval') == 'biWeekly' ? 'selected' : '' }}>Bi-Weekly</option>
+                                                <option value='monthly' {{ old('interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
+                                                <option value='yearly' {{ old('interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
+                                            </select>
+                                            <div class='invalid-feedback show-invalid'>{{ getErrorFor('interval')}}</div>
+                                        @else
+                                            <select class='form-control' name='interval' id='interval'>
+                                                <option value= '0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
+                                                <option value='daily' {{ old('interval') == 'daily' ? 'selected' : '' }}>Daily</option>
+                                                <option value='weekly' {{ old('interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
+                                                <option value='biWeekly' {{ old('interval') == 'biWeekly' ? 'selected' : '' }}>Bi-Weekly</option>
+                                                <option value='monthly' {{ old('interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
+                                                <option value='yearly' {{ old('interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
+                                            </select>
+                                        @endif
+                                    </div>
+                                    <div class='col form-group'>
+                                        @if(hasErrorFor('numberOfTimes'))
+                                            <select class='form-control is-invalid' name='numberOfTimes' id='numberOfTimes' onchange='removeErrorClass("numberOfTimes")'>
+                                                <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
+                                                <option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
+                                                <option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
+                                                <option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
+                                                <option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
+                                            </select> 
+                                            <div class='invalid-feedback show-invalid'>{{ getErrorFor('numberOfTimes')}}</div>
+                                        @else
+                                            <select class='form-control' name='numberOfTimes' id='numberOfTimes'>
+                                                <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
+                                                <option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
+                                                <option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
+                                                <option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
+                                                <option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
+                                            </select> 
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            {{--  Footer buttons to cancel and book room  --}}
+                            <div class='text-right'>
+                                <button type='submit' class='btn btn-primary w-100 mb-2'>Book Room</button>
+                            </div>
+                        </form>
+                    @else
+                        <p> Sorry, No bookings available for this room</p>
+                    @endif
+                </div>
             </div>
         </div>
+
     </div>
+
     <div class="card shadow mt-4 mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Rating and Reviews</h6>
         </div>
         <div class="card-body">
-            @if(reviews.length == 0)
-                <div class='row'>
-                    <div class='col-12 text-center'>
-                        <p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p>
-                        <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
-                    </div>			
-                </div>
+
+            @if(!hasReview) 
+                <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
             @else
-                <div class='table table-responsive mt-1'>
-                    <table id='reviewsTable' class='table table-hover' style='width:100%;'>
-                        <thead class='table table-hover mt-4'>
-                            <tr>
-                                <th scope='col' class='text-center' style='width:5%'>Rating</th>
-                                <th scope='col' class='text-center' style='width:95%'>Review</th>
-                            </tr>
-                        </thead>
-                        {{--  Loops through the rooms array and displays every room's content  --}}
-                        <tbody>
-                            @each(review in reviews) 
-                                <tr class='table-light' id='roomRow'>
-                                    <td class='text-center'>{{ review.rating }}</td>
-                                    <td class='text-center'>{{ review.review }}</td>
-                                </tr>
-                            @endeach
-                        </tbody>
-                    </table>
-                </div> 
+                <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
             @endif
+                        {{ csrfField() }}
+
+                        {{--  Body  --}}
+                        <div class='row'>
+                            <div class='col form-group'>
+                                <label for='rating' data-original-title='Enter a rating for this room'>Rating <b class='text-danger'>*</b></b></label>
+
+                                @if(hasErrorFor('rating'))
+                                    <select class='form-control is-invalid' name='rating' id='rating' onchange='removeErrorClass("rating")'>
+                                @else
+                                    <select class='form-control' name='rating' id='rating' onchange='removeErrorClass("rating")'>
+                                @endif
+                                        <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Rating</option>
+                                        <option value='1' {{ old('rating', review.rating) == '1' ? 'selected' : '' }}>1</option>
+                                        <option value='2' {{ old('rating', review.rating) == '2' ? 'selected' : '' }}>2</option>
+                                        <option value='3' {{ old('rating', review.rating) == '3' ? 'selected' : '' }}>3</option>
+                                        <option value='4' {{ old('rating', review.rating) == '4' ? 'selected' : '' }}>4</option>
+                                        <option value='5' {{ old('rating', review.rating) == '5' ? 'selected' : '' }}>5</option>
+                                    </select>
+
+                                    @if(hasErrorFor('rating'))
+                                        <div class='invalid-feedback'>{{ getErrorFor('rating') }}</div>
+                                    @endif
+                            </div>
+                        </div>
+
+                        <div class='row'>
+                            <div class='col form-group'>
+                                <label for='review'>Review</label>
+                                    <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
+                                    <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
+                            </div> 
+                        </div> 
+
+                        <div class='row'>
+                            {{--  Floor Plan Picture --}}
+                            <div class='col form-group no-margin' id='reviewPictureContent'>
+                                <label>Picture</label>
+                                <div class='form-group'>
+                                    <div class='custom-file'>
+                                        @if(hasErrorFor('reviewPicture'))
+                                            <input type='file' class='custom-file-input is-invalid' id='reviewPicture' name='reviewPicture' oninput='removeErrorClass("reviewPicture")'>
+                                            <div class='invalid-feedback'>{{ getErrorFor('reviewPicture') }}</div>
+                                        @else
+                                            <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
+                                        @endif
+                                        <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose File</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        {{--  Footer buttons to cancel and book room  --}}
+
+                        <div class='text-right'>
+                            @if(!hasReview)
+                                <button type='submit' class="btn btn-primary btn-icon-split">
+                                    <span class="icon text-white-50">
+                                      <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text">Submit</span>
+                                </button>
+                            @else  
+                                <button type='button' class="btn btn-danger btn-icon-split" data-toggle='modal' data-target='#deleteModal'>
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-trash"></i>
+                                    </span>
+                                    <span class="text">Delete</span>
+                                </button>  
+
+                                <button type='submit' class="btn btn-primary btn-icon-split">
+                                    <span class="icon text-white-50">
+                                      <i class="fas fa-check"></i>
+                                    </span>
+                                    <span class="text">Update</span>
+                                </button>
+                            @endif    
+                        </div> 
+                </form>
+
+
+
+                @if(reviews.length == 0)
+                    <div class='row'>
+                        <div class='col-12 text-center'>
+                            <p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p>
+                            <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
+                        </div>			
+                    </div>
+                @else
+                    {{--  Loops through the rooms array and displays every room's content  --}}
+                    @each(review in reviews) 
+                        @!component('components/stars', rating=review.rating)
+                        {{ review.review }}
+                    @endeach
+                @endif
             
         </div>
     </div>
+
+
+    <div class='modal' id='deleteModal' role='dialog' aria-hidden='true'>
+           <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h5 class='modal-title' id='exampleModalLabel'>Are you sure?</h5>
+                        <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+                            <span aria-hidden='true'>×</span>
+                        </button>
+                    </div>
+                    <div class='modal-body'>Are you sure you want to delete your review?</div>
+                    <form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                        {{ csrfField() }}
+                        <div class='modal-footer'>
+                            <button class='btn btn-secondary' type='button' data-dismiss='modal'>Cancel</button>
+                            <button type='submit' class='btn btn-danger'>Delete</button>
+                        </div>                    
+                    </form>
+                </div>
+           </div>
+       </div>
     {{--  Only show to non-admin users  --}}
     @if(!isAdmin)
         {{--  Review Modal Box  --}}
-        <div class='modal' id='reviewModal'>
-            <div class='modal-dialog confirmation-modal' role='document'>
-                <div class='modal-content'>
-                    @if(!hasReview) 
-                        <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
-                    @else
-                        <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
-                    @endif
-                        {{ csrfField() }}
-                        <div class='modal-highlight'></div>
-                        {{--  Header  --}}
-                        <div class='modal-header'>
-                            <h4 class='no-margin'>Review</h4>
-                        </div>
 
-                        {{--  Body  --}}
-                        <div class='body' style='margin:20px;'>
-                            <div class='row'>
-                                <div class='col form-group'>
-                                    <label for='rating' data-original-title='Enter a rating for this room'>Rating <b class='text-danger'>*</b></b></label>
-    
-                                    @if(hasErrorFor('rating'))
-                                        <select class='form-control is-invalid' name='rating' id='rating' onchange='removeErrorClass("rating")'>
-                                            <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Rating</option>
-                                            <option value='1' {{ old('rating', review.rating) == '1' ? 'selected' : '' }}>1</option>
-                                            <option value='2' {{ old('rating', review.rating) == '2' ? 'selected' : '' }}>2</option>
-                                            <option value='3' {{ old('rating', review.rating) == '3' ? 'selected' : '' }}>3</option>
-                                            <option value='4' {{ old('rating', review.rating) == '4' ? 'selected' : '' }}>4</option>
-                                            <option value='5' {{ old('rating', review.rating) == '5' ? 'selected' : '' }}>5</option>
-                                        </select>
-                                        <div class='invalid-feedback'>{{ getErrorFor('rating') }}</div>
-                                    @else
-                                        <select class='form-control' name='rating' id='rating' onchange='removeErrorClass("rating")'>
-                                            <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Rating</option>
-                                            <option value='1' {{ old('rating', review.rating) == '1' ? 'selected' : '' }}>1</option>
-                                            <option value='2' {{ old('rating', review.rating) == '2' ? 'selected' : '' }}>2</option>
-                                            <option value='3' {{ old('rating', review.rating) == '3' ? 'selected' : '' }}>3</option>
-                                            <option value='4' {{ old('rating', review.rating) == '4' ? 'selected' : '' }}>4</option>
-                                            <option value='5' {{ old('rating', review.rating) == '5' ? 'selected' : '' }}>5</option>
-                                        </select>
-                                    @endif
-                                </div>
-                            </div>
-                        
-                            <div class='row'>
-                                <div class='col form-group'>
-                                    <label for='review'>Review</label>
 
-                                    @if(hasErrorFor('review'))
-                                        <textarea class='form-control is-invalid' name='review' id='review' rows='5' onchange='removeErrorClass("review")'> {{ old('review',  review.review) }}</textarea>
-                                        <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
-                                    @else
-                                        <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
-                                    @endif
-                                </div> 
-                            </div> 
-                            
-                            <div class='row'>
-                                {{--  Floor Plan Picture --}}
-                                <div class='col form-group no-margin' id='reviewPictureContent'>
-                                    <label>Picture</label>
-                                    <div class='form-group'>
-                                        <div class='custom-file'>
-                                            @if(hasErrorFor('reviewPicture'))
-                                                <input type='file' class='custom-file-input is-invalid' id='reviewPicture' name='reviewPicture' oninput='removeErrorClass("reviewPicture")'>
-                                                <div class='invalid-feedback'>{{ getErrorFor('reviewPicture') }}</div>
-                                            @else
-                                                <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
-                                            @endif
-                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose File</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{--  Footer buttons to cancel and book room  --}}
-                        @if(!hasReview)
-                            <div class='modal-footer text-right'>
-                                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                                <button type='submit' class='btn btn-primary'>Add</button>   
-                            </div> 
-                        @else
-                            <div class='modal-footer text-right'>
-								<button type='button' class='btn' style='position:absolute; top:10px; right:0;' title='Delete review' data-toggle='modal' data-target='#deleteModal' ><i class='far fa-trash-alt' style='color:red; font-size:20px;'></i></button>   
-                                <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                                <button type='submit' class='btn btn-primary'>Update</button>   
-                            </div>
-                        @endif 
-                    </form> 
-                </div>
-            </div>
-        </div>
-        <!--  Delete Modal  -->
-        <div class='modal' id='deleteModal' role='dialog' aria-hidden='true'>
-            <div class='modal-dialog' role='document'>
-				<div class='modal-content'>
-					<div class='modal-header'>
-						<h5 class='modal-title' id='exampleModalLabel'>Are you sure?</h5>
-						<button class='close' type='button' data-dismiss='modal' aria-label='Close'>
-							<span aria-hidden='true'>×</span>
-						</button>
-					</div>
-					<div class='modal-body'>Are you sure you want to delete your review?</div>
-					<form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
-						{{ csrfField() }}
-						<div class='modal-footer'>
-							<button class='btn btn-secondary' type='button' data-dismiss='modal'>Cancel</button>
-							<button type='submit' class='btn btn-danger'>Delete</button>   
-						</div>					
-					</form> 
-				</div>
-            </div>
-        </div>
-        {{--  Room Booking Modal Box  --}}
-        <div class='modal' id='confirmModal'>
-            <div class='modal-dialog confirmation-modal' role='document'>
-                <div class='modal-content' >
-                    <form action='{{ route('confirmBooking') }}' method='POST'>
-                        {{ csrfField() }}
-                        <input type='hidden' name='room' value={{ room.id }} /> 
-                        <div class='modal-highlight'></div>
-                        {{--  Displaying room image and a link to full room details  --}}
-                        <div class='wrapper-center mb-4' style='height: auto;'>
-                            {{--  If there is a room picture then display it, else use default  --}}
-                            @if(room.picture) 
-                                <img class='room-confirm-image' src='../{{ room.picture }}'>
-                            @else
-                                <img class='room-confirm-image' src='/images/meeting.jpeg'>
-                            @endif
-                        </div>
-                        {{--  Body content  --}}
-                        <div class='body' style='margin:0 20px 0 20px;'>
-                            {{--  Meeting Name  --}}
-                            <div class='row'>
-                                <div class='col form-group'>
-                                    <div class='row'>
-                                        <label class='col' for='meeting'>Meeting Name <b class='text-danger'>*</b></label>
-                                        <div class='col text-right'>
-                                            <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='Select a name for the room booking'></i>
-                                        </div>
-                                    </div>
-                                    <td class='confirmation-modal-column'>
-                                        @if(hasErrorFor('meeting'))
-                                            <input type='text' id='meeting' name='meeting' class='form-control is-invalid' placeholder='Please enter booking name' value='{{ old('meeting', '') }}' onchange='removeErrorClass("meeting")'/>
-                                            <div class="invalid-feedback">{{ getErrorFor('meeting')}}</div>
-                                        @else
-                                            <input type='text' id='meeting' name='meeting' class='form-control' placeholder='Please enter booking name' value='{{ old('meeting', '') }}'/>
-                                        @endif
-                                </div>
-                            </div>
-                            {{--  Date form  --}}
-                            <div class='row'>
-                                <div class='col form-group'>
-                                    <div class='row'>
-                                        <label class='col' for='date'>Date <b class='text-danger'>*</b></label>
-                                        <div class='col text-right'>
-                                            <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='The date may not occur more than 3 months in advance'></i>
-                                        </div>
-                                    </div>
-                                    {{--  If field is not filled correctly show an error box  --}}
-                                    @if(hasErrorFor('date'))
-                                        <input name='date'  id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', form.date) }}"}' onchange='removeErrorClass("date")'>
-                                        <div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
-                                    {{--  Otherwise show a normal input  --}}
-                                    @else
-                                        <input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', form.date) }}"}'>
-                                    @endif
-                                </div>
-                            </div>
-                            {{--  From and To form  --}}
-                            <div class='row'>
-                                {{--  From  --}}
-                                <div class='col form-group mb-4'>
-                                    <label for='from'>From <b class='text-danger'>*</b></label>
-                                    {{--  If field is not filled correctly show an error box  --}}
-                                    @if(hasErrorFor('from'))
-                                    <input name='from'  id='from' class='form-control date-form is-invalid' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue":"{{ old('from', form.from) }}", "minuteStep":"30", "minuteStepRound":"1" }' onchange='removeErrorClass("from")'>
-                                    <div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
-                                    {{--  If another field is invalid show the previous value  --}}
-                                    @elseif(hasErrorFor())
-                                        <input name='from'  id='from' class='form-control date-form' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue":"{{ old('from', form.from) }}", "minuteStep":"30", "minuteStepRound":"1" }'>
-                                    {{--  If there is no previous value then fill with current time --}}
-                                    @elseif(form.from == 'undefined')
-                                        <input name='from' id='from' class='form-control date-form' type="time" data-role="datebox" onchange='removeErrorClass("from")'>
-                                    @elseif(form.from == null)
-                                    <input name='from' id='from' class='form-control date-form' type="time" data-role="datebox" onchange='removeErrorClass("from")'> 
-                                    {{--  Otherwise show previous value or value from previous form  --}}
-                                    @else
-                                        <input name='from'  id='from' class='form-control date-form' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue":"{{ old('from', form.from) }}", "minuteStep":"30", "minuteStepRound":"1" }'>
-                                    @endif
-                                </div>
-                                {{--  To  --}}
-                                <div class='col form-group mb-4'>
-                                    <label for='to'>To <b class='text-danger'>*</b></label>
-                                    {{--  If field is not filled correctly show an error box  --}}
-                                    @if(hasErrorFor('to'))
-                                    <input name='to'  id='to' class='form-control date-form is-invalid' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue": "{{ old('to', form.to) }}", "minuteStep":"30" }' onchange='removeErrorClass("to")'>
-                                    <div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
-                                    {{--  If another field is invalid show the previous value  --}}
-                                    @elseif(hasErrorFor())
-                                        <input name='to'  id='to' class='form-control date-form' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue": "{{ old('to', form.to) }}", "minuteStep":"30" }'>
-                                    {{--  If another field is invalid show the previous value  --}}
-                                    @elseif(form.to == 'undefined')
-                                        <input name='to'  id='to' class='form-control date-form' type="time" data-role="datebox" onchange='removeErrorClass("to")'>
-                                    {{--  If there is no previous value then fill with current time --}}
-                                    @elseif(form.to == null)
-                                        <input name='to'  id='to' class='form-control date-form' type="time" data-role="datebox" onchange='removeErrorClass("to")'>
-                                    {{--  Otherwise show a normal input  --}}
-                                    @else
-                                        <input name='to'  id='to' class='form-control date-form' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue": "{{ old('to', form.to) }}", "minuteStep":"30" }'>
-                                    @endif
-                                </div>
-                            </div>
-                            {{--  Reccuring Form  #### No functionality, Display:none for now --}}
-                            <div class='row' style='display:none'>
-                                <div class='col form-group'>
-                                    <label for='recurringSelect' data-toggle='tooltip' data-placement='right' title='' data-original-title=''>Recurring</label>
-                                    <select class='form-control' id='recurringSelect' name='recurringSelect' onchange='showRecurring()'>
-                                            <option value='0' {{ old('recurringSelect') == 0 ? 'selected' : '' }}>No</option>
-                                            <option value='1' {{ old('recurringSelect') == 1 ? 'selected' : '' }}>Yes</option>
-                                    </select>
-                                </div>
-                            </div>
-           
-                            {{--  NOTE: This only shows when the user selects 'Yes' in the Reccuring Dropdown  --}}
-                            <div class='row' id='recurringInfo' style='display:none'>
-                                <div class='col form-group'>
-                                    @if(hasErrorFor('interval'))
-                                        <select class='form-control is-invalid' name='interval' id='interval' onchange='removeErrorClass("interval")'>
-                                            <option value='0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
-                                            <option value='daily' {{ old('interval') == 'daily' ? 'selected' : '' }}>Daily</option>
-                                            <option value='weekly' {{ old('interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
-                                            <option value='biWeekly' {{ old('interval') == 'biWeekly' ? 'selected' : '' }}>Bi-Weekly</option>
-                                            <option value='monthly' {{ old('interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
-                                            <option value='yearly' {{ old('interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
-                                        </select>
-                                        <div class='invalid-feedback show-invalid'>{{ getErrorFor('interval')}}</div>
-                                    @else
-                                        <select class='form-control' name='interval' id='interval'>
-                                            <option value= '0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
-                                            <option value='daily' {{ old('interval') == 'daily' ? 'selected' : '' }}>Daily</option>
-                                            <option value='weekly' {{ old('interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
-                                            <option value='biWeekly' {{ old('interval') == 'biWeekly' ? 'selected' : '' }}>Bi-Weekly</option>
-                                            <option value='monthly' {{ old('interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
-                                            <option value='yearly' {{ old('interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
-                                        </select>
-                                    @endif
-                                </div>
-                                <div class='col form-group'>
-                                    @if(hasErrorFor('numberOfTimes'))
-                                        <select class='form-control is-invalid' name='numberOfTimes' id='numberOfTimes' onchange='removeErrorClass("numberOfTimes")'>
-                                            <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
-                                            <option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
-                                            <option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
-                                            <option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
-                                            <option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
-                                        </select> 
-                                        <div class='invalid-feedback show-invalid'>{{ getErrorFor('numberOfTimes')}}</div>
-                                    @else
-                                        <select class='form-control' name='numberOfTimes' id='numberOfTimes'>
-                                            <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
-                                            <option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
-                                            <option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
-                                            <option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
-                                            <option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
-                                        </select> 
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        {{--  Footer buttons to cancel and book room  --}}
-                        <div class='modal-footer text-right'>
-                            <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                            <button type='submit' class='btn btn-primary'>Book Room</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
         {{--  Reporting Modal Box  --}}
         <div class='modal' id='reportModal'>
             <div class='modal-dialog confirmation-modal' role='document'>
