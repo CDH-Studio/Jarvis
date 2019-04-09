@@ -2,6 +2,8 @@
 <div class='row page-title'>
     <div class='col-12 mb-3'>
         <h4 style='letter-spacing: 1px;'><b>{{ title }}</b></h4>
-        <p style='letter-spacing: 1px;'>{{ subtitle }}</p>
+        @if(subtitle)
+            <p style='letter-spacing: 1px;'>{{ subtitle }}</p>
+        @endif
     </div>
 </div>
