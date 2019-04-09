@@ -267,10 +267,6 @@ class BookingController {
 		}
 	}
 
-	async searchRecurring ({ view }) {
-		return view.render('userPages/recurringBooking');
-	}
-
 	/**
 	 * Create an event on the specified room calendar.
 	 *

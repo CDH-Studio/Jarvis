@@ -339,6 +339,10 @@ class RoomController {
 		return view.render('adminDash.viewRooms', { rooms });
 	}
 
+	async searchRecurring ({ request }) {
+		return request.all();
+	}
+
 	/**
 	 * Query rooms from search criteria and render the results page.
 	 *

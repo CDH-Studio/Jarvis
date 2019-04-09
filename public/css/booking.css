@@ -76,28 +76,13 @@
 	animation: fadeIn 2s;
 }
 
+/***** Recurring Booking page *****/
+
 .tabs {
   position: relative;   
   min-height: 200px; /* This part sucks */
   clear: both;
   margin: 25px 0;
-}
-
-.tab {
-  float: left;
-}
-
-.tab label {
-  background: #eee; 
-  padding: 10px; 
-  border: 1px solid #ccc; 
-  margin-left: -1px; 
-  position: relative;
-  left: 1px; 
-}
-
-.radio-tab {
-  display: none;   
 }
 
 .tab-content {
@@ -107,29 +92,12 @@
   background: white;
   right: 0;
   bottom: 0;
-  padding: 20px;
-	border: 1px solid #ccc; 
+	padding: 20px;
+	border: 1px solid #e3e6f0;
+	border-radius: calc(0.35rem - 1px) calc(0.35rem - 1px) 0 0;
 	
 	display: flex;
 	flex-wrap: wrap;
-}
-
-.daily-content {
-	flex-direction: column;
-}
-
-.weekly-content {
-	flex-direction: row;
-}
-
-[type=radio]:checked ~ label {
-  background: white;
-  border-bottom: 1px solid white;
-  z-index: 2;
-}
-
-[type=radio]:checked ~ label ~ .tab-content {
-  z-index: 1;
 }
 
 .weekdays {
