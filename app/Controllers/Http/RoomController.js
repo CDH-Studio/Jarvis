@@ -340,7 +340,10 @@ class RoomController {
 	}
 
 	async searchRecurring ({ request }) {
-		return request.all();
+		const recurrence = request.all();
+		console.log(recurrence);
+
+		return recurrence;
 	}
 
 	/**

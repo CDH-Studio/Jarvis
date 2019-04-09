@@ -77,6 +77,14 @@
 }
 
 /***** Recurring Booking page *****/
+a {
+	color: #004680 !important;
+}
+
+a.nav-link.active {
+	background-color: #004680 !important;
+	color: white !important;
+}
 
 .tabs {
   position: relative;   
