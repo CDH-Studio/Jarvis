@@ -146,29 +146,38 @@
 								</div>
                             </div>
                             
-                            {{---------------------------------------------------------------------------------------------}}
-							<div class="tab">
-								<button class="tablinks" onclick="">Daily</button>
-								<button class="tablinks" onclick="">Weekly</button>
-								<button class="tablinks" onclick="">Monthly</button>
-								<button class="tablinks" onclick="">Yearly</button>
+							{{---------------------------------------------------------------------------------------------}}
+							
+							{{------- Recurring Tabs -------}}
+							<div class="tabs">
+								<div class="tab">
+									<input class="radio-tab" type="radio" id="tab-1" name="tab-group-1" checked>
+									<label for="tab-1">Daily</label>
+									
+									<div class="content">
+										<input type="radio" name="every" value="every"> Every <br>
+									</div> 
+								</div>
+									
+								<div class="tab">
+									<input class="radio-tab" type="radio" id="tab-2" name="tab-group-1">
+									<label for="tab-2">Weekly</label>
+									
+									<div class="content">
+										stuff2
+									</div> 
+								</div>
+									
+								<div class="tab">
+									<input class="radio-tab" type="radio" id="tab-3" name="tab-group-1">
+									<label for="tab-3">Monthly</label>
+									
+									<div class="content">
+										stuff3
+									</div> 
+								</div>		
 							</div>
-
-							<div id="daily" class="tabcontent">
-								Daily
-							</div>
-								
-							<div id="weekly" class="tabcontent">
-								Weekly
-							</div>
-								
-							<div id="monthly" class="tabcontent">
-								Monthly
-							</div>
-
-							<div id="yearly" class="tabcontent">
-								Yearly
-							</div>
+							{{------- END Recurring Tabs -------}}
 
 							{{--  NOTE: This only shows when the user selects 'Yes' in the Reccuring Dropdown  --}}				
 							<div class='row' id='recurringInfo' style='display:none'>
@@ -272,5 +281,8 @@
             });
         </script>
 	@endif
+
+	<script>
+	</script>
 
 @endsection
