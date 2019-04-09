@@ -25,7 +25,7 @@ Route.on('/sample').render('sample');
 //= ========================================================================
 
 // User Authentication
-Route.get('/register', 'UserController.registerRender').as('register');
+Route.get('/register', 'UserController.registerUserRender').as('registerUser');
 Route.post('/register', 'UserController.create').validator('CreateUser');
 
 // Admin Authentication

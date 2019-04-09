@@ -69,7 +69,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async registerRender ({ request, auth, view, response }) {
+	async registerUserRender ({ request, auth, view, response }) {
 		// present login to logged out users only
 		if (auth.user) {
 			return response.redirect('/');
@@ -83,7 +83,7 @@ class UserController {
 			var floorOptions = await Floor.all();
 			floorOptions = floorOptions.toJSON();
 
-			return view.render('auth.register', { photoName, floorOptions, towerOptions });
+			return view.render('auth.registerUser', { photoName, floorOptions, towerOptions });
 		}
 	}
 
@@ -416,7 +416,7 @@ class UserController {
 			if (rows.length !== 0 && rows[0].type === 1) {
 				const email = rows[0].email;
 
-				return view.render('resetPassword', { email });
+				return view.render('auth.resetPassword', { email });
 			}
 		}
 	}
@@ -476,7 +476,7 @@ class UserController {
 			return (a.firstname > b.firstname) ? 1 : ((b.firstname > a.firstname) ? -1 : 0);
 		});
 
-		return view.render('adminDash.viewUsers', { users });
+		return view.render('adminPages.viewUsers', { users });
 	}
 }
 

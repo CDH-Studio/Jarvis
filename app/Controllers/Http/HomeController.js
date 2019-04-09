@@ -107,7 +107,7 @@ class HomeController {
 		const topFiveRooms = await this.getRoomPopularity();
 		const highestRatedRooms = await this.getRoomRatings();
 
-		return view.render('adminDash', { userStats: userStats, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
+		return view.render('adminPages.adminDash', { userStats: userStats, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
 	}
 
 	/****************************************

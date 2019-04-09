@@ -149,7 +149,7 @@ class IssueController {
 			issues[i].created_at = currentTime.toLocaleDateString('de-DE', options);
 		}
 
-		return view.render('adminDash.viewRoomIssues', { roomID: params.roomID, roomName, issues, stats, filterType: params.issueStatus });
+		return view.render('adminPages.viewRoomIssues', { roomID: params.roomID, roomName, issues, stats, filterType: params.issueStatus });
 	}
 
 	/**
