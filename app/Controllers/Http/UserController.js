@@ -298,7 +298,7 @@ class UserController {
 				session.flash({
 					notification: 'Welcome! You are logged in'
 				});
-				return response.redirect('/booking');
+				return response.redirect('/userDash');
 			} else {
 				return response.redirect('/');
 			}
