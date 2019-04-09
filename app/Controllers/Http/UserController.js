@@ -126,7 +126,7 @@ class UserController {
 			return response.redirect('/');
 		}
 
-		return view.render('auth.editUser', { user: user, layoutType: layoutType, isAdmin: isAdmin });
+		return view.render('auth.editProfile', { user: user, layoutType: layoutType, isAdmin: isAdmin });
 	}
 
 	/**
@@ -352,7 +352,7 @@ class UserController {
 			return response.redirect('/');
 		}
 
-		return view.render('auth.showUser', { auth, user, layoutType, canEdit, profileUserRole });
+		return view.render('auth.showProfile', { auth, user, layoutType, canEdit, profileUserRole });
 	}
 
 	/**
