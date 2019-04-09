@@ -151,11 +151,16 @@
 							{{------- Recurring Tabs -------}}
 							<div class="tabs">
 								<div class="tab">
-									<input class="radio-tab" type="radio" id="tab-1" name="tab-group-1" checked>
+									<input class="radio-tab" type="radio" id="tab-1" name="tab-group-1">
 									<label for="tab-1">Daily</label>
 									
 									<div class="content">
-										<input type="radio" name="every" value="every"> Every <br>
+										<div>
+											<input type="radio" name="every" value="every"> Every <input type="number" name="daily-interval"> day(s)
+										</div>
+										<div>
+											<input type="radio" name="every-weekday" value="every-weekday"> Every weekday
+										</div>
 									</div> 
 								</div>
 									
@@ -164,16 +169,51 @@
 									<label for="tab-2">Weekly</label>
 									
 									<div class="content">
-										stuff2
+										<div>
+											<p>Every <input type="number" name="weekly-interval"> week(s) on:</p>
+										</div>
+										
+										<div class="weekdays">
+											<div>
+												<input type='checkbox' name='sunday' id='sunday' value=0 />
+												<label for='sunday'>Sunday</label>
+											</div>
+											<div>
+												<input type='checkbox' name='monday' id='monday' value=1 />
+												<label for='monday'>Monday</label>
+											</div>
+											<div >
+												<input type='checkbox' name='tuesday' id='tuesday' value=2 />
+												<label for='tuesday'>Tuesday</label>
+											</div>
+											<div >
+												<input type='checkbox' name='wednesday' id='wednesday' value=3 />
+												<label for='wednesday'>Wednesday</label>
+											</div>
+											<div >
+												<input type='checkbox' name='thursday' id='thursday' value=4 />
+												<label for='thursday'>Thursday</label>
+											</div>
+											<div >
+												<input type='checkbox' name='friday' id='friday' value=5 />
+												<label for='friday'>Friday</label>
+											</div>
+											<div >
+												<input type='checkbox' name='saturday' id='saturday' value=6 />
+												<label for='saturday'>Saturday</label>
+											</div>
+										</div>
 									</div> 
 								</div>
 									
 								<div class="tab">
-									<input class="radio-tab" type="radio" id="tab-3" name="tab-group-1">
+									<input class="radio-tab" type="radio" id="tab-3" name="tab-group-1" checked>
 									<label for="tab-3">Monthly</label>
 									
 									<div class="content">
-										stuff3
+										<div>
+											<p>Day <input type="number" name="dayOfMonth" width="2"> of every <input type="number" name="interval"> month(s)</p>
+										</div>
 									</div> 
 								</div>		
 							</div>
