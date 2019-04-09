@@ -45,7 +45,7 @@ class RoomController {
 	* @param {view}
 	*
 	*/
-	async loadSearchRoomsForm ({ view, auth }) {
+	async loadSearchRoomsForm ({ view, params }) {
 		// Calculates the from and too times to pre fill in the search form
 		const currentTime = new Date();
 		const currentHour = currentTime.getHours();
@@ -69,8 +69,8 @@ class RoomController {
 			dropdownSelection.push({ dataValue: start.format('HH:mm'), name: start.format('h:mm A') });
 			start.add(30, 'm');
 		}
-
-		return view.render('userPages.searchRooms', { fromTime, toTime, dropdownSelection });
+		console.log('params', params)
+		return view.render(`userPages.${params.view}`, { fromTime, toTime, dropdownSelection });
 	}
 	/**
 	 * Takes in a variable and converts the value to 0 if it's null (Used for checkboxes)
