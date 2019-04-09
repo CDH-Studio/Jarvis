@@ -5,6 +5,7 @@ const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
 const Event = use('Event');
+const moment = require('moment');
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -37,6 +38,40 @@ function random (times) {
 }
 
 class RoomController {
+	/**
+	*
+	* Render Search Room Page and pass the current time for autofill purposes
+	*
+	* @param {view}
+	*
+	*/
+	async loadSearchRoomsForm ({ view, auth }) {
+		// Calculates the from and too times to pre fill in the search form
+		const currentTime = new Date();
+		const currentHour = currentTime.getHours();
+		const currentMinutes = currentTime.getMinutes();
+		let fromTime;
+		let toTime;
+		let dropdownSelection = [];
+		const start = moment().startOf('day');
+		const end = moment().endOf('day');
+
+		if (currentMinutes <= 30) {
+			fromTime = currentHour + ':30';
+			toTime = currentHour + 1 + ':30';
+		} else {
+			fromTime = currentHour + 1 + ':00';
+			toTime = currentHour + 2 + ':00';
+		}
+
+		// loop to fill the dropdown times
+		while (start.isBefore(end)) {
+			dropdownSelection.push({ dataValue: start.format('HH:mm'), name: start.format('h:mm A') });
+			start.add(30, 'm');
+		}
+
+		return view.render('userPages.searchRooms', { fromTime, toTime, dropdownSelection });
+	}
 	/**
 	 * Takes in a variable and converts the value to 0 if it's null (Used for checkboxes)
 	 *
@@ -385,14 +420,31 @@ class RoomController {
 
 		const code = random(4);
 		const checkRoomAvailability = async () => {
+			let results = [];
+			let hasResults = false;
+
 			await asyncForEach(rooms, async (item) => {
 				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
+					if (!hasResults) {
+						Event.fire('send.hasResults', {
+							code: code
+						});
+						hasResults = true;
+					}
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
 						code: code
 					});
+
+					results.push(item);
 				}
 			});
+
+			if (results.length === 0) {
+				Event.fire('send.empty', {
+					code: code
+				});
+			}
 		};
 
 		setTimeout(checkRoomAvailability, 500);

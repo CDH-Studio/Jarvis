@@ -1,8 +1,22 @@
 {{--  This is a general card with a custom body insert--}}
-<div class="card shadow">
+{{--  Params: --}}
+{{--  title - displays the title of the card  --}}
+{{--  icon - font awesome icon and displays beside title  --}}
+{{--  Custom Slots  --}}
+{{--  body - body content of card --}}
+{{--  title-right - seconary title to the right of card (used for external links to toehr pages)--}}
+
+<div class="card shadow" style='height:100%;'>
     {{--  grabs title from params and outputs within the header  --}}
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">{{ title }}</h6>
+    <div class="card-header py-3 d-flex">
+        <div class='flex-grow-1'>
+            <h6 class="m-0 font-weight-bold text-primary"><i class='{{icon}} mr-1'></i> {{ title }}</h6>
+        </div>
+        <div class='text-right'>
+            @if($slot.titleRight)
+                @!yield($slot.titleRight)
+            @endif
+        </div>        
     </div>
     {{--  content of the card  --}}
     <div class="card-body">
