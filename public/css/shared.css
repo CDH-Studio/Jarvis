@@ -682,6 +682,12 @@
 @media (min-width: 20){
     .col-xxl-6 {
         background-color: #202428;
-
     }
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* General Card Component CSS */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+.custom-card-header{
+    background-image: linear-gradient(270deg, #145f9c 0%, rgb(12, 81, 138) 100%);
 }
