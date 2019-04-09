@@ -392,12 +392,14 @@ class HomeController {
 			.fetch();
 		const rooms = searchResults.toJSON();
 
+		const now = moment();
+		const remainder = 30 - (now.minute() % 30);
 		const date = moment().format('YYYY-MM-DD');
-		const from = moment().startOf('h').format('HH:mm');
-		const to = moment().startOf('h').add(2, 'h').format('HH:mm');
+		const from = moment(now).add(remainder, 'm').format('HH:mm');
+		const to = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
 		const formattedDate = moment().format('dddd, MMMM DD, YYYY');
-		const formattedFrom = moment().startOf('h').format('HH:mm A');
-		const formattedTo = moment().startOf('h').add(2, 'h').format('HH:mm A');
+		const formattedFrom = moment(now).add(remainder, 'm').format('HH:mm A');
+		const formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm A');
 
 		const code = random(4);
 		const checkRoomAvailability = async () => {
