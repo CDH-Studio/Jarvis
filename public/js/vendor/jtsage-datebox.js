@@ -426,7 +426,7 @@
                 w.refresh();
             }).on("datebox", w._event);
             if (o.lockInput) {
-                w.d.input.attr("readonly", "readonly");
+                // w.d.input.attr("readonly", "readonly");
             }
             if (typeof $.event.special.mousewheel !== "undefined") {
                 w.wheelExists = true;

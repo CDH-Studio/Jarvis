@@ -160,3 +160,20 @@
     padding-right: 0.75rem;
     padding-left: 0.75rem;
 }
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* User Dashboard */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+#secondary-upcoming{
+    display: none;
+    /* height: 350px; */
+}
+
+@media(min-width: 1650px){
+    #original-upcoming{
+        display: none;
+    }
+    #secondary-upcoming{
+        display: block;
+    }
+}
