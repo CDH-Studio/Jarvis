@@ -90,7 +90,7 @@ Route.get('/searchRecurring', 'BookingController.searchRecurring').as('searchRec
 // Employee user pages
 // Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);
 Route.get('/booking', 'HomeController.userDashboard').as('booking').middleware(['isUser']);
-Route.on('/searchRooms').render('userPages/searchRooms').as('searchRooms').middleware(['isUser']);
+Route.get('/searchRooms', 'RoomController.loadSearchRoomsForm').as('searchRooms').middleware(['isUser']);
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking').middleware(['isUser']);
 
 // Rendering Results

@@ -104,3 +104,6 @@
 	border-top: none;
   }
   
+.room-card {
+    animation: fadeIn 2s;
+}

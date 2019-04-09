@@ -1,6 +1,7 @@
 'use strict';
 
 const { ServiceProvider } = require('@adonisjs/fold');
+const moment = require('moment');
 
 class CustomValidationProvider extends ServiceProvider {
 	/**
@@ -53,6 +54,7 @@ class CustomValidationProvider extends ServiceProvider {
 	async _isAfter (data, field, message, args, get) {
 		const before = get(data, field);
 		let after = get(data, args[0]);
+
 		if (before <= after) {
 			if (after.slice(0, 2) < 12) {
 				after += ' AM';
@@ -72,12 +74,11 @@ class CustomValidationProvider extends ServiceProvider {
 	async _isAfterToday (data, field, message, args, get) {
 		const inputTime = get(data, field);
 		const inputDate = get(data, args[0]);
-		const currentDate = new Date();
-		let currentTime = ('0' + (currentDate.getHours())).slice(-2) + ':' + ('0' + (currentDate.getMinutes())).slice(-2);
-		const newCurrentDate = currentDate.getFullYear() + '-' + ('0' + (currentDate.getMonth() + 1)).slice(-2) + '-' + currentDate.getDate();
+		const currentTime = moment();
+		const isAfterToday = moment(inputDate + inputTime, 'YYYY-MM-DDHH:mm').isSameOrAfter(currentTime);
 
 		// if the current date and the search date is the same, check that the times are NOT in the past
-		if (inputDate === newCurrentDate && inputTime < currentTime) {
+		if (!(isAfterToday)) {
 			throw message;
 		}
 	}

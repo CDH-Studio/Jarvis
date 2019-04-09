@@ -10,51 +10,70 @@
 @section('content')
 
     <div class='row'>
-        <div class='col-7'>
+        <div class='col-lg-12 col-xxl-7'>
             <div class='row'>
-                <div class='col'>
-                    <div class='card stats-card shadow'>
+                <div class='col' style='padding:12px;'>
+                    <div class='card shadow' style='min-width:240px; min-height:137px'>
                         <div class='card-highlight-primary'></div>
                         <div class='card-body'>
-                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+                            <div class='row justify-content-center'>
                                 <i class='d-inline-flex no-padding color-info card-icon fas fa-user fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
-                                        <h2 class='col no-margin'><b>{{ numberOfUsers }}</b></h2>
+                                        <h2 class='col no-margin'><b>{{ userStats['numberOfUsers'] }}</b></h2>
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total Users</h5>
                                     </div>
                                 </div>
                             </div>
+                            <div class='row' style='font-size:13px'>
+                                <div class='col text-center'>
+                                    @if(userStats['haveUsersIncreased'])
+                                        <div class='color-success' style='display:inline'><i class='fas fa-caret-up'></i> {{ userStats['increaseOfUsers'] }}% </div>From last month
+                                    @else
+                                        <div class='color-danger' style='display:inline'><i class='fas fa-caret-down'></i> {{ userStats['increaseOfUsers'] }}% </div>From last month
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class='col'>
-                    <div class='card stats-card shadow'>
-                        <div class='card-highlight-primary'></div>
+                <div class='col' style='padding:12px;'>
+                    <div class='card shadow' style='min-width:240px; min-height:137px'>
+                        <div class='card-highlight-success'></div>
                         <div class='card-body'>
-                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                                <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
+                            <div class='row justify-content-center'>
+                                <i class='d-inline-flex no-padding color-success card-icon fas fa-door-open fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
                                         <h2 class='col no-margin'><b>{{ roomStats['numberOfRooms'] }}</b></h2>
-                                        <h6 >{{ roomStats['percentageOfActiveRooms'] }}% are Active</h6>
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total Rooms</h5>
                                     </div>
                                 </div>
                             </div>
+                            <div class='row' style='font-size:13px'>
+                                <div class='col text-center'>
+                                    @if(roomStats['percentageOfActiveRooms'] > 74)
+                                        <div class='color-success' style='display:inline'>{{ roomStats['percentageOfActiveRooms'] }}% </div>are Active
+                                    @elseif(roomStats['percentageOfActiveRooms'] > 50)
+                                        <div class='color-warning' style='display:inline'>{{ roomStats['percentageOfActiveRooms'] }}% </div>are Active
+                                    @else
+                                        <div class='color-danger' style='display:inline'>{{ roomStats['percentageOfActiveRooms'] }}% </div>are Active
+                                    @endif
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class='col'>
-                    <div class='card stats-card shadow'>
-                        <div class='card-highlight-primary'></div>
+                <div class='col' style='padding:12px;'>
+                    <div class='card shadow' style='min-width:240px; min-height:137px'>
+                        <div class='card-highlight-warning'></div>
                         <div class='card-body'>
-                            <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-                                <i class='d-inline-flex no-padding color-info card-icon far fa-flag fa-2x'></i>
+                            <div class='row justify-content-center'>
+                                <i class='d-inline-flex no-padding color-warning card-icon far fa-flag fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
                                         <h2 class='col no-margin'><b>{{ issueStats }}</b></h2>
@@ -69,7 +88,7 @@
                 </div>
             </div>
             <div class='row'>
-                <div class='col' style='margin:10px'> 
+                <div class='col' style='padding:12px'> 
                     @component('components.generalCard', title='Bookings')
                         @slot('body')
                             <div class='chart-bar'>
@@ -80,7 +99,7 @@
                 </div>
             </div>
             <div class='row'>
-                <div class='col' style='margin:10px'>
+                <div class='col' style='padding:12px'>
                     @component('components.generalCard', title='Most Popular')
                         @slot('body')
                             <div class='chart-bar'>
@@ -92,9 +111,9 @@
             </div>
         </div>
 
-        <div class='col-5'>
+        <div class='col-lg-12 col-xxl-5'>
             <div class='row'>
-                <div class='col-6'>
+                <div class='col-6' style='padding:12px'>
                     @component('components.generalCard', title='Room - Statuses')
                         @slot('body')
                             <div class='chart-bar'>
@@ -103,7 +122,7 @@
                         @endslot
                     @endcomponent
                 </div>
-                <div class='col-6'>
+                <div class='col-6' style='padding:12px'>
                     @component('components.generalCard', title='Room - Issues')
                         @slot('body')
                             <div class='chart-bar'>
@@ -114,7 +133,7 @@
                 </div>
             </div>
             <div class='row'>
-                <div class='col-12' style='margin:20px 0 20px 0'>
+                <div class='col-12' style='padding:12px'>
                     @component('components.generalCard', title='Highest Rated')
                         @slot('body')
                             @each(room in highestRatedRooms) 
@@ -144,7 +163,11 @@
                                         @endif
                                     </div>
                                     <div>
-                                        <h6 class='col no-margin'><b> Number of Reviews: {{ room.totalReviews }}</b></h2>
+                                        @if(room.totalReviews == 1)
+                                            <h6 class='col no-margin'>{{ room.totalReviews }} Review</h2>
+                                        @else
+                                            <h6 class='col no-margin'>{{ room.totalReviews }} Reviews</h2>
+                                        @endif
                                     </div>
                                     @endslot
                                 @endcomponent
@@ -213,7 +236,7 @@
                 labels: ["Active", "Maintenance", "Deactived"],
                 datasets: [{
                     data: [ {{ roomStatusStats['active'] }}, {{ roomStatusStats['maintenance'] }}, {{ roomStatusStats['deactive'] }} ],
-                    backgroundColor: ['#004680', '#2C666E', '#90DDF0'],
+                    backgroundColor: ['#004680', '#3B67A5', '#B4D7FF'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
                 }],
             },
@@ -251,7 +274,7 @@
                 labels: ["Open", "Pending", "Closed"],
                 datasets: [{
                     data: [ {{ roomIssueStats['pending'] }}, {{ roomIssueStats['underReview'] }}, {{ roomIssueStats['resolved'] }} ],
-                    backgroundColor: ['#004680', '#2C666E', '#90DDF0'],
+                    backgroundColor: ['#004680', '#3B67A5', '#B4D7FF'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
                 }],
             },
@@ -289,7 +312,7 @@
                 labels: [ "{{ topFiveRooms[0]['room'].name }}", "{{ topFiveRooms[1]['room'].name }}", "{{ topFiveRooms[2]['room'].name }}", "{{ topFiveRooms[3]['room'].name }}", "{{ topFiveRooms[4]['room'].name }}" ],
                 datasets: [{
                     data: [ {{ topFiveRooms[0]['bookings'] }}, {{ topFiveRooms[1]['bookings'] }}, {{ topFiveRooms[2]['bookings'] }}, {{ topFiveRooms[3]['bookings'] }}, {{ topFiveRooms[4]['bookings'] }} ],
-                    backgroundColor: ['#004680', '#2C666E', '#90DDF0', '#A9A9A9', '#D3F3EE'],
+                    backgroundColor: ['#004680', '#3B67A5', '#648BCC', '#8CB0F5', '#B4D7FF'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
                 }],
             },
@@ -304,53 +327,6 @@
                         scaleLabel: {
                             display: true,
                             labelString: '# of Bookings'
-                        }
-                    }]  
-                },
-                tooltips: {
-                    borderWidth: 1,
-                    xPadding: 15,
-                    yPadding: 15,
-                    displayColors: false,
-                    caretPadding: 10
-                },
-                legend: {
-                    display: false,
-                },
-                cutoutPercentage: 80
-            },
-        });
-    </script>
-
-    {{--  Scrip tag responsible for the Highest Rated Rooms chart  --}}
-    <script>
-        // Set new default font family and font color to mimic Bootstrap's default styling
-        Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-        Chart.defaults.global.defaultFontColor = '#858796';
-
-        // Pie Chart Example
-        var ctx = document.getElementById("roomRatings");
-        var roomIssues = new Chart(ctx, {
-            type: 'horizontalBar',
-            data: {
-                labels: [ "{{ highestRatedRooms[0]['room'].name }}", "{{ highestRatedRooms[1]['room'].name }}", "{{ highestRatedRooms[2]['room'].name }}", "{{ highestRatedRooms[3]['room'].name }}", "{{ highestRatedRooms[4]['room'].name }}" ],
-                datasets: [{
-                    data: [ {{ highestRatedRooms[0]['averageRating'] }}, {{ highestRatedRooms[1]['averageRating'] }}, {{ highestRatedRooms[2]['averageRating'] }}, {{ highestRatedRooms[3]['averageRating'] }}, {{ highestRatedRooms[4]['averageRating'] }} ],
-                    backgroundColor: ['#004680', '#2C666E', '#90DDF0', '#A9A9A9', '#D3F3EE'],
-                    hoverBorderColor: "rgba(234, 236, 244, 1)",
-                }],
-            },
-            options: {
-                maintainAspectRatio: false,
-                scales: {
-                    xAxes: [{
-                        display: true,
-                        ticks: {
-                            beginAtZero: true,
-                        },
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Average Rating'
                         }
                     }]  
                 },

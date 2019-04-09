@@ -4,8 +4,48 @@ const User = use('App/Models/User');
 const Report = use('App/Models/Report');
 const Booking = use('App/Models/Booking');
 const Review = use('App/Models/Review');
+const Event = use('Event');
+const Token = use('App/Models/Token');
 
 var moment = require('moment');
+const graph = require('@microsoft/microsoft-graph-client');
+
+/**
+ * Retrieve access token for Microsoft Graph from the data basebase.
+ *
+ * @returns {Object} The access token.
+ *
+ */
+async function getAccessToken () {
+	try {
+		const results = await Token.findBy('type', 'access');
+		const accessToken = results.toJSON().token;
+		return accessToken;
+	} catch (err) {
+		console.log(err);
+		return null;
+	}
+}
+
+/**
+ * Generating a random string.
+ *
+ * @param {Integer} times Each time a string of 5 to 6 characters is generated.
+ */
+function random (times) {
+	let result = '';
+	for (let i = 0; i < times; i++) {
+		result += Math.random().toString(36).substring(2);
+	}
+
+	return result;
+}
+
+async function asyncForEach (arr, callback) {
+	for (let i = 0; i < arr.length; i++) {
+		await callback(arr[i], i, arr);
+	}
+}
 
 class HomeController {
 	/**
@@ -42,9 +82,12 @@ class HomeController {
 	*
 	*/
 	async userDashboard ({ view, auth }) {
-		const availRooms = await this.getAvailableRooms({ auth });
+		const code = await this.getAvailableRooms({ auth, view });
 		const freqRooms = await this.getFreqBooked({ auth });
-		return view.render('userPages.booking', { availRooms, freqRooms });
+		const upcomming = await this.getUpcomming({ auth });
+		const userId = auth.user.id;
+		const searchValues = await this.loadSearchRoomsForm({ auth });
+		return view.render('userPages.booking', { code, freqRooms, upcomming, userId, fromTime: searchValues.fromTime, toTime: searchValues.toTime, dropdownSelection: searchValues.dropdownSelection });
 	}
 
 	/**
@@ -55,7 +98,7 @@ class HomeController {
 	*
 	*/
 	async adminDashboard ({ view }) {
-		const numberOfUsers = await this.getNumberofUsers();
+		const userStats = await this.getUserStats();
 		const roomStats = await this.getRoomStats();
 		const issueStats = await this.getIssueStats();
 		const bookings = await this.getBookings();
@@ -64,7 +107,7 @@ class HomeController {
 		const topFiveRooms = await this.getRoomPopularity();
 		const highestRatedRooms = await this.getRoomRatings();
 
-		return view.render('adminDash', { numberOfUsers: numberOfUsers, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
+		return view.render('adminDash', { userStats: userStats, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
 	}
 
 	/****************************************
@@ -78,13 +121,38 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getNumberofUsers () {
+	async getUserStats () {
 		// retrieves all the users form the database
 		const results = await User.all();
-		const users = results.toJSON();
+		const allUsers = results.toJSON();
 
-		// return the number of users
-		return users.length;
+		// initialize the moment.js object to act as our date
+		const date = moment();
+
+		// queries the users table to retrieve the users for the current and previous month
+		let users = await User
+			.query()
+			.whereRaw("strftime('%Y-%m', created_at) = ?", [date.format('YYYY-MM')]) // eslint-disable-line
+			.count();
+
+		let usersRegisteredThisMonth = (users[0]['count(*)']);
+		let usersRegisteredBeforeThisMonth = allUsers.length - usersRegisteredThisMonth;
+
+		var stats = {};
+		stats['numberOfUsers'] = allUsers.length;
+		stats['haveUsersIncreased'] = true;
+
+		if (usersRegisteredBeforeThisMonth > allUsers.length) {
+			let differenceInUsers = usersRegisteredBeforeThisMonth - allUsers.length;
+
+			stats['increaseOfUsers'] = Math.round((differenceInUsers / allUsers.length) * 100);
+			stats['haveUsersIncreased'] = false;
+		} else {
+			stats['increaseOfUsers'] = Math.round((usersRegisteredThisMonth / usersRegisteredBeforeThisMonth) * 100);
+		}
+
+		// return the number of users and pourcentage of the increase of users from last month to the current one
+		return stats;
 	}
 
 	/**
@@ -148,7 +216,7 @@ class HomeController {
 		for (let i = 0; i < 6; i++) {
 			let bookings = await Booking
 				.query()
-				.whereRaw("strftime('%Y-%m', bookings.'from') < ?", [date.format('YYYY-MM')]) // eslint-disable-line
+				.whereRaw("strftime('%Y-%m', bookings.'from') = ?", [date.format('YYYY-MM')]) // eslint-disable-line
 				.count();
 
 			numberOfBookings.push(bookings[0]['count(*)']);
@@ -307,7 +375,7 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getAvailableRooms ({ auth }) {
+	async getAvailableRooms ({ auth, view }) {
 		let towerOrder;
 		// If the tower is West then set the order to descending, else ascending
 		towerOrder = (await auth.user.getUserTower() === 'West') ? 'desc' : 'asc';
@@ -321,10 +389,39 @@ class HomeController {
 			.orderByRaw('ABS(floor-' + auth.user.floor + ') ASC')
 			.orderBy('tower', towerOrder)
 			.orderBy('seats', 'asc')
-			.limit(2)
 			.fetch();
+		const rooms = searchResults.toJSON();
 
-		return searchResults.toJSON();
+		const date = moment().format('YYYY-MM-DD');
+		const from = moment().startOf('h').format('HH:mm');
+		const to = moment().startOf('h').add(2, 'h').format('HH:mm');
+		const formattedDate = moment().format('dddd, MMMM DD, YYYY');
+		const formattedFrom = moment().startOf('h').format('HH:mm A');
+		const formattedTo = moment().startOf('h').add(2, 'h').format('HH:mm A');
+
+		const code = random(4);
+		const checkRoomAvailability = async () => {
+			let numberOfRooms = 2;
+			await asyncForEach(rooms, async (item) => {
+				if (numberOfRooms !== 0 && await this.getRoomAvailability(date, from, to, item.calendar)) {
+					Event.fire('send.room', {
+						card: view.render('components.smallCard', { room: item, datetime: { date: formattedDate, time: formattedFrom + ' - ' + formattedTo } }),
+						code: code
+					});
+					numberOfRooms--;
+				}
+			});
+
+			if (numberOfRooms === 2) {
+				Event.fire('send.empty', {
+					view: view.render('components.noAvailableRooms'),
+					code: code
+				});
+			}
+		};
+
+		setTimeout(checkRoomAvailability, 500);
+		return code;
 	}
 
 	/**
@@ -343,14 +440,19 @@ class HomeController {
 			.count('room_id as total')
 			.groupBy('room_id')
 			.orderBy('total', 'desc')
-			.limit(2)
-			.innerJoin('rooms', 'bookings.room_id', 'rooms.id');
+			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
+			.limit(2);
 
 		// set the average rating for the rooms
 		for (let i = 0; i < searchResults.length; i++) {
 			searchResults[i].averageRating = await this.getAverageRating(searchResults[i].id);
 		}
-		return searchResults;
+
+		if (searchResults <= 0) {
+			return null;
+		} else {
+			return searchResults;
+		}
 	}
 
 	/**
@@ -376,6 +478,176 @@ class HomeController {
 		} catch (err) {
 			console.log(err);
 		}
+	}
+
+	/**
+	 *
+	 * @param {String} date     Date
+	 * @param {String} from     Starting time
+	 * @param {String} to       Ending time
+	 * @param {String} calendar Calendar ID
+	 *
+	 * @returns {Boolean} Whether or not the room is available
+	 */
+	async getRoomAvailability (date, from, to, calendar) {
+		const startTime = date + 'T' + from;
+		const endTime = date + 'T' + to;
+
+		// if there is a calendar for the room
+		if (calendar !== 'insertCalendarHere' && calendar !== null) {
+			// query the events within the search time range
+			const calendarViews = (await this.getCalendarView(
+				calendar,
+				startTime,
+				endTime
+			)).value;
+
+			// if event end time is the same as search start time, remove the event
+			calendarViews.forEach((item, index, items) => {
+				const eventEndTime = new Date(item.end.dateTime);
+				const searchStartTime = new Date(startTime);
+
+				if (+eventEndTime === +searchStartTime) {
+					items.splice(index, 1);
+				}
+			});
+
+			return calendarViews.length === 0;
+		}
+	}
+
+	async getCalendarView (calendarId, start, end) {
+		const accessToken = await getAccessToken();
+
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const calendarView = await client
+					.api(`/me/calendars/${calendarId}/calendarView?startDateTime=${start}&endDateTime=${end}`)
+					// .orderby('start DESC')
+					.header('Prefer', 'outlook.timezone="Eastern Standard Time"')
+					.get();
+
+				return calendarView;
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	}
+
+	/**
+	*
+	* Render Search Room Page and pass the current time for autofill purposes
+	*
+	* @param {view}
+	*
+	*/
+	async loadSearchRoomsForm ({ view, auth }) {
+		// Calculates the from and too times to pre fill in the search form
+		const currentTime = new Date();
+		const currentHour = currentTime.getHours();
+		const currentMinutes = currentTime.getMinutes();
+		let fromTime;
+		let toTime;
+		let dropdownSelection = [];
+		const start = moment().startOf('day');
+		const end = moment().endOf('day');
+
+		if (currentMinutes <= 30) {
+			fromTime = currentHour + ':30';
+			toTime = currentHour + 1 + ':30';
+		} else {
+			fromTime = currentHour + 1 + ':00';
+			toTime = currentHour + 2 + ':00';
+		}
+
+		// loop to fill the dropdown times
+		while (start.isBefore(end)) {
+			dropdownSelection.push({ dataValue: start.format('HH:mm'), name: start.format('h:mm A') });
+			start.add(30, 'm');
+		}
+
+		return ({ fromTime, toTime, dropdownSelection });
+	}
+
+	/**
+	*
+	* Render Search Room Page and pass the current time for autofill purposes
+	* Retrieve the user's frew booked rooms and returns and array of size 2 with results and return results
+	*
+	* @param {view}
+	*
+	*/
+	async getUpcomming ({ auth }) {
+		// get the next 3 upcomming bookings
+		let searchResults = await Booking
+			.query()
+			.where('user_id', auth.user.id)
+			.whereRaw("bookings.'from' >= date('now')") // eslint-disable-line
+			.select('*')
+			.orderBy('from', 'asc')
+			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
+			.limit(3)
+			.fetch();
+		// Converting date formats
+		searchResults = searchResults.toJSON();
+		const bookings = await this.populateBookings(searchResults);
+
+		return bookings;
+	}
+
+	/**
+	 * Populate bookings from booking query results.
+	 *
+	 * @param {Object} results Results from bookings query.
+	 *
+	 * @returns {Object} The access token.
+	 *
+	 */
+	async populateBookings (results) {
+		const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+		const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+		async function asyncMap (arr, callback) {
+			let arr2 = [];
+
+			for (let i = 0; i < arr.length; i++) {
+				arr2.push(await callback(arr[i], i, arr));
+			}
+
+			return arr2;
+		}
+
+		let bookings = [];
+		const populate = async () => {
+			bookings = await asyncMap(results, async (result) => {
+				const booking = {};
+
+				const from = new Date(result.from);
+				const to = new Date(result.to);
+				booking.subject = result.subject;
+				booking.status = result.status;
+				booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
+				booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+				booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
+				booking.roomId = result.room_id;
+				booking.id = result.id;
+				const userInfo = (await User.findBy('id', result.user_id)).toJSON();
+				booking.userName = userInfo.firstname + ' ' + userInfo.lastname;
+				booking.userId = userInfo.id;
+
+				return booking;
+			});
+		};
+
+		await populate();
+
+		return bookings;
 	}
 }
 
