@@ -149,26 +149,28 @@
 							{{---------------------------------------------------------------------------------------------}}
 							
 							{{------- Recurring Tabs -------}}
+							{{-- Daily --}}
 							<div class="tabs">
 								<div class="tab">
 									<input class="radio-tab" type="radio" id="tab-1" name="tab-group-1">
 									<label for="tab-1">Daily</label>
 									
-									<div class="tab-content">
+									<div class="tab-content daily-content">
 										<div>
-											<input type="radio" name="every" value="every"> Every <input type="number" name="daily-interval"> day(s)
+											<input type="radio" name="type" value="every"> Every <input type="number" name="daily-interval"> day(s)
 										</div>
 										<div>
-											<input type="radio" name="every-weekday" value="every-weekday"> Every weekday
+											<input type="radio" name="type" value="every-weekday"> Every weekday
 										</div>
 									</div> 
 								</div>
-									
+								
+								{{-- Weekly --}}
 								<div class="tab">
 									<input class="radio-tab" type="radio" id="tab-2" name="tab-group-1">
 									<label for="tab-2">Weekly</label>
 									
-									<div class="tab-content">
+									<div class="tab-content weekly-content">
 										<div>
 											<p>Every <input type="number" name="weekly-interval"> week(s) on:</p>
 										</div>
@@ -206,6 +208,7 @@
 									</div> 
 								</div>
 									
+								{{-- Monthly --}}
 								<div class="tab">
 									<input class="radio-tab" type="radio" id="tab-3" name="tab-group-1" checked>
 									<label for="tab-3">Monthly</label>

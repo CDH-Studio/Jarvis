@@ -111,8 +111,15 @@
 	border: 1px solid #ccc; 
 	
 	display: flex;
-	flex-direction: column;
 	flex-wrap: wrap;
+}
+
+.daily-content {
+	flex-direction: column;
+}
+
+.weekly-content {
+	flex-direction: row;
 }
 
 [type=radio]:checked ~ label {
