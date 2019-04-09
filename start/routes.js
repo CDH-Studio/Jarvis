@@ -18,7 +18,6 @@ const Route = use('Route');
 
 Route.get('/', 'HomeController.home').as('home');
 Route.on('/welcome').render('welcome');
-Route.on('/sample').render('sample');
 
 //= ========================================================================
 // Auth
@@ -68,12 +67,10 @@ Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['au
 Route.get('/roomBookings/:id', 'BookingController.getRoomBookings').as('roomBookings').middleware(['auth']);
 
 Route.get('/room/:roomID/issues/:issueStatus', 'IssueController.getRoomIssues').as('showIssue').middleware(['isAdmin']);
-Route.get('/issue/:id', 'IssueController.getRoomIssues').as('showIssue').middleware(['isAdmin']);
 Route.get('/issue/:id/edit', 'IssueController.editIssue').as('editIssue').middleware(['isAdmin']);
 Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['isAdmin']).validator('EditIssue');
 
 // user
-Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
 Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('AddReview').middleware(['isUser']);
 Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('AddReview').middleware(['isUser']);
 Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['isUser']);

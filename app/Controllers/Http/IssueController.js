@@ -39,7 +39,7 @@ class IssueController {
 		try {
 			// get the search form data if employee view
 			const issue = await Report.findOrFail(params.id);
-			return view.render('adminDash.editIssue', { id: params.id, issue });
+			return view.render('adminPages.editIssue', { id: params.id, issue });
 		} catch (error) {
 			return response.redirect('/');
 		}
