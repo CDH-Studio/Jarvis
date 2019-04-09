@@ -83,7 +83,7 @@ class RoomController {
 	}
 	async create ({ response, view, auth }) {
 		const actionType = 'Add Room';
-		return view.render('adminDash.addEditRoom', { actionType });
+		return view.render('adminPages.addEditRoom', { actionType });
 	}
 
 	/**
@@ -314,7 +314,7 @@ class RoomController {
 
 		// if user is admin
 		if (userRole === 'admin') {
-			return view.render('adminDash.viewRooms', { rooms, stats });
+			return view.render('adminPages.viewRooms', { rooms, stats });
 		} else {
 			return view.render('userPages.results', { rooms });
 		}

@@ -70,7 +70,7 @@ class HomeController {
 			if (userRole === 'admin') {
 				return response.route('adminDash', { auth });
 			} else {
-				return response.route('booking', { auth });
+				return response.route('userDash', { auth });
 			}
 		} catch (error) {
 			return response.route('login');
@@ -90,7 +90,7 @@ class HomeController {
 		const upcomming = await this.getUpcomming({ auth });
 		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
-		return view.render('userPages.booking', { code, freqRooms, upcomming, userId, fromTime: searchValues.fromTime, toTime: searchValues.toTime, dropdownSelection: searchValues.dropdownSelection });
+		return view.render('userPages.userDash', { code, freqRooms, upcomming, userId, fromTime: searchValues.fromTime, toTime: searchValues.toTime, dropdownSelection: searchValues.dropdownSelection });
 	}
 
 	/**
@@ -110,7 +110,7 @@ class HomeController {
 		const topFiveRooms = await this.getRoomPopularity();
 		const highestRatedRooms = await this.getRoomRatings();
 
-		return view.render('adminDash', { userStats: userStats, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
+		return view.render('adminPages.adminDash', { userStats: userStats, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
 	}
 
 	/****************************************
