@@ -69,7 +69,7 @@ class RoomController {
 			dropdownSelection.push({ dataValue: start.format('HH:mm'), name: start.format('h:mm A') });
 			start.add(30, 'm');
 		}
-		console.log('params', params)
+
 		return view.render(`userPages.${params.view}`, { fromTime, toTime, dropdownSelection });
 	}
 	/**

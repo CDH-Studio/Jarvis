@@ -77,25 +77,25 @@
 }
 
 /***** Recurring Booking page *****/
-a {
+.tabs a.nav-link {
 	color: #004680 !important;
 }
 
-a.nav-link.active {
+.tabs a.nav-link.active {
 	background-color: #004680 !important;
 	color: white !important;
 }
 
 .tabs {
   position: relative;   
-  min-height: 200px; /* This part sucks */
+  min-height: 200px;
   clear: both;
   margin: 25px 0;
 }
 
 .tab-content {
   position: absolute;
-  top: 28px;
+  top: 32px;
   left: 0;
   background: white;
   right: 0;

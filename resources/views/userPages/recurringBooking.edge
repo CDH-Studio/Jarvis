@@ -15,38 +15,15 @@
 {{--  book room page content  --}}
 @section('content')
     {{--  Loading page header  --}}
-    @!component('components.pageHeader', title= 'Hello, '+ auth.user.firstname)
+    @!component('components.pageHeader', title= 'Recurring Booking')
     {{--  Page Content  --}}
-    <div class='row d-flex flex-wrap'>
+    <div class='row'>
 		{{--  Search room page content  --}}
-		<div class='col-xl-6 col-xxl-4 recurring-form'>
-			@section('search room')
+		<div class='col search-room-content'>
 				<form action='/recurringResults' method='GET' enctype='multipart/form-data'>
 					<div class="card shadow mb-4">
-						<div class="card-header py-3">
-							<h6 class="m-0 font-weight-bold text-primary">Recurring Booking</h6>
-						</div>
 						<div class="card-body">
 							{{ csrfField() }}
-							{{--  Date form  --}}
-							<div class='row'>
-								<div class='col form-group mb-4 '>
-									<div class='row'>
-										<label class='col' for='date'>Date <b class='text-danger'>*</b></label>
-										<div class='col text-right'>
-											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
-										</div>
-									</div>
-									{{--  If field is not filled correctly show an error box  --}}
-									@if(hasErrorFor('date'))
-										<input name='date'  id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
-										<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
-									{{--  Otherwise show a normal input  --}}
-									@else
-										<input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
-									@endif
-								</div>
-							</div>
 							{{--  Meeting time from  --}}
 							<div class='row'>
 								<div class='col form-group mb-4'>
@@ -216,6 +193,43 @@
 								</div>
 							</div>
 							{{------- END Recurring Tabs -------}}
+
+							{{--  Date form  --}}
+							<div class='row'>
+								<div class='col form-group mb-4'>
+									<div class='row'>
+										<label class='col' for='date'>Start <b class='text-danger'>*</b></label>
+										<div class='col text-right'>
+											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
+										</div>
+									</div>
+									{{--  If field is not filled correctly show an error box  --}}
+									@if(hasErrorFor('date'))
+										<input name='date' id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
+										<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
+									{{--  Otherwise show a normal input  --}}
+									@else
+										<input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
+									@endif
+								</div>
+								<div class='col form-group mb-4'>
+									<div class='row'>
+										<label class='col' for='date'>End by</label>
+										<div class='col text-right'>
+											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
+										</div>
+									</div>
+									{{--  If field is not filled correctly show an error box  --}}
+									@if(hasErrorFor('date'))
+										<input name='date' id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
+										<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
+									{{--  Otherwise show a normal input  --}}
+									@else
+										<input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
+									@endif
+								</div>
+							</div>
+
                             {{---------------------------------------------------------------------------------------------}}
 							{{--  Page buttons  --}}
 							<div class='row mt-5'>
@@ -271,8 +285,6 @@
 						minuteStepRound: "1",
 					});
 				</script>
-			
-			@endsection
 		</div>
 
     <script>
