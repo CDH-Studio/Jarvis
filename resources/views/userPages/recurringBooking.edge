@@ -177,15 +177,15 @@
 								<div class="tab-content" id="pills-tabContent">
 									<div class="tab-pane fade show active" id="daily" role="tabpanel">
 										<div>
-											<input type="radio" name="daily-option" value="every"> Every <input type="number" name="daily-interval" value=1> day(s)
+											<input type="radio" name="dailyOption" value="every" checked> Every <input type="number" name="dailyInterval" value=1> day(s)
 										</div>
 										<div>
-											<input type="radio" name="daily-option" value="every-weekday"> Every weekday
+											<input type="radio" name="dailyOption" value="everyWeekday"> Every weekday
 										</div>
 									</div>
 									<div class="tab-pane fade" id="weekly" role="tabpanel">
 										<div>
-											<p>Every <input type="number" name="weekly-interval" value=1> week(s) on:</p>
+											<p>Every <input type="number" name="weeklyInterval" value=1> week(s) on:</p>
 										</div>
 
 										<div class="weekdays">
@@ -221,7 +221,7 @@
 									</div>
 									<div class="tab-pane fade" id="monthly" role="tabpanel">
 										<div>
-											<p>Day <input type="number" name="dayOfMonth" value=5> of every <input type="number" name="monthly-interval" value=1> month(s)</p>
+											<p>Day <input type="number" name="dayOfMonth" value=5> of every <input type="number" name="monthlyInterval" value=1> month(s)</p>
 										</div>
 									</div>
 								</div>
@@ -239,16 +239,16 @@
 									</div>
 									{{--  If field is not filled correctly show an error box  --}}
 									@if(hasErrorFor('date'))
-										<input name='date' id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
+										<input name='startDate' id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
 										<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
 									{{--  Otherwise show a normal input  --}}
 									@else
-										<input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
+										<input name='startDate' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
 									@endif
 								</div>
 								<div class='col form-group mb-4'>
 									<div class='row end-by'>
-										<input type="radio" name="end-option" value="endBy"><label class='col' for='date'>End by:</label>
+										<input type="radio" name="endOption" value="endBy"><label class='col' for='date'>End by:</label>
 										<div class='col text-right'>
 											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
 										</div>
@@ -263,7 +263,7 @@
 									@endif
 									<div class='row end-after mt-1'>
 										<input type="radio" name="end-option" value="endAfter"> <label class='col' for='endOccur'>End after:</label>
-										<p><input type="number" name="weekly-interval" value=10> occurrences</p>
+										<p><input type="number" name="numberOfOccurrences" value=10> occurrences</p>
 									</div>
 									<div class='row no-end'>
 										<input type="radio" name="end-option" value="noEnd" checked> <label class='col' for='endOccur'>No end date</label>

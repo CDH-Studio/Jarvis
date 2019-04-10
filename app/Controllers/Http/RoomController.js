@@ -341,10 +341,33 @@ class RoomController {
 	}
 
 	async searchRecurring ({ request }) {
-		const recurrence = request.all();
-		console.log(recurrence);
+		const options = request.all();
+		console.log(options);
 
-		return recurrence;
+		let recurrence = {};
+		recurrence.type = options.type;
+		recurrence.start = options.start;
+		if (options.dailyOption === 'everyWeekday') {
+			recurrence.type = 'weekly';
+			recurrence.daysOfWeek = [8];
+
+			return recurrence;
+		}
+
+		switch (recurrence.type) {
+			case 'daily':
+				recurrence.interval = request.only(['daily-interval']);
+				recurrence.interval = options.dailyInterval;
+				break;
+			case 'weekly':
+				break;
+			case 'monthly':
+				break;
+			default:
+		}
+
+		console.log('recurrence', recurrence);
+		return { options, recurrence };
 	}
 
 	/**
