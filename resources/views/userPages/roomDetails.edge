@@ -18,12 +18,12 @@
     {{--  Actual page content  --}}
     <div class="row">
     
-        <div class='col-8'>
+        <div class='col-12 col-lg-8'>
             <div class='card room-details-card shadow mb-4'>
                 <div class='card-header py-3'>
                     <div class='d-flex flex-wrap'>
                         <div class='' style='padding-top:6px;'>
-                            <h4 class="m-0 font-weight-bold text-primary">
+                            <h5 class="m-0 font-weight-bold text-primary">
                                 {{--  If the room is closed or under maintence then display info  --}}
                                 @if(room.state == 2)
                                     <i class='fa fa-times-circle color-danger'></i> Closed - 
@@ -31,7 +31,7 @@
                                     <i class="fas fa-tools color-warning"></i> Under Maintenance -  
                                 @endif
                                 {{room.name}}
-                            </h4>
+                            </h5>
                         </div>
                         <div class='flex-grow-1 text-right'>
                             @if(isAdmin)
@@ -48,18 +48,10 @@
                                     <span class="text">Edit Room</span>
                                 </button>   
                             @else
-                                @if(hasReview)
-                                    <button class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
-                                        <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
-                                        <span class="text">Edit Review</span>
-                                    </button>
-                                @else
-                                    <button class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
-                                        <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
-                                        <span class="text">Write Review</span>
-                                    </button>   
-                                @endif
-                                <button class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i></button>
+                                <button class="btn btn-info btn-icon-split bg-danger" data-toggle='modal' data-target='#reportModal'>
+                                    <span class="icon text-white-50"><i class="far fa-flag"></i></span>
+                                    <span class="text">Report Issue</span>
+                                </button>
                             @endif
                         </div>
                     </div>
@@ -102,62 +94,70 @@
                 </div>
             </div>
 
-            <div class="card shadow">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Key Features</h6>
-                </div>
-                <div class="card-body">
-                                            <div class='col room-details-spec'>
-                            <ul>
+            <div class="card shadow mb-4">
+                <div class="card-body m-3">
+                    <div class="row">
+                        <div class="col-6 col-lg-3  text-center mb-3 mb-lg-0">
+                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Display Tools">
+                                <i class="fas fa-tv"></i>
+                            </span>
                                 @if(room.projector == 1)
-                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Projector</span></li>
-                                @else
-                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Projector</span></li>
-                                @endif
-                                @if(room.flipchart == 1)
-                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Flip Chart</span></li>
-                                @else
-                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Flip Chart</span></li>
-                                @endif
-                                @if(room.whiteboard == 1)
-                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
-                                @else
-                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Whiteboard</span></li>
-                                @endif
-                                @if(room.audioConference == 1)
-                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio Conf.</span></li>
-                                @else
-                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Audio Conf.</span></li>
-                                @endif
-                                @if(room.videoConference == 1)
-                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video Conf.</span></li> 
-                                @else
-                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Video Conf.</span></li>
+                                    <p class="mb-0">Projector</p>
                                 @endif
                                 @if(room.pc == 1)
-                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
-                                @else
-                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> PC</span></li>
+                                    <p class="mb-0">PC</p>
                                 @endif
                                 @if(room.surfaceHub == 1)
-                                    <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Surface Hub</span></li>
-                                @else
-                                    <li class='spec-no'><i class='fa fa-times-circle'></i><span> Surface Hub</span></li>
+                                    <p class="mb-0">Surface Hub</p>
                                 @endif
-                            </ul>
                         </div>
+                        <div class="col-6 col-lg-3  text-center mb-3 mb-lg-0">
+                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Communication Tools">
+                                <i class="fas fa-headset"></i>
+                            </span>
+                                @if(room.audioConference == 1)
+                                    <p class="mb-0">Audio Conf.</p>
+                                @endif
+                                @if(room.videoConference == 1)
+                                    <p class="mb-0">Video Conf.</span></p> 
+                                @endif
+                        </div>
+                        <div class="col-6 col-lg-3 text-center">
+                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Discussion Tools">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </span>
+                            @if(room.flipchart == 1)
+                                <p class="mb-0">Flip Chart</p>
+                            @endif
+                            @if(room.whiteboard == 1)
+                                <p class="mb-0">Whiteboard</p>
+                            @endif
+                        </div>
+                        <div class="col-6 col-lg-3 text-center">
+                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Connectivity">
+                                <i class="fas fa-wifi"></i>
+                            </span>
+                            @if(room.publicWifi == 1)
+                                <p class="mb-0">Flip Chart</p>
+                            @endif
+                            @if(room.corpWifi == 1)
+                                <p class="mb-0">Whiteboard</p>
+                            @endif
+                            @if(room.ethernet == 1)
+                                <p class="mb-0">Whiteboard</p>
+                            @endif
+                        </div>
+                            
+                        </i>
+                    </div>    
                 </div>
             </div>
-
-
-
-
         </div>
         
-        <div class='col-4'>
+        <div class='col-12 col-lg-4'>
             <div class="card shadow">
                 <div class='card-header py-3'>
-                    <h4 class="m-0 font-weight-bold text-primary">Book Room</h4>
+                    <h5 class="m-0 font-weight-bold text-primary">Book Room</h5>
                 </div>
                 <div class="card-body">
                     @if(!isAdmin || room.state != 1)
@@ -315,20 +315,62 @@
                 </div>
             </div>
         </div>
-
     </div>
 
-    <div class="card shadow mt-4 mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Rating and Reviews</h6>
-        </div>
-        <div class="card-body">
+    <h5 class="mt-3 mb-3"><b>Reviews</b></h5>
 
-            @if(!hasReview) 
-                <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
-            @else
-                <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
-            @endif
+    <div class="row">
+        <div class='col-8'>
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            @if(reviews.length == 0)
+                                <div class='row'>
+                                    <div class='col-12 text-center'>
+                                        <p class='fas fa-ghost fa-7x mb-5 mt-5 text-muted'></p>
+                                        <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
+                                    </div>          
+                                </div>
+                            @else
+                                {{--  Loops through the rooms array and displays every room's content  --}}
+                                @each(review in reviews)
+                                    <div class="mb-2"> 
+                                        <b>{{ review.user.firstname }} {{ review.user.lastname }}</b> </br>
+                                        <i>{{review.user.email}}</i><br>
+                                        @!component('components/stars', rating=review.rating)
+                                        <br>
+                                        {{ review.review }}
+                                        <hr>
+                                    </div>
+                                @endeach
+                                <div class="text-center">
+                                    <i style="font-size: 0.9rem;">Reviews: {{reviewsCount}}</i>
+                                </div>
+                            @endif
+                        </div>
+                    </div>                  
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    @if(!hasReview) 
+                        <h6 class="m-0 font-weight-bold text-primary">Write a review</h6>
+                    @else
+                        <h6 class="m-0 font-weight-bold text-primary">Edit review</h6>
+                    @endif
+                </div>
+                <div class="card-body">
+
+                    @if(!hasReview) 
+                        <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                    @else
+                        <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                    @endif
                         {{ csrfField() }}
 
                         {{--  Body  --}}
@@ -358,7 +400,7 @@
                         <div class='row'>
                             <div class='col form-group'>
                                 <label for='review'>Review</label>
-                                    <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
+                                    <textarea class='form-control' name='review' id='review' rows='5' >{{ old('review',  review.review) }}</textarea>
                                     <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
                             </div> 
                         </div> 
@@ -376,6 +418,11 @@
                                             <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
                                         @endif
                                         <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose File</label>
+                                        @if(!hasReview) 
+                                            <small id="reviewPictureHelp" class="form-text text-muted">Image cannot be edited after upload. It can only be deleted.</small>
+                                        @else
+                                            <small id="reviewPictureHelp" class="form-text text-muted">Leave blank to delete last uploaded photo.</small>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -383,51 +430,35 @@
 
 
 
-                        {{--  Footer buttons to cancel and book room  --}}
+                            {{--  Footer buttons to cancel and book room  --}}
 
-                        <div class='text-right'>
-                            @if(!hasReview)
-                                <button type='submit' class="btn btn-primary btn-icon-split">
-                                    <span class="icon text-white-50">
-                                      <i class="fas fa-check"></i>
-                                    </span>
-                                    <span class="text">Submit</span>
-                                </button>
-                            @else  
-                                <button type='button' class="btn btn-danger btn-icon-split" data-toggle='modal' data-target='#deleteModal'>
-                                    <span class="icon text-white-50">
-                                        <i class="fas fa-trash"></i>
-                                    </span>
-                                    <span class="text">Delete</span>
-                                </button>  
+                            <div class='text-right'>
+                                @if(!hasReview)
+                                    <button type='submit' class="btn btn-primary btn-icon-split">
+                                        <span class="icon text-white-50">
+                                          <i class="fas fa-check"></i>
+                                        </span>
+                                        <span class="text">Submit</span>
+                                    </button>
+                                @else  
+                                    <button type='button' class="btn btn-danger btn-icon-split" data-toggle='modal' data-target='#deleteModal'>
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                        <span class="text">Delete</span>
+                                    </button>  
 
-                                <button type='submit' class="btn btn-primary btn-icon-split">
-                                    <span class="icon text-white-50">
-                                      <i class="fas fa-check"></i>
-                                    </span>
-                                    <span class="text">Update</span>
-                                </button>
-                            @endif    
-                        </div> 
-                </form>
-
-
-
-                @if(reviews.length == 0)
-                    <div class='row'>
-                        <div class='col-12 text-center'>
-                            <p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p>
-                            <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
-                        </div>			
-                    </div>
-                @else
-                    {{--  Loops through the rooms array and displays every room's content  --}}
-                    @each(review in reviews) 
-                        @!component('components/stars', rating=review.rating)
-                        {{ review.review }}
-                    @endeach
-                @endif
-            
+                                    <button type='submit' class="btn btn-primary btn-icon-split">
+                                        <span class="icon text-white-50">
+                                          <i class="fas fa-check"></i>
+                                        </span>
+                                        <span class="text">Update</span>
+                                    </button>
+                                @endif    
+                            </div> 
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -600,9 +631,6 @@
         });
 	</script>
 
-	<script>
-		document.getElementById('reviewModal').style['z-indez'] = 1040;
-	</script>
 
     {{--  If the report validations fails display this modal  --}}
     @if(hasErrorFor('issueType'))
@@ -664,15 +692,4 @@
         </script>
     @endif
     
-    {{--  Table Filter  --}}
-    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
-    <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
-    <script>$(document).ready(function() {
-            $('#reviewsTable').DataTable( {
-                "paging":   false,
-                "ordering": true,
-                "info":     false
-            });
-        });
-    </script>
 @endsection
