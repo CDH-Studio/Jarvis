@@ -15,51 +15,75 @@
 	@endcomponent
 	
 	<div class="card shadow">
-		<div class="card-body">
-			@if(bookings.length == 0)
+		@if(bookings.length == 0)
+			<div class="card-body">
 				<div class="row">
 					<div class="col-12 text-center">
 						<p class="fas fa-ghost fa-10x mb-5 mt-5 text-muted"></p>
 						<h3 class="text-muted">No Bookings Found</h3>
 					</div>
 				</div>
-			@else
-				<div class="row card-body">
-					<div class="col-12 table table-responsive">
-						{{--  Displays all of the bookings for the current user  --}}
-						<table class='table' id='manageUserBookingsTable'>
-							<thead>
-								<tr>
-									<th scope='col'>Room</th>
-									<th scope='col'>Meeting Name</th>
-									<th scope='col'>Date</th>
-									<th scope='col'>Time</th>
-									<th scope='col'>Status</th>
-									<th scope='col'></th>
+			</div>
+		@else
+			<div class="card-header py-3">
+				<h6 class="m-0 font-weight-bold text-primary">Upcoming Bookings</h6>
+			</div>
+			<div class="card-body">
+				<div class="col-12 table table-responsive">
+					<table id='manageUserBookingsTable' class='table table-hover' style='width:100%;'>
+						<thead>
+							<tr>
+								<th scope='col' class='text-center'>Room</th>
+								<th scope='col' class='text-center'>Meeting Name</th>
+								<th scope='col' class='text-center'>Date</th>
+								<th scope='col' class='text-center'>Time</th>
+								<th scope='col' class='text-center'>Status</th>
+								<th scope='col' class='text-center'></th>
+							</tr>
+						</thead>
+						{{--  Loops through the bookings array and displays every booking  --}}
+						<tbody>
+							@each(booking in bookings) 
+								<tr class='table-light'>
+									<td class='text-center'><a href='{{ route('showRoom', {id: booking.roomId}) }}'>{{ booking.room }}</a></td>
+									<td class='text-center'>{{ booking.subject }}</td>
+									<td class='text-center'>{{ booking.date }}</td>
+									<td class='text-center'>{{ booking.time }}</td>
+									<td class='text-center td-{{ booking.status }}'>{{ booking.status }}</td>
+									@if(booking.status == 'Approved' && canEdit)
+										<td><a class='text-danger' name='cancel' id='cancelButton' data-toggle='modal' data-target='#deleteModal{{ booking.id }}' href='#'><i class="fas fa-times"></i> Cancel</a></td>
+										
+										{{--  Delete Modal Box  --}}
+										<div class='modal' id='deleteModal{{ booking.id }}' role='dialog' aria-hidden='true'>
+											<div class='modal-dialog' role='document'>
+												<div class='modal-content'>
+													<div class='modal-header'>
+														<h5 class='modal-title' id='exampleModalLabel'>Are you sure?</h5>
+														<button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+															<span aria-hidden='true'>×</span>
+														</button>
+													</div>
+													<div class='modal-body'>Are you sure you want to cancel your booking?</div>
+													<form action='{{ route('cancelBooking', {id: booking.id}) }}' method='POST' enctype='multipart/form-data'>
+														{{ csrfField() }}
+														<div class='modal-footer'>
+															<button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+															<button type='submit' class='btn btn-danger'>Yes</button>
+														</div>                    
+													</form>
+												</div>
+											</div>
+										</div>
+									@else
+										<td></td>
+									@endif
 								</tr>
-							</thead>
-							{{--  Loops through the bookings array and displays every booking  --}}
-							<tbody>
-								@each(booking in bookings) 
-									<tr>
-										<td><a href='{{ route('showRoom', {id: booking.roomId}) }}'>{{ booking.room }}</a></td>
-										<td>{{ booking.subject }}</td>
-										<td>{{ booking.date }}</td>
-										<td>{{ booking.time }}</td>
-										<td class='td-{{ booking.status }}'>{{ booking.status }}</td>
-										@if(booking.status == 'Approved' && canEdit)
-											<td><a class='text-danger' name='cancel' id='cancelButton' href='{{ route('cancelBooking', {id: booking.id}) }}'><i class="fas fa-times"></i> Cancel</a></td>
-										@else
-											<td></td>
-										@endif
-									</tr>
-								@endeach
-							</tbody>
-						</table>
-					</div>
-				</div> 
-			@endif
-		</div>
+							@endeach
+						</tbody>
+					</table>
+				</div>
+			</div>
+		@endif
 	</div>
 @endsection
 
@@ -67,12 +91,12 @@
 @section('extrajs') 
     <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
     <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
-    <script>$(document).ready(function() {
-            $('#manageUserBookingsTable').DataTable( {
-                "paging":   false,
-                "ordering": true,
-                "info":     false
-            });
-        });
-    </script>
+	<script>$(document).ready(function() {
+			$('#manageUserBookingsTable').DataTable( {
+				"paging":   false,
+				"ordering": false,
+				"info":     false
+			});
+		});
+	</script>
 @endsection
