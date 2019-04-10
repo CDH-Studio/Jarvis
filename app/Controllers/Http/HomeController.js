@@ -562,7 +562,7 @@ class HomeController {
 
 		// round the autofill start and end times to the nearest 30mins
 		fromTime = fromTime.round(30, 'minutes').format('HH:mm');
-		toTime = toTime.round(30, 'minutes').add(1, 'h').format('hh:mm');
+		toTime = toTime.round(30, 'minutes').add(1, 'h').format('HH:mm');
 
 		// loop to fill the dropdown times
 		while (start.isBefore(end)) {
