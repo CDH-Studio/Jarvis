@@ -255,11 +255,11 @@
 									</div>
 									{{--  If field is not filled correctly show an error box  --}}
 									@if(hasErrorFor('endDate'))
-										<input name='endDate' id='endDate' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('endDate', '') }}"}' onchange='removeErrorClass("date")'>
+										<input name='endDate' id='endDate' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('endDate', endBy) }}"}' onchange='removeErrorClass("date")'>
 										<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
 									{{--  Otherwise show a normal input  --}}
 									@else
-										<input name='endDate' id='endDate' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('endDate', '') }}"}'>
+										<input name='endDate' id='endDate' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('endDate', endBy) }}"}'>
 									@endif
 									<div class='row end-after mt-1'>
 										<input type="radio" name="end-option" value="endAfter"> <label class='col' for='endOccur'>End after:</label>
@@ -282,23 +282,33 @@
 						</div>
 					</div>
 				</form>
-				{{--  Remove the is-invalid class when input changes  --}}
-				<script>
-					function removeErrorClass(idOfInput){
-						$('#'+idOfInput).removeClass('is-invalid');
-						// Ih field is the calendar, then remove styling from erorr message
-						if (idOfInput == 'date') {
-							$('#date-error').removeClass('show-invalid');
-						}
-						else if (idOfInput == 'from') {
-							$('#from-error').removeClass('show-invalid');
-						}
-						else if (idOfInput == 'to' ) {
-							$('#to-error').removeClass('show-invalid');
-						}
-					}
-				</script>
 		</div>
+
+	{{--  Remove the is-invalid class when input changes  --}}
+	<script>
+		function removeErrorClass(idOfInput){
+			$('#'+idOfInput).removeClass('is-invalid');
+			// Ih field is the calendar, then remove styling from erorr message
+			if (idOfInput == 'date') {
+				$('#date-error').removeClass('show-invalid');
+			}
+			else if (idOfInput == 'from') {
+				$('#from-error').removeClass('show-invalid');
+			}
+			else if (idOfInput == 'to' ) {
+				$('#to-error').removeClass('show-invalid');
+			}
+		}
+
+		// update from and to inputs from dropdown
+		$(document).on("click",".dropdown-menu a", function(ev) {
+			$(this).siblings().removeClass('active');
+			$(this).addClass("active");
+			$(this).parents(".timePicker").find('.time-form').val($(this).attr('data-value'));
+			$(this).parents(".timePicker").find('.time-form').removeClass('is-invalid');
+			$(this).parents(".timePicker").siblings('.invalid-feedback').removeClass('show-invalid');
+		});
+	</script>
 
     <script>
         $('#message').keypress((e) => {

@@ -55,6 +55,7 @@ class RoomController {
 		let dropdownSelection = [];
 		const start = moment().startOf('day');
 		const end = moment().endOf('day');
+		const endBy = moment().startOf('day').add(1, 'month').format('YYYY-MM-DD');
 
 		if (currentMinutes <= 30) {
 			fromTime = currentHour + ':30';
@@ -70,7 +71,7 @@ class RoomController {
 			start.add(30, 'm');
 		}
 
-		return view.render(`userPages.${params.view}`, { fromTime, toTime, dropdownSelection });
+		return view.render(`userPages.${params.view}`, { fromTime, toTime, dropdownSelection, endBy });
 	}
 	/**
 	 * Takes in a variable and converts the value to 0 if it's null (Used for checkboxes)
