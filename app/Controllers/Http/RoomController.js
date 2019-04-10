@@ -345,8 +345,17 @@ class RoomController {
 		console.log(options);
 
 		let recurrence = {};
+		if (options.endOption === 'endBy') {
+			recurrence.end = options.endDate;
+			recurrence.hasEnd = true;
+		} else if (options.endOption === 'endAfter') {
+			recurrence.numberOfOccurrences = options.numberOfOccurrences;
+			recurrence.hasEnd = true;
+		} else {
+			recurrence.hasEnd = false;
+		}
 		recurrence.type = options.type;
-		recurrence.start = options.start;
+		recurrence.start = options.startDate;
 		if (options.dailyOption === 'everyWeekday') {
 			recurrence.type = 'weekly';
 			recurrence.daysOfWeek = [8];
