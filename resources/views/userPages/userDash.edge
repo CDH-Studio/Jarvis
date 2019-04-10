@@ -23,7 +23,7 @@
 		{{--  Search room page content  --}}
 		<div class='col-xl-6 col-xxl-4 mb-4'>
 			@section('search room')
-				<form action='results' method='GET' enctype='multipart/form-data' style='min-height:674px;'>
+				<form aria-label='search-form' action='results' method='GET' enctype='multipart/form-data' style='min-height:674px;'>
 					<div class="card shadow" style='min-height:inherit;'>
 						<div class="card-body">
 							{{ csrfField() }}
@@ -31,9 +31,9 @@
 							<div class='row'>
 								<div class='col form-group mb-4'>
 									<div class='row'>
-										<label class='col' for='date'>Date <b class='text-danger'>*</b></label>
+										<label class='col' for='date' aria-describedby='date-tooltip'>Date <b class='text-danger'>*</b></label>
 										<div class='col text-right'>
-											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
+											<i id='date-tooltip' class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
 										</div>
 									</div>
 									{{--  If field is not filled correctly show an error box  --}}
@@ -49,7 +49,7 @@
 							{{--  Meeting time from  --}}
 							<div class='row'>
 								<div class='col form-group mb-4'>
-									<label for='from'>Start time <b class='text-danger'>*</b></label>
+									<label for='from' aria-labelledby='from-error'>Start time <b class='text-danger'>*</b></label>
 									{{--  If field is not filled correctly show an error box  --}}
 									<div class='timePicker' style='display: flex;'>
 										@if(hasErrorFor('from'))
@@ -59,10 +59,10 @@
 										@endif
 
 										<div class='dropdown no-arrow'>
-											<button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+											<button for='from' aria-label='from-button' class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
 											<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
 												@each(item in dropdownSelection)
-													<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+													<a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
 												@endeach
 											</div>
 										</div>
@@ -72,7 +72,7 @@
 									@endif
 								</div>
 								<div class='col form-group mb-4'>
-									<label for='to' data-toggle='tooltip'>End time <b class='text-danger'>*</b></label>
+									<label for='to' aria-labelledby='to-error' data-toggle='tooltip'>End time <b class='text-danger'>*</b></label>
 									<div style='display: flex;' class='timePicker'>
 										{{--  If field is not filled correctly show an error box  --}}
 										@if(hasErrorFor('to'))
@@ -81,10 +81,10 @@
 											<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>											
 										@endif
 										<div class='dropdown no-arrow'>
-											<button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+											<button for='to'  aria-label='to-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
 											<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
 												@each(item in dropdownSelection)
-													<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+													<a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
 												@endeach
 											</div>
 										</div>
@@ -98,7 +98,7 @@
 							<div class='row'>
 								<div class='col form-group mb-4'>
 									<label for='location'>Preferred location</label>
-									<select name='location' class='form-control'>
+									<select id='location' name='location' class='form-control'>
 										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>Select a floor</option>
 										<option value='0' {{ old('location') == '0' ? 'selected' : '' }}>Floor 0</option>
 										<option value='1' {{ old('location') == '1' ? 'selected' : '' }}>Floor 1</option>
@@ -117,12 +117,12 @@
 								{{--  Table Seats form  --}}
 								<div class='col form-group mb-4'>
 									<label for='seats'>Number of table seats</label>
-									<input class='form-control' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
+									<input class='form-control' id='seats' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
 								</div>
 								{{--  Max Capacity  --}}
 								<div class='col form-group mb-4'>
 									<label for='capacity'>Number of people</label>
-									<input class='form-control' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
+									<input class='form-control' id='capacity' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
 								</div>
 							</div>
 							{{--  Equipment check box form  --}}
@@ -164,8 +164,8 @@
 							{{--  Page buttons  --}}
 							<div class='row align-items-end' style='margin-top:80px;'>
 								<div class='col-sm-12 text-right'>
-									<button type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
-									<button type='submit' class='btn btn-primary no-margin'>Search</button>
+									{{--  <button aria-label='back' type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>  --}}
+									<button aria-label='submit' type='submit' class='btn btn-primary no-margin'>Search</button>
 								</div>
 							</div>
 						</div>
@@ -223,8 +223,8 @@
 														@!component('components.stars', rating= room.averageRating)
 													</div>
 													<div>
-														<i class="fas fa-chair spec-no mr-1"></i> {{room.seats}}
-														<i class="fas fa-users spec-no ml-4 mr-1"></i> {{room.capacity}}
+														<i class="fas fa-chair fa-sm spec-no mr-1"></i>Table Seats: {{room.seats}}
+														<i class="fas fa-users fa-sm spec-no ml-4 mr-1"></i>Capacity: {{room.capacity}}
 													</div>
 												@endslot
 											@endcomponent
