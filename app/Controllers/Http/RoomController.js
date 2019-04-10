@@ -5,7 +5,7 @@ const Token = use('App/Models/Token');
 const Booking = use('App/Models/Booking');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
-const Axios = require('axios');
+const axios = require('axios');
 // const Env = use('Env');
 const Event = use('Event');
 const moment = require('moment');
@@ -394,10 +394,10 @@ class RoomController {
 		console.log(options);
 
 		let recurrence = {};
-		// Recurrence start
-		recurrence.start = options.startDate;
+		// Recurrence start date
+		recurrence.startDate = options.startDate;
 
-		// Recurrence end
+		// Recurrence end date
 		if (options.endOption === 'endBy') {
 			recurrence.end = options.endDate;
 			recurrence.hasEnd = true;
@@ -415,7 +415,14 @@ class RoomController {
 			recurrence.daysOfWeek = [8];
 
 			console.log('recurrence', recurrence);
-			return recurrence;
+			const res = await axios.post('http://142.53.209.100:8080/recur', {
+				room: calendar,
+				start: date + 'T' + from,
+				end: date + 'T' + to,
+				floor: floor
+			});
+
+			return res.data;
 		}
 
 		switch (recurrence.type) {
@@ -434,7 +441,14 @@ class RoomController {
 		}
 
 		console.log('recurrence', recurrence);
-		return { options, recurrence };
+		const res = await axios.post('http://142.53.209.100:8080/recur', {
+				room: calendar,
+				start: date + 'T' + from,
+				end: date + 'T' + to,
+				floor: floor
+			});
+
+		return res.data;
 	}
 
 	/**
@@ -769,7 +783,7 @@ class RoomController {
 	async getRoomAvailability (date, from, to, floor, calendar) {
 		console.log(date, from, to, calendar);
 
-		const res = await Axios.post('http://142.53.209.100:8080/avail', {
+		const res = await axios.post('http://142.53.209.100:8080/avail', {
 			room: calendar,
 			start: date + 'T' + from,
 			end: date + 'T' + to,
