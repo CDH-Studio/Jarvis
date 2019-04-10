@@ -562,7 +562,7 @@ class HomeController {
 
 		// round the autofill start and end times to the nearest 30mins
 		fromTime = fromTime.round(30, 'minutes').format('HH:mm');
-		toTime = toTime.round(30, 'minutes').add(1, 'h').format('hh:mm');
+		toTime = toTime.round(30, 'minutes').add(1, 'h').format('HH:mm');
 
 		// loop to fill the dropdown times
 		while (start.isBefore(end)) {
@@ -586,7 +586,8 @@ class HomeController {
 		let searchResults = await Booking
 			.query()
 			.where('user_id', auth.user.id)
-			.whereRaw("bookings.'from' >= date('now')") // eslint-disable-line
+			.where('status', 'Approved')
+			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.select('*')
 			.orderBy('from', 'asc')
 			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
