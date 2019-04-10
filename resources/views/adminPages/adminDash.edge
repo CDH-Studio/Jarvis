@@ -236,7 +236,7 @@
                 labels: ["Active", "Maintenance", "Deactived"],
                 datasets: [{
                     data: [ {{ roomStatusStats['active'] }}, {{ roomStatusStats['maintenance'] }}, {{ roomStatusStats['deactive'] }} ],
-                    backgroundColor: ['#004680', '#3B67A5', '#B4D7FF'],
+                    backgroundColor: ['#18bc9c', '#f39c12', '#e74c3c'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
                 }],
             },
@@ -274,7 +274,7 @@
                 labels: ["Open", "Pending", "Closed"],
                 datasets: [{
                     data: [ {{ roomIssueStats['pending'] }}, {{ roomIssueStats['underReview'] }}, {{ roomIssueStats['resolved'] }} ],
-                    backgroundColor: ['#004680', '#3B67A5', '#B4D7FF'],
+                    backgroundColor: ['#18bc9c', '#f39c12', '#e74c3c'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
                 }],
             },

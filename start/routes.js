@@ -18,14 +18,13 @@ const Route = use('Route');
 
 Route.get('/', 'HomeController.home').as('home');
 Route.on('/welcome').render('welcome');
-Route.on('/sample').render('sample');
 
 //= ========================================================================
 // Auth
 //= ========================================================================
 
 // User Authentication
-Route.get('/register', 'UserController.registerRender').as('register');
+Route.get('/register', 'UserController.registerUserRender').as('registerUser');
 Route.post('/register', 'UserController.create').validator('CreateUser');
 
 // Admin Authentication
@@ -68,12 +67,10 @@ Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['au
 Route.get('/roomBookings/:id', 'BookingController.getRoomBookings').as('roomBookings').middleware(['auth']);
 
 Route.get('/room/:roomID/issues/:issueStatus', 'IssueController.getRoomIssues').as('showIssue').middleware(['isAdmin']);
-Route.get('/issue/:id', 'IssueController.getRoomIssues').as('showIssue').middleware(['isAdmin']);
 Route.get('/issue/:id/edit', 'IssueController.editIssue').as('editIssue').middleware(['isAdmin']);
 Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['isAdmin']).validator('EditIssue');
 
 // user
-Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
 Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('AddReview').middleware(['isUser']);
 Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('AddReview').middleware(['isUser']);
 Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['isUser']);
@@ -88,7 +85,7 @@ Route.get('/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBoo
 
 // Employee user pages
 // Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);
-Route.get('/booking', 'HomeController.userDashboard').as('booking').middleware(['isUser']);
+Route.get('/booking', 'HomeController.userDashboard').as('userDash').middleware(['isUser']);
 Route.get('/searchRooms', 'RoomController.loadSearchRoomsForm').as('searchRooms').middleware(['isUser']);
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking').middleware(['isUser']);
 
