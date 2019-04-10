@@ -385,7 +385,7 @@ class HomeController {
 		const checkRoomAvailability = async () => {
 			let numberOfRooms = 2;
 			await asyncForEach(rooms, async (item) => {
-				if (numberOfRooms !== 0 && await this.getRoomAvailability(date, from, to, item.calendar)) {
+				if (numberOfRooms !== 0 && await this.getRoomAvailability(date, from, to, item.floor, item.calendar)) {
 					Event.fire('send.room', {
 						card: view.render('components.smallCard', { room: item, datetime: { date: formattedDate, time: formattedFrom + ' - ' + formattedTo } }),
 						code: code
