@@ -26,34 +26,68 @@
 							{{ csrfField() }}
 							{{--  Meeting time from  --}}
 							<div class='row'>
-								<div class='col form-group mb-4'>
-									<label for='from'>Start Time <b class='text-danger'>*</b></label>
-									{{--  If field is not filled correctly show an error box  --}}
-									@if(hasErrorFor('from'))
-										<input name='from'  id='from' class='form-control date-form is-invalid' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }' onchange='removeErrorClass("from")'>
-										<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
-									{{--  If another field is invalid show the previous value  --}}
-									@elseif(hasErrorFor())
-										<input name='from'  id='from' class='form-control date-form' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }'>
-									{{--  Otherwise show a normal input  --}}
-									@else
-										<input name='from' id='from' class='form-control date-form' type='time' data-role='datebox' onchange='removeErrorClass("from")'>
-									@endif
-								</div>
-								<div class='col form-group mb-4'>
-									<label for='to' data-toggle='tooltip'>End Time <b class='text-danger'>*</b></label>
-									{{--  If field is not filled correctly show an error box  --}}
-									@if(hasErrorFor('to'))
-										<input name='to'  id='to' class='form-control date-form is-invalid' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }' onchange='removeErrorClass("to")'>
-										<div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
-									{{--  If another field is invalid show the previous value  --}}
-									@elseif(hasErrorFor())
-										<input name='to'  id='to' class='form-control date-form' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }'>
-									{{--  Otherwise show a normal input  --}}
-									@else
-										<input name='to'  id='to' class='form-control date-form' type='time' data-role='datebox' onchange='removeErrorClass("to")'>
-									@endif                  
-								</div>
+									<div class='col form-group mb-4'>
+											<label for='from'>Start Time <b class='text-danger'>*</b></label>
+											{{--  If field is not filled correctly show an error box  --}}
+											@if(hasErrorFor('from'))
+												<div class='timePicker' style='display: flex;'>
+													<input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
+													<div class='dropdown no-arrow'>
+														<button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+														<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+															@each(item in dropdownSelection)
+																<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+															@endeach
+														</div>
+													</div>
+												</div>
+												<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
+											@else
+												<div class='timePicker' style='display: flex;'>
+													<input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
+													<div class='dropdown no-arrow'>
+														<button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+														<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+															@each(item in dropdownSelection)
+																<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+															@endeach
+														</div>
+													</div>
+												</div>
+											@endif
+											
+										</div>
+										<div class='col form-group mb-4'>
+											<label for='to' data-toggle='tooltip'>End Time <b class='text-danger'>*</b></label>
+											{{--  If field is not filled correctly show an error box  --}}
+											@if(hasErrorFor('to'))
+												<div style='display: flex;' class='timePicker'>
+													<input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
+													<div class='dropdown no-arrow'>
+														<button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+														<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+															@each(item in dropdownSelection)
+																<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+															@endeach
+														</div>
+													</div>
+												</div>
+												<div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
+										   {{--  Otherwise show a normal input  --}}
+											@else
+											<div style='display: flex;' class='timePicker'>
+												<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
+												<div class='dropdown no-arrow'>
+													<button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+													<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+														@each(item in dropdownSelection)
+															<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+														@endeach
+													</div>
+												</div>
+											</div>
+											@endif                  
+										</div>
 							</div>
 							{{--  Location form  --}}
 							<div class='row'>
@@ -143,7 +177,7 @@
 								<div class="tab-content" id="pills-tabContent">
 									<div class="tab-pane fade show active" id="daily" role="tabpanel">
 										<div>
-											<input type="radio" name="daily-option" value="every"> Every <input type="number" name="daily-interval"> day(s)
+											<input type="radio" name="daily-option" value="every"> Every <input type="number" name="daily-interval" value=1> day(s)
 										</div>
 										<div>
 											<input type="radio" name="daily-option" value="every-weekday"> Every weekday
@@ -151,7 +185,7 @@
 									</div>
 									<div class="tab-pane fade" id="weekly" role="tabpanel">
 										<div>
-											<p>Every <input type="number" name="weekly-interval"> week(s) on:</p>
+											<p>Every <input type="number" name="weekly-interval" value=1> week(s) on:</p>
 										</div>
 
 										<div class="weekdays">
@@ -187,7 +221,7 @@
 									</div>
 									<div class="tab-pane fade" id="monthly" role="tabpanel">
 										<div>
-											<p>Day <input type="number" name="dayOfMonth" width="2"> of every <input type="number" name="monthly-interval"> month(s)</p>
+											<p>Day <input type="number" name="dayOfMonth" value=5> of every <input type="number" name="monthly-interval" value=1> month(s)</p>
 										</div>
 									</div>
 								</div>
@@ -200,7 +234,7 @@
 									<div class='row'>
 										<label class='col' for='date'>Start <b class='text-danger'>*</b></label>
 										<div class='col text-right'>
-											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
+											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='Some tip'></i>
 										</div>
 									</div>
 									{{--  If field is not filled correctly show an error box  --}}
@@ -213,20 +247,27 @@
 									@endif
 								</div>
 								<div class='col form-group mb-4'>
-									<div class='row'>
-										<label class='col' for='date'>End by</label>
+									<div class='row end-by'>
+										<input type="radio" name="end-option" value="endBy"><label class='col' for='date'>End by:</label>
 										<div class='col text-right'>
 											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
 										</div>
 									</div>
 									{{--  If field is not filled correctly show an error box  --}}
-									@if(hasErrorFor('date'))
-										<input name='date' id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
+									@if(hasErrorFor('endDate'))
+										<input name='endDate' id='endDate' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('endDate', '') }}"}' onchange='removeErrorClass("date")'>
 										<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
 									{{--  Otherwise show a normal input  --}}
 									@else
-										<input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
+										<input name='endDate' id='endDate' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('endDate', '') }}"}'>
 									@endif
+									<div class='row end-after mt-1'>
+										<input type="radio" name="end-option" value="endAfter"> <label class='col' for='endOccur'>End after:</label>
+										<p><input type="number" name="weekly-interval" value=10> occurrences</p>
+									</div>
+									<div class='row no-end'>
+										<input type="radio" name="end-option" value="noEnd" checked> <label class='col' for='endOccur'>No end date</label>
+									</div>
 								</div>
 							</div>
 
@@ -256,34 +297,6 @@
 							$('#to-error').removeClass('show-invalid');
 						}
 					}
-				</script>
-				{{--  Setting from and to times  --}}
-				<script>
-					const currentTime = new Date();
-					const currentHour = currentTime.getHours();
-					const currentMinutes = currentTime.getMinutes();
-					let fromTime;
-					let toTime;
-					if (currentMinutes <= 30) {
-						fromTime = currentHour + ":30"
-						toTime = currentHour + 1 + ":30"
-					} else {
-						fromTime = currentHour + 1 + ":00"
-						toTime = currentHour + 2 + ":00"
-			
-					}
-					$('#from').datebox({
-						mode: "timebox", 
-						defaultValue: fromTime,
-						minuteStep: "30",
-						minuteStepRound: "1"
-					});
-					$('#to').datebox({
-						mode: "timebox", 
-						defaultValue: toTime,
-						minuteStep: "30",
-						minuteStepRound: "1",
-					});
 				</script>
 		</div>
 
