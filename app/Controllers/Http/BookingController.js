@@ -5,6 +5,10 @@ const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const graph = require('@microsoft/microsoft-graph-client');
 
+// Used for time related calcuklations and formatting
+const moment = require('moment');
+require('moment-round');
+
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -159,6 +163,8 @@ class BookingController {
 		let searchResults = await Booking
 			.query()
 			.where('room_id', params.id)
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.orderBy('from', 'asc')
 			.fetch();
 
 		searchResults = searchResults.toJSON();
@@ -183,8 +189,17 @@ class BookingController {
 			canEdit = 1;
 		}
 
-		const results = (await Booking.query().where('user_id', params.id).fetch()).toJSON();
+		let results = await Booking
+			.query()
+			.where('user_id', params.id)
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.orderBy('from', 'asc')
+			.fetch();
+
+		results = results.toJSON();
 		const bookings = await populateBookings(results);
+
+		console.log(bookings);
 
 		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });
 	}

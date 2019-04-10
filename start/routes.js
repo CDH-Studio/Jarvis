@@ -85,7 +85,7 @@ Route.post('/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBo
 
 // Employee user pages
 // Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);
-Route.get('/booking', 'HomeController.userDashboard').as('userDash').middleware(['isUser']);
+Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware(['isUser']);
 Route.get('/searchRooms', 'RoomController.loadSearchRoomsForm').as('searchRooms').middleware(['isUser']);
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking').middleware(['isUser']);
 

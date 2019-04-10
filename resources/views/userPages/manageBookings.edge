@@ -15,52 +15,54 @@
 	@endcomponent
 	
 	<div class="card shadow">
-		<div class="card-body">
-			@if(bookings.length == 0)
-				<div class="row">
+		@if(bookings.length == 0)
+			<div class="card-body">
+					<div class="row">
 					<div class="col-12 text-center mt-5 mb-5">
 						<p class="fas fa-ghost fa-10x mb-5 text-muted"></p>
 						<h3 class="text-muted">No Bookings Found</h3>
 					</div>
 				</div>
-			@else
-				<div class="row card-body">
-					<div class="col-12 table table-responsive">
-						{{--  Displays all of the bookings for the current user  --}}
-						<table class='table table-hover' id='manageBookingsTable'>
-							<thead>
+			</div>		
+		@else
+			<div class="card-header py-3">
+				<h6 class="m-0 font-weight-bold text-primary">Upcoming Bookings</h6>
+			</div>
+			<div class="card-body">
+				<div class="col-12 table table-responsive">
+					<table id='manageBookingsTable' class='table table-hover' style='width:100%;'>
+						<thead>
+							<tr>
+								<th scope='col' class='text-center'>User</th>
+								<th scope='col' class='text-center'>Meeting Name</th>
+								<th scope='col' class='text-center'>Date</th>
+								<th scope='col' class='text-center'>Time</th>
+								<th scope='col' class='text-center'>Status</th>
+								<th scope='col' class='text-center'></th>
+							</tr>
+						</thead>
+						{{--  Loops through the bookings array and displays every booking  --}}
+						<tbody>
+							@each(booking in bookings) 
 								<tr>
-									<th scope='col'>User</th>
-									<th scope='col'>Meeting Name</th>
-									<th scope='col'>Date</th>
-									<th scope='col'>Time</th>
-									<th scope='col'>Status</th>
-									<th scope='col'></th>
+									<td class='text-center'><a href='{{ route('viewProfile', {id: booking.userId}) }}'>{{ booking.userName }}</a></td>
+									<td class='text-center'>{{ booking.subject }}</td>
+									<td class='text-center'>{{ booking.date }}</td>
+									<td class='text-center'>{{ booking.time }}</td>
+									<td class='text-center td-{{ booking.status }}'>{{ booking.status }}</td>
+									@if(booking.status == 'Approved' && canEdit)
+										<td><a class='text-danger' name='cancel' id='cancelButton' href='{{ route('cancelBooking', {id: booking.id}) }}'><i class="fas fa-times"></i> Cancel</a></td>
+									@else
+										<td></td>
+									@endif
 								</tr>
-							</thead>
-							{{--  Loops through the bookings array and displays every booking  --}}
-							<tbody>
-								@each(booking in bookings) 
-									<tr>
-										<td><a href='{{ route('viewProfile', {id: booking.userId}) }}'>{{ booking.userName }}</a></td>
-										<td>{{ booking.subject }}</td>
-										<td>{{ booking.date }}</td>
-										<td>{{ booking.time }}</td>
-										<td class='td-{{ booking.status }}'>{{ booking.status }}</td>
-										@if(booking.status == 'Approved' && canEdit)
-											<td><a class='text-danger' name='cancel' id='cancelButton' href='{{ route('cancelBooking', {id: booking.id}) }}'><i class="fas fa-times"></i> Cancel</a></td>
-										@else
-											<td></td>
-										@endif
-									</tr>
-								@endeach
-							</tbody>
+							@endeach
+						</tbody>
 
-						</table>
-					</div>
-				</div> 
-			@endif
-		</div>
+					</table>
+				</div>
+			</div> 
+		@endif
 	</div>
 @endsection
 
@@ -68,12 +70,12 @@
 @section('extrajs') 
     <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
     <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
-    <script>$(document).ready(function() {
-            $('#manageBookingsTable').DataTable( {
-                "paging":   false,
-                "ordering": true,
-                "info":     false
-            });
-        });
-    </script>
+	<script>$(document).ready(function() {
+			$('#manageBookingsTable').DataTable( {
+				"paging":   false,
+				"ordering": true,
+				"info":     false
+			});
+		});
+	</script>
 @endsection
