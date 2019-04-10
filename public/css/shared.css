@@ -1,7 +1,18 @@
 /*  This file is for CSS changes that are used by both ADMIN and USER views */
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-/* IE Compatibilitie Changes */
+/* Accesibility Changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+body, .table{
+    color: #4D4D5B;
+    color: #4D4D5B;
+}
+/* links */
+a{
+    color: #466CDD;
+}
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* IE Compatibility Changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 
 @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {  
@@ -135,6 +146,9 @@
     color:#707070 ;
 }
 
+.text-danger{
+    color: #D9080B !important;
+}
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Navagation Changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
