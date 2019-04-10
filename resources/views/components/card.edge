@@ -64,9 +64,9 @@
                                 <li class='spec-no'><i class='fas fa-times-circle'></i><span> Projector</span></li>
                             @endif
                             @if(room.flipchart === 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Flip Chart</span></li>
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Flip chart</span></li>
                             @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Flip Chart</span></li>
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Flip chart</span></li>
                             @endif
                             @if(room.whiteboard === 1)
                                 <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
@@ -74,18 +74,18 @@
                                 <li class='spec-no'><i class='fa fa-times-circle'></i><span> Whiteboard</span></li>
                             @endif
                             @if(room.audioConference === 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio Conf.</span></li>
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio conf.</span></li>
                             @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Audio Conf.</span></li>
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Audio conf.</span></li>
                             @endif
                         </ul>
                     </div>
                     <div class='room-card-spec'>
                         <ul class='space-evenly'>
                             @if(room.videoConference === 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video Conf.</span></li> 
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video conf.</span></li> 
                             @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Video Conf.</span></li>
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Video conf.</span></li>
                             @endif
                             @if(room.pc === 1)
                                 <li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
@@ -93,9 +93,9 @@
                                 <li class='spec-no'><i class='fa fa-times-circle'></i><span> PC</span></li>
                             @endif
                             @if(room.surfaceHub === 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Surface Hub</span></li>
+                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Surface hub</span></li>
                             @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Surface Hub</span></li>
+                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Surface hub</span></li>
                             @endif
                             {{--  <li><span class='link-color'>More info...</span></li>  --}}
                             <li class='spec-no' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Placeholder</span></li>
@@ -115,7 +115,7 @@
                     @endif
                 </div>
                 <div class='flex-fill'>
-                    <b>Seats:</b><span> {{ room.seats }} </span>
+                    <b>Table seats:</b><span> {{ room.seats }} </span>
                 </div>
                 <div class='flex-fill'>
                     <b>Capacity:</b><span> {{ room.capacity }}</span>

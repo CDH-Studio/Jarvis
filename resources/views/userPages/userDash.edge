@@ -49,56 +49,37 @@
 							{{--  Meeting time from  --}}
 							<div class='row'>
 								<div class='col form-group mb-4'>
-									<label for='from'>Start Time <b class='text-danger'>*</b></label>
+									<label for='from'>Start time <b class='text-danger'>*</b></label>
 									{{--  If field is not filled correctly show an error box  --}}
-									@if(hasErrorFor('from'))
-										<div class='timePicker' style='display: flex;'>
+									<div class='timePicker' style='display: flex;'>
+										@if(hasErrorFor('from'))
 											<input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
-											<div class='dropdown no-arrow'>
-												<button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-												<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-													@each(item in dropdownSelection)
-														<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
-													@endeach
-												</div>
+										@else
+											<input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>										  
+										@endif
+
+										<div class='dropdown no-arrow'>
+											<button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+											<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+												@each(item in dropdownSelection)
+													<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+												@endeach
 											</div>
 										</div>
+									</div>
+									@if(hasErrorFor('from'))
 										<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
-									@else
-										<div class='timePicker' style='display: flex;'>
-											<input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
-											<div class='dropdown no-arrow'>
-												<button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-												<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-													@each(item in dropdownSelection)
-														<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
-													@endeach
-												</div>
-											</div>
-										</div>
 									@endif
-									
 								</div>
 								<div class='col form-group mb-4'>
-									<label for='to' data-toggle='tooltip'>End Time <b class='text-danger'>*</b></label>
-									{{--  If field is not filled correctly show an error box  --}}
-									@if(hasErrorFor('to'))
-										<div style='display: flex;' class='timePicker'>
-											<input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
-											<div class='dropdown no-arrow'>
-												<button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-												<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-													@each(item in dropdownSelection)
-														<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
-													@endeach
-												</div>
-											</div>
-										</div>
-										<div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
-								{{--  Otherwise show a normal input  --}}
-									@else
+									<label for='to' data-toggle='tooltip'>End time <b class='text-danger'>*</b></label>
 									<div style='display: flex;' class='timePicker'>
-										<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
+										{{--  If field is not filled correctly show an error box  --}}
+										@if(hasErrorFor('to'))
+											<input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
+										@else
+											<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>											
+										@endif
 										<div class='dropdown no-arrow'>
 											<button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
 											<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
@@ -108,13 +89,15 @@
 											</div>
 										</div>
 									</div>
-									@endif                  
+									@if(hasErrorFor('to'))
+										<div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
+									@endif
 								</div>
 							</div>
 							{{--  Location form  --}}
 							<div class='row'>
 								<div class='col form-group mb-4'>
-									<label for='location'>Preferred Location</label>
+									<label for='location'>Preferred location</label>
 									<select name='location' class='form-control'>
 										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>Select a floor</option>
 										<option value='0' {{ old('location') == '0' ? 'selected' : '' }}>Floor 0</option>
@@ -133,12 +116,12 @@
 							<div class='row'>
 								{{--  Table Seats form  --}}
 								<div class='col form-group mb-4'>
-									<label for='seats'>Number of Table Seats</label>
+									<label for='seats'>Number of table seats</label>
 									<input class='form-control' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
 								</div>
 								{{--  Max Capacity  --}}
 								<div class='col form-group mb-4'>
-									<label for='capacity'>Number of People</label>
+									<label for='capacity'>Number of people</label>
 									<input class='form-control' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
 								</div>
 							</div>
@@ -156,21 +139,21 @@
 									</div>
 									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
 										<input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
+										<label class='custom-control-label' for='flipChartCheck'>Flip chart</label>
 									</div>  
 				
 									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
 										<input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
+										<label class='custom-control-label' for='audioCheck'>Audio conferencing</label>
 									</div>
 									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
 										<input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
+										<label class='custom-control-label' for='videoCheck'>Video conferencing</label>
 									</div>
 									
 									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
 										<input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1' {{ old('surfaceHubCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
+										<label class='custom-control-label' for='surfaceHubCheck'>Surface hub</label>
 									</div>              
 									<div class='custom-control custom-checkbox col ml-3'>
 										<input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1' {{ old('pcCheck') ? 'checked' : '' }}/>
@@ -254,7 +237,7 @@
 				</div>
 						{{--  This is a copy component from #oringal-upcoming --}}
 				<div id='secondary-upcoming' class='col-12'  style='height:325px;'>
-					@component('components.generalCard', title='Bookings', extraCSS='custom-card-header')
+					@component('components.generalCard', title='My Bookings', extraCSS='custom-card-header')
 						@slot('titleRight')
 							<a class="color-light"  href='{{ route('viewBookings',{id: userId}) }}' target='_blank'>
 								<i class="fas fa-external-link-alt fa-sm"></i>
@@ -302,7 +285,7 @@
     </div>
 	<div id='original-upcoming' class='row'>
 		<div id='myBookings' class='col'>
-			@component('components.generalCard', title='Bookings', extraCSS='custom-card-header')
+			@component('components.generalCard', title='My Bookings', extraCSS='custom-card-header')
 				@slot('titleRight')
 					<a class="color-primary"  href='{{ route('viewBookings',{id: userId}) }}' target='_blank'>
 						<i class="fas fa-external-link-alt"></i>

@@ -158,7 +158,7 @@ class RoomController {
 		// Retrieves room object
 		const room = await Room.findBy('id', params.id);
 		const actionType = 'Edit Room';
-		return view.render('adminDash.addEditRoom', { room: room, actionType });
+		return view.render('adminPages.addEditRoom', { room: room, actionType });
 	}
 
 	/**
