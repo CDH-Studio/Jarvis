@@ -415,12 +415,7 @@ class RoomController {
 			recurrence.daysOfWeek = [8];
 
 			console.log('recurrence', recurrence);
-			const res = await axios.post('http://142.53.209.100:8080/recur', {
-				room: calendar,
-				start: date + 'T' + from,
-				end: date + 'T' + to,
-				floor: floor
-			});
+			const res = await axios.post('http://142.53.209.100:8080/recur', recurrence);
 
 			return res.data;
 		}
@@ -441,12 +436,7 @@ class RoomController {
 		}
 
 		console.log('recurrence', recurrence);
-		const res = await axios.post('http://142.53.209.100:8080/recur', {
-				room: calendar,
-				start: date + 'T' + from,
-				end: date + 'T' + to,
-				floor: floor
-			});
+		const res = await axios.post('http://142.53.209.100:8080/recur', recurrence);
 
 		return res.data;
 	}
