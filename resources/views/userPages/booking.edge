@@ -17,20 +17,14 @@
 {{--  book room page content  --}}
 @section('content')
     {{--  Loading page header  --}}
-    @component('components.pageHeader', title= 'Hello, '+ auth.user.firstname)
-        @slot('body')
-        @endslot
-    @endcomponent
+    @!component('components.pageHeader', title= 'Hello, '+ auth.user.firstname)
     {{--  Page Content  --}}
-    <div class='d-flex flex-wrap content'>    
+    <div class='row d-flex flex-wrap'>
 		{{--  Search room page content  --}}
-		<div class='search-room-content mr-4'>
+		<div class='col-xl-6 col-xxl-4'>
 			@section('search room')
-				<form action='/results' method='GET' enctype='multipart/form-data'>
+				<form action='results' method='GET' enctype='multipart/form-data'>
 					<div class="card shadow mb-4">
-						<div class="card-header py-3">
-							<h6 class="m-0 font-weight-bold text-primary">Search & Book</h6>
-						</div>
 						<div class="card-body">
 							{{ csrfField() }}
 							{{--  Date form  --}}
@@ -58,35 +52,69 @@
 									<label for='from'>Start Time <b class='text-danger'>*</b></label>
 									{{--  If field is not filled correctly show an error box  --}}
 									@if(hasErrorFor('from'))
-										<input name='from'  id='from' class='form-control date-form is-invalid' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }' onchange='removeErrorClass("from")'>
+										<div class='timePicker' style='display: flex;'>
+											<input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
+											<div class='dropdown no-arrow'>
+												<button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+												<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+													@each(item in dropdownSelection)
+														<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+													@endeach
+												</div>
+											</div>
+										</div>
 										<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
-									{{--  If another field is invalid show the previous value  --}}
-									@elseif(hasErrorFor())
-										<input name='from'  id='from' class='form-control date-form' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue":"{{ old('from', '') }}", "minuteStep":"30", "minuteStepRound":"1" }'>
-									{{--  Otherwise show a normal input  --}}
 									@else
-										<input name='from' id='from' class='form-control date-form' type='time' data-role='datebox' onchange='removeErrorClass("from")'>
+										<div class='timePicker' style='display: flex;'>
+											<input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
+											<div class='dropdown no-arrow'>
+												<button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+												<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+													@each(item in dropdownSelection)
+														<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+													@endeach
+												</div>
+											</div>
+										</div>
 									@endif
+									
 								</div>
 								<div class='col form-group mb-4'>
 									<label for='to' data-toggle='tooltip'>End Time <b class='text-danger'>*</b></label>
 									{{--  If field is not filled correctly show an error box  --}}
 									@if(hasErrorFor('to'))
-										<input name='to'  id='to' class='form-control date-form is-invalid' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }' onchange='removeErrorClass("to")'>
+										<div style='display: flex;' class='timePicker'>
+											<input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
+											<div class='dropdown no-arrow'>
+												<button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+												<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+													@each(item in dropdownSelection)
+														<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+													@endeach
+												</div>
+											</div>
+										</div>
 										<div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
-									{{--  If another field is invalid show the previous value  --}}
-									@elseif(hasErrorFor())
-										<input name='to'  id='to' class='form-control date-form' type='time' data-role='datebox' data-options='{"mode":"timebox", "defaultValue": "{{ old('to', '') }}", "minuteStep":"30" }'>
-									{{--  Otherwise show a normal input  --}}
+								{{--  Otherwise show a normal input  --}}
 									@else
-										<input name='to'  id='to' class='form-control date-form' type='time' data-role='datebox' onchange='removeErrorClass("to")'>
+									<div style='display: flex;' class='timePicker'>
+										<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
+										<div class='dropdown no-arrow'>
+											<button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+											<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+												@each(item in dropdownSelection)
+													<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+												@endeach
+											</div>
+										</div>
+									</div>
 									@endif                  
 								</div>
 							</div>
 							{{--  Location form  --}}
 							<div class='row'>
 								<div class='col form-group mb-4'>
-									<label for='location'>Location</label>
+									<label for='location'>Preferred Location</label>
 									<select name='location' class='form-control'>
 										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>Select a floor</option>
 										<option value='0' {{ old('location') == '0' ? 'selected' : '' }}>Floor 0</option>
@@ -116,7 +144,7 @@
 							</div>
 							{{--  Equipment check box form  --}}
 							<div class='form-group'>
-								<h4>Equipment</h4>
+								<label>Equipment</label>
 								<div class='row'>               
 									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
 										<input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value= '1' {{ old('projectorCheck') ? 'checked' : '' }}/>
@@ -168,134 +196,115 @@
 						if (idOfInput == 'date') {
 							$('#date-error').removeClass('show-invalid');
 						}
-						else if (idOfInput == 'from') {
-							$('#from-error').removeClass('show-invalid');
-						}
-						else if (idOfInput == 'to' ) {
-							$('#to-error').removeClass('show-invalid');
-						}
 					}
-				</script>
-				{{--  Setting from and to times  --}}
-				<script>
-					const currentTime = new Date();
-					const currentHour = currentTime.getHours();
-					const currentMinutes = currentTime.getMinutes();
-					let fromTime;
-					let toTime;
-					if (currentMinutes <= 30) {
-						fromTime = currentHour + ":30"
-						toTime = currentHour + 1 + ":30"
-					} else {
-						fromTime = currentHour + 1 + ":00"
-						toTime = currentHour + 2 + ":00"
-			
-					}
-					$('#from').datebox({
-						mode: "timebox", 
-						defaultValue: fromTime,
-						minuteStep: "30",
-						minuteStepRound: "1"
-					});
-					$('#to').datebox({
-						mode: "timebox", 
-						defaultValue: toTime,
-						minuteStep: "30",
-						minuteStepRound: "1",
+					
+					// update from and to inputs from dropdown
+					$(document).on("click",".dropdown-menu a", function(ev) {
+						$(this).siblings().removeClass('active');
+						$(this).addClass("active");
+						$(this).parents(".timePicker").find('.time-form').val($(this).attr('data-value'));
+						$(this).parents(".timePicker").find('.time-form').removeClass('is-invalid');
+						$(this).parents(".timePicker").siblings('.invalid-feedback').removeClass('show-invalid');
 					});
 				</script>
-			
 			@endsection
 		</div>
-		<div class='d-flex flex-column flex-fill' style="padding-right: 24px;">
-			<div id='myBookings'>
-				@component('components.generalCard', title='Upcomming Bookings')
-					@slot('body')
-						<div class='table table-responsive'>
-							<table id='bookNowTable' class='table table-hover' style='width:100%;'>
-								<thead>
-									<tr>
-										<th scope='col' class='text-center' style='width:10%'>Name</th>
-										<th scope='col' class='text-center' style='width:10%'>Room</th>
-										<th scope='col' class='text-center' style='width:10%'>Date</th>
-										<th scope='col' class='text-center' style='width:10%'>Time</th>
-									</tr>
-								</thead>
-								{{--  Loops through the rooms array and displays every room's content  --}}
-								<tbody>
-									@each(room in rooms) 
-										<tr class='table-light row-hover' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
-											<td class='text-center'>{{ room.name }}</td>
-											<td class='text-center'>{{ room.floor }}</td>
-											<td class='text-center'>{{ room.tower }} </td>
-											<td class='text-center'>{{ room.capacity }}</td> 
-										</tr>
-									@endeach
-								</tbody>
-							</table>
-						</div>
-					@endslot
-				@endcomponent
+		<div class='col-xl-6 col-xxl-8'>
+			<div class='row'>
+				<div id='available' class='col-xl-12 col-xxl-6'>
+                    @component('components.generalCard', title='Currently Available')
+                        {{--  If there are no avail rooms display a message accordingly  --}}
+						@slot('body')
+                            <div id='avail'></div>
+						@endslot
+					@endcomponent
+				</div>
+				<div id='frequentlyBooked' class='col-lg-12 col-xxl-6'>
+					@component('components.generalCard', title='Frequently Booked')
+						@slot('body')
+							{{--  if the user have not booked anythings display message, else display the freq booked  --}}
+							@if(!freqRooms)
+								<div class="d-flex flex-wrap justify-content-center" style='height:244px;'>
+									<div class="d-flex flex-column justify-content-around">
+										<i class="fas fa-ghost fa-8x text-muted wrapper-center"></i>
+										<h3 class="text-muted no-margin">No Frequently Booked Rooms</h3>
+									</div>
+								</div>
+							@else
+								@each(room in freqRooms)
+									<div class='row'>
+										<div class='col'>
+											@component('components.smallCard', room=room)
+												@slot('body')
+													<div class='mb-2'>
+														@!component('components.stars', rating= room.averageRating)
+													</div>
+													<div>
+														<i class="fas fa-chair spec-no mr-1"></i> {{room.seats}}
+														<i class="fas fa-users spec-no ml-4 mr-1"></i> {{room.capacity}}
+													</div>
+												@endslot
+											@endcomponent
+										</div>
+									</div>
+								@endeach
+							@endif
+						@endslot
+					@endcomponent
+				</div>
 			</div>
-			<div id='available' class='mt-4'>
-				@component('components.generalCard', title='Currently Available')
-					@slot('body')
-						<div class='table table-responsive'>
-							<table id='bookNowTable' class='table table-hover' style='width:100%;'>
-								<thead>
-									<tr>
-										<th scope='col' class='text-center' style='width:10%'>Room</th>
-										<th scope='col' class='text-center' style='width:10%'>Floor</th>
-										<th scope='col' class='text-center' style='width:10%'>Tower</th>
-										<th scope='col' class='text-center' style='width:10%'>Capacity</th>
-									</tr>
-								</thead>
-								{{--  Loops through the rooms array and displays every room's content  --}}
-								<tbody>
-									@each(room in rooms) 
-										<tr class='table-light row-hover' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
-											<td class='text-center'>{{ room.name }}</td>
-											<td class='text-center'>{{ room.floor }}</td>
-											<td class='text-center'>{{ room.tower }} </td>
-											<td class='text-center'>{{ room.capacity }}</td> 
-										</tr>
-									@endeach
-								</tbody>
-							</table>
+			<div class='row'>
+				<div class='col'>
+					<div class='row mt-4'>
+						<div id='myBookings' class='col'>
+							@component('components.generalCard', title='Upcoming Bookings')
+								@slot('titleRight')
+									<a class="color-primary"  href='{{ route('viewBookings',{id: userId}) }}' target='_blank'>
+										<i class="fas fa-external-link-alt"></i>
+									</a>
+								@endslot
+								@slot('body')
+									{{-- display message if there are no upcomming bookings --}}
+									@if(!freqRooms)
+										<div class="d-flex flex-wrap justify-content-center">
+											<div class="d-flex flex-column justify-content-around">
+												<i class="fas fa-book fa-8x text-muted wrapper-center"></i>
+												<h3 class="text-muted no-margin">No Bookings Found</h3>
+											</div>
+										</div>
+									@else
+										<div class='table table-responsive'>
+											<table id='bookNowTable' class='table' style='width:100%;'>
+												<thead>
+													<tr>
+														<th scope='col' class='text-center' style='width:10%'>Room</th>
+														<th scope='col' class='text-center' style='width:10%'>Name</th>
+														<th scope='col' class='text-center' style='width:10%'>Date</th>
+														<th scope='col' class='text-center' style='width:10%'>Time</th>
+													</tr>
+												</thead>
+												{{--  Loops through the rooms array and displays every room's content  --}}
+												<tbody>
+													@each(room in upcomming) 
+														<tr class='table-light'>
+															<td class='text-center'><a href='{{ route('showRoom', {id: ""+room.roomId}) }}'>{{ room.room }}</a></td>
+															<td class='text-center'>{{ room.subject }}</td>
+															<td class='text-center'>{{ room.date }} </td>
+															<td class='text-center'>{{ room.time }}</td> 
+														</tr>
+													@endeach
+												</tbody>
+											</table>
+										</div>
+									@endif
+								@endslot
+							@endcomponent
 						</div>
-					@endslot
-				@endcomponent
-			</div>
-			<div id='frequentlyBooked' class='mt-4'>
-				@component('components.generalCard', title='Frequently Booked')
-					@slot('body')
-						<div class='table table-responsive'>
-							<table id='bookNowTable' class='table table-hover' style='width:100%;'>
-								<thead>
-									<tr>
-										<th scope='col' class='text-center' style='width:10%'>Name</th>
-										<th scope='col' class='text-center' style='width:10%'>Room</th>
-										<th scope='col' class='text-center' style='width:10%'>Date</th>
-										<th scope='col' class='text-center' style='width:10%'>Time</th>
-									</tr>
-								</thead>
-								{{--  Loops through the rooms array and displays every room's content  --}}
-								<tbody>
-									@each(room in rooms) 
-										<tr class='table-light row-hover' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
-											<td class='text-center'>{{ room.name }}</td>
-											<td class='text-center'>{{ room.floor }}</td>
-											<td class='text-center'>{{ room.tower }} </td>
-											<td class='text-center'>{{ room.capacity }}</td> 
-										</tr>
-									@endeach
-								</tbody>
-							</table>
-						</div>
-					@endslot
-				@endcomponent
+					</div>
+				</div>
 			</div>
 		</div>
+
 		{{--  Chatbot  --}}
 		<div class='row' hidden>
 			<i class='open-button fas fa-robot fa-2x' onclick='openChat()'></i>
@@ -312,12 +321,36 @@
 		</div>
 	</div>
 
+    {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
     <script>
         $('#message').keypress((e) => {
 	        if (e.which === 13 && !e.shiftKey) {
                 $('#sub').click();
                 e.preventDefault();
                 return false;
+            }
+        });
+
+        let pusher = new Pusher('aca8a920ad0e3d8ac09f', {
+            cluster: 'us2',
+            useTLS: true
+        });
+
+        //Subscribe to the channel we specified in our Adonis Application
+        let channel = pusher.subscribe('adonis-channel')
+
+        //Listen for events on the channel
+        channel.bind('send-room', function (data) {
+            if (data.message.code == '{{ code }}') {
+                let listItem = $("<div class='row'><div class='col'>" + data.message.card + "</div></div>")
+                $('#avail').prepend(listItem)
+            }
+        });
+
+        channel.bind('send-empty', function (data) {
+            if (data.message.code == '{{ code }}') {
+                let listItem = $(data.message.view)
+                $('#avail').empty().append(listItem)
             }
         });
     </script>
@@ -330,8 +363,7 @@
                 notify({ $: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
             });
         </script>
-	@endif
-
+    @endif
 @endsection
 
 

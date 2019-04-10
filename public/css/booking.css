@@ -64,10 +64,55 @@
 	width: 100%;
   }
   
-  .card:hover {
+.card:hover {
 	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  }
-  
-  .card-container {
+}
+
+.card-container {
 	padding: 2px 16px;
-  }
+}
+
+.room-card {
+	animation: fadeIn 2s;
+}
+
+/***** Recurring Booking page *****/
+.tabs a.nav-link {
+	color: #004680 !important;
+}
+
+.tabs a.nav-link.active {
+	background-color: #004680 !important;
+	color: white !important;
+}
+
+.tabs {
+  position: relative;   
+  min-height: 200px;
+  clear: both;
+  margin: 25px 0;
+}
+
+.tab-content {
+  position: absolute;
+  top: 32px;
+  left: 0;
+  background: white;
+  right: 0;
+  bottom: 0;
+	padding: 20px;
+	border: 1px solid #e3e6f0;
+	border-radius: calc(0.35rem - 1px) calc(0.35rem - 1px) 0 0;
+	
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.weekdays {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+input[type=number]{
+	width: 80px;
+} 

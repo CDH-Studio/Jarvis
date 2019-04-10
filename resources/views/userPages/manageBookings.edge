@@ -24,8 +24,8 @@
 					</div>
 				</div>
 			@else
-				<div class="row">
-					<div class="col-12">
+				<div class="row card-body">
+					<div class="col-12 table table-responsive">
 						{{--  Displays all of the bookings for the current user  --}}
 						<table class='table table-hover' id='manageBookingsTable'>
 							<thead>
@@ -52,7 +52,6 @@
 										@else
 											<td></td>
 										@endif
-
 									</tr>
 								@endeach
 							</tbody>

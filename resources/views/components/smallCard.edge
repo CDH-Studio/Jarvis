@@ -1,0 +1,31 @@
+{{--  Small General Room card, takes room to display photo and title --}}
+{{--  Optional body slot to input custom information --}}
+{{--  Routing to rooom details when clicked  --}}
+{{--  href='{{ route('viewProfile', {id: auth.user.id}) }}'  --}}
+<a class='link-style-none room-card' href="{{  route('showRoom', { id: ''+ room.id }) }}">
+    <div class='small-card border-left-primary custom-shadow-2'>
+        <div class='body d-flex flex-wrap justify-content-center'>
+            {{--  Room Picture  --}}
+            {{--  <div class='photo'>  --}}
+                @if(room.picture) 
+                    <img src='{{ room.picture }}'>
+                @else
+                    <img src='/images/meeting.jpeg'>
+                @endif
+            {{--  </div>  --}}
+            {{--  Room information  --}}
+            <div class='content flex-fill wrapper-center d-flex flex-wrap flex-column justify-content-center'>
+                <div class='title'>
+                    <h5>{{room.name}}</h5>
+                </div>
+                @if($slot.body)
+                    @!yield($slot.body)
+                @endif
+                @if(datetime)
+                    <div><strong>{{datetime.date}}</strong></div>
+                    <div>{{datetime.time}}</div>
+                @endif
+            </div>
+        </div>
+    </div>
+</a>

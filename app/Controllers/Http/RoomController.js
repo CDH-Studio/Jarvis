@@ -8,6 +8,7 @@ const graph = require('@microsoft/microsoft-graph-client');
 const Axios = require('axios');
 // const Env = use('Env');
 const Event = use('Event');
+const moment = require('moment');
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -86,6 +87,41 @@ async function populateBookings (results) {
 }
 
 class RoomController {
+	/**
+	*
+	* Render Search Room Page and pass the current time for autofill purposes
+	*
+	* @param {view}
+	*
+	*/
+	async loadSearchRoomsForm ({ view, params }) {
+		// Calculates the from and too times to pre fill in the search form
+		const currentTime = new Date();
+		const currentHour = currentTime.getHours();
+		const currentMinutes = currentTime.getMinutes();
+		let fromTime;
+		let toTime;
+		let dropdownSelection = [];
+		const start = moment().startOf('day');
+		const end = moment().endOf('day');
+		const endBy = moment().startOf('day').add(1, 'month').format('YYYY-MM-DD');
+
+		if (currentMinutes <= 30) {
+			fromTime = currentHour + ':30';
+			toTime = currentHour + 1 + ':30';
+		} else {
+			fromTime = currentHour + 1 + ':00';
+			toTime = currentHour + 2 + ':00';
+		}
+
+		// loop to fill the dropdown times
+		while (start.isBefore(end)) {
+			dropdownSelection.push({ dataValue: start.format('HH:mm'), name: start.format('h:mm A') });
+			start.add(30, 'm');
+		}
+
+		return view.render(`userPages.${params.view}`, { fromTime, toTime, dropdownSelection, endBy });
+	}
 	/**
 	 * Takes in a variable and converts the value to 0 if it's null (Used for checkboxes)
 	 *
@@ -353,6 +389,54 @@ class RoomController {
 		return view.render('adminDash.viewRooms', { rooms });
 	}
 
+	async searchRecurring ({ request }) {
+		const options = request.all();
+		console.log(options);
+
+		let recurrence = {};
+		// Recurrence start
+		recurrence.start = options.startDate;
+
+		// Recurrence end
+		if (options.endOption === 'endBy') {
+			recurrence.end = options.endDate;
+			recurrence.hasEnd = true;
+		} else if (options.endOption === 'endAfter') {
+			recurrence.numberOfOccurrences = options.numberOfOccurrences;
+			recurrence.hasEnd = true;
+		} else {
+			recurrence.hasEnd = false;
+		}
+
+		// Recurrence type
+		recurrence.type = options.type;
+		if (recurrence.type === 'daily' && options.dailyOption === 'everyWeekday') {
+			recurrence.type = 'weekly';
+			recurrence.daysOfWeek = [8];
+
+			console.log('recurrence', recurrence);
+			return recurrence;
+		}
+
+		switch (recurrence.type) {
+			case 'daily':
+				recurrence.interval = options.dailyInterval;
+				break;
+			case 'weekly':
+				recurrence.interval = options.weeklyInterval;
+				recurrence.daysOfWeek = options.daysOfWeek;
+				break;
+			case 'monthly':
+				recurrence.interval = options.monthlyInterval;
+				recurrence.dayOfMonth = options.dayOfMonth;
+				break;
+			default:
+		}
+
+		console.log('recurrence', recurrence);
+		return { options, recurrence };
+	}
+
 	/**
 	 * Query rooms from search criteria and render the results page.
 	 *
@@ -430,14 +514,31 @@ class RoomController {
 
 		const code = random(4);
 		const checkRoomAvailability = async () => {
+			let results = [];
+			let hasResults = false;
+
 			await asyncForEach(rooms, async (item) => {
 				if (await this.getRoomAvailability(date, from, to, item.floor, item.calendar)) {
+					if (!hasResults) {
+						Event.fire('send.hasResults', {
+							code: code
+						});
+						hasResults = true;
+					}
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
 						code: code
 					});
+
+					results.push(item);
 				}
 			});
+
+			if (results.length === 0) {
+				Event.fire('send.empty', {
+					code: code
+				});
+			}
 		};
 
 		setTimeout(checkRoomAvailability, 500);

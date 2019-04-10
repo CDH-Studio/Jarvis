@@ -15,3 +15,15 @@ Event.when('send.room', async (message) => {
 		message
 	});
 });
+
+Event.when('send.hasResults', async (message) => {
+	pusher.trigger('adonis-channel', 'send-hasResults', {
+		message
+	});
+});
+
+Event.when('send.empty', async (message) => {
+	pusher.trigger('adonis-channel', 'send-empty', {
+		message
+	});
+});

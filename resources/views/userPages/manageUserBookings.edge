@@ -1,4 +1,4 @@
-@layout('layouts.mainLayout')
+  @layout('layouts.mainLayout')
 
 @section('title')
     Manage Bookings
@@ -24,10 +24,10 @@
 					</div>
 				</div>
 			@else
-				<div class="row">
-					<div class="col-12">
+				<div class="row card-body">
+					<div class="col-12 table table-responsive">
 						{{--  Displays all of the bookings for the current user  --}}
-						<table class='table table-hover' id='manageUserBookingsTable'>
+						<table class='table' id='manageUserBookingsTable'>
 							<thead>
 								<tr>
 									<th scope='col'>Room</th>

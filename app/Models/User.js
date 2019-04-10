@@ -6,6 +6,7 @@ const Hash = use('Hash');
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model');
 const UserRole = use('App/Models/UserRole');
+const Tower = use('App/Models/Tower');
 const logger = use('Logger');
 
 class User extends Model {
@@ -75,6 +76,16 @@ class User extends Model {
 	static async getName (user_id) {
 		var user = await this.findOrFail(user_id);
 		return user.firstname + ' ' + user.lastname;
+	}
+
+	async getUserTower () {
+		try {
+			var tower = await Tower.findOrFail(this.tower);
+			return tower.name;
+		} catch (error) {
+			logger.error('Tower Lookup Failed');
+			return 0;
+		}
 	}
 }
 
