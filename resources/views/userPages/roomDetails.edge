@@ -18,7 +18,7 @@
     {{--  Actual page content  --}}
     <div class="row">
     
-        <div class='col-8'>
+        <div class='col-md-8'>
             <div class='card room-details-card shadow mb-4'>
                 <div class='card-header py-3'>
                     <div class='d-flex flex-wrap'>
@@ -48,18 +48,10 @@
                                     <span class="text">Edit Room</span>
                                 </button>   
                             @else
-                                @if(hasReview)
-                                    <button class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
-                                        <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
-                                        <span class="text">Edit Review</span>
-                                    </button>
-                                @else
-                                    <button class="btn btn-info btn-icon-split" data-toggle='modal' data-target='#reviewModal'>
-                                        <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
-                                        <span class="text">Write Review</span>
-                                    </button>   
-                                @endif
-                                <button class='btn btn-primary bg-danger' data-toggle='modal' data-target='#reportModal'><i class="far fa-flag"></i></button>
+                                <button class="btn btn-info btn-icon-split bg-danger" data-toggle='modal' data-target='#reportModal'>
+                                    <span class="icon text-white-50"><i class="far fa-flag"></i></span>
+                                    <span class="text">Report Issue</span>
+                                </button>
                             @endif
                         </div>
                     </div>
@@ -103,9 +95,6 @@
             </div>
 
             <div class="card shadow">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Key Features</h6>
-                </div>
                 <div class="card-body">
                                             <div class='col room-details-spec'>
                             <ul>
@@ -154,7 +143,7 @@
 
         </div>
         
-        <div class='col-4'>
+        <div class='col-md-4'>
             <div class="card shadow">
                 <div class='card-header py-3'>
                     <h4 class="m-0 font-weight-bold text-primary">Book Room</h4>
@@ -317,18 +306,56 @@
         </div>
 
     </div>
+    <div class="row">
+        <div class='col-8'>
+            <div class="card shadow mt-4 mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Rating and Reviews</h6>
+                </div>
+                <div class="card-body">
 
-    <div class="card shadow mt-4 mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Rating and Reviews</h6>
+                    <div class="row">
+                        @if(reviews.length == 0)
+                            <div class='row'>
+                                <div class='col-12 text-center'>
+                                    <p class='fas fa-ghost fa-8x mb-5 mt-5 text-muted'></p>
+                                    <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
+                                </div>          
+                            </div>
+                        @else
+                            {{--  Loops through the rooms array and displays every room's content  --}}
+                            @each(review in reviews) 
+                                @!component('components/stars', rating=review.rating)
+                                {{ review.review }}
+                            @endeach
+                        @endif
+
+                    </div>
+                    
+                </div>
+            </div>
         </div>
-        <div class="card-body">
 
-            @if(!hasReview) 
-                <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
-            @else
-                <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
-            @endif
+
+
+
+
+        <div class="col-4">
+            <div class="card shadow mt-4 mb-4">
+                <div class="card-header py-3">
+                    @if(!hasReview) 
+                        <h6 class="m-0 font-weight-bold text-primary">Write a review</h6>
+                    @else
+                        <h6 class="m-0 font-weight-bold text-primary">Edit review</h6>
+                    @endif
+                </div>
+                <div class="card-body">
+
+                    @if(!hasReview) 
+                        <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                    @else
+                        <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                    @endif
                         {{ csrfField() }}
 
                         {{--  Body  --}}
@@ -358,7 +385,7 @@
                         <div class='row'>
                             <div class='col form-group'>
                                 <label for='review'>Review</label>
-                                    <textarea class='form-control' name='review' id='review' rows='5' > {{ old('review',  review.review) }}</textarea>
+                                    <textarea class='form-control' name='review' id='review' rows='5' >{{ old('review',  review.review) }}</textarea>
                                     <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
                             </div> 
                         </div> 
@@ -376,6 +403,11 @@
                                             <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
                                         @endif
                                         <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose File</label>
+                                        @if(!hasReview) 
+                                            <small id="reviewPictureHelp" class="form-text text-muted">Image cannot be edited after upload. It can only be deleted.</small>
+                                        @else
+                                            <small id="reviewPictureHelp" class="form-text text-muted">Leave blank to delete last uploaded photo.</small>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -383,51 +415,35 @@
 
 
 
-                        {{--  Footer buttons to cancel and book room  --}}
+                            {{--  Footer buttons to cancel and book room  --}}
 
-                        <div class='text-right'>
-                            @if(!hasReview)
-                                <button type='submit' class="btn btn-primary btn-icon-split">
-                                    <span class="icon text-white-50">
-                                      <i class="fas fa-check"></i>
-                                    </span>
-                                    <span class="text">Submit</span>
-                                </button>
-                            @else  
-                                <button type='button' class="btn btn-danger btn-icon-split" data-toggle='modal' data-target='#deleteModal'>
-                                    <span class="icon text-white-50">
-                                        <i class="fas fa-trash"></i>
-                                    </span>
-                                    <span class="text">Delete</span>
-                                </button>  
+                            <div class='text-right'>
+                                @if(!hasReview)
+                                    <button type='submit' class="btn btn-primary btn-icon-split">
+                                        <span class="icon text-white-50">
+                                          <i class="fas fa-check"></i>
+                                        </span>
+                                        <span class="text">Submit</span>
+                                    </button>
+                                @else  
+                                    <button type='button' class="btn btn-danger btn-icon-split" data-toggle='modal' data-target='#deleteModal'>
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                        <span class="text">Delete</span>
+                                    </button>  
 
-                                <button type='submit' class="btn btn-primary btn-icon-split">
-                                    <span class="icon text-white-50">
-                                      <i class="fas fa-check"></i>
-                                    </span>
-                                    <span class="text">Update</span>
-                                </button>
-                            @endif    
-                        </div> 
-                </form>
-
-
-
-                @if(reviews.length == 0)
-                    <div class='row'>
-                        <div class='col-12 text-center'>
-                            <p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p>
-                            <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
-                        </div>			
-                    </div>
-                @else
-                    {{--  Loops through the rooms array and displays every room's content  --}}
-                    @each(review in reviews) 
-                        @!component('components/stars', rating=review.rating)
-                        {{ review.review }}
-                    @endeach
-                @endif
-            
+                                    <button type='submit' class="btn btn-primary btn-icon-split">
+                                        <span class="icon text-white-50">
+                                          <i class="fas fa-check"></i>
+                                        </span>
+                                        <span class="text">Update</span>
+                                    </button>
+                                @endif    
+                            </div> 
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -600,9 +616,6 @@
         });
 	</script>
 
-	<script>
-		document.getElementById('reviewModal').style['z-indez'] = 1040;
-	</script>
 
     {{--  If the report validations fails display this modal  --}}
     @if(hasErrorFor('issueType'))
@@ -664,15 +677,4 @@
         </script>
     @endif
     
-    {{--  Table Filter  --}}
-    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
-    <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
-    <script>$(document).ready(function() {
-            $('#reviewsTable').DataTable( {
-                "paging":   false,
-                "ordering": true,
-                "info":     false
-            });
-        });
-    </script>
 @endsection
