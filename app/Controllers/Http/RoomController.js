@@ -250,18 +250,29 @@ class RoomController {
 			}
 
 			// retrieves all of the reviews associated to this room
-			let searchResults = await Review
+			let reviewResults = await Review
 				.query()
 				.where('room_id', params.id)
+				.with('user')
 				.fetch();
 
-			const reviews = searchResults.toJSON();
+						// retrieves all of the reviews associated to this room
+			let reviewsCount = await Review
+				.query()
+				.where('room_id', params.id)
+				.with('user')
+				.getCount();
 
+
+			var reviews = reviewResults.toJSON();
+			//var reviewsCount = searchResults.count();
+			
 			// Adds new attribute - rating - to every room object
 			room.rating = await this.getAverageRating(room.id);
 
-			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review });
+			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review, reviewsCount });
 		} catch (error) {
+			console.log(error);
 			return response.redirect('/');
 		}
 	}

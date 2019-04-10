@@ -23,7 +23,7 @@
                 <div class='card-header py-3'>
                     <div class='d-flex flex-wrap'>
                         <div class='' style='padding-top:6px;'>
-                            <h4 class="m-0 font-weight-bold text-primary">
+                            <h5 class="m-0 font-weight-bold text-primary">
                                 {{--  If the room is closed or under maintence then display info  --}}
                                 @if(room.state == 2)
                                     <i class='fa fa-times-circle color-danger'></i> Closed - 
@@ -31,7 +31,7 @@
                                     <i class="fas fa-tools color-warning"></i> Under Maintenance -  
                                 @endif
                                 {{room.name}}
-                            </h4>
+                            </h5>
                         </div>
                         <div class='flex-grow-1 text-right'>
                             @if(isAdmin)
@@ -157,7 +157,7 @@
         <div class='col-12 col-lg-4'>
             <div class="card shadow">
                 <div class='card-header py-3'>
-                    <h4 class="m-0 font-weight-bold text-primary">Book Room</h4>
+                    <h5 class="m-0 font-weight-bold text-primary">Book Room</h5>
                 </div>
                 <div class="card-body">
                     @if(!isAdmin || room.state != 1)
@@ -317,42 +317,46 @@
         </div>
     </div>
 
+    <h5 class="mt-3 mb-3"><b>Reviews</b></h5>
+
     <div class="row">
         <div class='col-8'>
-            <div class="card shadow mt-4 mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Rating and Reviews</h6>
-                </div>
+            <div class="card shadow mb-4">
                 <div class="card-body">
-
                     <div class="row">
-                        @if(reviews.length == 0)
-                            <div class='row'>
-                                <div class='col-12 text-center'>
-                                    <p class='fas fa-ghost fa-8x mb-5 mt-5 text-muted'></p>
-                                    <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
-                                </div>          
-                            </div>
-                        @else
-                            {{--  Loops through the rooms array and displays every room's content  --}}
-                            @each(review in reviews) 
-                                @!component('components/stars', rating=review.rating)
-                                {{ review.review }}
-                            @endeach
-                        @endif
-
-                    </div>
-                    
+                        <div class="col-12">
+                            @if(reviews.length == 0)
+                                <div class='row'>
+                                    <div class='col-12 text-center'>
+                                        <p class='fas fa-ghost fa-7x mb-5 mt-5 text-muted'></p>
+                                        <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
+                                    </div>          
+                                </div>
+                            @else
+                                {{--  Loops through the rooms array and displays every room's content  --}}
+                                @each(review in reviews)
+                                    <div class="mb-2"> 
+                                        <b>{{ review.user.firstname }} {{ review.user.lastname }}</b> </br>
+                                        <i>{{review.user.email}}</i><br>
+                                        @!component('components/stars', rating=review.rating)
+                                        <br>
+                                        {{ review.review }}
+                                        <hr>
+                                    </div>
+                                @endeach
+                                <div class="text-center">
+                                    <i style="font-size: 0.9rem;">Reviews: {{reviewsCount}}</i>
+                                </div>
+                            @endif
+                        </div>
+                    </div>                  
                 </div>
             </div>
         </div>
 
 
-
-
-
         <div class="col-4">
-            <div class="card shadow mt-4 mb-4">
+            <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     @if(!hasReview) 
                         <h6 class="m-0 font-weight-bold text-primary">Write a review</h6>
