@@ -345,6 +345,10 @@ class RoomController {
 		console.log(options);
 
 		let recurrence = {};
+		// Recurrence start
+		recurrence.start = options.startDate;
+
+		// Recurrence end
 		if (options.endOption === 'endBy') {
 			recurrence.end = options.endDate;
 			recurrence.hasEnd = true;
@@ -354,23 +358,28 @@ class RoomController {
 		} else {
 			recurrence.hasEnd = false;
 		}
+
+		// Recurrence type
 		recurrence.type = options.type;
-		recurrence.start = options.startDate;
-		if (options.dailyOption === 'everyWeekday') {
+		if (recurrence.type === 'daily' && options.dailyOption === 'everyWeekday') {
 			recurrence.type = 'weekly';
 			recurrence.daysOfWeek = [8];
 
+			console.log('recurrence', recurrence);
 			return recurrence;
 		}
 
 		switch (recurrence.type) {
 			case 'daily':
-				recurrence.interval = request.only(['daily-interval']);
 				recurrence.interval = options.dailyInterval;
 				break;
 			case 'weekly':
+				recurrence.interval = options.weeklyInterval;
+				recurrence.daysOfWeek = options.daysOfWeek;
 				break;
 			case 'monthly':
+				recurrence.interval = options.monthlyInterval;
+				recurrence.dayOfMonth = options.dayOfMonth;
 				break;
 			default:
 		}
