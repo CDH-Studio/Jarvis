@@ -82,7 +82,6 @@
                                 <div class="col-4"><b>Table Seats:</b> {{ room.seats }}</div>
                                 <div class="col-6"> <b>Capacity:</b> {{ room.capacity }}</div>
                             </div>
-                            <div class="mt-2 mb-2"><b>Equipment:</b> {{ room.extraEquipment }}</div>
                         </div>
                         <div class="col-12">
                             @if(room.comment === undefined || room.comment === null)
@@ -327,10 +326,7 @@
                         <div class="col-12">
                             @if(reviews.length == 0)
                                 <div class='row'>
-                                    <div class='col-12 text-center'>
-                                        <p class='fas fa-ghost fa-7x mb-5 mt-5 text-muted'></p>
-                                        <div><strong>{{ room.name }}</strong> currently has no ratings or reviews</div>
-                                    </div>          
+                                    @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="no reviews available")          
                                 </div>
                             @else
                                 {{--  Loops through the rooms array and displays every room's content  --}}
@@ -359,79 +355,80 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     @if(!hasReview) 
-                        <h6 class="m-0 font-weight-bold text-primary">Write a review</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Write a Review</h6>
                     @else
-                        <h6 class="m-0 font-weight-bold text-primary">Edit review</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Edit Review</h6>
                     @endif
                 </div>
                 <div class="card-body">
-
-                    @if(!hasReview) 
-                        <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                    @if(isAdmin)
+                        @!component('components.cardEmptyMessage',faIcon="fas fa-ban fa-6x", message="Review not available for admin")
                     @else
-                        <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
-                    @endif
+                        @if(!hasReview) 
+                            <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                        @else
+                            <form action='{{ route('editReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                        @endif
+
                         {{ csrfField() }}
 
-                        {{--  Body  --}}
-                        <div class='row'>
-                            <div class='col form-group'>
-                                <label for='rating' data-original-title='Enter a rating for this room'>Rating <b class='text-danger'>*</b></b></label>
-
-                                @if(hasErrorFor('rating'))
-                                    <select class='form-control is-invalid' name='rating' id='rating' onchange='removeErrorClass("rating")'>
-                                @else
-                                    <select class='form-control' name='rating' id='rating' onchange='removeErrorClass("rating")'>
-                                @endif
-                                        <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Rating</option>
-                                        <option value='1' {{ old('rating', review.rating) == '1' ? 'selected' : '' }}>1</option>
-                                        <option value='2' {{ old('rating', review.rating) == '2' ? 'selected' : '' }}>2</option>
-                                        <option value='3' {{ old('rating', review.rating) == '3' ? 'selected' : '' }}>3</option>
-                                        <option value='4' {{ old('rating', review.rating) == '4' ? 'selected' : '' }}>4</option>
-                                        <option value='5' {{ old('rating', review.rating) == '5' ? 'selected' : '' }}>5</option>
-                                    </select>
+                            {{--  Body  --}}
+                            <div class='row'>
+                                <div class='col form-group'>
+                                    <label for='rating' data-original-title='Enter a rating for this room'>Rating <b class='text-danger'>*</b></b></label>
 
                                     @if(hasErrorFor('rating'))
-                                        <div class='invalid-feedback'>{{ getErrorFor('rating') }}</div>
+                                        <select class='form-control is-invalid' name='rating' id='rating' onchange='removeErrorClass("rating")'>
+                                    @else
+                                        <select class='form-control' name='rating' id='rating' onchange='removeErrorClass("rating")'>
                                     @endif
+                                            <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Rating</option>
+                                            <option value='1' {{ old('rating', review.rating) == '1' ? 'selected' : '' }}>1</option>
+                                            <option value='2' {{ old('rating', review.rating) == '2' ? 'selected' : '' }}>2</option>
+                                            <option value='3' {{ old('rating', review.rating) == '3' ? 'selected' : '' }}>3</option>
+                                            <option value='4' {{ old('rating', review.rating) == '4' ? 'selected' : '' }}>4</option>
+                                            <option value='5' {{ old('rating', review.rating) == '5' ? 'selected' : '' }}>5</option>
+                                        </select>
+
+                                        @if(hasErrorFor('rating'))
+                                            <div class='invalid-feedback'>{{ getErrorFor('rating') }}</div>
+                                        @endif
+                                </div>
                             </div>
-                        </div>
 
-                        <div class='row'>
-                            <div class='col form-group'>
-                                <label for='review'>Review</label>
-                                    <textarea class='form-control' name='review' id='review' rows='5' >{{ old('review',  review.review) }}</textarea>
-                                    <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
+                            <div class='row'>
+                                <div class='col form-group'>
+                                    <label for='review'>Review</label>
+                                        <textarea class='form-control' name='review' id='review' rows='5' >{{ old('review',  review.review) }}</textarea>
+                                        <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
+                                </div> 
                             </div> 
-                        </div> 
 
-                        <div class='row'>
-                            {{--  Floor Plan Picture --}}
-                            <div class='col form-group no-margin' id='reviewPictureContent'>
-                                <label>Picture</label>
-                                <div class='form-group'>
-                                    <div class='custom-file'>
-                                        @if(hasErrorFor('reviewPicture'))
-                                            <input type='file' class='custom-file-input is-invalid' id='reviewPicture' name='reviewPicture' oninput='removeErrorClass("reviewPicture")'>
-                                            <div class='invalid-feedback'>{{ getErrorFor('reviewPicture') }}</div>
-                                        @else
-                                            <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
-                                        @endif
-                                        <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose File</label>
-                                        @if(!hasReview) 
-                                            <small id="reviewPictureHelp" class="form-text text-muted">Image cannot be edited after upload. It can only be deleted.</small>
-                                        @else
-                                            <small id="reviewPictureHelp" class="form-text text-muted">Leave blank to delete last uploaded photo.</small>
-                                        @endif
+                            <div class='row'>
+                                {{--  Floor Plan Picture --}}
+                                <div class='col form-group no-margin' id='reviewPictureContent'>
+                                    <label>Picture</label>
+                                    <div class='form-group'>
+                                        <div class='custom-file'>
+                                            @if(hasErrorFor('reviewPicture'))
+                                                <input type='file' class='custom-file-input is-invalid' id='reviewPicture' name='reviewPicture' oninput='removeErrorClass("reviewPicture")'>
+                                                <div class='invalid-feedback'>{{ getErrorFor('reviewPicture') }}</div>
+                                            @else
+                                                <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
+                                            @endif
+                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose File</label>
+                                            @if(!hasReview) 
+                                                <small id="reviewPictureHelp" class="form-text text-muted">Image cannot be edited after upload. It can only be deleted.</small>
+                                            @else
+                                                <small id="reviewPictureHelp" class="form-text text-muted">Leave blank to delete last uploaded photo.</small>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
 
 
                             {{--  Footer buttons to cancel and book room  --}}
-
                             <div class='text-right'>
                                 @if(!hasReview)
                                     <button type='submit' class="btn btn-primary btn-icon-split">
@@ -456,7 +453,8 @@
                                     </button>
                                 @endif    
                             </div> 
-                    </form>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
@@ -485,9 +483,6 @@
        </div>
     {{--  Only show to non-admin users  --}}
     @if(!isAdmin)
-        {{--  Review Modal Box  --}}
-
-
         {{--  Reporting Modal Box  --}}
         <div class='modal' id='reportModal'>
             <div class='modal-dialog confirmation-modal' role='document'>
