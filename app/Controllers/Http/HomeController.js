@@ -5,27 +5,9 @@ const Report = use('App/Models/Report');
 const Booking = use('App/Models/Booking');
 const Review = use('App/Models/Review');
 const Event = use('Event');
-const Token = use('App/Models/Token');
 
 var moment = require('moment');
-const graph = require('@microsoft/microsoft-graph-client');
-
-/**
- * Retrieve access token for Microsoft Graph from the data basebase.
- *
- * @returns {Object} The access token.
- *
- */
-async function getAccessToken () {
-	try {
-		const results = await Token.findBy('type', 'access');
-		const accessToken = results.toJSON().token;
-		return accessToken;
-	} catch (err) {
-		console.log(err);
-		return null;
-	}
-}
+const axios = require('axios');
 
 /**
  * Generating a random string.
@@ -489,55 +471,17 @@ class HomeController {
 	 *
 	 * @returns {Boolean} Whether or not the room is available
 	 */
-	async getRoomAvailability (date, from, to, calendar) {
-		const startTime = date + 'T' + from;
-		const endTime = date + 'T' + to;
+	async getRoomAvailability (date, from, to, floor, calendar) {
+		console.log(date, from, to, calendar);
 
-		// if there is a calendar for the room
-		if (calendar !== 'insertCalendarHere' && calendar !== null) {
-			// query the events within the search time range
-			const calendarViews = (await this.getCalendarView(
-				calendar,
-				startTime,
-				endTime
-			)).value;
+		const res = await axios.post('http://142.53.209.100:8080/avail', {
+			room: calendar,
+			start: date + 'T' + from,
+			end: date + 'T' + to,
+			floor: floor
+		});
 
-			// if event end time is the same as search start time, remove the event
-			calendarViews.forEach((item, index, items) => {
-				const eventEndTime = new Date(item.end.dateTime);
-				const searchStartTime = new Date(startTime);
-
-				if (+eventEndTime === +searchStartTime) {
-					items.splice(index, 1);
-				}
-			});
-
-			return calendarViews.length === 0;
-		}
-	}
-
-	async getCalendarView (calendarId, start, end) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const calendarView = await client
-					.api(`/me/calendars/${calendarId}/calendarView?startDateTime=${start}&endDateTime=${end}`)
-					// .orderby('start DESC')
-					.header('Prefer', 'outlook.timezone="Eastern Standard Time"')
-					.get();
-
-				return calendarView;
-			} catch (err) {
-				console.log(err);
-			}
-		}
+		return res.data === 'free';
 	}
 
 	/**
