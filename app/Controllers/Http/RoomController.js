@@ -344,7 +344,7 @@ class RoomController {
 
 		const rooms = searchResults.toJSON();
 
-		return view.render('adminDash.viewRooms', { rooms });
+		return view.render('adminPages.viewRooms', { rooms });
 	}
 
 	/**
