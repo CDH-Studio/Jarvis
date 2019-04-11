@@ -207,9 +207,10 @@ class BookingController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async cancelBooking ({ params, response, auth }) {
+	async cancelBooking ({ params, response, view }) {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
+		const userId = booking.toJSON().user_id;
 		const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
 		const eventId = booking.toJSON().event_id;
 
@@ -217,7 +218,11 @@ class BookingController {
 		booking.status = 'Cancelled';
 		await booking.save();
 
-		return response.redirect(`/user/${auth.user.id}/bookings`);
+		if (params.bookingType === 'user') {
+			return response.route('viewBookings', { id: userId });
+		} else {
+			return response.route('roomBookings', { id: roomId });
+		}
 	}
 
 	async getCalendarView (calendarId, start, end) {
