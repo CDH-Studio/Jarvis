@@ -45,21 +45,22 @@
 						</thead>
 						{{--  Loops through the bookings array and displays every booking  --}}
 						<tbody>
-								@each(booking in bookings) 
-									<tr aria-label='{{booking.subject}} row'>
+							@each(booking in bookings) 
+								<tr aria-label='{{booking.subject}} row'>
 									<td class='text-center'><a href='{{ route('viewProfile', {id: booking.userId}) }}'>{{ booking.userName }}</a></td>
 									<td class='text-center'>{{ booking.subject }}</td>
 									<td class='text-center'>{{ booking.date }}</td>
 									<td class='text-center'>{{ booking.time }}</td>
 									<td class='text-center td-{{ booking.status }}'>{{ booking.status }}</td>
 									@if(booking.status == 'Approved' && canEdit)
-										<td><a class='text-danger' name='cancel' id='cancelButton' href='{{ route('cancelBooking', {id: booking.id}) }}'><i class="fas fa-times"></i> Cancel</a></td>
+										<td><a class='text-danger cancelButton' name='cancel' href='{{ route('cancelBooking', {id: booking.id}) }}'><i class="fas fa-times"></i> Cancel</a></td>
 									@else
 										<td></td>
 									@endif
 								</tr>
 							@endeach
 						</tbody>
+
 					</table>
 				</div>
 			</div> 
