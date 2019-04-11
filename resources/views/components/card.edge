@@ -13,7 +13,7 @@
                 <div class=''>
                     <h4>{{ room.name }} </h4> 
                 </div>
-                <div class='flex-grow-1 text-right spec-no' id='stars'>
+                <div class='flex-grow-1 text-right spec-no stars'>
                     @if(room.rating == 1)
                         <div>
                             <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
@@ -48,9 +48,9 @@
                 {{--  Room Picture  --}}
                 <div class='room-card-photo-container'>
                     @if(room.picture) 
-                        <img class='room-card-img' src='{{ room.picture }}'>
+                        <img class='room-card-img' alt='{{ room.name }} photo' src='{{ room.picture }}'>
                     @else
-                        <img class='room-card-img' src='/images/meeting.jpeg'>
+                        <img class='room-card-img' alt='default photo'src='/images/meeting.jpeg'>
                     @endif
                 </div>
                 {{--  Room information  --}}
@@ -61,22 +61,22 @@
                             @if(room.projector === 1)
                                 <li class='spec-yes'><i class='fas fa-check-circle'></i><span> Projector</span></li>
                             @else
-                                <li class='spec-no'><i class='fas fa-times-circle'></i><span> Projector</span></li>
+                                <li class='spec-no'><i class='fas fa-times-circle spec-no-icon'></i><span> Projector</span></li>
                             @endif
                             @if(room.flipchart === 1)
                                 <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Flip chart</span></li>
                             @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Flip chart</span></li>
+                                <li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Flip chart</span></li>
                             @endif
                             @if(room.whiteboard === 1)
                                 <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
                             @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Whiteboard</span></li>
+                                <li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Whiteboard</span></li>
                             @endif
                             @if(room.audioConference === 1)
                                 <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio conf.</span></li>
                             @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Audio conf.</span></li>
+                                <li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Audio conf.</span></li>
                             @endif
                         </ul>
                     </div>
@@ -85,17 +85,17 @@
                             @if(room.videoConference === 1)
                                 <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video conf.</span></li> 
                             @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Video conf.</span></li>
+                                <li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Video conf.</span></li>
                             @endif
                             @if(room.pc === 1)
                                 <li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
                             @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> PC</span></li>
+                                <li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> PC</span></li>
                             @endif
                             @if(room.surfaceHub === 1)
                                 <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Surface hub</span></li>
                             @else
-                                <li class='spec-no'><i class='fa fa-times-circle'></i><span> Surface hub</span></li>
+                                <li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Surface hub</span></li>
                             @endif
                             {{--  <li><span class='link-color'>More info...</span></li>  --}}
                             <li class='spec-no' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Placeholder</span></li>
@@ -109,16 +109,16 @@
             <div class='d-flex flex-wrap wrapper-center'>
                 <div class='flex-fill'>
                     @if(room.floor == 0)
-                        <b>Location:</b><span>  0-{{ room.tower }} </span>
+                        <strong>Location:</strong><span>  0-{{ room.tower }} </span>
                     @else 
-                        <b>Location:</b><span>  {{ room.floor }}-{{ room.tower }} </span>
+                        <strong>Location:</strong><span>  {{ room.floor }}-{{ room.tower }} </span>
                     @endif
                 </div>
                 <div class='flex-fill'>
-                    <b>Table seats:</b><span> {{ room.seats }} </span>
+                    <strong>Table seats:</strong><span> {{ room.seats }} </span>
                 </div>
                 <div class='flex-fill'>
-                    <b>Capacity:</b><span> {{ room.capacity }}</span>
+                    <strong>Capacity:</strong><span> {{ room.capacity }}</span>
                 </div>
             </div>
         </div>

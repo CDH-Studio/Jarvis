@@ -11,6 +11,11 @@ body, .table{
 a{
     color: #466CDD;
 }
+
+.badge-success {
+    color: #fff;
+    background-color: #097AAE;
+}
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* IE Compatibility Changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -138,12 +143,8 @@ a{
     color: #004680 !important;
 }
 
-.text-muted{
-    color:#cccccc !important;
-}
-
-.text-grey{
-    color:#707070 ;
+.text-muted, .text-grey{
+    color:#707070 !important;
 }
 
 .text-danger{
@@ -459,7 +460,7 @@ a{
     color: #FFFFFF;
 }
 
-.room-card:hover #stars{
+.room-card:hover .stars{
     color: #FFFFFF;
 }
 
@@ -541,12 +542,19 @@ a{
     display:inline-block;
     width:110px;
 }
+
 .spec-yes{
-    color:rgb(18, 201, 164);
+    color: #097AAE;
 }
+
 .spec-no{
+    color:#696969;
+}
+
+.spec-no-icon{
     color:#a1a1a1;
 }
+
 .spec-warning{
     color:#e04141;
 }

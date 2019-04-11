@@ -85,24 +85,6 @@
             <!-- Topbar Navbar -->
             <ul class="navbar-nav ml-auto">
 
-              <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-              <li class="nav-item dropdown no-arrow d-sm-none">
-                <!-- Dropdown - Messages -->
-                <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in">
-                  <form class="form-inline mr-auto w-100 navbar-search">
-                    <div class="input-group">
-                      <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                      <div class="input-group-append">
-                        <button class="btn btn-primary" type="button">
-                          <i class="fas fa-search fa-sm"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </li>
-
-
               <div class="topbar-divider d-none d-sm-block"></div>
 
               <!-- Nav Item - User Information -->
@@ -171,11 +153,11 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class='modal fade' id='logoutModal' tabindex='-1' role='dialog' aria-labelledby='exampleModalLabel' aria-hidden='true'>
+    <div class='modal fade' id='logoutModal' tabindex='-1' role='dialog' aria-labelledby='logoutTitle' aria-hidden='true'>
       <div class='modal-dialog' role='document'>
         <div class='modal-content'>
           <div class='modal-header'>
-            <p class='modal-title' id='exampleModalLabel'><b>Ready to Leave?</b></p>
+            <p class='modal-title' aria-label='Logout Title' id='logoutTitle' ><strong>Ready to Leave?</strong></p>
             <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
               <span aria-hidden='true'>×</span>
             </button>

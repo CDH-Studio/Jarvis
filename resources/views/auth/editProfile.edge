@@ -84,7 +84,7 @@
                                                 </select>
                                                 <div class='invalid-feedback'>{{ getErrorFor('tower') }}</div>
                                             @else
-                                                <select class='form-control' name='tower' >
+                                                <select class='form-control' name='tower' id='tower'>
                                                     <option value=1 {{ user.tower == 1 ? 'selected' : '' }}>East</option>
                                                     <option value=2 {{ user.tower == 2 ? 'selected' : '' }}>West</option>
                                                 </select>

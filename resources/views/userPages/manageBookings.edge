@@ -30,25 +30,25 @@
 						<table class='table table-hover' id='manageBookingsTable'>
 							<thead>
 								<tr>
-									<th scope='col'>User</th>
-									<th scope='col'>Meeting Name</th>
-									<th scope='col'>Date</th>
-									<th scope='col'>Time</th>
-									<th scope='col'>Status</th>
-									<th scope='col'></th>
+									<th scope='col' aria-label='Room column'>Room</th>
+									<th scope='col' aria-label='Meeting name column'>Meeting name</th>
+									<th scope='col' aria-label='Date column'>Date</th>
+									<th scope='col' aria-label='Time column'>Time</th>
+									<th scope='col' aria-label='Status column'>Status</th>
+									<th scope='col' aria-label='Cancel option column'></th>
 								</tr>
 							</thead>
 							{{--  Loops through the bookings array and displays every booking  --}}
 							<tbody>
 								@each(booking in bookings) 
-									<tr>
+									<tr aria-label='{{booking.subject}} row'>
 										<td><a href='{{ route('viewProfile', {id: booking.userId}) }}'>{{ booking.userName }}</a></td>
 										<td>{{ booking.subject }}</td>
 										<td>{{ booking.date }}</td>
 										<td>{{ booking.time }}</td>
 										<td class='td-{{ booking.status }}'>{{ booking.status }}</td>
 										@if(booking.status == 'Approved' && canEdit)
-											<td><a class='text-danger' name='cancel' id='cancelButton' href='{{ route('cancelBooking', {id: booking.id}) }}'><i class="fas fa-times"></i> Cancel</a></td>
+											<td><a class='text-danger cancelButton' name='cancel' href='{{ route('cancelBooking', {id: booking.id}) }}'><i class="fas fa-times"></i> Cancel</a></td>
 										@else
 											<td></td>
 										@endif
