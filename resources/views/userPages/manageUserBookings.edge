@@ -5,7 +5,9 @@
 @endsection
 
 @section('extracss')
-{{ style('css/manageBookings') }}
+	{{ style('css/manageBookings') }}
+	{{--  Bootstrap link needed for the table formating  --}}
+	<link href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css' rel='stylesheet'>
 @endsection
 
 {{--  Manage bookings page content  --}}
@@ -29,7 +31,7 @@
 				<h6 class="m-0 font-weight-bold text-primary">Upcoming Bookings</h6>
 			</div>
 			<div class="card-body">
-				<div class="col-12 table table-responsive">
+				<div class="table table-responsive">
 					<table id='manageUserBookingsTable' class='table table-hover' style='width:100%;'>
 						<thead>
 							<tr>
