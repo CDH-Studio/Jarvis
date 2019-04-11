@@ -2,6 +2,7 @@
 
 const { ServiceProvider } = require('@adonisjs/fold');
 const moment = require('moment');
+require('moment-round');
 
 class CustomValidationProvider extends ServiceProvider {
 	/**
@@ -67,14 +68,14 @@ class CustomValidationProvider extends ServiceProvider {
 		}
 	}
 
-	/* Validate to check if {{args}} and current Date is the same, then make sure the {{field}} is after the current time
+	/* Validate to check if {{args}} and current Date is the same, then make sure the {{field}} is after the current time (rounded to neartest 30mins)
 	*
 	* @usage isAfter
 	*/
 	async _isAfterToday (data, field, message, args, get) {
 		const inputTime = get(data, field);
 		const inputDate = get(data, args[0]);
-		const currentTime = moment();
+		const currentTime = moment().floor(30, 'minutes');
 		const isAfterToday = moment(inputDate + inputTime, 'YYYY-MM-DDHH:mm').isSameOrAfter(currentTime);
 
 		// if the current date and the search date is the same, check that the times are NOT in the past

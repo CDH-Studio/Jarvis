@@ -1,13 +1,13 @@
-#cancelButton {
+.cancelButton {
     padding: 0;
 }
 
 .td-Approved {
-    color: #5cb85c;
+    color: #2A8735;
 }
 
 .td-Cancelled {
-    color: #d9534f;
+    color: #D9080B;
 }
 
 .td-Pending {
