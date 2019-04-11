@@ -139,7 +139,7 @@ class HomeController {
 			.count();
 
 		let usersRegisteredThisMonth = (users[0]['count(*)']);
-		let usersRegisteredBeforeThisMonth = allUsers.length - usersRegisteredThisMonth;
+		let usersRegisteredBeforeThisMonth = ((allUsers.length - usersRegisteredThisMonth) === 0 ? 1 : (allUsers.length - usersRegisteredThisMonth));
 
 		var stats = {};
 		stats['numberOfUsers'] = allUsers.length;
