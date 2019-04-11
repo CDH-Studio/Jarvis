@@ -139,28 +139,8 @@
                             @each(room in highestRatedRooms) 
                                 @component('components.smallCard', room=room)
                                     @slot('body')
-                                    <div>
-                                        @if(room.avgRating == 1)
-                                            <div>
-                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
-                                            </div> 
-                                        @elseif(room.avgRating == 2)
-                                            <div>
-                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
-                                            </div> 
-                                        @elseif(room.avgRating == 3)
-                                            <div>
-                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
-                                            </div> 
-                                        @elseif(room.avgRating == 4)
-                                            <div>
-                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
-                                            </div> 
-                                        @elseif(room.avgRating == 5) 
-                                            <div>
-                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> 
-                                            </div> 
-                                        @endif
+                                    <div class='mb-2'>
+                                        @!component('components.stars', rating = room.avgRating)
                                     </div>
                                     <div>
                                         @if(room.totalReviews == 1)
