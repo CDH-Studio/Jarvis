@@ -199,8 +199,6 @@ class BookingController {
 		results = results.toJSON();
 		const bookings = await populateBookings(results);
 
-		console.log(bookings);
-
 		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });
 	}
 
