@@ -50,7 +50,7 @@ class IssueController {
 	*
 	* @param {Object} Context The context object.
 	*/
-	async updateIssue ({ response, auth, params, view, request, session }) {
+	async updateIssue ({ response, params, request, session }) {
 		try {
 			const { issueType, comment, roomID, issueStatus } = request.only(['issueType', 'comment', 'roomID', 'userID', 'issueStatus']);
 			const date = new Date();
@@ -65,7 +65,7 @@ class IssueController {
 					updated_at: date
 				});
 			session.flash({ notification: 'Issue Updated!' });
-			return response.route('roomIssues', { id: roomID });
+			return response.route('showIssue', { roomID: roomID, issueStatus: 'all' });
 		} catch (error) {
 			return response.redirect('/');
 		}

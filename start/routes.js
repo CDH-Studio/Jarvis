@@ -47,7 +47,8 @@ Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetReq
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
-Route.post('/user/:id/edit', 'UserController.update').as('saveUser').middleware(['auth']);
+Route.post('/user/:id/edit', 'UserController.update').as('saveUser').validator('EditUser').middleware(['isUser']);
+Route.post('/user/:id/editAdmin', 'UserController.update').as('saveAdmin').validator('EditAdmin').middleware(['isAdmin']);
 Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 
 //= ========================================================================
@@ -81,11 +82,11 @@ Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(
 //= ========================================================================
 Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails').middleware(['auth']); // needs to be changed to get
 Route.get('/user/:id/bookings', 'BookingController.getUserBookings').as('viewBookings').middleware(['auth']);
-Route.get('/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth']);
+Route.post('/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth']);
 
 // Employee user pages
 // Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);
-Route.get('/booking', 'HomeController.userDashboard').as('userDash').middleware(['isUser']);
+Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware(['isUser']);
 Route.get('/searchRooms', 'RoomController.loadSearchRoomsForm').as('searchRooms').middleware(['isUser']);
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking').middleware(['isUser']);
 
