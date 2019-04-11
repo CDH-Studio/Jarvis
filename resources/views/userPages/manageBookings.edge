@@ -53,7 +53,29 @@
 									<td class='text-center'>{{ booking.time }}</td>
 									<td class='text-center td-{{ booking.status }}'>{{ booking.status }}</td>
 									@if(booking.status == 'Approved' && canEdit)
-										<td><a class='text-danger cancelButton' name='cancel' href='{{ route('cancelBooking', {id: booking.id}) }}'><i class="fas fa-times"></i> Cancel</a></td>
+										<td><a class='text-danger cancelButton' name='cancel' data-toggle='modal' data-target='#deleteModal{{ booking.id }}' href='#'><i class="fas fa-times"></i> Cancel</a></td>
+									
+										{{--  Delete Modal Box  --}}
+										<div class='modal' id='deleteModal{{ booking.id }}' role='dialog' aria-hidden='true'>
+											<div class='modal-dialog' role='document'>
+												<div class='modal-content'>
+													<div class='modal-header'>
+														<h5 class='modal-title' id='exampleModalLabel'>Are you sure?</h5>
+														<button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+															<span aria-hidden='true'>×</span>
+														</button>
+													</div>
+													<div class='modal-body'>Are you sure you want to cancel your booking?</div>
+													<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'room'}) }}' method='POST' enctype='multipart/form-data'>
+														{{ csrfField() }}
+														<div class='modal-footer'>
+															<button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+															<button type='submit' class='btn btn-danger'>Yes</button>
+														</div>                    
+													</form>
+												</div>
+											</div>
+										</div>
 									@else
 										<td></td>
 									@endif
