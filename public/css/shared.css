@@ -1,7 +1,23 @@
 /*  This file is for CSS changes that are used by both ADMIN and USER views */
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-/* IE Compatibilitie Changes */
+/* Accesibility Changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+body, .table{
+    color: #4D4D5B;
+    color: #4D4D5B;
+}
+/* links */
+a{
+    color: #466CDD;
+}
+
+.badge-success {
+    color: #fff;
+    background-color: #097AAE;
+}
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* IE Compatibility Changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 
 @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {  
@@ -127,14 +143,13 @@
     color: #004680 !important;
 }
 
-.text-muted{
-    color:#cccccc !important;
+.text-muted, .text-grey{
+    color:#707070 !important;
 }
 
-.text-grey{
-    color:#707070 ;
+.text-danger{
+    color: #D9080B !important;
 }
-
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Navagation Changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -445,7 +460,7 @@
     color: #FFFFFF;
 }
 
-.room-card:hover #stars{
+.room-card:hover .stars{
     color: #FFFFFF;
 }
 
@@ -527,12 +542,19 @@
     display:inline-block;
     width:110px;
 }
+
 .spec-yes{
-    color:rgb(18, 201, 164);
+    color: #097AAE;
 }
+
 .spec-no{
+    color:#696969;
+}
+
+.spec-no-icon{
     color:#a1a1a1;
 }
+
 .spec-warning{
     color:#e04141;
 }

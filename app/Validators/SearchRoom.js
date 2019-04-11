@@ -42,6 +42,7 @@ class SearchRoom {
 			 */
 			from: 'required|isAfterToday:date',
 			to: 'required|isAfter:from|isAfterToday:date'
+
 		};
 	}
 

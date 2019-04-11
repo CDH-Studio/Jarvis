@@ -35,18 +35,18 @@
 					<table id='manageUserBookingsTable' class='table table-hover' style='width:100%;'>
 						<thead>
 							<tr>
-								<th scope='col' class='text-center'>Room</th>
-								<th scope='col' class='text-center'>Meeting Name</th>
-								<th scope='col' class='text-center'>Date</th>
-								<th scope='col' class='text-center'>Time</th>
-								<th scope='col' class='text-center'>Status</th>
-								<th scope='col' class='text-center'></th>
+								<th scope='col' aria-label='Room column' class='text-center'>Room</th>
+								<th scope='col' aria-label='Meeting name column' class='text-center'>Meeting name</th>
+								<th scope='col' aria-label='Date column' class='text-center'>Date</th>
+								<th scope='col' aria-label='Time column' class='text-center'>Time</th>
+								<th scope='col' aria-label='Status column' class='text-center'>Status</th>
+								<th scope='col' aria-label='Cancel option column' class='text-center'></th>
 							</tr>
 						</thead>
 						{{--  Loops through the bookings array and displays every booking  --}}
 						<tbody>
 							@each(booking in bookings) 
-								<tr class='table-light'>
+								<tr class='table-light' aria-label='{{booking.subject}} row'>
 									<td class='text-center'><a href='{{ route('showRoom', {id: booking.roomId}) }}'>{{ booking.room }}</a></td>
 									<td class='text-center'>{{ booking.subject }}</td>
 									<td class='text-center'>{{ booking.date }}</td>
