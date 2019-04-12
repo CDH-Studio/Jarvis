@@ -16,7 +16,7 @@ Jarvis - Login
 						<div class='col-lg-6'>
 							<div class='p-5'>
 								<div class='text-left'>
-									<img class='login-logo mb-3' src='/logo_full_dark.png'>
+									<img class='login-logo mb-3' src='/logo_full_dark.png' alt='Jarvis Logo'>
 								</div>
 								<div class='text-left'>
 									<h1 class='h4 text-gray-900 mb-3'>Login</h1>
@@ -30,8 +30,8 @@ Jarvis - Login
 								<form action='{{ route('UserController.login') }}' method='POST' class='user'>
 									{{ csrfField() }}
 									<div class='form-group mb-2'>
-										<label for='tower'>Email</label>
-									<input type='email' class='form-control' name='email' id='email' aria-describedby='emailHelp' placeholder='Enter email'>
+										<label for='email'>Email</label>
+									<input type='email' class='form-control' name='email' id='email' placeholder='Enter email'>
 									@if(hasErrorFor('email'))        
 										<div class='invalid-feedback d-block'>{{ getErrorFor('email') }}</div>
 									@endif
