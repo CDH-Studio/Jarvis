@@ -233,7 +233,7 @@ class RoomController {
 		try {
 			// get the search form date range if filled in, otherwise generate the data with current date
 			const form = request.only(['date', 'from', 'to']);
-			if (!form.date || !form.from || !form.to) {
+			if (!form.date || form.date === 'undefined' || !form.from || form.from === 'undefined' || !form.to || form.to === 'undefined') {
 				form.date = moment().format('YYYY-MM-DD');
 				form.from = moment().round(30, 'minutes').format('HH:mm');
 				form.to = moment().round(30, 'minutes').add(1, 'h').format('HH:mm');
@@ -243,13 +243,13 @@ class RoomController {
 			let dropdownSelection = [];
 			const start = moment().startOf('day');
 			const end = moment().endOf('day');
+
 			// loop to fill the dropdown times
 			while (start.isBefore(end)) {
 				dropdownSelection.push({ dataValue: start.format('HH:mm'), name: start.format('h:mm A') });
 				start.add(30, 'm');
 			}
 
-			console.log(form.date);
 			const room = await Room.findOrFail(params.id);
 			const userRole = await auth.user.getUserRole();
 			const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);

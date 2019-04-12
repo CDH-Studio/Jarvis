@@ -202,19 +202,13 @@
                                             <div class='timePicker' style='display: flex;'>
                                                 @if(hasErrorFor('from'))
                                                     <input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', form.from) }}' onchange='removeErrorClass("from")'>
-                                                @elseif(form.from == 'undefined')
-                                                    {{--  <input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', form.from) }}' onchange='removeErrorClass("from")'>										    --}}
-                                                    here
-                                                @elseif(form.to == null)
-                                                    not here
-                                                    {{--  <input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', form.from) }}' onchange='removeErrorClass("from")'>										    --}}
                                                 @else
                                                     <input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', form.from) }}' onchange='removeErrorClass("from")'>										  
                                                 @endif
             
                                                 <div class='dropdown no-arrow'>
                                                     <button for='from' aria-label='start-time-button' class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-                                                    <div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                                    <div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                                         @each(item in dropdownSelection)
                                                             <a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
                                                         @endeach
@@ -237,7 +231,7 @@
                                             @endif
                                             <div class='dropdown no-arrow'>
                                                 <button for='to'  aria-label='end-time-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-                                                <div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+                                                <div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                                     @each(item in dropdownSelection)
                                                         <a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
                                                     @endeach
@@ -467,8 +461,8 @@
     </div>
 
 
-    <div class='modal' id='deleteModal' role='dialog' aria-hidden='true'>
-           <div class='modal-dialog' role='document'>
+    <div class='modal fade'  id='deleteModal' role='dialog' aria-hidden='true'>
+           <div class='modal-dialog modal-dialog-centered modal-lg' role='document'>
                 <div class='modal-content'>
                     <div class='modal-header'>
                         <h5 class='modal-title' id='deleteRoomTitle'>Are you sure?</h5>
@@ -490,8 +484,8 @@
     {{--  Only show to non-admin users  --}}
     @if(!isAdmin)
         {{--  Reporting Modal Box  --}}
-        <div class='modal' id='reportModal'>
-            <div class='modal-dialog confirmation-modal' role='document'>
+        <div class='modal fade' id='reportModal'>
+            <div class='modal-dialog modal-dialog-centered confirmation-modal' role='document'>
                 <div class='modal-content' >
                     {{--  Form Content  --}}
                     <form action='{{ route('reportRoom') }}' method='POST' enctype='multipart/form-data'>
