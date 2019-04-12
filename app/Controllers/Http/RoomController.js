@@ -146,6 +146,7 @@ class RoomController {
 			return response.route('showRoom', { id: room.id });
 		} catch (err) {
 			console.log(err);
+			return response.redirect('/');
 		}
 	}
 
@@ -270,6 +271,7 @@ class RoomController {
 
 			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review, reviewsCount });
 		} catch (error) {
+			console.log(error);
 			return response.redirect('/');
 		}
 	}
