@@ -60,9 +60,9 @@
                     <div class="row">
                         <div class="col-5">
                             @if(room.picture) 
-                                <img class='room-details-image' src='../{{ room.picture }}'>
+                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='../{{ room.picture }}'>
                             @else
-                                <img class='room-details-image' src='/images/meeting.jpeg'>
+                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/meeting.jpeg'>
                             @endif                     
                         </div>
                         <div class="col-7">
@@ -309,7 +309,7 @@
                             </div>
                         </form>
                     @else
-                        <p> Sorry, No bookings available for this room</p>
+                        @!component('components.cardEmptyMessage',faIcon="fas fa-ban fa-6x", message="Review not available for admin")
                     @endif
                 </div>
             </div>
@@ -322,30 +322,33 @@
         <div class='col-8'>
             <div class="card shadow mb-4">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            @if(reviews.length == 0)
-                                <div class='row'>
-                                    @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="no reviews available")          
-                                </div>
+                    
+                            @if(reviews.length == 0)             
+                                @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="no reviews available")          
                             @else
                                 {{--  Loops through the rooms array and displays every room's content  --}}
                                 @each(review in reviews)
-                                    <div class="mb-2"> 
-                                        <b>{{ review.user.firstname }} {{ review.user.lastname }}</b> </br>
-                                        <i>{{review.user.email}}</i><br>
-                                        @!component('components/stars', rating=review.rating)
-                                        <br>
-                                        {{ review.review }}
-                                        <hr>
-                                    </div>
+                                    <div class="row">
+                                        <div class="col-8">
+                                            <b>{{ review.user.firstname }} {{ review.user.lastname }}</b> </br>
+                                            <i>{{review.user.email}}</i><br>
+                                            @!component('components/stars', rating=review.rating)
+                                            </br>
+                                            {{ review.review }}      
+                                        </div>
+                                        <div class="col-4 text-center">
+                                            @if(review.reviewPicture)
+                                                <img class="shadow"style ="width:150px; max-height: 150px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
+                                            @endif
+                                        </div>
+                                    </div> 
+                                    <hr>
                                 @endeach
                                 <div class="text-center">
                                     <i style="font-size: 0.9rem;">Reviews: {{reviewsCount}}</i>
                                 </div>
                             @endif
-                        </div>
-                    </div>                  
+                                         
                 </div>
             </div>
         </div>
@@ -431,21 +434,21 @@
                             {{--  Footer buttons to cancel and book room  --}}
                             <div class='text-right'>
                                 @if(!hasReview)
-                                    <button type='submit' class="btn btn-primary btn-icon-split">
+                                    <button type='submit' class="btn btn-primary btn-icon-split mb-2">
                                         <span class="icon text-white-50">
                                           <i class="fas fa-check"></i>
                                         </span>
                                         <span class="text">Submit</span>
                                     </button>
                                 @else  
-                                    <button type='button' class="btn btn-danger btn-icon-split" data-toggle='modal' data-target='#deleteModal'>
+                                    <button type='button' class="btn btn-danger btn-icon-split mb-2" data-toggle='modal' data-target='#deleteModal'>
                                         <span class="icon text-white-50">
                                             <i class="fas fa-trash"></i>
                                         </span>
                                         <span class="text">Delete</span>
                                     </button>  
 
-                                    <button type='submit' class="btn btn-primary btn-icon-split">
+                                    <button type='submit' class="btn btn-primary btn-icon-split mb-2">
                                         <span class="icon text-white-50">
                                           <i class="fas fa-check"></i>
                                         </span>
@@ -544,6 +547,18 @@
             </div>
         </div>
 
+    @endif
+
+    @each(review in reviews)
+        @if(review.reviewPicture)
+            @!component('components.imageModal', id="review-"+review.id, title="By "+review.user.firstname+" "+review.user.lastname, image="/"+review.reviewPicture)
+        @endif
+    @endeach
+
+    @if(room.picture)
+        @!component('components.imageModal', id="room-pic", title=room.name, image=room.picture)
+    @else
+        @!component('components.imageModal', id="room-pic", title=room.name, image="/images/meeting.jpeg")
     @endif
 
     {{--  Script to display file name on upload  --}}
