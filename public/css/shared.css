@@ -158,20 +158,6 @@ a{
 /* Modal box changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 
-.modal.show .modal-dialog {
-    box-shadow: 0 2px 6px 0  rgba(110, 40, 40, 0.2);
-}
-
-/* centering modal boxes */
-.modal.show .modal-dialog {
-    -webkit-transform: translate(0,-50%);
-    -o-transform: translate(0,-50%);
-    transform: translate(0,-50%);
-    top: 50%;
-    margin: 0 auto;
-}
-
-
 .modal-footer{
     padding: 10px;
     border-top:none;
@@ -389,7 +375,21 @@ a{
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
+.btn-primary:hover, .btn-primary:active{
+    /* #0FACF3 old color */
+    background-color: #023258 !important;
+    box-shadow: 0 4px 8px 0 #00000033 !important;
+    
+}
+
 .btn-primary:hover:enabled, .btn-primary:active:enabled{
+    /* #0FACF3 old color */
+    background-color: #023258 !important;
+    box-shadow: 0 4px 8px 0 #00000033 !important;
+    
+}
+
+.btn-primary:hover:disabled, .btn-primary:active:disabled{
     /* #0FACF3 old color */
     background-color: #023258 !important;
     box-shadow: 0 4px 8px 0 #00000033 !important;

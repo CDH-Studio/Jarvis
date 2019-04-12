@@ -4,9 +4,6 @@
     Jarvis
 @endsection
 
-@section('extrajs')
-@endsection
-
 @section('content')
 
     <div class='row'>
@@ -29,10 +26,12 @@
                             </div>
                             <div class='row' style='font-size:13px'>
                                 <div class='col text-center'>
-                                    @if(userStats['haveUsersIncreased'])
-                                        <div class='text-success' style='display:inline'><i class='fas fa-caret-up'></i><strong> {{ userStats['increaseOfUsers'] }}% </strong></div>From last month
+                                    @if(userStats['increaseOfUsers']>0)
+                                        <div class='text-success' style='display:inline'><strong><i class='fas fa-caret-up'></i> {{ userStats['increaseOfUsers'] }}% </strong></div>From last month
+                                    @elseif(userStats['increaseOfUsers']==0)
+                                        <div class='text-secondary' style='display:inline'><strong>{{ userStats['increaseOfUsers'] }}% </strong></div>From last month
                                     @else
-                                        <div class='text-danger' style='display:inline'><i class='fas fa-caret-down'></i><strong> {{ userStats['increaseOfUsers'] }}% </strong></div>From last month
+                                        <div class='text-danger' style='display:inline'><strong><i class='fas fa-caret-down'></i><strong> {{ userStats['increaseOfUsers'] }}% </strong></strong></div>From last month
                                     @endif
                                 </div>
                             </div>
@@ -168,6 +167,10 @@
         </script>
     @endif
 
+
+@endsection
+
+@section('extrajs')
     {{--  Scrip tag responsible for the bookings time chart  --}}
     <script>
             // Set new default font family and font color to mimic Bootstrap's default styling
@@ -200,10 +203,8 @@
                     },
                 },
             });
-    </script>
 
     {{--  Scrip tag responsible for the Room Statuses chart  --}}
-    <script>
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';
@@ -238,10 +239,8 @@
                 cutoutPercentage: 80
             },
         });
-    </script>
 
     {{--  Scrip tag responsible for the Room Issues chart  --}}
-    <script>
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';
@@ -276,10 +275,9 @@
                 cutoutPercentage: 80
             },
         });
-    </script>
+
 
     {{--  Scrip tag responsible for the Room Popularity chart  --}}
-    <script>
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';

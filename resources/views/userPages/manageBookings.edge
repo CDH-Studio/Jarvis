@@ -15,9 +15,30 @@
     {{--  Loading page header  --}}
 	@component('components.pageHeader', title='Manage Bookings')
 	@endcomponent
-	
+
+	{{--  Bookings Stats  --}}
+	<div class='row text-center' style='padding-left: 15px;'> 
+		<div class='col-3 card stats-card shadow no-padding'>
+			<div class='card-highlight-primary'></div>
+			<div class='card-body'>
+				<div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+					<i class='d-inline-flex no-padding color-info card-icon fas fa-list fa-2x'></i>
+					<div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+						<div class='row'>
+							<h2 class='col no-margin'><b>{{ bookings.length }}</b></h2>
+						</div>
+						<div class='row'>
+							<h5 class='col text-grey'>Total Bookings</h5>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="card shadow">
 		@if(bookings.length == 0)
+			{{--  If there are no bookings found, display no bookings   --}}
 			<div class="card-body">
 					<div class="row">
 					<div class="col-12 text-center mt-5 mb-5">
@@ -53,7 +74,29 @@
 									<td class='text-center'>{{ booking.time }}</td>
 									<td class='text-center td-{{ booking.status }}'>{{ booking.status }}</td>
 									@if(booking.status == 'Approved' && canEdit)
-										<td><a class='text-danger cancelButton' name='cancel' href='{{ route('cancelBooking', {id: booking.id}) }}'><i class="fas fa-times"></i> Cancel</a></td>
+										<td><a class='text-danger cancelButton' name='cancel' data-toggle='modal' data-target='#deleteModal{{ booking.id }}' href='#'><i class="fas fa-times"></i> Cancel</a></td>
+									
+										{{--  Delete Modal Box  --}}
+										<div class='modal' id='deleteModal{{ booking.id }}' role='dialog' aria-hidden='true'>
+											<div class='modal-dialog' role='document'>
+												<div class='modal-content'>
+													<div class='modal-header'>
+														<h5 class='modal-title' id='exampleModalLabel'>Are you sure?</h5>
+														<button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+															<span aria-hidden='true'>×</span>
+														</button>
+													</div>
+													<div class='modal-body'>Are you sure you want to cancel your booking?</div>
+													<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'room'}) }}' method='POST' enctype='multipart/form-data'>
+														{{ csrfField() }}
+														<div class='modal-footer'>
+															<button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+															<button type='submit' class='btn btn-danger'>Yes</button>
+														</div>                    
+													</form>
+												</div>
+											</div>
+										</div>
 									@else
 										<td></td>
 									@endif
