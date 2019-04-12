@@ -170,7 +170,15 @@ class BookingController {
 		searchResults = searchResults.toJSON();
 		const bookings = await populateBookings(searchResults);
 
-		return view.render('userPages.manageBookings', { bookings, layoutType, canEdit });
+		// calculate the number of bookings a room has this month
+		let numberOfBookingsThisMonth = await Booking
+			.query()
+			.where('room_id', params.id)
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
+			.getCount();
+
+		return view.render('userPages.manageBookings', { bookings, numberOfBookingsThisMonth, layoutType, canEdit });
 	}
 
 	/**
@@ -199,7 +207,15 @@ class BookingController {
 		results = results.toJSON();
 		const bookings = await populateBookings(results);
 
-		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });
+		// calculate the number of bookings a room has this month
+		let numberOfBookingsThisMonth = await Booking
+			.query()
+			.where('user_id', params.id)
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
+			.getCount();
+
+		return view.render('userPages.manageUserBookings', { bookings, numberOfBookingsThisMonth, layoutType, canEdit });
 	}
 
 	/**

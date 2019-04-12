@@ -17,25 +17,46 @@
 	@endcomponent
 
 	{{--  Bookings Stats  --}}
-	<div class='row text-center' style='padding-left: 15px;'> 
-		<div class='col-3 card stats-card shadow no-padding'>
-			<div class='card-highlight-primary'></div>
-			<div class='card-body'>
-				<div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-					<i class='d-inline-flex no-padding color-info card-icon fas fa-list fa-2x'></i>
-					<div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
-						<div class='row'>
-							<h2 class='col no-margin'><b>{{ bookings.length }}</b></h2>
-						</div>
-						<div class='row'>
-							<h5 class='col text-grey'>Total Bookings</h5>
+	<div class='row' style='padding-left: 15px;'>
+		<div class='row text-center' style='padding-left: 15px;'> 
+			<div class='col-3 card stats-card shadow no-padding'>
+				<div class='card-highlight-primary'></div>
+				<div class='card-body'>
+					<div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+						<i class='d-inline-flex no-padding color-info card-icon fas fa-list fa-2x'></i>
+						<div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+							<div class='row'>
+								<h2 class='col no-margin'><b>{{ bookings.length }}</b></h2>
+							</div>
+							<div class='row'>
+								<h5 class='col text-grey'>Total Bookings</h5>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	
+		<div class='row text-center' style='padding-left: 15px;'> 
+			<div class='col-3 card stats-card shadow no-padding'>
+				<div class='card-highlight-primary'></div>
+				<div class='card-body'>
+					<div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+						<i class='d-inline-flex no-padding color-info card-icon fas fa-list fa-2x'></i>
+						<div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+							<div class='row'>
+								<h2 class='col no-margin'><b>{{ numberOfBookingsThisMonth }}</b></h2>
+							</div>
+							<div class='row'>
+								<h5 class='col text-grey'>Bookings this month</h5>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>			
 	</div>
-
+	
 	<div class="card shadow">
 		@if(bookings.length == 0)
 			{{--  If there are no bookings found, display no bookings   --}}
