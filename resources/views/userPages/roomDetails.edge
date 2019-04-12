@@ -319,42 +319,42 @@
     <h5 class="mt-3 mb-3"><b>Reviews</b></h5>
 
     <div class="row">
-        <div class='col-8'>
+        <div class='col-12 col-lg-8'>
             <div class="card shadow mb-4">
                 <div class="card-body">
                     
-                            @if(reviews.length == 0)             
-                                @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="no reviews available")          
-                            @else
-                                {{--  Loops through the rooms array and displays every room's content  --}}
-                                @each(review in reviews)
-                                    <div class="row">
-                                        <div class="col-8">
-                                            <b>{{ review.user.firstname }} {{ review.user.lastname }}</b> </br>
-                                            <i>{{review.user.email}}</i><br>
-                                            @!component('components/stars', rating=review.rating)
-                                            </br>
-                                            {{ review.review }}      
-                                        </div>
-                                        <div class="col-4 text-center">
-                                            @if(review.reviewPicture)
-                                                <img class="shadow"style ="width:150px; max-height: 150px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
-                                            @endif
-                                        </div>
-                                    </div> 
-                                    <hr>
-                                @endeach
-                                <div class="text-center">
-                                    <i style="font-size: 0.9rem;">Reviews: {{reviewsCount}}</i>
+                    @if(reviews.length == 0)             
+                        @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="no reviews available")          
+                    @else
+                        {{--  Loops through the rooms array and displays every room's content  --}}
+                        @each(review in reviews)
+                            <div class="row">
+                                <div class="col-8">
+                                    <b>{{ review.user.firstname }} {{ review.user.lastname }}</b> </br>
+                                    <i>{{review.user.email}}</i><br>
+                                    @!component('components/stars', rating=review.rating)
+                                    </br>
+                                    {{ review.review }}      
                                 </div>
-                            @endif
+                                <div class="col-4 text-center">
+                                    @if(review.reviewPicture)
+                                        <img class="shadow"style ="width:80%; max-height: 150px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
+                                    @endif
+                                </div>
+                            </div> 
+                            <hr>
+                        @endeach
+                        <div class="text-center">
+                            <i style="font-size: 0.9rem;">Reviews: {{reviewsCount}}</i>
+                        </div>
+                    @endif
                                          
                 </div>
             </div>
         </div>
 
 
-        <div class="col-4">
+        <div class="col-12 col-lg-4">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     @if(!hasReview) 
@@ -563,8 +563,8 @@
 
     {{--  Script to display file name on upload  --}}
     <script>
-        $('#reviewPicture').change(function(e){
-            var fileName = e.target.files[0].name;
+        $('#reviewPicture').on('change',function(){
+            var fileName = $(this).val().substring(0,15)+"...";
             $('#reviewPictureLabel').html(fileName);
         });
     </script>
