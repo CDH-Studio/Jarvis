@@ -6,10 +6,11 @@
 
 {{--  Manage bookings page content  --}}
 @section('content')
-    @!component('components.pageHeader', title='Room Details')
+    @!component('components.pageHeader', title='Room details')
+    {{--  floormap  --}}
     @component('components.generalModal', id='mapModal', title='Map')
         @slot('body')
-            <img class='room-details-image' src='/images/temp_floor_map.png'>
+            <img class='room-details-image' src='/images/temp_floor_map.png' alt='Default Floor Map'>
         @endslot
     @endcomponent
 
@@ -26,9 +27,9 @@
                             <h5 class="m-0 font-weight-bold text-primary">
                                 {{--  If the room is closed or under maintence then display info  --}}
                                 @if(room.state == 2)
-                                    <i class='fa fa-times-circle color-danger'></i> Closed - 
+                                    <i class='fa fa-times-circle color-danger mr-2'></i> Closed - 
                                 @elseif(room.state == 3)
-                                    <i class="fas fa-tools color-warning"></i> Under Maintenance -  
+                                    <i class="fas fa-tools color-warning mr-2"></i> Under maintenance -  
                                 @endif
                                 {{room.name}}
                             </h5>
@@ -37,21 +38,19 @@
                             @if(isAdmin)
                                 <button class="btn btn-info btn-icon-split" onclick="window.location='{{route('roomBookings', { id: room.id}) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-book"></i></span>
-                                    <span class="text">View Bookings</span>
+                                    <span class="text">View bookings</span>
                                 </button>
                                 <button class="btn btn-info btn-icon-split" onclick="window.location='{{ route('showIssue', { roomID: room.id, issueStatus: 'all' }) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-flag"></i></span>
-                                    <span class="text">View Issues</span>
+                                    <span class="text">View issues</span>
                                 </button>   
                                 <button class="btn btn-primary btn-icon-split" onclick="window.location='{{ route('editRoom', { id: room.id }) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
-                                    <span class="text">Edit Room</span>
+                                    <span class="text">Edit room</span>
                                 </button>   
                             @else
-                                <button class="btn btn-info btn-icon-split bg-danger" data-toggle='modal' data-target='#reportModal'>
-                                    <span class="icon text-white-50"><i class="far fa-flag"></i></span>
-                                    <span class="text">Report Issue</span>
-                                </button>
+                                {{--  Report room  --}}
+                                <a href='#' class="color-danger" data-toggle='modal' data-target='#reportModal' title="Report an issue" aria-label="report issue button"><i class="fas fa-flag fa-sm"></i></a>
                             @endif
                         </div>
                     </div>
@@ -60,32 +59,32 @@
                     <div class="row">
                         <div class="col-5">
                             @if(room.picture) 
-                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='../{{ room.picture }}'>
+                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='../{{ room.picture }}' alt='{{ room }} room picture'>
                             @else
-                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/meeting.jpeg'>
+                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/meeting.jpeg' alt='default room picture'>
                             @endif                     
                         </div>
                         <div class="col-7">
-                            <b>{{ room.fullName }}</b>
+                            <strong>{{ room.fullName }}</strong>
                             <div class="">
                                 @!component('components/stars', rating=room.rating)
                             </div>
 
                             <div class="mt-2 mb-2">
-                                <b><i class="fas fa-map-marker-alt fa-fw"></i></b> {{ room.floor }}  {{ room.tower }}
+                                <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong> {{ room.floor }}  {{ room.tower }}
                             </div>
                             <div class="mt-2 mb-3">
-                                <b><i class="fas fa-phone fa-fw"></i></b> {{ room.telephone }}
+                                <strong><i class="fas fa-phone fa-fw"></i></strong> {{ room.telephone }}
                             </div>
                             <hr>
                             <div class="row">
-                                <div class="col-6"><b>Table Seats:</b> {{ room.seats }}</div>
-                                <div class="col-6"> <b>Capacity:</b> {{ room.capacity }}</div>
+                                <div class="col-6 text-center"><strong>Table seats:</strong> {{ room.seats }}</div>
+                                <div class="col-6 text-center"> <strong>Capacity:</strong> {{ room.capacity }}</div>
                             </div>
                         </div>
                         <div class="col-12">
                             @if(room.comment === undefined || room.comment === null)
-                                <div class="mt-2 mb-2"><b>Comments:</b> {{ room.comment }}</div>
+                                <div class="mt-2 mb-2"><strong>Comments:</strong> {{ room.comment }}</div>
                             @endif
                         </div>
                     </div>
@@ -115,10 +114,10 @@
                                 <i class="fas fa-headset"></i>
                             </span>
                                 @if(room.audioConference == 1)
-                                    <p class="mb-0">Audio Conf.</p>
+                                    <p class="mb-0">Audio conf.</p>
                                 @endif
                                 @if(room.videoConference == 1)
-                                    <p class="mb-0">Video Conf.</span></p> 
+                                    <p class="mb-0">Video conf.</span></p> 
                                 @endif
                         </div>
                         <div class="col-6 col-lg-3 text-center">
@@ -126,7 +125,7 @@
                                 <i class="fas fa-chalkboard-teacher"></i>
                             </span>
                             @if(room.flipchart == 1)
-                                <p class="mb-0">Flip Chart</p>
+                                <p class="mb-0">Flip chart</p>
                             @endif
                             @if(room.whiteboard == 1)
                                 <p class="mb-0">Whiteboard</p>
@@ -148,7 +147,7 @@
         <div class='col-12 col-lg-4'>
             <div class="card shadow">
                 <div class='card-header py-3'>
-                    <h5 class="m-0 font-weight-bold text-primary">Book Room</h5>
+                    <h5 class="m-0 font-weight-bold text-primary">Book room</h5>
                 </div>
                 <div class="card-body">
                     @if(!isAdmin || room.state != 1)
@@ -161,7 +160,7 @@
                                 <div class='row'>
                                     <div class='col form-group'>
                                         <div class='row'>
-                                            <label class='col' for='meeting'>Meeting Name <b class='text-danger'>*</b></label>
+                                            <label class='col' for='meeting'>Meeting name <strong class='text-danger'>*</strong></label>
                                             <div class='col text-right'>
                                                 <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='Select a name for the room booking'></i>
                                             </div>
@@ -179,7 +178,7 @@
                                 <div class='row'>
                                     <div class='col form-group'>
                                         <div class='row'>
-                                            <label class='col' for='date'>Date <b class='text-danger'>*</b></label>
+                                            <label class='col' for='date'>Date <strong class='text-danger'>*</strong></label>
                                             <div class='col text-right'>
                                                 <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='The date may not occur more than 3 months in advance'></i>
                                             </div>
@@ -198,7 +197,7 @@
                                 <div class='row'>
                                     {{--  From  --}}
                                     <div class='col-12 form-group mb-4'>
-                                        <label for='from'>From <b class='text-danger'>*</b></label>
+                                        <label for='from'>From <strong class='text-danger'>*</strong></label>
                                         {{--  If field is not filled correctly show an error box  --}}
                                         @if(hasErrorFor('from'))
                                         <input name='from'  id='from' class='form-control date-form is-invalid' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue":"{{ old('from', form.from) }}", "minuteStep":"30", "minuteStepRound":"1" }' onchange='removeErrorClass("from")'>
@@ -218,7 +217,7 @@
                                     </div>
                                     {{--  To  --}}
                                     <div class='col-12 form-group mb-4'>
-                                        <label for='to'>To <b class='text-danger'>*</b></label>
+                                        <label for='to'>To <strong class='text-danger'>*</strong></label>
                                         {{--  If field is not filled correctly show an error box  --}}
                                         @if(hasErrorFor('to'))
                                         <input name='to'  id='to' class='form-control date-form is-invalid' type="time" data-role="datebox" data-options='{"mode":"timebox", "defaultValue": "{{ old('to', form.to) }}", "minuteStep":"30" }' onchange='removeErrorClass("to")'>
@@ -301,14 +300,14 @@
                             </div>
                         </form>
                     @else
-                        @!component('components.cardEmptyMessage',faIcon="fas fa-ban fa-6x", message="Booking not available for admin")
+                        @!component('components.cardEmptyMessage', faIcon='fas fa-ban fa-6x', message='Booking not available for admin')
                     @endif
                 </div>
             </div>
         </div>
     </div>
 
-    <h5 class="mt-3 mb-3"><b>Reviews</b></h5>
+    <h5 class="mt-3 mb-3"><strong>Reviews</strong></h5>
 
     <div class="row">
         <div class='col-12 col-lg-8'>
@@ -316,13 +315,13 @@
                 <div class="card-body">
                     
                     @if(reviews.length == 0)             
-                        @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="No reviews available")          
+                        @!component('components.cardEmptyMessage',faIcon='fas fa-ghost fa-6x', message='No reviews available')          
                     @else
                         {{--  Loops through the rooms array and displays every room's content  --}}
                         @each(review in reviews)
                             <div class="row">
                                 <div class="col-8">
-                                    <b>{{ review.user.firstname }} {{ review.user.lastname }}</b> </br>
+                                    <strong>{{ review.user.firstname }} {{ review.user.lastname }}</strong> </br>
                                     <i>{{review.user.email}}</i><br>
                                     @!component('components/stars', rating=review.rating)
                                     </br>
@@ -330,7 +329,7 @@
                                 </div>
                                 <div class="col-4 text-center">
                                     @if(review.reviewPicture)
-                                        <img class="shadow"style ="width:80%; max-height: 150px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
+                                        <img class="shadow"style ="width:80%; max-height: 150px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}} alt="{{ review.user.firstname }} {{ review.user.lastname }}'s review picture">
                                     @endif
                                 </div>
                             </div> 
@@ -357,7 +356,7 @@
                 </div>
                 <div class="card-body">
                     @if(isAdmin)
-                        @!component('components.cardEmptyMessage',faIcon="fas fa-ban fa-6x", message="Review not available for admin")
+                        @!component('components.cardEmptyMessage',faIcon='fas fa-ban fa-6x', message='Review not available for admin')
                     @else
                         @if(!hasReview) 
                             <form action='{{ route('addReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
@@ -370,7 +369,7 @@
                             {{--  Body  --}}
                             <div class='row'>
                                 <div class='col form-group'>
-                                    <label for='rating' data-original-title='Enter a rating for this room'>Rating <b class='text-danger'>*</b></b></label>
+                                    <label for='rating' data-original-title='Enter a rating for this room'>Rating <strong class='text-danger'>*</strong></label>
 
                                     @if(hasErrorFor('rating'))
                                         <select class='form-control is-invalid' name='rating' id='rating' onchange='removeErrorClass("rating")'>
@@ -495,7 +494,7 @@
                         <div class='body' style='margin: 20px;'>
                             <div class='row'>
                                 <div class='col form-group'>
-                                    <label for='issueType'>Issue Type <b class='text-danger'>*</b></label>
+                                    <label for='issueType'>Issue Type <strong class='text-danger'>*</strong></label>
                                     @if(hasErrorFor('issueType'))
                                         <select class='form-control is-invalid' name='issueType' id='issueType' onchange='removeErrorClass("issueType")'>
                                             <option value='undefined' {{ old('rating', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select an issue</option>
@@ -520,7 +519,7 @@
                             </div>
                             <div class='row'>
                                 <div class='col form-group no-margin'>
-                                    <label for='comment'>Comment <b class='text-danger'>*</b></label>
+                                    <label for='comment'>Comment <strong class='text-danger'>*</strong></label>
                                     @if(hasErrorFor('comment'))
                                         <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
@@ -548,7 +547,7 @@
     @endeach
 
     @if(room.picture)
-        @!component('components.imageModal', id="room-pic", title=room.name, image=room.picture)
+        @!component('components.imageModal', id="room-pic", title=room.name, image='../'+ room.picture)
     @else
         @!component('components.imageModal', id="room-pic", title=room.name, image="/images/meeting.jpeg")
     @endif

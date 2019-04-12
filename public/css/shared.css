@@ -285,7 +285,7 @@ a{
 }
 
 .bg-danger{
-    background-color: #e74c3c !important;
+    background-color: #D9080B !important;
 }
 
 .bg-warning{
@@ -693,7 +693,7 @@ a{
     max-width: 160px;
 }
 
-@media(max-width: 479px){
+@media(max-width: 585px){
     .small-card img {
         display: none;
     }
