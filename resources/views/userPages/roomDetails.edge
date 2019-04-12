@@ -301,7 +301,7 @@
                             </div>
                         </form>
                     @else
-                        @!component('components.cardEmptyMessage',faIcon="fas fa-ban fa-6x", message="Review not available for admin")
+                        @!component('components.cardEmptyMessage',faIcon="fas fa-ban fa-6x", message="Booking not available for admin")
                     @endif
                 </div>
             </div>
@@ -316,7 +316,7 @@
                 <div class="card-body">
                     
                     @if(reviews.length == 0)             
-                        @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="no reviews available")          
+                        @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="No reviews available")          
                     @else
                         {{--  Loops through the rooms array and displays every room's content  --}}
                         @each(review in reviews)
@@ -460,7 +460,7 @@
            <div class='modal-dialog' role='document'>
                 <div class='modal-content'>
                     <div class='modal-header'>
-                        <h5 class='modal-title' id='exampleModalLabel'>Are you sure?</h5>
+                        <h5 class='modal-title' id='deleteRoomTitle'>Are you sure?</h5>
                         <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
                             <span aria-hidden='true'>×</span>
                         </button>
