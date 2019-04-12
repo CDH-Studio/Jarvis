@@ -20,7 +20,7 @@
                                 <i class='d-inline-flex no-padding color-info card-icon fas fa-user fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
-                                        <h2 class='col no-margin'><b>{{ userStats['numberOfUsers'] }}</b></h2>
+                                        <h2 class='col no-margin'><strong>{{ userStats['numberOfUsers'] }}</strong></h2>
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total Users</h5>
@@ -30,9 +30,9 @@
                             <div class='row' style='font-size:13px'>
                                 <div class='col text-center'>
                                     @if(userStats['haveUsersIncreased'])
-                                        <div class='color-success' style='display:inline'><i class='fas fa-caret-up'></i> {{ userStats['increaseOfUsers'] }}% </div>From last month
+                                        <div class='text-success' style='display:inline'><i class='fas fa-caret-up'></i><strong> {{ userStats['increaseOfUsers'] }}% </strong></div>From last month
                                     @else
-                                        <div class='color-danger' style='display:inline'><i class='fas fa-caret-down'></i> {{ userStats['increaseOfUsers'] }}% </div>From last month
+                                        <div class='text-danger' style='display:inline'><i class='fas fa-caret-down'></i><strong> {{ userStats['increaseOfUsers'] }}% </strong></div>From last month
                                     @endif
                                 </div>
                             </div>
@@ -47,7 +47,7 @@
                                 <i class='d-inline-flex no-padding color-success card-icon fas fa-door-open fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
-                                        <h2 class='col no-margin'><b>{{ roomStats['numberOfRooms'] }}</b></h2>
+                                        <h2 class='col no-margin'><strong>{{ roomStats['numberOfRooms'] }}</strong></h2>
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total Rooms</h5>
@@ -57,11 +57,11 @@
                             <div class='row' style='font-size:13px'>
                                 <div class='col text-center'>
                                     @if(roomStats['percentageOfActiveRooms'] > 74)
-                                        <div class='color-success' style='display:inline'>{{ roomStats['percentageOfActiveRooms'] }}% </div>are Active
+                                        <div class='text-success' style='display:inline'><strong>{{ roomStats['percentageOfActiveRooms'] }}% </strong></div>are Active
                                     @elseif(roomStats['percentageOfActiveRooms'] > 50)
-                                        <div class='color-warning' style='display:inline'>{{ roomStats['percentageOfActiveRooms'] }}% </div>are Active
+                                        <div class='text-warning' style='display:inline'><strong>{{ roomStats['percentageOfActiveRooms'] }}% </strong></div>are Active
                                     @else
-                                        <div class='color-danger' style='display:inline'>{{ roomStats['percentageOfActiveRooms'] }}% </div>are Active
+                                        <div class='text-danger' style='display:inline'><strong>{{ roomStats['percentageOfActiveRooms'] }}% </strong></div>are Active
                                     @endif
                                 </div>
                             </div>
@@ -76,7 +76,7 @@
                                 <i class='d-inline-flex no-padding color-warning card-icon far fa-flag fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
-                                        <h2 class='col no-margin'><b>{{ issueStats }}</b></h2>
+                                        <h2 class='col no-margin'><strong>{{ issueStats }}</strong></h2>
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total Issues</h5>

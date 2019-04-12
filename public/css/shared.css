@@ -3,7 +3,7 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Accesibility Changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-body, .table{
+body, .table,.sidebar .nav-item .collapse .collapse-inner .collapse-header, .sidebar .nav-item .collapsing .collapse-inner .collapse-header {
     color: #4D4D5B;
     color: #4D4D5B;
 }
@@ -135,21 +135,7 @@ a{
     display: block;
 }
 
-/*+++++++++++++++++++++++++++++++++++++++++++*/
-/* Text */
-/*+++++++++++++++++++++++++++++++++++++++++++*/
 
-.text-primary{
-    color: #004680 !important;
-}
-
-.text-muted, .text-grey{
-    color:#707070 !important;
-}
-
-.text-danger{
-    color: #D9080B !important;
-}
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Navagation Changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -298,7 +284,7 @@ a{
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-/* Colors */
+/* Colors and Text*/
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 .bg-primary{
     background-color: #001642 !important;
@@ -351,7 +337,7 @@ a{
     color: #e74c3c !important;
 }
 
-.color-warning{
+.color-warning, .text-warning{
     color: #f39c12 !important;
 }
 
@@ -370,6 +356,21 @@ a{
     color: #001642 !important;
 }
 
+.text-primary{
+    color: #004680 !important;
+}
+
+.text-muted, .text-grey{
+    color:#707070 !important;
+}
+
+.text-success{
+    color: #117360 !important;
+}
+
+.text-danger{
+    color: #D9080B !important;
+}
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Changing button colors */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
