@@ -170,7 +170,37 @@ class BookingController {
 		searchResults = searchResults.toJSON();
 		const bookings = await populateBookings(searchResults);
 
-		return view.render('userPages.manageBookings', { bookings, layoutType, canEdit });
+		// counts the number of approved bookings
+		let numberOfApprovedBookings = await Booking
+			.query()
+			.where('room_id', params.id)
+			.where('status', 'Approved')
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.getCount();
+
+		// calculate the number of bookings a room has this month
+		let numberOfBookingsThisMonth = await Booking
+			.query()
+			.where('room_id', params.id)
+			.where('status', 'Approved')
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
+			.fetch();
+
+		numberOfBookingsThisMonth = numberOfBookingsThisMonth.toJSON();
+
+		// Calculates the number of hours in bookings for this month
+		let numberOfHours = 0;
+		for (var i = 0; i < numberOfBookingsThisMonth.length; i++) {
+			let fromTime = moment(numberOfBookingsThisMonth[0].from);
+			let toTime = moment(numberOfBookingsThisMonth[0].to);
+			let duration = moment.duration(toTime.diff(fromTime));
+			numberOfHours += duration.asHours();
+		}
+
+		numberOfBookingsThisMonth = numberOfBookingsThisMonth.length;
+
+		return view.render('userPages.manageBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfHours, layoutType, canEdit });
 	}
 
 	/**
@@ -189,6 +219,7 @@ class BookingController {
 			canEdit = 1;
 		}
 
+		// retrieves the bookings
 		let results = await Booking
 			.query()
 			.where('user_id', params.id)
@@ -199,7 +230,37 @@ class BookingController {
 		results = results.toJSON();
 		const bookings = await populateBookings(results);
 
-		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });
+		// counts the number of approved bookings
+		let numberOfApprovedBookings = await Booking
+			.query()
+			.where('user_id', params.id)
+			.where('status', 'Approved')
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.getCount();
+
+		// calculate the number of bookings a room has this month
+		let numberOfBookingsThisMonth = await Booking
+			.query()
+			.where('user_id', params.id)
+			.where('status', 'Approved')
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
+			.fetch();
+
+		numberOfBookingsThisMonth = numberOfBookingsThisMonth.toJSON();
+
+		// Calculates the number of hours in bookings for this month
+		let numberOfHours = 0;
+		for (var i = 0; i < numberOfBookingsThisMonth.length; i++) {
+			let fromTime = moment(numberOfBookingsThisMonth[0].from);
+			let toTime = moment(numberOfBookingsThisMonth[0].to);
+			let duration = moment.duration(toTime.diff(fromTime));
+			numberOfHours += duration.asHours();
+		}
+
+		numberOfBookingsThisMonth = numberOfBookingsThisMonth.length;
+
+		return view.render('userPages.manageUserBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfHours, layoutType, canEdit });
 	}
 
 	/**
