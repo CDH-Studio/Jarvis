@@ -4,9 +4,6 @@
     Jarvis
 @endsection
 
-@section('extrajs')
-@endsection
-
 @section('content')
 
     <div class='row'>
@@ -168,6 +165,10 @@
         </script>
     @endif
 
+
+@endsection
+
+@section('extrajs')
     {{--  Scrip tag responsible for the bookings time chart  --}}
     <script>
             // Set new default font family and font color to mimic Bootstrap's default styling
@@ -200,10 +201,8 @@
                     },
                 },
             });
-    </script>
 
     {{--  Scrip tag responsible for the Room Statuses chart  --}}
-    <script>
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';
@@ -238,10 +237,8 @@
                 cutoutPercentage: 80
             },
         });
-    </script>
 
     {{--  Scrip tag responsible for the Room Issues chart  --}}
-    <script>
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';
@@ -276,10 +273,9 @@
                 cutoutPercentage: 80
             },
         });
-    </script>
+
 
     {{--  Scrip tag responsible for the Room Popularity chart  --}}
-    <script>
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';
