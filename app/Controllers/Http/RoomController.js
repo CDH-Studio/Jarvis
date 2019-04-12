@@ -270,7 +270,7 @@ class RoomController {
 
 			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review, reviewsCount });
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 			return response.redirect('/');
 		}
 	}
