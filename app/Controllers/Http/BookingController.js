@@ -5,6 +5,10 @@ const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const graph = require('@microsoft/microsoft-graph-client');
 
+// Used for time related calcuklations and formatting
+const moment = require('moment');
+require('moment-round');
+
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -159,6 +163,8 @@ class BookingController {
 		let searchResults = await Booking
 			.query()
 			.where('room_id', params.id)
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.orderBy('from', 'asc')
 			.fetch();
 
 		searchResults = searchResults.toJSON();
@@ -183,7 +189,14 @@ class BookingController {
 			canEdit = 1;
 		}
 
-		const results = (await Booking.query().where('user_id', params.id).fetch()).toJSON();
+		let results = await Booking
+			.query()
+			.where('user_id', params.id)
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.orderBy('from', 'asc')
+			.fetch();
+
+		results = results.toJSON();
 		const bookings = await populateBookings(results);
 
 		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });
@@ -194,9 +207,10 @@ class BookingController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async cancelBooking ({ params, response, auth }) {
+	async cancelBooking ({ params, response, view }) {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
+		const userId = booking.toJSON().user_id;
 		const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
 		const eventId = booking.toJSON().event_id;
 
@@ -204,7 +218,11 @@ class BookingController {
 		booking.status = 'Cancelled';
 		await booking.save();
 
-		return response.redirect(`/user/${auth.user.id}/bookings`);
+		if (params.bookingType === 'user') {
+			return response.route('viewBookings', { id: userId });
+		} else {
+			return response.route('roomBookings', { id: roomId });
+		}
 	}
 
 	async getCalendarView (calendarId, start, end) {

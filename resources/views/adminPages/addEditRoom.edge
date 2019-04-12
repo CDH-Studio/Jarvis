@@ -6,7 +6,7 @@
 
 @section('content')
     @!component('components.pageHeader', title=actionType)
-    <p>Add Rooms to database. Rooms added here can be booked by users.</p>
+    <p>Add rooms to database. Rooms added here can be booked by users.</p>
 
     <div class='row'>
         <div class= 'col-md-9'>
@@ -24,7 +24,7 @@
                                 <div class='row'>
                                     <div class='col form-group'>
                                         <div class='row'>
-                                            <label class='col' for='name'>Room Name <b class='text-danger'>*</b></label>
+                                            <label class='col' for='name'>Room name <b class='text-danger'>*</b></label>
                                             <div class='col text-right'>
                                                 <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right' data-original-title='Enter the short name of the meeting room you wish to add (Ex. 101A (E))'></i>
                                             </div>
@@ -41,7 +41,7 @@
                                 <div class='row'>
                                     <div class='col form-group'>
                                         <div class='row'>
-                                            <label class='col' for='fullName'>Full Room Name <b class='text-danger'>*</b></label>
+                                            <label class='col' for='fullName'>Full room name <b class='text-danger'>*</b></label>
                                             <div class='col text-right'>
                                                 <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right' data-original-title='Please enter the full name of the room (Ex. IC CONF OTT-235 Queen-Oasis CONF IC)'></i>
                                             </div>
@@ -58,7 +58,7 @@
                                 <div class='row'>                
                                     <div class='col form-group'>
                                         <div class='row'>
-                                            <label class='col' for='state'>Room Status <b class='text-danger'>* </b></label>
+                                            <label class='col' for='state'>Room status <b class='text-danger'>* </b></label>
                                             <div class='col text-right'>
                                                 <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right' data-original-title='Active: available for booking, Deactive & Maintenance: unavailable for booking'></i>
                                             </div>
@@ -67,16 +67,16 @@
                                             <select class='form-control is-invalid' name='state' id='state' onchange='removeErrorClass("state")'>
                                                 <option value='undefined' {{ old('state', room.state) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Room Status</option>
                                                 <option value='1' {{ old('state', room.state) == '1' ? 'selected' : '' }}>Active</option>
-                                                <option value='2' {{ old('state', room.state) == '2' ? 'selected' : '' }}>Deactive</option>
-                                                <option value='3' {{ old('state', room.state) == '3' ? 'selected' : '' }}>Under Maintenance</option>
+                                                <option value='2' {{ old('state', room.state) == '2' ? 'selected' : '' }}>Deactivated</option>
+                                                <option value='3' {{ old('state', room.state) == '3' ? 'selected' : '' }}>Under maintenance</option>
                                             </select>
                                             <div class='invalid-feedback'>{{ getErrorFor('state') }}</div>
                                         @else
                                             <select class='form-control' name='state' id='state' onchange='removeErrorClass("state")'>
                                                 <option value='undefined' {{ old('state', room.state) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Room Status</option>
                                                 <option value='1' {{ old('state', room.state) == '1' ? 'selected' : '' }}>Active</option>
-                                                <option value='2' {{ old('state', room.state) == '2' ? 'selected' : '' }}>Deactive</option>
-                                                <option value='3' {{ old('state', room.state) == '3' ? 'selected' : '' }}>Under Maintenance</option>
+                                                <option value='2' {{ old('state', room.state) == '2' ? 'selected' : '' }}>Deactivated</option>
+                                                <option value='3' {{ old('state', room.state) == '3' ? 'selected' : '' }}>Under maintenance</option>
                                             </select>
                                         @endif
                                     </div>
@@ -138,7 +138,7 @@
                                 {{--  Phone Number  --}}
                                 <div class='row'>
                                     <div class='col form-group'>
-                                        <label for='telephoneNumber'>Telephone Number <b class='text-danger'>*</b></label>
+                                        <label for='telephoneNumber'>Telephone number <b class='text-danger'>*</b></label>
                                         @if(hasErrorFor('telephoneNumber'))
                                             <input type='text' name='telephoneNumber' class='form-control is-invalid' id='telephoneNumber' placeholder='Ex: 343-333-3333' value='{{ old('telephoneNumber', room.telephone) }}' oninput='removeErrorClass("telephoneNumber")'/>
                                             <div class='invalid-feedback'>{{ getErrorFor('telephoneNumber') }}</div>
@@ -150,7 +150,7 @@
                                 {{--  Table Seats  --}}
                                 <div class='row'>
                                     <div class='col form-group'>
-                                        <label for='tableSeats'>Table Seats <b class='text-danger'>*</b></label>
+                                        <label for='tableSeats'>Table seats <b class='text-danger'>*</b></label>
                                         @if(hasErrorFor('tableSeats'))
                                             <input type='text' name='tableSeats' class='form-control is-invalid' id='tableSeats' placeholder='Ex: 22' value='{{ old('tableSeats', room.seats) }}' oninput='removeErrorClass("tableSeats")'/>
                                             <div class='invalid-feedback'>{{ getErrorFor('tableSeats') }}</div>
@@ -162,7 +162,7 @@
                                 {{--  Max Capacity  --}}
                                 <div class='row'>
                                     <div class='col form-group'>
-                                        <label for='maximumCapacity'>Maximum Capacity <b class='text-danger'>*</b></label>
+                                        <label for='maximumCapacity'>Maximum capacity <b class='text-danger'>*</b></label>
                                         @if(hasErrorFor('maximumCapacity'))
                                             <input type='text' name='maximumCapacity' class='form-control is-invalid' id='maximumCapacity' placeholder='Ex: 42' value='{{ old('maximumCapacity', room.capacity) }}' oninput='removeErrorClass("maximumCapacity")'/>
                                             <div class='invalid-feedback'>{{ getErrorFor('maximumCapacity') }}</div>
@@ -189,23 +189,23 @@
                                         <div class='row'>
                                             <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-4 ml-3'>
                                                 <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck', room.flipchart) ? 'checked' : '' }} >
-                                                <label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
+                                                <label class='custom-control-label' for='flipChartCheck'>Flip chart</label>
                                             </div>  
                                             <div class='custom-control custom-checkbox ml-3'>
                                                 <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck', room.audioConference) ? 'checked' : '' }} >
-                                                <label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
+                                                <label class='custom-control-label' for='audioCheck'>Audio conferencing</label>
                                             </div>                
                                         </div>
                     
                                         <div class='row'>
                                             <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-4 ml-3'>
                                                 <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck', room.videoConference) ? 'checked' : '' }} >
-                                                <label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
+                                                <label class='custom-control-label' for='videoCheck'>Video conferencing</label>
                                             </div>
                                             
                                             <div class='custom-control custom-checkbox ml-3'>
                                                 <input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1' {{ old('surfaceHubCheck', room.surfaceHub) ? 'checked' : '' }} >
-                                                <label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
+                                                <label class='custom-control-label' for='surfaceHubCheck'>Surface hub</label>
                                             </div>               
                                         </div>
                     
@@ -220,7 +220,7 @@
                                 {{--  Extra Equipment  --}}
                                 <div class='row'>
                                     <div class='col form-group mt-4'>
-                                        <label for='extraEquipment'>Extra Equipment</label>
+                                        <label for='extraEquipment'>Extra equipment</label>
                                         <textarea class='form-control' name='extraEquipment' id='extraEquipment' rows='3' >{{ old('extraEquipment', room.extraEquipment) }}</textarea>
                                     </div>
                                 </div>
@@ -234,7 +234,7 @@
                                 <div class='row'>
                                     {{--  Floor Plan Picture --}}
                                     <div class='col' id='floorPlanContent'>
-                                        <label>Floor Plan <b class='text-danger'>*</b></label>
+                                        <label>Floor plan <b class='text-danger'>*</b></label>
                                         <div class='form-group'>
                                             <div class='custom-file'>
                                                 @if(hasErrorFor('floorPlan'))
@@ -243,13 +243,13 @@
                                                 @else
                                                     <input type='file' class='custom-file-input' id='floorPlan' name='floorPlan'>
                                                 @endif
-                                                <label id='floorPlanLabel' class='custom-file-label' for='floorPlan'>Choose File</label>
+                                                <label id='floorPlanLabel' class='custom-file-label' for='floorPlan'>Choose file</label>
                                             </div>
                                         </div>
                                     </div>
                                     {{--  Room Picture  --}}
                                     <div class='col' id='roomPictureContent'>
-                                        <label>Room Picture <b class='text-danger'>*</b></label>
+                                        <label>Room picture <b class='text-danger'>*</b></label>
                                         <div class='form-group'>
                                             <div class='custom-file'>
                                                 @if(hasErrorFor('roomPicture'))
@@ -258,7 +258,7 @@
                                                 @else
                                                     <input type='file' class='custom-file-input' id='roomPicture' name='roomPicture'>
                                                 @endif
-                                                <label id='roomPictureLabel' class='custom-file-label' for='roomPicture'>Choose File</label>
+                                                <label id='roomPictureLabel' class='custom-file-label' for='roomPicture'>Choose file</label>
                                             </div>
                                         </div>
                                     </div>

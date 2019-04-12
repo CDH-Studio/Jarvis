@@ -158,7 +158,7 @@ class RoomController {
 		// Retrieves room object
 		const room = await Room.findBy('id', params.id);
 		const actionType = 'Edit Room';
-		return view.render('adminDash.addEditRoom', { room: room, actionType });
+		return view.render('adminPages.addEditRoom', { room: room, actionType });
 	}
 
 	/**
@@ -345,7 +345,7 @@ class RoomController {
 
 		const rooms = searchResults.toJSON();
 
-		return view.render('adminDash.viewRooms', { rooms });
+		return view.render('adminPages.viewRooms', { rooms });
 	}
 
 	/**
