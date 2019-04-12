@@ -26,8 +26,10 @@
                             </div>
                             <div class='row' style='font-size:13px'>
                                 <div class='col text-center'>
-                                    @if(userStats['haveUsersIncreased'])
+                                    @if(userStats['increaseOfUsers']>0)
                                         <div class='color-success' style='display:inline'><i class='fas fa-caret-up'></i> {{ userStats['increaseOfUsers'] }}% </div>From last month
+                                    @elseif(userStats['increaseOfUsers']==0)
+                                        <div class='color-secondary' style='display:inline'>{{ userStats['increaseOfUsers'] }}% </div>From last month
                                     @else
                                         <div class='color-danger' style='display:inline'><i class='fas fa-caret-down'></i> {{ userStats['increaseOfUsers'] }}% </div>From last month
                                     @endif
