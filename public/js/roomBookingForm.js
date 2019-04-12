@@ -7,7 +7,7 @@
 	}
 
 	// Show the recurring drop down if the user selects yes, otherwise hide it  --}}
-
+	/* eslint-disable */
 	function showRecurring () {
 		var selection = document.getElementById('recurringSelect');
 		if (selection.value === '1') {
@@ -29,7 +29,7 @@
 			$('#to-error').removeClass('show-invalid');
 		}
 	}
-
+	/* eslint-enable */
 	// Setting from and to times
 	const currentTime = new Date();
 	const currentHour = currentTime.getHours();

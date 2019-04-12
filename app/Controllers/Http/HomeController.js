@@ -127,7 +127,7 @@ class HomeController {
 	async getUserStats () {
 		// retrieves all the users form the database
 		const allUsers = await User.getCount();
-		//const allUsers = results.toJSON();
+		// const allUsers = results.toJSON();
 
 		// initialize the moment.js object to act as our date
 		const date = moment();
@@ -136,9 +136,9 @@ class HomeController {
 		let usersRegisteredThisMonth = await User
 			.query()
 			.whereRaw("strftime('%Y-%m', created_at) = ?", [date.format('YYYY-MM')]) // eslint-disable-line
-			.getCount()
+			.getCount();
 
-		//let usersRegisteredThisMonth = users;
+		// let usersRegisteredThisMonth = users;
 		let usersRegisteredBeforeThisMonth = allUsers - usersRegisteredThisMonth;
 
 		var stats = {};
@@ -147,17 +147,6 @@ class HomeController {
 
 		let differenceInUsers = usersRegisteredThisMonth - usersRegisteredBeforeThisMonth;
 		stats['increaseOfUsers'] = Math.round((differenceInUsers / allUsers) * 100);
-
-		// if (usersRegisteredBeforeThisMonth > allUsers) {
-		// 	let differenceInUsers = usersRegisteredBeforeThisMonth - allUsers;
-
-		// 	stats['increaseOfUsers'] = Math.round((differenceInUsers / allUsers) * 100);
-		// 	stats['haveUsersIncreased'] = false;
-		// }else if(usersRegisteredBeforeThisMonth===0){ 
-		// 	stats['increaseOfUsers']=0;
-		// }else {
-		// 	stats['increaseOfUsers'] = Math.round((usersRegisteredThisMonth / usersRegisteredBeforeThisMonth) * 100);
-		// }
 
 		// return the number of users and pourcentage of the increase of users from last month to the current one
 		return stats;
