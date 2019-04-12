@@ -170,10 +170,19 @@ class BookingController {
 		searchResults = searchResults.toJSON();
 		const bookings = await populateBookings(searchResults);
 
+		// counts the number of approved bookings
+		let numberOfApprovedBookings = await Booking
+			.query()
+			.where('room_id', params.id)
+			.where('status', 'Approved')
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.getCount();
+
 		// calculate the number of bookings a room has this month
 		let numberOfBookingsThisMonth = await Booking
 			.query()
 			.where('room_id', params.id)
+			.where('status', 'Approved')
 			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
 			.fetch();
@@ -191,7 +200,7 @@ class BookingController {
 
 		numberOfBookingsThisMonth = numberOfBookingsThisMonth.length;
 
-		return view.render('userPages.manageBookings', { bookings, numberOfBookingsThisMonth, numberOfHours, layoutType, canEdit });
+		return view.render('userPages.manageBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfHours, layoutType, canEdit });
 	}
 
 	/**
@@ -210,6 +219,7 @@ class BookingController {
 			canEdit = 1;
 		}
 
+		// retrieves the bookings
 		let results = await Booking
 			.query()
 			.where('user_id', params.id)
@@ -220,10 +230,19 @@ class BookingController {
 		results = results.toJSON();
 		const bookings = await populateBookings(results);
 
+		// counts the number of approved bookings
+		let numberOfApprovedBookings = await Booking
+			.query()
+			.where('user_id', params.id)
+			.where('status', 'Approved')
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.getCount();
+
 		// calculate the number of bookings a room has this month
 		let numberOfBookingsThisMonth = await Booking
 			.query()
 			.where('user_id', params.id)
+			.where('status', 'Approved')
 			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
 			.fetch();
@@ -241,7 +260,7 @@ class BookingController {
 
 		numberOfBookingsThisMonth = numberOfBookingsThisMonth.length;
 
-		return view.render('userPages.manageUserBookings', { bookings, numberOfBookingsThisMonth, numberOfHours, layoutType, canEdit });
+		return view.render('userPages.manageUserBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfHours, layoutType, canEdit });
 	}
 
 	/**
