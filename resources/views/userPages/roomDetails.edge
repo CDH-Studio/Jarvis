@@ -568,71 +568,6 @@
         }
     </script>
 
-    {{--  Run this on load incase the page reloaded with field 'recurringSelect' set to YES --}}
-    <script>
-            var selection=document.getElementById("recurringSelect");
-            if (selection.value==='1'){
-                document.getElementById('recurringInfo').style.display='';
-            }
-    </script>
-
-    {{--  Show the recurring drop down if the user selects yes, otherwise hide it  --}}
-    <script>
-        function showRecurring(){
-            var selection=document.getElementById("recurringSelect");
-            if (selection.value==='1'){
-                document.getElementById('recurringInfo').style.display='';
-            }
-            else{
-                document.getElementById('recurringInfo').style.display='none';
-            }
-        }
-    </script>
-    {{--  remove the is-invalid output when the user inputs a new value  --}}
-    <script>
-        function removeErrorClass(idOfInput){
-            $('#'+idOfInput).removeClass('is-invalid');
-            // Ih field is the calendar, then remove styling from erorr message
-            if (idOfInput == 'date') {
-                $('#date-error').removeClass('show-invalid');
-            }
-            else if (idOfInput == 'from') {
-                $('#from-error').removeClass('show-invalid');
-            }
-            else if (idOfInput == 'to' ) {
-                $('#to-error').removeClass('show-invalid');
-            }
-        }
-    </script>
-    {{--  Setting from and to times  --}}
-    <script>
-        const currentTime = new Date();
-        const currentHour = currentTime.getHours();
-        const currentMinutes = currentTime.getMinutes();
-        let fromTime;
-        let toTime;
-        if (currentMinutes <= 30) {
-            fromTime = currentHour + ":30"
-            toTime = currentHour + 1 + ":30"
-        } else {
-            fromTime = currentHour + 1 + ":00"
-            toTime = currentHour + 2 + ":00"
-
-        }
-        $('#from').datebox({
-            mode: "timebox", 
-            defaultValue: fromTime,
-            minuteStep: "30",
-            minuteStepRound: "1"
-        });
-        $('#to').datebox({
-            mode: "timebox", 
-            defaultValue: toTime,
-            minuteStep: "30",
-            minuteStepRound: "1",
-        });
-	</script>
-
 
     {{--  If the report validations fails display this modal  --}}
     @if(hasErrorFor('issueType'))
@@ -648,32 +583,8 @@
             });
         </script>
     {{--  If the review validations fails display this modal  --}}
-    @elseif(hasErrorFor('rating'))
-        <script>
-            $(window).on('load',function(){
-                $('#reviewModal').modal('show');
-            });
-        </script>
-    @elseif(hasErrorFor('review'))
-        <script>
-            $(window).on('load',function(){
-                $('#reviewModal').modal('show');
-            });
-        </script>
-    @elseif(hasErrorFor('reviewPicture'))
-        <script>
-            $(window).on('load',function(){
-                $('#reviewModal').modal('show');
-            });
-        </script>
-    {{--  If a validation error is thrown show the modal box  --}}
-    @elseif(hasErrorFor())
-        <script>
-            $(window).on('load',function(){
-                $('#confirmModal').modal('show');
-            });
-        </script>
     @endif
+
     {{--  Displays "Room Added/Updated!" success message  --}}
     @if(flashMessage('notification'))
         <script type='module'>
@@ -684,6 +595,7 @@
             });
         </script>
     @endif
+
     {{--  Displays "Room has already been booked!" error message  --}}
     @if(flashMessage('error'))
         <script type='module'>
@@ -694,4 +606,9 @@
         </script>
     @endif
     
+@endsection
+
+{{--  Deals with the search functionality of the table above- searches all fields   --}}
+@section('extrajs') 
+    {{ script('js/roomBookingForm.js') }}
 @endsection
