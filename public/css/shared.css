@@ -370,13 +370,14 @@ a{
 }
 .btn-primary{
     /* #0FACF3 old color */
-    background-color: #004680;
+    background-image: linear-gradient(180deg, #145f9c 0%, rgb(12, 81, 138) 100%);
     border-style: none;
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
 .btn-primary:hover, .btn-primary:active{
     /* #0FACF3 old color */
+    background-image: linear-gradient(180deg, #114e80 0%, rgb(12, 62, 102) 100%);
     background-color: #023258 !important;
     box-shadow: 0 4px 8px 0 #00000033 !important;
     

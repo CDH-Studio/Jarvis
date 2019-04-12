@@ -19,12 +19,12 @@
     {{--  Actual page content  --}}
     <div class="row">
     
-        <div class='col-12 col-lg-8'>
+        <div class='col-12 col-lg-8 mb-4'>
             <div class='card room-details-card shadow mb-4'>
-                <div class='card-header py-3'>
+                <div class='card-header custom-card-header py-3'>
                     <div class='d-flex flex-wrap'>
                         <div class='' style='padding-top:6px;'>
-                            <h5 class="m-0 font-weight-bold text-primary">
+                            <h5 class="m-0 font-weight-bold color-light">
                                 {{--  If the room is closed or under maintence then display info  --}}
                                 @if(room.state == 2)
                                     <i class='fa fa-times-circle color-danger mr-2'></i> Closed - 
@@ -50,7 +50,7 @@
                                 </button>   
                             @else
                                 {{--  Report room  --}}
-                                <a href='#' class="color-danger" data-toggle='modal' data-target='#reportModal' title="Report an issue" aria-label="report issue button"><i class="fas fa-flag fa-sm"></i></a>
+                                <a href='#' class="color-light" data-toggle='modal' data-target='#reportModal' title="Report an issue" aria-label="report issue button"><i class="fas fa-flag fa-sm"></i></a>
                             @endif
                         </div>
                     </div>
@@ -91,8 +91,8 @@
 
                 </div>
             </div>
-
-            <div class="card shadow mb-4">
+            {{--  Card for equipments  --}}
+            <div id='equipment-card' class="card shadow">
                 <div class="card-body m-3">
                     <div class="row">
                         <div class="col-6 col-lg-3  text-center mb-3 mb-lg-0">
@@ -144,8 +144,8 @@
             </div>
         </div>
         
-        <div class='col-12 col-lg-4'>
-            <div class="card shadow">
+        <div class='col-12 col-lg-4 mb-4'>
+            <div class="card shadow" style="height:100%;">
                 <div class='card-header py-3'>
                     <h5 class="m-0 font-weight-bold text-primary">Book room</h5>
                 </div>
