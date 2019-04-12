@@ -207,12 +207,7 @@
 						@slot('body')
 							{{--  if the user have not booked anythings display message, else display the freq booked  --}}
 							@if(!freqRooms)
-								<div class="d-flex flex-wrap justify-content-center" style='height:244px;'>
-									<div class="d-flex flex-column justify-content-around">
-										<i class="fas fa-ghost fa-8x text-muted wrapper-center"></i>
-										<h3 class="text-muted no-margin">No Frequently Booked Rooms</h3>
-									</div>
-								</div>
+								@!component('components.cardEmptyMessage',faIcon="fas fa-history fa-4x", message="No Bookings Found") 
 							@else
 								@each(room in freqRooms)
 									<div class='row'>
@@ -252,6 +247,7 @@
 										<h3 class="text-muted no-margin">No Bookings Found</h3>
 									</div>
 								</div>
+								 @!component('components.cardEmptyMessage',faIcon="fas fa-list fa-6x", message="No Bookings Found") 
 							@else
 								<div class='table table-responsive'>
 									<table id='bookNowTable' class='table' style='width:100%;'>
@@ -294,12 +290,7 @@
 				@slot('body')
 					{{-- display message if there are no upcomming bookings --}}
 					@if(!freqRooms)
-						<div class="d-flex flex-wrap justify-content-center">
-							<div class="d-flex flex-column justify-content-around">
-								<i class="fas fa-book fa-8x text-muted wrapper-center"></i>
-								<h3 class="text-muted no-margin">No Bookings Found</h3>
-							</div>
-						</div>
+						@!component('components.cardEmptyMessage',faIcon="fas fa-search fa-4x", message="No Bookings Found") 
 					@else
 						<div class='table table-responsive'>
 							<table id='bookNowTable' class='table' style='width:100%;'>

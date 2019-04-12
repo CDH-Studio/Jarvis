@@ -146,6 +146,7 @@ class RoomController {
 			return response.route('showRoom', { id: room.id });
 		} catch (err) {
 			console.log(err);
+			return response.redirect('/');
 		}
 	}
 
