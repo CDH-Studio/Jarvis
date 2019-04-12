@@ -3,6 +3,7 @@ const Room = use('App/Models/Room');
 const User = use('App/Models/User');
 const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
+const Env = use('Env');
 const graph = require('@microsoft/microsoft-graph-client');
 const axios = require('axios');
 
@@ -243,7 +244,7 @@ class BookingController {
 	async getRoomAvailability (date, from, to, floor, calendar) {
 		console.log(date, from, to, calendar);
 
-		const res = await axios.post('http://142.53.209.100:8080/avail', {
+		const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/avail`, {
 			room: calendar,
 			start: date + 'T' + from,
 			end: date + 'T' + to,
@@ -263,7 +264,7 @@ class BookingController {
 	 */
 	async createEvent (eventInfo, booking, user, room) {
 		try {
-			const res = await axios.post('http://142.53.209.100:8080/booking', {
+			const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/booking`, {
 				room: room.calendar,
 				start: eventInfo.start.dateTime,
 				end: eventInfo.end.dateTime,
@@ -300,7 +301,7 @@ class BookingController {
 	*/
 	async deleteEvent (calendarId, eventId, floor) {
 		try {
-			const res = await axios.post('http://142.53.209.100:8080/cancel', {
+			const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/cancel`, {
 				room: calendarId,
 				eventId: eventId,
 				floor: floor

@@ -5,6 +5,7 @@ const Report = use('App/Models/Report');
 const Booking = use('App/Models/Booking');
 const Review = use('App/Models/Review');
 const Event = use('Event');
+const Env = use('Env');
 
 var moment = require('moment');
 const axios = require('axios');
@@ -474,7 +475,7 @@ class HomeController {
 	async getRoomAvailability (date, from, to, floor, calendar) {
 		console.log(date, from, to, calendar);
 
-		const res = await axios.post('http://142.53.209.100:8080/avail', {
+		const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/avail`, {
 			room: calendar,
 			start: date + 'T' + from,
 			end: date + 'T' + to,

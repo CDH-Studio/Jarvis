@@ -6,9 +6,10 @@ const Booking = use('App/Models/Booking');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
 const axios = require('axios');
-// const Env = use('Env');
+const Env = use('Env');
 const Event = use('Event');
 const moment = require('moment');
+require('moment-recur');
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -389,7 +390,30 @@ class RoomController {
 		return view.render('adminDash.viewRooms', { rooms });
 	}
 
+	async searchRecurring2 ({ request }) {
+		const options = request.all();
+
+		// start date
+		const startDate = options.startDate;
+
+		let recur = moment(startDate);
+		if (options.type === 'daily') {
+			recur = recur
+				.every(options.dailyInterval)
+				.days();
+		} else if (options.type === 'monthly') {
+			recur = recur
+				.daysOfMonth(options.dayOfMonth);
+		} else {
+			recur = recur
+				.daysOfWeek()
+		}
+
+		return recur;
+	}
+
 	async searchRecurring ({ request }) {
+		console.log(Env.get('EXCHANGE_AGENT_SERVER', 'http://172.17.75.10:3000'))
 		const options = request.all();
 		console.log(options);
 
@@ -415,7 +439,7 @@ class RoomController {
 			recurrence.daysOfWeek = [8];
 
 			console.log('recurrence', recurrence);
-			const res = await axios.post('http://142.53.209.100:8080/recur', recurrence);
+			const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/`, recurrence);
 
 			return res.data;
 		}
@@ -436,7 +460,7 @@ class RoomController {
 		}
 
 		console.log('recurrence', recurrence);
-		const res = await axios.post('http://142.53.209.100:8080/recur', recurrence);
+		const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/`, recurrence);
 
 		return res.data;
 	}
@@ -773,7 +797,7 @@ class RoomController {
 	async getRoomAvailability (date, from, to, floor, calendar) {
 		console.log(date, from, to, calendar);
 
-		const res = await axios.post('http://142.53.209.100:8080/avail', {
+		const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/avail`, {
 			room: calendar,
 			start: date + 'T' + from,
 			end: date + 'T' + to,
