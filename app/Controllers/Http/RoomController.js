@@ -8,8 +8,11 @@ const graph = require('@microsoft/microsoft-graph-client');
 const axios = require('axios');
 const Env = use('Env');
 const Event = use('Event');
+// Used for time related calcuklations and formatting
 const moment = require('moment');
 require('moment-recur');
+require('moment-round');
+
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -97,23 +100,16 @@ class RoomController {
 	*/
 	async loadSearchRoomsForm ({ view, params }) {
 		// Calculates the from and too times to pre fill in the search form
-		const currentTime = new Date();
-		const currentHour = currentTime.getHours();
-		const currentMinutes = currentTime.getMinutes();
-		let fromTime;
-		let toTime;
+		let fromTime = moment();
+		let toTime = moment();
 		let dropdownSelection = [];
 		const start = moment().startOf('day');
 		const end = moment().endOf('day');
 		const endBy = moment().startOf('day').add(1, 'month').format('YYYY-MM-DD');
 
-		if (currentMinutes <= 30) {
-			fromTime = currentHour + ':30';
-			toTime = currentHour + 1 + ':30';
-		} else {
-			fromTime = currentHour + 1 + ':00';
-			toTime = currentHour + 2 + ':00';
-		}
+		// round the autofill start and end times to the nearest 30mins
+		fromTime = fromTime.round(30, 'minutes').format('HH:mm');
+		toTime = toTime.round(30, 'minutes').add(1, 'h').format('hh:mm');
 
 		// loop to fill the dropdown times
 		while (start.isBefore(end)) {
@@ -138,7 +134,7 @@ class RoomController {
 	}
 	async create ({ response, view, auth }) {
 		const actionType = 'Add Room';
-		return view.render('adminDash.addEditRoom', { actionType });
+		return view.render('adminPages.addEditRoom', { actionType });
 	}
 
 	/**
@@ -201,6 +197,7 @@ class RoomController {
 			return response.route('showRoom', { id: room.id });
 		} catch (err) {
 			console.log(err);
+			return response.redirect('/');
 		}
 	}
 
@@ -213,7 +210,7 @@ class RoomController {
 		// Retrieves room object
 		const room = await Room.findBy('id', params.id);
 		const actionType = 'Edit Room';
-		return view.render('adminDash.addEditRoom', { room: room, actionType });
+		return view.render('adminPages.addEditRoom', { room: room, actionType });
 	}
 
 	/**
@@ -305,14 +302,27 @@ class RoomController {
 			}
 
 			// retrieves all of the reviews associated to this room
-			let searchResults = await Review
+			let reviewResults = await Review
 				.query()
 				.where('room_id', params.id)
+				.with('user')
 				.fetch();
-			const reviews = searchResults.toJSON();
 
-			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review });
+			// retrieves all of the reviews associated to this room
+			let reviewsCount = await Review
+				.query()
+				.where('room_id', params.id)
+				.with('user')
+				.getCount();
+
+			var reviews = reviewResults.toJSON();
+
+			// Adds new attribute - rating - to every room object
+			room.rating = await this.getAverageRating(room.id);
+
+			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review, reviewsCount });
 		} catch (error) {
+			console.log(error);
 			return response.redirect('/');
 		}
 	}
@@ -365,7 +375,7 @@ class RoomController {
 
 		// if user is admin
 		if (userRole === 'admin') {
-			return view.render('adminDash.viewRooms', { rooms, stats });
+			return view.render('adminPages.viewRooms', { rooms, stats });
 		} else {
 			return view.render('userPages.results', { rooms });
 		}
@@ -387,11 +397,12 @@ class RoomController {
 
 		const rooms = searchResults.toJSON();
 
-		return view.render('adminDash.viewRooms', { rooms });
+		return view.render('adminPages.viewRooms', { rooms });
 	}
 
 	async searchRecurring2 ({ request }) {
 		const options = request.all();
+		console.log(options);
 
 		// start date
 		const startDate = options.startDate;
@@ -399,21 +410,26 @@ class RoomController {
 		let recur = moment(startDate);
 		if (options.type === 'daily') {
 			recur = recur
+				.recur()
 				.every(options.dailyInterval)
 				.days();
 		} else if (options.type === 'monthly') {
 			recur = recur
+				.recur()
 				.daysOfMonth(options.dayOfMonth);
 		} else {
 			recur = recur
-				.daysOfWeek()
+				.recur()
+				.daysOfWeek(options.daysOfWeek);
 		}
+
+		console.log(recur.next(3));
 
 		return recur;
 	}
 
 	async searchRecurring ({ request }) {
-		console.log(Env.get('EXCHANGE_AGENT_SERVER', 'http://172.17.75.10:3000'))
+		console.log(Env.get('EXCHANGE_AGENT_SERVER', 'http://172.17.75.10:3000'));
 		const options = request.all();
 		console.log(options);
 

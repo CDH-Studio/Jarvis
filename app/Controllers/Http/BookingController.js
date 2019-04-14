@@ -7,6 +7,10 @@ const Env = use('Env');
 const graph = require('@microsoft/microsoft-graph-client');
 const axios = require('axios');
 
+// Used for time related calcuklations and formatting
+const moment = require('moment');
+require('moment-round');
+
 /**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
@@ -137,7 +141,7 @@ class BookingController {
 			url: `/user/${auth.user.id}/bookings`
 		});
 
-		return response.redirect('/booking');
+		return response.redirect('/userDash');
 	}
 
 	/**
@@ -158,12 +162,44 @@ class BookingController {
 		let searchResults = await Booking
 			.query()
 			.where('room_id', params.id)
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.orderBy('from', 'asc')
 			.fetch();
 
 		searchResults = searchResults.toJSON();
 		const bookings = await populateBookings(searchResults);
 
-		return view.render('userPages.manageBookings', { bookings, layoutType, canEdit });
+		// counts the number of approved bookings
+		let numberOfApprovedBookings = await Booking
+			.query()
+			.where('room_id', params.id)
+			.where('status', 'Approved')
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.getCount();
+
+		// calculate the number of bookings a room has this month
+		let numberOfBookingsThisMonth = await Booking
+			.query()
+			.where('room_id', params.id)
+			.where('status', 'Approved')
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
+			.fetch();
+
+		numberOfBookingsThisMonth = numberOfBookingsThisMonth.toJSON();
+
+		// Calculates the number of hours in bookings for this month
+		let numberOfHours = 0;
+		for (var i = 0; i < numberOfBookingsThisMonth.length; i++) {
+			let fromTime = moment(numberOfBookingsThisMonth[0].from);
+			let toTime = moment(numberOfBookingsThisMonth[0].to);
+			let duration = moment.duration(toTime.diff(fromTime));
+			numberOfHours += duration.asHours();
+		}
+
+		numberOfBookingsThisMonth = numberOfBookingsThisMonth.length;
+
+		return view.render('userPages.manageBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfHours, layoutType, canEdit });
 	}
 
 	/**
@@ -182,10 +218,48 @@ class BookingController {
 			canEdit = 1;
 		}
 
-		const results = (await Booking.query().where('user_id', params.id).fetch()).toJSON();
+		// retrieves the bookings
+		let results = await Booking
+			.query()
+			.where('user_id', params.id)
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.orderBy('from', 'asc')
+			.fetch();
+
+		results = results.toJSON();
 		const bookings = await populateBookings(results);
 
-		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });
+		// counts the number of approved bookings
+		let numberOfApprovedBookings = await Booking
+			.query()
+			.where('user_id', params.id)
+			.where('status', 'Approved')
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.getCount();
+
+		// calculate the number of bookings a room has this month
+		let numberOfBookingsThisMonth = await Booking
+			.query()
+			.where('user_id', params.id)
+			.where('status', 'Approved')
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
+			.fetch();
+
+		numberOfBookingsThisMonth = numberOfBookingsThisMonth.toJSON();
+
+		// Calculates the number of hours in bookings for this month
+		let numberOfHours = 0;
+		for (var i = 0; i < numberOfBookingsThisMonth.length; i++) {
+			let fromTime = moment(numberOfBookingsThisMonth[0].from);
+			let toTime = moment(numberOfBookingsThisMonth[0].to);
+			let duration = moment.duration(toTime.diff(fromTime));
+			numberOfHours += duration.asHours();
+		}
+
+		numberOfBookingsThisMonth = numberOfBookingsThisMonth.length;
+
+		return view.render('userPages.manageUserBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfHours, layoutType, canEdit });
 	}
 
 	/**
@@ -193,19 +267,25 @@ class BookingController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async cancelBooking ({ params, response, auth }) {
+	async cancelBooking ({ params, response, view }) {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
 		const room = (await Room.findBy('id', roomId)).toJSON();
 		const calendarId = room.calendar;
 		const floor = room.floor;
+		// const userId = booking.toJSON().user_id;
+		// const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
 		const eventId = booking.toJSON().event_id;
 
 		await this.deleteEvent(calendarId, eventId, floor);
 		booking.status = 'Cancelled';
 		await booking.save();
 
-		return response.redirect(`/user/${auth.user.id}/bookings`);
+		if (params.bookingType === 'user') {
+			return response.route('viewBookings', { id: userId });
+		} else {
+			return response.route('roomBookings', { id: roomId });
+		}
 	}
 
 	async getCalendarView (calendarId, start, end) {

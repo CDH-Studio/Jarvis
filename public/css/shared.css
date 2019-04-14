@@ -1,7 +1,23 @@
 /*  This file is for CSS changes that are used by both ADMIN and USER views */
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-/* IE Compatibilitie Changes */
+/* Accesibility Changes */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+body, .table{
+    color: #4D4D5B;
+    color: #4D4D5B;
+}
+/* links */
+a{
+    color: #466CDD;
+}
+
+.badge-success {
+    color: #fff;
+    background-color: #097AAE;
+}
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* IE Compatibility Changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 
 @media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {  
@@ -127,14 +143,13 @@
     color: #004680 !important;
 }
 
-.text-muted{
-    color:#cccccc !important;
+.text-muted, .text-grey{
+    color:#707070 !important;
 }
 
-.text-grey{
-    color:#707070 ;
+.text-danger{
+    color: #D9080B !important;
 }
-
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Navagation Changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
@@ -156,23 +171,6 @@
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Modal box changes */
 /*+++++++++++++++++++++++++++++++++++++++++++*/
-
-.modal.show .modal-dialog {
-    box-shadow: 0 2px 6px 0  rgba(110, 40, 40, 0.2);
-}
-
-/* centering modal boxes */
-.modal.show .modal-dialog {
-    -webkit-transform: translate(0,-50%);
-    -o-transform: translate(0,-50%);
-    transform: translate(0,-50%);
-    top: 50%;
-    margin: 0 auto;
-}
-
-.modal-header{
-    padding: 10px;
-}
 
 .modal-footer{
     padding: 10px;
@@ -376,7 +374,21 @@
     box-shadow: 0 2px 6px 0 #00000033 !important;
 }
 
+.btn-primary:hover, .btn-primary:active{
+    /* #0FACF3 old color */
+    background-color: #023258 !important;
+    box-shadow: 0 4px 8px 0 #00000033 !important;
+    
+}
+
 .btn-primary:hover:enabled, .btn-primary:active:enabled{
+    /* #0FACF3 old color */
+    background-color: #023258 !important;
+    box-shadow: 0 4px 8px 0 #00000033 !important;
+    
+}
+
+.btn-primary:hover:disabled, .btn-primary:active:disabled{
     /* #0FACF3 old color */
     background-color: #023258 !important;
     box-shadow: 0 4px 8px 0 #00000033 !important;
@@ -448,7 +460,7 @@
     color: #FFFFFF;
 }
 
-.room-card:hover #stars{
+.room-card:hover .stars{
     color: #FFFFFF;
 }
 
@@ -530,12 +542,19 @@
     display:inline-block;
     width:110px;
 }
+
 .spec-yes{
-    color:rgb(18, 201, 164);
+    color: #097AAE;
 }
+
 .spec-no{
+    color:#696969;
+}
+
+.spec-no-icon{
     color:#a1a1a1;
 }
+
 .spec-warning{
     color:#e04141;
 }
@@ -553,6 +572,10 @@
 .room-details-card{
     padding:0px !important;
     background-color: #FFFFFF;
+}
+
+.room-details-card .fa-star{
+    color: #FFD700;
 }
 
 .room-details-card-title{
@@ -595,11 +618,10 @@
 
 .room-details-image{
     /* min-width: 505px; */
-    min-height: 336px;
-    max-height: 336px;
+    max-width: 305px;
     max-width: 505px;
     width:100%;
-    height:100%;
+    height:auto;
 
 }
 
@@ -682,6 +704,16 @@
 @media (min-width: 20){
     .col-xxl-6 {
         background-color: #202428;
-
     }
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* General Card Component CSS */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+.custom-card-header{
+    background-image: linear-gradient(270deg, #145f9c 0%, rgb(12, 81, 138) 100%);
+}
+.custom-card-header h6{
+    color: white ;
+    font-weight: 400 !important;
 }

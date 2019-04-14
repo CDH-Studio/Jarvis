@@ -18,14 +18,13 @@ const Route = use('Route');
 
 Route.get('/', 'HomeController.home').as('home');
 Route.on('/welcome').render('welcome');
-Route.on('/sample').render('sample');
 
 //= ========================================================================
 // Auth
 //= ========================================================================
 
 // User Authentication
-Route.get('/register', 'UserController.registerRender').as('register');
+Route.get('/register', 'UserController.registerUserRender').as('registerUser');
 Route.post('/register', 'UserController.create').validator('CreateUser');
 
 // Admin Authentication
@@ -48,7 +47,8 @@ Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetReq
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
-Route.post('/user/:id/edit', 'UserController.update').as('saveUser').middleware(['auth']);
+Route.post('/user/:id/edit', 'UserController.update').as('saveUser').validator('EditUser').middleware(['isUser']);
+Route.post('/user/:id/editAdmin', 'UserController.update').as('saveAdmin').validator('EditAdmin').middleware(['isAdmin']);
 Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 
 //= ========================================================================
@@ -68,12 +68,10 @@ Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['au
 Route.get('/roomBookings/:id', 'BookingController.getRoomBookings').as('roomBookings').middleware(['auth']);
 
 Route.get('/room/:roomID/issues/:issueStatus', 'IssueController.getRoomIssues').as('showIssue').middleware(['isAdmin']);
-Route.get('/issue/:id', 'IssueController.getRoomIssues').as('showIssue').middleware(['isAdmin']);
 Route.get('/issue/:id/edit', 'IssueController.editIssue').as('editIssue').middleware(['isAdmin']);
 Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['isAdmin']).validator('EditIssue');
 
 // user
-Route.get('/addReview/:id', 'RoomController.renderReviewPage').as('ratingAndReview').middleware(['auth']);
 Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('AddReview').middleware(['isUser']);
 Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('AddReview').middleware(['isUser']);
 Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['isUser']);
@@ -84,12 +82,12 @@ Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(
 //= ========================================================================
 Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails').middleware(['auth']); // needs to be changed to get
 Route.get('/user/:id/bookings', 'BookingController.getUserBookings').as('viewBookings').middleware(['auth']);
-Route.get('/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth']);
+Route.post('/:bookingType/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth']);
 
 // Employee user pages
 // Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);
-Route.get('/booking', 'HomeController.userDashboard').as('booking').middleware(['isUser']);
 Route.get('/searchRooms/:view', 'RoomController.loadSearchRoomsForm').as('searchRooms').middleware(['isUser']);
+Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware(['isUser']);
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking').middleware(['isUser']);
 
 // Rendering Results

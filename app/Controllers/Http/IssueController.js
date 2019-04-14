@@ -39,7 +39,7 @@ class IssueController {
 		try {
 			// get the search form data if employee view
 			const issue = await Report.findOrFail(params.id);
-			return view.render('adminDash.editIssue', { id: params.id, issue });
+			return view.render('adminPages.editIssue', { id: params.id, issue });
 		} catch (error) {
 			return response.redirect('/');
 		}
@@ -50,7 +50,7 @@ class IssueController {
 	*
 	* @param {Object} Context The context object.
 	*/
-	async updateIssue ({ response, auth, params, view, request, session }) {
+	async updateIssue ({ response, params, request, session }) {
 		try {
 			const { issueType, comment, roomID, issueStatus } = request.only(['issueType', 'comment', 'roomID', 'userID', 'issueStatus']);
 			const date = new Date();
@@ -65,7 +65,7 @@ class IssueController {
 					updated_at: date
 				});
 			session.flash({ notification: 'Issue Updated!' });
-			return response.route('roomIssues', { id: roomID });
+			return response.route('showIssue', { roomID: roomID, issueStatus: 'all' });
 		} catch (error) {
 			return response.redirect('/');
 		}
@@ -149,7 +149,7 @@ class IssueController {
 			issues[i].created_at = currentTime.toLocaleDateString('de-DE', options);
 		}
 
-		return view.render('adminDash.viewRoomIssues', { roomID: params.roomID, roomName, issues, stats, filterType: params.issueStatus });
+		return view.render('adminPages.viewRoomIssues', { roomID: params.roomID, roomName, issues, stats, filterType: params.issueStatus });
 	}
 
 	/**

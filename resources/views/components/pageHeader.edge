@@ -1,7 +1,9 @@
 {{--  Main page header that takes in: title  --}}
 <div class='row page-title'>
     <div class='col-12 mb-3'>
-        <h4 style='letter-spacing: 1px;'><b>{{ title }}</b></h4>
-        <p style='letter-spacing: 1px;'>{{ subtitle }}</p>
+        <h4 style='letter-spacing: 1px;'><strong>{{ title }}</strong></h4>
+        @if(subtitle)
+            <p style='letter-spacing: 1px;'>{{ subtitle }}</p>
+        @endif
     </div>
 </div>

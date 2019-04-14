@@ -50,7 +50,7 @@ class HomeController {
 			if (userRole === 'admin') {
 				return response.route('adminDash', { auth });
 			} else {
-				return response.route('booking', { auth });
+				return response.route('userDash', { auth });
 			}
 		} catch (error) {
 			return response.route('login');
@@ -70,7 +70,7 @@ class HomeController {
 		const upcomming = await this.getUpcomming({ auth });
 		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
-		return view.render('userPages.booking', { code, freqRooms, upcomming, userId, fromTime: searchValues.fromTime, toTime: searchValues.toTime, dropdownSelection: searchValues.dropdownSelection });
+		return view.render('userPages.userDash', { code, freqRooms, upcomming, userId, fromTime: searchValues.fromTime, toTime: searchValues.toTime, dropdownSelection: searchValues.dropdownSelection });
 	}
 
 	/**
@@ -90,7 +90,7 @@ class HomeController {
 		const topFiveRooms = await this.getRoomPopularity();
 		const highestRatedRooms = await this.getRoomRatings();
 
-		return view.render('adminDash', { userStats: userStats, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
+		return view.render('adminPages.adminDash', { userStats: userStats, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
 	}
 
 	/****************************************
@@ -106,33 +106,27 @@ class HomeController {
 	*/
 	async getUserStats () {
 		// retrieves all the users form the database
-		const results = await User.all();
-		const allUsers = results.toJSON();
+		const allUsers = await User.getCount();
+		// const allUsers = results.toJSON();
 
 		// initialize the moment.js object to act as our date
 		const date = moment();
 
 		// queries the users table to retrieve the users for the current and previous month
-		let users = await User
+		let usersRegisteredThisMonth = await User
 			.query()
 			.whereRaw("strftime('%Y-%m', created_at) = ?", [date.format('YYYY-MM')]) // eslint-disable-line
-			.count();
+			.getCount();
 
-		let usersRegisteredThisMonth = (users[0]['count(*)']);
-		let usersRegisteredBeforeThisMonth = allUsers.length - usersRegisteredThisMonth;
+		// let usersRegisteredThisMonth = users;
+		let usersRegisteredBeforeThisMonth = allUsers - usersRegisteredThisMonth;
 
 		var stats = {};
-		stats['numberOfUsers'] = allUsers.length;
+		stats['numberOfUsers'] = allUsers;
 		stats['haveUsersIncreased'] = true;
 
-		if (usersRegisteredBeforeThisMonth > allUsers.length) {
-			let differenceInUsers = usersRegisteredBeforeThisMonth - allUsers.length;
-
-			stats['increaseOfUsers'] = Math.round((differenceInUsers / allUsers.length) * 100);
-			stats['haveUsersIncreased'] = false;
-		} else {
-			stats['increaseOfUsers'] = Math.round((usersRegisteredThisMonth / usersRegisteredBeforeThisMonth) * 100);
-		}
+		let differenceInUsers = usersRegisteredThisMonth - usersRegisteredBeforeThisMonth;
+		stats['increaseOfUsers'] = Math.round((differenceInUsers / allUsers) * 100);
 
 		// return the number of users and pourcentage of the increase of users from last month to the current one
 		return stats;
@@ -375,12 +369,14 @@ class HomeController {
 			.fetch();
 		const rooms = searchResults.toJSON();
 
+		const now = moment();
+		const remainder = 30 - (now.minute() % 30);
 		const date = moment().format('YYYY-MM-DD');
-		const from = moment().startOf('h').format('HH:mm');
-		const to = moment().startOf('h').add(2, 'h').format('HH:mm');
+		const from = moment(now).add(remainder, 'm').format('HH:mm');
+		const to = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
 		const formattedDate = moment().format('dddd, MMMM DD, YYYY');
-		const formattedFrom = moment().startOf('h').format('HH:mm A');
-		const formattedTo = moment().startOf('h').add(2, 'h').format('HH:mm A');
+		const formattedFrom = moment(now).add(remainder, 'm').format('HH:mm A');
+		const formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm A');
 
 		const code = random(4);
 		const checkRoomAvailability = async () => {
@@ -403,7 +399,7 @@ class HomeController {
 			}
 		};
 
-		setTimeout(checkRoomAvailability, 500);
+		setTimeout(checkRoomAvailability, 800);
 		return code;
 	}
 
@@ -494,22 +490,15 @@ class HomeController {
 	*/
 	async loadSearchRoomsForm ({ view, auth }) {
 		// Calculates the from and too times to pre fill in the search form
-		const currentTime = new Date();
-		const currentHour = currentTime.getHours();
-		const currentMinutes = currentTime.getMinutes();
-		let fromTime;
-		let toTime;
+		let fromTime = moment();
+		let toTime = moment();
 		let dropdownSelection = [];
 		const start = moment().startOf('day');
 		const end = moment().endOf('day');
 
-		if (currentMinutes <= 30) {
-			fromTime = currentHour + ':30';
-			toTime = currentHour + 1 + ':30';
-		} else {
-			fromTime = currentHour + 1 + ':00';
-			toTime = currentHour + 2 + ':00';
-		}
+		// round the autofill start and end times to the nearest 30mins
+		fromTime = fromTime.round(30, 'minutes').format('HH:mm');
+		toTime = toTime.round(30, 'minutes').add(1, 'h').format('HH:mm');
 
 		// loop to fill the dropdown times
 		while (start.isBefore(end)) {
@@ -533,7 +522,8 @@ class HomeController {
 		let searchResults = await Booking
 			.query()
 			.where('user_id', auth.user.id)
-			.whereRaw("bookings.'from' >= date('now')") // eslint-disable-line
+			.where('status', 'Approved')
+			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.select('*')
 			.orderBy('from', 'asc')
 			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')

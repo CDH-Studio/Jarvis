@@ -4,9 +4,6 @@
     Jarvis
 @endsection
 
-@section('extrajs')
-@endsection
-
 @section('content')
 
     <div class='row'>
@@ -29,8 +26,10 @@
                             </div>
                             <div class='row' style='font-size:13px'>
                                 <div class='col text-center'>
-                                    @if(userStats['haveUsersIncreased'])
+                                    @if(userStats['increaseOfUsers']>0)
                                         <div class='color-success' style='display:inline'><i class='fas fa-caret-up'></i> {{ userStats['increaseOfUsers'] }}% </div>From last month
+                                    @elseif(userStats['increaseOfUsers']==0)
+                                        <div class='color-secondary' style='display:inline'>{{ userStats['increaseOfUsers'] }}% </div>From last month
                                     @else
                                         <div class='color-danger' style='display:inline'><i class='fas fa-caret-down'></i> {{ userStats['increaseOfUsers'] }}% </div>From last month
                                     @endif
@@ -139,34 +138,14 @@
                             @each(room in highestRatedRooms) 
                                 @component('components.smallCard', room=room)
                                     @slot('body')
-                                    <div>
-                                        @if(room.avgRating == 1)
-                                            <div>
-                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
-                                            </div> 
-                                        @elseif(room.avgRating == 2)
-                                            <div>
-                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
-                                            </div> 
-                                        @elseif(room.avgRating == 3)
-                                            <div>
-                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
-                                            </div> 
-                                        @elseif(room.avgRating == 4)
-                                            <div>
-                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='far fa-star fa-sm mr-1'></i>
-                                            </div> 
-                                        @elseif(room.avgRating == 5) 
-                                            <div>
-                                                <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> <i class='fas fa-star fa-sm mr-1'></i> 
-                                            </div> 
-                                        @endif
+                                    <div class='mb-2'>
+                                        @!component('components.stars', rating = room.avgRating)
                                     </div>
                                     <div>
                                         @if(room.totalReviews == 1)
-                                            <h6 class='col no-margin'>{{ room.totalReviews }} Review</h2>
+                                            <i style="font-size: 0.9rem;">{{ room.totalReviews }} Review</i>
                                         @else
-                                            <h6 class='col no-margin'>{{ room.totalReviews }} Reviews</h2>
+                                            <i style="font-size: 0.9rem;">{{ room.totalReviews }} Reviews</i>
                                         @endif
                                     </div>
                                     @endslot
@@ -188,6 +167,10 @@
         </script>
     @endif
 
+
+@endsection
+
+@section('extrajs')
     {{--  Scrip tag responsible for the bookings time chart  --}}
     <script>
             // Set new default font family and font color to mimic Bootstrap's default styling
@@ -220,10 +203,8 @@
                     },
                 },
             });
-    </script>
 
     {{--  Scrip tag responsible for the Room Statuses chart  --}}
-    <script>
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';
@@ -236,7 +217,7 @@
                 labels: ["Active", "Maintenance", "Deactived"],
                 datasets: [{
                     data: [ {{ roomStatusStats['active'] }}, {{ roomStatusStats['maintenance'] }}, {{ roomStatusStats['deactive'] }} ],
-                    backgroundColor: ['#004680', '#3B67A5', '#B4D7FF'],
+                    backgroundColor: ['#18bc9c', '#f39c12', '#e74c3c'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
                 }],
             },
@@ -258,10 +239,8 @@
                 cutoutPercentage: 80
             },
         });
-    </script>
 
     {{--  Scrip tag responsible for the Room Issues chart  --}}
-    <script>
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';
@@ -274,7 +253,7 @@
                 labels: ["Open", "Pending", "Closed"],
                 datasets: [{
                     data: [ {{ roomIssueStats['pending'] }}, {{ roomIssueStats['underReview'] }}, {{ roomIssueStats['resolved'] }} ],
-                    backgroundColor: ['#004680', '#3B67A5', '#B4D7FF'],
+                    backgroundColor: ['#18bc9c', '#f39c12', '#e74c3c'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
                 }],
             },
@@ -296,10 +275,9 @@
                 cutoutPercentage: 80
             },
         });
-    </script>
+
 
     {{--  Scrip tag responsible for the Room Popularity chart  --}}
-    <script>
         // Set new default font family and font color to mimic Bootstrap's default styling
         Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
         Chart.defaults.global.defaultFontColor = '#858796';
