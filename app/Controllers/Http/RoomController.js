@@ -90,6 +90,13 @@ async function populateBookings (results) {
 	return bookings;
 }
 
+// iterate through the rooms
+async function asyncForEach (arr, callback) {
+	for (let i = 0; i < arr.length; i++) {
+		await callback(arr[i], i, arr);
+	}
+}
+
 class RoomController {
 	/**
 	*
@@ -402,9 +409,28 @@ class RoomController {
 
 	async findAvailableResults ({ request }) {
 		const options = request.all();
+		const rooms = (await this.filterRooms(options)).toJSON();
+
+		let results = {};
+		const findAvailable = async () => {
+			await asyncForEach(rooms, async (item) => {
+				const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/findAvail`, {
+					room: item.calendar,
+					floor: item.floor,
+					duration: options.hour * 60 + options.minute,
+					start: moment(options.date).format('YYYY-MM-DDTHH:mm'),
+					end: moment(options.date).add(24, 'hour').format('YYYY-MM-DDTHH:mm')
+				});
+
+				results[item.name] = res.data.times;
+			});
+		};
+
+		await findAvailable();
+
 		console.log(options);
 
-		return options;
+		return results;
 	}
 
 	async searchRecurring2 ({ request }) {
@@ -496,59 +522,9 @@ class RoomController {
 	async getSearchRooms ({ request, view }) {
 		// importing forms from search form
 		const form = request.all();
-		const date = form.date;
-		const from = form.from;
-		const to = form.to;
-		const location = form.location;
-		const seats = form.seats;
-		const capacity = form.capacity;
-		// check boxes input
-		let checkBox = [{ checkName: 'projector', checkValue: form.projectorCheck },
-			{ checkName: 'whiteboard', checkValue: form.whiteboardCheck },
-			{ checkName: 'flipchart', checkValue: form.flipChartCheck },
-			{ checkName: 'audioConference', checkValue: form.audioCheck },
-			{ checkName: 'videoConference', checkValue: form.videoCheck },
-			{ checkName: 'surfaceHub', checkValue: form.surfaceHubCheck },
-			{ checkName: 'pc', checkValue: form.pcCheck }
-		];
-		// only loook for roosm that are open
-		let searchResults = Room
-			.query()
-			.where('state', 1)
-			.clone();
 
-		// if the location is selected then query, else dont
-		if (location !== 'undefined') {
-			searchResults = searchResults
-				.where('floor', location)
-				.clone();
-		}
-		// if the "number of seats" is selected then add to query, else ignore it
-		if (seats) {
-			searchResults = searchResults
-				.where('seats', '>=', seats)
-				.clone();
-		}
 
-		// if the "number of people" is selected then add to query, else ignore it
-		if (capacity) {
-			searchResults = searchResults
-				.where('capacity', '>=', capacity)
-				.clone();
-		}
-
-		// loop through the array of objects and add to query if checked
-		for (let i = 0; i < checkBox.length; i++) {
-			if (checkBox[i].checkValue === '1') {
-				searchResults = searchResults
-					.where(checkBox[i].checkName, checkBox[i].checkValue)
-					.clone();
-			}
-		}
-		// fetch the query
-		searchResults = await searchResults.fetch();
-
-		let rooms = searchResults.toJSON();
+		let rooms = (await this.filterRooms(form)).toJSON();
 
 		// Sets average rating for each room
 		for (var i = 0; i < rooms.length; i++) {
@@ -556,13 +532,9 @@ class RoomController {
 			rooms[i].rating = await this.getAverageRating(rooms[i].id);
 		}
 
-		// iterate through the rooms
-		async function asyncForEach (arr, callback) {
-			for (let i = 0; i < arr.length; i++) {
-				await callback(arr[i], i, arr);
-			}
-		}
-
+		const date = form.date;
+		const from = form.from;
+		const to = form.to;
 		const code = random(4);
 		const checkRoomAvailability = async () => {
 			let results = [];
@@ -602,8 +574,57 @@ class RoomController {
 		return view.render('userPages.searchResults', { code: code });
 	}
 
-	async filterRooms () {
-		
+	async filterRooms (options) {
+		const location = options.location;
+		const seats = options.seats;
+		const capacity = options.capacity;
+		// check boxes input
+		let checkBox = [{ checkName: 'projector', checkValue: options.projectorCheck },
+			{ checkName: 'whiteboard', checkValue: options.whiteboardCheck },
+			{ checkName: 'flipchart', checkValue: options.flipChartCheck },
+			{ checkName: 'audioConference', checkValue: options.audioCheck },
+			{ checkName: 'videoConference', checkValue: options.videoCheck },
+			{ checkName: 'surfaceHub', checkValue: options.surfaceHubCheck },
+			{ checkName: 'pc', checkValue: options.pcCheck }
+		];
+		// only loook for roosm that are open
+		let searchResults = Room
+			.query()
+			.where('state', 1)
+			.clone();
+
+		// if the location is selected then query, else dont
+		if (location !== 'undefined') {
+			searchResults = searchResults
+				.where('floor', location)
+				.clone();
+		}
+		// if the "number of seats" is selected then add to query, else ignore it
+		if (seats) {
+			searchResults = searchResults
+				.where('seats', '>=', seats)
+				.clone();
+		}
+
+		// if the "number of people" is selected then add to query, else ignore it
+		if (capacity) {
+			searchResults = searchResults
+				.where('capacity', '>=', capacity)
+				.clone();
+		}
+
+		// loop through the array of objects and add to query if checked
+		for (let i = 0; i < checkBox.length; i++) {
+			if (checkBox[i].checkValue === '1') {
+				searchResults = searchResults
+					.where(checkBox[i].checkName, checkBox[i].checkValue)
+					.clone();
+			}
+		}
+
+		// fetch the query
+		searchResults = await searchResults.fetch();
+		return searchResults;
 	}
 
 	/**
