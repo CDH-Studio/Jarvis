@@ -363,9 +363,9 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     @if(!hasReview) 
-                        <h5 class="m-0 font-weight-bold text-primary">Write a Review</h5>
+                        <h5 class="m-0 font-weight-bold text-primary">Write a review</h5>
                     @else
-                        <h5 class="m-0 font-weight-bold text-primary">Edit Review</h5>
+                        <h5 class="m-0 font-weight-bold text-primary">Edit review</h5>
                     @endif
                 </div>
                 <div class="card-body">
@@ -390,7 +390,7 @@
                                     @else
                                         <select class='form-control' name='rating' id='rating' onchange='removeErrorClass("rating")'>
                                     @endif
-                                            <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Rating</option>
+                                            <option value='undefined' {{ old('rating', room.rating) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a rating</option>
                                             <option value='1' {{ old('rating', review.rating) == '1' ? 'selected' : '' }}>1</option>
                                             <option value='2' {{ old('rating', review.rating) == '2' ? 'selected' : '' }}>2</option>
                                             <option value='3' {{ old('rating', review.rating) == '3' ? 'selected' : '' }}>3</option>
@@ -424,7 +424,7 @@
                                             @else
                                                 <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
                                             @endif
-                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose File</label>
+                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose file</label>
                                             @if(!hasReview) 
                                                 <small id="reviewPictureHelp" class="form-text text-muted">Image cannot be edited after upload. It can only be deleted.</small>
                                             @else
@@ -568,12 +568,12 @@
 
     {{--  Script to display file name on upload  --}}
     <script>
-        $('#reviewPicture').on('change',function(){
-            var fileName = $(this).val().substring(0,15)+"...";
+        $('#reviewPicture').change(function(e){
+            var fileName = e.target.files[0].name;
             $('#reviewPictureLabel').html(fileName);
         });
     </script>
-
+    
     {{--  Remove the is-invalid class when input changes  --}}
     <script>
         function removeErrorClass(idOfInput){
