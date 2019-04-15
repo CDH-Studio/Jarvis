@@ -29,38 +29,21 @@
                         <div class='row'>
                             <div class='col form-group mb-4'>
                                 <div class='row'>
-                                    <label class='col' for='date'>From <b class='text-danger'>*</b></label>
+                                    <label class='col' for='date'>Date <b class='text-danger'>*</b></label>
                                     <div class='col text-right'>
                                         <i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='Some tip'></i>
                                     </div>
                                 </div>
                                 {{--  If field is not filled correctly show an error box  --}}
                                 @if(hasErrorFor('date'))
-                                    <input name='startDate' id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
+                                    <input name='date' id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
                                     <div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
                                 {{--  Otherwise show a normal input  --}}
                                 @else
-                                    <input name='startDate' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
-                                @endif
-                            </div>
-                            <div class='col form-group mb-4'>
-                                <div class='row end-by'>
-                                    <label class='col' for='date'>To <b class='text-danger'>*</b></label>
-                                    <div class='col text-right'>
-                                        <i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
-                                    </div>
-                                </div>
-                                {{--  If field is not filled correctly show an error box  --}}
-                                @if(hasErrorFor('endDate'))
-                                    <input name='endDate' id='endDate' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
-                                    <div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
-                                {{--  Otherwise show a normal input  --}}
-                                @else
-                                    <input name='endDate' id='endDate' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
+                                    <input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
                                 @endif
                             </div>
                         </div>
-
                         {{--  Meeting time from  --}}
                         <div class='row'>
                             <div class='col form-group mb-4'>

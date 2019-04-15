@@ -400,8 +400,11 @@ class RoomController {
 		return view.render('adminPages.viewRooms', { rooms });
 	}
 
-	async findAvailableResults({ request }) {
-		
+	async findAvailableResults ({ request }) {
+		const options = request.all();
+		console.log(options);
+
+		return options;
 	}
 
 	async searchRecurring2 ({ request }) {
@@ -597,6 +600,10 @@ class RoomController {
 		});
 
 		return view.render('userPages.searchResults', { code: code });
+	}
+
+	async filterRooms () {
+		
 	}
 
 	/**
