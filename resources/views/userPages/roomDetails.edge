@@ -581,21 +581,13 @@
         }
     </script>
 
-
     {{--  If the report validations fails display this modal  --}}
-    @if(hasErrorFor('issueType'))
+    @if(hasErrorFor('issueType') || hasErrorFor('comment'))
         <script>
             $(window).on('load',function(){
                 $('#reportModal').modal('show');
             });
         </script>
-    @elseif(hasErrorFor('comment'))
-        <script>
-            $(window).on('load',function(){
-                $('#reportModal').modal('show');
-            });
-        </script>
-    {{--  If the review validations fails display this modal  --}}
     @endif
 
     {{--  Displays "Room Added/Updated!" success message  --}}
