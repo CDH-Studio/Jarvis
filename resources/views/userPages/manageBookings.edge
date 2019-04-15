@@ -124,13 +124,23 @@
 														</button>
 													</div>
 													<div class='modal-body'>Are you sure you want to cancel your booking?</div>
-													<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'room'}) }}' method='POST' enctype='multipart/form-data'>
-														{{ csrfField() }}
-														<div class='modal-footer'>
-															<button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
-															<button type='submit' class='btn btn-danger'>Yes</button>
-														</div>                    
-													</form>
+													@if(bookingsType == 'userBookings')
+														<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'user'}) }}' method='POST' enctype='multipart/form-data'>
+															{{ csrfField() }}
+															<div class='modal-footer'>
+																<button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+																<button type='submit' class='btn btn-danger'>Yes</button>
+															</div>                    
+														</form>													
+													@else
+														<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'room'}) }}' method='POST' enctype='multipart/form-data'>
+															{{ csrfField() }}
+															<div class='modal-footer'>
+																<button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+																<button type='submit' class='btn btn-danger'>Yes</button>
+															</div>                    
+														</form>													
+													@endif
 												</div>
 											</div>
 										</div>
