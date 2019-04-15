@@ -13,7 +13,6 @@ class CreateUser {
 
 	// Validation rules
 	get rules () {
-
 		return {
 			/**
 			 * Validation Rules
