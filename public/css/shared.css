@@ -620,13 +620,51 @@ a{
 
 .room-details-image{
     /* min-width: 505px; */
-    max-width: 305px;
-    max-width: 505px;
+    max-height: 305px;
+    max-width: 420px;
     width:100%;
     height:auto;
-
 }
 
+#room-details-stars{
+    margin-left:0px;
+    text-align: center;
+}
+
+#body-header{
+    margin-top: 8px;
+    text-align: center;
+}
+
+.room-content-row{
+    margin: 8px 0;
+    text-align: center;
+}
+
+@media(min-width: 600px){
+    #room-details-stars{
+    text-align: left;
+    }
+
+}
+@media(min-width: 1574px){
+    .room-details-image{
+        margin-right: 20px;
+    }
+
+    #room-details-stars{
+        text-align: right;
+    }
+
+    #body-header{
+        margin: 0;
+        text-align: left;
+    }
+
+    .room-content-row{
+        text-align: left;
+    }
+}
 .room-confirm-image{
     min-width: 448px;
     min-height: 336px;
