@@ -28,7 +28,7 @@ View Rooms
                             <i class='md-auto no-padding color-info card-icon far fa-flag fa-2x'></i>
                             <div class='md-auto flex-item no-padding text-left stats-card-content' style='padding-left:15px;'>
                                 <div class='row'>
-                                    <h2 class='col no-margin'><b>{{ stats['total'] }}</b></h2>
+                                    <h2 class='col no-margin'><strong>{{ stats['total'] }}</strong></h2>
                                 </div>
                                 <div class='row'>
                                     <h5 class='col text-grey'>Total Rooms</h5>
@@ -44,7 +44,7 @@ View Rooms
                             <i class='d-inline-flex no-padding color-success card-icon fas fa-door-open fa-2x'></i>
                             <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                 <div class='row'>
-                                    <h2 class='col no-margin'><b>{{ stats['active'] }}</b></h2>
+                                    <h2 class='col no-margin'><strong>{{ stats['active'] }}</strong></h2>
                                 </div>
                                 <div class='row'>
                                     <h5 class='col text-grey'>Active</h5>
@@ -60,7 +60,7 @@ View Rooms
                             <i class='d-inline-flex no-padding color-warning card-icon fas fa-wrench fa-2x'></i>
                             <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                 <div class='row'>
-                                    <h2 class='col no-margin'><b>{{ stats['maintenance'] }}</b></h2>
+                                    <h2 class='col no-margin'><strong>{{ stats['maintenance'] }}</strong></h2>
                                 </div>
                                 <div class='row'>
                                     <h5 class='col text-grey'>Maintenance</h5>
@@ -76,7 +76,7 @@ View Rooms
                             <i class='d-inline-flex no-padding color-danger card-icon fas fa-door-closed fa-2x'></i>
                             <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                 <div class='row'>
-                                    <h2 class='col no-margin'><b>{{ stats['deactive'] }}</b></h2>
+                                    <h2 class='col no-margin'><strong>{{ stats['deactive'] }}</strong></h2>
                                 </div>
                                 <div class='row'>
                                     <h5 class='col text-grey'>Deactivated</h5>
@@ -88,10 +88,10 @@ View Rooms
             </div>
             <div class="card shadow mt-4 mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">All Rooms</h6>
+                    <h6 class="m-0 font-weight-bold text-primary" id='all-rooms'>All Rooms</h6>
                 </div>
                 <div class="card-body">
-                    <div class='table table-responsive'>
+                    <div class='table table-responsive' aria-describedby='all-rooms'>
                         <table id='roomsTable' class='table table-hover' style='width:100%;'>
                             <thead>
                                 <tr>
@@ -101,13 +101,13 @@ View Rooms
                                     <th scope='col' class='text-center' style='width:10%'>Floor</th>
                                     <th scope='col' class='text-center' style='width:10%'>Tower</th>
                                     <th scope='col' class='text-center' style='width:10%'>Capacity</th>
-                                    <th scope='col' class='text-center' style='width:15%'>Room Status</th>
+                                    <th scope='col' class='text-center' style='width:10%'>Room Status</th>
                                 </tr>
                             </thead>
                             {{--  Loops through the rooms array and displays every room's content  --}}
                             <tbody>
                                 @each(room in rooms) 
-                                    <tr class='table-light row-hover' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
+                                    <tr class='table-light row-hover' aria-label='{{ room.name }} content' onclick="window.location='{{ route('showRoom', { id: room.id }) }}';">
                                         <td class='text-center'>{{ room.name }}</td>
                                         <td class='text-center'>{{ room.fullName }}</td>
                                         <td class='text-center'>{{ room.telephone }}</td>
@@ -115,11 +115,11 @@ View Rooms
                                         <td class='text-center'>{{ room.tower }} </td>
                                         <td class='text-center'>{{ room.capacity }}</td>
                                         @if(room.state == 1)
-                                            <td class='text-center td-{{ room.state }}'>Active</td>
+                                            <td class='text-'><i class="fas fa-circle td-success fa-xs mr-1"></i> Active</span></td>
                                         @elseif(room.state == 2)
-                                            <td class='text-center td-{{ room.state }}'>Deactive</td>
+                                            <td class='text-'><i class="fas fa-circle td-danger fa-xs mr-1"></i> Deactivated</span></td>
                                         @else
-                                            <td class='text-center td-{{ room.state }}'>Under Maintenance</td>
+                                            <td class='text-'><i class="fas fa-circle td-warning fa-xs mr-1"></i> Maintenance</span></td>
                                         @endif 
                                     </tr>
                                 @endeach
