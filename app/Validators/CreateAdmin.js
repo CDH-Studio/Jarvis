@@ -32,7 +32,7 @@ class CreateAdmin {
 			email: 'required|email|unique:users',
 			firstname: 'required|max:50',
 			lastname: 'required|max:50',
-			password:"required", // eslint-disable-line
+			password:"required|regexPassword", // eslint-disable-line
 			// regex: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$
 			token: `required|equals:${secretToken}`
 		};

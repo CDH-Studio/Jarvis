@@ -33,6 +33,7 @@ class CustomValidationProvider extends ServiceProvider {
 		Validator.extend('isAfterToday', this._isAfterToday, '');
 		Validator.extend('isWithinRange', this._isWithinRange, '');
 		Validator.extend('requiredDropdown', this._requiredDropdown, '');
+		Validator.extend('regexPassword', this._regexPassword, '');
 	}
 
 	/* Validate if time ends in 00 or 30
@@ -125,6 +126,18 @@ class CustomValidationProvider extends ServiceProvider {
 	*/
 	async _requiredDropdown (data, field, message, args, get) {
 		const userSelection = get(data, field);
+		if (userSelection === 'undefined') {
+			throw message;
+		}
+	}
+
+	/* Validate to check if {{ field }} dropdown is selected on "Select a ___", if so throw message
+	*
+	* @usage requiredDropdown
+	*/
+	async _regexPassword (data, field, message, args, get) {
+		const userSelection = get(data, field);
+		console.log(userSelection);
 		if (userSelection === 'undefined') {
 			throw message;
 		}
