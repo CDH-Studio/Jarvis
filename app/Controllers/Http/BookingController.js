@@ -150,19 +150,16 @@ class BookingController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getRoomBookings ({ params, view, auth, response }) {
-		var canEdit = 0;
-		var layoutType;
+	async getBookings ({ params, view, auth }) {
 		const userRole = await auth.user.getUserRole();
-
-		if (auth.user.id === Number(params.id) || userRole === 'admin') {
-			canEdit = 1;
-		}
+		var canEdit = (auth.user.id === Number(params.id) || userRole === 'admin') ? 1 : 0;
+		var idType = (params.bookingType === 'user') ? 'user_id' : 'room_id';
+		var bookingsType = (idType === 'user_id') ? 'userBookings' : 'roomBookings';
 
 		// Queries the database fr the bookings associated to a specific room
 		let searchResults = await Booking
 			.query()
-			.where('room_id', params.id)
+			.where(idType, params.id)
 			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.orderBy('from', 'asc')
 			.fetch();
@@ -173,15 +170,19 @@ class BookingController {
 		// counts the number of approved bookings
 		let numberOfApprovedBookings = await Booking
 			.query()
-			.where('room_id', params.id)
+			.where(idType, params.id)
 			.where('status', 'Approved')
 			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.getCount();
 
+		if (numberOfApprovedBookings === 0) {
+			numberOfApprovedBookings = '0';
+		}
+
 		// calculate the number of bookings a room has this month
 		let numberOfBookingsThisMonth = await Booking
 			.query()
-			.where('room_id', params.id)
+			.where(idType, params.id)
 			.where('status', 'Approved')
 			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
@@ -198,69 +199,17 @@ class BookingController {
 			numberOfHours += duration.asHours();
 		}
 
-		numberOfBookingsThisMonth = numberOfBookingsThisMonth.length;
-
-		return view.render('userPages.manageBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfHours, layoutType, canEdit });
-	}
-
-	/**
-	 * Create a list of all bookings under the current user and render a view for it.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async getUserBookings ({ params, auth, view, response }) {
-		var canEdit = 0;
-		var layoutType = '';
-		const userRole = await auth.user.getUserRole();
-
-		// check if user is viewing their own profile
-		if (auth.user.id === Number(params.id) || userRole === 'admin') {
-			layoutType = 'layouts/mainLayout';
-			canEdit = 1;
+		if (numberOfHours === 0) {
+			numberOfHours = '0';
 		}
 
-		// retrieves the bookings
-		let results = await Booking
-			.query()
-			.where('user_id', params.id)
-			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
-			.orderBy('from', 'asc')
-			.fetch();
-
-		results = results.toJSON();
-		const bookings = await populateBookings(results);
-
-		// counts the number of approved bookings
-		let numberOfApprovedBookings = await Booking
-			.query()
-			.where('user_id', params.id)
-			.where('status', 'Approved')
-			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
-			.getCount();
-
-		// calculate the number of bookings a room has this month
-		let numberOfBookingsThisMonth = await Booking
-			.query()
-			.where('user_id', params.id)
-			.where('status', 'Approved')
-			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
-			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
-			.fetch();
-
-		numberOfBookingsThisMonth = numberOfBookingsThisMonth.toJSON();
-
-		// Calculates the number of hours in bookings for this month
-		let numberOfHours = 0;
-		for (var i = 0; i < numberOfBookingsThisMonth.length; i++) {
-			let fromTime = moment(numberOfBookingsThisMonth[0].from);
-			let toTime = moment(numberOfBookingsThisMonth[0].to);
-			let duration = moment.duration(toTime.diff(fromTime));
-			numberOfHours += duration.asHours();
+		if (numberOfBookingsThisMonth.length === 0) {
+			numberOfBookingsThisMonth = '0';
+		} else {
+			numberOfBookingsThisMonth = numberOfBookingsThisMonth.length;
 		}
 
-		numberOfBookingsThisMonth = numberOfBookingsThisMonth.length;
-
-		return view.render('userPages.manageUserBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfHours, layoutType, canEdit });
+		return view.render('userPages.manageBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfHours, bookingsType, canEdit });
 	}
 
 	/**
