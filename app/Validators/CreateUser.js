@@ -41,7 +41,7 @@ class CreateUser {
 		return {
 			'email': 'Please enter a valid e-mail address (somebody@example.com)',
 			'max': 'Please limit input to 50 characters.',
-			'regexPassword': 'Your password must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character and be a least 8 Characters.',
+			'regexPassword': 'Your password must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character and be at least 8 Characters.',
 			'required': 'This field is required.',
 			'requiredDropdown': 'This field is required.',
 			'same': 'Passwords do not match',
