@@ -91,8 +91,7 @@
                             </div>
                             <div class="row room-content-row">
                                 <div class="col no-padding">
-                                    @if(room.comment == " ")
-                                    @else
+                                    @if(room.comment != " " && room.comment)
                                         <div class=""><strong>Comments:</strong> {{ room.comment }}</div>
                                     @endif
                                 </div>
@@ -153,7 +152,7 @@
                     <h5 class="m-0 font-weight-bold text-primary">Book room</h5>
                 </div>
                 <div class="card-body" style="height:100%;">
-                    @if(!isAdmin || room.state != 1)
+                    @if(!isAdmin && room.state == 1)
                         <form action='{{ route('confirmBooking') }}' method='POST'  style="min-height:334px;">
                             {{ csrfField() }}
                             <input type='hidden' name='room' value={{ room.id }} /> 
@@ -317,11 +316,11 @@
         </div>
     </div>
 
-    <h5 class="mt-3 mb-3"><strong>Reviews</strong></h5>
+    <h4 class="mt-4 mb-3"><strong>Reviews</strong></h4>
 
     <div class="row">
         <div class='col-12 col-lg-8'>
-            <div class="card shadow mb-4">
+            <div class="reviews-card card shadow mb-4">
                 <div class="card-body">
                     
                     @if(reviews.length == 0)             
@@ -330,18 +329,24 @@
                         {{--  Loops through the rooms array and displays every room's content  --}}
                         @each(review in reviews)
                             <div class="row">
-                                <div class="col-8">
-                                    <strong>{{ review.user.firstname }} {{ review.user.lastname }}</strong> </br>
-                                    <i>{{review.user.email}}</i><br>
+                                <div class="col">
+                                    <div class="row mb-2">
+                                        <div class="col">
+                                            <strong>{{ review.user.firstname }} {{ review.user.lastname }}</strong>
+                                            <i class='ml-2'>({{review.user.email}})</i>
+                                        </div>
+                                    </div>
                                     @!component('components/stars', rating=review.rating)
-                                    </br>
-                                    {{ review.review }}      
+                                    <br>
+                                    <div>
+                                        {{ review.review }} 
+                                    </div>    
                                 </div>
-                                <div class="col-4 text-center">
-                                    @if(review.reviewPicture)
+                                @if(review.reviewPicture)
+                                    <div class="col-4 text-center">
                                         <img class="shadow"style ="width:80%; max-height: 150px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}} alt="{{ review.user.firstname }} {{ review.user.lastname }}'s review picture">
-                                    @endif
-                                </div>
+                                    </div>
+                                @endif
                             </div> 
                             <hr>
                         @endeach
@@ -358,9 +363,9 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     @if(!hasReview) 
-                        <h6 class="m-0 font-weight-bold text-primary">Write a Review</h6>
+                        <h5 class="m-0 font-weight-bold text-primary">Write a Review</h5>
                     @else
-                        <h6 class="m-0 font-weight-bold text-primary">Edit Review</h6>
+                        <h5 class="m-0 font-weight-bold text-primary">Edit Review</h5>
                     @endif
                 </div>
                 <div class="card-body">

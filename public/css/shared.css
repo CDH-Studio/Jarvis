@@ -574,10 +574,11 @@ a{
 .room-details-card{
     padding:0px !important;
     background-color: #FFFFFF;
+    height: 100%;
 }
 
-.room-details-card .fa-star{
-    color: #FFD700;
+.room-details-card .fa-star, .reviews-card .fa-star{
+    color: rgb(255, 196, 0);
 }
 
 .room-details-card-title{
