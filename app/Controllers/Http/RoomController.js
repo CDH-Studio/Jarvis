@@ -422,6 +422,8 @@ class RoomController {
 					end: moment(options.date).add(24, 'hour').format('YYYY-MM-DDTHH:mm')
 				});
 
+				console.log(item.name);
+				console.log(res.data);
 				results[item.name] = res.data.times;
 			});
 		};
