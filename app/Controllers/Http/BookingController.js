@@ -229,12 +229,6 @@ class BookingController {
 		await booking.save();
 
 		return response.route('viewBookings', { id: idType, bookingType: params.bookingType });
-
-		// if (params.bookingType === 'user') {
-		// 	return response.route('viewBookings', { id: userId });
-		// } else {
-		// 	return response.route('roomBookings', { id: roomId });
-		// }
 	}
 
 	async getCalendarView (calendarId, start, end) {
