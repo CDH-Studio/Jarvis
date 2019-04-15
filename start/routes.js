@@ -93,6 +93,7 @@ Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking
 // Rendering Results
 Route.get('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
 Route.get('/recurringResults', 'RoomController.searchRecurring2').as('recurringResults');
+Route.get('/findAvailableResults', 'RoomController.findAvailableResults').as('findAvailableResults');
 
 // Booking a Room
 Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);

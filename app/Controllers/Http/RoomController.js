@@ -400,6 +400,10 @@ class RoomController {
 		return view.render('adminPages.viewRooms', { rooms });
 	}
 
+	async findAvailableResults({ request }) {
+		
+	}
+
 	async searchRecurring2 ({ request }) {
 		const options = request.all();
 		console.log(options);
