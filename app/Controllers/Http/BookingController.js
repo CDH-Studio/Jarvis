@@ -142,7 +142,7 @@ class BookingController {
 			url: `/user/${auth.user.id}/bookings`
 		});
 
-		return response.redirect('/userDash');
+		return response.route('/userDash');
 	}
 
 	/**
@@ -160,8 +160,8 @@ class BookingController {
 		let searchResults = await Booking
 			.query()
 			.where(idType, params.id)
-			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
-			.orderBy('from', 'asc')
+			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.orderBy('to', 'asc')
 			.fetch();
 
 		searchResults = searchResults.toJSON();
@@ -172,7 +172,7 @@ class BookingController {
 			.query()
 			.where(idType, params.id)
 			.where('status', 'Approved')
-			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.getCount();
 
 		if (numberOfApprovedBookings === 0) {
@@ -184,8 +184,8 @@ class BookingController {
 			.query()
 			.where(idType, params.id)
 			.where('status', 'Approved')
-			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
-			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
+			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.whereRaw("strftime('%Y-%m', bookings.'to') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
 			.fetch();
 
 		numberOfBookingsThisMonth = numberOfBookingsThisMonth.toJSON();
@@ -193,8 +193,8 @@ class BookingController {
 		// Calculates the number of hours in bookings for this month
 		let numberOfHours = 0;
 		for (var i = 0; i < numberOfBookingsThisMonth.length; i++) {
-			let fromTime = moment(numberOfBookingsThisMonth[0].from);
-			let toTime = moment(numberOfBookingsThisMonth[0].to);
+			let fromTime = moment(numberOfBookingsThisMonth[i].from);
+			let toTime = moment(numberOfBookingsThisMonth[i].to);
 			let duration = moment.duration(toTime.diff(fromTime));
 			numberOfHours += duration.asHours();
 		}
@@ -220,19 +220,15 @@ class BookingController {
 	async cancelBooking ({ params, response, view }) {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
-		const userId = booking.toJSON().user_id;
 		const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
 		const eventId = booking.toJSON().event_id;
+		const idType = (params.bookingType === 'user') ? booking.toJSON().user_id : booking.toJSON().room_id;
 
 		await this.deleteEvent(calendarId, eventId);
 		booking.status = 'Cancelled';
 		await booking.save();
 
-		if (params.bookingType === 'user') {
-			return response.route('viewBookings', { id: userId });
-		} else {
-			return response.route('roomBookings', { id: roomId });
-		}
+		return response.route('viewBookings', { id: idType, bookingType: params.bookingType });
 	}
 
 	async getCalendarView (calendarId, start, end) {

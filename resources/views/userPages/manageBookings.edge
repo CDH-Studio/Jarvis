@@ -118,19 +118,29 @@
 											<div class='modal-dialog' role='document'>
 												<div class='modal-content'>
 													<div class='modal-header'>
-														<h5 class='modal-title' id='exampleModalLabel'>Are you sure?</h5>
+														<h5 class='modal-title' id='cancelTitle'>Are you sure?</h5>
 														<button class='close' type='button' data-dismiss='modal' aria-label='Close'>
 															<span aria-hidden='true'>×</span>
 														</button>
 													</div>
 													<div class='modal-body'>Are you sure you want to cancel your booking?</div>
-													<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'room'}) }}' method='POST' enctype='multipart/form-data'>
-														{{ csrfField() }}
-														<div class='modal-footer'>
-															<button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
-															<button type='submit' class='btn btn-danger'>Yes</button>
-														</div>                    
-													</form>
+													@if(bookingsType == 'userBookings')
+														<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'user'}) }}' method='POST' enctype='multipart/form-data'>
+															{{ csrfField() }}
+															<div class='modal-footer'>
+																<button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+																<button type='submit' class='btn btn-danger'>Yes</button>
+															</div>                    
+														</form>													
+													@else
+														<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'room'}) }}' method='POST' enctype='multipart/form-data'>
+															{{ csrfField() }}
+															<div class='modal-footer'>
+																<button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+																<button type='submit' class='btn btn-danger'>Yes</button>
+															</div>                    
+														</form>													
+													@endif
 												</div>
 											</div>
 										</div>
