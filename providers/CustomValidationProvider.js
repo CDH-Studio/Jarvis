@@ -131,14 +131,15 @@ class CustomValidationProvider extends ServiceProvider {
 		}
 	}
 
-	/* Validate to check if {{ field }} dropdown is selected on "Select a ___", if so throw message
+	/* Validate a user's password to  conatin at least 1 upper, 1 lower, 1 number, 1 special character and at least 8 chars
 	*
 	* @usage requiredDropdown
 	*/
 	async _regexPassword (data, field, message, args, get) {
 		const userSelection = get(data, field);
-		console.log(userSelection);
-		if (userSelection === 'undefined') {
+		const regex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})'); // eslint-disable-line
+
+		if (!regex.test(userSelection)) {
 			throw message;
 		}
 	}
