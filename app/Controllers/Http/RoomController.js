@@ -424,7 +424,7 @@ class RoomController {
 
 				console.log(item.name);
 				console.log(res.data);
-				results[item.name] = res.data.times;
+				results[item.name] = res.data;
 			});
 		};
 
