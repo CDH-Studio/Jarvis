@@ -142,7 +142,7 @@ class BookingController {
 			url: `/user/${auth.user.id}/bookings`
 		});
 
-		return response.redirect('/userDash');
+		return response.route('/userDash');
 	}
 
 	/**
@@ -160,8 +160,8 @@ class BookingController {
 		let searchResults = await Booking
 			.query()
 			.where(idType, params.id)
-			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
-			.orderBy('from', 'asc')
+			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.orderBy('to', 'asc')
 			.fetch();
 
 		searchResults = searchResults.toJSON();
@@ -172,7 +172,7 @@ class BookingController {
 			.query()
 			.where(idType, params.id)
 			.where('status', 'Approved')
-			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.getCount();
 
 		if (numberOfApprovedBookings === 0) {
@@ -184,8 +184,8 @@ class BookingController {
 			.query()
 			.where(idType, params.id)
 			.where('status', 'Approved')
-			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
-			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
+			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.whereRaw("strftime('%Y-%m', bookings.'to') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
 			.fetch();
 
 		numberOfBookingsThisMonth = numberOfBookingsThisMonth.toJSON();
