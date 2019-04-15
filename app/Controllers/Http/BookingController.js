@@ -193,8 +193,8 @@ class BookingController {
 		// Calculates the number of hours in bookings for this month
 		let numberOfHours = 0;
 		for (var i = 0; i < numberOfBookingsThisMonth.length; i++) {
-			let fromTime = moment(numberOfBookingsThisMonth[0].from);
-			let toTime = moment(numberOfBookingsThisMonth[0].to);
+			let fromTime = moment(numberOfBookingsThisMonth[i].from);
+			let toTime = moment(numberOfBookingsThisMonth[i].to);
 			let duration = moment.duration(toTime.diff(fromTime));
 			numberOfHours += duration.asHours();
 		}
