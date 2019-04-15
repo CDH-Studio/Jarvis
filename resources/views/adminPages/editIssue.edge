@@ -25,7 +25,7 @@ Issue #{{ issue.id }}
                                 {{--  Body Information  --}}
                                 <div class='row'>
                                     <div class='col form-group'>
-                                        <label for='issueStatus'>Status <b class='text-danger'>*</b></label>
+                                        <label for='issueStatus'>Status <strong class='text-danger'>*</strong></label>
                                         @if(hasErrorFor('issueStatus'))
                                             <select class='form-control is-invalid' name='issueStatus' id='issueStatus' onchange='removeErrorClass("issueStatus")'>
                                                 <option value='undefined' {{ old('rating', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a status</option>
@@ -44,7 +44,7 @@ Issue #{{ issue.id }}
                                         @endif
                                     </div>
                                     <div class='col form-group'>
-                                        <label for='issueType'>Issue Type <b class='text-danger'>*</b></label>
+                                        <label for='issueType'>Issue Type <strong class='text-danger'>*</strong></label>
                                         @if(hasErrorFor('issueType'))
                                             <select class='form-control is-invalid' name='issueType' id='issueType' onchange='removeErrorClass("issueType")'>
                                                 <option value='undefined' {{ old('rating', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select an issue</option>
@@ -69,7 +69,7 @@ Issue #{{ issue.id }}
                                 </div>
                                 <div class='row'>
                                     <div class='col form-group no-margin'>
-                                        <label for='comment'>Comment <b class='text-danger'>*</b></label>
+                                        <label for='comment'>Comment <strong class='text-danger'>*</strong></label>
                                         @if(hasErrorFor('comment'))
                                             <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment', issue.comment) }}</textarea>
                                             <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>

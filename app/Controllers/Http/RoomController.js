@@ -58,7 +58,7 @@ class RoomController {
 
 		// round the autofill start and end times to the nearest 30mins
 		fromTime = fromTime.round(30, 'minutes').format('HH:mm');
-		toTime = toTime.round(30, 'minutes').add(1, 'h').format('hh:mm');
+		toTime = toTime.round(30, 'minutes').add(1, 'h').format('HH:mm');
 
 		// loop to fill the dropdown times
 		while (start.isBefore(end)) {
@@ -231,8 +231,25 @@ class RoomController {
 	 */
 	async show ({ response, auth, params, view, request }) {
 		try {
-			// get the search form data if employee view
+			// get the search form date range if filled in, otherwise generate the data with current date
 			const form = request.only(['date', 'from', 'to']);
+			if (!form.date || form.date === 'undefined' || !form.from || form.from === 'undefined' || !form.to || form.to === 'undefined') {
+				form.date = moment().format('YYYY-MM-DD');
+				form.from = moment().round(30, 'minutes').format('HH:mm');
+				form.to = moment().round(30, 'minutes').add(1, 'h').format('HH:mm');
+			}
+
+			// generating form for droptime times
+			let dropdownSelection = [];
+			const start = moment().startOf('day');
+			const end = moment().endOf('day');
+
+			// loop to fill the dropdown times
+			while (start.isBefore(end)) {
+				dropdownSelection.push({ dataValue: start.format('HH:mm'), name: start.format('h:mm A') });
+				start.add(30, 'm');
+			}
+
 			const room = await Room.findOrFail(params.id);
 			const userRole = await auth.user.getUserRole();
 			const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
@@ -269,7 +286,7 @@ class RoomController {
 			// Adds new attribute - rating - to every room object
 			room.rating = await this.getAverageRating(room.id);
 
-			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review, reviewsCount });
+			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review, reviewsCount, dropdownSelection });
 		} catch (error) {
 			console.log(error);
 			return response.redirect('/');

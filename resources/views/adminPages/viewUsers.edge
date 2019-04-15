@@ -30,7 +30,7 @@ View Users
                             <i class='d-inline-flex no-padding color-info card-icon fas fa-user fa-2x'></i>
                             <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                 <div class='row'>
-                                    <h2 class='col no-margin'><b>{{ users.length }}</b></h2>
+                                    <h2 class='col no-margin'><strong>{{ users.length }}</strong></h2>
                                 </div>
                                 <div class='row'>
                                     <h5 class='col text-grey'>Total Users</h5>
@@ -58,7 +58,7 @@ View Users
                             {{--  Loops through the users array and displays every user's information  --}}
                             <tbody>
                                 @each(user in users) 
-                                    <tr id='userRow' class='table-light' onclick="window.location='{{ route('viewProfile', { id: user.id }) }}';">
+                                    <tr class='table-light' onclick="window.location='{{ route('viewProfile', { id: user.id }) }}';">
                                     <td>{{ user.firstname }} {{ user.lastname }}</td>
                                     <td>{{ user.email }}</td>
                                     </tr>
