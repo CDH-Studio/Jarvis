@@ -234,7 +234,7 @@
 				<div id='secondary-upcoming' class='col-12'  style='height:325px;'>
 					@component('components.generalCard', title='My bookings', extraCSS='custom-card-header')
 						@slot('titleRight')
-							<a class="color-light"  href='{{ route('viewBookings',{id: userId}) }}' target='_blank'>
+							<a class="color-light"  href='{{ route('viewBookings',{id: userId, bookingType: 'user'}) }}' target='_blank'>
 								<i class="fas fa-external-link-alt fa-sm"></i>
 							</a>
 						@endslot
@@ -277,7 +277,7 @@
 		<div id='myBookings' class='col'>
 			@component('components.generalCard', title='My bookings', extraCSS='custom-card-header')
 				@slot('titleRight')
-					<a class="color-primary"  href='{{ route('viewBookings',{id: userId}) }}' target='_blank'>
+					<a class="color-primary"  href='{{ route('viewBookings',{id: userId, bookingType: 'user'}) }}' target='_blank'>
 						<i class="fas fa-external-link-alt"></i>
 					</a>
 				@endslot
