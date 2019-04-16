@@ -3,8 +3,8 @@
 <form action='{{ route('showRoom', {id: room.id}) }}' method='GET'>
     <input type='hidden' name='_csrf' value={{ token }} />
     <input type='hidden' name='date' value={{ form.date }} />
-    <input type='hidden' name='from' value={{ form.from }} />
-    <input type='hidden' name='to' value={{ form.to }} />
+    <input type='hidden' name='from' value={{ from }} />
+    <input type='hidden' name='to' value={{ to }} />
     {{--  Room card  --}}
     <a class='card room-card custom-shadow ie-room-card' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
         {{--  Title  --}}

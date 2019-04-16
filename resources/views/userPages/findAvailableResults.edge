@@ -27,14 +27,26 @@
                 <div class="card-header" id="heading{{time.id}}">
                 <h5 class="mb-0">
                     <button class="btn btn-link" data-toggle="collapse" data-target="#{{time.id}}" aria-expanded="false" aria-controls="{{time.id}}">
-                    {{ time.time }}
+                    {{ time.from }}
                     </button>
                 </h5>
                 </div>
             
                 <div id="{{time.id}}" class="collapse" aria-labelledby="heading{{time.id}}" data-parent="#times">
                 <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                    <div class='d-flex flex-wrap'>
+                        @each(room in time.rooms)
+                            <div class='no-padding ie-room-margin'>
+                                {{ csrfField() }}
+                                @!component('components.card',
+                                    form=form,
+                                    room=room.room,
+                                    from=room.from,
+                                    to=room.to,
+                                    token=csrfToken)
+                            </div>
+                        @endeach
+                    </div>
                 </div>
                 </div>
             </div>
