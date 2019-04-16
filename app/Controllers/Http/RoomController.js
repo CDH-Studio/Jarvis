@@ -295,7 +295,15 @@ class RoomController {
 				.with('user')
 				.getCount();
 
+			
+
+
 			var reviews = reviewResults.toJSON();
+
+			for (var index = 0; index < reviewsCount; ++index) {
+    			var dd=Date.parse(reviews[index].created_at);
+				reviews[index].comment_date=moment(dd).format('YYYY-MM-DD')
+			}
 
 			// Adds new attribute - rating - to every room object
 			room.rating = await this.getAverageRating(room.id);

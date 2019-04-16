@@ -19,129 +19,138 @@
     {{--  Actual page content  --}}
     <div class="row">
     
-        <div class='col-12 col-lg-8 mb-4'>
-            <div class='card room-details-card shadow'>
-                <div class='card-header custom-card-header py-3'>
+        <div class='col-12 col-lg-8'>
+            <div class='card room-details-card shadow mb-4'>
+                <div class='card-header py-3 custom-card-header'>
                     <div class='d-flex flex-wrap'>
-                        <div class='' style=''>
-                            <h5 class="m-0 font-weight-bold color-light">
+                        <div class='' style='padding-top:6px;'>
+                            <h5 class="m-0 font-weight-bold text-white">
                                 {{--  If the room is closed or under maintence then display info  --}}
                                 @if(room.state == 2)
-                                    <i class='fa fa-times-circle color-danger mr-2'></i> Closed - 
+                                    <i class='fa fa-times-circle color-danger'></i> Closed - 
                                 @elseif(room.state == 3)
-                                    <i class="fas fa-tools fa-sm color-warning mr-2"></i> Under maintenance -  
+                                    <i class="fas fa-tools color-warning"></i> Under Maintenance -  
                                 @endif
                                 {{room.name}}
                             </h5>
                         </div>
                         <div class='flex-grow-1 text-right'>
                             @if(isAdmin)
-                                <button class="btn btn-info btn-icon-split" onclick="window.location='{{route('viewBookings', { id: room.id, bookingType: 'room'}) }}';">
+                                <button class="btn btn-info btn-icon-split" onclick="window.location='{{route('roomBookings', { id: room.id}) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-book"></i></span>
-                                    <span class="text">View bookings</span>
+                                    <span class="text">View Bookings</span>
                                 </button>
                                 <button class="btn btn-info btn-icon-split" onclick="window.location='{{ route('showIssue', { roomID: room.id, issueStatus: 'all' }) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-flag"></i></span>
-                                    <span class="text">View issues</span>
+                                    <span class="text">View Issues</span>
                                 </button>   
-                                <button class="btn btn-info btn-icon-split" onclick="window.location='{{ route('editRoom', { id: room.id }) }}';">
+                                <button class="btn btn-primary btn-icon-split" onclick="window.location='{{ route('editRoom', { id: room.id }) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
-                                    <span class="text">Edit room</span>
+                                    <span class="text">Edit Room</span>
                                 </button>   
                             @else
-                                {{--  Report room  --}}
-                                <a href='#' class="color-light" data-toggle='modal' data-target='#reportModal' title="Report an issue" aria-label="report issue button"><i class="fas fa-flag fa-sm"></i></a>
+                                <span data-toggle="modal" data-target='#reportModal' >
+                                    <a href="#" class="btn btn-danger btn-circle" data-toggle='tooltip'  data-placement="top" title="Report Issue">
+                                        <i class="fas fa-flag"></i>
+                                      </a>
+                                </span>
                             @endif
                         </div>
                     </div>
                 </div>
                 <div class='card-body'>
-                    <div class='d-flex flex-wrap justify-content-center'>
-                        <div class='d-flex flex-column room-details-image'> 
+                    <div class="row">
+                        <div class="col-5">
                             @if(room.picture) 
-                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='../{{ room.picture }}' alt='{{ room }} room picture'>
+                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='../{{ room.picture }}'>
                             @else
-                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/meeting.jpeg' alt='default room picture'>
+                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/meeting.jpeg'>
                             @endif                     
                         </div>
-                        <div class="flex-grow-1 d-flex flex-column">
-                            <div id='body-header' class="d-flex flex-wrap">
-                                <strong  class="flex-grow-1">{{ room.fullName }}</strong>
-                            
-                                <div id='room-details-stars' class="flex-grow-1">
+                        <div class="col-7">
+                            <b>{{ room.fullName }}</b>
+                            <div>
+                                <a href="#reviews" class="link-style-none">
                                     @!component('components/stars', rating=room.rating)
-                                </div>
+                                </a>
                             </div>
-                            <div class="row room-content-row">
-                                <div class="col no-padding">
-                                    <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong> {{ room.floor }}  {{ room.tower }}
-                                </div>
+
+                            <div class="mt-2 mb-2">
+                                <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong> {{ room.floor }}  {{ room.tower }}
                             </div>
-                            <div class="row room-content-row">
-                                <div class="col no-padding"><strong>
-                                    <i class="fas fa-phone fa-fw"></i></strong> {{ room.telephone }}
-                                </div>
+                            <div class="mt-2 mb-3">
+                                <strong><i class="fas fa-phone fa-fw"></i></strong> {{ room.telephone }}
                             </div>
-                        
-                            <div class="row room-content-row">
-                                <div class="col no-padding"><strong>Table seats:</strong> {{ room.seats }}</div>
+                            <hr>
+                            <div class="mt-2 mb-3">
+                                <strong>Table Seats:</strong>  {{ room.seats }}
                             </div>
-                            <div class="row room-content-row">
-                                <div class="col no-padding"> <strong>Capacity:</strong> {{ room.capacity }}</div>
+                            <div class="mt-2 mb-3">
+                                <strong>Capacity:</strong> {{ room.capacity }}
                             </div>
-                            <div class="row room-content-row">
-                                <div class="col no-padding">
-                                    @if(room.comment != " " && room.comment)
-                                        <div class=""><strong>Comments:</strong> {{ room.comment }}</div>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="row mt-4 flex-grow-1 align-content-end">
-                                    <div class="col-6 col-lg-3  text-center mb-3 mb-lg-0">
-                                        <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Display Tools">
-                                            <i class="fas fa-tv"></i>
-                                        </span>
-                                            @if(room.projector == 1)
-                                                <p class="mb-0">Projector</p>
-                                            @endif
-                                            @if(room.pc == 1)
-                                                <p class="mb-0">PC</p>
-                                            @endif
-                                            @if(room.surfaceHub == 1)
-                                                <p class="mb-0">Surface Hub</p>
-                                            @endif
-                                    </div>
-                                    <div class="col-6 col-lg-3  text-center mb-3 mb-lg-0">
-                                        <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Communication Tools">
-                                            <i class="fas fa-headset"></i>
-                                        </span>
-                                            @if(room.audioConference == 1)
-                                                <p class="mb-0">Audio conf.</p>
-                                            @endif
-                                            @if(room.videoConference == 1)
-                                                <p class="mb-0">Video conf.</span></p> 
-                                            @endif
-                                    </div>
-                                    <div class="col-6 col-lg-3 text-center">
-                                        <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Discussion Tools">
-                                            <i class="fas fa-chalkboard-teacher"></i>
-                                        </span>
-                                        @if(room.flipchart == 1)
-                                            <p class="mb-0">Flip chart</p>
-                                        @endif
-                                        @if(room.whiteboard == 1)
-                                            <p class="mb-0">Whiteboard</p>
-                                        @endif
-                                    </div>
-                                    <div class="col-6 col-lg-3 text-center">
-                                        <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Connectivity">
-                                            <i class="fas fa-wifi"></i>
-                                        </span>
-                                        <p class="mb-0">Wi-Fi</p>
-                                    </div>
-                                </div> 
+                            @if(room.comment && room.comment != " ")
+                                <div class="mt-2 mb-2"><b>Comments:</b> {{ room.comment }}</div>
+                            @endif
                         </div>
+
                     </div>
+
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-body m-2">
+                    <div class="row justify-content-around">
+                        <div class="col-6 col-lg-2  text-center mb-3 mb-lg-0">
+                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Display Tools">
+                                <i class="fas fa-tv"></i>
+                            </span>
+                                @if(room.projector == 1)
+                                    <p class="mb-0">Projector</p>
+                                @endif
+                                @if(room.pc == 1)
+                                    <p class="mb-0">PC</p>
+                                @endif
+                                @if(room.surfaceHub == 1)
+                                    <p class="mb-0">Surface Hub</p>
+                                @endif
+                        </div>
+                        <div class="col-6 col-lg-2  text-center mb-3 mb-lg-0">
+                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Communication Tools">
+                                <i class="fas fa-headset"></i>
+                            </span>
+                                @if(room.audioConference == 1)
+                                    <p class="mb-0">Audio Conf.</p>
+                                @endif
+                                @if(room.videoConference == 1)
+                                    <p class="mb-0">Video Conf.</span></p> 
+                                @endif
+                        </div>
+                        <div class="col-6 col-lg-2 mb-3 text-center">
+                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Discussion Tools">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </span>
+                            @if(room.flipchart == 1)
+                                <p class="mb-0">Flip Chart</p>
+                            @endif
+                            @if(room.whiteboard == 1)
+                                <p class="mb-0">Whiteboard</p>
+                            @endif
+                        </div>
+                        <div class="col-6 col-lg-2  mb-3 text-center">
+                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Connectivity">
+                                <i class="fas fa-wifi"></i>
+                            </span>
+                            <p class="mb-0">Wi-Fi</p>
+                        </div>
+                        <div class="col-6 col-lg-2 text-center">
+                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Extra Equipment">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            <p class="mb-0">{{ room.extraEquipment }}</p>
+                        </div>                    
+                        </i>
+                    </div>    
                 </div>
             </div>
         </div>
@@ -316,7 +325,7 @@
         </div>
     </div>
 
-    <h4 class="mt-4 mb-3"><strong>Reviews</strong></h4>
+    <h4 class="mt-4 mb-3" id="reviews"><strong>Reviews</strong></h4>
 
     <div class="row">
         <div class='col-12 col-lg-8'>
@@ -324,37 +333,37 @@
                 <div class="card-body">
                     
                     @if(reviews.length == 0)             
-                        @!component('components.cardEmptyMessage',faIcon='fas fa-ghost fa-6x', message='No reviews available')          
+                        @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="no reviews available")          
                     @else
                         {{--  Loops through the rooms array and displays every room's content  --}}
                         @each(review in reviews)
-                            <div class="row">
-                                <div class="col">
+                            <div class="row mb-1">
+                                <div class="col-8">
                                     <div class="row mb-2">
                                         <div class="col">
-                                            <strong>{{ review.user.firstname }} {{ review.user.lastname }}</strong>
-                                            <i class='ml-2'>({{review.user.email}})</i>
+                                            <strong>{{ review.user.firstname }} {{ review.user.lastname }}</strong><br>
+                                            @!component('components/stars', rating=review.rating) 
+                                            <br>
+                                            <i class="text-muted">{{review.user.email}}</i> | <i class="text-muted">{{review.comment_date}}</i>
                                         </div>
                                     </div>
-                                    @!component('components/stars', rating=review.rating)
-                                    <br>
-                                    <div>
-                                        {{ review.review }} 
-                                    </div>    
+                                    <div>{{ review.review }} </div>
+ 
                                 </div>
-                                @if(review.reviewPicture)
-                                    <div class="col-4 text-center">
-                                        <img class="shadow"style ="width:80%; max-height: 150px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}} alt="{{ review.user.firstname }} {{ review.user.lastname }}'s review picture">
-                                    </div>
-                                @endif
-                            </div> 
-                            <hr>
+                                <div class="col-4 text-center">
+                                    @if(review.reviewPicture)
+                                        <img class="shadow"style ="width:80%; height:auto; max-height: 150px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
+                                    @endif
+                                </div>
+                                <hr>             
+                            </div>
                         @endeach
-                        <div class="text-center">
-                            <i style="font-size: 0.9rem;">Reviews: {{reviewsCount}}</i>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <i style="font-size: 0.9rem;">Reviews: {{reviewsCount}}</i>
+                            </div>
                         </div>
-                    @endif
-                                         
+                    @endif                       
                 </div>
             </div>
         </div>
@@ -538,7 +547,7 @@
                                         <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
                                     @else
-                                        <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  '') }}</textarea>
+                                        <textarea class='form-control' name='comment' id='comment' rows='5' >{{ old('comment',  '') }}</textarea>
                                     @endif                                    
                                 </div> 
                             </div>
@@ -568,8 +577,8 @@
 
     {{--  Script to display file name on upload  --}}
     <script>
-        $('#reviewPicture').change(function(e){
-            var fileName = e.target.files[0].name;
+        $('#reviewPicture').on('change',function(){
+            var fileName = $(this).val().substring(0,15)+"...";
             $('#reviewPictureLabel').html(fileName);
         });
     </script>
