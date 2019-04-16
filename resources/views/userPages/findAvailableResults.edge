@@ -13,12 +13,124 @@
     
     {{--  Loading page header  --}}
     @!component('components.pageHeader', title='Results')
+	<div class='row d-flex flex-row justify-content-center'>
+		<div class='row-12'>
+			<div class='card room-card custom-shadow ie-room-card'>
+				{{--  Title  --}}
+				<div class='room-card-title'>
+					<div class="row">
+						<div class="col-6">
+							<h5 style="line-height: 50px" class="m-0">Search Criteria </h5>
+						</div> 
+					</div>
+				</div>
 
-    {{--  where result cards will be displayed --}}
-	{{--  <div class="spinner-border" role="status">  --}}
-		{{--  <span class="sr-only">Loading...</span>  --}}
-	{{--  </div>  --}}
-	
+				{{--  DateTime  --}}
+				<hr style='margin-top:0px;'>
+				<div class='d-flex flex-wrap wrapper-center'>
+					<div class='flex-fill mr-3 ml-2'>
+						<strong>Date:</strong><span>  {{ form.formattedDate }} </span>
+					</div>
+					<div class='flex-fill ml-3 mr-2'>
+						<strong>Time range:</strong><span> {{ form.formattedFrom }} - {{ form.formattedTo }} </span>
+					</div>
+				</div>
+				<div class='d-flex flex-wrap wrapper-center'>
+					<div class='flex-fill'>
+						@if(form.hour == 0)
+							<strong>Meeting duration:</strong><span> {{ form.minute }} M </span>
+						@else
+							@if(form.minute == 0)
+								<strong>Meeting duration:</strong><span> {{ form.hour }} H </span>
+							@else
+								<strong>Meeting duration:</strong><span> {{ form.hour }} H {{ form.minute }} M</span>
+							@endif
+						@endif
+					</div>
+				</div>
+				<hr style='margin-top:0px;'>
+
+				<div class='room-card-body'>
+					<div class='d-flex flex-wrap justify-content-center'>
+						{{--  Room information  --}}
+						<div class='checkbox-content d-flex flex-wrap'>
+							<div class='room-card-spec' style='min-width:122px'>
+								<ul class='space-evenly'>
+									@if(form.projectorCheck == 1)
+										<li class='spec-yes'><i class='fas fa-check-circle'></i><span> Projector</span></li>
+									@else
+										<li class='spec-no'><i class='fas fa-times-circle spec-no-icon'></i><span> Projector</span></li>
+									@endif
+									@if(form.flipChartCheck == 1)
+										<li class='spec-yes'><i class='fa fa-check-circle'></i><span> Flip chart</span></li>
+									@else
+										<li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Flip chart</span></li>
+									@endif
+									@if(form.whiteboardCheck == 1)
+										<li class='spec-yes'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
+									@else
+										<li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Whiteboard</span></li>
+									@endif
+									@if(form.audioCheck == 1)
+										<li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio conf.</span></li>
+									@else
+										<li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Audio conf.</span></li>
+									@endif
+								</ul>
+							</div>
+							<div class='room-card-spec'>
+								<ul class='space-evenly'>
+									@if(form.videoCheck == 1)
+										<li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video conf.</span></li> 
+									@else
+										<li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Video conf.</span></li>
+									@endif
+									@if(form.pcCheck == 1)
+										<li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
+									@else
+										<li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> PC</span></li>
+									@endif
+									@if(form.surfaceHubCheck == 1)
+										<li class='spec-yes'><i class='fa fa-check-circle'></i><span> Surface hub</span></li>
+									@else
+										<li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Surface hub</span></li>
+									@endif
+									{{--  <li><span class='link-color'>More info...</span></li>  --}}
+									<li class='spec-no' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Placeholder</span></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					
+					{{--  Checkboxes  --}}
+					<hr style='margin-top:0px;'>
+					<div class='d-flex flex-wrap wrapper-center'>
+						<div class='flex-fill'>
+							@if(form.location && form.location != 'undefined')
+								<strong>Floor:</strong><span>  {{ form.location }} </span>
+							@else
+								<strong>Floor:</strong><span class='spec-no'> Unspecified </span>
+							@endif
+						</div>
+						<div class='flex-fill mr-3 ml-3'>
+							@if(form.seats)
+								<strong>Table seats:</strong><span> {{ form.seats }} </span>
+							@else
+								<strong>Table seats:</strong><span class='spec-no'> Unspecified </span>
+							@endif
+						</div>
+						<div class='flex-fill'>
+							@if(form.capacity)
+								<strong>Capacity:</strong><span> {{ form.capacity }}</span>
+							@else
+								<strong>Capacity:</strong><span class='spec-no'> Unspecified</span>
+							@endif
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
     <div id='times'>
         @if(times.length !== 0)
             @each(time in times)
@@ -35,18 +147,18 @@
                     </h5>
                     </div>
                 
-                    <div id="{{time.id}}" class="collapse" aria-labelledby="heading{{time.id}}" data-parent="#times">
+                    <div id="{{time.id}}" class="collapse" aria-labelledby="heading{{time.id}}">
                     <div class="card-body">
                         <div class='d-flex flex-wrap'>
                             @each(room in time.rooms)
                                 <div class='no-padding ie-room-margin'>
                                     {{ csrfField() }}
-                                    @!component('components.card',
-                                        form=form,
-                                        room=room.room,
-                                        from=room.from,
-                                        to=room.to,
-                                        token=csrfToken)
+                                    {{--  @!component('components.card',  --}}
+                                        {{--  form=form,  --}}
+                                        {{--  room=room.room,  --}}
+                                        {{--  from=room.from,  --}}
+                                        {{--  to=room.to,  --}}
+                                        {{--  token=csrfToken)  --}}
                                 </div>
                             @endeach
                         </div>
