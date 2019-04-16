@@ -27,15 +27,13 @@
 
 				{{--  DateTime  --}}
 				<hr style='margin-top:0px;'>
-				<div class='d-flex flex-wrap wrapper-center'>
+				<div class='d-flex justify-content-between'>
 					<div class='flex-fill mr-3 ml-2'>
 						<strong>Date:</strong><span>  {{ form.formattedDate }} </span>
 					</div>
 					<div class='flex-fill ml-3 mr-2'>
 						<strong>Time range:</strong><span> {{ form.formattedFrom }} - {{ form.formattedTo }} </span>
 					</div>
-				</div>
-				<div class='d-flex flex-wrap wrapper-center'>
 					<div class='flex-fill'>
 						@if(form.hour == 0)
 							<strong>Meeting duration:</strong><span> {{ form.minute }} M </span>
@@ -104,7 +102,7 @@
 					
 					{{--  Checkboxes  --}}
 					<hr style='margin-top:0px;'>
-					<div class='d-flex flex-wrap wrapper-center'>
+					<div class='d-flex'>
 						<div class='flex-fill'>
 							@if(form.location && form.location != 'undefined')
 								<strong>Floor:</strong><span>  {{ form.location }} </span>
