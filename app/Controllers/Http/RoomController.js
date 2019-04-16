@@ -179,24 +179,39 @@ class RoomController {
 			types: ['image'],
 			size: '2mb'
 		});
-		await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-			name: `${body.name}_floorPlan.png`,
-			overwrite: true
-		});
+
+		let floorPlanStringPath;
+		if (floorPlanImage != null) {
+			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
+				name: `${body.name}_floorPlan.png`,
+				overwrite: true
+			});
+			floorPlanStringPath = `uploads/floorPlans/${body.name}_floorPlan.png`;
+		} else {
+			floorPlanStringPath = room.floorplan;
+		}
 
 		// Upload process - Room Picture
 		const roomImage = request.file('roomPicture', {
 			types: ['image'],
 			size: '2mb'
 		});
-		await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-			name: `${body.name}_roomPicture.png`,
-			overwrite: true
-		});
+
+		let roomImageStringPath;
+		if (roomImage != null) {
+			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
+				name: `${body.name}_roomPicture.png`,
+				overwrite: true
+			});
+			roomImageStringPath = `uploads/roomPictures/${body.name}_roomPicture.png`;
+		} else {
+			roomImageStringPath = room.picture;
+		}
+
 		// Updates room information in database
 		await Room
 			.query()
-			.where('name', room.name)
+			.where('id', room.id)
 			.update({
 				name: body.name,
 				fullName: body.fullName,
@@ -212,13 +227,12 @@ class RoomController {
 				videoConference: body.videoCheck === '1' ? '1' : '0',
 				surfaceHub: body.surfaceHubCheck === '1' ? '1' : '0',
 				pc: body.pcCheck === '1' ? '1' : '0',
-				floorplan: `uploads/floorPlans/${body.name}_floorPlan.png`,
-				picture: `uploads/roomPictures/${body.name}_roomPicture.png`,
+				floorplan: floorPlanStringPath,
+				picture: roomImageStringPath,
 				extraEquipment: body.extraEquipment == null ? ' ' : body.extraEquipment,
 				comment: body.comment == null ? ' ' : body.comment,
 				state: body.state
 			});
-		room = await Room.findBy('name', body.name);
 		session.flash({ notification: 'Room Updated!' });
 
 		return response.route('showRoom', { id: room.id });
