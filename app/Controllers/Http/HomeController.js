@@ -375,8 +375,8 @@ class HomeController {
 		const from = moment(now).add(remainder, 'm').format('HH:mm');
 		const to = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
 		const formattedDate = moment().format('dddd, MMMM DD, YYYY');
-		const formattedFrom = moment(now).add(remainder, 'm').format('HH:mm A');
-		const formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm A');
+		const formattedFrom = moment(now).add(remainder, 'm').format('h:mm A');
+		const formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('h:mm A');
 
 		const code = random(4);
 		const checkRoomAvailability = async () => {

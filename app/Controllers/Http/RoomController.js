@@ -447,7 +447,7 @@ class RoomController {
 					times[item] = {};
 					times[item].rooms = [];
 					times[item].from = item;
-					times[item].time = moment(item, 'HH:mm').format('HH:mm A');
+					times[item].time = moment(item, 'HH:mm').format('h:mm A');
 					times[item].to = moment(item, 'HH:mm').add(duration, 'minutes').format('HH:mm');
 					times[item].id = 'tab' + moment(item, 'HH:mm').format('HHmm');
 				}
