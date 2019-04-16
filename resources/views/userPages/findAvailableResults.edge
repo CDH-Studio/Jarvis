@@ -27,9 +27,9 @@
                     <h5 class="mb-0">
                         <button class="btn btn-link" data-toggle="collapse" data-target="#{{time.id}}" aria-expanded="false" aria-controls="{{time.id}}">
 							@if(time.rooms.length > 1)
-								{{ time.from }} ({{ time.rooms.length }} rooms)
+								{{ time.time }} ({{ time.rooms.length }} rooms)
 							@else
-								{{ time.from }} ({{ time.rooms.length }} room)
+								{{ time.time }} ({{ time.rooms.length }} room)
 							@endif
                         </button>
                     </h5>
