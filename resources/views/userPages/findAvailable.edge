@@ -115,11 +115,11 @@
                             <div class='row'>
                                 <div class='col form-group mb-1'>
                                     <label for='duration'>Hours</label>
-                                    <input class='form-control' name='hour' type='number' min='0' max='10' value='{{ old('hour', '') }}'>
+                                    <input class='form-control' name='hour' type='number' min='0' max='10' value='{{ old('hour', '1') }}'>
                                 </div>
                                 <div class='col form-group mb-1'>
                                     <label for='duration'>Minutes</label>
-                                    <input class='form-control' name='minute' type='number' min='0' max='30' step=30 value='{{ old('minute', '') }}'>
+                                    <input class='form-control' name='minute' type='number' min='0' max='30' step=30 value='{{ old('minute', '0') }}'>
                                 </div>
                             </div>
                         </div>
