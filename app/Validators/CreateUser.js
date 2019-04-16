@@ -5,16 +5,7 @@
  **/
 'use strict';
 
-// const Tower = use('App/Models/Tower');
-// const Floor = use('App/Models/Floor');
-
 class CreateUser {
-// async getTowers() {
-// const towers = await Tower.all();
-// towers=towers.toJSON();
-// return tower;
-// }
-
 	// Validate and return all fields
 	get validateAll () {
 		return true;
@@ -22,11 +13,6 @@ class CreateUser {
 
 	// Validation rules
 	get rules () {
-		// this.getTowers().then( => {
-		// console.log('data', data);
-		// });
-		// console.log("in rules ",towermax);
-
 		return {
 			/**
 			 * Validation Rules
@@ -41,12 +27,11 @@ class CreateUser {
 			 *
 			 */
 
-			confirmPassword: 'required|same:password',
+			confirmPassword: 'required|regexPassword|same:password',
 			email: 'required|email|unique:users',
 			firstname: 'required|max:50',
 			lastname: 'required|max:50',
-			password:"required", // eslint-disable-line
-			// regex: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$
+			password:"required|regexPassword", // eslint-disable-line
 			floor: 'required|integer|requiredDropdown',
 			tower: 'required|integer|requiredDropdown'
 		};
@@ -56,7 +41,7 @@ class CreateUser {
 		return {
 			'email': 'Please enter a valid e-mail address (somebody@example.com)',
 			'max': 'Please limit input to 50 characters.',
-			'regex': 'Your password must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character',
+			'regexPassword': 'Your password must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character and be at least 8 Characters.',
 			'required': 'This field is required.',
 			'requiredDropdown': 'This field is required.',
 			'same': 'Passwords do not match',

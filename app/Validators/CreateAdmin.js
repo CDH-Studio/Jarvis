@@ -28,12 +28,11 @@ class CreateAdmin {
 			 * unique: email must be unique and must not already exist within the database
 			 *
 			 */
-			confirmPassword: 'required|same:password',
+			confirmPassword: 'required|regexPassword|same:password',
 			email: 'required|email|unique:users',
 			firstname: 'required|max:50',
 			lastname: 'required|max:50',
-			password:"required", // eslint-disable-line
-			// regex: ^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]$
+			password:"required|regexPassword", // eslint-disable-line
 			token: `required|equals:${secretToken}`
 		};
 	}
@@ -44,7 +43,7 @@ class CreateAdmin {
 			'email': 'Please enter a valid e-mail address (somebody@example.com)',
 			'equals': 'Token incorrect',
 			'max': 'Please limit input to 50 characters.',
-			'regex': 'Your password must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character',
+			'regexPassword': 'Your password must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character and be at least 8 Characters.',
 			'required': 'This field is required',
 			'same': 'Passwords do not match',
 			'unique': 'The {{ field }} already exists, try logging in instead'

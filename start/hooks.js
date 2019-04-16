@@ -17,7 +17,6 @@ hooks.after.providersBooted(() => {
 		}
 
 		for (let arg in args) {
-			console.log(data[args[arg]]);
 			if (data[field] !== data[args[arg]]) {
 				throw message;
 			}

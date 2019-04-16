@@ -60,7 +60,7 @@
 
 										<div class='dropdown no-arrow'>
 											<button for='from' aria-label='start-time-button' class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-											<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+											<div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
 												@each(item in dropdownSelection)
 													<a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
 												@endeach
@@ -82,7 +82,7 @@
 										@endif
 										<div class='dropdown no-arrow'>
 											<button for='to'  aria-label='end-time-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-											<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+											<div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
 												@each(item in dropdownSelection)
 													<a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
 												@endeach
@@ -114,7 +114,7 @@
 								</div>
 							</div>
 							<div class='row'>
-								{{--  Table Seats form  --}}
+								{{--  PMts form  --}}
 								<div class='col form-group mb-4'>
 									<label for='seats'>Number of table seats</label>
 									<input class='form-control' id='seats' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
@@ -195,7 +195,7 @@
 		<div class='col-xl-6 col-xxl-8 mb-4'>
 			<div class='row' style='height:100%;'>
 				<div id='available' class='col-xl-12 col-xxl-6 mb-4' style='height:325px;'>
-                    @component('components.generalCard', title='Currently Available', extraCSS='custom-card-header')
+                    @component('components.generalCard', title='Currently available', extraCSS='custom-card-header')
                         {{--  If there are no avail rooms display a message accordingly  --}}
 						@slot('body')
                             <div id='avail'></div>
@@ -203,11 +203,11 @@
 					@endcomponent
 				</div>
 				<div id='frequentlyBooked' class='col-lg-12 col-xxl-6' style='height:325px;'>
-					@component('components.generalCard', title='Frequently Booked', extraCSS='custom-card-header')
+					@component('components.generalCard', title='Frequently booked', extraCSS='custom-card-header')
 						@slot('body')
 							{{--  if the user have not booked anythings display message, else display the freq booked  --}}
 							@if(!freqRooms)
-								@!component('components.cardEmptyMessage',faIcon="fas fa-history fa-4x", message="No Bookings Found") 
+								@!component('components.cardEmptyMessage',faIcon="fas fa-history fa-4x", message="No rooms found") 
 							@else
 								@each(room in freqRooms)
 									<div class='row'>
@@ -218,7 +218,7 @@
 														@!component('components.stars', rating= room.averageRating)
 													</div>
 													<div>
-														<span>Table Seats: {{room.seats}}</span>
+														<span class='mr-3'>Table seats: {{room.seats}}</span>
 														<span>Capacity: {{room.capacity}}</span>
 													</div>
 												@endslot
@@ -232,22 +232,16 @@
 				</div>
 						{{--  This is a copy component from #oringal-upcoming --}}
 				<div id='secondary-upcoming' class='col-12'  style='height:325px;'>
-					@component('components.generalCard', title='My Bookings', extraCSS='custom-card-header')
+					@component('components.generalCard', title='My bookings', extraCSS='custom-card-header')
 						@slot('titleRight')
-							<a class="color-light"  href='{{ route('viewBookings',{id: userId}) }}' target='_blank'>
+							<a class="color-light"  href='{{ route('viewBookings',{id: userId, bookingType: 'user'}) }}' target='_blank'>
 								<i class="fas fa-external-link-alt fa-sm"></i>
 							</a>
 						@endslot
 						@slot('body')
 							{{-- display message if there are no upcomming bookings --}}
 							@if(!freqRooms)
-								<div class="d-flex flex-wrap justify-content-center">
-									<div class="d-flex flex-column justify-content-around">
-										<i class="fas fa-book fa-8x text-muted wrapper-center"></i>
-										<h3 class="text-muted no-margin">No Bookings Found</h3>
-									</div>
-								</div>
-								 @!component('components.cardEmptyMessage',faIcon="fas fa-list fa-6x", message="No Bookings Found") 
+								 @!component('components.cardEmptyMessage',faIcon="fas fa-list fa-6x", message="No bookings found") 
 							@else
 								<div class='table table-responsive'>
 									<table id='bookNowTable' class='table' style='width:100%;'>
@@ -281,9 +275,9 @@
     </div>
 	<div id='original-upcoming' class='row'>
 		<div id='myBookings' class='col'>
-			@component('components.generalCard', title='My Bookings', extraCSS='custom-card-header')
+			@component('components.generalCard', title='My bookings', extraCSS='custom-card-header')
 				@slot('titleRight')
-					<a class="color-primary"  href='{{ route('viewBookings',{id: userId}) }}' target='_blank'>
+					<a class="color-primary"  href='{{ route('viewBookings',{id: userId, bookingType: 'user'}) }}' target='_blank'>
 						<i class="fas fa-external-link-alt"></i>
 					</a>
 				@endslot

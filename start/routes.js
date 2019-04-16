@@ -65,8 +65,6 @@ Route.get('/rooms/:id/edit', 'RoomController.edit').as('editRoom').middleware(['
 Route.post('/rooms/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['isAdmin']);
 Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 
-Route.get('/roomBookings/:id', 'BookingController.getRoomBookings').as('roomBookings').middleware(['auth']);
-
 Route.get('/room/:roomID/issues/:issueStatus', 'IssueController.getRoomIssues').as('showIssue').middleware(['isAdmin']);
 Route.get('/issue/:id/edit', 'IssueController.editIssue').as('editIssue').middleware(['isAdmin']);
 Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['isAdmin']).validator('EditIssue');
@@ -81,7 +79,7 @@ Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(
 // Bookings
 //= ========================================================================
 Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails').middleware(['auth']); // needs to be changed to get
-Route.get('/user/:id/bookings', 'BookingController.getUserBookings').as('viewBookings').middleware(['auth']);
+Route.get('/:bookingType/:id/bookings', 'BookingController.getBookings').as('viewBookings').middleware(['auth']);
 Route.post('/:bookingType/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth']);
 
 // Employee user pages

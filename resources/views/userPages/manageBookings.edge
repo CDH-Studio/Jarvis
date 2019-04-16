@@ -28,7 +28,7 @@
 							<h2 class='col no-margin'><b>{{ numberOfApprovedBookings }}</b></h2>
 						</div>
 						<div class='row'>
-							<h5 class='col text-grey'>Total Bookings</h5>
+							<h5 class='col text-grey'>Total bookings</h5>
 						</div>
 					</div>
 				</div>
@@ -36,33 +36,33 @@
 		</div>
 
 		<div class='col card stats-card shadow no-padding'>
+			<div class='card-highlight-danger'></div>
+			<div class='card-body'>
+				<div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
+					<i class='d-inline-flex no-padding color-danger card-icon far fa-calendar-times fa-2x'></i>
+					<div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
+						<div class='row'>
+							<h2 class='col no-margin'><b>{{ numberOfCancelled }}</b></h2>
+						</div>
+						<div class='row'>
+							<h5 class='col text-grey'>Total Cancelled</h5>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class='col card stats-card shadow no-padding'>
 			<div class='card-highlight-success'></div>
 			<div class='card-body'>
 				<div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-					<i class='d-inline-flex no-padding color-success card-icon fas fa-list fa-2x'></i>
+					<i class='d-inline-flex no-padding color-success card-icon far fa-calendar-alt fa-2x'></i>
 					<div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
 						<div class='row'>
 							<h2 class='col no-margin'><b>{{ numberOfBookingsThisMonth }}</b></h2>
 						</div>
 						<div class='row'>
-							<h6 class='col text-grey'>Bookings this month</h6>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class='col card stats-card shadow no-padding'>
-			<div class='card-highlight-warning'></div>
-			<div class='card-body'>
-				<div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-					<i class='d-inline-flex no-padding color-warning card-icon fas fa-list fa-2x'></i>
-					<div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
-						<div class='row'>
-							<h2 class='col no-margin'><b>{{ numberOfHours }}</b></h2>
-						</div>
-						<div class='row'>
-							<h6 class='col text-grey'>Hours in Bookings this Month</h6>
+							<h5 class='col text-grey'>Remaining this month</h5>
 						</div>
 					</div>
 				</div>
@@ -74,12 +74,7 @@
 		@if(bookings.length == 0)
 			{{--  If there are no bookings found, display no bookings   --}}
 			<div class="card-body">
-					<div class="row">
-					<div class="col-12 text-center mt-5 mb-5">
-						<p class="fas fa-ghost fa-10x mb-5 text-muted"></p>
-						<h3 class="text-muted">No Bookings Found</h3>
-					</div>
-				</div>
+				@!component('components.cardEmptyMessage',faIcon="fas fa-history fa-5x", message="No Bookings Found") 
 			</div>		
 		@else
 			<div class="card-header py-3">
@@ -90,7 +85,11 @@
 					<table id='manageBookingsTable' class='table table-hover' style='width:100%;'>
 						<thead>
 							<tr>
-								<th scope='col' aria-label='Room column' class='text-center'>Room</th>
+								@if(bookingsType == 'userBookings')
+									<th scope='col' aria-label='Room column' class='text-center'>Room</th>
+								@else
+									<th scope='col' aria-label='Room column' class='text-center'>Name</th>
+								@endif
 								<th scope='col' aria-label='Meeting name column'  class='text-center'>Meeting name</th>
 								<th scope='col' aria-label='Date column' class='text-center'>Date</th>
 								<th scope='col' aria-label='Time column' class='text-center'>Time</th>
@@ -102,7 +101,11 @@
 						<tbody>
 							@each(booking in bookings) 
 								<tr aria-label='{{booking.subject}} row'>
-									<td class='text-center'><a href='{{ route('viewProfile', {id: booking.userId}) }}'>{{ booking.userName }}</a></td>
+									@if(bookingsType == 'userBookings')
+										<td class='text-center'><a href='{{ route('showRoom', {id: booking.roomId}) }}'>{{ booking.room }}</a></td>
+									@else
+										<td class='text-center'><a href='{{ route('viewProfile', {id: booking.userId}) }}'>{{ booking.userName }}</a></td>
+									@endif
 									<td class='text-center'>{{ booking.subject }}</td>
 									<td class='text-center'>{{ booking.date }}</td>
 									<td class='text-center'>{{ booking.time }}</td>
@@ -115,19 +118,29 @@
 											<div class='modal-dialog' role='document'>
 												<div class='modal-content'>
 													<div class='modal-header'>
-														<h5 class='modal-title' id='exampleModalLabel'>Are you sure?</h5>
+														<h5 class='modal-title' id='cancelTitle'>Are you sure?</h5>
 														<button class='close' type='button' data-dismiss='modal' aria-label='Close'>
 															<span aria-hidden='true'>×</span>
 														</button>
 													</div>
 													<div class='modal-body'>Are you sure you want to cancel your booking?</div>
-													<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'room'}) }}' method='POST' enctype='multipart/form-data'>
-														{{ csrfField() }}
-														<div class='modal-footer'>
-															<button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
-															<button type='submit' class='btn btn-danger'>Yes</button>
-														</div>                    
-													</form>
+													@if(bookingsType == 'userBookings')
+														<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'user'}) }}' method='POST' enctype='multipart/form-data'>
+															{{ csrfField() }}
+															<div class='modal-footer'>
+																<button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+																<button type='submit' class='btn btn-danger'>Yes</button>
+															</div>                    
+														</form>													
+													@else
+														<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'room'}) }}' method='POST' enctype='multipart/form-data'>
+															{{ csrfField() }}
+															<div class='modal-footer'>
+																<button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+																<button type='submit' class='btn btn-danger'>Yes</button>
+															</div>                    
+														</form>													
+													@endif
 												</div>
 											</div>
 										</div>

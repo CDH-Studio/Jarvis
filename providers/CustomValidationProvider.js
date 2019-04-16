@@ -33,6 +33,7 @@ class CustomValidationProvider extends ServiceProvider {
 		Validator.extend('isAfterToday', this._isAfterToday, '');
 		Validator.extend('isWithinRange', this._isWithinRange, '');
 		Validator.extend('requiredDropdown', this._requiredDropdown, '');
+		Validator.extend('regexPassword', this._regexPassword, '');
 	}
 
 	/* Validate if time ends in 00 or 30
@@ -126,6 +127,19 @@ class CustomValidationProvider extends ServiceProvider {
 	async _requiredDropdown (data, field, message, args, get) {
 		const userSelection = get(data, field);
 		if (userSelection === 'undefined') {
+			throw message;
+		}
+	}
+
+	/* Validate a user's password to  conatin at least 1 upper, 1 lower, 1 number, 1 special character and at least 8 chars
+	*
+	* @usage requiredDropdown
+	*/
+	async _regexPassword (data, field, message, args, get) {
+		const userSelection = get(data, field);
+		const regex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})'); // eslint-disable-line
+
+		if (!regex.test(userSelection)) {
 			throw message;
 		}
 	}
