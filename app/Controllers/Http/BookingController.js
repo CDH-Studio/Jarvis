@@ -186,30 +186,25 @@ class BookingController {
 			.where('status', 'Approved')
 			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.whereRaw("strftime('%Y-%m', bookings.'to') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
-			.fetch();
-
-		numberOfBookingsThisMonth = numberOfBookingsThisMonth.toJSON();
-
-		// Calculates the number of hours in bookings for this month
-		let numberOfHours = 0;
-		for (var i = 0; i < numberOfBookingsThisMonth.length; i++) {
-			let fromTime = moment(numberOfBookingsThisMonth[i].from);
-			let toTime = moment(numberOfBookingsThisMonth[i].to);
-			let duration = moment.duration(toTime.diff(fromTime));
-			numberOfHours += duration.asHours();
-		}
-
-		if (numberOfHours === 0) {
-			numberOfHours = '0';
-		}
+			.getCount();
 
 		if (numberOfBookingsThisMonth.length === 0) {
 			numberOfBookingsThisMonth = '0';
-		} else {
-			numberOfBookingsThisMonth = numberOfBookingsThisMonth.length;
 		}
 
-		return view.render('userPages.manageBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfHours, bookingsType, canEdit });
+		// Queries the database fr the cancelled bookings
+		let numberOfCancelled = await Booking
+			.query()
+			.where(idType, params.id)
+			.where('status', 'Cancelled')
+			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.getCount();
+
+		if (numberOfCancelled === 0) {
+			numberOfCancelled = '0';
+		}
+
+		return view.render('userPages.manageBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfCancelled, bookingsType, canEdit });
 	}
 
 	/**
