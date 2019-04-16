@@ -192,7 +192,7 @@ class BookingController {
 			numberOfBookingsThisMonth = '0';
 		}
 
-		// Queries the database fr the bookings associated to a specific room
+		// Queries the database fr the cancelled bookings
 		let numberOfCancelled = await Booking
 			.query()
 			.where(idType, params.id)
