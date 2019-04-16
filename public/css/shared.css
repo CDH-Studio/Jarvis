@@ -574,12 +574,19 @@ a{
 .room-details-card{
     padding:0px !important;
     background-color: #FFFFFF;
-    height: 100%;
 }
 
 .room-details-card .fa-star, .reviews-card .fa-star{
     color: rgb(255, 196, 0);
 }
+
+.reviews-card hr{
+    border-top: 1px solid #fff00;
+    clear:both;
+    width: 97%;
+    margin:20px 10px;
+}
+
 
 .room-details-card-title{
     border-top-right-radius: 0.35rem;
@@ -642,30 +649,6 @@ a{
     text-align: center;
 }
 
-@media(min-width: 600px){
-    #room-details-stars{
-    text-align: left;
-    }
-
-}
-@media(min-width: 1574px){
-    .room-details-image{
-        margin-right: 20px;
-    }
-
-    #room-details-stars{
-        text-align: right;
-    }
-
-    #body-header{
-        margin: 0;
-        text-align: left;
-    }
-
-    .room-content-row{
-        text-align: left;
-    }
-}
 .room-confirm-image{
     min-width: 448px;
     min-height: 336px;
