@@ -407,7 +407,7 @@ class RoomController {
 		return view.render('adminPages.viewRooms', { rooms });
 	}
 
-	async findAvailableResults ({ request }) {
+	async findAvailableResults ({ request, view }) {
 		const options = request.all();
 		const rooms = (await this.filterRooms(options)).toJSON();
 
@@ -442,9 +442,20 @@ class RoomController {
 			})
 		}
 
-		console.log(options);
+		const start = moment(options.from, 'HH:mm');
+		const end = moment(options.to, 'HH:mm');
+		const times = [];
+		while (start.isSameOrBefore(end)) {
+			const time = {};
+			time.time = start.format('HH:mm');
+			time.id = start.format('tabHHmm');
+			times.push(time);
+			start.add(30, 'm');
+		}
 
-		return results;
+		console.log(times);
+
+		return view.render('userPages.findAvailableResults', {times: times});
 	}
 
 	async searchRecurring2 ({ request }) {

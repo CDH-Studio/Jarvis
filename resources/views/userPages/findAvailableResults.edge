@@ -1,0 +1,75 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+    Results
+@endsection
+
+@section('extracss')
+    {{ style('css/user') }}
+@endsection
+
+{{--  Manage bookings page content  --}}
+@section('content')
+    
+    {{--  Loading page header  --}}
+    @!component('components.pageHeader', title='Results')
+
+    {{--  where result cards will be displayed --}}
+    <div class='row' id='results'>
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+    <div id='times'>
+        @each(time in times)
+            <div class="card">
+                <div class="card-header" id="heading{{time.id}}">
+                <h5 class="mb-0">
+                    <button class="btn btn-link" data-toggle="collapse" data-target="#{{time.id}}" aria-expanded="false" aria-controls="{{time.id}}">
+                    {{ time.time }}
+                    </button>
+                </h5>
+                </div>
+            
+                <div id="{{time.id}}" class="collapse show" aria-labelledby="heading{{time.id}}" data-parent="#times">
+                <div class="card-body">
+                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                </div>
+                </div>
+            </div>
+        @endeach
+    </div>
+
+    {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
+    <script>
+        let pusher = new Pusher('aca8a920ad0e3d8ac09f', {
+            cluster: 'us2',
+            useTLS: true
+        });
+
+        //Subscribe to the channel we specified in our Adonis Application
+        let channel = pusher.subscribe('adonis-channel')
+
+        //Listen for events on the channel
+        channel.bind('send-room', function (data) {
+            if (data.message.code == '{{ code }}') {
+                let listItem = $("<div class='cno-padding ie-room-margin'>" + data.message.card + "</div>")
+                $('#results').append(listItem)
+            }
+        });
+
+        channel.bind('send-hasResults', function (data) {
+            if (data.message.code == '{{ code }}') {
+                $('#results').empty();
+            }
+        });
+
+        channel.bind('send-empty', function (data) {
+            if (data.message.code == '{{ code }}') {
+                let listItem = $("<div class='empty'><p class='fas fa-ghost fa-10x mb-5 mt-5 text-muted'></p><div> No rooms found.</div></div>")
+                $('#results').empty().append(listItem)
+            }
+        });
+    </script>
+@endsection
