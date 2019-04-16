@@ -13,9 +13,9 @@
     
     {{--  Loading page header  --}}
     @!component('components.pageHeader', title='Results')
-	<div class='row d-flex flex-row justify-content-center'>
-		<div class='row-12'>
-			<div class='card room-card custom-shadow ie-room-card'>
+	<div class='row d-flex flex-row justify-content-center mb-3'>
+		<div class='row-12' >
+			<div class='card'>
 				{{--  Title  --}}
 				<div class='room-card-title'>
 					<div class="row">
@@ -27,21 +27,21 @@
 
 				{{--  DateTime  --}}
 				<hr style='margin-top:0px;'>
-				<div class='d-flex justify-content-between'>
-					<div class='flex-fill mr-3 ml-2'>
-						<strong>Date:</strong><span>  {{ form.formattedDate }} </span>
+				<div class='d-flex flex-row justify-content-between'>
+					<div class='d-inline-flex p-3'>
+						<strong>Date:&nbsp</strong><span>  {{ form.formattedDate }} </span>
 					</div>
-					<div class='flex-fill ml-3 mr-2'>
-						<strong>Time range:</strong><span> {{ form.formattedFrom }} - {{ form.formattedTo }} </span>
+					<div class='d-inline-flex p-3'>
+						<strong>Time range:&nbsp</strong><span>  {{ form.formattedFrom }} - {{ form.formattedTo }} </span>
 					</div>
-					<div class='flex-fill'>
+					<div class='d-inline-flex p-3'>
 						@if(form.hour == 0)
-							<strong>Meeting duration:</strong><span> {{ form.minute }} M </span>
+							<strong>Duration:&nbsp</strong><span> {{ form.minute }} M </span>
 						@else
 							@if(form.minute == 0)
-								<strong>Meeting duration:</strong><span> {{ form.hour }} H </span>
+								<strong>Duration:&nbsp</strong><span> {{ form.hour }} H </span>
 							@else
-								<strong>Meeting duration:</strong><span> {{ form.hour }} H {{ form.minute }} M</span>
+								<strong>Duration:&nbsp</strong><span> {{ form.hour }} H {{ form.minute }} M</span>
 							@endif
 						@endif
 					</div>
@@ -102,22 +102,22 @@
 					
 					{{--  Checkboxes  --}}
 					<hr style='margin-top:0px;'>
-					<div class='d-flex'>
-						<div class='flex-fill'>
+					<div class='d-flex flex-row justify-content-between'>
+						<div class='d-inline-flex p-2'>
 							@if(form.location && form.location != 'undefined')
 								<strong>Floor:</strong><span>  {{ form.location }} </span>
 							@else
 								<strong>Floor:</strong><span class='spec-no'> Unspecified </span>
 							@endif
 						</div>
-						<div class='flex-fill mr-3 ml-3'>
+						<div class='d-inline-flex p-2'>
 							@if(form.seats)
 								<strong>Table seats:</strong><span> {{ form.seats }} </span>
 							@else
 								<strong>Table seats:</strong><span class='spec-no'> Unspecified </span>
 							@endif
 						</div>
-						<div class='flex-fill'>
+						<div class='d-inline-flex p-2'>
 							@if(form.capacity)
 								<strong>Capacity:</strong><span> {{ form.capacity }}</span>
 							@else
