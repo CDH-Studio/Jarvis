@@ -14,7 +14,7 @@
     {{--  Loading page header  --}}
     @!component('components.pageHeader', title='Results')
 	<div class='row d-flex flex-row justify-content-center mb-3'>
-		<div class='row-12' >
+		<div class='row' >
 			<div class='card'>
 				{{--  Title  --}}
 				<div class='room-card-title'>
@@ -50,8 +50,8 @@
 
 				<div class='room-card-body'>
 					{{--  Room information  --}}
-					<div class='checkbox-content'>
-						<div class='' style='min-width:122px'>
+					<div class='row'>
+						<div class='col'>
 							<ul class='list-inline'>
 								@if(form.projectorCheck == 1)
 									<li class='spec-yes list-inline-item'><i class='fas fa-check-circle'></i><span> Projector</span></li>
@@ -88,8 +88,6 @@
 								@else
 									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> Surface hub</span></li>
 								@endif
-								{{--  <li><span class='link-color'>More info...</span></li>  --}}
-								<li class='spec-no list-inline-item' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Placeholder</span></li>
 							</ul>
 						</div>
 					</div>
@@ -99,23 +97,23 @@
 					<div class='d-flex flex-row justify-content-between'>
 						<div class='d-inline-flex p-3'>
 							@if(form.location && form.location != 'undefined')
-								<strong>Floor:</strong><span>  {{ form.location }} </span>
+								<strong>Floor:&nbsp</strong><span>  {{ form.location }} </span>
 							@else
-								<strong>Floor:</strong><span class='spec-no'> Unspecified </span>
+								<strong>Floor:&nbsp</strong><span class='spec-no'> Unspecified </span>
 							@endif
 						</div>
 						<div class='d-inline-flex p-3'>
 							@if(form.seats)
-								<strong>Table seats:</strong><span> {{ form.seats }} </span>
+								<strong>Table seats:&nbsp</strong><span> {{ form.seats }} </span>
 							@else
-								<strong>Table seats:</strong><span class='spec-no'> Unspecified </span>
+								<strong>Table seats:&nbsp</strong><span class='spec-no'> Unspecified </span>
 							@endif
 						</div>
 						<div class='d-inline-flex p-3'>
 							@if(form.capacity)
-								<strong>Capacity:</strong><span> {{ form.capacity }}</span>
+								<strong>Capacity:&nbsp</strong><span> {{ form.capacity }}</span>
 							@else
-								<strong>Capacity:</strong><span class='spec-no'> Unspecified</span>
+								<strong>Capacity:&nbsp</strong><span class='spec-no'> Unspecified</span>
 							@endif
 						</div>
 					</div>

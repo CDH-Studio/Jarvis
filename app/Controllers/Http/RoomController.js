@@ -477,7 +477,7 @@ class RoomController {
 				return (time >= min && time <= max);
 			});
 
-			// item: a starting time for a room 
+			// item: a starting time for a room
 			room.forEach(item => {
 				if (!times[item]) {
 					times[item] = {};
@@ -496,11 +496,6 @@ class RoomController {
 			});
 		}
 
-		// Event.fire('send.room', {
-		// 	card: view.render('components.card', { form, room: item, token: request.csrfToken }),
-		// 	code: code
-		// });
-
 		times = Object.values(times);
 		times.sort((a, b) => {
 			return (a.from > b.from) ? 1 : ((b.from > a.from) ? -1 : 0);
@@ -508,7 +503,6 @@ class RoomController {
 		options.formattedDate = moment(options.date).format('dddd, MMM DD, YYYY');
 		options.formattedFrom = moment(options.from, 'HH:mm').format('h:mm A');
 		options.formattedTo = moment(options.to, 'HH:mm').format('h:mm A');
-		console.log(options);
 		return view.render('userPages.findAvailableResults', { times: times, form: options });
 	}
 

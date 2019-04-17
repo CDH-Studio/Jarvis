@@ -131,10 +131,8 @@ class IssueController {
 		}
 
 		issues = results.toJSON();
-		console.log('issues', issues);
 		// Retrieve issue stats
 		const stats = await this.getIssueStatistics(params.roomID);
-		console.log('stats', stats);
 		// date formatting options
 		var options = { year: 'numeric', month: 'long', day: 'numeric' };
 
