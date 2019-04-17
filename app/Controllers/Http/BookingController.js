@@ -188,7 +188,7 @@ class BookingController {
 			.whereRaw("strftime('%Y-%m', bookings.'to') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
 			.getCount();
 
-		if (numberOfBookingsThisMonth.length === 0) {
+		if (numberOfBookingsThisMonth === 0) {
 			numberOfBookingsThisMonth = '0';
 		}
 
