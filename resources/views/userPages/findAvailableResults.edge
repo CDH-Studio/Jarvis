@@ -49,75 +49,69 @@
 				<hr style='margin-top:0px;'>
 
 				<div class='room-card-body'>
-					<div class='d-flex flex-wrap justify-content-center'>
-						{{--  Room information  --}}
-						<div class='checkbox-content d-flex flex-wrap'>
-							<div class='room-card-spec' style='min-width:122px'>
-								<ul class='space-evenly'>
-									@if(form.projectorCheck == 1)
-										<li class='spec-yes'><i class='fas fa-check-circle'></i><span> Projector</span></li>
-									@else
-										<li class='spec-no'><i class='fas fa-times-circle spec-no-icon'></i><span> Projector</span></li>
-									@endif
-									@if(form.flipChartCheck == 1)
-										<li class='spec-yes'><i class='fa fa-check-circle'></i><span> Flip chart</span></li>
-									@else
-										<li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Flip chart</span></li>
-									@endif
-									@if(form.whiteboardCheck == 1)
-										<li class='spec-yes'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
-									@else
-										<li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Whiteboard</span></li>
-									@endif
-									@if(form.audioCheck == 1)
-										<li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio conf.</span></li>
-									@else
-										<li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Audio conf.</span></li>
-									@endif
-								</ul>
-							</div>
-							<div class='room-card-spec'>
-								<ul class='space-evenly'>
-									@if(form.videoCheck == 1)
-										<li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video conf.</span></li> 
-									@else
-										<li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Video conf.</span></li>
-									@endif
-									@if(form.pcCheck == 1)
-										<li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
-									@else
-										<li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> PC</span></li>
-									@endif
-									@if(form.surfaceHubCheck == 1)
-										<li class='spec-yes'><i class='fa fa-check-circle'></i><span> Surface hub</span></li>
-									@else
-										<li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Surface hub</span></li>
-									@endif
-									{{--  <li><span class='link-color'>More info...</span></li>  --}}
-									<li class='spec-no' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Placeholder</span></li>
-								</ul>
-							</div>
+					{{--  Room information  --}}
+					<div class='checkbox-content'>
+						<div class='' style='min-width:122px'>
+							<ul class='list-inline'>
+								@if(form.projectorCheck == 1)
+									<li class='spec-yes list-inline-item'><i class='fas fa-check-circle'></i><span> Projector</span></li>
+								@else
+									<li class='spec-no list-inline-item'><i class='fas fa-times-circle spec-no-icon'></i><span> Projector</span></li>
+								@endif
+								@if(form.flipChartCheck == 1)
+									<li class='spec-yes list-inline-item'><i class='fa fa-check-circle'></i><span> Flip chart</span></li>
+								@else
+									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> Flip chart</span></li>
+								@endif
+								@if(form.whiteboardCheck == 1)
+									<li class='spec-yes list-inline-item'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
+								@else
+									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> Whiteboard</span></li>
+								@endif
+								@if(form.audioCheck == 1)
+									<li class='spec-yes list-inline-item'><i class='fa fa-check-circle'></i><span> Audio conf.</span></li>
+								@else
+									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> Audio conf.</span></li>
+								@endif
+								@if(form.videoCheck == 1)
+									<li class='spec-yes list-inline-item'><i class='fa fa-check-circle'></i><span> Video conf.</span></li> 
+								@else
+									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> Video conf.</span></li>
+								@endif
+								@if(form.pcCheck == 1)
+									<li class='spec-yes list-inline-item'><i class='fa fa-check-circle'></i><span> PC</span></li>
+								@else
+									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> PC</span></li>
+								@endif
+								@if(form.surfaceHubCheck == 1)
+									<li class='spec-yes list-inline-item'><i class='fa fa-check-circle'></i><span> Surface hub</span></li>
+								@else
+									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> Surface hub</span></li>
+								@endif
+								{{--  <li><span class='link-color'>More info...</span></li>  --}}
+								<li class='spec-no list-inline-item' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Placeholder</span></li>
+							</ul>
 						</div>
 					</div>
 					
 					{{--  Checkboxes  --}}
 					<hr style='margin-top:0px;'>
 					<div class='d-flex flex-row justify-content-between'>
-						<div class='d-inline-flex p-2'>
+						<div class='d-inline-flex p-3'>
 							@if(form.location && form.location != 'undefined')
 								<strong>Floor:</strong><span>  {{ form.location }} </span>
 							@else
 								<strong>Floor:</strong><span class='spec-no'> Unspecified </span>
 							@endif
 						</div>
-						<div class='d-inline-flex p-2'>
+						<div class='d-inline-flex p-3'>
 							@if(form.seats)
 								<strong>Table seats:</strong><span> {{ form.seats }} </span>
 							@else
 								<strong>Table seats:</strong><span class='spec-no'> Unspecified </span>
 							@endif
 						</div>
-						<div class='d-inline-flex p-2'>
+						<div class='d-inline-flex p-3'>
 							@if(form.capacity)
 								<strong>Capacity:</strong><span> {{ form.capacity }}</span>
 							@else
