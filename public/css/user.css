@@ -177,3 +177,19 @@
         display: block;
     }
 }
+
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+/* Search Criteria */
+/*+++++++++++++++++++++++++++++++++++++++++++*/
+ul.list-group:after {
+    clear: both;
+    display: block;
+    content: "";
+}
+  
+.list-group-item {
+    float: left;
+    border: 0 !important;
+    margin: 0px;
+    padding: 10px 0px;
+}

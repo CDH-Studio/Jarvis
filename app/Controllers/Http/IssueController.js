@@ -77,6 +77,7 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async getRoomIssues ({ params, view, auth, response }) {
+		try{
 		var results;
 		var issues;
 		var currentTime;
@@ -150,6 +151,9 @@ class IssueController {
 		}
 
 		return view.render('adminPages.viewRoomIssues', { roomID: params.roomID, roomName, issues, stats, filterType: params.issueStatus });
+		} catch(e) {
+			return e;
+		} 
 	}
 
 	/**
