@@ -317,10 +317,9 @@ class BookingController {
 	* @param {String} calendarId The id of the room calendar.
 	* @param {String} eventId The id of the event to delete.
 	*/
-	async deleteEvent (calendarId, eventId, floor) {
+	async deleteEvent (eventId, floor) {
 		try {
 			const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/cancel`, {
-				room: calendarId,
 				eventId: eventId,
 				floor: floor
 			});
