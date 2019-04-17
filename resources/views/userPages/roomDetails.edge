@@ -36,7 +36,7 @@
                         </div>
                         <div class='flex-grow-1 text-right'>
                             @if(isAdmin)
-                                <button class="btn btn-info btn-icon-split" onclick="window.location='{{route('roomBookings', { id: room.id}) }}';">
+                                <button class="btn btn-info btn-icon-split" onclick="window.location='{{route('viewBookings', { id: room.id, bookingType: 'room'}) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-book"></i></span>
                                     <span class="text">View Bookings</span>
                                 </button>
