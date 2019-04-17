@@ -142,7 +142,7 @@ class IssueController {
 		// TODO: needs to be changed to take advantage of relational database
 		for (let i = 0; i < issues.length; i++) {
 			issues[i].status = await ReportStatus.getName(issues[i].report_status_id);
-		// 	issues[i].room = await Room.getName(issues[i].room_id);
+			issues[i].room = await Room.getName(issues[i].room_id);
 			issues[i].user = await User.getName(issues[i].user_id);
 			issues[i].type = await ReportType.getName(issues[i].report_type_id);
 			currentTime = new Date(issues[i].created_at);
