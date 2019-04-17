@@ -145,12 +145,12 @@
                             @each(room in time.rooms)
                                 <div class='no-padding ie-room-margin'>
                                     {{ csrfField() }}
-                                    {{--  @!component('components.card',  --}}
+                                    @!component('components.card',  --}}
                                         {{--  form=form,  --}}
                                         {{--  room=room.room,  --}}
                                         {{--  from=room.from,  --}}
                                         {{--  to=room.to,  --}}
-                                        {{--  token=csrfToken)  --}}
+                                        {{--  token=csrfToken)
                                 </div>
                             @endeach
                         </div>
