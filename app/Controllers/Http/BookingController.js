@@ -215,14 +215,11 @@ class BookingController {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
 		const room = (await Room.findBy('id', roomId)).toJSON();
-		const calendarId = room.calendar;
 		const floor = room.floor;
-		// const userId = booking.toJSON().user_id;
-		// const calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
 		const eventId = booking.toJSON().event_id;
 		const idType = (params.bookingType === 'user') ? booking.toJSON().user_id : booking.toJSON().room_id;
 
-		await this.deleteEvent(calendarId, eventId, floor);
+		await this.deleteEvent(eventId, floor);
 		booking.status = 'Cancelled';
 		await booking.save();
 
