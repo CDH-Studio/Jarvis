@@ -85,7 +85,6 @@ class ReviewController {
 
 				// find the review object
 				const review = await Review.findBy('id', reviewId);
-				console.log(review.reviewPicture);
 				if (review.reviewPicture != null) {
 					await Drive.delete(review.reviewPicture);
 				}

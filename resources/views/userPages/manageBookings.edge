@@ -1,7 +1,7 @@
 @layout('layouts.mainLayout')
 
 @section('title')
-    Manage Bookings
+    Manage bookings
 @endsection
 
 @section('extracss')
@@ -13,7 +13,7 @@
 {{--  Manage bookings page content  --}}
 @section('content')
     {{--  Loading page header  --}}
-	@component('components.pageHeader', title='Manage Bookings')
+	@component('components.pageHeader', title='Manage bookings')
 	@endcomponent
 
 	{{--  Bookings Stats  --}}
@@ -45,7 +45,7 @@
 							<h2 class='col no-margin'><b>{{ numberOfCancelled }}</b></h2>
 						</div>
 						<div class='row'>
-							<h5 class='col text-grey'>Total Cancelled</h5>
+							<h5 class='col text-grey'>Total cancelled</h5>
 						</div>
 					</div>
 				</div>
@@ -78,7 +78,7 @@
 			</div>		
 		@else
 			<div class="card-header py-3">
-				<h6 class="m-0 font-weight-bold text-primary">Upcoming Bookings</h6>
+				<h6 class="m-0 font-weight-bold text-primary">Upcoming bookings</h6>
 			</div>
 			<div class="card-body">
 				<div class="table table-responsive">
