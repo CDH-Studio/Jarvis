@@ -23,9 +23,9 @@
 		{{--  Search room page content  --}}
 		<div class='col-xl-6 col-xxl-4 mb-4'>
 			@section('search room')
-			@component('components.generalCard', title='Search', extraCSS='custom-card-header')
-				@slot('body')
-				<form aria-label='search-form' action='results' method='GET' enctype='multipart/form-data' style='min-height:674px; height: 100%'>
+				<form aria-label='search-form' action='results' method='GET' enctype='multipart/form-data' style='min-height:674px;'>
+					<div class="card shadow" style='min-height:inherit;'>
+						<div class="card-body">
 							{{ csrfField() }}
 							{{--  Date form  --}}
 							<div class='row'>
@@ -168,6 +168,8 @@
 									<button aria-label='search-submit-button' type='submit' class='btn btn-primary no-margin'>Search</button>
 								</div>
 							</div>
+						</div>
+					</div>
 				</form>
 				{{--  Remove the is-invalid class when input changes  --}}
 				<script>
@@ -188,8 +190,6 @@
 						$(this).parents(".timePicker").siblings('.invalid-feedback').removeClass('show-invalid');
 					});
 				</script>
-				@endslot
-			@endcomponent	
 			@endsection
 		</div>
 		<div class='col-xl-6 col-xxl-8 mb-4'>
