@@ -63,8 +63,9 @@
 }
 
 .spinner-border {
-    vertical-align: middle;
-    margin: auto;
+    /* vertical-align: middle; */
+    margin-left: 10px;
+    margin-top: -5px;
 }
 
 .empty {

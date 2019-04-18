@@ -10,13 +10,14 @@
         {{ style('css/user') }}
     @endsection
     {{--  Loading page header  --}}
-    @!component('components.pageHeader', title='Results')
-    {{--  where result cards will be displayed --}}
-    <div class='row' id='results'>
-        <div class="spinner-border" role="status">
+    <div id='title' class='row'>
+        @!component('components.pageHeader', title='Results')
+        <div id='spinner' class="spinner-border" role="status">
             <span class="sr-only">Loading...</span>
         </div>
     </div>
+    {{--  where result cards will be displayed --}}
+    <div class='row' id='results'></div>
 
     {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
     <script>
@@ -36,10 +37,12 @@
             }
         });
 
-        channel.bind('send-hasResults', function (data) {
-            if (data.message.code == '{{ code }}') {
-                $('#results').empty();
-            }
+        channel.bind('send-done', function (data) {
+            setTimeout(function() {
+                if (data.message.code == '{{ code }}') {
+                    $('#spinner').fadeOut();
+                }
+            }, 1000);
         });
 
         channel.bind('send-empty', function (data) {

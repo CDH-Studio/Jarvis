@@ -611,16 +611,9 @@ class RoomController {
 		const code = random(4);
 		const checkRoomAvailability = async () => {
 			let results = [];
-			let hasResults = false;
 
 			await asyncForEach(rooms, async (item) => {
 				if (await this.getRoomAvailability(date, from, to, item.floor, item.calendar)) {
-					if (!hasResults) {
-						Event.fire('send.hasResults', {
-							code: code
-						});
-						hasResults = true;
-					}
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken, from: from, to: to }),
 						code: code
@@ -628,6 +621,10 @@ class RoomController {
 
 					results.push(item);
 				}
+			});
+
+			Event.fire('send.done', {
+				code: code
 			});
 
 			if (results.length === 0) {
