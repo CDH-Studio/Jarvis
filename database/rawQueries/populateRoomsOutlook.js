@@ -32,7 +32,7 @@ values("0ASIS", "IC CONF OTT-235 Queen-Oasis CONF IC", 0, "East", "Contact IT Se
 ("7E Lobby", "IC CONF OTT-235 Queen-7E LOBBY CONF IC", 7, "East", "343-291-1861", 12, 30, 1, 1, 1, 1, 0, 1, 1," ","(Multi-purpose room)","ic.conf-ott-235queen-7elobby-conf.ic@canada.ca", 1),
 ("7W Lobby", "IC CONF OTT-235 Queen-7W LOBBY CONF IC", 7, "West", "343-291-1862", 12, 28, 1, 1, 1, 1, 0, 0, 1,"Plasma"," ","ic.conf-ott-235queen-7wlobby-conf.ic@canada.ca", 1),
 ("741F (E)", "IC CONF OTT-235 Queen741F CONF IC", 7, "East", "343-291-1881", 10, 10, 0, 1, 0, 1, 0, 1, 1," "," ","ic.conf-ott-235queen-741f-conf.ic@canada.ca", 1),
-("752A (E)", "IC CONF OTT-235 Queen752A CONF IC", 7, "East", "343-291-3188", 16, 16, 0, 0, 1, 0, 0, 0, 0," "," ","ic.conf-ott-235queen-752a-conf.ic@canada.ca", 1),
+("752A (E)", "IC CONF OTT-235 Queen752A CONF IC", 7, "East", "343-291-3188", 16, 16, 0, 0, 1, 0, 0, 0, 0," "," ","ic.conf-ott-235queen-752a-conf.ic@canada.ca", 2),
 ("799A (W)", "IC CONF OTT-235 Queen799A CONF IC", 7, "West", "343-291-3544", 10, 31, 0, 0, 1, 1, 0, 1, 1," "," ","ic.conf-ott-235queen-799a-conf.ic@canada.ca", 1),
 ("831D (E)", "IC CONF OTT-235 Queen831D CONF IC", 8, "East", "343-291-2322", 8, 9, 0, 1, 0, 1, 0, 1, 1," "," ","ic.conf-ott-235queen-831d-conf.ic@canada.ca", 1),
 ("902A (E)", "IC CONF OTT-235 Queen902A CONF IC", 9, "East", "343-291-1868", 8, 12, 0, 1, 1, 1, 0, 1, 1," "," ","ic.conf-ott-235queen-902a-conf.ic@canada.ca", 1),
