@@ -20,7 +20,7 @@
                                         <h2 class='col no-margin'><strong>{{ userStats['numberOfUsers'] }}</strong></h2>
                                     </div>
                                     <div class='row'>
-                                        <h5 class='col text-grey'>Total Users</h5>
+                                        <h5 class='col text-grey'>Total users</h5>
                                     </div>
                                 </div>
                             </div>
@@ -49,7 +49,7 @@
                                         <h2 class='col no-margin'><strong>{{ roomStats['numberOfRooms'] }}</strong></h2>
                                     </div>
                                     <div class='row'>
-                                        <h5 class='col text-grey'>Total Rooms</h5>
+                                        <h5 class='col text-grey'>Total rooms</h5>
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +78,7 @@
                                         <h2 class='col no-margin'><strong>{{ issueStats }}</strong></h2>
                                     </div>
                                     <div class='row'>
-                                        <h5 class='col text-grey'>Total Issues</h5>
+                                        <h5 class='col text-grey'>Total issues</h5>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +99,7 @@
             </div>
             <div class='row'>
                 <div class='col' style='padding:12px'>
-                    @component('components.generalCard', title='Most Popular')
+                    @component('components.generalCard', title='Most popular')
                         @slot('body')
                             <div class='chart-bar'>
                                 <canvas id="roomPopularity" width="400" height="400"></canvas>
@@ -113,7 +113,7 @@
         <div class='col-lg-12 col-xxl-5'>
             <div class='row'>
                 <div class='col-6' style='padding:12px'>
-                    @component('components.generalCard', title='Room - Statuses')
+                    @component('components.generalCard', title='Rooms status')
                         @slot('body')
                             <div class='chart-bar'>
                                 <canvas id="roomStatuses" width="400" height="400"></canvas>
@@ -122,7 +122,7 @@
                     @endcomponent
                 </div>
                 <div class='col-6' style='padding:12px'>
-                    @component('components.generalCard', title='Room - Issues')
+                    @component('components.generalCard', title='Rooms issue')
                         @slot('body')
                             <div class='chart-bar'>
                                 <canvas id="roomIssues" width="400" height="400"></canvas>
@@ -133,7 +133,7 @@
             </div>
             <div class='row'>
                 <div class='col-12' style='padding:12px'>
-                    @component('components.generalCard', title='Highest Rated')
+                    @component('components.generalCard', title='Highest rated')
                         @slot('body')
                             @each(room in highestRatedRooms) 
                                 @component('components.smallCard', room=room)

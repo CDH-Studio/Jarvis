@@ -7,14 +7,6 @@
 {{--  Manage bookings page content  --}}
 @section('content')
     @!component('components.pageHeader', title='Room details')
-    {{--  floormap  --}}
-    @component('components.generalModal', id='mapModal', title='Map')
-        @slot('body')
-            <img class='room-details-image' src='/images/temp_floor_map.png' alt='Default Floor Map'>
-        @endslot
-    @endcomponent
-
-    {{--  Loading page header  --}}
 
     {{--  Actual page content  --}}
     <div class="row">
@@ -38,15 +30,15 @@
                             @if(isAdmin)
                                 <button class="btn btn-info btn-icon-split" onclick="window.location='{{route('viewBookings', { id: room.id, bookingType: 'room'}) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-book"></i></span>
-                                    <span class="text">View Bookings</span>
+                                    <span class="text">View bookings</span>
                                 </button>
                                 <button class="btn btn-info btn-icon-split" onclick="window.location='{{ route('showIssue', { roomID: room.id, issueStatus: 'all' }) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-flag"></i></span>
-                                    <span class="text">View Issues</span>
+                                    <span class="text">View issues</span>
                                 </button>   
                                 <button class="btn btn-info btn-icon-split" onclick="window.location='{{ route('editRoom', { id: room.id }) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
-                                    <span class="text">Edit Room</span>
+                                    <span class="text">Edit room</span>
                                 </button>   
                             @else
                                 <span data-toggle="modal" data-target='#reportModal' >
@@ -64,8 +56,12 @@
                             @if(room.picture) 
                                 <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='../{{ room.picture }}'>
                             @else
-                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/meeting.jpeg'>
-                            @endif                     
+                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/default.png'>
+                            @endif        
+                            <a class='link-color' href='' style='display:block; text-align:center;'  data-toggle='modal' data-target='#mapModal'>
+                                <i class='fas fa-external-link-alt'></i>
+                                View Map
+                            </a>             
                         </div>
                         <div class="col-7">
                             <b>{{ room.fullName }}</b>
@@ -333,7 +329,7 @@
                 <div class="card-body">
                     
                     @if(reviews.length == 0)             
-                        @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="no reviews available")          
+                        @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="No reviews available")          
                     @else
                         {{--  Loops through the rooms array and displays every room's content  --}}
                         @each(review in reviews)
@@ -563,18 +559,27 @@
 
     @endif
 
+    {{--  Loading modal for review pictures  --}}
     @each(review in reviews)
         @if(review.reviewPicture)
             @!component('components.imageModal', id="review-"+review.id, title="By "+review.user.firstname+" "+review.user.lastname, image="/"+review.reviewPicture)
         @endif
     @endeach
 
+    {{--  Loading modal for room picture  --}}
     @if(room.picture)
         @!component('components.imageModal', id="room-pic", title=room.name, image='../'+ room.picture)
     @else
-        @!component('components.imageModal', id="room-pic", title=room.name, image="/images/meeting.jpeg")
+        @!component('components.imageModal', id="room-pic", title=room.name, image="/images/default.png")
     @endif
 
+    {{--  Loading modal for room floor plan  --}}
+    @if(room.floorplan)
+        @!component('components.imageModal', id='mapModal', title= room.name + '- Floor plan', image='../' + room.floorplan)
+    @else
+        @!component('components.imageModal', id='mapModal', title= room.name + '- Floor plan', image='/images/temp_floor_map.png')
+    @endif
+    
     {{--  Script to display file name on upload  --}}
     <script>
         $('#reviewPicture').on('change',function(){
