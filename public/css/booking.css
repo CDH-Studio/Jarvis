@@ -76,6 +76,10 @@
 	animation: fadeIn 2s;
 }
 
+.small-card {
+	animation: fadeIn 2s;
+}
+
 /***** Recurring Booking page *****/
 .tabs a.nav-link {
 	color: #004680 !important;
