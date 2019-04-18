@@ -15,7 +15,7 @@
 {{--  book room page content  --}}
 @section('content')
     {{--  Loading page header  --}}
-    @!component('components.pageHeader', title= 'Find Available Rooms')
+    @!component('components.pageHeader', title= 'Search By Time Range')
     {{--  Page Content  --}}
     <div class='row'>
 		{{--  Search room page content  --}}
@@ -45,9 +45,10 @@
                             </div>
                         </div>
                         {{--  Meeting time from  --}}
+                        <h4>Time Range</h4>
                         <div class='row'>
                             <div class='col form-group mb-4'>
-                                <label for='from'>Start Time <b class='text-danger'>*</b></label>
+                                <label for='from'>From <b class='text-danger'>*</b></label>
                                 {{--  If field is not filled correctly show an error box  --}}
                                 @if(hasErrorFor('from'))
                                     <div class='timePicker' style='display: flex;'>
@@ -77,7 +78,7 @@
                                 @endif
                             </div>
                             <div class='col form-group mb-4'>
-                                <label for='to' data-toggle='tooltip'>End Time <b class='text-danger'>*</b></label>
+                                <label for='to' data-toggle='tooltip'>To <b class='text-danger'>*</b></label>
                                 {{--  If field is not filled correctly show an error box  --}}
                                 @if(hasErrorFor('to'))
                                     <div style='display: flex;' class='timePicker'>
