@@ -7,14 +7,6 @@
 {{--  Manage bookings page content  --}}
 @section('content')
     @!component('components.pageHeader', title='Room details')
-    {{--  floormap  --}}
-    @component('components.generalModal', id='mapModal', title='Map')
-        @slot('body')
-            <img class='room-details-image' src='/images/temp_floor_map.png' alt='Default Floor Map'>
-        @endslot
-    @endcomponent
-
-    {{--  Loading page header  --}}
 
     {{--  Actual page content  --}}
     <div class="row">
@@ -64,8 +56,12 @@
                             @if(room.picture) 
                                 <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='../{{ room.picture }}'>
                             @else
-                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/meeting.jpeg'>
-                            @endif                     
+                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/default.png'>
+                            @endif        
+                            <a class='link-color' href='' style='display:block; text-align:center;'  data-toggle='modal' data-target='#mapModal'>
+                                <i class='fas fa-external-link-alt'></i>
+                                View Map
+                            </a>             
                         </div>
                         <div class="col-7">
                             <b>{{ room.fullName }}</b>
@@ -563,18 +559,27 @@
 
     @endif
 
+    {{--  Loading modal for review pictures  --}}
     @each(review in reviews)
         @if(review.reviewPicture)
             @!component('components.imageModal', id="review-"+review.id, title="By "+review.user.firstname+" "+review.user.lastname, image="/"+review.reviewPicture)
         @endif
     @endeach
 
+    {{--  Loading modal for room picture  --}}
     @if(room.picture)
         @!component('components.imageModal', id="room-pic", title=room.name, image='../'+ room.picture)
     @else
-        @!component('components.imageModal', id="room-pic", title=room.name, image="/images/meeting.jpeg")
+        @!component('components.imageModal', id="room-pic", title=room.name, image="/images/default.png")
     @endif
 
+    {{--  Loading modal for room floor plan  --}}
+    @if(room.floorplan)
+        @!component('components.imageModal', id='mapModal', title= room.name + '- Floor plan', image='../' + room.floorplan)
+    @else
+        @!component('components.imageModal', id='mapModal', title= room.name + '- Floor plan', image='/images/temp_floor_map.png')
+    @endif
+    
     {{--  Script to display file name on upload  --}}
     <script>
         $('#reviewPicture').on('change',function(){
