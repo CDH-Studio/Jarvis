@@ -113,7 +113,7 @@
         <div class='col-lg-12 col-xxl-5'>
             <div class='row'>
                 <div class='col-6' style='padding:12px'>
-                    @component('components.generalCard', title='Rooms status')
+                    @component('components.generalCard', title='Status - Rooms')
                         @slot('body')
                             <div class='chart-bar'>
                                 <canvas id="roomStatuses" width="400" height="400"></canvas>
@@ -122,7 +122,7 @@
                     @endcomponent
                 </div>
                 <div class='col-6' style='padding:12px'>
-                    @component('components.generalCard', title='Rooms issue')
+                    @component('components.generalCard', title='Issue - Rooms')
                         @slot('body')
                             <div class='chart-bar'>
                                 <canvas id="roomIssues" width="400" height="400"></canvas>
