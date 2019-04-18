@@ -25,6 +25,11 @@
 			@section('search room')
 				<form aria-label='search-form' action='results' method='GET' enctype='multipart/form-data' style='min-height:674px;'>
 					<div class="card shadow" style='min-height:inherit;'>
+						<div class="card-header custom-card-header py-3 d-flex color-primary">
+							<div class='flex-grow-1 d-flex align-content-center'>
+								<h6 class="m-0 font-weight-bold color-light">Search </h6>
+							</div>       
+						</div>
 						<div class="card-body">
 							{{ csrfField() }}
 							{{--  Date form  --}}
@@ -162,7 +167,7 @@
 								</div>
 							</div>
 							{{--  Page buttons  --}}
-							<div class='row align-items-end' style='margin-top:80px;'>
+							<div class='row align-items-end' style='margin-top:40px;'>
 								<div class='col-sm-12 text-right'>
 									{{--  <button aria-label='back' type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>  --}}
 									<button aria-label='search-submit-button' type='submit' class='btn btn-primary no-margin'>Search</button>
