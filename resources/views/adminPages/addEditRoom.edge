@@ -304,14 +304,14 @@
     @if(room.floorplan)
         @!component('components.imageModal', id="room-floorplan-"+room.id, title=room.name + ' - Floor plan', image='/'+ room.floorplan)
     @else
-        @!component('components.imageModal', id="room-floorplan-"+room.id, title=room.name + ' - Floor plan', image="/images/meeting.jpeg")
+        @!component('components.imageModal', id="room-floorplan-"+room.id, title=room.name + ' - Floor plan', image="/images/default.png")
     @endif
 
     {{--  displaying the room picture  --}}
     @if(room.picture)
         @!component('components.imageModal', id="room-roompicture-"+room.id, title=room.name + ' - Room picture', image='/'+ room.picture)
     @else
-        @!component('components.imageModal', id="room-roompicture-"+room.id, title=room.name + ' - Room picture', image="/images/meeting.jpeg")
+        @!component('components.imageModal', id="room-roompicture-"+room.id, title=room.name + ' - Room picture', image="/images/default.png")
     @endif
 
     {{--  Script to display file name on upload  --}}
