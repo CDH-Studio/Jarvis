@@ -9,7 +9,7 @@ tmp
 .env
 
 # Uploads 
-public/uploads/
+public/uploads/reviewPictures
 
 # the vscode config file
 .vscode
