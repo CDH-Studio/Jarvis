@@ -145,15 +145,15 @@
                             </div>
                         </div>
                         <div class='row'>
+                            {{--  Max Capacity from--}}
+                            <div class='col form-group mb-4'>
+                                    <label for='capacity'>Max Capacity</label>
+                                    <input class='form-control' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
+                                </div>
                             {{--  Table Seats form  --}}
                             <div class='col form-group mb-4'>
                                 <label for='seats'>Number of Table Seats</label>
                                 <input class='form-control' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
-                            </div>
-                            {{--  Max Capacity  --}}
-                            <div class='col form-group mb-4'>
-                                <label for='capacity'>Number of People</label>
-                                <input class='form-control' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
                             </div>
                         </div>
                         {{--  Equipment check box form  --}}
