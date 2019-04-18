@@ -70,8 +70,8 @@ Route.get('/issue/:id/edit', 'IssueController.editIssue').as('editIssue').middle
 Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['isAdmin']).validator('EditIssue');
 
 // user
-Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('AddReview').middleware(['isUser']);
-Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('AddReview').middleware(['isUser']);
+Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('addReview').middleware(['isUser']);
+Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('addReview').middleware(['isUser']);
 Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['isUser']);
 Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
 
