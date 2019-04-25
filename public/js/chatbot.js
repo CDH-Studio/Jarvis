@@ -45,7 +45,7 @@ function subscribeToChannel () {
 			$('.messages').empty().html(`
 				<b>I have found a room for you!</b>
 				<div class="card">
-					<img src="/images/meeting.jpeg" alt="Avatar" style="width:100%">
+					<img src="/images/default.png" alt="Avatar" style="width:100%">
 					<div class="card-container">
 						<h4><b>${room.name}</b></h4> 
 						<p>${date}</p> 

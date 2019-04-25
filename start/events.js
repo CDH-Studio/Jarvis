@@ -27,3 +27,9 @@ Event.when('send.empty', async (message) => {
 		message
 	});
 });
+
+Event.when('send.done', async (message) => {
+	pusher.trigger('adonis-channel', 'send-done', {
+		message
+	});
+});

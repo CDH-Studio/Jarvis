@@ -1,7 +1,7 @@
 @layout('layouts.mainLayout')
 
 @section('content')
-    @!component('components.pageHeader', title='User Profile')
+    @!component('components.pageHeader', title='User profile')
     <div class='row'>
         <div class= 'col-12'>
             <div class="card shadow mb-4 p-3">
@@ -29,14 +29,14 @@
                                 @endif
                                 <button onclick="window.location='{{ route('viewBookings', {id: user.id, bookingType: 'user'}) }}';" class="btn btn-info btn-icon-split">
                                     <span class="icon text-white-50"><i class="fas fa-list-ul"></i></span>
-                                    <span class="text">View Bookings</span>
+                                    <span class="text">View bookings</span>
                                 </button>             
                             @endif
                            
                             @if(canEdit)
                                 <button onclick="window.location='{{ route('editUser', { id: user.id }) }}';" class="btn btn-primary btn-icon-split">
                                     <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
-                                    <span class="text">Edit Profile</span>
+                                    <span class="text">Edit profile</span>
                                 </button>
                             @endif
                         </div>
@@ -52,7 +52,7 @@
                     <div class='row'>
                         <div class='col-md-5'>
 							@if(canEdit)
-								<h4>Change Password</h4>
+								<h4>Change password</h4>
 								@if(old('error'))
 									<div class='alert alert-danger'>
 										{{ old('error') }}

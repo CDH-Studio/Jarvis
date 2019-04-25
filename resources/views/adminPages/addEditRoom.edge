@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    @!component('components.pageHeader', title=actionType)
+    @!component('components.pageHeader', title='Add room')
     <p>Add rooms to database. Rooms added here can be booked by users.</p>
 
     <div class='row'>
@@ -15,7 +15,7 @@
                     <div class='row'>
                         <div class='col-md-12'>
                             @if(actionType =='Add Room')
-                                <h4 class="mb-3">New Room</h4>
+                                <h4 class="mb-3">New room</h4>
                                 <form action={{ route('addRoom') }} method='POST' enctype='multipart/form-data'>
                             @else
                                 <form action='{{ route('saveRoom', {id: room.id}) }}' method='POST' enctype='multipart/form-data'>
@@ -304,14 +304,14 @@
     @if(room.floorplan)
         @!component('components.imageModal', id="room-floorplan-"+room.id, title=room.name + ' - Floor plan', image='/'+ room.floorplan)
     @else
-        @!component('components.imageModal', id="room-floorplan-"+room.id, title=room.name + ' - Floor plan', image="/images/meeting.jpeg")
+        @!component('components.imageModal', id="room-floorplan-"+room.id, title=room.name + ' - Floor plan', image="/images/default.png")
     @endif
 
     {{--  displaying the room picture  --}}
     @if(room.picture)
         @!component('components.imageModal', id="room-roompicture-"+room.id, title=room.name + ' - Room picture', image='/'+ room.picture)
     @else
-        @!component('components.imageModal', id="room-roompicture-"+room.id, title=room.name + ' - Room picture', image="/images/meeting.jpeg")
+        @!component('components.imageModal', id="room-roompicture-"+room.id, title=room.name + ' - Room picture', image="/images/default.png")
     @endif
 
     {{--  Script to display file name on upload  --}}
