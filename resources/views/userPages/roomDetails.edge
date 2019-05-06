@@ -411,7 +411,7 @@
 
                             <div class='row'>
                                 <div class='col form-group'>
-                                    <label for='review'>Review</label>
+                                    <label for='review'>Review <strong class='text-danger'>*</strong></label>
                                         <textarea class='form-control' name='review' id='review' rows='5' >{{ old('review',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
                                 </div> 
@@ -429,7 +429,7 @@
                                             @else
                                                 <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
                                             @endif
-                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose file</label>
+                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose file (Max: 2MB)</label>
                                             @if(!hasReview) 
                                                 <small id="reviewPictureHelp" class="form-text text-muted">Image cannot be edited after upload. It can only be deleted.</small>
                                             @else
