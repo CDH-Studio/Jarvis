@@ -8,12 +8,6 @@
   {{ style('css/booking') }}
 @endsection
 
-@section('extrajs')
-    {{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
-    {{ script('https://unpkg.com/@adonisjs/websocket-client@1.0.9/dist/Ws.browser.js') }}
-    {{ script('js/chatbot.js') }}
-@endsection
-
 {{--  book room page content  --}}
 @section('content')
     {{--  Loading page header  --}}
@@ -172,24 +166,7 @@
 					</div>
 				</form>
 				{{--  Remove the is-invalid class when input changes  --}}
-				<script>
-					function removeErrorClass(idOfInput){
-						$('#'+idOfInput).removeClass('is-invalid');
-						// Ih field is the calendar, then remove styling from erorr message
-						if (idOfInput == 'date') {
-							$('#date-error').removeClass('show-invalid');
-						}
-					}
-					
-					// update from and to inputs from dropdown
-					$(document).on("click",".dropdown-menu a", function(ev) {
-						$(this).siblings().removeClass('active');
-						$(this).addClass("active");
-						$(this).parents(".timePicker").find('.time-form').val($(this).attr('data-value'));
-						$(this).parents(".timePicker").find('.time-form').removeClass('is-invalid');
-						$(this).parents(".timePicker").siblings('.invalid-feedback').removeClass('show-invalid');
-					});
-				</script>
+				
 			@endsection
 		</div>
 		<div class='col-xl-6 col-xxl-8 mb-4'>
@@ -230,46 +207,6 @@
 						@endslot
 					@endcomponent
 				</div>
-						{{--  This is a copy component from #oringal-upcoming --}}
-				<div id='secondary-upcoming' class='col-12'  style='height:325px;'>
-					@component('components.generalCard', title='My bookings', extraCSS='custom-card-header')
-						@slot('titleRight')
-							<a class="color-light"  href='{{ route('viewBookings',{id: userId, bookingType: 'user'}) }}' target='_blank'>
-								<i class="fas fa-external-link-alt fa-sm"></i>
-							</a>
-						@endslot
-						@slot('body')
-							{{-- display message if there are no upcomming bookings --}}
-							@if(!freqRooms)
-								 @!component('components.cardEmptyMessage',faIcon="fas fa-list fa-6x", message="No bookings found") 
-							@else
-								<div class='table table-responsive'>
-									<table id='bookNowTable' class='table' style='width:100%;'>
-										<thead>
-											<tr>
-												<th scope='col' class='text-center' style='width:10%'>Room</th>
-												<th scope='col' class='text-center' style='width:10%'>Name</th>
-												<th scope='col' class='text-center' style='width:10%'>Date</th>
-												<th scope='col' class='text-center' style='width:10%'>Time</th>
-											</tr>
-										</thead>
-										{{--  Loops through the rooms array and displays every room's content  --}}
-										<tbody>
-											@each(room in upcomming) 
-												<tr class='table-light'>
-													<td class='text-center'><a href='{{ route('showRoom', {id: ""+room.roomId}) }}'>{{ room.room }}</a></td>
-													<td class='text-center'>{{ room.subject }}</td>
-													<td class='text-center'>{{ room.date }} </td>
-													<td class='text-center'>{{ room.time }}</td> 
-												</tr>
-											@endeach
-										</tbody>
-									</table>
-								</div>
-							@endif
-						@endslot
-					@endcomponent
-				</div>
 			</div>
 		</div>
     </div>
@@ -283,7 +220,7 @@
 				@endslot
 				@slot('body')
 					{{-- display message if there are no upcomming bookings --}}
-					@if(!freqRooms)
+					@if(!upcoming)
 						@!component('components.cardEmptyMessage',faIcon="fas fa-search fa-4x", message="No Bookings Found") 
 					@else
 						<div class='table table-responsive'>
@@ -314,24 +251,18 @@
 			@endcomponent
 		</div>
 	</div>
-	<div class='row d-flex flex-wrap'>
-		{{--  Chatbot  WIP--}}
-		<div class='row' hidden>
-			<i class='open-button fas fa-robot fa-2x' onclick='openChat()'></i>
-			<div class='chat-popup' id='chat-popup'>
-				<form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>
-					{{ csrfField() }}
-					<div class='messages'></div>
-					<textarea arialabel='user-input' placeholder='Type message..' name='message' id='message'></textarea>
 
-					<button id='sub' type='button' class='btn' onclick='send()'>Send</button>
-					<button type='button' class='btn cancel' onclick='closeChat()'>Close</button>
-				</form>
-			</div>
-		</div>
-	</div>
 
+
+
+@endsection
+
+@section('extrajs')
+	{{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
+    {{ script('https://unpkg.com/@adonisjs/websocket-client@1.0.9/dist/Ws.browser.js') }}
+    {{ script('js/chatbot.js') }}
     {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
+    
     <script>
         $('#message').keypress(function(e) {
 	        if (e.which === 13 && !e.shiftKey) {
@@ -363,6 +294,23 @@
                 $('#avail').empty().append(listItem)
             }
         });
+
+        function removeErrorClass(idOfInput){
+			$('#'+idOfInput).removeClass('is-invalid');
+			// Ih field is the calendar, then remove styling from erorr message
+			if (idOfInput == 'date') {
+				$('#date-error').removeClass('show-invalid');
+			}
+		}
+		
+		// update from and to inputs from dropdown
+		$(document).on("click",".dropdown-menu a", function(ev) {
+			$(this).siblings().removeClass('active');
+			$(this).addClass("active");
+			$(this).parents(".timePicker").find('.time-form').val($(this).attr('data-value'));
+			$(this).parents(".timePicker").find('.time-form').removeClass('is-invalid');
+			$(this).parents(".timePicker").siblings('.invalid-feedback').removeClass('show-invalid');
+		});
     </script>
 
     @if(flashMessage('notification'))
@@ -374,6 +322,6 @@
             });
         </script>
     @endif
-@endsection
 
+@endsection
 
