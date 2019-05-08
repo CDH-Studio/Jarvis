@@ -326,32 +326,26 @@
     <div class="row">
         <div class='col-12 col-lg-8'>
             <div class="reviews-card card shadow mb-4">
-                <div class="card-body">
+                <div class="card-body p-4">
                     
                     @if(reviews.length == 0)             
                         @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="No reviews available")          
                     @else
                         {{--  Loops through the rooms array and displays every room's content  --}}
                         @each(review in reviews)
-                            <div class="row mb-1">
+                            <div class="row mb-4">
                                 <div class="col-8">
-                                    <div class="row mb-2">
-                                        <div class="col">
-                                            <strong>{{ review.user.firstname }} {{ review.user.lastname }}</strong><br>
-                                            @!component('components/stars', rating=review.rating) 
-                                            <br>
-                                            <i class="text-muted">{{review.user.email}}</i> | <i class="text-muted">{{review.comment_date}}</i>
-                                        </div>
-                                    </div>
-                                    <div>{{ review.review }} </div>
- 
+                                    <strong>{{ review.user.firstname }} {{ review.user.lastname }}</strong><br>
+                                    @!component('components/stars', rating=review.rating) 
+                                    <br>
+                                    <i class="text-muted">{{review.user.email}}</i> | <i class="text-muted">{{review.comment_date}}</i>
+                                    <p class="mt-2">{{ review.review }}</p>
                                 </div>
                                 <div class="col-4 text-center">
                                     @if(review.reviewPicture)
-                                        <img class="shadow"style ="width:80%; height:auto; max-height: 150px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
+                                        <img class="shadow" style ="width:auto; height:110px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
                                     @endif
-                                </div>
-                                <hr>             
+                                </div>           
                             </div>
                         @endeach
                         <div class="row">
