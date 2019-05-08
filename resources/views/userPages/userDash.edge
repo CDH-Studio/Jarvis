@@ -56,7 +56,7 @@
 											<button for='from' aria-label='start-time-button' class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
 											<div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
 												@each(item in dropdownSelection)
-													<a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
+													<a class='dropdown-item' for='fromDropDown' data-value='{{item.dataValue}}' href='#'>{{item.name}}</a>
 												@endeach
 											</div>
 										</div>
@@ -176,6 +176,9 @@
                         {{--  If there are no avail rooms display a message accordingly  --}}
 						@slot('body')
                             <div id='avail'></div>
+                            <div id="loading">
+								@!component('components.cardEmptyMessage',faIcon="fas fa-circle-notch fa-spin fa-4x", message="searching")
+							</div>
 						@endslot
 					@endcomponent
 				</div>
@@ -259,10 +262,8 @@
 
 @section('extrajs')
 	{{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
-    {{ script('https://unpkg.com/@adonisjs/websocket-client@1.0.9/dist/Ws.browser.js') }}
-    {{ script('js/chatbot.js') }}
     {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
-    
+
     <script>
         $('#message').keypress(function(e) {
 	        if (e.which === 13 && !e.shiftKey) {
@@ -283,15 +284,18 @@
         //Listen for events on the channel
         channel.bind('send-room', function (data) {
             if (data.message.code == '{{ code }}') {
-                let listItem = $("<div class='row'><div class='col'>" + data.message.card + "</div></div>")
-                $('#avail').prepend(listItem)
+                let listItem = $("<div class='row'><div class='col'>" + data.message.card + "</div></div>");
+                $('#loading').hide();
+                $('#avail').prepend(listItem);
             }
         });
 
         channel.bind('send-empty', function (data) {
             if (data.message.code == '{{ code }}') {
                 let listItem = $(data.message.view)
+                $('#loading').hide();
                 $('#avail').empty().append(listItem)
+
             }
         });
 
