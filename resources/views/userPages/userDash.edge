@@ -192,10 +192,10 @@
 								@each(room in freqRooms)
 									<div class='row'>
 										<div class='col'>
-											@component('components.smallCard', room=room)
+											@component('components.smallCard', room = room)
 												@slot('body')
 													<div class='mb-2'>
-														@!component('components.stars', rating= room.averageRating)
+														@!component('components.stars', rating = room.averageRating)
 													</div>
 													<div>
 														<span class='mr-3'>Table seats: {{room.seats}}</span>

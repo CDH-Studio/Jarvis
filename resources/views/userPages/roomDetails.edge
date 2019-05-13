@@ -217,7 +217,7 @@
                                                     <button for='from' aria-label='start-time-button' class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
                                                     <div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                                         @each(item in dropdownSelection)
-                                                            <a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
+                                                            <a class="dropdown-item" for='fromDropDown' data-value="{{item.dataValue}}" href="#">{{item.name}}</a>
                                                         @endeach
                                                     </div>
                                                 </div>
@@ -240,7 +240,7 @@
                                                 <button for='to'  aria-label='end-time-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
                                                 <div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                                     @each(item in dropdownSelection)
-                                                        <a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
+                                                        <a class="dropdown-item" for='fromDropDown' data-value="{{item.dataValue}}" href="#">{{item.name}}</a>
                                                     @endeach
                                                 </div>
                                             </div>
@@ -574,6 +574,12 @@
         @!component('components.imageModal', id='mapModal', title= room.name + '- Floor plan', image='/images/temp_floor_map.png')
     @endif
     
+    
+@endsection
+
+{{--  Deals with the search functionality of the table above- searches all fields   --}}
+@section('extrajs') 
+    
     {{--  Script to display file name on upload  --}}
     <script>
         $('#reviewPicture').on('change',function(){
@@ -618,10 +624,9 @@
             });
         </script>
     @endif
-    
-@endsection
 
-{{--  Deals with the search functionality of the table above- searches all fields   --}}
-@section('extrajs') 
+    {{--  Mouseover Tooltip  --}}
+    <script> $(document).ready(function(){ $('[data-toggle="tooltip"]').tooltip(); });</script>
+
     {{ script('js/roomBookingForm.js') }}
 @endsection

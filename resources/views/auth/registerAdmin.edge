@@ -1,7 +1,7 @@
 @layout('layouts.loginLayout')
 
 @section('title')
-Jarvis - Login
+Admin Register | Jarvis
 @endsection
 
 @section('content')
@@ -21,6 +21,10 @@ Jarvis - Login
 								<h1 class="h4 text-gray-900 mb-4">Register Admin</h1>
 							</div>
 							<form class='needs-validation user' action='{{ route('CreateAdmin') }}' method='POST'>
+								<div class="alert alert-dismissible alert-danger">
+								  <button type="button" class="close" data-dismiss="alert">&times;</button>
+								  <i class="fas fa-exclamation-triangle"></i> This page is for administrator use only. You will need a special code to register.
+								</div>
 								{{ csrfField() }}
 
 								<div class='form-row'>
@@ -57,6 +61,9 @@ Jarvis - Login
 									<div class='col-md-6'>
 										<div class='form-group mb-2'>
 											<label for='password'>Password</label>
+											<span href="#" class="mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Your password must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character and be at least 8 Characters.">
+												<i class="fas fa-info-circle text-muted fa-xs"></i>
+											</span>
 											<input type='password' class='form-control' name='password' id='password' placeholder='Password'>
 											@if(hasErrorFor('password'))
 												<div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>

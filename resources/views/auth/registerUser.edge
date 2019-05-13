@@ -1,7 +1,7 @@
 @layout('layouts.loginLayout')
 
 @section('title')
-Jarvis - Login
+Register | Jarvis
 @endsection
 
 @section('content')
@@ -57,6 +57,9 @@ Jarvis - Login
 										<div class='col-md-6'>
 											<div class='form-group mb-2'>
 												<label for='password'>Password</label>
+													<span href="#" class="mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Your password must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character and be at least 8 Characters.">
+														<i class="fas fa-info-circle text-muted fa-xs"></i>
+													</span>
 												<input type='password' class='form-control' name='password' id='password' placeholder='Password'>
 												@if(hasErrorFor('password'))
 													<div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>
