@@ -9,6 +9,7 @@ const Mail = use('Mail');
 const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
+const axios = require('axios');
 
 /**
  * Generating a random string.
@@ -30,14 +31,12 @@ function random (times) {
  * @param {string} subject  Subject of Email
  * @param {string} body     Body of Email
  * @param {string} to       Sending address
- * @param {string} from     Receiving address
  */
-function sendMail (subject, body, to, from) {
-	Mail.raw(body, (message) => {
-		message
-			.to(to)
-			.from(from)
-			.subject(subject);
+async function sendMail (subject, body, to, from) {
+	await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/send`, {
+		to,
+		subject,
+		body
 	});
 	Logger.info('mail sent');
 }
