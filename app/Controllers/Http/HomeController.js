@@ -30,20 +30,6 @@ async function getAccessToken () {
 	}
 }
 
-/**
- * Generating a random string.
- *
- * @param {Integer} times Each time a string of 5 to 6 characters is generated.
- */
-function random (times) {
-	let result = '';
-	for (let i = 0; i < times; i++) {
-		result += Math.random().toString(36).substring(2);
-	}
-
-	return result;
-}
-
 async function asyncForEach (arr, callback) {
 	for (let i = 0; i < arr.length; i++) {
 		await callback(arr[i], i, arr);
@@ -61,7 +47,14 @@ class HomeController {
 	* @param {auth}
 	*
 	*/
-	async home ({ response, auth }) {
+	async home ({ response, auth, request }) {
+
+		//Check if user has selected language
+		const lang = request.cookie('lang');
+		if (lang != "en" && lang != 'fr'){
+			return response.route('langSelect');
+		}
+		
 		try {
 			// cheack user is logged-in and role
 			await auth.check();
@@ -75,6 +68,32 @@ class HomeController {
 		} catch (error) {
 			return response.route('login');
 		}
+	}
+
+	/**
+	*
+	* Render language selection page
+	*
+	* @param {view}
+	*
+	*/
+	async viewLang ({ response, auth, request }) {
+	  	return view.render('language.langSelect', { locales: antl.availableLocales(), photoName } )
+	}
+
+	/**
+	*
+	* Change language cookie
+	*
+	* @param {view}
+	*
+	*/
+	async changeLang ({ response, auth, request }) {
+		const locales = antl.availableLocales()
+		if (locales.indexOf(params.lang) > -1 ) {
+		response.cookie('lang', params.lang, { path: '/' })
+		}
+		response.redirect('back')
 	}
 
 	/**
@@ -398,7 +417,7 @@ class HomeController {
 		const formattedFrom = moment(now).add(remainder, 'm').format('HH:mm A');
 		const formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm A');
 
-		const code = random(4);
+		const code = randomString(4);
 		const checkRoomAvailability = async () => {
 			let numberOfRooms = 2;
 			await asyncForEach(rooms, async (item) => {

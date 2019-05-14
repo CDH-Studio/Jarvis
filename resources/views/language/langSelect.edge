@@ -1,41 +1,51 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
-</head>
-<body>
+@layout('layouts.loginLayout')
 
-  <nav class="navbar navbar-expand navbar-light bg-light">
-    <a class="navbar-brand" href="#">AdonisJs</a>
+@section('title')
+Jarvis
+@endsection
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Switch language
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-            @each(locale in locales)
-              <a class="dropdown-item" href="/switch/{{ locale }}"> {{ locale }} </a>
-            @endeach
-
+@section('content')
+  <!-- Outer Row -->
+    <div class='row justify-content-center vertical-center' style='height:100vh'>
+    <div class='col-xl-6 col-lg-6 col-md-9'>
+      <div class='card o-hidden border-0 shadow-lg my-5'>
+        <div class='card-body p-0'>
+          <!-- Nested Row within Card Body -->
+          <div class='row'>
+            <div class='col-lg-12 align-self-center'>
+              <div class='p-5'>
+                <div class='text-left'>
+                  <img class='login-logo mb-3' src='/logo_full_dark.png' alt='Jarvis Logo'>
+                </div>
+                <div class='text-left mb-4'>
+                  <h1 class='h4 text-gray-900 mb-3'>Select Language</h1>
+                </div>
+                <a href='/switch/en' class='btn btn-primary btn-user btn-block mt-3 mb-2'>English</a>
+                <a href='/switch/fr' class='btn btn-primary btn-user btn-block mt-3 mb-2'>French</a>
+              </div>
+            </div>
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
-  </nav>
+    </div>
 
+    @if(flashMessage('notification'))
+    <script type='module'>
+        import {notify} from '/js/notify.js';
+        $(window).on('load', () => {
+            notify({ $: $, message: '{{ flashMessage('notification') }}' });
+        });
+    </script>
+    @elseif(hasErrorFor('password') || hasErrorFor('email'))
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', () => {
+                notify({ $: $, message: 'One or more errors occurred.', type: 'danger', align: 'center',
+                                 enter: 'bounceIn', exit: 'bounceOut', element: '.notify-error'
+                });
+            });
+        </script>
+    @endif
 
-  <div class="jumbotron">
-    <h1 class="display-4">{{ antl.formatMessage('greetings.greet') }}</h1>
-  </div>
-
-
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-
-</body>
-</html>
+@endsection
