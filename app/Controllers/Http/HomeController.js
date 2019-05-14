@@ -14,6 +14,20 @@ require('moment-round');
 const graph = require('@microsoft/microsoft-graph-client');
 
 /**
+ * Generating a random string.
+ *
+ * @param {Integer} times Each time a string of 5 to 6 characters is generated.
+ */
+function randomString (times) {
+	let result = '';
+	for (let i = 0; i < times; i++) {
+		result += Math.random().toString(36).substring(2);
+	}
+
+	return result;
+}
+
+/**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
  * @returns {Object} The access token.
@@ -77,8 +91,8 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async viewLang ({ response, auth, request }) {
-	  	return view.render('language.langSelect', { locales: antl.availableLocales(), photoName } )
+	async viewLang ({ view }) {
+	  	return view.render('language.langSelect');
 	}
 
 	/**
@@ -88,7 +102,7 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async changeLang ({ response, auth, request }) {
+	async changeLang ({ params, antl, request, response }) {
 		const locales = antl.availableLocales()
 		if (locales.indexOf(params.lang) > -1 ) {
 		response.cookie('lang', params.lang, { path: '/' })
