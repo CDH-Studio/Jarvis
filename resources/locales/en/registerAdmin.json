@@ -1,0 +1,12 @@
+{
+	"title": "Admin Registration",
+	"warning": "This page is for administrator use only. You will need a special code to register.",
+	"firstname": "First Name",
+	"lastname": "Last Name",
+	"email": "Email",
+	"pass": "Password",
+	"confirmPass": "Confirm Password",
+	"token": "Admin Token",
+	"submit": "Register",
+	"loginRedirect": "Already have an account? Login!"
+}

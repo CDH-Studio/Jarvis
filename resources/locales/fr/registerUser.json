@@ -1,0 +1,12 @@
+{
+	"title": "Admin Registration",
+	"firstname": "First Name",
+	"lastname": "Last Name",
+	"email": "Email",
+	"pass": "Password",
+	"confirmPass": "Confirm Password",
+	"tower": "Tower",
+	"floor": "Floor",
+	"submit": "Register",
+	"loginRedirect": "Already have an account? Login!"
+}

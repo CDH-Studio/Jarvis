@@ -19,6 +19,19 @@ const Route = use('Route');
 Route.get('/', 'HomeController.home').as('home');
 Route.on('/welcome').render('welcome');
 
+
+Route.get('/langs', ({ view, antl }) => {
+  return view.render('language.langSelect', { locales: antl.availableLocales() })
+})
+
+Route.get('/switch/:lang', ({ params, antl, request, response }) => {
+  const locales = antl.availableLocales()
+  if (locales.indexOf(params.lang) > -1 ) {
+    response.cookie('lang', params.lang, { path: '/' })
+  }
+  response.redirect('back')
+})
+
 //= ========================================================================
 // Auth
 //= ========================================================================
