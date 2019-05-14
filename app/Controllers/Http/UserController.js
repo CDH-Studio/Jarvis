@@ -382,7 +382,7 @@ class UserController {
       			<h2> Password Reset Request </h2>
       			<p>
         			We received a request to reset your password. If you asked to reset your password, please click the following URL: 
-        			${Env.get('REGISTRATION_CONFIRMATION', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newPassword?hash=${hash}
+        			${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newPassword?hash=${hash}
       			</p>
 			`;
 
