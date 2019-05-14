@@ -193,7 +193,7 @@ class UserController {
 			<h2> Welcome to Jarvis, ${userInfo.firstname} </h2>
     		<p>
       			Please click the following URL into your browser: 
-      			${Env.get('REGISTRATION_CONFIRMATION', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newUser?hash=${hash}
+      			${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newUser?hash=${hash}
     		</p>
     	`;
 
