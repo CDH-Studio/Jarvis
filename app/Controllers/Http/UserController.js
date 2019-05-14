@@ -32,7 +32,7 @@ function random (times) {
  * @param {string} body     Body of Email
  * @param {string} to       Sending address
  */
-async function sendMail (subject, body, to, from) {
+async function sendMail (subject, body, to) {
 	await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/send`, {
 		to,
 		subject,
@@ -198,7 +198,7 @@ class UserController {
     	`;
 
 		await sendMail('Verify Email Address for Jarvis',
-			body, userInfo.email, 'support@mail.cdhstudio.ca');
+			body, userInfo.email);
 
 		await User.create(userInfo);
 		return response.redirect('/login');
@@ -387,7 +387,7 @@ class UserController {
 			`;
 
 			await sendMail('Password Reset Request',
-				body, email, 'support@mail.cdhstudio.ca');
+				body, email);
 		}
 
 		session.flash({
