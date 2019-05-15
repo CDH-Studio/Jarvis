@@ -1,0 +1,15 @@
+<div class='row'>
+	<div class='col'>
+		@component('components.smallCard', room = room)
+			@slot('body')
+				<div class='mb-2'>
+					@!component('components.stars', rating = room.averageRating)
+				</div>
+				<div>
+					<span class='mr-3'>Table seats: {{room.seats}}</span>
+					<span>Capacity: {{room.capacity}}</span>
+				</div>
+			@endslot
+		@endcomponent
+	</div>
+</div>
