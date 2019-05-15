@@ -288,8 +288,8 @@ class BookingController {
 				end: eventInfo.end.dateTime,
 				subject: eventInfo.subject,
 				body: eventInfo.body.content,
-				floor: room.floor
-				// attendees: ['yunwei.li@canada.ca']
+				floor: room.floor,
+				attendees: [user.email]
 			});
 
 			const eventId = res.data.eventId.UniqueId;
