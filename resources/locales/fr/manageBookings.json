@@ -1,0 +1,21 @@
+{
+	"pageTitle": "fManage bookings",
+	"totalBookings": "fTotal Bookings",
+	"totalCancelled": "fTotal Cancelled",
+	"totalRemaining": "fRemaining this month",
+	"bookingsError": "fNo Bookings Found",
+	"bookingsHeader": "fUpcoming Bookings",
+	"tableRoom": "fRoom",
+	"tableName": "fName",
+	"tableMeetingName": "fMeeting Name",
+	"tableDate": "fDate",
+	"tableTime": "fTime",
+	"tableStatus": "fStatus",
+	"tableCancel": "fCancel",
+	"tableApproved": "fApproved",
+	"tableDeclined": "fDeclined",
+	"modalHeader":"fAre you sure?",
+	"modalBody":"fAre you sure you want to cancel your booking?",
+	"yes": "fYes",
+	"no": "fNo"
+}

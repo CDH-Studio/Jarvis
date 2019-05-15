@@ -11,7 +11,7 @@
     {{--  Actual page content  --}}
     <div class="row">
     
-        <div class='col-12 col-lg-8'>
+        <div class='col-12 col-xl-8'>
             <div class='card room-details-card shadow mb-4'>
                 <div class='card-header py-3 custom-card-header'>
                     <div class='d-flex flex-wrap'>
@@ -151,7 +151,7 @@
             </div>
         </div>
         
-        <div class='col-12 col-lg-4 mb-4'>
+        <div class='col-12 col-xl-4 mb-4'>
             <div class="card shadow" style="min-height:433px;">
                 <div class='card-header py-3'>
                     <h5 class="m-0 font-weight-bold text-primary">Book room</h5>
@@ -217,7 +217,7 @@
                                                     <button for='from' aria-label='start-time-button' class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
                                                     <div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                                         @each(item in dropdownSelection)
-                                                            <a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
+                                                            <a class="dropdown-item" for='fromDropDown' data-value="{{item.dataValue}}" href="#">{{item.name}}</a>
                                                         @endeach
                                                     </div>
                                                 </div>
@@ -240,7 +240,7 @@
                                                 <button for='to'  aria-label='end-time-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
                                                 <div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
                                                     @each(item in dropdownSelection)
-                                                        <a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
+                                                        <a class="dropdown-item" for='fromDropDown' data-value="{{item.dataValue}}" href="#">{{item.name}}</a>
                                                     @endeach
                                                 </div>
                                             </div>
@@ -308,7 +308,7 @@
                                 {{--  Footer buttons to cancel and book room  --}}
                                 <div class='row flex-grow-1 align-content-end'>
                                     <div class='col'>
-                                        <button type='submit' class='btn btn-primary w-100 mb-2'>Book Room</button>
+                                        <button type='submit' class='btn btn-success w-100 mb-2'><i class="fas fa-check"></i> Book Room</button>
                                     </div>
                                 </div>
                             </div>
@@ -324,34 +324,28 @@
     <h4 class="mt-4 mb-3" id="reviews"><strong>Reviews</strong></h4>
 
     <div class="row">
-        <div class='col-12 col-lg-8'>
+        <div class='col-12 col-xl-8'>
             <div class="reviews-card card shadow mb-4">
-                <div class="card-body">
+                <div class="card-body p-4">
                     
                     @if(reviews.length == 0)             
                         @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="No reviews available")          
                     @else
                         {{--  Loops through the rooms array and displays every room's content  --}}
                         @each(review in reviews)
-                            <div class="row mb-1">
+                            <div class="row mb-4">
                                 <div class="col-8">
-                                    <div class="row mb-2">
-                                        <div class="col">
-                                            <strong>{{ review.user.firstname }} {{ review.user.lastname }}</strong><br>
-                                            @!component('components/stars', rating=review.rating) 
-                                            <br>
-                                            <i class="text-muted">{{review.user.email}}</i> | <i class="text-muted">{{review.comment_date}}</i>
-                                        </div>
-                                    </div>
-                                    <div>{{ review.review }} </div>
- 
+                                    <strong>{{ review.user.firstname }} {{ review.user.lastname }}</strong><br>
+                                    @!component('components/stars', rating=review.rating) 
+                                    <br>
+                                    <i class="text-muted">{{review.user.email}}</i> | <i class="text-muted">{{review.comment_date}}</i>
+                                    <p class="mt-2">{{ review.review }}</p>
                                 </div>
                                 <div class="col-4 text-center">
                                     @if(review.reviewPicture)
-                                        <img class="shadow"style ="width:80%; height:auto; max-height: 150px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
+                                        <img class="shadow" style ="width:auto; height:110px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
                                     @endif
-                                </div>
-                                <hr>             
+                                </div>           
                             </div>
                         @endeach
                         <div class="row">
@@ -364,7 +358,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-4">
+        <div class="col-12 col-xl-4">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     @if(!hasReview) 
@@ -411,7 +405,7 @@
 
                             <div class='row'>
                                 <div class='col form-group'>
-                                    <label for='review'>Review</label>
+                                    <label for='review'>Review <strong class='text-danger'>*</strong></label>
                                         <textarea class='form-control' name='review' id='review' rows='5' >{{ old('review',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
                                 </div> 
@@ -429,7 +423,7 @@
                                             @else
                                                 <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
                                             @endif
-                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose file</label>
+                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose file (Max: 2MB)</label>
                                             @if(!hasReview) 
                                                 <small id="reviewPictureHelp" class="form-text text-muted">Image cannot be edited after upload. It can only be deleted.</small>
                                             @else
@@ -580,10 +574,16 @@
         @!component('components.imageModal', id='mapModal', title= room.name + '- Floor plan', image='/images/temp_floor_map.png')
     @endif
     
+    
+@endsection
+
+{{--  Deals with the search functionality of the table above- searches all fields   --}}
+@section('extrajs') 
+    
     {{--  Script to display file name on upload  --}}
     <script>
         $('#reviewPicture').on('change',function(){
-            var fileName = $(this).val().substring(0,15)+"...";
+            var fileName = $(this).val().substring(12,27)+"...";
             $('#reviewPictureLabel').html(fileName);
         });
     </script>
@@ -624,10 +624,9 @@
             });
         </script>
     @endif
-    
-@endsection
 
-{{--  Deals with the search functionality of the table above- searches all fields   --}}
-@section('extrajs') 
+    {{--  Mouseover Tooltip  --}}
+    <script> $(document).ready(function(){ $('[data-toggle="tooltip"]').tooltip(); });</script>
+
     {{ script('js/roomBookingForm.js') }}
 @endsection

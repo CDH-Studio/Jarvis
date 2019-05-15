@@ -1,7 +1,7 @@
 @layout('layouts.loginLayout')
 
 @section('title')
-Jarvis - Login
+{{ antl.formatMessage('registerUser.title') }} | Jarvis
 @endsection
 
 @section('content')
@@ -18,7 +18,7 @@ Jarvis - Login
 									<img class='login-logo mb-3' src='/logo_full_dark.png' alt='Jarvis Logo'>
 								</div>
 								<div class="text-left">
-									<h1 class="h4 text-gray-900 mb-4">Register</h1>
+									<h1 class="h4 text-gray-900 mb-4">{{ antl.formatMessage('registerUser.title') }}</h1>
 								</div>
 								<form class='needs-validation user' action='{{ route('UserController.create') }}' method='POST'>
 									{{ csrfField() }}
@@ -26,7 +26,7 @@ Jarvis - Login
 									<div class='form-row'>
 										<div class='col-md-6'>
 											<div class='form-group mb-2'>
-												<label for='firstname'>First name</label>
+												<label for='firstname'>{{ antl.formatMessage('registerUser.firstname') }}</label>
 												<input type='text' class='form-control' name='firstname' id='firstname' placeholder='John' value='{{ old('firstname', '') }}'>
 												@if(hasErrorFor('firstname'))
 													<div class='invalid-feedback d-block'>{{ getErrorFor('firstname') }}</div>
@@ -35,7 +35,7 @@ Jarvis - Login
 										</div>
 										<div class='col-md-6'>
 											<div class='form-group mb-2'>
-												<label for='lastname'>Last name</label>
+												<label for='lastname'>{{ antl.formatMessage('registerUser.lastname') }}</label>
 												<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe' value='{{ old('lastname', '') }}'>
 												@if(hasErrorFor('lastname'))        
 													<div class='invalid-feedback d-block'>{{ getErrorFor('lastname') }}</div>
@@ -46,8 +46,8 @@ Jarvis - Login
 
 										
 									<div class='form-group mb-2'>
-										<label for='email'>Email address</label>
-										<input type='email' class='form-control' name='email' id='email' placeholder='Enter email' value='{{ old('email', '') }}'>
+										<label for='email'>{{ antl.formatMessage('registerUser.email') }}</label>
+										<input type='email' class='form-control' name='email' id='email' placeholder='sample@canada.ca' value='{{ old('email', '') }}'>
 										@if(hasErrorFor('email'))        
 											<div class='invalid-feedback d-block'>{{ getErrorFor('email') }}</div>
 										@endif
@@ -56,8 +56,11 @@ Jarvis - Login
 									<div class='form-row'>
 										<div class='col-md-6'>
 											<div class='form-group mb-2'>
-												<label for='password'>Password</label>
-												<input type='password' class='form-control' name='password' id='password' placeholder='Password'>
+												<label for='password'>{{ antl.formatMessage('registerUser.pass') }}</label>
+													<span href="#" class="mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="{{ antl.formatMessage('registerUser.passTip') }}">
+														<i class="fas fa-info-circle text-muted fa-xs"></i>
+													</span>
+												<input type='password' class='form-control' name='password' id='password' placeholder='{{ antl.formatMessage('registerUser.pass') }}'>
 												@if(hasErrorFor('password'))
 													<div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>
 												@endif
@@ -65,8 +68,8 @@ Jarvis - Login
 										</div>
 										<div class='col-md-6'>
 											<div class='form-group mb-2'>
-												<label for='confirmPassword'>Confirm password</label>
-												<input type='password' class='form-control' name='confirmPassword' id='confirmPassword' placeholder='Password'>
+												<label for='confirmPassword'>{{ antl.formatMessage('registerUser.confirmPass') }}</label>
+												<input type='password' class='form-control' name='confirmPassword' id='confirmPassword' placeholder='{{ antl.formatMessage('registerUser.confirmPass') }}'>
 												@if(hasErrorFor('confirmPassword'))
 												<div class='invalid-feedback d-block'>{{ getErrorFor('confirmPassword') }}</div>
 												@endif
@@ -78,9 +81,9 @@ Jarvis - Login
 									<div class='form-row'>
 										<div class='col'>
 											<div class='form-group mb-2'>
-												<label for='tower'>Tower</label>
+												<label for='tower'>{{ antl.formatMessage('registerUser.tower') }}</label>
 												<select id='tower' name='tower' class='form-control text-capitalize'>
-													<option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Tower</option>
+													<option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.tower') }}</option>
 													@each(towerOption in towerOptions)
 														<option value='{{towerOption.id}}' {{ old('tower') == towerOption.id ? 'selected' : '' }}>{{towerOption.name}}</option>
 													@endeach
@@ -93,9 +96,9 @@ Jarvis - Login
 										
 										<div class='col'>
 											<div class='form-group mb-2'>
-												<label for='floor'>Floor</label>
+												<label for='floor'>{{ antl.formatMessage('registerUser.floor') }}</label>
 												<select id='floor' name='floor' class='form-control text-capitalize'>
-													<option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Floor</option>
+													<option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.floor') }}</option>
 													@each(floorOption in floorOptions)
 														<option value='{{floorOption.id}}' {{ old('floor') == floorOption.id ? 'selected' : '' }}>{{floorOption.name}}</option>
 													@endeach
@@ -106,12 +109,12 @@ Jarvis - Login
 											</div>
 										</div>
 									</div>
-									<button type='submit' class='btn btn-primary btn-user btn-block mt-3 mb-2'>Register</button>
+									<button type='submit' class='btn btn-primary btn-user btn-block mt-3 mb-2'>{{ antl.formatMessage('registerUser.submit') }}</button>
 								</form>
 								<hr>
 
 								<div class="text-center">
-									<a class="small" href='{{ route('login') }}'>Already have an account? Login!</a>
+									<a class="small" href='{{ route('login') }}'>{{ antl.formatMessage('registerUser.loginRedirect') }}</a>
 								</div>
 							</div>
 						</div>

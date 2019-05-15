@@ -1,0 +1,13 @@
+{
+	"title": "Registration",
+	"firstname": "First Name",
+	"lastname": "Last Name",
+	"email": "Email",
+	"passTip": "must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character and be at least 8 Characters",
+	"pass": "Password",
+	"confirmPass": "Confirm Password",
+	"tower": "Tower",
+	"floor": "Floor",
+	"submit": "Register",
+	"loginRedirect": "Already have an account? Login!"
+}

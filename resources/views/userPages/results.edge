@@ -1,13 +1,13 @@
 @layout('layouts.mainLayout')
 
 @section('title')
-    Results
+    {{ antl.formatMessage('results.pageTitle') }}
 @endsection
 
 {{--  Manage bookings page content  --}}
 @section('content')
     {{--  Loading page header  --}}
-    @!component('components.pageHeader', title='Results')
+    @!component('components.pageHeader', title=antl.formatMessage('results.pageTitle') )
     @if(rooms.length == 0)
         <div class="row">
             <div class="col-12 text-center mt-5 mb-5">
