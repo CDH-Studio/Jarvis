@@ -88,7 +88,7 @@ Route.get('/searchRooms', 'RoomController.loadSearchRoomsForm').as('searchRooms'
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking').middleware(['isUser']);
 
 // Rendering Results
-Route.get('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
+Route.get('/results', 'RoomController.searchRooms').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
 
 // Booking a Room
 Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);

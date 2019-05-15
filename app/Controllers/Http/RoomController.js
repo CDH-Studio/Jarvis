@@ -367,30 +367,11 @@ class RoomController {
 	}
 
 	/**
-	 * Query the room from the database which matches the search input.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async searchRooms ({ request, view }) {
-		const form = request.all();
-		const name = form.searchField;
-
-		let searchResults = await Room
-			.query()
-			.where('name', name)
-			.fetch();
-
-		const rooms = searchResults.toJSON();
-
-		return view.render('adminPages.viewRooms', { rooms });
-	}
-
-	/**
 	 * Query rooms from search criteria and render the results page.
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getSearchRooms ({ request, view }) {
+	async searchRooms ({ request, view }) {
 		// importing forms from search form
 		const form = request.all();
 		const date = form.date;
