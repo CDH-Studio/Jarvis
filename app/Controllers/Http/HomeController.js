@@ -62,12 +62,6 @@ class HomeController {
 	*
 	*/
 	async home ({ response, auth, request }) {
-
-		//Check if user has selected language
-		const lang = request.cookie('lang');
-		if (lang != "en" && lang != 'fr'){
-			return response.route('langSelect');
-		}
 		
 		try {
 			// cheack user is logged-in and role
