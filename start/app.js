@@ -24,7 +24,8 @@ const providers = [
 	'adonis-scheduler/providers/SchedulerProvider',
 	'@adonisjs/drive/providers/DriveProvider',
 	path.join(__dirname, '..', 'providers', 'CustomValidationProvider'),
-	'@adonisjs/websocket/providers/WsProvider'
+	'@adonisjs/websocket/providers/WsProvider',
+	'@adonisjs/antl/providers/AntlProvider'
 ];
 
 /*

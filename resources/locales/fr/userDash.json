@@ -1,0 +1,11 @@
+{
+	"browserTab": "fDashboard",
+	"hello": "fHello, ",
+	"searchHeading": "fSearch",
+	"CAHeading":"fCurrently Available",
+	"FBHeading": "fFrequently booked",
+	"MBHeading": "fMy bookings",
+	"CAError": "fSearching",
+	"FBError": "fNo rooms found",
+	"MBError": "fNo bookings found"
+}

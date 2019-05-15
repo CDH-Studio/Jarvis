@@ -19,6 +19,8 @@ const Route = use('Route');
 Route.get('/', 'HomeController.home').as('home');
 Route.on('/welcome').render('welcome');
 
+Route.get('/switch/:lang', 'HomeController.changeLang');
+
 //= ========================================================================
 // Auth
 //= ========================================================================

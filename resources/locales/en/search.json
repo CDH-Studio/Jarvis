@@ -1,0 +1,14 @@
+{
+	"browserTab": "Search Room",
+	"date": "Date",
+	"timeRange": "Time Range",
+	"TRFrom": "From",
+	"TRTo": "To",
+	"MDHeading": "Meeting Duration",
+	"MDHours": "Hours",
+	"MDMinutes": "Minutes",
+	"locationHeading": "Location",
+	"locationAir": "Select a Floor",
+	"maxCapacity": "Max Capacity",
+	"numberSeats": "Number of Table of Seats"
+}

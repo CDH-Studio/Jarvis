@@ -14,6 +14,20 @@ require('moment-round');
 const graph = require('@microsoft/microsoft-graph-client');
 
 /**
+ * Generating a random string.
+ *
+ * @param {Integer} times Each time a string of 5 to 6 characters is generated.
+ */
+function randomString (times) {
+	let result = '';
+	for (let i = 0; i < times; i++) {
+		result += Math.random().toString(36).substring(2);
+	}
+
+	return result;
+}
+
+/**
  * Retrieve access token for Microsoft Graph from the data basebase.
  *
  * @returns {Object} The access token.
@@ -28,20 +42,6 @@ async function getAccessToken () {
 		console.log(err);
 		return null;
 	}
-}
-
-/**
- * Generating a random string.
- *
- * @param {Integer} times Each time a string of 5 to 6 characters is generated.
- */
-function random (times) {
-	let result = '';
-	for (let i = 0; i < times; i++) {
-		result += Math.random().toString(36).substring(2);
-	}
-
-	return result;
 }
 
 async function asyncForEach (arr, callback) {
@@ -61,7 +61,7 @@ class HomeController {
 	* @param {auth}
 	*
 	*/
-	async home ({ response, auth }) {
+	async home ({ response, auth, request }) {
 		try {
 			// cheack user is logged-in and role
 			await auth.check();
@@ -75,6 +75,32 @@ class HomeController {
 		} catch (error) {
 			return response.route('login');
 		}
+	}
+
+	/**
+	*
+	* Render language selection page
+	*
+	* @param {view}
+	*
+	*/
+	async viewLang ({ view }) {
+		return view.render('language.langSelect');
+	}
+
+	/**
+	*
+	* Change language cookie
+	*
+	* @param {view}
+	*
+	*/
+	async changeLang ({ params, antl, request, response }) {
+		const locales = antl.availableLocales();
+		if (locales.indexOf(params.lang) > -1) {
+			response.cookie('lang', params.lang, { path: '/' });
+		}
+		response.redirect('back');
 	}
 
 	/**
@@ -398,7 +424,7 @@ class HomeController {
 		const formattedFrom = moment(now).add(remainder, 'm').format('HH:mm A');
 		const formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm A');
 
-		const code = random(4);
+		const code = randomString(4);
 		const checkRoomAvailability = async () => {
 			let numberOfRooms = 2;
 			await asyncForEach(rooms, async (item) => {

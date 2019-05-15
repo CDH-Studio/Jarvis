@@ -1,0 +1,8 @@
+{
+	"title": "Login",
+	"email": "Email",
+	"pass": "Password",
+	"forgot": "Forgot Password",
+	"submit": "Login",
+	"registerRedirect": "Create an account"
+}
