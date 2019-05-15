@@ -62,7 +62,6 @@ class HomeController {
 	*
 	*/
 	async home ({ response, auth, request }) {
-		
 		try {
 			// cheack user is logged-in and role
 			await auth.check();
@@ -86,7 +85,7 @@ class HomeController {
 	*
 	*/
 	async viewLang ({ view }) {
-	  	return view.render('language.langSelect');
+		return view.render('language.langSelect');
 	}
 
 	/**
@@ -97,11 +96,11 @@ class HomeController {
 	*
 	*/
 	async changeLang ({ params, antl, request, response }) {
-		const locales = antl.availableLocales()
-		if (locales.indexOf(params.lang) > -1 ) {
-		response.cookie('lang', params.lang, { path: '/' })
+		const locales = antl.availableLocales();
+		if (locales.indexOf(params.lang) > -1) {
+			response.cookie('lang', params.lang, { path: '/' });
 		}
-		response.redirect('back')
+		response.redirect('back');
 	}
 
 	/**

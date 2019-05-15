@@ -14,13 +14,10 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route');   
+const Route = use('Route');
 
 Route.get('/', 'HomeController.home').as('home');
 Route.on('/welcome').render('welcome');
-
-
-Route.get('/language', 'HomeController.viewLang').as('langSelect');
 
 Route.get('/switch/:lang', 'HomeController.changeLang');
 
