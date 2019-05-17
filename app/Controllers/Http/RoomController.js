@@ -457,7 +457,7 @@ class RoomController {
 		for (const name in results) {
 			let room = results[name];
 			room = room.filter(item => {
-				const time = moment(item, 'HH:mm')
+				const time = moment(item, 'HH:mm');
 				const min = moment(options.from, 'HH:mm');
 				const max = moment(options.to, 'HH:mm');
 
