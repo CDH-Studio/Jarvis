@@ -437,10 +437,13 @@ class RoomController {
 		const duration = Number(options.hour) * 60 + Number(options.minute);
 		const difference = moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))).minutes();
 
+		console.log('duration', duration);
+		console.log('diff', difference);
+
 		if (duration === difference) {
-			this.findSpecific({ request, view });
+			await this.findSpecific({ request, view });
 		} else {
-			this.findAvailable({ request, view });
+			await this.findAvailable({ request, view });
 		}
 	}
 
