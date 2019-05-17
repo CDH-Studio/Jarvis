@@ -22,6 +22,7 @@ class IssueController {
 		const categories = await RoomFeaturesCategory.query().with('features').fetch();
 		const roomFeatures = await Feature.query().with('category').fetch();
 
+
 		return view.render('adminPages.viewConfiguration', 
 								{ towers: buildingTowers.toJSON(),
 			 					floors:buildingFloors.toJSON(),
