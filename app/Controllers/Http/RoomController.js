@@ -425,6 +425,25 @@ class RoomController {
 		}
 	}
 
+	async searchRooms ({ request, view }) {
+		const options = request.all();
+		const rooms = (await this.filterRooms(options)).toJSON();
+		// Sets average rating for each room
+		for (var i = 0; i < rooms.length; i++) {
+			// Adds new attribute - rating - to every room object
+			rooms[i].rating = await this.getAverageRating(rooms[i].id);
+		}
+
+		const duration = Number(options.hour) * 60 + Number(options.minute);
+		const difference = moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))).minutes();
+
+		if (duration === difference) {
+			this.findSpecific({ request, view });
+		} else {
+			this.findAvailable({ request, view });
+		}
+	}
+
 	async findAvailable ({ request, view }) {
 		const options = request.all();
 		const rooms = (await this.filterRooms(options)).toJSON();
@@ -498,7 +517,7 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async searchRooms ({ request, view }) {
+	async findSpecific ({ request, view }) {
 		// importing forms from search form
 		const form = request.all();
 		let rooms = (await this.filterRooms(form)).toJSON();
