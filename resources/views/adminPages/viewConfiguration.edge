@@ -1,0 +1,119 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+Configuration
+@endsection
+
+
+@section('extracss')
+<link href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css' rel='stylesheet'>
+@endsection
+
+@section('content')
+    @!component('components.pageHeader', title='Configuration')
+    @each(floor in floors)
+        {{floor.name}}
+    @endeach
+
+    @each(tower in towers)
+        {{tower.name}}
+    @endeach
+    <h4 class="mt-4 mb-3" id="reviews"><strong>Room Features</strong></h4>
+        <div class="row">
+            @each(category in categories)
+                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
+                    @component('components.generalCard', title=category.name)
+                        @slot('body')
+
+                                <table class="table">
+                                  <tbody>
+                                    @each(feature in category.features)
+                                    <tr>
+                                        <td><strong>{{feature.name}}</strong></td> 
+                                        <td class="text-xl-right"># rooms</td>
+                                        <td class="text-xl-right">
+                                            <a class="text-danger" name='delete Feature' data-toggle='modal'  data-target='#deleteModal{{feature.id}}' href='#'>
+                                                <i class="fas fa-trash fa-1x"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @endeach
+                                  </tbody>
+                                </table>
+
+
+                                
+                                 <form class="form-inline" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'  >
+                                    {{ csrfField() }}
+                                    <div class="form-group mb-2 mr-2">
+                                        <label for="name" class="sr-only">Feature Name</label>
+                                        <input type="hidden"  name="featureCategory" value="{{category.id}}">
+                                        <input type="text" class="form-control mr-2" id="name" name="featureName" placeholder="New Feature" class="form-group mb-2">
+                                    </div>
+                                    <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
+                                </form>
+                       
+                        @endslot
+                    @endcomponent
+                </div>
+            @endeach
+        </div>
+
+
+
+
+        {{-- Delete Modal --}}
+
+        @each(category in categories)
+            @each(feature in category.features)
+                <div class='modal' id='deleteModal{{ feature.id }}' role='dialog' aria-hidden='true'>
+                    <div class='modal-dialog modal-dialog-centered' role='document'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <h5 class='modal-title' id='cancelTitle'>Delete Feature?</h5>
+                                <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+                                    <span aria-hidden='true'>×</span>
+                                </button>
+                            </div>
+                            <div class='modal-body'>Are you sure want to delete <strong>{{feature.name}}</strong>.<br>
+                                <p>This feature will be removed from ## rooms.</p>
+                                <p class="text-danger">This is process is permanent!</p>
+                            </div>
+                                <form action='{{ route('deleteRoomFeature', {id: feature.id}) }}' method='POST' enctype='multipart/form-data'>
+                                    {{ csrfField() }}
+                                    <div class='modal-footer'>
+                                        <button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+                                        <button type='submit' class='btn btn-danger'>Yes</button>
+                                    </div>                    
+                                </form>  
+
+                        </div>
+                    </div>
+                </div>
+            @endeach
+        @endeach
+
+
+@endsection
+
+{{--  Deals with the search functionality of the table above- searches all fields   --}}
+@section('extrajs') 
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script>$(document).ready(function() {
+            $('#usersTable').DataTable( {
+                "paging":   false,
+                "ordering": true,
+                "info":     false
+            });
+        });
+    </script>
+@endsection
+
+
+
+
+
+
+
+
