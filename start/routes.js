@@ -68,7 +68,7 @@ Route.post('/rooms/:id/edit', 'RoomController.update').as('saveRoom').validator(
 Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 
 Route.get('/configure', 'featureController.show').as('configuration').middleware(['isAdmin']);
-Route.post('/feature/add', 'featureController.addRoomFeature').as('addRoomFeature').middleware(['isAdmin']);
+Route.post('/feature/add', 'featureController.addRoomFeature').as('addRoomFeature').validator('AddFeature').middleware(['isAdmin']);
 Route.post('/feature/:id', 'featureController.deleteRoomFeature').as('deleteRoomFeature').middleware(['isAdmin']);
 
 
