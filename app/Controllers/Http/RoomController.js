@@ -8,6 +8,7 @@ const graph = require('@microsoft/microsoft-graph-client');
 const axios = require('axios');
 const Env = use('Env');
 const Event = use('Event');
+const Logger = use('Logger');
 // Used for time related calcuklations and formatting
 const moment = require('moment');
 require('moment-recur');
@@ -25,7 +26,7 @@ async function getAccessToken () {
 		const accessToken = results.toJSON().token;
 		return accessToken;
 	} catch (err) {
-		console.log(err);
+		Logger.debug(err);
 		return null;
 	}
 }
@@ -364,8 +365,8 @@ class RoomController {
 			room.rating = await this.getAverageRating(room.id);
 
 			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review, reviewsCount, dropdownSelection });
-		} catch (error) {
-			console.log(error);
+		} catch (err) {
+			Logger.debug(err);
 			return response.redirect('/');
 		}
 	}
@@ -422,25 +423,6 @@ class RoomController {
 		} else {
 			return view.render('userPages.results', { rooms });
 		}
-	}
-
-	/**
-	 * Query the room from the database which matches the search input.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async searchRooms ({ request, view }) {
-		const form = request.all();
-		const name = form.searchField;
-
-		let searchResults = await Room
-			.query()
-			.where('name', name)
-			.fetch();
-
-		const rooms = searchResults.toJSON();
-
-		return view.render('adminPages.viewRooms', { rooms });
 	}
 
 	async findAvailableResults ({ request, view }) {
@@ -506,97 +488,14 @@ class RoomController {
 		return view.render('userPages.findAvailableResults', { times: times, form: options });
 	}
 
-	async searchRecurring2 ({ request }) {
-		const options = request.all();
-		console.log(options);
-
-		// start date
-		const startDate = options.startDate;
-
-		let recur = moment(startDate);
-		if (options.type === 'daily') {
-			recur = recur
-				.recur()
-				.every(options.dailyInterval)
-				.days();
-		} else if (options.type === 'monthly') {
-			recur = recur
-				.recur()
-				.daysOfMonth(options.dayOfMonth);
-		} else {
-			recur = recur
-				.recur()
-				.daysOfWeek(options.daysOfWeek);
-		}
-
-		console.log(recur.next(3));
-
-		return recur;
-	}
-
-	async searchRecurring ({ request }) {
-		console.log(Env.get('EXCHANGE_AGENT_SERVER', 'http://172.17.75.10:3000'));
-		const options = request.all();
-		console.log(options);
-
-		let recurrence = {};
-		// Recurrence start date
-		recurrence.startDate = options.startDate;
-
-		// Recurrence end date
-		if (options.endOption === 'endBy') {
-			recurrence.end = options.endDate;
-			recurrence.hasEnd = true;
-		} else if (options.endOption === 'endAfter') {
-			recurrence.numberOfOccurrences = options.numberOfOccurrences;
-			recurrence.hasEnd = true;
-		} else {
-			recurrence.hasEnd = false;
-		}
-
-		// Recurrence type
-		recurrence.type = options.type;
-		if (recurrence.type === 'daily' && options.dailyOption === 'everyWeekday') {
-			recurrence.type = 'weekly';
-			recurrence.daysOfWeek = [8];
-
-			console.log('recurrence', recurrence);
-			const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/`, recurrence);
-
-			return res.data;
-		}
-
-		switch (recurrence.type) {
-			case 'daily':
-				recurrence.interval = options.dailyInterval;
-				break;
-			case 'weekly':
-				recurrence.interval = options.weeklyInterval;
-				recurrence.daysOfWeek = options.daysOfWeek;
-				break;
-			case 'monthly':
-				recurrence.interval = options.monthlyInterval;
-				recurrence.dayOfMonth = options.dayOfMonth;
-				break;
-			default:
-		}
-
-		console.log('recurrence', recurrence);
-		const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/`, recurrence);
-
-		return res.data;
-	}
-
 	/**
 	 * Query rooms from search criteria and render the results page.
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getSearchRooms ({ request, view }) {
+	async searchRooms ({ request, view }) {
 		// importing forms from search form
 		const form = request.all();
-
-
 		let rooms = (await this.filterRooms(form)).toJSON();
 
 		// Sets average rating for each room

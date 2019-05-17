@@ -89,7 +89,7 @@ Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking').middleware(['isUser']);
 
 // Rendering Results
-Route.get('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
+Route.get('/results', 'RoomController.searchRooms').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
 Route.get('/recurringResults', 'RoomController.searchRecurring2').as('recurringResults');
 Route.get('/findAvailableResults', 'RoomController.findAvailableResults').as('findAvailableResults');
 

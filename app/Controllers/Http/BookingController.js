@@ -4,6 +4,7 @@ const User = use('App/Models/User');
 const Booking = use('App/Models/Booking');
 const Token = use('App/Models/Token');
 const Env = use('Env');
+const Logger = use('Logger');
 const graph = require('@microsoft/microsoft-graph-client');
 const axios = require('axios');
 
@@ -23,7 +24,7 @@ async function getAccessToken () {
 		const accessToken = results.toJSON().token;
 		return accessToken;
 	} catch (err) {
-		console.log(err);
+		Logger.debug(err);
 		return null;
 	}
 }
