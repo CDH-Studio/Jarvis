@@ -597,22 +597,6 @@ class RoomController {
 	}
 
 	/**
-	 * Navigate to the details page of specified room.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	// async goToDetails ({ request, view }) {
-	// //  get all information from card view
-	// const results = request.all();
-	// // take the unique id from the rooom and search tyhe database for the rest of the information to display in room details
-	// let roomId = results.id;
-	// let searchResults = await Room
-	// .findBy('id', roomId);
-	// const room = searchResults.toJSON();
-	// return view.render('userPages.roomDetails', { room });
-	// }
-
-	/**
 	 * Retrives all of the bookings that correspond to a specific room.
 	 *
 	 * @param {Object} Context The context object.
