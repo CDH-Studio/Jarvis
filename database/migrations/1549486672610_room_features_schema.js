@@ -9,6 +9,7 @@ class RoomFeaturesSchema extends Schema {
 			table.increments();
 			table.string('name', 100).notNullable();
 			table.integer('feature_category_id', 4).notNullable();
+			table.integer('building_id', 4).notNullable();
 			table.timestamps();
 		});
 	}

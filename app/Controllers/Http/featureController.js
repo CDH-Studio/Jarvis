@@ -1,4 +1,5 @@
 'use strict';
+const Building = use('App/Models/Building');
 const Floor = use('App/Models/Floor');
 const Tower = use('App/Models/Tower');
 const Feature = use('App/Models/RoomFeature');
@@ -17,15 +18,14 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async show ({ view }) {
-		const buildingFloors = await Floor.all();
-		const buildingTowers = await Tower.all();
+		const building = await Building.query().where('id', 1).with('floor').with('tower').fetch();
+		console.log(building.toJSON());
 		const categories = await RoomFeaturesCategory.query().with('features').fetch();
 		const roomFeatures = await Feature.query().with('category').fetch();
 
 
 		return view.render('adminPages.viewConfiguration', 
-								{ towers: buildingTowers.toJSON(),
-			 					floors:buildingFloors.toJSON(),
+								{building: building.toJSON(),
 			 					features:roomFeatures.toJSON(),
 			 					categories: categories.toJSON() });
 

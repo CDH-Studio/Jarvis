@@ -8,6 +8,7 @@ class FloorsSchema extends Schema {
 		this.create('floors', (table) => {
 			table.increments();
 			table.string('name', 20).notNullable();
+			table.integer('building_id', 4).notNullable();
 			table.timestamps();
 		});
 	}
