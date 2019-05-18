@@ -11,60 +11,158 @@ Configuration
 
 @section('content')
     @!component('components.pageHeader', title='Configuration')
-    @each(floor in floors)
-        {{floor.name}}
-    @endeach
 
-    @each(tower in towers)
-        {{tower.name}}
-    @endeach
-    <h4 class="mt-4 mb-3" id="reviews"><strong>Room Features</strong></h4>
-    @if(hasErrorFor('featureName'))
-                <div class="alert alert-dismissible alert-danger">
-                  <button type="button" class="close" data-dismiss="alert">&times;</button>
-                  {{ getErrorFor('featureName') }}
-                </div>        
-            @endif
-        <div class="row">
-            
-            @each(category in categories)
-                <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
-                    @component('components.generalCard', title=category.name)
-                        @slot('body')
+    <div class="row">
+        <div class="col-12 mb-4"> 
+        @component('components.generalCard', title='Building Info')
+            @slot('body')
+                <div class='row'>
+                    <div class='col-md-2 text-center '>
+                        <i class='fas fa-building fa-4x mb-3'></i>
+                        <h4>{{ building.name }}</h4>
+                    </div>
+                    <div class= 'col-md-5'>
+                        <p><i class='fas fa-map-marker-alt'></i> {{ building.street_address }} {{ building.postal_code }}</p>
+                        <p><i class="fas fa-map-marked-alt"></i> {{ building.city }}, {{ building.country }}</p>
 
-                                <table class="table">
-                                  <tbody>
-                                    @each(feature in category.features)
+                        {{--  --}}
+
+                    </div>
+                </div>
+            @endslot
+        @endcomponent
+    </div>
+    </div>
+
+    <div class="row">    
+
+            {{-- Floors  --}}
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
+                @component('components.generalCard', title='Configure Floor')
+                    @slot('body')
+                        @if(category.features.length!=0)
+                            <table class="table table-borderless table-hover table-sm">
+                              <tbody>
+                                @each(floor in building.floor)
                                     <tr>
-                                        <td><strong>{{feature.name}}</strong></td> 
-                                        <td class="text-xl-right"># rooms</td>
+                                        <td class="text-xl-left"><strong>{{floor.name}}</strong></td> 
+                                        <td class="text-xl-center"># rooms</td>
+                                        <td class="text-xl-right">
+                                            <a class="text-danger" name='delete floor' data-toggle='modal'  data-target='#deleteModal{{feature.id}}' href='#'>
+                                                <i class="fas fa-trash fa-1x"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endeach
+                              </tbody>
+                            </table>
+                        @else
+                            <p>No floors configured</p>
+                        @endif
+                            
+                             <form class="form-inline" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'  >
+                                {{ csrfField() }}
+                                <div class="form-group mb-2 mr-2">
+                                    <label for="name" class="sr-only">Floor Name</label>
+                                    <input type="hidden"  name="featureCategory" value="{{category.id}}">
+                                    <input type="text" class="form-control mr-2" id="name" name="floorName" placeholder="New Floor" class="form-group mb-2">
+                                </div>
+                                <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
+                            </form>
+                   
+                    @endslot
+                @endcomponent
+            </div>
+
+            {{-- Tower --}}
+            <div class="col-sm-12 col-md-6 col-lg-5 col-xl-5 mb-4">
+                @component('components.generalCard', title='Configure Tower')
+                    @slot('body')
+                        @if(building.tower.length!=0)
+                            <table class="table table-borderless table-hover table-sm">
+                              <tbody>
+                                @each(tower in building.tower)
+                                    <tr>
+                                        <td class="text-xl-left"><strong>{{tower.name}}</strong></td> 
+                                        <td class="text-xl-center"># rooms</td>
                                         <td class="text-xl-right">
                                             <a class="text-danger" name='delete Feature' data-toggle='modal'  data-target='#deleteModal{{feature.id}}' href='#'>
                                                 <i class="fas fa-trash fa-1x"></i>
                                             </a>
                                         </td>
                                     </tr>
-                                    @endeach
-                                  </tbody>
-                                </table>
+                                @endeach
+                              </tbody>
+                            </table>
+                        @else
+                            <p>No towers configured</p>
 
+                            @endif
+                            
+                             <form class="form-inline" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'  >
+                                {{ csrfField() }}
+                                <div class="form-group mb-2 mr-2">
+                                    <label for="name" class="sr-only">New Tower</label>
+                                    <input type="hidden"  name="featureCategory" value="{{category.id}}">
+                                    <input type="text" class="form-control mr-2" id="name" name="towerName" placeholder="New Tower" class="form-group mb-2">
+                                </div>
+                                <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
+                            </form>
+                   
+                    @endslot
+                @endcomponent
+            </div>
+    </div>
 
-                                
-                                 <form class="form-inline" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'  >
-                                    {{ csrfField() }}
-                                    <div class="form-group mb-2 mr-2">
-                                        <label for="name" class="sr-only">Feature Name</label>
-                                        <input type="hidden"  name="featureCategory" value="{{category.id}}">
-                                        <input type="text" class="form-control mr-2" id="name" name="featureName" placeholder="New Feature" class="form-group mb-2">
-                                    </div>
-                                    <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
-                                </form>
-                       
-                        @endslot
-                    @endcomponent
-                </div>
-            @endeach
-        </div>
+    {{-- room features --}}
+    <h4 class="mt-4 mb-3" id="reviews"><strong>Room Features</strong></h4>
+    @if(hasErrorFor('featureName'))
+        <div class="alert alert-dismissible alert-danger">
+          <button type="button" class="close" data-dismiss="alert">&times;</button>
+          {{ getErrorFor('featureName') }}
+        </div>        
+    @endif
+    <div class="row">     
+        @each(category in categories)
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
+                @component('components.generalCard', title=category.name)
+                    @slot('body')
+                        @if(category.features.length!=0)
+                            <table class="table table-borderless table-hover table-sm">
+                              <tbody>
+                                @each(feature in category.features)
+                                    <tr>
+                                        <td class="text-xl-left"><strong>{{feature.name}}</strong></td> 
+                                        <td class="text-xl-center"># rooms</td>
+                                        <td class="text-xl-right">
+                                            <a class="text-danger" name='delete Feature' data-toggle='modal'  data-target='#deleteModal{{feature.id}}' href='#'>
+                                                <i class="fas fa-trash fa-1x"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endeach
+                              </tbody>
+                            </table>
+                        @else
+                            <p>No Features</p>
+
+                            @endif
+                            
+                             <form class="form-inline" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'  >
+                                {{ csrfField() }}
+                                <div class="form-group mb-2 mr-2">
+                                    <label for="name" class="sr-only">Feature Name</label>
+                                    <input type="hidden"  name="featureCategory" value="{{category.id}}">
+                                    <input type="text" class="form-control mr-2" id="name" name="featureName" placeholder="New Feature" class="form-group mb-2">
+                                </div>
+                                <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
+                            </form>
+                   
+                    @endslot
+                @endcomponent
+            </div>
+        @endeach
+    </div>
 
 
 

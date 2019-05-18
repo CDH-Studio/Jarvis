@@ -11,6 +11,10 @@ class Floor extends Model {
 	building () {
 		return this.belongsTo('App/Models/Building', 'building_id')
 	}
+
+	floor () {
+	    return this.hasMany('App/Models/Room','id', 'floor_id')
+	}
 }
 
 module.exports = Floor;

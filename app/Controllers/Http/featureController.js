@@ -18,9 +18,15 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async show ({ view }) {
-		const building = await Building.query().where('id', 1).with('floor').with('tower').fetch();
-		console.log(building.toJSON());
-		const categories = await RoomFeaturesCategory.query().with('features').fetch();
+		const building = await Building.query().where('id', 1).with('floor').with('tower').firstOrFail();
+		
+		const categories = await RoomFeaturesCategory
+									.query()
+									.with('features', (builder) => {
+										 builder.where('building_id', 1)
+									}).fetch();
+
+		console.log(building.toJSON().tower);
 		const roomFeatures = await Feature.query().with('category').fetch();
 
 
@@ -41,6 +47,7 @@ class IssueController {
 			const newFeature = new Feature();
 			newFeature.name = body.featureName;
 			newFeature.feature_category_id = body.featureCategory;
+			newFeature.building_id = 1;
 			await newFeature.save();
 
 			session.flash({ notification: 'Feature Added!' });
