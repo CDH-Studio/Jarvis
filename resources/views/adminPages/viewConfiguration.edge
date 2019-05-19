@@ -46,7 +46,7 @@ Configuration
                                 @each(floor in building.floor)
                                     <tr>
                                         <td class="text-xl-left"><strong>{{floor.name}}</strong></td> 
-                                        <td class="text-xl-center"># rooms</td>
+                                        <td class="text-xl-center">{{floor.room.length}} rooms</td>
                                         <td class="text-xl-right">
                                             <a class="text-danger" name='delete floor' data-toggle='modal'  data-target='#deleteModal{{feature.id}}' href='#'>
                                                 <i class="fas fa-trash fa-1x"></i>

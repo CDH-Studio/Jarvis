@@ -9,11 +9,11 @@ class RoomsSchema extends Schema {
 			table.increments();
 			table.string('name', 20).notNullable().unique();
 			table.string('fullName', 100).notNullable();
-			table.integer('floor', 3).notNullable();
+			table.integer('floor_id').notNullable();
 			table.string('tower', 5).notNullable();
 			table.string('telephone', 20);
-			table.integer('seats', 500).notNullable();
-			table.integer('capacity', 500).notNullable();
+			table.integer('seats').notNullable();
+			table.integer('capacity').notNullable();
 			table.bool('projector');
 			table.bool('whiteboard');
 			table.bool('flipchart');

@@ -12,7 +12,7 @@ class Floor extends Model {
 		return this.belongsTo('App/Models/Building', 'building_id')
 	}
 
-	floor () {
+	room () {
 	    return this.hasMany('App/Models/Room','id', 'floor_id')
 	}
 }

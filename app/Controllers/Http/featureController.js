@@ -18,7 +18,7 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async show ({ view }) {
-		const building = await Building.query().where('id', 1).with('floor').with('tower').firstOrFail();
+		const building = await Building.query().where('id', 1).with('floor').with('tower').with('floor.room').firstOrFail();
 		
 		const categories = await RoomFeaturesCategory
 									.query()
