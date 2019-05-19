@@ -54,9 +54,16 @@
       </div>
     </li>
 
-    <!-- Nav Item - Utilities Collapse Menu -->
+        <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
-      <a class="nav-link" href="{{route('configuration')}}">
-        <i class="fas fa-fw fa-cog"></i>
-        <span>{{antl.formatMessage('adminSidebarOptions.configuration')}}</span></a>
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBuilding" aria-expanded="true" aria-controls="collapseUtilities">
+        <i class="fas fa-fw fa-building"></i>
+        <span>Building</span>
+      </a>
+      <div id="collapseBuilding" class="collapse" aria-labelledby="collapseUtilities" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a id="room-issues-drop-down" class='dropdown-item' href="{{route('configuration')}}">Config Building</a>
+          <a id="room-issues-drop-down" class='dropdown-item' href='#'>New Building</a>
+        </div>
+      </div>
     </li>
