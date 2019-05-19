@@ -12,26 +12,57 @@ const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
 class IssueController {
 
+
+	/**
+	 * Reports a room
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async setBuilding ({ response, params, view }) {
+
+		try{
+			const building = await Building.query()
+								.where('id', params.id)
+								.firstOrFail();
+			response.cookie('selectedBuilding', building.name, { path: '/' })
+			console.log('hello');
+			return response.redirect('back');
+		}catch(err){
+			return response.route('home');
+		}
+
+		
+
+	}
+
 	/**
 	 * Reports a room
 	 *
 	 * @param {Object} Context The context object.
 	 */
 	async show ({ view }) {
-		const building = await Building.query().where('id', 1).with('floor').with('tower').with('floor.room').firstOrFail();
+		const allBuildings = await Building.all();
+
+
+		const building = await Building.query()
+								.where('id', 1)
+								.with('floor').
+								with('tower')
+								.with('floor.room')
+								.with('tower.room')
+								.firstOrFail();
 		
 		const categories = await RoomFeaturesCategory
 									.query()
 									.with('features', (builder) => {
 										 builder.where('building_id', 1)
 									}).fetch();
-
-		console.log(building.toJSON().tower);
 		const roomFeatures = await Feature.query().with('category').fetch();
 
 
 		return view.render('adminPages.viewConfiguration', 
-								{building: building.toJSON(),
+								{allBuildings: allBuildings.toJSON(),
+								building: building.toJSON(),
 			 					features:roomFeatures.toJSON(),
 			 					categories: categories.toJSON() });
 

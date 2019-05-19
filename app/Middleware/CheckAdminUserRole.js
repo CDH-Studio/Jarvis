@@ -86,13 +86,23 @@ class CheckAdminUserRole {
 	* @param {Function} next
 	*
 	*/
-	async handle ({ auth, view, response }, next, schemes) {
+	async handle ({ auth, view, response, request }, next, schemes) {
 		var authValid = await this._authenticate(auth, schemes, response);
 
 		if (!authValid) {
 			return response.redirect('/');
 		}
 
+		//get all building
+		const Building = use('App/Models/Building');
+		const allBuildings = await Building.all();
+
+		//read selected building name from cookie
+		const selectedBuilding = request.cookie('selectedBuilding')
+
+
+		//get all building options for admin
+		view.share({ allbuildings: allBuildings.toJSON(), selectedBuilding: selectedBuilding});
 		/**
 		 * For compatibility with the old API
 		 */

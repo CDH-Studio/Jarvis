@@ -10,7 +10,7 @@ class RoomsSchema extends Schema {
 			table.string('name', 20).notNullable().unique();
 			table.string('fullName', 100).notNullable();
 			table.integer('floor_id').notNullable();
-			table.string('tower', 5).notNullable();
+			table.integer('tower_id').notNullable();
 			table.string('telephone', 20);
 			table.integer('seats').notNullable();
 			table.integer('capacity').notNullable();

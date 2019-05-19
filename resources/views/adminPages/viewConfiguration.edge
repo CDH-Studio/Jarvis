@@ -12,6 +12,24 @@ Configuration
 @section('content')
     @!component('components.pageHeader', title='Configuration')
 
+    <div class="dropdown show mb-4">
+      <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Select Building
+      </a>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        @each(building in allBuildings)
+            <a class="dropdown-item" href="{{ route('building', {id: building.id}) }}">{{building.name}}</a>
+        @endeach
+      </div>
+    </div>
+
+    <a href="#" class="btn btn-secondary btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-plus"></i>
+        </span>
+        <span class="text">New Building</span>
+    </a>
+
     <div class="row">
         <div class="col-12 mb-4"> 
         @component('components.generalCard', title='Building Info')
@@ -84,7 +102,7 @@ Configuration
                                 @each(tower in building.tower)
                                     <tr>
                                         <td class="text-xl-left"><strong>{{tower.name}}</strong></td> 
-                                        <td class="text-xl-center"># rooms</td>
+                                        <td class="text-xl-center">{{tower.room.length}} rooms</td>
                                         <td class="text-xl-right">
                                             <a class="text-danger" name='delete Feature' data-toggle='modal'  data-target='#deleteModal{{feature.id}}' href='#'>
                                                 <i class="fas fa-trash fa-1x"></i>
