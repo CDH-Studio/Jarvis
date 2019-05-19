@@ -106,12 +106,8 @@
                       @endif
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      @each(building in allbuildings)
-                          @if(selectedBuilding==building.name)
-                            <a class="dropdown-item active" href="{{ route('setBuilding', {id: building.id}) }}">{{building.name}}</a>
-                          @else
-                            <a class="dropdown-item" href="{{ route('setBuilding', {id: building.id}) }}">{{building.name}}</a>
-                          @endif
+                      @each(building in allBuildings)
+                        <a class="dropdown-item" href="{{ route('setBuilding', {id: building.id}) }}">{{building.name}}</a>
                       @endeach
                     </div>
                   </div>

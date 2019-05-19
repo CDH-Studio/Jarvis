@@ -24,14 +24,29 @@ class IssueController {
 			const building = await Building.query()
 								.where('id', params.id)
 								.firstOrFail();
+
 			response.cookie('selectedBuilding', building.name, { path: '/' })
-			console.log('hello');
-			return response.redirect('back');
 		}catch(err){
-			return response.route('home');
+			console.log(err);
 		}
 
-		
+		return response.route('home');
+
+	}
+
+
+	/**
+	 * Reports a room
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async viewSelectBuilding ({ request, view }) {
+
+		//get all building
+		const Building = use('App/Models/Building');
+		const allBuildings = await Building.all();
+
+		return view.render('adminPages.selectBuilding', {allBuildings: allBuildings.toJSON()});
 
 	}
 
@@ -40,14 +55,15 @@ class IssueController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async show ({ view }) {
+	async show ({ request, view }) {
 		const allBuildings = await Building.all();
 
+		const selectedBuilding = request.cookie('selectedBuilding')
 
 		const building = await Building.query()
-								.where('id', 1)
-								.with('floor').
-								with('tower')
+								.where('name', selectedBuilding)
+								.with('floor')
+								.with('tower')
 								.with('floor.room')
 								.with('tower.room')
 								.firstOrFail();
@@ -57,13 +73,11 @@ class IssueController {
 									.with('features', (builder) => {
 										 builder.where('building_id', 1)
 									}).fetch();
-		const roomFeatures = await Feature.query().with('category').fetch();
 
 
 		return view.render('adminPages.viewConfiguration', 
 								{allBuildings: allBuildings.toJSON(),
 								building: building.toJSON(),
-			 					features:roomFeatures.toJSON(),
 			 					categories: categories.toJSON() });
 
 	}

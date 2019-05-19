@@ -12,17 +12,6 @@ Configuration
 @section('content')
     @!component('components.pageHeader', title='Configuration')
 
-    <div class="dropdown show mb-4">
-      <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Select Building
-      </a>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-        @each(building in allBuildings)
-            <a class="dropdown-item" href="{{ route('building', {id: building.id}) }}">{{building.name}}</a>
-        @endeach
-      </div>
-    </div>
-
     <a href="#" class="btn btn-secondary btn-icon-split">
         <span class="icon text-white-50">
             <i class="fas fa-plus"></i>
@@ -31,25 +20,25 @@ Configuration
     </a>
 
     <div class="row">
-        <div class="col-12 mb-4"> 
-        @component('components.generalCard', title='Building Info')
-            @slot('body')
-                <div class='row'>
-                    <div class='col-md-2 text-center '>
-                        <i class='fas fa-building fa-4x mb-3'></i>
-                        <h4>{{ building.name }}</h4>
-                    </div>
-                    <div class= 'col-md-5'>
-                        <p><i class='fas fa-map-marker-alt'></i> {{ building.street_address }} {{ building.postal_code }}</p>
-                        <p><i class="fas fa-map-marked-alt"></i> {{ building.city }}, {{ building.country }}</p>
+        <div class="col-xl-12 mb-4"> 
+            @component('components.generalCard', title='Building Info')
+                @slot('body')
+                    <div class='row'>
+                        <div class='col-md-2 text-center '>
+                            <i class='fas fa-building fa-4x mb-3'></i>
+                            <h4>{{ building.name }}</h4>
+                        </div>
+                        <div class= 'col-md-5'>
+                            <p><i class='fas fa-map-marker-alt'></i> {{ building.street_address }} {{ building.postal_code }}</p>
+                            <p><i class="fas fa-map-marked-alt"></i> {{ building.city }}, {{ building.country }}</p>
 
-                        {{--  --}}
+                            {{--  --}}
 
+                        </div>
                     </div>
-                </div>
-            @endslot
-        @endcomponent
-    </div>
+                @endslot
+            @endcomponent
+        </div>
     </div>
 
     <div class="row">    
@@ -132,15 +121,18 @@ Configuration
             </div>
     </div>
 
-    {{-- room features --}}
-    <h4 class="mt-4 mb-3" id="reviews"><strong>Room Features</strong></h4>
-    @if(hasErrorFor('featureName'))
-        <div class="alert alert-dismissible alert-danger">
-          <button type="button" class="close" data-dismiss="alert">&times;</button>
-          {{ getErrorFor('featureName') }}
-        </div>        
-    @endif
-    <div class="row">     
+
+    <div class="row">
+         <div class="col-xl-12">
+            {{-- room features --}}
+            <h4 class="mt-4 mb-3" id="reviews"><strong>Room Features</strong></h4>
+            @if(hasErrorFor('featureName'))
+                <div class="alert alert-dismissible alert-danger">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  {{ getErrorFor('featureName') }}
+                </div>        
+            @endif
+        </div>     
         @each(category in categories)
             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
                 @component('components.generalCard', title=category.name)

@@ -100,9 +100,12 @@ class CheckAdminUserRole {
 		//read selected building name from cookie
 		const selectedBuilding = request.cookie('selectedBuilding')
 
+		if (!selectedBuilding) {
+			return response.route('viewSelectBuilding');
+		}
 
 		//get all building options for admin
-		view.share({ allbuildings: allBuildings.toJSON(), selectedBuilding: selectedBuilding});
+		view.share({ allBuildings: allBuildings.toJSON(), selectedBuilding: selectedBuilding});
 		/**
 		 * For compatibility with the old API
 		 */
