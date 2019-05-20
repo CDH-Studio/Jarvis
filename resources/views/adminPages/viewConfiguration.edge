@@ -49,9 +49,17 @@ Configuration
     <div class="row">    
             {{-- Floors  --}}
             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
+                
                 @component('components.generalCard', title='Configure Floor')
                     @slot('body')
-                        @if(category.features.length!=0)
+
+                        @if(hasErrorFor('floorName'))
+                            <div class="alert alert-dismissible alert-danger">
+                              <button type="button" class="close" data-dismiss="alert">&times;</button>
+                              {{ getErrorFor('floorName') }}
+                            </div>        
+                        @endif
+                        @if(building.floor.length!=0)
                             <table class="table table-borderless table-hover table-sm">
                               <tbody>
                                 @each(floor in building.floor)
@@ -80,7 +88,7 @@ Configuration
                             <p>No floors configured</p>
                         @endif
                             
-                             <form class="form-inline" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'  >
+                             <form class="form-inline" action='{{ route('addFloor') }}' method='POST' enctype='multipart/form-data'  >
                                 {{ csrfField() }}
                                 <div class="form-group mb-2 mr-2">
                                     <label for="name" class="sr-only">Floor Name</label>
@@ -246,7 +254,7 @@ Configuration
                                     {{ csrfField() }}
                                     <div class="form-group mb-2 mr-2">
                                         <label for="name" class="sr-only">Edit Feature Name</label>
-                                        <input type="text" class="form-control mr-2" id="name" name="featureName" placeholder="New Tower" class="form-group mb-2" value='{{ old('featureName', feature.name) }}'>
+                                        <input type="text" class="form-control mr-2" id="name" name="featureName" placeholder="New Tower" class="form-group mb-2" value='{{feature.name}}'>
                                     </div>
                                    <button type='submit' class='btn btn-primary'>Save</button>
                                 </form>
@@ -300,7 +308,7 @@ Configuration
                                 {{ csrfField() }}
                                 <div class="form-group mb-2 mr-2">
                                     <label for="name" class="sr-only">Edit Tower Name</label>
-                                    <input type="text" class="form-control mr-2" id="name" name="towerName" placeholder="New Tower" class="form-group mb-2" value='{{ old('towerName', tower.name) }}'>
+                                    <input type="text" class="form-control mr-2" id="name" name="towerName" placeholder="New Tower" class="form-group mb-2" value='{{ tower.name }}'>
                                 </div>
                                <button type='submit' class='btn btn-primary'>Save</button>
                             </form>
@@ -349,11 +357,11 @@ Configuration
                         </div>
                         <div class='modal-body'>Are you sure want to edit "{{floor.name}}"?<br>
                             <p>This change will effect {{floor.room.length}} rooms.</p>
-                            <form class="form-inline" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'  >
+                            <form class="form-inline" action='{{ route('updateFloor', {id: floor.id} ) }}' method='POST' enctype='multipart/form-data'  >
                                 {{ csrfField() }}
                                 <div class="form-group mb-2 mr-2">
                                     <label for="name" class="sr-only">Edit Floor Name</label>
-                                    <input type="text" class="form-control mr-2" id="name" name="floorName" placeholder="New Tower" class="form-group mb-2" value='{{ old('floorName', floor.name) }}'>
+                                    <input type="text" class="form-control mr-2" id="name" name="floorName" placeholder="New Tower" class="form-group mb-2" value='{{ floor.name }}'>
                                 </div>
                                <button type='submit' class='btn btn-primary'>Save</button>
                             </form>

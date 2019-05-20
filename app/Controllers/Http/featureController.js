@@ -1,13 +1,6 @@
 'use strict';
 const Building = use('App/Models/Building');
-const Floor = use('App/Models/Floor');
-const Tower = use('App/Models/Tower');
 const Feature = use('App/Models/RoomFeature');
-const Room = use('App/Models/Room');
-const User = use('App/Models/User');
-const Report = use('App/Models/Report');
-const ReportStatus = use('App/Models/ReportStatus');
-const ReportType = use('App/Models/ReportType');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
 class FeatureController {

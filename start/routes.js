@@ -71,6 +71,11 @@ Route.get('/building/select', 'BuildingController.viewSelectBuilding').as('viewS
 Route.get('/building/set/:id', 'BuildingController.setBuilding').as('setBuilding').middleware(['auth']);
 Route.get('/configure', 'FeatureController.show').as('configuration').middleware(['isAdmin']);
 Route.get('/configure/building/:id', 'FeatureController.show').as('building').middleware(['isAdmin']);
+
+Route.post('/floor/add', 'FloorController.addFloor').as('addFloor').validator('AddFloor').middleware(['isAdmin']);
+Route.post('/floor/:id/edit', 'FloorController.updateFloor').as('updateFloor').validator('EditFloor').middleware(['isAdmin']);
+
+
 Route.post('/feature/add', 'FeatureController.addRoomFeature').as('addRoomFeature').validator('AddFeature').middleware(['isAdmin']);
 Route.post('/feature/:id/delete', 'FeatureController.deleteRoomFeature').as('deleteRoomFeature').middleware(['isAdmin']);
 Route.post('/feature/:id/edit', 'FeatureController.updateRoomFeature').as('updateRoomFeature').validator('EditFeature').middleware(['isAdmin']);
