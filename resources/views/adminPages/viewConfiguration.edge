@@ -59,15 +59,15 @@ Configuration
                                         <td class="text-xl-left"><strong>{{floor.name}}</strong></td> 
                                         <td class="text-xl-center">{{floor.room.length}} rooms</td>
                                         <td class="text-xl-right">
-                                            <a class="text-primary mr-2" name='edit tower' data-toggle='modal'  data-target='#editFloorModal{{floor.id}}' href='#'>
+                                            <a class="btn btn-primary btn-circle btn-sm-sb mr-2" name='edit tower' data-toggle='modal'  data-target='#editFloorModal{{floor.id}}' href='#'>
                                                 <i class="fas fa-pencil-alt fa-1x"></i>
                                             </a>
                                             @if(floor.room.length == 0)
-                                                <a class="text-danger" name='delete floor' data-toggle='modal'  data-target='#deleteFloorModal{{floor.id}}' href='#'>
+                                                <a class="btn btn-danger btn-circle btn-sm-sb" name='delete floor' data-toggle='modal'  data-target='#deleteFloorModal{{floor.id}}' href='#'>
                                                     <i class="fas fa-trash fa-1x"></i>
                                                 </a>
                                             @else
-                                                <a class="text-secondary" name='delete floor' data-toggle='tooltip'  data-placement="top" title="Cannot be deleted becasue there are rooms assigned" disabled>
+                                                <a class="btn btn-secondary btn-circle btn-sm-sb" name='delete floor' data-toggle='tooltip'  data-placement="top" title="Cannot be deleted becasue there are rooms assigned" disabled>
                                                     <i class="fas fa-trash fa-1x"></i>
                                                 </a>
                                             @endif
@@ -106,15 +106,15 @@ Configuration
                                         <td class="text-xl-left"><strong>{{tower.name}}</strong></td> 
                                         <td class="text-xl-center">{{tower.room.length}} rooms</td>
                                         <td class="text-xl-right">
-                                            <a class="text-primary mr-2" name='edit tower' data-toggle='modal'  data-target='#editTowerModal{{tower.id}}' href='#'>
+                                            <a class="btn btn-primary btn-circle btn-sm-sb mr-2" name='edit tower' data-toggle='modal'  data-target='#editTowerModal{{tower.id}}' href='#'>
                                                 <i class="fas fa-pencil-alt fa-1x"></i>
                                             </a>
                                             @if(tower.room.length == 0)
-                                                <a class="text-danger" name='delete Feature' data-toggle='modal'  data-target='#deleteTowerModal{{tower.id}}' href='#'>
+                                                <a class="btn btn-danger btn-circle btn-sm-sb" name='delete Feature' data-toggle='modal'  data-target='#deleteTowerModal{{tower.id}}' href='#'>
                                                     <i class="fas fa-trash fa-1x"></i>
                                                 </a>
                                             @else
-                                                <a class="text-secondary" name='delete floor' data-toggle='tooltip'  data-placement="top" title="Cannot be deleted becasue there are rooms assigned" disabled>
+                                                <a class="btn btn-secondary btn-circle btn-sm-sb mr-2" name='delete floor' data-toggle='tooltip'  data-placement="top" title="Cannot be deleted becasue there are rooms assigned" disabled>
                                                     <i class="fas fa-trash fa-1x"></i>
                                                 </a>
                                             @endif
@@ -166,11 +166,11 @@ Configuration
                                         <td class="text-xl-left"><strong>{{feature.name}}</strong></td> 
                                         <td class="text-xl-center"># rooms</td>
                                         <td class="text-xl-right">
-                                            <a class="text-primary mr-2" name='edit tower' data-toggle='modal'  data-target='#editFeatureModal{{feature.id}}' href='#'>
+                                            <a class="btn btn-primary btn-circle btn-sm-sb mr-2" name='edit tower' data-toggle='modal'  data-target='#editFeatureModal{{feature.id}}' href='#'>
                                                 <i class="fas fa-pencil-alt fa-1x"></i>
                                             </a>
 
-                                            <a class="text-danger" name='delete Feature' data-toggle='modal'  data-target='#deleteFeatureModal{{feature.id}}' href='#'>
+                                            <a class="btn btn-danger btn-circle btn-sm-sb" name='delete Feature' data-toggle='modal'  data-target='#deleteFeatureModal{{feature.id}}' href='#'>
                                                 <i class="fas fa-trash fa-1x"></i>
                                             </a>
                                         </td>
