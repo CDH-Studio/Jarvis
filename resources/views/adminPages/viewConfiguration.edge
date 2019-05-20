@@ -92,7 +92,6 @@ Configuration
                                 {{ csrfField() }}
                                 <div class="form-group mb-2 mr-2">
                                     <label for="name" class="sr-only">Floor Name</label>
-                                    <input type="hidden"  name="featureCategory" value="{{category.id}}">
                                     <input type="text" class="form-control mr-2" id="name" name="floorName" placeholder="New Floor" class="form-group mb-2">
                                 </div>
                                 <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
@@ -106,6 +105,12 @@ Configuration
             <div class="col-sm-12 col-md-6 col-lg-5 col-xl-5 mb-4">
                 @component('components.generalCard', title='Configure Tower')
                     @slot('body')
+                        @if(hasErrorFor('towerName'))
+                            <div class="alert alert-dismissible alert-danger">
+                              <button type="button" class="close" data-dismiss="alert">&times;</button>
+                              {{ getErrorFor('towerName') }}
+                            </div>        
+                        @endif
                         @if(building.tower.length!=0)
                             <table class="table table-borderless table-hover table-sm">
                               <tbody>
@@ -135,11 +140,10 @@ Configuration
                             <p>No towers configured</p>
                         @endif
                             
-                        <form class="form-inline" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'  >
+                        <form class="form-inline" action='{{ route('addTower') }}' method='POST' enctype='multipart/form-data'  >
                             {{ csrfField() }}
                             <div class="form-group mb-2 mr-2">
                                 <label for="name" class="sr-only">New Tower</label>
-                                <input type="hidden"  name="featureCategory" value="{{category.id}}">
                                 <input type="text" class="form-control mr-2" id="name" name="towerName" placeholder="New Tower" class="form-group mb-2">
                             </div>
                             <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
@@ -304,7 +308,7 @@ Configuration
                         </div>
                         <div class='modal-body'>Are you sure want to edit "{{tower.name}}"?<br>
                             <p>This change will effect {{tower.room.length}} rooms.</p>
-                            <form class="form-inline" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'  >
+                            <form class="form-inline" action='{{ route('updateTower', {id: tower.id}) }}' method='POST' enctype='multipart/form-data'  >
                                 {{ csrfField() }}
                                 <div class="form-group mb-2 mr-2">
                                     <label for="name" class="sr-only">Edit Tower Name</label>

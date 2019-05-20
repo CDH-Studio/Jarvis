@@ -22,7 +22,7 @@ class EditFloor {
 	get messages () {
 		return {
 			'floorName.required': 'You must provide a floor name',
-			'floorName.max': 'feature name can only be 20 characters long',
+			'floorName.max': 'Floor name can only be 20 characters long',
 			'floorName.unique': 'The floor name already exists.'
 		};
 	}

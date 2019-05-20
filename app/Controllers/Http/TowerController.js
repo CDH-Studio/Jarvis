@@ -1,14 +1,13 @@
 'use strict';
 const Building = use('App/Models/Building');
-const Floor = use('App/Models/Floor');
+const Tower = use('App/Models/Tower');
 const Feature = use('App/Models/RoomFeature');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
-class FloorController {
+class TowerController {
 
 
-
-	async addFloor ({ request, response, session }) {
+	async addTower ({ request, response, session }) {
 		try {
 
 			const selectedBuilding = request.cookie('selectedBuilding');
@@ -18,12 +17,12 @@ class FloorController {
 			// Retrieves user input
 			const body = request.all();
 			// Populates the review object's values
-			const newFloor = new Floor();
-			newFloor.name = body.floorName;
-			newFloor.building_id = building.id;
-			await newFloor.save();
+			const newTower = new Tower();
+			newTower.name = body.towerName;
+			newTower.building_id = building.id;
+			await newTower.save();
 
-			session.flash({ notification: 'Floor Added!' });
+			session.flash({ notification: 'Tower Added!' });
 
 			return response.route('configuration');
 		} catch (err) {
@@ -31,18 +30,18 @@ class FloorController {
 		}
 	}
 
-	async updateFloor ({ params, response, request, session}) {
+	async updateTower ({ params, response, request, session}) {
 		try {
 			const body = request.all();
 			// Updates room information in database
-			const floor = await Floor
+			const tower = await Tower
 				.query()
 				.where('id', params.id)
 				.firstOrFail();
 
-			floor.name = body.floorName;
-			await floor.save();
-			session.flash({ notification: 'Floor Updated!' });
+			tower.name = body.towerName;
+			await tower.save();
+			session.flash({ notification: 'Tower Updated!' });
 			return response.route('configuration');
 
 		} catch (err) {
@@ -53,4 +52,4 @@ class FloorController {
 	
 }
 
-module.exports = FloorController;
+module.exports = TowerController;
