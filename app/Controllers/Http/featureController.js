@@ -10,45 +10,8 @@ const ReportStatus = use('App/Models/ReportStatus');
 const ReportType = use('App/Models/ReportType');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
-class IssueController {
+class FeatureController {
 
-
-	/**
-	 * Reports a room
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async setBuilding ({ response, params, view }) {
-
-		try{
-			const building = await Building.query()
-								.where('id', params.id)
-								.firstOrFail();
-
-			response.cookie('selectedBuilding', building.name, { path: '/' })
-		}catch(err){
-			console.log(err);
-		}
-
-		return response.route('home');
-
-	}
-
-
-	/**
-	 * Reports a room
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async viewSelectBuilding ({ request, view }) {
-
-		//get all building
-		const Building = use('App/Models/Building');
-		const allBuildings = await Building.all();
-
-		return view.render('adminPages.selectBuilding', {allBuildings: allBuildings.toJSON()});
-
-	}
 
 	/**
 	 * Reports a room
@@ -85,7 +48,6 @@ class IssueController {
 	async addRoomFeature ({ request, response, session }) {
 		try {
 
-			
 			// Retrieves user input
 			const body = request.all();
 			// Populates the review object's values
@@ -103,13 +65,32 @@ class IssueController {
 		}
 	}
 
+	async updateRoomFeature ({ params, response, request, session}) {
+		try {
+			const body = request.all();
+			// Updates room information in database
+			const feature = await Feature
+				.query()
+				.where('id', params.id)
+				.firstOrFail();
+
+			feature.name = body.featureName;
+			await feature.save();
+			session.flash({ notification: 'Feature Updated!' });
+			return response.route('configuration');
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+
 	async deleteRoomFeature ({ params, response}) {
 		try {
-		const { id } = params;
-		const feature = await Feature.find(params.id)
+			const { id } = params;
+			const feature = await Feature.find(params.id)
 
-		await feature.delete()
-		return response.route('configuration');
+			await feature.delete()
+			return response.route('configuration');
 
 		} catch (err) {
 			console.log(err);
@@ -119,4 +100,4 @@ class IssueController {
 	
 }
 
-module.exports = IssueController;
+module.exports = FeatureController;

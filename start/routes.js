@@ -67,12 +67,13 @@ Route.get('/rooms/:id/edit', 'RoomController.edit').as('editRoom').middleware(['
 Route.post('/rooms/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['isAdmin']);
 Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
 
-Route.get('/building/select', 'featureController.viewSelectBuilding').as('viewSelectBuilding').middleware(['auth']);
-Route.get('/building/set/:id', 'featureController.setBuilding').as('setBuilding').middleware(['auth']);
-Route.get('/configure', 'featureController.show').as('configuration').middleware(['isAdmin']);
-Route.get('/configure/building/:id', 'featureController.show').as('building').middleware(['isAdmin']);
-Route.post('/feature/add', 'featureController.addRoomFeature').as('addRoomFeature').validator('AddFeature').middleware(['isAdmin']);
-Route.post('/feature/:id', 'featureController.deleteRoomFeature').as('deleteRoomFeature').middleware(['isAdmin']);
+Route.get('/building/select', 'BuildingController.viewSelectBuilding').as('viewSelectBuilding').middleware(['auth']);
+Route.get('/building/set/:id', 'BuildingController.setBuilding').as('setBuilding').middleware(['auth']);
+Route.get('/configure', 'FeatureController.show').as('configuration').middleware(['isAdmin']);
+Route.get('/configure/building/:id', 'FeatureController.show').as('building').middleware(['isAdmin']);
+Route.post('/feature/add', 'FeatureController.addRoomFeature').as('addRoomFeature').validator('AddFeature').middleware(['isAdmin']);
+Route.post('/feature/:id/delete', 'FeatureController.deleteRoomFeature').as('deleteRoomFeature').middleware(['isAdmin']);
+Route.post('/feature/:id/edit', 'FeatureController.updateRoomFeature').as('updateRoomFeature').validator('EditFeature').middleware(['isAdmin']);
 
 
 Route.get('/room/:roomID/issues/:issueStatus', 'IssueController.getRoomIssues').as('showIssue').middleware(['isAdmin']);

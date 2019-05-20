@@ -5,7 +5,7 @@
  **/
 'use strict';
 
-class AddFeature {
+class EditFeature {
 	// Validate and return all fields
 	get validateAll () {
 		return true;
@@ -15,7 +15,6 @@ class AddFeature {
 	get rules () {
 		return {
 			featureName: 'required|max:20',
-			featureCategory: 'required|integer',
 		};
 	}
 
@@ -33,4 +32,4 @@ class AddFeature {
 	}
 }
 
-module.exports = AddFeature;
+module.exports = EditFeature;
