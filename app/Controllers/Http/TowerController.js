@@ -1,6 +1,7 @@
 'use strict';
 const Building = use('App/Models/Building');
 const Tower = use('App/Models/Tower');
+const Room = use('App/Models/Room');
 const Feature = use('App/Models/RoomFeature');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
@@ -50,10 +51,15 @@ class TowerController {
 	async deleteTower ({ params, response, request, session}) {
 		try {
 
-			const tower = await Tower.find(params.id);
-			await tower.delete();
-			
-			session.flash({ notification: 'Tower Deleted!' });
+			const roomCount = await Room.query().where('tower_id', params.id).getCount();
+
+			if(roomCount==0){
+				const tower = await Tower.find(params.id);
+				await tower.delete();
+
+				session.flash({ notification: 'Tower Deleted!' });
+			}
+
 			return response.route('configuration');
 
 		} catch (err) {
