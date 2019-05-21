@@ -1,6 +1,7 @@
 'use strict';
 const Building = use('App/Models/Building');
 const Floor = use('App/Models/Floor');
+const Room = use('App/Models/Room');
 const Feature = use('App/Models/RoomFeature');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
@@ -35,14 +36,30 @@ class FloorController {
 		try {
 			const body = request.all();
 			// Updates room information in database
-			const floor = await Floor
-				.query()
-				.where('id', params.id)
-				.firstOrFail();
+			const floor = await Floor.find(params.id);
 
 			floor.name = body.floorName;
 			await floor.save();
 			session.flash({ notification: 'Floor Updated!' });
+			return response.route('configuration');
+
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	async deleteFloor({ params, response, request, session}) {
+		try {
+
+			const roomCount = await Room.query().where('floor_id', params.id).getCount();
+
+			if(roomCount==0){
+				const floor = await Floor.find(params.id);
+				await floor.delete();
+
+				session.flash({ notification: 'Floor Deleted!' });
+			}
+
 			return response.route('configuration');
 
 		} catch (err) {

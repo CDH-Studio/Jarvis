@@ -327,29 +327,31 @@ Configuration
 
         @each(floor in building.floor)
 
-            {{-- delete floor modal --}}
-            <div class='modal' id='deleteFloorModal{{ floor.id }}' role='dialog' aria-hidden='true'>
-                <div class='modal-dialog modal-dialog-centered' role='document'>
-                    <div class='modal-content'>
-                        <div class='modal-header'>
-                            <h5 class='modal-title' id='cancelTitle'>Delete FLoor?</h5>
-                            <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
-                                <span aria-hidden='true'>×</span>
-                            </button>
+            @if(floor.room.length == 0)
+                {{-- delete floor modal --}}
+                <div class='modal' id='deleteFloorModal{{ floor.id }}' role='dialog' aria-hidden='true'>
+                    <div class='modal-dialog modal-dialog-centered' role='document'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <h5 class='modal-title' id='cancelTitle'>Delete Floor?</h5>
+                                <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+                                    <span aria-hidden='true'>×</span>
+                                </button>
+                            </div>
+                            <div class='modal-body'>Are you sure want to delete <strong>"{{floor.name}}"</strong>?<br>
+                                <p class="text-danger">This is process is permanent!</p>
+                            </div>
+                            <form action='{{ route('deleteFloor', {id: floor.id}) }}' method='POST' enctype='multipart/form-data'>
+                                {{ csrfField() }}
+                                <div class='modal-footer'>
+                                    <button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+                                    <button type='submit' class='btn btn-danger'>Yes</button>
+                                </div>                    
+                            </form>  
                         </div>
-                        <div class='modal-body'>Are you sure want to delete <strong>"{{floor.name}}"</strong>?<br>
-                            <p class="text-danger">This is process is permanent!</p>
-                        </div>
-                        <form action='{{ route('deleteRoomFeature', {id: floor.id}) }}' method='POST' enctype='multipart/form-data'>
-                            {{ csrfField() }}
-                            <div class='modal-footer'>
-                                <button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
-                                <button type='submit' class='btn btn-danger'>Yes</button>
-                            </div>                    
-                        </form>  
                     </div>
                 </div>
-            </div>
+            @endif
 
             {{-- edit floor modal --}}
             <div class='modal' id='editFloorModal{{ floor.id }}' role='dialog' aria-hidden='true'>

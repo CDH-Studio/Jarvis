@@ -76,10 +76,9 @@ Route.post('/tower/add', 'TowerController.addTower').as('addTower').validator('A
 Route.post('/tower/:id/edit', 'TowerController.updateTower').as('updateTower').validator('EditTower').middleware(['isAdmin']);
 Route.post('/tower/:id/delete', 'TowerController.deleteTower').as('deleteTower').middleware(['isAdmin']);
 
-
 Route.post('/floor/add', 'FloorController.addFloor').as('addFloor').validator('AddFloor').middleware(['isAdmin']);
 Route.post('/floor/:id/edit', 'FloorController.updateFloor').as('updateFloor').validator('EditFloor').middleware(['isAdmin']);
-
+Route.post('/floor/:id/delete', 'FloorController.deleteFloor').as('deleteFloor').middleware(['isAdmin']);
 
 Route.post('/feature/add', 'FeatureController.addRoomFeature').as('addRoomFeature').validator('AddFeature').middleware(['isAdmin']);
 Route.post('/feature/:id/edit', 'FeatureController.updateRoomFeature').as('updateRoomFeature').validator('EditFeature').middleware(['isAdmin']);
