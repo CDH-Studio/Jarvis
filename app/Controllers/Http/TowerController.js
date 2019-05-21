@@ -32,16 +32,28 @@ class TowerController {
 
 	async updateTower ({ params, response, request, session}) {
 		try {
+
 			const body = request.all();
-			// Updates room information in database
-			const tower = await Tower
-				.query()
-				.where('id', params.id)
-				.firstOrFail();
+
+			const tower = await Tower.find(params.id);
 
 			tower.name = body.towerName;
 			await tower.save();
 			session.flash({ notification: 'Tower Updated!' });
+			return response.route('configuration');
+
+		} catch (err) {
+			console.log(err);
+		}
+	}
+
+	async deleteTower ({ params, response, request, session}) {
+		try {
+
+			const tower = await Tower.find(params.id);
+			await tower.delete();
+			
+			session.flash({ notification: 'Tower Deleted!' });
 			return response.route('configuration');
 
 		} catch (err) {
