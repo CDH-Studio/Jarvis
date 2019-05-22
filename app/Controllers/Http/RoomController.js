@@ -434,7 +434,7 @@ class RoomController {
 			rooms[i].rating = await this.getAverageRating(rooms[i].id);
 		}
 
-		const duration = Number(options.hour) * 60 + Number(options.minute);
+		const duration = Number(options.hour) * 60;
 		const difference = Math.abs(moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))).asMinutes());
 
 		if (duration === difference) {
@@ -452,7 +452,7 @@ class RoomController {
 			// Adds new attribute - rating - to every room object
 			rooms[i].rating = await this.getAverageRating(rooms[i].id);
 		}
-		const duration = Number(options.hour) * 60 + Number(options.minute);
+		const duration = Number(options.hour) * 60;
 		let results = {};
 		const find = async () => {
 			await asyncForEach(rooms, async (item) => {
