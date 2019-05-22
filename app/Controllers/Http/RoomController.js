@@ -514,7 +514,6 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async findSpecific ({ request, view }) {
-		console.log('hi1');
 		// importing forms from search form
 		const form = request.all();
 		let rooms = (await this.filterRooms(form)).toJSON();
@@ -531,7 +530,6 @@ class RoomController {
 		const code = random(4);
 		const checkRoomAvailability = async () => {
 			let results = [];
-			console.log('hi2');
 			await asyncForEach(rooms, async (item) => {
 				if (await this.getRoomAvailability(date, from, to, item.floor, item.calendar)) {
 					Event.fire('send.room', {
@@ -555,7 +553,6 @@ class RoomController {
 		};
 
 		setTimeout(checkRoomAvailability, 500);
-		console.log('hi3');
 		// Sort the results by name
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
