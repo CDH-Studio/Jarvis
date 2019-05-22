@@ -98,6 +98,10 @@
 										<div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
 									@endif
 								</div>
+								<div class='col form-group mb-1'>
+                                    <label for='duration'>Duration</label> <strong class='text-danger'>*</strong>
+                                    <input class='form-control' name='hour' type='number' min=0 max=10 step=0.5 value='{{ old('hour', '1') }}'>
+                                </div>
 							</div>
 							{{--  Location form  --}}
 							<div class='row'>
