@@ -2,7 +2,6 @@
 [![Build Status][build-shield]]()
 [![Contributors][contributors-shield]]()
 [![MIT License][license-shield]][license-url]
-[![Contributors][contributors-shield]]()
 
 <!-- PROJECT LOGO -->
 <br />
@@ -37,7 +36,7 @@
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
-* [Usage](#usage)
+* [Screenshots](#screenshots)
 * [Contributing](#contributing)
 * [License](#license)
 * [Contact](#contact)
@@ -108,9 +107,11 @@ To run test if your code meets coding conventions
 * run `yarn lint`
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## Screenshots
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+![screenshot1]
+![screenshot2]
+![screenshot3]
 
 _For more examples, please refer to the [Documentation](https://github.com/CDH-Studio/Jarvis/wiki)_
 
@@ -148,3 +149,6 @@ Project Link: [https://github.com/CDH-Studio/Jarvis](https://github.com/CDH-Stud
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [product-screenshot]: https://github.com/CDH-Studio/Jarvis/blob/CDHJ-00-Feature/ReadME/screenshots/JarvisRegistration.png
+[screenshot1]: https://github.com/CDH-Studio/Jarvis/blob/CDHJ-00-Feature/ReadME/screenshots/AdminDash.png
+[screenshot2]: https://github.com/CDH-Studio/Jarvis/blob/CDHJ-00-Feature/ReadME/screenshots/UserLanding.png
+[screenshot3]: https://github.com/CDH-Studio/Jarvis/blob/CDHJ-00-Feature/ReadME/screenshots/RoomDetails.png
