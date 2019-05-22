@@ -48,6 +48,7 @@ Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetReq
 // Authentication
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
+Route.get('/allAdmins', 'UserController.getAllAdmins').as('allAdmins').middleware(['isAdmin']);
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
 Route.post('/user/:id/edit', 'UserController.update').as('saveUser').validator('EditUser').middleware(['isUser']);
 Route.post('/user/:id/editAdmin', 'UserController.update').as('saveAdmin').validator('EditAdmin').middleware(['isAdmin']);

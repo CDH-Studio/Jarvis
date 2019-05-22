@@ -19,6 +19,7 @@ class IssueController {
 		// Populates the review object's values
 		const issue = new Report();
 		issue.user_id = auth.user.id;
+		issue.building_id = 1;
 		issue.room_id = row.id;
 		issue.report_type_id = issueType;
 		issue.comment = comment;

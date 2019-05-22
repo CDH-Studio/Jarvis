@@ -12,8 +12,9 @@ class UserSchema extends Schema {
 			table.string('lastname', 80).notNullable();
 			table.string('email', 254).notNullable().unique();
 			table.string('password', 60).notNullable();
-			table.integer('floor');
-			table.integer('tower');
+			table.integer('floor_id');
+			table.integer('tower_id');
+			table.integer('building_id');
 			table.integer('role_id').notNullable();
 			table.bool('verified').notNullable();
 			table.timestamps();
