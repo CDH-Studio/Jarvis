@@ -15,6 +15,10 @@ class Room extends Model {
 		return this.hasMany('App/Models/Report');
 	}
 
+	building () {
+		return this.belongsTo('App/Models/Building', 'building_id');
+	}
+
 	static get table () {
 		return 'rooms';
 	}

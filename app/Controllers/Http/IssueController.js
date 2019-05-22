@@ -76,7 +76,7 @@ class IssueController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getRoomIssues ({ params, view, auth, response }) {
+	async getRoomIssues ({request, params, view, response }) {
 		var results;
 		var issues;
 		var currentTime;
@@ -94,16 +94,21 @@ class IssueController {
 			issuefilterType = 3;
 		}
 
+		const selectedBuilding = request.cookie('selectedBuilding');
+
 		// refine filter by room requested
 		if (params.roomID === 'all') {
 			// filter based on status
 			if (issuefilterType > 0 && issuefilterType < 4) {
 				results = await Report
 					.query()
+					.where('building_id', selectedBuilding.id)
 					.where('report_status_id', issuefilterType)
 					.fetch();
 			} else {
-				results = await Report.all();
+				results = await Report.query()
+					.where('building_id', selectedBuilding.id)
+					.fetch();
 			}
 		} else {
 			// for security check if room number is actually an int
@@ -133,7 +138,7 @@ class IssueController {
 		issues = results.toJSON();
 
 		// Retrieve issue stats
-		const stats = await this.getIssueStatistics(params.roomID);
+		const stats = await this.getIssueStatistics(params.roomID,selectedBuilding);
 
 		// date formatting options
 		var options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -157,7 +162,7 @@ class IssueController {
 	*
 	* @param {Object} Context The context object.
 	*/
-	async getIssueStatistics (roomID) {
+	async getIssueStatistics (roomID, selectedBuilding) {
 		var countPending;
 		var countUnderReview;
 		var countResolved;
@@ -166,18 +171,21 @@ class IssueController {
 			// Retrieve number of issues that are pending
 			countPending = await Report
 				.query()
+				.where('building_id', selectedBuilding.id)
 				.where('report_status_id', 1)
 				.count();
 
 			// Retrieve number of issues that are under review
 			countUnderReview = await Report
 				.query()
+				.where('building_id', selectedBuilding.id)
 				.where('report_status_id', 2)
 				.count();
 
 			// Retrieve number of issues that are resolved
 			countResolved = await Report
 				.query()
+				.where('building_id', selectedBuilding.id)
 				.where('report_status_id', 3)
 				.count();
 		} else {

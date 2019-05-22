@@ -16,7 +16,7 @@ class BuildingController {
 								.where('id', params.id)
 								.firstOrFail();
 
-			response.cookie('selectedBuilding', building.name, { path: '/' })
+			response.cookie('selectedBuilding', building.toJSON(), { path: '/' })
 		}catch(err){
 			console.log(err);
 		}
