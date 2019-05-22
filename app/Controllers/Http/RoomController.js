@@ -426,7 +426,6 @@ class RoomController {
 	}
 
 	async searchRooms ({ request, view }) {
-		console.log('view1', view);
 		const options = request.all();
 		const rooms = (await this.filterRooms(options)).toJSON();
 		// Sets average rating for each room
@@ -446,7 +445,6 @@ class RoomController {
 	}
 
 	async findAvailable ({ request, view }) {
-		console.log('view2', view);
 		const options = request.all();
 		const rooms = (await this.filterRooms(options)).toJSON();
 		// Sets average rating for each room
@@ -508,6 +506,7 @@ class RoomController {
 		options.formattedFrom = moment(options.from, 'HH:mm').format('h:mm A');
 		options.formattedTo = moment(options.to, 'HH:mm').format('h:mm A');
 		// return view.render('userPages.findAvailableResults', { times: times, form: options });
+		console.log(times);
 		return times;
 	}
 
