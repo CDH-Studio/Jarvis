@@ -438,9 +438,9 @@ class RoomController {
 		const difference = Math.abs(moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))).asMinutes());
 
 		if (duration === difference) {
-			await this.findSpecific({ request, view });
+			return this.findSpecific({ request, view });
 		} else {
-			await this.findAvailable({ request, view });
+			return this.findAvailable({ request, view });
 		}
 	}
 
@@ -505,9 +505,7 @@ class RoomController {
 		options.formattedDate = moment(options.date).format('dddd, MMM DD, YYYY');
 		options.formattedFrom = moment(options.from, 'HH:mm').format('h:mm A');
 		options.formattedTo = moment(options.to, 'HH:mm').format('h:mm A');
-		// return view.render('userPages.findAvailableResults', { times: times, form: options });
-		console.log(times);
-		return times;
+		return view.render('userPages.findAvailableResults', { times: times, form: options });
 	}
 
 	/**
