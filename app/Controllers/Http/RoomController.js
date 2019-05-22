@@ -507,7 +507,8 @@ class RoomController {
 		options.formattedDate = moment(options.date).format('dddd, MMM DD, YYYY');
 		options.formattedFrom = moment(options.from, 'HH:mm').format('h:mm A');
 		options.formattedTo = moment(options.to, 'HH:mm').format('h:mm A');
-		return view.render('userPages.findAvailableResults', { times: times, form: options });
+		// return view.render('userPages.findAvailableResults', { times: times, form: options });
+		return times;
 	}
 
 	/**
