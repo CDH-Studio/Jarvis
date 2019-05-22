@@ -435,7 +435,7 @@ class RoomController {
 		}
 
 		const duration = Number(options.hour) * 60 + Number(options.minute);
-		const difference = moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))).minutes();
+		const difference = moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))).asMinutes();
 
 		console.log('raw', moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))));
 		console.log('duration', duration);
