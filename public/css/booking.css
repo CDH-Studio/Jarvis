@@ -75,3 +75,13 @@ padding: 2px 16px;
 .room-card {
     animation: fadeIn 2s;
 }
+
+/* duration */
+.duration-append {
+	background-color: #145f9c;
+	color: #fff;
+}
+
+.duration-input {
+	min-width: 45px;
+}
