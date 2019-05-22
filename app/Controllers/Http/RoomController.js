@@ -437,6 +437,7 @@ class RoomController {
 		const duration = Number(options.hour) * 60 + Number(options.minute);
 		const difference = moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))).minutes();
 
+		console.log('raw', moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))));
 		console.log('duration', duration);
 		console.log('diff', difference);
 
@@ -448,6 +449,7 @@ class RoomController {
 	}
 
 	async findAvailable ({ request, view }) {
+		console.log('here1');
 		const options = request.all();
 		const rooms = (await this.filterRooms(options)).toJSON();
 		// Sets average rating for each room
@@ -456,9 +458,10 @@ class RoomController {
 			rooms[i].rating = await this.getAverageRating(rooms[i].id);
 		}
 		const duration = Number(options.hour) * 60 + Number(options.minute);
-
+		console.log('here2');
 		let results = {};
 		const find = async () => {
+			console.log('here3');
 			await asyncForEach(rooms, async (item) => {
 				const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/findAvail`, {
 					room: item.calendar,
@@ -485,7 +488,7 @@ class RoomController {
 
 				return (time >= min && time <= max);
 			});
-
+			console.log('here4');
 			// item: a starting time for a room
 			room.forEach(item => {
 				if (!times[item]) {
@@ -504,7 +507,7 @@ class RoomController {
 				times[item].rooms.push(newRoom);
 			});
 		}
-
+		console.log('here5');
 		times = Object.values(times);
 		times.sort((a, b) => {
 			return (a.from > b.from) ? 1 : ((b.from > a.from) ? -1 : 0);
