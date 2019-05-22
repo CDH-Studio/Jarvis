@@ -35,15 +35,7 @@
 						<strong>Time range:&nbsp</strong><span>  {{ form.formattedFrom }} - {{ form.formattedTo }} </span>
 					</div>
 					<div class='d-inline-flex p-3'>
-						@if(form.hour == 0)
-							<strong>Duration:&nbsp</strong><span> {{ form.minute }} M </span>
-						@else
-							@if(form.minute == 0)
-								<strong>Duration:&nbsp</strong><span> {{ form.hour }} H </span>
-							@else
-								<strong>Duration:&nbsp</strong><span> {{ form.hour }} H {{ form.minute }} M</span>
-							@endif
-						@endif
+						<strong>Duration:&nbsp</strong><span> {{ form.hour }} Hour(s) </span>
 					</div>
 				</div>
 				<hr style='margin-top:0px;'>

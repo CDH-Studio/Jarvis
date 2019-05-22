@@ -53,7 +53,7 @@
 							</div>
 							{{--  Meeting time from  --}}
 							<div class='row'>
-								<div class='col form-group mb-4'>
+								<div class='col col-sm-4 form-group mb-4 mr-3'>
 									<label for='from' aria-labelledby='from-error'>Start time <strong class='text-danger'>*</strong></label>
 									{{--  If field is not filled correctly show an error box  --}}
 									<div class='timePicker' style='display: flex;'>
@@ -76,7 +76,7 @@
 										<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
 									@endif
 								</div>
-								<div class='col form-group mb-4'>
+								<div class='col col-sm-4 form-group mb-4 mr-3'>
 									<label for='to' aria-labelledby='to-error' data-toggle='tooltip'>End time <strong class='text-danger'>*</strong></label>
 									<div style='display: flex;' class='timePicker'>
 										{{--  If field is not filled correctly show an error box  --}}
