@@ -147,4 +147,4 @@ Project Link: [https://github.com/CDH-Studio/Jarvis](https://github.com/CDH-Stud
 [license-url]: https://choosealicense.com/licenses/mit
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=flat-square&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: https://raw.githubusercontent.com/Jarvis/public/screenshots/JarvisRegistration.png
+[product-screenshot]: https://github.com/CDH-Studio/Jarvis/blob/CDHJ-00-Feature/ReadME/screenshots/JarvisRegistration.png
