@@ -1,0 +1,12 @@
+{
+	"title": "Admin Registration",
+	"warning": "Cette page est destinée uniquement à l'administrateur. Vous aurez besoin d'un code spécial pour vous inscrire.",
+	"firstname": "Prénom",
+	"lastname": "Nom de famille",
+	"email": "Email",
+	"pass": "Mot de passe",
+	"confirmPass": "Confirm Password",
+	"token": "Jeton d'administration",
+	"submit": "Register",
+	"loginRedirect": "Vous avez déjà un compte? Connectez-vous!"
+}

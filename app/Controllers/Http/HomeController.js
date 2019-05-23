@@ -6,8 +6,8 @@ const Booking = use('App/Models/Booking');
 const Review = use('App/Models/Review');
 const Event = use('Event');
 const Env = use('Env');
-
 var moment = require('moment');
+require('moment-round');
 const axios = require('axios');
 
 /**
@@ -15,7 +15,7 @@ const axios = require('axios');
  *
  * @param {Integer} times Each time a string of 5 to 6 characters is generated.
  */
-function random (times) {
+function randomString (times) {
 	let result = '';
 	for (let i = 0; i < times; i++) {
 		result += Math.random().toString(36).substring(2);
@@ -41,7 +41,7 @@ class HomeController {
 	* @param {auth}
 	*
 	*/
-	async home ({ response, auth }) {
+	async home ({ response, auth, request }) {
 		try {
 			// cheack user is logged-in and role
 			await auth.check();
@@ -55,6 +55,32 @@ class HomeController {
 		} catch (error) {
 			return response.route('login');
 		}
+	}
+
+	/**
+	*
+	* Render language selection page
+	*
+	* @param {view}
+	*
+	*/
+	async viewLang ({ view }) {
+		return view.render('language.langSelect');
+	}
+
+	/**
+	*
+	* Change language cookie
+	*
+	* @param {view}
+	*
+	*/
+	async changeLang ({ params, antl, request, response }) {
+		const locales = antl.availableLocales();
+		if (locales.indexOf(params.lang) > -1) {
+			response.cookie('lang', params.lang, { path: '/' });
+		}
+		response.redirect('back');
 	}
 
 	/**
@@ -378,7 +404,7 @@ class HomeController {
 		const formattedFrom = moment(now).add(remainder, 'm').format('h:mm A');
 		const formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('h:mm A');
 
-		const code = random(4);
+		const code = randomString(4);
 		const checkRoomAvailability = async () => {
 			let numberOfRooms = 2;
 			await asyncForEach(rooms, async (item) => {

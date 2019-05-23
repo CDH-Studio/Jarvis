@@ -15,7 +15,7 @@ const axios = require('axios');
  *
  * @param {Integer} times Each time a string of 5 to 6 characters is generated.
  */
-function random (times) {
+function randomString (times) {
 	let result = '';
 	for (let i = 0; i < times; i++) {
 		result += Math.random().toString(36).substring(2);
@@ -179,7 +179,7 @@ class UserController {
 		userInfo.role_id = await UserRole.getRoleID('user');
 		userInfo.verified = false;
 
-		let hash = random(4);
+		let hash = randomString(4);
 
 		let row = {
 			email: userInfo.email,
@@ -367,7 +367,7 @@ class UserController {
 		const rows = results.toJSON();
 
 		if (rows.length !== 0) {
-			let hash = random(4);
+			let hash = randomString(4);
 
 			let row = {
 				email: email,

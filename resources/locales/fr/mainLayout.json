@@ -1,0 +1,8 @@
+{
+	"profile": "fprofile",
+	"logout" : "flogout",
+	"logoutModalHeader": "fReady to Leave?",
+	"logoutModalBody": "fAre you sure you want to log out?",
+	"logoutModalLogoutBtn": "fLogout",
+	"logoutModalCancelBtn": "fCancel"
+}

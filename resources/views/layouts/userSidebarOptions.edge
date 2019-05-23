@@ -2,7 +2,7 @@
 <li class="nav-item">
   <a class="nav-link" href="{{route('home')}}">
     <i class="fas fa-fw fa-tachometer-alt"></i>
-    <span>Dashboard</span></a>
+    <span>{{ antl.formatMessage('userSidebarOptions.dashboard') }}</span></a>
 </li>
 
 <!-- Divider -->
@@ -10,14 +10,14 @@
 
 <!-- Heading -->
 <div class="sidebar-heading">
-  Tools
+  {{ antl.formatMessage('userSidebarOptions.miniNavHeading') }}
 </div>
 
 <!-- Nav Item - Pages Collapse Menu -->
 <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRooms" aria-expanded="true" aria-controls="collapseRooms">
     <i class="fas fa-fw fa-map-marker-alt"></i>
-    <span>Rooms</span>
+    <span>{{ antl.formatMessage('userSidebarOptions.roomsDropdown') }}</span>
   </a>
   <div id="collapseRooms" class="collapse" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
@@ -25,14 +25,14 @@
         <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('searchRooms', { view: 'searchRooms'}) }}'>Search</a>
         <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('searchRooms', { view: 'findAvailable'}) }}'>Search By Time Range</a>
         <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('searchRooms', { view: 'recurringBooking'}) }}'>Recurring Booking</a>
-        <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('allRooms') }}'>View All Rooms</a>
+        <a id="all-rooms-dropdown" class='dropdown-item' href='{{ route('allRooms') }}'>{{antl.formatMessage('userSidebarOptions.allRooms')}}</a>
       </div>
-    </div>
+  </div>
 </li>
 <!-- Nav Item - Dashboard -->
 <li class="nav-item">
   <a class="nav-link"  href='{{ route('viewBookings',{id: userid, bookingType: 'user'}) }}'>
     <i class="fas fa-tasks"></i>
-    <span>Manage bookings</span>
+    <span>{{antl.formatMessage('userSidebarOptions.manageBookings')}}</span>
   </a>
 </li>
