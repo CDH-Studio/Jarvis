@@ -2,6 +2,10 @@
 const Room = use('App/Models/Room');
 const User = use('App/Models/User');
 const Building = use('App/Models/Building');
+const Floor = use('App/Models/Floor');
+const Tower = use('App/Models/Tower');
+const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
+const RoomStatus = use('App/Models/RoomStatus');
 const Review = use('App/Models/Review');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
@@ -85,7 +89,21 @@ class RoomController {
 	}
 	async create ({ response, view, auth }) {
 		const actionType = 'Add Room';
-		return view.render('adminPages.addEditRoom', { actionType });
+
+		var formOptions = new Object();
+
+		var results = await RoomStatus.query().select('id', 'name').fetch();
+		formOptions.statuses = results.toJSON()
+		results = await Floor.query().select('id', 'name').fetch();
+		formOptions.floors = results.toJSON()
+		results = await Tower.query().select('id','name').fetch();
+		formOptions.towers = results.toJSON()
+		results = await RoomFeaturesCategory.query().with('features').select('id','name').fetch();
+		formOptions.roomFeatureCategory = results.toJSON()
+
+		console.log(formOptions.features);
+
+		return view.render('adminPages.addEditRoom', { actionType, formOptions });
 	}
 
 	/**

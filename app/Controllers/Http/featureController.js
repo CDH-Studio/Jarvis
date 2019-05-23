@@ -17,7 +17,7 @@ class FeatureController {
 		const selectedBuilding = request.cookie('selectedBuilding')
 
 		const building = await Building.query()
-								.where('name', selectedBuilding)
+								.where('id', selectedBuilding.id)
 								.with('floor')
 								.with('tower')
 								.with('floor.room')

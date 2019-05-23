@@ -60,7 +60,6 @@ class User extends Model {
 
 	async getUserRole () {
 		try {
-			console.log("getUser"+this.role_id);
 			var role = await UserRole.findOrFail(this.role_id);
 			return role.name;
 		} catch (error) {
@@ -74,7 +73,6 @@ class User extends Model {
 			role = await UserRole.findByOrFail('name', role);
 			this.role_id = role.id;
 			this.save();
-			console.log(this.role_id);
 			return 1;
 		} catch (error) {
 			logger.error('Role Set Failed');

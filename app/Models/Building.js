@@ -4,6 +4,10 @@
 const Model = use('Model')
 
 class Building extends Model {
+	static get table () {
+		return 'buildings';
+	}
+
 	tower () {
 	    return this.hasMany('App/Models/Tower','id', 'building_id')
 	}
