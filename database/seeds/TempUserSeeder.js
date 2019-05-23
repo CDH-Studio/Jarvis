@@ -19,7 +19,8 @@ class TempUserSeeder {
 			{ firstname: 'Yunwei', lastname: 'Admin', email: 'yunwei.li@carleton.ca', password: '123', floor: '8', tower: '1', role_id: '1', verified: 1 },
 			{ firstname: 'Yunwei', lastname: 'User', email: 'ylithrowaway@gmail.com', password: '123', floor: '8', tower: '2', role_id: '2', verified: 1 },
 			{ firstname: 'Ali', lastname: 'Admin', email: 'admin@gmail.com', password: '123456', floor: '5', tower: '2', role_id: '1', verified: 1 },
-			{ firstname: 'Ali', lastname: 'User', email: 'user@gmail.com', password: '123456', floor: '2', tower: '2', role_id: '2', verified: 1 }
+			{ firstname: 'Ali', lastname: 'User', email: 'user@gmail.com', password: '123456', floor: '2', tower: '2', role_id: '2', verified: 1 },
+			{ firstname: 'Mena', lastname: 'Machado', email: 'mena.machado@canada.ca', password: '123', floor: '3', tower: '2', role_id: '2', verified: 1 }
 		];
 
 		var count = await Users.getCount();
