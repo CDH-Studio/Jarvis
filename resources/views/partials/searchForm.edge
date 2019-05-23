@@ -151,9 +151,17 @@
 							<div class='row align-items-end' style='margin-top:80px;'>
 								<div class='col-sm-12 text-right'>
 									{{--  <button aria-label='back' type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>  --}}
-									<button aria-label='search-submit-button' type='submit' class='btn btn-primary no-margin'>Search</button>
+									<button aria-label='search-submit-button' type='submit' class='btn btn-primary no-margin' id='submit'>Search </button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</form>
+
+				<script>
+					$('#submit').on('click', function() {
+						setTimeout(function() {
+							$('#submit').append('<i class="fas fa-circle-notch fa-spin fa-1x"></i>');
+						}, 500);
+					});
+				</script>
