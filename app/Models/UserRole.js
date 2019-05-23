@@ -12,7 +12,7 @@ class UserRole extends Model {
 	}
 
 	static async getRoleID (role_name) {
-		var role = await this.findByOrFail('role_name', role_name);
+		var role = await this.findByOrFail('name', role_name);
 		return role.id;
 	}
 

@@ -63,9 +63,11 @@ class HomeController {
 	*/
 	async home ({ response, auth, request }) {
 		try {
+			console.log('hello');
 			// cheack user is logged-in and role
 			await auth.check();
 			const userRole = await auth.user.getUserRole();
+			console.log("zz"+userRole);
 
 			if (userRole === 'admin') {
 				return response.route('adminDash', { auth });

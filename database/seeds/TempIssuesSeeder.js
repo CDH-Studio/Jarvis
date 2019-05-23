@@ -106,8 +106,7 @@ class TempIssuesSeeder {
 			{ 'user_id': 1, 'building_id': 1, 'room_id': 20, 'report_type_id': 4, 'comment': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer aliquam adipiscing lacus. Ut nec urna et arcu imperdiet ullamcorper.', 'report_status_id': 3 },
 			{ 'user_id': 1, 'building_id': 1, 'room_id': 12, 'report_type_id': 4, 'comment': 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Curabitur sed tortor. Integer aliquam adipiscing lacus. Ut nec urna et arcu', 'report_status_id': 3 }
 		];
-
-		console.log('reportxxxxxx DB: Finished Seeding');
+		
 		var count = await Reports.getCount();
 
 		if (count === 0) {

@@ -9,8 +9,9 @@ class RoomsSchema extends Schema {
 			table.increments();
 			table.string('name', 20).notNullable().unique();
 			table.string('fullName', 100).notNullable();
-			table.integer('floor_id').notNullable();
-			table.integer('tower_id').notNullable();
+			table.integer('floor_id').unsigned().references('id').inTable('floors').notNullable();
+			table.integer('tower_id').unsigned().references('id').inTable('towers').notNullable();
+			table.integer('building_id').unsigned().references('id').inTable('buildings').notNullable();
 			table.string('telephone', 20);
 			table.integer('seats').notNullable();
 			table.integer('capacity').notNullable();

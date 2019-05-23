@@ -1,5 +1,7 @@
 'use strict';
 const Room = use('App/Models/Room');
+const User = use('App/Models/User');
+const Building = use('App/Models/Building');
 const Review = use('App/Models/Review');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
@@ -317,10 +319,28 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getAllRooms ({ auth, view }) {
-		const results = await Room.all();
-		const rooms = results.toJSON();
+	async getAllRooms ({ auth, view, request, response }) {
+
+
 		const userRole = await auth.user.getUserRole();
+		var selectedBuilding;
+		//get info of logged-in user
+		const result = await User.query().where('id',auth.user.id).with('building').with('role').firstOrFail()
+		const user = result.toJSON();
+
+		//set building we are searching rooms in
+		if (user.role.name === 'admin') {
+			selectedBuilding = request.cookie('selectedBuilding');
+			if (!selectedBuilding) {
+			return response.route('viewSelectBuilding');
+		}
+		}else{
+			selectedBuilding= user.building;
+		}
+
+		//find rooms
+		const results = await Room.query().where('building_id',selectedBuilding.id).with('floor').with('tower').fetch();
+		const rooms = results.toJSON();
 
 		// Sort the results by name
 		rooms.sort((a, b) => {
@@ -331,18 +351,21 @@ class RoomController {
 		let countActive = await Room
 			.query()
 			.where('state', 1)
+			.where('building_id', selectedBuilding.id)
 			.count();
 
 		// Retrieve number of deactive rooms
 		let countDeactive = await Room
 			.query()
 			.where('state', 2)
+			.where('building_id', selectedBuilding.id)
 			.count();
 
 		// Retrieve number of rooms under maintenance
 		let countMaint = await Room
 			.query()
 			.where('state', 3)
+			.where('building_id', selectedBuilding.id)
 			.count();
 
 		// Create statistic array with custom keys
@@ -359,12 +382,18 @@ class RoomController {
 		}
 
 		// if user is admin
-		if (userRole === 'admin') {
-			return view.render('adminPages.viewRooms', { rooms, stats });
+		if (user.role.name === 'admin') {
+			// get all builig info admin nav bar since this route is shared with regular users and admin
+			// therefore, the admin middle-ware can't retrieve building info to pass to view
+			var allBuildings = await Building.all();
+			allBuildings =allBuildings.toJSON();
+			return view.render('adminPages.viewRooms', { rooms, stats, allBuildings, selectedBuilding });
 		} else {
 			return view.render('userPages.results', { rooms });
 		}
 	}
+
+
 
 	/**
 	 * Query the room from the database which matches the search input.

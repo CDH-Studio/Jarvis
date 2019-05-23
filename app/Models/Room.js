@@ -19,6 +19,15 @@ class Room extends Model {
 		return this.belongsTo('App/Models/Building', 'building_id');
 	}
 
+	floor () {
+		return this.belongsTo('App/Models/Floor', 'floor_id');
+	}
+
+	tower () {
+		return this.belongsTo('App/Models/Tower', 'tower_id');
+	}
+
+
 	static get table () {
 		return 'rooms';
 	}
