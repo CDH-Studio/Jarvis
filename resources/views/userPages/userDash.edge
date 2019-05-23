@@ -24,10 +24,9 @@
                     @component('components.generalCard', title=antl.formatMessage('userDash.CAHeading'), extraCSS='custom-card-header')
                         {{--  If there are no avail rooms display a message accordingly  --}}
 						@slot('body')
-                            <div id='avail'>
-								<div id="loading">
-									@!component('components.cardEmptyMessage',faIcon="fas fa-circle-notch fa-spin fa-4x", message=antl.formatMessage('userDash.CAError'))
-								</div>
+							<div id='avail'></div>
+							<div id="loading">
+								@!component('components.cardEmptyMessage',faIcon="fas fa-circle-notch fa-spin fa-4x", message=antl.formatMessage('userDash.CAError'))
 							</div>
 						@endslot
 					@endcomponent
