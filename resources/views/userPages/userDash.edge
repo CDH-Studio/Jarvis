@@ -1,282 +1,44 @@
 @layout('layouts.mainLayout')
 
 @section('title')
-    Booking
+    {{ antl.formatMessage('userDash.browserTab') }}
 @endsection
 
 @section('extracss')
   {{ style('css/booking') }}
 @endsection
 
-@section('extrajs')
-    {{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
-    {{ script('https://unpkg.com/@adonisjs/websocket-client@1.0.9/dist/Ws.browser.js') }}
-    {{ script('js/chatbot.js') }}
-@endsection
-
 {{--  book room page content  --}}
 @section('content')
     {{--  Loading page header  --}}
-    @!component('components.pageHeader', title= 'Hello, '+ auth.user.firstname)
+    @!component('components.pageHeader', title= antl.formatMessage('userDash.hello') + auth.user.firstname)
     {{--  Page Content  --}}
     <div class='row d-flex flex-wrap'>
 		{{--  Search room page content  --}}
 		<div class='col-xl-6 col-xxl-4 mb-4'>
-			@section('search room')
-				<form aria-label='search-form' action='results' method='GET' enctype='multipart/form-data' style='min-height:674px;'>
-					<div class="card shadow" style='min-height:inherit;'>
-						<div class="card-body">
-							{{ csrfField() }}
-							{{--  Date form  --}}
-							<div class='row'>
-								<div class='col form-group mb-4'>
-									<div class='row'>
-										<label class='col' for='date' aria-describedby='date-tooltip'>Date <strong class='text-danger'>*</strong></label>
-										<div class='col text-right'>
-											<i id='date-tooltip' class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
-										</div>
-									</div>
-									{{--  If field is not filled correctly show an error box  --}}
-									@if(hasErrorFor('date'))
-										<input name='date'  id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
-										<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
-									{{--  Otherwise show a normal input  --}}
-									@else
-										<input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
-									@endif
-								</div>
-							</div>
-							{{--  Meeting time from  --}}
-							<div class='row'>
-								<div class='col col-sm-4 form-group mb-4 mr-3'>
-									<label for='from' aria-labelledby='from-error'>Start time <strong class='text-danger'>*</strong></label>
-									{{--  If field is not filled correctly show an error box  --}}
-									<div class='timePicker' style='display: flex;'>
-										@if(hasErrorFor('from'))
-											<input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
-										@else
-											<input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>										  
-										@endif
-
-										<div class='dropdown no-arrow'>
-											<button for='from' aria-label='start-time-button' class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-											<div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-												@each(item in dropdownSelection)
-													<a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
-												@endeach
-											</div>
-										</div>
-									</div>
-									@if(hasErrorFor('from'))
-										<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
-									@endif
-								</div>
-								<div class='col col-sm-4 form-group mb-4 mr-3'>
-									<label for='to' aria-labelledby='to-error' data-toggle='tooltip'>End time <strong class='text-danger'>*</strong></label>
-									<div style='display: flex;' class='timePicker'>
-										{{--  If field is not filled correctly show an error box  --}}
-										@if(hasErrorFor('to'))
-											<input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
-										@else
-											<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>											
-										@endif
-										<div class='dropdown no-arrow'>
-											<button for='to'  aria-label='end-time-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-											<div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-												@each(item in dropdownSelection)
-													<a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
-												@endeach
-											</div>
-										</div>
-									</div>
-									@if(hasErrorFor('to'))
-										<div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
-									@endif
-								</div>
-								<div class='col col-sm-3 form-group mb-1'>
-									<label for='duration'>Duration </label> <strong class='text-danger'>*</strong>
-									<div class='form-group'>
-										<div class='input-group mb-3'>
-										<input class='form-control duration-input' name='hour' type='number' min=0 max=10 step=0.5 value='{{ old('hour', '1') }}'>
-										<div class="input-group-append">
-											<span class="input-group-text duration-append">hr</span>
-										</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							{{--  Location form  --}}
-							<div class='row'>
-								<div class='col form-group mb-4'>
-									<label for='location'>Preferred location</label>
-									<select id='location' name='location' class='form-control'>
-										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>Select a floor</option>
-										<option value='0' {{ old('location') == '0' ? 'selected' : '' }}>Floor 0</option>
-										<option value='1' {{ old('location') == '1' ? 'selected' : '' }}>Floor 1</option>
-										<option value='2' {{ old('location') == '2' ? 'selected' : '' }}>Floor 2</option>
-										<option value='3' {{ old('location') == '3' ? 'selected' : '' }}>Floor 3</option>
-										<option value='4' {{ old('location') == '4' ? 'selected' : '' }}>Floor 4</option>
-										<option value='5' {{ old('location') == '5' ? 'selected' : '' }}>Floor 5</option>
-										<option value='6' {{ old('location') == '6' ? 'selected' : '' }}>Floor 6</option>
-										<option value='7' {{ old('location') == '7' ? 'selected' : '' }}>Floor 7</option>
-										<option value='8' {{ old('location') == '8' ? 'selected' : '' }}>Floor 8</option>
-										<option value='9' {{ old('location') == '9' ? 'selected' : '' }}>Floor 9</option>
-									</select>
-								</div>
-							</div>
-							<div class='row'>
-								{{--  PMts form  --}}
-								<div class='col form-group mb-4'>
-									<label for='seats'>Number of table seats</label>
-									<input class='form-control' id='seats' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
-								</div>
-								{{--  Max Capacity  --}}
-								<div class='col form-group mb-4'>
-									<label for='capacity'>Max Capacity</label>
-									<input class='form-control' id='capacity' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
-								</div>
-							</div>
-							{{--  Equipment check box form  --}}
-							<div class='form-group'>
-								<label>Equipment</label>
-								<div class='row'>               
-									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
-										<input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value= '1' {{ old('projectorCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='projectorCheck'>Projector</label>
-									</div>
-									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
-										<input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1' {{ old('whiteboardCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
-									</div>
-									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
-										<input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='flipChartCheck'>Flip chart</label>
-									</div>  
-				
-									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
-										<input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='audioCheck'>Audio conferencing</label>
-									</div>
-									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
-										<input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='videoCheck'>Video conferencing</label>
-									</div>
-									
-									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
-										<input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1' {{ old('surfaceHubCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='surfaceHubCheck'>Surface hub</label>
-									</div>              
-									<div class='custom-control custom-checkbox col ml-3'>
-										<input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1' {{ old('pcCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='pcCheck'>PC</label>
-									</div>                
-								</div>
-							</div>
-							{{--  Page buttons  --}}
-							<div class='row align-items-end' style='margin-top:80px;'>
-								<div class='col-sm-12 text-right'>
-									{{--  <button aria-label='back' type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>  --}}
-									<button aria-label='search-submit-button' type='submit' class='btn btn-primary no-margin'>Search</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-				{{--  Remove the is-invalid class when input changes  --}}
-				<script>
-					function removeErrorClass(idOfInput){
-						$('#'+idOfInput).removeClass('is-invalid');
-						// Ih field is the calendar, then remove styling from erorr message
-						if (idOfInput == 'date') {
-							$('#date-error').removeClass('show-invalid');
-						}
-					}
-					
-					// update from and to inputs from dropdown
-					$(document).on("click",".dropdown-menu a", function(ev) {
-						$(this).siblings().removeClass('active');
-						$(this).addClass("active");
-						$(this).parents(".timePicker").find('.time-form').val($(this).attr('data-value'));
-						$(this).parents(".timePicker").find('.time-form').removeClass('is-invalid');
-						$(this).parents(".timePicker").siblings('.invalid-feedback').removeClass('show-invalid');
-					});
-				</script>
-			@endsection
+		@include('partials.searchForm')
 		</div>
 		<div class='col-xl-6 col-xxl-8 mb-4'>
 			<div class='row' style='height:100%;'>
 				<div id='available' class='col-xl-12 col-xxl-6 mb-4' style='height:325px;'>
-                    @component('components.generalCard', title='Currently available', extraCSS='custom-card-header')
+                    @component('components.generalCard', title=antl.formatMessage('userDash.CAHeading'), extraCSS='custom-card-header')
                         {{--  If there are no avail rooms display a message accordingly  --}}
 						@slot('body')
                             <div id='avail'></div>
+                            <div id="loading">
+								@!component('components.cardEmptyMessage',faIcon="fas fa-circle-notch fa-spin fa-4x", message=antl.formatMessage('userDash.CAError'))
+							</div>
 						@endslot
 					@endcomponent
 				</div>
 				<div id='frequentlyBooked' class='col-lg-12 col-xxl-6' style='height:325px;'>
-					@component('components.generalCard', title='Frequently booked', extraCSS='custom-card-header')
+					@component('components.generalCard', title=antl.formatMessage('userDash.FBHeading'), extraCSS='custom-card-header')
 						@slot('body')
 							{{--  if the user have not booked anythings display message, else display the freq booked  --}}
 							@if(!freqRooms)
-								@!component('components.cardEmptyMessage',faIcon="fas fa-history fa-4x", message="No rooms found") 
+								@!component('components.cardEmptyMessage',faIcon="fas fa-history fa-4x", message=antl.formatMessage('userDash.FBError')) 
 							@else
-								@each(room in freqRooms)
-									<div class='row'>
-										<div class='col'>
-											@component('components.smallCard', room=room)
-												@slot('body')
-													<div class='mb-2'>
-														@!component('components.stars', rating= room.averageRating)
-													</div>
-													<div>
-														<span class='mr-3'>Table seats: {{room.seats}}</span>
-														<span>Capacity: {{room.capacity}}</span>
-													</div>
-												@endslot
-											@endcomponent
-										</div>
-									</div>
-								@endeach
-							@endif
-						@endslot
-					@endcomponent
-				</div>
-						{{--  This is a copy component from #oringal-upcoming --}}
-				<div id='secondary-upcoming' class='col-12'  style='height:325px;'>
-					@component('components.generalCard', title='My bookings', extraCSS='custom-card-header')
-						@slot('titleRight')
-							<a class="color-light"  href='{{ route('viewBookings',{id: userId, bookingType: 'user'}) }}' target='_blank'>
-								<i class="fas fa-external-link-alt fa-sm"></i>
-							</a>
-						@endslot
-						@slot('body')
-							{{-- display message if there are no upcomming bookings --}}
-							@if(!freqRooms)
-								 @!component('components.cardEmptyMessage',faIcon="fas fa-list fa-6x", message="No bookings found") 
-							@else
-								<div class='table table-responsive'>
-									<table id='bookNowTable' class='table' style='width:100%;'>
-										<thead>
-											<tr>
-												<th scope='col' class='text-center' style='width:10%'>Room</th>
-												<th scope='col' class='text-center' style='width:10%'>Name</th>
-												<th scope='col' class='text-center' style='width:10%'>Date</th>
-												<th scope='col' class='text-center' style='width:10%'>Time</th>
-											</tr>
-										</thead>
-										{{--  Loops through the rooms array and displays every room's content  --}}
-										<tbody>
-											@each(room in upcomming) 
-												<tr class='table-light'>
-													<td class='text-center'><a href='{{ route('showRoom', {id: ""+room.roomId}) }}'>{{ room.room }}</a></td>
-													<td class='text-center'>{{ room.subject }}</td>
-													<td class='text-center'>{{ room.date }} </td>
-													<td class='text-center'>{{ room.time }}</td> 
-												</tr>
-											@endeach
-										</tbody>
-									</table>
-								</div>
+								@!each(room in freqRooms, include = 'partials.miniRoomCard')
 							@endif
 						@endslot
 					@endcomponent
@@ -286,7 +48,7 @@
     </div>
 	<div id='original-upcoming' class='row'>
 		<div id='myBookings' class='col'>
-			@component('components.generalCard', title='My bookings', extraCSS='custom-card-header')
+			@component('components.generalCard', title=antl.formatMessage('userDash.MBHeading'), extraCSS='custom-card-header')
 				@slot('titleRight')
 					<a class="color-primary"  href='{{ route('viewBookings',{id: userId, bookingType: 'user'}) }}' target='_blank'>
 						<i class="fas fa-external-link-alt"></i>
@@ -294,8 +56,8 @@
 				@endslot
 				@slot('body')
 					{{-- display message if there are no upcomming bookings --}}
-					@if(!freqRooms)
-						@!component('components.cardEmptyMessage',faIcon="fas fa-search fa-4x", message="No Bookings Found") 
+					@if(!upcoming)
+						@!component('components.cardEmptyMessage',faIcon="fas fa-search fa-4x", message=antl.formatMessage('userDash.MBError')) 
 					@else
 						<div class='table table-responsive'>
 							<table id='bookNowTable' class='table' style='width:100%;'>
@@ -325,24 +87,16 @@
 			@endcomponent
 		</div>
 	</div>
-	<div class='row d-flex flex-wrap'>
-		{{--  Chatbot  WIP--}}
-		<div class='row' hidden>
-			<i class='open-button fas fa-robot fa-2x' onclick='openChat()'></i>
-			<div class='chat-popup' id='chat-popup'>
-				<form action='{{ route('message') }}' method='POST' class='chat-window' id='chat-window'>
-					{{ csrfField() }}
-					<div class='messages'></div>
-					<textarea arialabel='user-input' placeholder='Type message..' name='message' id='message'></textarea>
 
-					<button id='sub' type='button' class='btn' onclick='send()'>Send</button>
-					<button type='button' class='btn cancel' onclick='closeChat()'>Close</button>
-				</form>
-			</div>
-		</div>
-	</div>
 
+
+
+@endsection
+
+@section('extrajs')
+	{{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
     {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
+
     <script>
         $('#message').keypress(function(e) {
 	        if (e.which === 13 && !e.shiftKey) {
@@ -363,17 +117,37 @@
         //Listen for events on the channel
         channel.bind('send-room', function (data) {
             if (data.message.code == '{{ code }}') {
-                let listItem = $("<div class='row'><div class='col'>" + data.message.card + "</div></div>")
-                $('#avail').prepend(listItem)
+                let listItem = $("<div class='row'><div class='col'>" + data.message.card + "</div></div>");
+                $('#loading').hide();
+                $('#avail').prepend(listItem);
             }
         });
 
         channel.bind('send-empty', function (data) {
             if (data.message.code == '{{ code }}') {
                 let listItem = $(data.message.view)
+                $('#loading').hide();
                 $('#avail').empty().append(listItem)
+
             }
         });
+
+        function removeErrorClass(idOfInput){
+			$('#'+idOfInput).removeClass('is-invalid');
+			// Ih field is the calendar, then remove styling from erorr message
+			if (idOfInput == 'date') {
+				$('#date-error').removeClass('show-invalid');
+			}
+		}
+		
+		// update from and to inputs from dropdown
+		$(document).on("click",".dropdown-menu a", function(ev) {
+			$(this).siblings().removeClass('active');
+			$(this).addClass("active");
+			$(this).parents(".timePicker").find('.time-form').val($(this).attr('data-value'));
+			$(this).parents(".timePicker").find('.time-form').removeClass('is-invalid');
+			$(this).parents(".timePicker").siblings('.invalid-feedback').removeClass('show-invalid');
+		});
     </script>
 
     @if(flashMessage('notification'))
@@ -385,6 +159,6 @@
             });
         </script>
     @endif
-@endsection
 
+@endsection
 

@@ -1,7 +1,7 @@
 @layout('layouts.loginLayout')
 
 @section('title')
-Jarvis - Login
+{{ antl.formatMessage('registerAdmin.title') }} | Jarvis
 @endsection
 
 @section('content')
@@ -18,15 +18,19 @@ Jarvis - Login
 								<img class='login-logo mb-3' src='/logo_full_dark.png' alt='Jarvis Logo'>					                  		
 	                  		</div>
 							<div class="text-left">
-								<h1 class="h4 text-gray-900 mb-4">Register Admin</h1>
+								<h1 class="h4 text-gray-900 mb-4">{{ antl.formatMessage('registerAdmin.title') }}</h1>
 							</div>
 							<form class='needs-validation user' action='{{ route('CreateAdmin') }}' method='POST'>
+								<div class="alert alert-dismissible alert-danger">
+								  <button type="button" class="close" data-dismiss="alert">&times;</button>
+								  <i class="fas fa-exclamation-triangle"></i> {{ antl.formatMessage('registerAdmin.warning') }}
+								</div>
 								{{ csrfField() }}
 
 								<div class='form-row'>
 								    <div class='col-md-6'>
 								      	<div class='form-group mb-2'>
-											<label for='firstname'>First name</label>
+											<label for='firstname'>{{ antl.formatMessage('registerAdmin.firstname') }}</label>
 											<input type='text' class='form-control' name='firstname' id='firstname' placeholder='John' value='{{ old('firstname', '') }}'>
 											@if(hasErrorFor('firstname'))
 												<div class='invalid-feedback d-block'>{{ getErrorFor('firstname') }}</div>
@@ -35,7 +39,7 @@ Jarvis - Login
 									</div>
 									<div class='col-md-6'>
 									    <div class='form-group mb-2'>
-											<label for='lastname'>Last name</label>
+											<label for='lastname'>{{ antl.formatMessage('registerAdmin.lastname') }}</label>
 											<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe' value='{{ old('lastname', '') }}'>
 											@if(hasErrorFor('lastname'))        
 							              		<div class='invalid-feedback d-block'>{{ getErrorFor('lastname') }}</div>
@@ -46,7 +50,7 @@ Jarvis - Login
 
 									
 								<div class='form-group mb-2'>
-									<label for='email'>Email address</label>
+									<label for='email'>{{ antl.formatMessage('registerAdmin.email') }}</label>
 									<input type='email' class='form-control' name='email' id='email' placeholder='Enter email' value='{{ old('email', '') }}'>
 									@if(hasErrorFor('email'))        
 							      		<div class='invalid-feedback d-block'>{{ getErrorFor('email') }}</div>
@@ -56,7 +60,10 @@ Jarvis - Login
 								<div class='form-row'>
 									<div class='col-md-6'>
 										<div class='form-group mb-2'>
-											<label for='password'>Password</label>
+											<label for='password'>{{ antl.formatMessage('registerAdmin.pass') }}</label>
+											<span href="#" class="mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="{{ antl.formatMessage('registerAdmin.passTip') }}">
+												<i class="fas fa-info-circle text-muted fa-xs"></i>
+											</span>
 											<input type='password' class='form-control' name='password' id='password' placeholder='Password'>
 											@if(hasErrorFor('password'))
 												<div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>
@@ -65,8 +72,8 @@ Jarvis - Login
 									</div>
 									<div class='col-md-6'>
 									    <div class='form-group mb-2'>
-								      		<label for='confirmPassword'>Confirm password</label>
-								      		<input type='password' class='form-control' name='confirmPassword' id='confirmPassword' placeholder='Password'>
+								      		<label for='confirmPassword'>{{ antl.formatMessage('registerAdmin.confirmPass') }}</label>
+								      		<input type='password' class='form-control' name='confirmPassword' id='confirmPassword' placeholder='{{ antl.formatMessage('registerAdmin.confirmPass') }}'>
 											@if(hasErrorFor('confirmPassword'))
 											  <div class='invalid-feedback d-block'>{{ getErrorFor('confirmPassword') }}</div>
 											@endif
@@ -75,7 +82,7 @@ Jarvis - Login
 								 </div>
 
 								 <div class='form-group mb-2'>
-					  				<label for='token'>Admin token</label>
+					  				<label for='token'>{{ antl.formatMessage('registerAdmin.token') }}</label>
 									  <input type='text' class='form-control' name='token' id='token' placeholder='Token'>
 									  @if(hasErrorFor('token'))
 										<div class='invalid-feedback d-block'>{{ getErrorFor('token') }}</div>
@@ -83,12 +90,12 @@ Jarvis - Login
 								</div>
 
 
-								<button type='submit' class='btn btn-primary btn-user btn-block mt-3 mb-2'>Register</button>
+								<button type='submit' class='btn btn-primary btn-user btn-block mt-3 mb-2'>{{ antl.formatMessage('registerAdmin.submit') }}</button>
 							</form>
 							<hr>
 
 							<div class="text-center">
-								<a class="small" href='{{ route('login') }}'>Already have an account? Login!</a>
+								<a class="small" href='{{ route('login') }}'>{{ antl.formatMessage('registerAdmin.loginRedirect') }}</a>
 							</div>
 
 					</div>

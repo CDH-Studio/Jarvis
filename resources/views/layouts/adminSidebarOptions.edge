@@ -2,7 +2,7 @@
     <li class="nav-item">
       <a class="nav-link" href="{{route('home')}}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Dashboard</span></a>
+        <span>{{ antl.formatMessage('adminSidebarOptions.dashboard') }}</span></a>
     </li>
 
     <!-- Divider -->
@@ -10,18 +10,17 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-      Tools
+      {{ antl.formatMessage('adminSidebarOptions.miniNavHeading') }}
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
       <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRooms" aria-expanded="true" aria-controls="collapseRooms">
         <i class="fas fa-fw fa-map-marker-alt"></i>
-        <span>Rooms</span>
+        <span>{{ antl.formatMessage('adminSidebarOptions.roomsDropdown') }}</span>
       </a>
       <div id="collapseRooms" class="collapse" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <h6 class="collapse-header">Room Pages:</h6>
           <a id="add-room-dropdown" class='dropdown-item' href='{{ route('addRoom') }}'>Add Room</a>
           <a id="view-rooms-dropdown" class='dropdown-item' href='{{ route('allRooms') }}'>View Rooms</a>
         </div>
@@ -33,12 +32,11 @@
     <li class="nav-item">
       <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="true" aria-controls="collapseUsers">
         <i class="fas fa-fw fa-user-friends"></i>
-        <span>Users</span>
+        <span>{{ antl.formatMessage('adminSidebarOptions.usersDropdown') }}</span>
       </a>
       <div id="collapseUsers" class="collapse" aria-labelledby="collapseUsers" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <h6 class="collapse-header">Room Pages:</h6>
-          <a id="view-users-dropdown" class="dropdown-item" href='{{ route('allUsers') }}'>View Users</a>
+          <a id="view-users-dropdown" class="dropdown-item" href='{{ route('allUsers') }}'>{{ antl.formatMessage('adminSidebarOptions.viewUsers') }}</a>
         </div>
       </div>
     </li>
@@ -51,8 +49,7 @@
       </a>
       <div id="collapseUtilities" class="collapse" aria-labelledby="collapseUtilities" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <h6 class="collapse-header">Room Issues:</h6>
-          <a id="room-issues-drop-down" class='dropdown-item' href='{{ route('showIssue', {roomID: 'all', issueStatus: 'all' }) }}'>View Issues</a>
+          <a id="room-issues-drop-down" class='dropdown-item' href='{{ route('showIssue', {roomID: 'all', issueStatus: 'all' }) }}'>{{ antl.formatMessage('adminSidebarOptions.viewIssues') }}</a>
         </div>
       </div>
     </li>

@@ -1,0 +1,51 @@
+@layout('layouts.loginLayout')
+
+@section('title')
+Jarvis
+@endsection
+
+@section('content')
+  <!-- Outer Row -->
+    <div class='row justify-content-center vertical-center' style='height:100vh'>
+    <div class='col-xl-6 col-lg-6 col-md-9'>
+      <div class='card o-hidden border-0 shadow-lg my-5'>
+        <div class='card-body p-0'>
+          <!-- Nested Row within Card Body -->
+          <div class='row'>
+            <div class='col-lg-12 align-self-center'>
+              <div class='p-5'>
+                <div class='text-left'>
+                  <img class='login-logo mb-3' src='/logo_full_dark.png' alt='Jarvis Logo'>
+                </div>
+                <div class='text-left mb-4'>
+                  <h1 class='h4 text-gray-900 mb-3'>Select Language</h1>
+                </div>
+                <a href='/switch/en' class='btn btn-primary btn-user btn-block mt-3 mb-2'>English</a>
+                <a href='/switch/fr' class='btn btn-primary btn-user btn-block mt-3 mb-2'>French</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    @if(flashMessage('notification'))
+    <script type='module'>
+        import {notify} from '/js/notify.js';
+        $(window).on('load', () => {
+            notify({ $: $, message: '{{ flashMessage('notification') }}' });
+        });
+    </script>
+    @elseif(hasErrorFor('password') || hasErrorFor('email'))
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', () => {
+                notify({ $: $, message: 'One or more errors occurred.', type: 'danger', align: 'center',
+                                 enter: 'bounceIn', exit: 'bounceOut', element: '.notify-error'
+                });
+            });
+        </script>
+    @endif
+
+@endsection
