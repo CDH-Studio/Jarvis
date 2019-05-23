@@ -17,7 +17,7 @@ class TempUserSeeder {
 			{ firstname: 'Majd', lastname: 'Admin', email: 'majd.khodr15@gmail.com', password: '123', floor: '5', tower: '1', role_id: '1', verified: 1 },
 			{ firstname: 'Majd', lastname: 'User', email: 'majd.khodr@hotmail.com', password: '123', floor: '6', tower: '2', role_id: '2', verified: 1 },
 			{ firstname: 'Yunwei', lastname: 'Admin', email: 'yunwei.li@carleton.ca', password: '123', floor: '8', tower: '1', role_id: '1', verified: 1 },
-			{ firstname: 'Yunwei', lastname: 'User', email: 'liyunwei10@gmail.com', password: '123', floor: '8', tower: '2', role_id: '2', verified: 1 },
+			{ firstname: 'Yunwei', lastname: 'User', email: 'ylithrowaway@gmail.com', password: '123', floor: '8', tower: '2', role_id: '2', verified: 1 },
 			{ firstname: 'Ali', lastname: 'Admin', email: 'admin@gmail.com', password: '123456', floor: '5', tower: '2', role_id: '1', verified: 1 },
 			{ firstname: 'Ali', lastname: 'User', email: 'user@gmail.com', password: '123456', floor: '2', tower: '2', role_id: '2', verified: 1 }
 		];
