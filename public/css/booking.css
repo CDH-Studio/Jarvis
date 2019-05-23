@@ -78,8 +78,10 @@ padding: 2px 16px;
 
 /* duration */
 .duration-append {
-	background-color: #145f9c;
-	color: #fff;
+	/* color: #858796; */
+	background-color: #fff;
+	font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+	font-weight: 600;
 }
 
 .duration-input {
