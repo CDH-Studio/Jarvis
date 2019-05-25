@@ -5,6 +5,8 @@ const Building = use('App/Models/Building');
 const Floor = use('App/Models/Floor');
 const Tower = use('App/Models/Tower');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
+const roomFeature = use('App/Models/RoomFeature');
+const featurePivot = use('App/Models/FeaturesRoomsPivot');
 const RoomStatus = use('App/Models/RoomStatus');
 const Review = use('App/Models/Review');
 const Token = use('App/Models/Token');
@@ -119,14 +121,11 @@ class RoomController {
 	async add ({ request, response, session }) {
 		try {
 
-
-
-			const featurePivot = use('App/Models/FeaturesRoomsPivot');
-			const roomFeature = use('App/Models/RoomFeature');
-
 			//get building
 			const selectedBuilding = request.cookie('selectedBuilding');
 			const body = request.all();
+
+			console.log(body.toJSON());
 
 			// Upload process - Floor Plan
 			const floorPlanImage = request.file('floorPlan', {
@@ -202,8 +201,17 @@ class RoomController {
 	 */
 	async edit ({ params, view }) {
 
+		const featurePivot = use('App/Models/FeaturesRoomsPivot');
+		const roomFeature = use('App/Models/RoomFeature');
+
 		// Retrieves room object
-		const room = await Room.findBy('id', params.id);
+		var room = await Room.findBy('id', params.id);
+		room.features = await featurePivot.query().where('room_id', room.id).pluck('feature_id');
+		room= room.toJSON()
+		console.log(room);
+	
+		//const roomFeatures = await featurePivot.query().with('features').where('room_id', room.id).fetch();
+
 		const actionType = 'Edit Room';
 
 		var formOptions = new Object();
@@ -223,7 +231,9 @@ class RoomController {
 							.fetch();
 		formOptions.roomFeatureCategory = results.toJSON()
 
-		return view.render('adminPages.addEditRoom', { room, actionType, formOptions });
+
+
+		return view.render('adminPages.addEditRoom', { room, actionType, formOptions});
 	}
 
 	/**
@@ -232,6 +242,9 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async update ({ request, session, params, response }) {
+
+		
+
 		// Retrieves room object
 		let room = await Room.findBy('id', params.id);
 
@@ -297,10 +310,17 @@ class RoomController {
 		const results = await roomFeature.query().where('building_id', selectedBuilding.id).fetch();
 		const roomFeatures = results.toJSON();
 
-		var index;
+		//delete currently save room features
+		await featurePivot
+		  .query()
+		  .where('room_id', room.id)
+		  .delete()
 
+		//re-save selected room features
+		var index;
 		for (index = 0; index < roomFeatures.length; ++index) {
 			if(body[roomFeatures[index].name]){
+
 				const feature = new featurePivot();
 				feature.room_id=room.id;
 				feature.feature_id=roomFeatures[index].id;
