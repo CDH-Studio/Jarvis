@@ -27,7 +27,7 @@ class RoomsSchema extends Schema {
 			table.string('floorplan', 100);
 			table.string('picture', 100);
 			table.string('calendar', 250).defaultTo('insertCalendarHere');
-			table.integer('state').notNullable();
+			table.integer('state_id').notNullable();
 			table.timestamps();
 
 			const query = require('../rawQueries/populateRooms');

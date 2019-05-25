@@ -70,7 +70,7 @@
                                         @endif
                                             <option value='undefined' {{ old('state', room.state) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Room Status</option>
                                             @each(status in formOptions.statuses)
-                                                <option value='{{status.id}}' {{ old('state', room.state_id) == status.id ? 'selected' : '' }}>{{status.name}}</option>
+                                                <option value='{{status.id}}' {{ old('state', room.state) == status.id ? 'selected' : '' }}>{{status.name}}</option>
                                             @endeach
                                         </select>
                                         @if(hasErrorFor('state'))

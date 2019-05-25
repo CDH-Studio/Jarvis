@@ -87,6 +87,7 @@ class RoomController {
 		}
 		return variable;
 	}
+
 	async create ({ response, view, auth }) {
 		const actionType = 'Add Room';
 
@@ -98,10 +99,14 @@ class RoomController {
 		formOptions.floors = results.toJSON()
 		results = await Tower.query().select('id','name').fetch();
 		formOptions.towers = results.toJSON()
-		results = await RoomFeaturesCategory.query().with('features').select('id','name').fetch();
+		results = await RoomFeaturesCategory
+							.query()
+							.with('features', (builder) => {
+							    builder.where('building_id', 1)
+							  })
+							.select('id','name')
+							.fetch();
 		formOptions.roomFeatureCategory = results.toJSON()
-
-		console.log(formOptions.features);
 
 		return view.render('adminPages.addEditRoom', { actionType, formOptions });
 	}
@@ -113,33 +118,20 @@ class RoomController {
 	 */
 	async add ({ request, response, session }) {
 		try {
-			// Retrieves user input
+
+
+
+			const featurePivot = use('App/Models/FeaturesRoomsPivot');
+			const roomFeature = use('App/Models/RoomFeature');
+
+			//get building
+			const selectedBuilding = request.cookie('selectedBuilding');
 			const body = request.all();
 
-			// Populates the room object's values
-			const room = new Room();
-			room.name = body.name;
-			room.fullName = body.fullName;
-			room.floor = body.floor;
-			room.tower = body.tower;
-			room.state = body.state;
-			room.telephone = body.telephoneNumber;
-			room.seats = body.tableSeats;
-			room.capacity = body.maximumCapacity;
-			room.projector = body.projectorCheck === '1' ? '1' : '0';
-			room.whiteboard = body.whiteboardCheck === '1' ? '1' : '0';
-			room.flipchart = body.flipChartCheck === '1' ? '1' : '0';
-			room.audioConference = body.audioCheck === '1' ? '1' : '0';
-			room.videoConference = body.videoCheck === '1' ? '1' : '0';
-			room.surfaceHub = body.surfaceHubCheck === '1' ? '1' : '0';
-			room.pc = body.pcCheck === '1' ? '1' : '0';
 			// Upload process - Floor Plan
 			const floorPlanImage = request.file('floorPlan', {
 				types: ['image'],
 				size: '2mb'
-			});
-			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-				name: `${room.name}_floorPlan.png`
 			});
 
 			// Upload process - Room Picture
@@ -147,6 +139,23 @@ class RoomController {
 				types: ['image'],
 				size: '2mb'
 			});
+
+			// Save room details in Rooms table
+			const room = new Room();
+			room.name = body.name;
+			room.fullName = body.fullName;
+			room.floor_id = body.floor;
+			room.tower_id = body.tower;
+			room.building_id = selectedBuilding.id;
+			room.state = body.state;
+			room.telephone = body.telephoneNumber;
+			room.seats = body.tableSeats;
+			room.capacity = body.maximumCapacity;
+			
+			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
+				name: `${room.name}_floorPlan.png`
+			});
+
 			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
 				name: `${room.name}_roomPicture.png`
 			});
@@ -157,6 +166,22 @@ class RoomController {
 			room.extraEquipment = body.extraEquipment == null ? ' ' : body.extraEquipment;
 			room.comment = body.comment == null ? ' ' : body.extraEquipment;
 			await room.save();
+
+			//Save room feature in pivot table
+			const results = await roomFeature.query().where('building_id', selectedBuilding.id).fetch();
+			const roomFeatures = results.toJSON();
+
+			var index;
+
+			for (index = 0; index < roomFeatures.length; ++index) {
+				if(body[roomFeatures[index].name]){
+					const feature = new featurePivot();
+					feature.room_id=room.id;
+					feature.feature_id=roomFeatures[index].id;
+					feature.save();
+			    	console.log(body[roomFeatures[index].name]);
+				}
+			}
 
 			session.flash({
 				notification: 'Room Added! To add another room, click here',
@@ -176,10 +201,29 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async edit ({ params, view }) {
+
 		// Retrieves room object
 		const room = await Room.findBy('id', params.id);
 		const actionType = 'Edit Room';
-		return view.render('adminPages.addEditRoom', { room: room, actionType });
+
+		var formOptions = new Object();
+
+		var results = await RoomStatus.query().select('id', 'name').fetch();
+		formOptions.statuses = results.toJSON()
+		results = await Floor.query().select('id', 'name').fetch();
+		formOptions.floors = results.toJSON()
+		results = await Tower.query().select('id','name').fetch();
+		formOptions.towers = results.toJSON()
+		results = await RoomFeaturesCategory
+							.query()
+							.with('features', (builder) => {
+							    builder.where('building_id', 1)
+							  })
+							.select('id','name')
+							.fetch();
+		formOptions.roomFeatureCategory = results.toJSON()
+
+		return view.render('adminPages.addEditRoom', { room, actionType, formOptions });
 	}
 
 	/**
@@ -235,24 +279,36 @@ class RoomController {
 			.update({
 				name: body.name,
 				fullName: body.fullName,
-				floor: body.floor,
-				tower: body.tower,
+				floor_id: body.floor,
+				tower_id: body.tower,
 				telephone: body.telephoneNumber,
 				seats: body.tableSeats,
 				capacity: body.maximumCapacity,
-				projector: body.projectorCheck === '1' ? '1' : '0',
-				whiteboard: body.whiteboardCheck === '1' ? '1' : '0',
-				flipchart: body.flipChartCheck === '1' ? '1' : '0',
-				audioConference: body.audioCheck === '1' ? '1' : '0',
-				videoConference: body.videoCheck === '1' ? '1' : '0',
-				surfaceHub: body.surfaceHubCheck === '1' ? '1' : '0',
-				pc: body.pcCheck === '1' ? '1' : '0',
 				floorplan: floorPlanStringPath,
 				picture: roomImageStringPath,
 				extraEquipment: body.extraEquipment == null ? ' ' : body.extraEquipment,
 				comment: body.comment == null ? ' ' : body.comment,
 				state: body.state
 			});
+
+		//save room features
+		const selectedBuilding = request.cookie('selectedBuilding');
+
+		const results = await roomFeature.query().where('building_id', selectedBuilding.id).fetch();
+		const roomFeatures = results.toJSON();
+
+		var index;
+
+		for (index = 0; index < roomFeatures.length; ++index) {
+			if(body[roomFeatures[index].name]){
+				const feature = new featurePivot();
+				feature.room_id=room.id;
+				feature.feature_id=roomFeatures[index].id;
+				feature.save();
+		    	console.log(body[roomFeatures[index].name]);
+			}
+		}
+
 		session.flash({ notification: 'Room Updated!' });
 
 		return response.route('showRoom', { id: room.id });
