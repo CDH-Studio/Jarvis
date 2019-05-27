@@ -350,7 +350,10 @@ class BookingController {
 				.where('status', 'Approved')
 				.fetch();
 
+			console.log(bookings.toJSON());
+
 			for (const booking in bookings) {
+				console.log(booking);
 				const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/sync`, {
 					eventId: booking.event_id,
 					floor: 0
