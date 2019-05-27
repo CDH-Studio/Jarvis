@@ -156,6 +156,11 @@ class BookingController {
 		var idType = (params.bookingType === 'user') ? 'user_id' : 'room_id';
 		var bookingsType = (idType === 'user_id') ? 'userBookings' : 'roomBookings';
 
+		if (userRole !== 'admin') {
+			console.log('before sync');
+			this.syncEvents(auth.user.id);
+		}
+
 		// Queries the database fr the bookings associated to a specific room
 		let searchResults = await Booking
 			.query()
@@ -328,6 +333,34 @@ class BookingController {
 			console.log(res);
 		} catch (err) {
 			console.log(err);
+		}
+	}
+
+	/**
+	* Sync events with Outlook
+	*
+	* @param {String} userId The id of the current user.
+	*/
+	async syncEvents (userId) {
+		try {
+			console.log('sync');
+			const bookings = await Booking
+				.query()
+				.where('user_id', userId)
+				.where('status', 'Approved')
+				.fetch();
+
+			for (const booking in bookings) {
+				const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/sync`, {
+					eventId: booking.event_id,
+					floor: 0
+				});
+
+				booking.status = res.data;
+				booking.save();
+			}
+		} catch (err) {
+			Logger.debug(err);
 		}
 	}
 }
