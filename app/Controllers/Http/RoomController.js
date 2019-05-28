@@ -146,7 +146,7 @@ class RoomController {
 			room.floor_id = body.floor;
 			room.tower_id = body.tower;
 			room.building_id = selectedBuilding.id;
-			room.state = body.state;
+			room.State_id = body.State_id;
 			room.telephone = body.telephoneNumber;
 			room.seats = body.tableSeats;
 			room.capacity = body.maximumCapacity;
@@ -201,16 +201,11 @@ class RoomController {
 	 */
 	async edit ({ params, view }) {
 
-		const featurePivot = use('App/Models/FeaturesRoomsPivot');
-		const roomFeature = use('App/Models/RoomFeature');
-
 		// Retrieves room object
 		var room = await Room.findBy('id', params.id);
 		room.features = await featurePivot.query().where('room_id', room.id).pluck('feature_id');
 		room= room.toJSON()
 		console.log(room);
-	
-		//const roomFeatures = await featurePivot.query().with('features').where('room_id', room.id).fetch();
 
 		const actionType = 'Edit Room';
 
@@ -231,9 +226,7 @@ class RoomController {
 							.fetch();
 		formOptions.roomFeatureCategory = results.toJSON()
 
-
-
-		return view.render('adminPages.addEditRoom', { room, actionType, formOptions});
+		return view.render('adminPages.addEditRoom', {room, actionType, formOptions});
 	}
 
 	/**
@@ -301,7 +294,7 @@ class RoomController {
 				picture: roomImageStringPath,
 				extraEquipment: body.extraEquipment == null ? ' ' : body.extraEquipment,
 				comment: body.comment == null ? ' ' : body.comment,
-				state: body.state
+				State_id: body.State_id
 			});
 
 		//save room features
@@ -401,7 +394,33 @@ class RoomController {
 			// Adds new attribute - rating - to every room object
 			room.rating = await this.getAverageRating(room.id);
 
-			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review, reviewsCount, dropdownSelection });
+			var roomFeatures = await featurePivot
+							.query()
+							.where("room_id", room.id)
+							.with('feature.category')
+							.fetch();
+
+
+			var roomFeatureCategory = await RoomFeaturesCategory
+							.query()
+							.select('id','name', 'icon')
+							.fetch();
+
+			roomFeatureCategory = roomFeatureCategory.toJSON();
+			roomFeatures = roomFeatures.toJSON();
+
+			return view.render('userPages.roomDetails', { id: params.id,
+															 room,
+															 isAdmin,
+															 form,
+															 hasReview,
+															 reviews,
+															 review,
+															 reviewsCount,
+															 dropdownSelection,
+															 roomFeatureCategory,
+															 roomFeatures});
+
 		} catch (error) {
 			console.log(error);
 			return response.redirect('/');
@@ -444,21 +463,21 @@ class RoomController {
 		// Retrieve number of active rooms
 		let countActive = await Room
 			.query()
-			.where('state', 1)
+			.where('State_id', 1)
 			.where('building_id', selectedBuilding.id)
 			.count();
 
 		// Retrieve number of deactive rooms
 		let countDeactive = await Room
 			.query()
-			.where('state', 2)
+			.where('State_id', 2)
 			.where('building_id', selectedBuilding.id)
 			.count();
 
 		// Retrieve number of rooms under maintenance
 		let countMaint = await Room
 			.query()
-			.where('state', 3)
+			.where('State_id', 3)
 			.where('building_id', selectedBuilding.id)
 			.count();
 
@@ -534,7 +553,7 @@ class RoomController {
 		// only loook for roosm that are open
 		let searchResults = Room
 			.query()
-			.where('state', 1)
+			.where('State_id', 1)
 			.clone();
 
 		// if the location is selected then query, else dont

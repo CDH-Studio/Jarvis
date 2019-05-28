@@ -58,23 +58,23 @@
                                 <div class='row'>                
                                     <div class='col form-group'>
                                         <div class='row'>
-                                            <label class='col' for='state'>Room status <strong class='text-danger'>* </strong></label>
+                                            <label class='col' for='state_id'>Room status <strong class='text-danger'>* </strong></label>
                                             <div class='col text-right'>
                                                 <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right' data-original-title='Active: available for booking, Deactive & Maintenance: unavailable for booking'></i>
                                             </div>
                                         </div>
-                                        @if(hasErrorFor('state'))
-                                            <select class='form-control is-invalid' name='state' id='state' onchange='removeErrorClass("state")'>
+                                        @if(hasErrorFor('state_id'))
+                                            <select class='form-control is-invalid' name='state_id' id='state_id' onchange='removeErrorClass("state_id")'>
                                         @else
-                                            <select class='form-control' name='state' id='state'>
+                                            <select class='form-control' name='state_id' id='state_id'>
                                         @endif
-                                            <option value='undefined' {{ old('state', room.state) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Room Status</option>
+                                            <option value='undefined' {{ old('state_id', room.state_id) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Room Status</option>
                                             @each(status in formOptions.statuses)
-                                                <option value='{{status.id}}' {{ old('state', room.state) == status.id ? 'selected' : '' }}>{{status.name}}</option>
+                                                <option value='{{status.id}}' {{ old('state_id', room.state_id) == status.id ? 'selected' : '' }}>{{status.name}}</option>
                                             @endeach
                                         </select>
-                                        @if(hasErrorFor('state'))
-                                            <div class='invalid-feedback'>{{ getErrorFor('state') }}</div>
+                                        @if(hasErrorFor('state_id'))
+                                            <div class='invalid-feedback'>{{ getErrorFor('state_id') }}</div>
                                         @endif
                                     </div>
                                 </div>
@@ -87,9 +87,9 @@
                                         @else
                                             <select class='form-control' name='floor' id='floor'>
                                         @endif
-                                            <option value='undefined' {{ old('floor', room.floor) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Floor</option>
+                                            <option value='undefined' {{ old('floor', room.floor_id) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Floor</option>
                                             @each(floor in formOptions.floors)
-                                                <option value='{{floor.id}}' {{ old('state', room.floor_id) == floor.id ? 'selected' : '' }}>{{floor.name}}</option>
+                                                <option value='{{floor.id}}' {{ old('floor', room.floor_id) == floor.id ? 'selected' : '' }}>{{floor.name}}</option>
                                             @endeach
                                         </select>
                                         @if(hasErrorFor('floor'))
@@ -107,7 +107,7 @@
                                         @endif
                                             <option value='undefined' {{ old('tower', room.tower) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Tower</option>
                                             @each(tower in formOptions.towers)
-                                                <option value='{{tower.id}}' {{ old('state', room.tower_id) == tower.id ? 'selected' : '' }}>{{tower.name}}</option>
+                                                <option value='{{tower.id}}' {{ old('tower', room.tower_id) == tower.id ? 'selected' : '' }}>{{tower.name}}</option>
                                             @endeach
                                             </select>
                                         @if(hasErrorFor('tower'))
@@ -164,7 +164,12 @@
 
                                                     @each(feature in featureCategory.features)
                                                         <div class='form-check'>
-                                                            <input class="form-check-input" type='checkbox' name='{{feature.name}}' class='custom-control-input' id='{{feature.name}}' value= '1' {{ old(feature.name, room.features.includes(feature.id)) ? 'checked' : '' }} >
+                                                            <input class="form-check-input" type='checkbox' name='{{feature.name}}' class='custom-control-input' id='{{feature.name}}' value= '1' 
+                                                            @if(room)
+                                                                {{ old(feature.name, room.features.includes(feature.id)) ? 'checked' : '' }} >
+                                                            @else
+                                                                {{ old(feature.name) ? 'checked' : '' }} >
+                                                            @endif
                                                             <label class="form-check-label" for='{{feature.name}}'>{{feature.name}}</label>
                                                         </div>
                                                     @endeach
