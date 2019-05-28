@@ -92,14 +92,36 @@
 
             <!-- Topbar Navbar -->
             <ul class="navbar-nav ml-auto">
-              
-              <li class="nav-item dropdown no-arrow">
-                @if(antl.currentLocale() =="en")
-                <a class="nav-link dropdown-toggle text-grey small" href='/switch/fr'><i class="fas fa-globe mr-1"></i>FR</a>
-                @else
-                <a class="nav-link dropdown-toggle text-grey small" href='/switch/en'><i class="fas fa-globe mr-1"></i>EN</a>
-                @endif
-              </li>
+
+
+              @if(auth.user.role_id===1)
+
+                <form class="form-inline">
+                  <div class="dropdown">
+                   <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      @if(selectedBuilding)
+                        <i class="far fa-building"></i> {{selectedBuilding.name}}
+                      @else
+                        <i class="far fa-building"></i> Select Building
+                      @endif
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                      @each(building in allBuildings)
+                        <a class="dropdown-item" href="{{ route('setBuilding', {id: building.id}) }}">{{building.name}}</a>
+                      @endeach
+                    </div>
+                  </div>
+                </form>
+              @else
+                <li class="nav-item dropdown no-arrow">
+                  @if(antl.currentLocale() =="en")
+                   <a class="nav-link dropdown-toggle text-grey small" href='/switch/fr'><i class="fas fa-globe mr-1"></i>FR</a>
+                  @else
+                    <a class="nav-link dropdown-toggle text-grey small" href='/switch/en'><i class="fas fa-globe mr-1"></i>EN</a>
+                  @endif
+                </li>
+              @endif
+
               <div class="topbar-divider d-none d-sm-block"></div>
               <!-- Nav Item - User Information -->
               <li class="nav-item dropdown no-arrow">
@@ -191,6 +213,11 @@
     <!-- Core plugin JavaScript-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.compatibility.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <script>
+      
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })</script>
 
     @!section('extrajs')
 

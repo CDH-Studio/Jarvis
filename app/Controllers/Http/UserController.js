@@ -286,6 +286,8 @@ class UserController {
 	async login ({ request, auth, response, session }) {
 		const { email, password } = request.all();
 
+		console.log('hello');
+
 		const user = await User
 			.query()
 			.where('email', email.toLowerCase())
@@ -467,8 +469,10 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getAllUsers ({ view }) {
-		const results = await User.all();
+	async getAllUsers ({ view, request }) {
+		const selectedBuilding = request.cookie('selectedBuilding');
+
+		const results = await User.query().where('role_id', 2).where('building_id', selectedBuilding.id).fetch();
 		const users = results.toJSON();
 
 		// Sort the results by name
@@ -476,7 +480,28 @@ class UserController {
 			return (a.firstname > b.firstname) ? 1 : ((b.firstname > a.firstname) ? -1 : 0);
 		});
 
-		return view.render('adminPages.viewUsers', { users });
+		const pageTitle = 'All users';
+
+		return view.render('adminPages.viewUsers', { users, pageTitle });
+	}
+
+	/**
+	 * Query all admins from the database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getAllAdmins ({ view, request }) {
+		const pageTitle = 'All admin users';
+
+		const results = await User.query().where('role_id', 1).fetch();
+		const users = results.toJSON();
+
+		// Sort the results by name
+		users.sort((a, b) => {
+			return (a.firstname > b.firstname) ? 1 : ((b.firstname > a.firstname) ? -1 : 0);
+		});
+
+		return view.render('adminPages.viewUsers', { users, pageTitle });
 	}
 }
 

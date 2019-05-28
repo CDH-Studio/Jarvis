@@ -10,7 +10,7 @@ View Users
 @endsection
 
 @section('content')
-    @!component('components.pageHeader', title='View users')
+    @!component('components.pageHeader', title=pageTitle)
     <div>
         {{--  Displays all of the users in the database in a table  --}}
         @if(users.length == 0)

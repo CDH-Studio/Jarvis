@@ -8,6 +8,7 @@ class ReportSchema extends Schema {
 		this.create('reports', (table) => {
 			table.increments();
 			table.integer('user_id').unsigned().references('id').inTable('users').notNullable();
+			table.integer('building_id').unsigned().references('id').inTable('buildings').notNullable();
 			table.integer('room_id').unsigned().references('id').inTable('rooms').notNullable();
 			table.integer('report_type_id').unsigned().references('id').inTable('report_type').notNullable();
 			table.string('comment', 250);

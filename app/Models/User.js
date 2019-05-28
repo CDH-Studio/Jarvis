@@ -50,10 +50,18 @@ class User extends Model {
 		return this.hasMany('App/Models/Report');
 	}
 
+	building () {
+		return this.belongsTo('App/Models/Building', 'building_id');
+	}
+
+	role () {
+		return this.belongsTo('App/Models/UserRole', 'role_id');
+	}
+
 	async getUserRole () {
 		try {
 			var role = await UserRole.findOrFail(this.role_id);
-			return role.role_name;
+			return role.name;
 		} catch (error) {
 			logger.error('Role Lookup Failed');
 			return 0;
@@ -62,10 +70,9 @@ class User extends Model {
 
 	async setUserRole (role) {
 		try {
-			role = await UserRole.findByOrFail('role_name', role);
+			role = await UserRole.findByOrFail('name', role);
 			this.role_id = role.id;
 			this.save();
-			console.log(this.role_id);
 			return 1;
 		} catch (error) {
 			logger.error('Role Set Failed');

@@ -1,0 +1,405 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+Configuration
+@endsection
+
+
+@section('extracss')
+<link href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css' rel='stylesheet'>
+@endsection
+
+@section('content')
+    @!component('components.pageHeader', title='Configuration')
+
+    @if(flashMessage('notification'))
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="alert alert-dismissible alert-success">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ flashMessage('notification') }}
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <div class="row">
+        <div class="col-xl-12 mb-4">         
+            @component('components.generalCard', title='Building Info')
+                @slot('body')
+                    <div class='row'>
+                        <div class='col-md-2 text-center '>
+                            <i class='fas fa-building fa-4x mb-3'></i>
+                            <h4>{{ building.name }}</h4>
+                        </div>
+                        <div class= 'col-md-5'>
+                            <p><i class='fas fa-map-marker-alt'></i> {{ building.street_address }} {{ building.postal_code }}</p>
+                            <p><i class="fas fa-map-marked-alt"></i> {{ building.city }}, {{ building.country }}</p>
+
+                            {{--  --}}
+
+                        </div>
+                    </div>
+                @endslot
+            @endcomponent
+        </div>
+    </div>
+
+    {{-- building specs --}}
+    <div class="row">    
+            {{-- Floors  --}}
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
+                
+                @component('components.generalCard', title='Configure Floor')
+                    @slot('body')
+
+                        @if(hasErrorFor('floorName'))
+                            <div class="alert alert-dismissible alert-danger">
+                              <button type="button" class="close" data-dismiss="alert">&times;</button>
+                              {{ getErrorFor('floorName') }}
+                            </div>        
+                        @endif
+                        @if(building.floor.length!=0)
+                            <table class="table table-borderless table-hover table-sm">
+                              <tbody>
+                                @each(floor in building.floor)
+                                    <tr>
+                                        <td class="text-xl-left"><strong>{{floor.name}}</strong></td> 
+                                        <td class="text-xl-center">{{floor.room.length}} rooms</td>
+                                        <td class="text-xl-right">
+                                            <a class="btn btn-primary btn-circle btn-sm-sb mr-2" name='edit tower' data-toggle='modal'  data-target='#editFloorModal{{floor.id}}' href='#'>
+                                                <i class="fas fa-pencil-alt fa-1x"></i>
+                                            </a>
+                                            @if(floor.room.length == 0)
+                                                <a class="btn btn-danger btn-circle btn-sm-sb" name='delete floor' data-toggle='modal'  data-target='#deleteFloorModal{{floor.id}}' href='#'>
+                                                    <i class="fas fa-trash fa-1x"></i>
+                                                </a>
+                                            @else
+                                                <a class="btn btn-secondary btn-circle btn-sm-sb" name='delete floor' data-toggle='tooltip'  data-placement="top" title="Cannot be deleted becasue there are rooms assigned" disabled>
+                                                    <i class="fas fa-trash fa-1x"></i>
+                                                </a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endeach
+                              </tbody>
+                            </table>
+                        @else
+                            <p>No floors configured</p>
+                        @endif
+                            
+                             <form class="form-inline" action='{{ route('addFloor') }}' method='POST' enctype='multipart/form-data'  >
+                                {{ csrfField() }}
+                                <div class="form-group mb-2 mr-2">
+                                    <label for="name" class="sr-only">Floor Name</label>
+                                    <input type="text" class="form-control mr-2" id="name" name="floorName" placeholder="New Floor" class="form-group mb-2">
+                                </div>
+                                <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
+                            </form>
+                   
+                    @endslot
+                @endcomponent
+            </div>
+
+            {{-- Tower --}}
+            <div class="col-sm-12 col-md-6 col-lg-5 col-xl-5 mb-4">
+                @component('components.generalCard', title='Configure Tower')
+                    @slot('body')
+                        @if(hasErrorFor('towerName'))
+                            <div class="alert alert-dismissible alert-danger">
+                              <button type="button" class="close" data-dismiss="alert">&times;</button>
+                              {{ getErrorFor('towerName') }}
+                            </div>        
+                        @endif
+                        @if(building.tower.length!=0)
+                            <table class="table table-borderless table-hover table-sm">
+                              <tbody>
+                                @each(tower in building.tower)
+                                    <tr>
+                                        <td class="text-xl-left"><strong>{{tower.name}}</strong></td> 
+                                        <td class="text-xl-center">{{tower.room.length}} rooms</td>
+                                        <td class="text-xl-right">
+                                            <a class="btn btn-primary btn-circle btn-sm-sb mr-2" name='edit tower' data-toggle='modal'  data-target='#editTowerModal{{tower.id}}' href='#'>
+                                                <i class="fas fa-pencil-alt fa-1x"></i>
+                                            </a>
+                                            @if(tower.room.length == 0)
+                                                <a class="btn btn-danger btn-circle btn-sm-sb" name='delete Feature' data-toggle='modal'  data-target='#deleteTowerModal{{tower.id}}' href='#'>
+                                                    <i class="fas fa-trash fa-1x"></i>
+                                                </a>
+                                            @else
+                                                <a class="btn btn-secondary btn-circle btn-sm-sb mr-2" name='delete floor' data-toggle='tooltip'  data-placement="top" title="Cannot be deleted becasue there are rooms assigned" disabled>
+                                                    <i class="fas fa-trash fa-1x"></i>
+                                                </a>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endeach
+                              </tbody>
+                            </table>
+                        @else
+                            <p>No towers configured</p>
+                        @endif
+                            
+                        <form class="form-inline" action='{{ route('addTower') }}' method='POST' enctype='multipart/form-data'  >
+                            {{ csrfField() }}
+                            <div class="form-group mb-2 mr-2">
+                                <label for="name" class="sr-only">New Tower</label>
+                                <input type="text" class="form-control mr-2" id="name" name="towerName" placeholder="New Tower" class="form-group mb-2">
+                            </div>
+                            <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
+                        </form>
+                   
+                    @endslot
+                @endcomponent
+            </div>
+    </div>
+
+
+    <div class="row">
+         <div class="col-xl-12">
+            {{-- room features --}}
+            <h4 class="mt-4 mb-3" id="reviews"><strong>Room Features</strong></h4>
+            @if(hasErrorFor('featureName'))
+                <div class="alert alert-dismissible alert-danger">
+                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                  {{ getErrorFor('featureName') }}
+                </div>        
+            @endif
+        </div>     
+        @each(category in categories)
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
+                @component('components.generalCard', title=category.name)
+                    @slot('body')
+                        @if(category.features.length!=0)
+                            <table class="table table-borderless table-hover table-sm">
+                              <tbody>
+                                @each(feature in category.features)
+                                    <tr>
+                                        <td class="text-xl-left"><strong>{{feature.name}}</strong></td> 
+                                        <td class="text-xl-center"># rooms</td>
+                                        <td class="text-xl-right">
+                                            <a class="btn btn-primary btn-circle btn-sm-sb mr-2" name='edit tower' data-toggle='modal'  data-target='#editFeatureModal{{feature.id}}' href='#'>
+                                                <i class="fas fa-pencil-alt fa-1x"></i>
+                                            </a>
+
+                                            <a class="btn btn-danger btn-circle btn-sm-sb" name='delete Feature' data-toggle='modal'  data-target='#deleteFeatureModal{{feature.id}}' href='#'>
+                                                <i class="fas fa-trash fa-1x"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endeach
+                              </tbody>
+                            </table>
+                        @else
+                            <p>No Features</p>
+                        @endif
+                            
+                         <form class="form-inline" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'  >
+                            {{ csrfField() }}
+                            <div class="form-group mb-2 mr-2">
+                                <label for="name" class="sr-only">Feature Name</label>
+                                <input type="hidden"  name="featureCategory" value="{{category.id}}">
+                                <input type="text" class="form-control mr-2" id="name" name="featureName" placeholder="New Feature" class="form-group mb-2">
+                            </div>
+                            <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
+                        </form>
+                   
+                    @endslot
+                @endcomponent
+            </div>
+        @endeach
+    </div>
+
+
+
+
+        {{-- Delete Modal --}}
+        @each(category in categories)
+            @each(feature in category.features)
+
+                {{-- delete Feature modal --}}
+                <div class='modal' id='deleteFeatureModal{{ feature.id }}' role='dialog' aria-hidden='true'>
+                    <div class='modal-dialog modal-dialog-centered' role='document'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <h5 class='modal-title' id='cancelTitle'>Delete Feature?</h5>
+                                <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+                                    <span aria-hidden='true'>×</span>
+                                </button>
+                            </div>
+                            <div class='modal-body'>Are you sure want to delete <strong>{{feature.name}}</strong>?<br>
+                                <p>This feature will be removed from ## rooms.</p>
+                                <p class="text-danger">This is process is permanent!</p>
+                            </div>
+                            <form action='{{ route('deleteRoomFeature', {id: feature.id}) }}' method='POST' enctype='multipart/form-data'>
+                                {{ csrfField() }}
+                                <div class='modal-footer'>
+                                    <button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+                                    <button type='submit' class='btn btn-danger'>Yes</button>
+                                </div>                    
+                            </form>  
+                        </div>
+                    </div>
+                </div>
+
+                {{-- edit tower modal --}}
+                <div class='modal' id='editFeatureModal{{ feature.id }}' role='dialog' aria-hidden='true'>
+                    <div class='modal-dialog modal-dialog-centered' role='document'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <h5 class='modal-title' id='cancelTitle'>Edit Feature?</h5>
+                                <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+                                    <span aria-hidden='true'>×</span>
+                                </button>
+                            </div>
+                            <div class='modal-body'>Are you sure want to edit "{{feature.name}}"?<br>
+                                <p>This change will effect ## rooms.</p>
+                                <form class="form-inline" action='{{ route('updateRoomFeature', {id: feature.id}) }}' method='POST' enctype='multipart/form-data'  >
+                                    {{ csrfField() }}
+                                    <div class="form-group mb-2 mr-2">
+                                        <label for="name" class="sr-only">Edit Feature Name</label>
+                                        <input type="text" class="form-control mr-2" id="name" name="featureName" placeholder="New Tower" class="form-group mb-2" value='{{feature.name}}'>
+                                    </div>
+                                   <button type='submit' class='btn btn-primary'>Save</button>
+                                </form>
+                            </div> 
+
+                        </div>
+                    </div>
+                </div>
+            @endeach
+        @endeach
+
+        @each(tower in building.tower)
+
+            @if(tower.room.length == 0)
+                {{-- delete tower modal --}}
+                <div class='modal' id='deleteTowerModal{{ tower.id }}' role='dialog' aria-hidden='true'>
+                    <div class='modal-dialog modal-dialog-centered' role='document'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <h5 class='modal-title' id='cancelTitle'>Delete Tower?</h5>
+                                <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+                                    <span aria-hidden='true'>×</span>
+                                </button>
+                            </div>
+                            <div class='modal-body'>Are you sure want to delete <strong>"{{tower.name}}"</strong>?<br>
+                                <p class="text-danger">This is process is permanent!</p>
+                            </div>
+                            <form action='{{ route('deleteTower', {id: tower.id}) }}' method='POST' enctype='multipart/form-data'>
+                                {{ csrfField() }}
+                                <div class='modal-footer'>
+                                    <button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+                                    <button type='submit' class='btn btn-danger'>Yes</button>
+                                </div>                    
+                            </form>  
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            {{-- edit tower modal --}}
+            <div class='modal' id='editTowerModal{{ tower.id }}' role='dialog' aria-hidden='true'>
+                <div class='modal-dialog modal-dialog-centered' role='document'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <h5 class='modal-title' id='cancelTitle'>Edit Tower?</h5>
+                            <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+                                <span aria-hidden='true'>×</span>
+                            </button>
+                        </div>
+                        <div class='modal-body'>Are you sure want to edit "{{tower.name}}"?<br>
+                            <p>This change will effect {{tower.room.length}} rooms.</p>
+                            <form class="form-inline" action='{{ route('updateTower', {id: tower.id}) }}' method='POST' enctype='multipart/form-data'  >
+                                {{ csrfField() }}
+                                <div class="form-group mb-2 mr-2">
+                                    <label for="name" class="sr-only">Edit Tower Name</label>
+                                    <input type="text" class="form-control mr-2" id="name" name="towerName" placeholder="New Tower" class="form-group mb-2" value='{{ tower.name }}'>
+                                </div>
+                               <button type='submit' class='btn btn-primary'>Save</button>
+                            </form>
+                        </div> 
+
+                    </div>
+                </div>
+            </div>
+        @endeach
+
+        @each(floor in building.floor)
+
+            @if(floor.room.length == 0)
+                {{-- delete floor modal --}}
+                <div class='modal' id='deleteFloorModal{{ floor.id }}' role='dialog' aria-hidden='true'>
+                    <div class='modal-dialog modal-dialog-centered' role='document'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <h5 class='modal-title' id='cancelTitle'>Delete Floor?</h5>
+                                <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+                                    <span aria-hidden='true'>×</span>
+                                </button>
+                            </div>
+                            <div class='modal-body'>Are you sure want to delete <strong>"{{floor.name}}"</strong>?<br>
+                                <p class="text-danger">This is process is permanent!</p>
+                            </div>
+                            <form action='{{ route('deleteFloor', {id: floor.id}) }}' method='POST' enctype='multipart/form-data'>
+                                {{ csrfField() }}
+                                <div class='modal-footer'>
+                                    <button class='btn btn-secondary' type='button' data-dismiss='modal'>No</button>
+                                    <button type='submit' class='btn btn-danger'>Yes</button>
+                                </div>                    
+                            </form>  
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            {{-- edit floor modal --}}
+            <div class='modal' id='editFloorModal{{ floor.id }}' role='dialog' aria-hidden='true'>
+                <div class='modal-dialog modal-dialog-centered' role='document'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <h5 class='modal-title' id='cancelTitle'>Edit Floor?</h5>
+                            <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+                                <span aria-hidden='true'>×</span>
+                            </button>
+                        </div>
+                        <div class='modal-body'>Are you sure want to edit "{{floor.name}}"?<br>
+                            <p>This change will effect {{floor.room.length}} rooms.</p>
+                            <form class="form-inline" action='{{ route('updateFloor', {id: floor.id} ) }}' method='POST' enctype='multipart/form-data'  >
+                                {{ csrfField() }}
+                                <div class="form-group mb-2 mr-2">
+                                    <label for="name" class="sr-only">Edit Floor Name</label>
+                                    <input type="text" class="form-control mr-2" id="name" name="floorName" placeholder="New Tower" class="form-group mb-2" value='{{ floor.name }}'>
+                                </div>
+                               <button type='submit' class='btn btn-primary'>Save</button>
+                            </form>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        @endeach
+
+
+@endsection
+
+{{--  Deals with the search functionality of the table above- searches all fields   --}}
+@section('extrajs') 
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script>$(document).ready(function() {
+            $('#usersTable').DataTable( {
+                "paging":   false,
+                "ordering": true,
+                "info":     false
+            });
+        });
+    </script>
+@endsection
+
+
+
+
+
+
+
+

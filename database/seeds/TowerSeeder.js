@@ -15,13 +15,15 @@ const Tower = use('App/Models/Tower');
 
 class TowerSeeder {
 	async run () {
-		var TowerFiller = ['East', 'West'];
+		var towerFiller = ['East', 'West'];
+		var buildingFiller = [1, 1];
 		var count = await Tower.getCount();
 
 		if (count === 0) {
-			for (var i = 0; i < TowerFiller.length; i++) {
+			for (var i = 0; i < towerFiller.length; i++) {
 				const tower = new Tower();
-				tower.name = TowerFiller[i];
+				tower.name = towerFiller[i];
+				tower.building_id = buildingFiller[i];
 				await tower.save();
 			}
 			console.log('Tower Name DB: Finished Seeding');

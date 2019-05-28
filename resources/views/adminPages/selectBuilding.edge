@@ -1,0 +1,45 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+Configuration
+@endsection
+
+
+@section('extracss')
+<link href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css' rel='stylesheet'>
+@endsection
+
+@section('content')
+    @!component('components.pageHeader', title='Select Building', subtitle='Please select the building you would like to manage')
+            @each(building in allBuildings)
+                <a href="{{ route('setBuilding', {id: building.id}) }}" class="btn btn-sq-lg btn-outline-primary p-4" style="width:180px; height: 180px;">
+                    <br />
+                    <i class="fas fa-building fa-4x mb-2"></i><br/>
+                    {{building.name}}
+                </a>
+            @endeach
+            
+
+@endsection
+
+{{--  Deals with the search functionality of the table above- searches all fields   --}}
+@section('extrajs') 
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script>$(document).ready(function() {
+            $('#usersTable').DataTable( {
+                "paging":   false,
+                "ordering": true,
+                "info":     false
+            });
+        });
+    </script>
+@endsection
+
+
+
+
+
+
+
+

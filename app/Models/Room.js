@@ -15,6 +15,24 @@ class Room extends Model {
 		return this.hasMany('App/Models/Report');
 	}
 
+	building () {
+		return this.belongsTo('App/Models/Building', 'building_id');
+	}
+
+	floor () {
+		return this.belongsTo('App/Models/Floor', 'floor_id');
+	}
+
+	tower () {
+		return this.belongsTo('App/Models/Tower', 'tower_id');
+	}
+
+	features () {
+		return this
+			.belongsToMany('App/Models/RoomFeature')
+			.pivotTable('features_rooms_pivot');
+	}
+
 	static get table () {
 		return 'rooms';
 	}
