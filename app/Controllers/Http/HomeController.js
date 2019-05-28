@@ -193,7 +193,7 @@ class HomeController {
 		// Retrieve number of active rooms
 		let countActive = await Room
 			.query()
-			.where('state', 1)
+			.where('state_id', 1)
 			.count();
 
 		var stats = {};
@@ -272,19 +272,19 @@ class HomeController {
 		// Retrieve number of active rooms
 		let countActive = await Room
 			.query()
-			.where('state', 1)
+			.where('state_id', 1)
 			.count();
 
 		// Retrieve number of deactive rooms
 		let countDeactive = await Room
 			.query()
-			.where('state', 2)
+			.where('state_id', 2)
 			.count();
 
 		// Retrieve number of rooms under maintenance
 		let countMaint = await Room
 			.query()
-			.where('state', 3)
+			.where('state_id', 3)
 			.count();
 
 		// Create statistic array with custom keys
@@ -408,7 +408,7 @@ class HomeController {
 		// order by ascending seats number and fetch results
 		let searchResults = await Room
 			.query()
-			.where('state', 1)
+			.where('state_id', 1)
 			.orderByRaw('ABS(floor-' + auth.user.floor + ') ASC')
 			.orderBy('tower', towerOrder)
 			.orderBy('seats', 'asc')
