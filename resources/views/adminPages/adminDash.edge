@@ -136,10 +136,10 @@
                     @component('components.generalCard', title='Highest rated')
                         @slot('body')
                             @each(room in highestRatedRooms) 
-                                @component('components.smallCard', room=room)
+                                @component('components.smallCard', room = room)
                                     @slot('body')
                                     <div class='mb-2'>
-                                        @!component('components.stars', rating = room.avgRating)
+                                        @!component('components.stars', rating = room.avg_rating)
                                     </div>
                                     <div>
                                         @if(room.totalReviews == 1)

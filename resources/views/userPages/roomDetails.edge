@@ -67,7 +67,7 @@
                             <b>{{ room.fullName }}</b>
                             <div>
                                 <a href="#reviews" class="link-style-none">
-                                    @!component('components/stars', rating=room.rating)
+                                    @!component('components/stars', rating=room.avg_rating)
                                 </a>
                             </div>
                             <div class="mt-2 mb-2">
@@ -316,7 +316,7 @@
                                 </div>
                                 <div class="col-4 text-center">
                                     @if(review.reviewPicture)
-                                        <img class="shadow" style ="width:auto; height:110px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
+                                        <img class="img-fluid img-thumbnail" style ="max-width:110px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
                                     @endif
                                 </div>           
                             </div>
@@ -379,8 +379,12 @@
                             <div class='row'>
                                 <div class='col form-group'>
                                     <label for='review'>Review <strong class='text-danger'>*</strong></label>
-                                        <textarea class='form-control' name='review' id='review' rows='5' >{{ old('review',  review.review) }}</textarea>
+                                    @if(hasErrorFor('review'))
+                                        <textarea class='form-control is-invalid' name='review' id='review' rows='5'>{{ old('review',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
+                                    @else
+                                        <textarea class='form-control' name='review' id='review' rows='5' >{{ old('review',  review.review) }}</textarea>
+                                    @endif
                                 </div> 
                             </div> 
 

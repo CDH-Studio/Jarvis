@@ -124,8 +124,6 @@ class RoomController {
 			const selectedBuilding = request.cookie('selectedBuilding');
 			const body = request.all();
 
-			console.log(body.toJSON());
-
 			// Upload process - Floor Plan
 			const floorPlanImage = request.file('floorPlan', {
 				types: ['image'],
@@ -169,9 +167,7 @@ class RoomController {
 			const results = await RoomFeature.query().where('building_id', selectedBuilding.id).fetch();
 			const roomFeatures = results.toJSON();
 
-			var index;
-
-			for (index = 0; index < roomFeatures.length; ++index) {
+			for (var index = 0; index < roomFeatures.length; ++index) {
 				if (body[roomFeatures[index].name]) {
 					var feature = new FeaturePivot();
 					feature.room_id = room.id;
