@@ -93,19 +93,19 @@ class CheckAdminUserRole {
 			return response.redirect('/');
 		}
 
-		//get all building
+		// get all building
 		const Building = use('App/Models/Building');
 		const allBuildings = await Building.all();
 
-		//read selected building name from cookie
-		const selectedBuilding = request.cookie('selectedBuilding')
+		// read selected building name from cookie
+		const selectedBuilding = request.cookie('selectedBuilding');
 
 		if (!selectedBuilding) {
 			return response.route('viewSelectBuilding');
 		}
 
-		//get all building options for admin
-		view.share({ allBuildings: allBuildings.toJSON(), selectedBuilding: selectedBuilding});
+		// get all building options for admin
+		view.share({ allBuildings: allBuildings.toJSON(), selectedBuilding: selectedBuilding });
 		/**
 		 * For compatibility with the old API
 		 */

@@ -85,7 +85,6 @@ Route.post('/feature/add', 'FeatureController.addRoomFeature').as('addRoomFeatur
 Route.post('/feature/:id/edit', 'FeatureController.updateRoomFeature').as('updateRoomFeature').validator('EditFeature').middleware(['isAdmin']);
 Route.post('/feature/:id/delete', 'FeatureController.deleteRoomFeature').as('deleteRoomFeature').middleware(['isAdmin']);
 
-
 Route.get('/room/:roomID/issues/:issueStatus', 'IssueController.getRoomIssues').as('showIssue').middleware(['isAdmin']);
 Route.get('/issue/:id/edit', 'IssueController.editIssue').as('editIssue').middleware(['isAdmin']);
 Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['isAdmin']).validator('EditIssue');

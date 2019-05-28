@@ -77,7 +77,7 @@ class IssueController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getRoomIssues ({request, params, view, response }) {
+	async getRoomIssues ({ request, params, view, response }) {
 		var results;
 		var issues;
 		var currentTime;
@@ -139,7 +139,7 @@ class IssueController {
 		issues = results.toJSON();
 
 		// Retrieve issue stats
-		const stats = await this.getIssueStatistics(params.roomID,selectedBuilding);
+		const stats = await this.getIssueStatistics(params.roomID, selectedBuilding);
 
 		// date formatting options
 		var options = { year: 'numeric', month: 'long', day: 'numeric' };

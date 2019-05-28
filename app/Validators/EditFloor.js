@@ -14,7 +14,7 @@ class EditFloor {
 	// Validation rules
 	get rules () {
 		return {
-			floorName: 'required|max:20|unique:floors,name',
+			floorName: 'required|max:20|unique:floors,name'
 		};
 	}
 

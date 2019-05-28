@@ -286,7 +286,7 @@ class UserController {
 	async login ({ request, auth, response, session }) {
 		const { email, password } = request.all();
 
-		console.log("hello");
+		console.log('hello');
 
 		const user = await User
 			.query()
@@ -480,10 +480,9 @@ class UserController {
 			return (a.firstname > b.firstname) ? 1 : ((b.firstname > a.firstname) ? -1 : 0);
 		});
 
-		const pageTitle="All users";
+		const pageTitle = 'All users';
 
 		return view.render('adminPages.viewUsers', { users, pageTitle });
-
 	}
 
 	/**
@@ -492,8 +491,7 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async getAllAdmins ({ view, request }) {
-
-		const pageTitle="All admin users";
+		const pageTitle = 'All admin users';
 
 		const results = await User.query().where('role_id', 1).fetch();
 		const users = results.toJSON();

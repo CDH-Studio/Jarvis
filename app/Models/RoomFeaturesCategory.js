@@ -9,10 +9,8 @@ class RoomFeaturesCategory extends Model {
 	}
 
 	features () {
-	    return this.hasMany('App/Models/RoomFeature','id', 'feature_category_id')
+		return this.hasMany('App/Models/RoomFeature', 'id', 'feature_category_id');
 	}
-
-
 }
 
 module.exports = RoomFeaturesCategory;

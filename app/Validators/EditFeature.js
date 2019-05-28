@@ -14,7 +14,7 @@ class EditFeature {
 	// Validation rules
 	get rules () {
 		return {
-			featureName: 'required|max:20',
+			featureName: 'required|max:20'
 		};
 	}
 
@@ -22,7 +22,7 @@ class EditFeature {
 	get messages () {
 		return {
 			'featureName.required': 'You must provide a feature name',
-			'featureName.max': 'Feature name can only be 20 characters long',
+			'featureName.max': 'Feature name can only be 20 characters long'
 		};
 	}
 

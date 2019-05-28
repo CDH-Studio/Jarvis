@@ -2,15 +2,10 @@
 const Building = use('App/Models/Building');
 const Tower = use('App/Models/Tower');
 const Room = use('App/Models/Room');
-const Feature = use('App/Models/RoomFeature');
-const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
 class TowerController {
-
-
 	async addTower ({ request, response, session }) {
 		try {
-
 			const selectedBuilding = request.cookie('selectedBuilding');
 
 			const building = await Building.query().where('name', selectedBuilding).firstOrFail();
@@ -31,9 +26,8 @@ class TowerController {
 		}
 	}
 
-	async updateTower ({ params, response, request, session}) {
+	async updateTower ({ params, response, request, session }) {
 		try {
-
 			const body = request.all();
 
 			const tower = await Tower.find(params.id);
@@ -42,18 +36,16 @@ class TowerController {
 			await tower.save();
 			session.flash({ notification: 'Tower Updated!' });
 			return response.route('configuration');
-
 		} catch (err) {
 			console.log(err);
 		}
 	}
 
-	async deleteTower ({ params, response, request, session}) {
+	async deleteTower ({ params, response, request, session }) {
 		try {
-
 			const roomCount = await Room.query().where('tower_id', params.id).getCount();
 
-			if(roomCount==0){
+			if (roomCount === 0) {
 				const tower = await Tower.find(params.id);
 				await tower.delete();
 
@@ -61,13 +53,10 @@ class TowerController {
 			}
 
 			return response.route('configuration');
-
 		} catch (err) {
 			console.log(err);
 		}
 	}
-
-	
 }
 
 module.exports = TowerController;

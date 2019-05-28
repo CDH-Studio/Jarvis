@@ -51,11 +51,11 @@ class User extends Model {
 	}
 
 	building () {
-		return this.belongsTo('App/Models/Building','building_id');
+		return this.belongsTo('App/Models/Building', 'building_id');
 	}
 
 	role () {
-		return this.belongsTo('App/Models/UserRole','role_id');
+		return this.belongsTo('App/Models/UserRole', 'role_id');
 	}
 
 	async getUserRole () {

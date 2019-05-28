@@ -19,11 +19,11 @@ class FloorSeeder {
 
 		if (count === 0) {
 			const building = new Building();
-			building.name = "CD Howe";
-			building.street_address = "55 Golflinks dr.";
-			building.postal_code = "K2J4Y3";
-			building.city = "Ottawa";
-			building.country = "Canada";
+			building.name = 'CD Howe';
+			building.street_address = '55 Golflinks dr.';
+			building.postal_code = 'K2J4Y3';
+			building.city = 'Ottawa';
+			building.country = 'Canada';
 			await building.save();
 
 			console.log('Building DB: Finished Seeding');

@@ -4,8 +4,6 @@ const Feature = use('App/Models/RoomFeature');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
 class FeatureController {
-
-
 	/**
 	 * Reports a room
 	 *
@@ -14,33 +12,31 @@ class FeatureController {
 	async show ({ request, view }) {
 		const allBuildings = await Building.all();
 
-		const selectedBuilding = request.cookie('selectedBuilding')
+		const selectedBuilding = request.cookie('selectedBuilding');
 
 		const building = await Building.query()
-								.where('id', selectedBuilding.id)
-								.with('floor')
-								.with('tower')
-								.with('floor.room')
-								.with('tower.room')
-								.firstOrFail();
-		
+			.where('id', selectedBuilding.id)
+			.with('floor')
+			.with('tower')
+			.with('floor.room')
+			.with('tower.room')
+			.firstOrFail();
+
 		const categories = await RoomFeaturesCategory
-									.query()
-									.with('features', (builder) => {
-										 builder.where('building_id', 1)
-									}).fetch();
+			.query()
+			.with('features', (builder) => {
+				builder.where('building_id', 1);
+			}).fetch();
 
-
-		return view.render('adminPages.viewConfiguration', 
-								{allBuildings: allBuildings.toJSON(),
-								building: building.toJSON(),
-			 					categories: categories.toJSON() });
-
+		return view.render('adminPages.viewConfiguration',
+			{ allBuildings: allBuildings.toJSON(),
+				building: building.toJSON(),
+				categories: categories.toJSON()
+			});
 	}
 
 	async addRoomFeature ({ request, response, session }) {
 		try {
-
 			// Retrieves user input
 			const body = request.all();
 			// Populates the review object's values
@@ -58,7 +54,7 @@ class FeatureController {
 		}
 	}
 
-	async updateRoomFeature ({ params, response, request, session}) {
+	async updateRoomFeature ({ params, response, request, session }) {
 		try {
 			const body = request.all();
 			// Updates room information in database
@@ -76,21 +72,15 @@ class FeatureController {
 		}
 	}
 
-
-	async deleteRoomFeature ({ params, response}) {
+	async deleteRoomFeature ({ params, response }) {
 		try {
-			const { id } = params;
-			const feature = await Feature.find(params.id)
-
-			await feature.delete()
+			const feature = await Feature.find(params.id);
+			await feature.delete();
 			return response.route('configuration');
-
 		} catch (err) {
 			console.log(err);
 		}
 	}
-
-	
 }
 
 module.exports = FeatureController;

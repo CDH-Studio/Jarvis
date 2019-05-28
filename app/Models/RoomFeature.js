@@ -9,11 +9,11 @@ class RoomFeature extends Model {
 	}
 
 	category () {
-		return this.belongsTo('App/Models/RoomFeaturesCategory', 'feature_category_id')
+		return this.belongsTo('App/Models/RoomFeaturesCategory', 'feature_category_id');
 	}
 
 	building () {
-		return this.belongsTo('App/Models/Building', 'building_id')
+		return this.belongsTo('App/Models/Building', 'building_id');
 	}
 }
 

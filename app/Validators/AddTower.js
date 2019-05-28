@@ -14,7 +14,7 @@ class AddTower {
 	// Validation rules
 	get rules () {
 		return {
-			towerName: 'required|max:20|unique:towers,name',
+			towerName: 'required|max:20|unique:towers,name'
 		};
 	}
 

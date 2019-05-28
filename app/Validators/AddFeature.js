@@ -15,7 +15,7 @@ class AddFeature {
 	get rules () {
 		return {
 			featureName: 'required|max:20',
-			featureCategory: 'required|integer',
+			featureCategory: 'required|integer'
 		};
 	}
 
@@ -23,7 +23,7 @@ class AddFeature {
 	get messages () {
 		return {
 			'featureName.required': 'You must provide a feature name',
-			'featureName.max': 'feature name can only be 20 characters long',
+			'featureName.max': 'feature name can only be 20 characters long'
 		};
 	}
 
