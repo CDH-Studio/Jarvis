@@ -76,7 +76,22 @@
 											</div>
 										</div>
 									</div>
-
+									<div class='form-row'>
+										<div class='col'>
+											<div class='form-group mb-2'>
+												<label for='building'>Building</label>
+												<select id='building' name='building' class='form-control text-capitalize'>
+													<option value='undefined' {{ old('building') == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Building</option>
+													@each(buildingOption in formOptions.buildings)
+														<option value='{{buildingOption.id}}' {{ old('building') == buildingOption.id ? 'selected' : '' }}>{{buildingOption.name}}</option>
+													@endeach
+												</select>
+												@if(hasErrorFor('building'))
+													<div class='invalid-feedback d-block'>{{ getErrorFor('building') }}</div>
+												@endif
+											</div>
+										</div>
+									</div>
 
 									<div class='form-row'>
 										<div class='col'>
@@ -84,7 +99,7 @@
 												<label for='tower'>{{ antl.formatMessage('registerUser.tower') }}</label>
 												<select id='tower' name='tower' class='form-control text-capitalize'>
 													<option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.tower') }}</option>
-													@each(towerOption in towerOptions)
+													@each(towerOption in formOptions.towers)
 														<option value='{{towerOption.id}}' {{ old('tower') == towerOption.id ? 'selected' : '' }}>{{towerOption.name}}</option>
 													@endeach
 												</select>
@@ -99,7 +114,7 @@
 												<label for='floor'>{{ antl.formatMessage('registerUser.floor') }}</label>
 												<select id='floor' name='floor' class='form-control text-capitalize'>
 													<option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.floor') }}</option>
-													@each(floorOption in floorOptions)
+													@each(floorOption in formOptions.floors)
 														<option value='{{floorOption.id}}' {{ old('floor') == floorOption.id ? 'selected' : '' }}>{{floorOption.name}}</option>
 													@endeach
 												</select>

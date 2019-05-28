@@ -54,6 +54,14 @@ class User extends Model {
 		return this.belongsTo('App/Models/Building', 'building_id');
 	}
 
+	tower () {
+		return this.belongsTo('App/Models/Tower', 'tower_id');
+	}
+
+	floor () {
+		return this.belongsTo('App/Models/Floor', 'floor_id');
+	}
+
 	role () {
 		return this.belongsTo('App/Models/UserRole', 'role_id');
 	}
