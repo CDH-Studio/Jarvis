@@ -27,7 +27,7 @@
                             </h5>
                         </div>
                         <div class='flex-grow-1 text-right'>
-                            @if(isAdmin)
+                            @if(user.role.name === 'admin')
                                 <button class="btn btn-info btn-icon-split" onclick="window.location='{{route('viewBookings', { id: room.id, bookingType: 'room'}) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-book"></i></span>
                                     <span class="text">View bookings</span>
@@ -59,7 +59,7 @@
                                 <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/default.png'>
                             @endif        
                             <a class='link-color' href='' style='display:block; text-align:center;'  data-toggle='modal' data-target='#mapModal'>
-                                <i class='fas fa-external-link-alt'></i>
+                                <i class='fas fa-external-link-alt mt-3'></i>
                                 View Map
                             </a>             
                         </div>
@@ -70,18 +70,20 @@
                                     @!component('components/stars', rating=room.rating)
                                 </a>
                             </div>
-
                             <div class="mt-2 mb-2">
-                                <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong> {{ room.floor }}  {{ room.tower }}
+                                <strong><i class="fas fa-building fa-fw"></i></strong> {{ room.building.name }}
+                            </div>
+                            <div class="mt-2 mb-2">
+                                <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong> {{ room.floor.name }}  {{ room.tower.name }}
                             </div>
                             <div class="mt-2 mb-3">
                                 <strong><i class="fas fa-phone fa-fw"></i></strong> {{ room.telephone }}
                             </div>
                             <hr>
-                            <div class="mt-2 mb-3">
+                            <div class="mt-2 mb-2">
                                 <strong>Table Seats:</strong>  {{ room.seats }}
                             </div>
-                            <div class="mt-2 mb-3">
+                            <div class="mt-1 mb-2">
                                 <strong>Capacity:</strong> {{ room.capacity }}
                             </div>
                             @if(room.comment && room.comment != " ")
@@ -113,7 +115,7 @@
                             </div>
                         @endeach
                         @if(room.extraEquipment)
-                        <div class="col-12 col-lg-12 text-center">
+                        <div class="col-12 col-lg-12 text-center mt-3">
                             <p class="mb-0"><strong>Extra Equipment: </strong>{{room.extraEquipment}}</p>
                         </div>
                         @endif
@@ -128,7 +130,7 @@
                     <h5 class="m-0 font-weight-bold text-primary">Book room</h5>
                 </div>
                 <div class="card-body" style="height:100%;">
-                    @if(!isAdmin && room.state_id == 1)
+                    @if(user.role.name === 'user' && room.state_id == 1)
                         <form action='{{ route('confirmBooking') }}' method='POST'  style="min-height:334px;">
                             {{ csrfField() }}
                             <input type='hidden' name='room' value={{ room.id }} /> 
@@ -339,7 +341,7 @@
                     @endif
                 </div>
                 <div class="card-body">
-                    @if(isAdmin)
+                    @if(user.role.name === 'admin')
                         @!component('components.cardEmptyMessage',faIcon='fas fa-ban fa-6x', message='Review not available for admin')
                     @else
                         @if(!hasReview) 
@@ -460,7 +462,7 @@
            </div>
        </div>
     {{--  Only show to non-admin users  --}}
-    @if(!isAdmin)
+    @if(user.role.name === 'user')
         {{--  Reporting Modal Box  --}}
         <div class='modal fade' id='reportModal'>
             <div class='modal-dialog modal-dialog-centered confirmation-modal' role='document'>

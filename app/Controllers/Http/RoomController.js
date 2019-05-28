@@ -334,6 +334,10 @@ class RoomController {
 	 */
 	async show ({ response, auth, params, view, request }) {
 		try {
+
+			const result = await User.query().where('id',auth.user.id).with('role').firstOrFail()
+			const user = result.toJSON();
+
 			// get the search form date range if filled in, otherwise generate the data with current date
 			const form = request.only(['date', 'from', 'to']);
 			if (!form.date || form.date === 'undefined' || !form.from || form.from === 'undefined' || !form.to || form.to === 'undefined') {
@@ -353,22 +357,16 @@ class RoomController {
 				start.add(30, 'm');
 			}
 
-			const room = await Room.findOrFail(params.id);
+			var room = await Room.query()
+									.where('id', params.id)
+									.with('tower')
+									.with('floor')
+									.with('building')
+									.firstOrFail();
+			
 			const userRole = await auth.user.getUserRole();
 			const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
 			const review = await this.getRatingAndReview(auth.user.id, params.id);
-
-			var isAdmin = 0;
-			// if user is admin
-			if (userRole === 'admin') {
-				isAdmin = 1;
-				// check if user is viewing their own profile
-			} else if (userRole === 'user') {
-				isAdmin = 0;
-				// check if user is viewing someone elses profile
-			} else {
-				return response.redirect('/');
-			}
 
 			// retrieves all of the reviews associated to this room
 			let reviewResults = await Review
@@ -408,10 +406,24 @@ class RoomController {
 
 			roomFeatureCategory = roomFeatureCategory.toJSON();
 			roomFeatures = roomFeatures.toJSON();
+			room = room.toJSON();
+
+
+			var selectedBuilding;
+			var allBuildings;
+
+			if (user.role.name === 'admin') {
+				selectedBuilding = request.cookie('selectedBuilding');
+				// get all builig info admin nav bar since this route is shared with regular users and admin
+				// therefore, the admin middle-ware can't retrieve building info to pass to view
+				allBuildings = await Building.all();
+				allBuildings =allBuildings.toJSON();
+			}
+
 
 			return view.render('userPages.roomDetails', { id: params.id,
 															 room,
-															 isAdmin,
+															 user,
 															 form,
 															 hasReview,
 															 reviews,
@@ -419,7 +431,9 @@ class RoomController {
 															 reviewsCount,
 															 dropdownSelection,
 															 roomFeatureCategory,
-															 roomFeatures});
+															 roomFeatures,
+															 selectedBuilding,
+															 allBuildings});
 
 		} catch (error) {
 			console.log(error);
