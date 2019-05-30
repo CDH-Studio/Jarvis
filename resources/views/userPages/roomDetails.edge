@@ -74,7 +74,7 @@
                                 <strong><i class="fas fa-building fa-fw"></i></strong> {{ room.building.name }}
                             </div>
                             <div class="mt-2 mb-2">
-                                <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong> {{ room.floor.name }}  {{ room.tower.name }}
+                                <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong> {{ room.floor === null ? 0 : room.floor.name }}  {{ room.tower.name }}
                             </div>
                             <div class="mt-2 mb-3">
                                 <strong><i class="fas fa-phone fa-fw"></i></strong> {{ room.telephone }}

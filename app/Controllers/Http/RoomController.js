@@ -553,9 +553,10 @@ class RoomController {
 			.clone();
 
 		// if the location is selected then query, else dont
+		// TODO: floor_id -> floorName
 		if (location !== 'undefined') {
 			searchResults = searchResults
-				.where('floor', location)
+				.where('floor_id', location)
 				.clone();
 		}
 		// if the "number of seats" is selected then add to query, else ignore it
@@ -582,8 +583,7 @@ class RoomController {
 		}
 		// fetch the query
 		searchResults = await searchResults.fetch();
-
-		const rooms = searchResults.toJSON();
+		const rooms = searchResults.rows;
 
 		// Sets average rating for each room
 		for (var i = 0; i < rooms.length; i++) {
@@ -604,6 +604,8 @@ class RoomController {
 
 			await asyncForEach(rooms, async (item) => {
 				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
+					item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
+					item.towerName = (await item.tower().fetch()).name;
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
 						code: code

@@ -399,18 +399,18 @@ class HomeController {
 	*
 	*/
 	async getAvailableRooms ({ auth, view }) {
-		let towerOrder;
 		// If the tower is West then set the order to descending, else ascending
-		towerOrder = (await auth.user.getUserTower() === 'West') ? 'desc' : 'asc';
+		let towerOrder = (await auth.user.getUserTower() === 'West') ? 'asc' : 'desc';
 
 		// look for rooms that are open
 		// order all rooms in the database by closest to the user's floor and tower
 		// order by ascending seats number and fetch results
+		// TODO: floor_id -> floor, tower_id
 		let searchResults = await Room
 			.query()
 			.where('state_id', 1)
-			.orderByRaw('ABS(floor-' + auth.user.floor + ') ASC')
-			.orderBy('tower', towerOrder)
+			.orderByRaw('ABS(floor_id-' + auth.user.floor_id + ') ASC')
+			.orderBy('tower_id', towerOrder)
 			.orderBy('seats', 'asc')
 			.fetch();
 		const rooms = searchResults.toJSON();
