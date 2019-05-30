@@ -111,12 +111,30 @@ class HomeController {
 	*
 	*/
 	async userDashboard ({ view, auth }) {
-		const code = await this.getAvailableRooms({ auth, view });
-		const freqRooms = await this.getFreqBooked({ auth });
-		const upcomming = await this.getUpcomming({ auth });
+		// get user with default floor and tower
+		let user = await User.query()
+			.where('id', auth.user.id)
+			.with('floor').with('tower')
+			.with('building')
+			.firstOrFail();
+
+		user = user.toJSON();
+
+		const code = await this.getAvailableRooms({ view, user, auth });
+		const freqRooms = await this.getFreqBooked({ user, auth });
+		const upcomming = await this.getUpcomming({ user, auth });
 		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
-		return view.render('userPages.userDash', { code, freqRooms, upcomming, userId, fromTime: searchValues.fromTime, toTime: searchValues.toTime, dropdownSelection: searchValues.dropdownSelection });
+
+		return view.render('userPages.userDash', {
+			code,
+			freqRooms,
+			upcomming,
+			userId,
+			fromTime: searchValues.fromTime,
+			toTime: searchValues.toTime,
+			dropdownSelection: searchValues.dropdownSelection
+		});
 	}
 
 	/**
@@ -126,17 +144,27 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async adminDashboard ({ view }) {
-		const userStats = await this.getUserStats();
-		const roomStats = await this.getRoomStats();
-		const issueStats = await this.getIssueStats();
-		const bookings = await this.getBookings();
-		const roomStatusStats = await this.getRoomStatusStats();
-		const roomIssueStats = await this.getRoomIssueStats();
-		const topFiveRooms = await this.getRoomPopularity();
-		const highestRatedRooms = await this.getRoomRatings();
+	async adminDashboard ({ view, request }) {
+		const selectedBuilding = request.cookie('selectedBuilding');
 
-		return view.render('adminPages.adminDash', { userStats: userStats, roomStats: roomStats, issueStats: issueStats, bookings: bookings, roomStatusStats: roomStatusStats, roomIssueStats: roomIssueStats, topFiveRooms: topFiveRooms, highestRatedRooms: highestRatedRooms });
+		const userStats = await this.getUserStats(selectedBuilding);
+		const roomStats = await this.getRoomStats(selectedBuilding);
+		const issueStats = await this.getIssueStats(selectedBuilding);
+		const bookings = await this.getBookings(selectedBuilding);
+		const roomStatusStats = await this.getRoomStatusStats(selectedBuilding);
+		const roomIssueStats = await this.getRoomIssueStats(selectedBuilding);
+		const topFiveRooms = await this.getRoomPopularity(selectedBuilding);
+		const highestRatedRooms = await this.getTopRatedRooms(selectedBuilding);
+
+		return view.render('adminPages.adminDash', {
+			userStats,
+			roomStats,
+			issueStats,
+			bookings,
+			roomStatusStats,
+			roomIssueStats,
+			topFiveRooms,
+			highestRatedRooms });
 	}
 
 	/****************************************
@@ -150,7 +178,7 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getUserStats () {
+	async getUserStats (selectedBuilding) {
 		// retrieves all the users form the database
 		const allUsers = await User.getCount();
 		// const allUsers = results.toJSON();
@@ -161,6 +189,7 @@ class HomeController {
 		// queries the users table to retrieve the users for the current and previous month
 		let usersRegisteredThisMonth = await User
 			.query()
+			.where('building_id', selectedBuilding.id)
 			.whereRaw("strftime('%Y-%m', created_at) = ?", [date.format('YYYY-MM')]) // eslint-disable-line
 			.getCount();
 
@@ -185,14 +214,18 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getRoomStats () {
-		// retrieves all the users form the database
-		const results = await Room.all();
-		const rooms = results.toJSON();
+	async getRoomStats (selectedBuilding) {
+		var rooms = await Room
+			.query()
+			.where('building_id', selectedBuilding.id)
+			.fetch();
+
+		rooms = rooms.toJSON();
 
 		// Retrieve number of active rooms
 		let countActive = await Room
 			.query()
+			.where('building_id', selectedBuilding.id)
 			.where('state_id', 1)
 			.count();
 
@@ -211,9 +244,13 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getIssueStats () {
+	async getIssueStats (selectedBuilding) {
 		// retrieves all the users form the database
-		const results = await Report.all();
+		const results = await Report
+			.query()
+			.where('building_id', selectedBuilding.id)
+			.fetch();
+
 		const issues = results.toJSON();
 
 		// return the number of users
@@ -227,7 +264,7 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getBookings () {
+	async getBookings (selectedBuilding) {
 		// initialize the moment.js object to act as our date
 		const date = moment();
 
@@ -239,6 +276,7 @@ class HomeController {
 		for (let i = 0; i < 6; i++) {
 			let bookings = await Booking
 				.query()
+				.where('building_id', selectedBuilding.id)
 				.whereRaw("strftime('%Y-%m', bookings.'from') = ?", [date.format('YYYY-MM')]) // eslint-disable-line
 				.count();
 
@@ -268,22 +306,25 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getRoomStatusStats () {
+	async getRoomStatusStats (selectedBuilding) {
 		// Retrieve number of active rooms
 		let countActive = await Room
 			.query()
+			.where('building_id', selectedBuilding.id)
 			.where('state_id', 1)
 			.count();
 
 		// Retrieve number of deactive rooms
 		let countDeactive = await Room
 			.query()
+			.where('building_id', selectedBuilding.id)
 			.where('state_id', 2)
 			.count();
 
 		// Retrieve number of rooms under maintenance
 		let countMaint = await Room
 			.query()
+			.where('building_id', selectedBuilding.id)
 			.where('state_id', 3)
 			.count();
 
@@ -299,27 +340,30 @@ class HomeController {
 
 	/**
 	*
-	* Retrieve the number of pending, under review, and deactivated rooms in the database.
+	* Retrieve the number of open, pending, and closed issues for graph.
 	*
 	* @param {view}
 	*
 	*/
-	async getRoomIssueStats () {
+	async getRoomIssueStats (selectedBuilding) {
 		// Retrieve number of issues that are pending
 		let countPending = await Report
 			.query()
+			.where('building_id', selectedBuilding.id)
 			.where('report_status_id', 1)
 			.count();
 
 		// Retrieve number of issues that are under review
 		let countUnderReview = await Report
 			.query()
+			.where('building_id', selectedBuilding.id)
 			.where('report_status_id', 2)
 			.count();
 
 		// Retrieve number of issues that are resolved
 		let countResolved = await Report
 			.query()
+			.where('building_id', selectedBuilding.id)
 			.where('report_status_id', 3)
 			.count();
 
@@ -340,10 +384,11 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getRoomPopularity () {
+	async getRoomPopularity (selectedBuilding) {
 		// Retrieves the top five rooms with the highest number of bookings
 		let bookings = await Booking
 			.query()
+			.where('building_id', selectedBuilding.id)
 			.select('room_id')
 			.count('room_id as total')
 			.orderBy('total', 'desc')
@@ -371,19 +416,17 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getRoomRatings () {
-		// Retrieves the top five highest rated rooms
-		let ratings = await Review
-			.query()
-			.select('*')
-			.avg('rating as avgRating')
-			.orderBy('avgRating', 'desc')
-			.count('review as totalReviews')
-			.groupBy('room_id')
-			.limit(5)
-			.innerJoin('rooms', 'reviews.room_id', 'rooms.id');
+	async getTopRatedRooms (selectedBuilding) {
+		// get top 5 rated rooms
+		let topRatedRooms = await Room.query().where('building_id', selectedBuilding.id).orderBy('avg_rating', 'desc').limit(5).fetch();
+		topRatedRooms = topRatedRooms.toJSON();
 
-		return ratings;
+		// get review counts for each room
+		for (var index = 0; index < topRatedRooms.length; index++) {
+			topRatedRooms[index].totalReviews = await Review.query().where('room_id', topRatedRooms[index].id).getCount();
+		}
+
+		return topRatedRooms;
 	}
 
 	/****************************************

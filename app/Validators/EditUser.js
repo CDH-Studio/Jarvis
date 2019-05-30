@@ -30,7 +30,8 @@ class EditUser {
 			firstName: 'required|max:50',
 			lastName: 'required|max:50',
 			floor: 'required|integer|requiredDropdown',
-			tower: 'required|integer|requiredDropdown'
+			tower: 'required|integer|requiredDropdown',
+			building: 'required|integer|requiredDropdown'
 		};
 	}
 	// Custom error messages
