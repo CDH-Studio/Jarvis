@@ -126,9 +126,6 @@ class HomeController {
 		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
 
-		console.log(freqRooms);
-
-
 		return view.render('userPages.userDash', {
 			code,
 			freqRooms,

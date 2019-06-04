@@ -361,8 +361,6 @@ class UserController {
 	async login ({ request, auth, response, session }) {
 		const { email, password } = request.all();
 
-		console.log('hello');
-
 		const user = await User
 			.query()
 			.where('email', email.toLowerCase())

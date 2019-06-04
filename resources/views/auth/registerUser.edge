@@ -16,6 +16,11 @@
 							<div class="p-5">
 								<div class='text-left'>
 									<img class='login-logo mb-3' src='/logo_full_dark.png' alt='Jarvis Logo'>
+									@if(antl.currentLocale() =="en")
+										<a class='btn btn-primary btn-user float-right' href='/switch/fr'>FR</a>
+									@else
+										<a class='btn btn-primary btn-user float-right' href='/switch/en'>EN</a>
+									@endif
 								</div>
 								<div class="text-left">
 									<h1 class="h4 text-gray-900 mb-4">{{ antl.formatMessage('registerUser.title') }}</h1>
@@ -79,9 +84,9 @@
 									<div class='form-row'>
 										<div class='col'>
 											<div class='form-group mb-2'>
-												<label for='building'>Building</label>
+												<label for='building'>{{ antl.formatMessage('registerUser.building') }}</label>
 												<select id='building' name='building' class='form-control text-capitalize'>
-													<option value='undefined' {{ old('building') == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Building</option>
+													<option value='undefined' {{ old('building') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.building') }}</option>
 													@each(buildingOption in formOptions.buildings)
 														<option value='{{buildingOption.id}}' {{ old('building') == buildingOption.id ? 'selected' : '' }}>{{buildingOption.name}}</option>
 													@endeach
