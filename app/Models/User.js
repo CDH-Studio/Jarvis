@@ -95,7 +95,7 @@ class User extends Model {
 
 	async getUserTower () {
 		try {
-			var tower = await Tower.findOrFail(this.tower);
+			var tower = await Tower.findOrFail(this.tower_id);
 			return tower.name;
 		} catch (error) {
 			logger.error('Tower Lookup Failed');

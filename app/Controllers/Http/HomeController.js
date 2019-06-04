@@ -120,11 +120,14 @@ class HomeController {
 
 		user = user.toJSON();
 
-		const code = await this.getAvailableRooms({ view, user });
-		const freqRooms = await this.getFreqBooked({ user });
-		const upcomming = await this.getUpcomming({ user });
+		const code = await this.getAvailableRooms(user, view);
+		const freqRooms = await this.getFreqBooked( user );
+		const upcomming = await this.getUpcomming( user );
 		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
+
+		console.log(freqRooms);
+
 
 		return view.render('userPages.userDash', {
 			code,
@@ -441,9 +444,10 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getAvailableRooms ({ auth, view }) {
+	async getAvailableRooms (user, view) {
+
 		// If the tower is West then set the order to descending, else ascending
-		let towerOrder = (await auth.user.getUserTower() === 'West') ? 'desc' : 'asc';
+		let towerOrder = (await user.tower.name === 'West') ? 'desc' : 'asc';
 
 		// look for rooms that are open
 		// order all rooms in the database by closest to the user's floor and tower
@@ -451,8 +455,8 @@ class HomeController {
 		let searchResults = await Room
 			.query()
 			.where('state_id', 1)
-			.orderByRaw('ABS(floor-' + auth.user.floor + ') ASC')
-			.orderBy('tower', towerOrder)
+			.orderByRaw('ABS(floor_id-' + user.floor.id + ') ASC')
+			.orderBy('tower_id', towerOrder)
 			.orderBy('seats', 'asc')
 			.fetch();
 		const rooms = searchResults.toJSON();
@@ -498,22 +502,25 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getFreqBooked ({ auth }) {
+	async getFreqBooked ( user ) {
+
+
 		// get the top 2 freq booked rooms that are available and join with the rooms table to find the room name
 		let searchResults = await Booking
 			.query()
-			.where('user_id', auth.user.id)
+			.where('user_id', user.id)
 			.select('*')
 			.count('room_id as total')
 			.groupBy('room_id')
 			.orderBy('total', 'desc')
 			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
-			.limit(2);
+			.limit(2)
+
 
 		// set the average rating for the rooms
-		for (let i = 0; i < searchResults.length; i++) {
-			searchResults[i].averageRating = await this.getAverageRating(searchResults[i].id);
-		}
+		// for (let i = 0; i < searchResults.length; i++) {
+		// 	searchResults[i].averageRating = await this.getAverageRating(searchResults[i].id);
+		// }
 
 		if (searchResults <= 0) {
 			return null;
@@ -643,11 +650,11 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getUpcomming ({ auth }) {
+	async getUpcomming ( user ) {
 		// get the next 3 upcomming bookings
 		let searchResults = await Booking
 			.query()
-			.where('user_id', auth.user.id)
+			.where('user_id', user.id)
 			.where('status', 'Approved')
 			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.select('*')
