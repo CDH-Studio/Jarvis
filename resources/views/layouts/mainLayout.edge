@@ -95,7 +95,6 @@
 
 
               @if(auth.user.role_id===1)
-
                 <form class="form-inline">
                   <div class="dropdown">
                    <a class="btn btn-outline-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -113,6 +112,9 @@
                   </div>
                 </form>
               @else
+                <li class="nav-item dropdown no-arrow">
+                   <a class="nav-link dropdown-toggle text-grey small" href='https://docs.google.com/forms/d/e/1FAIpQLSdy0b5w0p0P-lNET54LsryEsGDN-7f16tr6leO5TH3kjbdPTg/viewform?usp=sf_link' target="_blank"><i class="fas fa-comment mr-1"></i>Feedback</a>
+                </li>
                 <li class="nav-item dropdown no-arrow">
                   @if(antl.currentLocale() =="en")
                    <a class="nav-link dropdown-toggle text-grey small" href='/switch/fr'><i class="fas fa-globe mr-1"></i>FR</a>
