@@ -676,6 +676,8 @@ class RoomController {
 		const checkRoomAvailability = async () => {
 			let results = [];
 			await asyncForEach(rooms, async (item) => {
+				console.log('item', item)
+				console.log('floor_id', item.floor_id)
 				if (await this.getRoomAvailability(date, from, to, item.floor_id, item.calendar)) {
 					item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
 					item.towerName = (await item.tower().fetch()).name;
