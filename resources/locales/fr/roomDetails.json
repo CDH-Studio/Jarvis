@@ -1,0 +1,41 @@
+{
+	"title": "Room details",
+	"viewMap": "View Map",
+	"tableSeats": "Table Seats",
+	"capacity": "Capacity",
+	"comments": "Comments",
+	"extraEquipment": "Extra Equipment",
+
+	"bookRoom": "Book room",
+	"bookingName": "Meeting name",
+	"bookingNameHelp": "Select a name for the room booking",
+	"bookingDate": "Date",
+	"bookingDateHelp": "The date may not occur more than 3 months in advance",
+	"bookingStart": "Start time",
+	"bookingEnd": "End time",
+	"bookingRecurring": "Recurring",
+	"bookingButton": "Book Room",
+
+	"issueType": "Issue Type",
+	"issueComment": "comment",
+	"cancel": "cancel",
+	"report": "report",
+	"reportIssue": "Report Issue",
+	"ratings": "No ratings",
+
+	"reviewHeading": "Reviews",
+	"noReviews": "No reviews available",
+	"reviewCount": "Reviews",
+
+	"writeReview": "Write a review",
+	"editReview": "Edit Review",
+	"reviewRating": "Rating",
+	"reviewComment": "Comment",
+	"reviewPicture": "Picture",
+	"reviewPictureSize": "Choose file (Max: 2MB)",
+	"reviewPictureRequirements": "Image cannot be edited after upload. It can only be deleted",
+	"reviewPictureRequirementsDelete": "Leave blank to delete last uploaded photo.",
+	"reviewUpdateButton": "Update",
+	"reviewDeleteButton": "Delete",
+	"reviewSubmitButton": "Submit"
+}
