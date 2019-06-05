@@ -121,8 +121,8 @@ class HomeController {
 		user = user.toJSON();
 
 		const code = await this.getAvailableRooms(user, view);
-		const freqRooms = await this.getFreqBooked( user );
-		const upcomming = await this.getUpcomming( user );
+		const freqRooms = await this.getFreqBooked(user);
+		const upcomming = await this.getUpcomming(user);
 		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
 
@@ -442,7 +442,6 @@ class HomeController {
 	*
 	*/
 	async getAvailableRooms (user, view) {
-
 		// If the tower is West then set the order to descending, else ascending
 		let towerOrder = (await user.tower.name === 'West') ? 'desc' : 'asc';
 
@@ -499,9 +498,7 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getFreqBooked ( user ) {
-
-
+	async getFreqBooked (user) {
 		// get the top 2 freq booked rooms that are available and join with the rooms table to find the room name
 		let searchResults = await Booking
 			.query()
@@ -511,13 +508,7 @@ class HomeController {
 			.groupBy('room_id')
 			.orderBy('total', 'desc')
 			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
-			.limit(2)
-
-
-		// set the average rating for the rooms
-		// for (let i = 0; i < searchResults.length; i++) {
-		// 	searchResults[i].averageRating = await this.getAverageRating(searchResults[i].id);
-		// }
+			.limit(2);
 
 		if (searchResults <= 0) {
 			return null;
@@ -647,7 +638,7 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getUpcomming ( user ) {
+	async getUpcomming (user) {
 		// get the next 3 upcomming bookings
 		let searchResults = await Booking
 			.query()

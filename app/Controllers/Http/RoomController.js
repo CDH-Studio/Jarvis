@@ -452,8 +452,8 @@ class RoomController {
 			.with('floor')
 			.with('tower')
 			.with('features', (builder) => {
-			    builder.orderBy('id', 'desc')
-			  })
+				builder.orderBy('id', 'desc');
+			})
 			.fetch();
 
 		const rooms = results.toJSON();
@@ -465,7 +465,6 @@ class RoomController {
 
 		// if user is admin
 		if (user.role.name === 'admin') {
-
 			// Retrieve number of active rooms
 			let countActive = await Room
 				.query()
@@ -494,7 +493,6 @@ class RoomController {
 			stats['deactive'] = countDeactive[0]['count(*)'];
 			stats['maintenance'] = countMaint[0]['count(*)'];
 
-		
 			// get all builig info admin nav bar since this route is shared with regular users and admin
 			// therefore, the admin middle-ware can't retrieve building info to pass to view
 			var allBuildings = await Building.all();
