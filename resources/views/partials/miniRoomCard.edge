@@ -6,8 +6,8 @@
 					@!component('components.stars', rating = room.averageRating)
 				</div>
 				<div>
-					<span class='mr-3'>Table seats: {{room.seats}}</span>
-					<span>Capacity: {{room.capacity}}</span>
+					<span class='mr-3'>{{ antl.formatMessage('roomSearchCard.tableSeats') }}: {{room.seats}}</span>
+					<span>{{ antl.formatMessage('roomSearchCard.tableSeats') }}: {{room.capacity}}</span>
 				</div>
 			@endslot
 		@endcomponent

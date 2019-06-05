@@ -9,11 +9,12 @@ class RoomsSchema extends Schema {
 			table.increments();
 			table.string('name', 20).notNullable().unique();
 			table.string('fullName', 100).notNullable();
-			table.integer('floor', 3).notNullable();
-			table.string('tower', 5).notNullable();
+			table.integer('floor_id').unsigned().references('id').inTable('floors').notNullable();
+			table.integer('tower_id').unsigned().references('id').inTable('towers').notNullable();
+			table.integer('building_id').unsigned().references('id').inTable('buildings').notNullable();
 			table.string('telephone', 20);
-			table.integer('seats', 500).notNullable();
-			table.integer('capacity', 500).notNullable();
+			table.integer('seats').notNullable();
+			table.integer('capacity').notNullable();
 			table.bool('projector');
 			table.bool('whiteboard');
 			table.bool('flipchart');
@@ -26,7 +27,8 @@ class RoomsSchema extends Schema {
 			table.string('floorplan', 100);
 			table.string('picture', 100);
 			table.string('calendar', 250).defaultTo('insertCalendarHere');
-			table.integer('state').notNullable();
+			table.integer('avg_rating').unsigned().notNullable();
+			table.integer('state_id').notNullable();
 			table.timestamps();
 
 			const query = require('../rawQueries/populateRooms');

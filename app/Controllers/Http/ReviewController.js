@@ -1,5 +1,6 @@
 'use strict';
 const Review = use('App/Models/Review');
+const Room = use('App/Models/Room');
 const Helpers = use('Helpers');
 const Drive = use('Drive');
 
@@ -11,13 +12,16 @@ class ReviewController {
 	 */
 	async add ({ request, response, session, auth, params }) {
 		try {
+			// Check if room exists
+			const room = await Room.findOrFail(params.id);
+
 			// Retrieves user input
 			const body = request.all();
 
 			// Populates the review object's values
 			const review = new Review();
 			review.user_id = auth.user.id;
-			review.room_id = params.id;
+			review.room_id = room.id;
 			review.rating = body.rating;
 			review.review = body.review;
 
@@ -40,6 +44,12 @@ class ReviewController {
 			}
 
 			await review.save();
+
+			// Update Room Average
+			const reviews = await Review.query().where('room_id', room.id).avg('rating as avgRating').first();
+			room.avg_rating = reviews.avgRating;
+			await room.save();
+
 			session.flash({ notification: 'Review Added!' });
 
 			return response.route('showRoom', { id: params.id });
@@ -55,6 +65,8 @@ class ReviewController {
 	 */
 	async edit ({ request, response, session, auth, params }) {
 		try {
+			// Check if room exists
+			const room = await Room.findOrFail(params.id);
 			// Retrieves user input
 			const body = request.all();
 
@@ -75,7 +87,7 @@ class ReviewController {
 				let searchResults = await Review
 					.query()
 					.where('user_id', auth.user.id)
-					.where('room_id', params.id)
+					.where('room_id', room.id)
 					.fetch();
 
 				const reviews = searchResults.toJSON();
@@ -95,7 +107,7 @@ class ReviewController {
 				});
 
 				// Populates the review object's values
-				reviewPictureString = `uploads/reviewPictures/${params.id}_${auth.user.id}_reviewPicture.png`;
+				reviewPictureString = `uploads/reviewPictures/${room.id}_${auth.user.id}_reviewPicture.png`;
 			}
 
 			// Update the review in the database
@@ -109,9 +121,14 @@ class ReviewController {
 					reviewPicture: reviewPictureString
 				});
 
+			// update average room rating
+			const reviews = await Review.query().where('room_id', room.id).avg('rating as avgRating').first();
+			room.avg_rating = reviews.avgRating;
+			await room.save();
+
 			session.flash({ notification: 'Review Updated!' });
 
-			return response.route('showRoom', { id: params.id });
+			return response.route('showRoom', { id: room.id });
 		} catch (err) {
 			console.log(err);
 		}
@@ -124,20 +141,17 @@ class ReviewController {
 	 */
 	async delete ({ request, response, session, auth, params }) {
 		try {
+			// Check if room exists
+			const room = await Room.findOrFail(params.id);
+
 			// retrives the reviews in the database
 			let searchResults = await Review
 				.query()
 				.where('user_id', auth.user.id)
-				.where('room_id', params.id)
-				.fetch();
+				.where('room_id', room.id)
+				.firstOrFail();
 
-			const reviews = searchResults.toJSON();
-
-			// stores the unique review id in reviewId
-			const reviewId = reviews[0].id;
-
-			// find the review object
-			const review = await Review.findBy('id', reviewId);
+			const review = searchResults.toJSON();
 
 			if (review.reviewPicture != null) {
 				// deletes the review picture in the file system
@@ -145,7 +159,16 @@ class ReviewController {
 			}
 
 			// deletes the review object
-			await review.delete();
+			await searchResults.delete();
+
+			// update average room rating
+			let roomRating = await Review.query().where('room_id', room.id).avg('rating as avgRating').first();
+			if (roomRating.avgRating != null) {
+				room.avg_rating = roomRating.avgRating;
+			} else {
+				room.avg_rating = 0;
+			}
+			await room.save();
 
 			session.flash({ notification: 'Review Deleted!' });
 

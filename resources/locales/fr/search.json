@@ -1,0 +1,14 @@
+{
+	"browserTab": "Recherche une salle",
+	"date": "Date",
+	"timeRange": "Intervalle de temps",
+	"TRFrom": "De",
+	"TRTo": "À",
+	"MDHeading": "Durée de la réunion",
+	"MDHours": "Heures",
+	"MDMinutes": "Minutes",
+	"locationHeading": "Lieu",
+	"locationAir": "Sélectionnez un étage",
+	"maxCapacity": "Capacité maximum",
+	"numberSeats": "Nombre de tables de sièges"
+}

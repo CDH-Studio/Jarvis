@@ -47,50 +47,53 @@
                                 @if(!isAdmin)
                                     <div class='form-row'>
                                         <div class='col'>
-                                            <label for='floor'>Floor</label>
-                                            @if(hasErrorFor('floor'))
-                                                <select class='form-control is-invalid' id='floor' name='floor' onchange='removeErrorClass("floor")'>
-                                                    <option value='1' {{ user.floor == '1' ? 'selected' : '' }}>1</option>
-                                                    <option value='2' {{ user.floor == '2' ? 'selected' : '' }}>2</option>
-                                                    <option value='3' {{ user.floor == '3' ? 'selected' : '' }}>3</option>
-                                                    <option value='4' {{ user.floor == '4' ? 'selected' : '' }}>4</option>
-                                                    <option value='5' {{ user.floor == '5' ? 'selected' : '' }}>5</option>
-                                                    <option value='6' {{ user.floor == '6' ? 'selected' : '' }}>6</option>
-                                                    <option value='7' {{ user.floor == '7' ? 'selected' : '' }}>7</option>
-                                                    <option value='8' {{ user.floor == '8' ? 'selected' : '' }}>8</option>
-                                                    <option value='9' {{ user.floor == '9' ? 'selected' : '' }}>9</option>
+                                            <div class='form-group mb-2'>
+                                                <label for='building'>Building</label>
+                                                <select id='building' name='building' class='form-control text-capitalize'>
+                                                    <option value='undefined' {{ old('building') == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Building</option>
+                                                    @each(buildingOption in formOptions.buildings)
+                                                        <option value='{{buildingOption.id}}' {{ old('building', user.building_id) == buildingOption.id ? 'selected' : '' }}>{{buildingOption.name}}</option>
+                                                    @endeach
                                                 </select>
-                                                <div class='invalid-feedback'>{{ getErrorFor('floor') }}</div>
-                                            @else
-                                                <select class='form-control' id='floor' name='floor'>
-                                                    <option value='1' {{ user.floor == '1' ? 'selected' : '' }}>1</option>
-                                                    <option value='2' {{ user.floor == '2' ? 'selected' : '' }}>2</option>
-                                                    <option value='3' {{ user.floor == '3' ? 'selected' : '' }}>3</option>
-                                                    <option value='4' {{ user.floor == '4' ? 'selected' : '' }}>4</option>
-                                                    <option value='5' {{ user.floor == '5' ? 'selected' : '' }}>5</option>
-                                                    <option value='6' {{ user.floor == '6' ? 'selected' : '' }}>6</option>
-                                                    <option value='7' {{ user.floor == '7' ? 'selected' : '' }}>7</option>
-                                                    <option value='8' {{ user.floor == '8' ? 'selected' : '' }}>8</option>
-                                                    <option value='9' {{ user.floor == '9' ? 'selected' : '' }}>9</option>
-                                                </select>
-                                            @endif
-                                        </div>
-                                        <div class='col'>
-                                            <label for='tower'>Tower</label>
-                                            @if(hasErrorFor('tower'))
-                                                <select class='form-control is-invalid' name='tower' id='tower' onchange='removeErrorClass("tower")'>
-                                                    <option value=1 {{ user.tower == 1 ? 'selected' : '' }}>East</option>
-                                                    <option value=2 {{ user.tower == 2 ? 'selected' : '' }}>West</option>
-                                                </select>
-                                                <div class='invalid-feedback'>{{ getErrorFor('tower') }}</div>
-                                            @else
-                                                <select class='form-control' name='tower' id='tower'>
-                                                    <option value=1 {{ user.tower == 1 ? 'selected' : '' }}>East</option>
-                                                    <option value=2 {{ user.tower == 2 ? 'selected' : '' }}>West</option>
-                                                </select>
-                                            @endif
+                                                @if(hasErrorFor('building'))
+                                                    <div class='invalid-feedback d-block'>{{ getErrorFor('building') }}</div>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
+
+                                    <div class='form-row'>
+                                        <div class='col'>
+                                            <div class='form-group mb-2'>
+                                                <label for='tower'>{{ antl.formatMessage('registerUser.tower') }}</label>
+                                                <select id='tower' name='tower' class='form-control text-capitalize'>
+                                                    <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.tower') }}</option>
+                                                    @each(towerOption in formOptions.towers)
+                                                        <option value='{{towerOption.id}}' {{ old('tower', user.tower_id) == towerOption.id ? 'selected' : '' }}>{{towerOption.name}}</option>
+                                                    @endeach
+                                                </select>
+                                                @if(hasErrorFor('tower'))
+                                                    <div class='invalid-feedback d-block'>{{ getErrorFor('tower') }}</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        
+                                        <div class='col'>
+                                            <div class='form-group mb-2'>
+                                                <label for='floor'>{{ antl.formatMessage('registerUser.floor') }}</label>
+                                                <select id='floor' name='floor' class='form-control text-capitalize'>
+                                                    <option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.floor') }}</option>
+                                                    @each(floorOption in formOptions.floors)
+                                                        <option value='{{floorOption.id}}' {{ old('floor', user.floor_id) == floorOption.id ? 'selected' : '' }}>{{floorOption.name}}</option>
+                                                    @endeach
+                                                </select>
+                                                @if(hasErrorFor('floor'))
+                                                    <div class='invalid-feedback d-block'>{{ getErrorFor('floor') }}</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 @endif
 
                                 <div class='row'>

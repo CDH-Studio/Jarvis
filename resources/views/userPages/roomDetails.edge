@@ -18,16 +18,16 @@
                         <div class='' style='padding-top:6px;'>
                             <h5 class="m-0 font-weight-bold text-white">
                                 {{--  If the room is closed or under maintence then display info  --}}
-                                @if(room.state == 2)
+                                @if(room.state_id == 2)
                                     <i class='fa fa-times-circle color-danger'></i> Closed - 
-                                @elseif(room.state == 3)
+                                @elseif(room.state_id == 3)
                                     <i class="fas fa-tools color-warning"></i> Under Maintenance -  
                                 @endif
                                 {{room.name}}
                             </h5>
                         </div>
                         <div class='flex-grow-1 text-right'>
-                            @if(isAdmin)
+                            @if(user.role.name === 'admin')
                                 <button class="btn btn-info btn-icon-split" onclick="window.location='{{route('viewBookings', { id: room.id, bookingType: 'room'}) }}';">
                                     <span class="icon text-white-50"><i class="fas fa-book"></i></span>
                                     <span class="text">View bookings</span>
@@ -59,7 +59,7 @@
                                 <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/default.png'>
                             @endif        
                             <a class='link-color' href='' style='display:block; text-align:center;'  data-toggle='modal' data-target='#mapModal'>
-                                <i class='fas fa-external-link-alt'></i>
+                                <i class='fas fa-external-link-alt mt-3'></i>
                                 View Map
                             </a>             
                         </div>
@@ -67,21 +67,23 @@
                             <b>{{ room.fullName }}</b>
                             <div>
                                 <a href="#reviews" class="link-style-none">
-                                    @!component('components/stars', rating=room.rating)
+                                    @!component('components/stars', rating=room.avg_rating)
                                 </a>
                             </div>
-
                             <div class="mt-2 mb-2">
-                                <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong> {{ room.floor }}  {{ room.tower }}
+                                <strong><i class="fas fa-building fa-fw"></i></strong> {{ room.building.name }}
+                            </div>
+                            <div class="mt-2 mb-2">
+                                <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong> {{ room.floor.name }}  {{ room.tower.name }}
                             </div>
                             <div class="mt-2 mb-3">
                                 <strong><i class="fas fa-phone fa-fw"></i></strong> {{ room.telephone }}
                             </div>
                             <hr>
-                            <div class="mt-2 mb-3">
+                            <div class="mt-2 mb-2">
                                 <strong>Table Seats:</strong>  {{ room.seats }}
                             </div>
-                            <div class="mt-2 mb-3">
+                            <div class="mt-1 mb-2">
                                 <strong>Capacity:</strong> {{ room.capacity }}
                             </div>
                             @if(room.comment && room.comment != " ")
@@ -97,55 +99,26 @@
             <div class="card shadow mb-4">
                 <div class="card-body m-2">
                     <div class="row justify-content-around">
-                        <div class="col-6 col-lg-2  text-center mb-3 mb-lg-0">
-                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Display Tools">
-                                <i class="fas fa-tv"></i>
-                            </span>
-                                @if(room.projector == 1)
-                                    <p class="mb-0">Projector</p>
+                        @each(featureCategory in roomFeatureCategory)
+                            <div class="col-6 col-lg-2  text-center mb-3 mb-lg-0">
+                                <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="{{featureCategory.name}}">
+                                    <i class="{{featureCategory.icon}}"></i>
+                                </span>
+                                @each(roomFeature in roomFeatures)
+                                    @if(roomFeature.feature.category.name==$parent.featureCategory.name)
+                                        <p class="mb-0">{{ truncate(roomFeature.feature.name, 13, '.') }}</p>   
+                                    @endif 
+                                @endeach
+                                @if(featureCategory=='Other')
+                                    <p class="mb-0">{{room.extraEquipment}}</p>
                                 @endif
-                                @if(room.pc == 1)
-                                    <p class="mb-0">PC</p>
-                                @endif
-                                @if(room.surfaceHub == 1)
-                                    <p class="mb-0">Surface Hub</p>
-                                @endif
+                            </div>
+                        @endeach
+                        @if(room.extraEquipment)
+                        <div class="col-12 col-lg-12 text-center mt-3">
+                            <p class="mb-0"><strong>Extra Equipment: </strong>{{room.extraEquipment}}</p>
                         </div>
-                        <div class="col-6 col-lg-2  text-center mb-3 mb-lg-0">
-                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Communication Tools">
-                                <i class="fas fa-headset"></i>
-                            </span>
-                                @if(room.audioConference == 1)
-                                    <p class="mb-0">Audio Conf.</p>
-                                @endif
-                                @if(room.videoConference == 1)
-                                    <p class="mb-0">Video Conf.</span></p> 
-                                @endif
-                        </div>
-                        <div class="col-6 col-lg-2 mb-3 text-center">
-                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Discussion Tools">
-                                <i class="fas fa-chalkboard-teacher"></i>
-                            </span>
-                            @if(room.flipchart == 1)
-                                <p class="mb-0">Flip Chart</p>
-                            @endif
-                            @if(room.whiteboard == 1)
-                                <p class="mb-0">Whiteboard</p>
-                            @endif
-                        </div>
-                        <div class="col-6 col-lg-2  mb-3 text-center">
-                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Connectivity">
-                                <i class="fas fa-wifi"></i>
-                            </span>
-                            <p class="mb-0">Wi-Fi</p>
-                        </div>
-                        <div class="col-6 col-lg-2 text-center">
-                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="Extra Equipment">
-                                <i class="fas fa-plus"></i>
-                            </span>
-                            <p class="mb-0">{{ room.extraEquipment }}</p>
-                        </div>                    
-                        </i>
+                        @endif
                     </div>    
                 </div>
             </div>
@@ -157,7 +130,7 @@
                     <h5 class="m-0 font-weight-bold text-primary">Book room</h5>
                 </div>
                 <div class="card-body" style="height:100%;">
-                    @if(!isAdmin && room.state == 1)
+                    @if(user.role.name === 'user' && room.state_id == 1)
                         <form action='{{ route('confirmBooking') }}' method='POST'  style="min-height:334px;">
                             {{ csrfField() }}
                             <input type='hidden' name='room' value={{ room.id }} /> 
@@ -343,7 +316,7 @@
                                 </div>
                                 <div class="col-4 text-center">
                                     @if(review.reviewPicture)
-                                        <img class="shadow" style ="width:auto; height:110px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
+                                        <img class="img-fluid img-thumbnail" style ="max-width:110px;" data-toggle="modal" data-target="#review-{{review.id}}" src=/{{review.reviewPicture}}>
                                     @endif
                                 </div>           
                             </div>
@@ -368,7 +341,7 @@
                     @endif
                 </div>
                 <div class="card-body">
-                    @if(isAdmin)
+                    @if(user.role.name === 'admin')
                         @!component('components.cardEmptyMessage',faIcon='fas fa-ban fa-6x', message='Review not available for admin')
                     @else
                         @if(!hasReview) 
@@ -406,8 +379,12 @@
                             <div class='row'>
                                 <div class='col form-group'>
                                     <label for='review'>Review <strong class='text-danger'>*</strong></label>
-                                        <textarea class='form-control' name='review' id='review' rows='5' >{{ old('review',  review.review) }}</textarea>
+                                    @if(hasErrorFor('review'))
+                                        <textarea class='form-control is-invalid' name='review' id='review' rows='5'>{{ old('review',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
+                                    @else
+                                        <textarea class='form-control' name='review' id='review' rows='5' >{{ old('review',  review.review) }}</textarea>
+                                    @endif
                                 </div> 
                             </div> 
 
@@ -489,7 +466,7 @@
            </div>
        </div>
     {{--  Only show to non-admin users  --}}
-    @if(!isAdmin)
+    @if(user.role.name === 'user')
         {{--  Reporting Modal Box  --}}
         <div class='modal fade' id='reportModal'>
             <div class='modal-dialog modal-dialog-centered confirmation-modal' role='document'>

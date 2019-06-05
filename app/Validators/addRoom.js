@@ -38,7 +38,7 @@ class AddRoom {
 			// telephoneNumber: "required| regex: ^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$",
 			tower: 'required|requiredDropdown',
 			maximumCapacity: 'required|integer|above:0',
-			name: 'required|unique:rooms',
+			name: 'required|unique:rooms,name',
 			state: 'required|requiredDropdown'
 		};
 	}

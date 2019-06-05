@@ -111,12 +111,12 @@ View Rooms
                                         <td class='text-center'>{{ room.name }}</td>
                                         <td class='text-center'>{{ room.fullName }}</td>
                                         <td class='text-center'>{{ room.telephone }}</td>
-                                        <td class='text-center'>{{ room.floor }}</td>
-                                        <td class='text-center'>{{ room.tower }} </td>
+                                        <td class='text-center'>{{ room.floor.name }}</td>
+                                        <td class='text-center'>{{ room.tower.name }} </td>
                                         <td class='text-center'>{{ room.capacity }}</td>
-                                        @if(room.state == 1)
+                                        @if(room.state_id == 1)
                                             <td class='text-'><i class="fas fa-circle td-success fa-xs mr-1"></i> Active</span></td>
-                                        @elseif(room.state == 2)
+                                        @elseif(room.state_id == 2)
                                             <td class='text-'><i class="fas fa-circle td-danger fa-xs mr-1"></i> Deactivated</span></td>
                                         @else
                                             <td class='text-'><i class="fas fa-circle td-warning fa-xs mr-1"></i> Maintenance</span></td>

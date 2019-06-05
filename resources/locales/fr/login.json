@@ -1,8 +1,8 @@
 {
-	"title": "Login",
-	"email": "Email",
-	"pass": "Password",
-	"forgot": "Forgot Password",
-	"submit": "Login",
-	"registerRedirect": "Create an account"
+	"title": "Ouvrir Une Session",
+	"email": "Courriel",
+	"pass": "Mot de passe",
+	"forgot": "Mot de passe oublié",
+	"submit": "Ouvrir Une Session",
+	"registerRedirect": "Créer Un Compte"
 }

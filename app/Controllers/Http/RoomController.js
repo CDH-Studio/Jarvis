@@ -1,5 +1,13 @@
 'use strict';
 const Room = use('App/Models/Room');
+const User = use('App/Models/User');
+const Building = use('App/Models/Building');
+const Floor = use('App/Models/Floor');
+const Tower = use('App/Models/Tower');
+const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
+const RoomFeature = use('App/Models/RoomFeature');
+const FeaturePivot = use('App/Models/FeaturesRoomsPivot');
+const RoomStatus = use('App/Models/RoomStatus');
 const Review = use('App/Models/Review');
 const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
@@ -81,9 +89,28 @@ class RoomController {
 		}
 		return variable;
 	}
+
 	async create ({ response, view, auth }) {
 		const actionType = 'Add Room';
-		return view.render('adminPages.addEditRoom', { actionType });
+
+		var formOptions = {};
+
+		var results = await RoomStatus.query().select('id', 'name').fetch();
+		formOptions.statuses = results.toJSON();
+		results = await Floor.query().select('id', 'name').fetch();
+		formOptions.floors = results.toJSON();
+		results = await Tower.query().select('id', 'name').fetch();
+		formOptions.towers = results.toJSON();
+		results = await RoomFeaturesCategory
+			.query()
+			.with('features', (builder) => {
+				builder.where('building_id', 1);
+			})
+			.select('id', 'name')
+			.fetch();
+		formOptions.roomFeatureCategory = results.toJSON();
+
+		return view.render('adminPages.addEditRoom', { actionType, formOptions });
 	}
 
 	/**
@@ -93,33 +120,14 @@ class RoomController {
 	 */
 	async add ({ request, response, session }) {
 		try {
-			// Retrieves user input
+			// get building
+			const selectedBuilding = request.cookie('selectedBuilding');
 			const body = request.all();
 
-			// Populates the room object's values
-			const room = new Room();
-			room.name = body.name;
-			room.fullName = body.fullName;
-			room.floor = body.floor;
-			room.tower = body.tower;
-			room.state = body.state;
-			room.telephone = body.telephoneNumber;
-			room.seats = body.tableSeats;
-			room.capacity = body.maximumCapacity;
-			room.projector = body.projectorCheck === '1' ? '1' : '0';
-			room.whiteboard = body.whiteboardCheck === '1' ? '1' : '0';
-			room.flipchart = body.flipChartCheck === '1' ? '1' : '0';
-			room.audioConference = body.audioCheck === '1' ? '1' : '0';
-			room.videoConference = body.videoCheck === '1' ? '1' : '0';
-			room.surfaceHub = body.surfaceHubCheck === '1' ? '1' : '0';
-			room.pc = body.pcCheck === '1' ? '1' : '0';
 			// Upload process - Floor Plan
 			const floorPlanImage = request.file('floorPlan', {
 				types: ['image'],
 				size: '2mb'
-			});
-			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-				name: `${room.name}_floorPlan.png`
 			});
 
 			// Upload process - Room Picture
@@ -127,6 +135,23 @@ class RoomController {
 				types: ['image'],
 				size: '2mb'
 			});
+
+			// Save room details in Rooms table
+			const room = new Room();
+			room.name = body.name;
+			room.fullName = body.fullName;
+			room.floor_id = body.floor;
+			room.tower_id = body.tower;
+			room.building_id = selectedBuilding.id;
+			room.State_id = body.State_id;
+			room.telephone = body.telephoneNumber;
+			room.seats = body.tableSeats;
+			room.capacity = body.maximumCapacity;
+
+			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
+				name: `${room.name}_floorPlan.png`
+			});
+
 			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
 				name: `${room.name}_roomPicture.png`
 			});
@@ -137,6 +162,19 @@ class RoomController {
 			room.extraEquipment = body.extraEquipment == null ? ' ' : body.extraEquipment;
 			room.comment = body.comment == null ? ' ' : body.extraEquipment;
 			await room.save();
+
+			// Save room feature in pivot table
+			const results = await RoomFeature.query().where('building_id', selectedBuilding.id).fetch();
+			const roomFeatures = results.toJSON();
+
+			for (var index = 0; index < roomFeatures.length; ++index) {
+				if (body[roomFeatures[index].name]) {
+					var feature = new FeaturePivot();
+					feature.room_id = room.id;
+					feature.feature_id = roomFeatures[index].id;
+					feature.save();
+				}
+			}
 
 			session.flash({
 				notification: 'Room Added! To add another room, click here',
@@ -157,9 +195,30 @@ class RoomController {
 	 */
 	async edit ({ params, view }) {
 		// Retrieves room object
-		const room = await Room.findBy('id', params.id);
+		var room = await Room.findBy('id', params.id);
+		room.features = await FeaturePivot.query().where('room_id', room.id).pluck('feature_id');
+		room = room.toJSON();
+
 		const actionType = 'Edit Room';
-		return view.render('adminPages.addEditRoom', { room: room, actionType });
+
+		var formOptions = {};
+
+		var results = await RoomStatus.query().select('id', 'name').fetch();
+		formOptions.statuses = results.toJSON();
+		results = await Floor.query().select('id', 'name').fetch();
+		formOptions.floors = results.toJSON();
+		results = await Tower.query().select('id', 'name').fetch();
+		formOptions.towers = results.toJSON();
+		results = await RoomFeaturesCategory
+			.query()
+			.with('features', (builder) => {
+				builder.where('building_id', 1);
+			})
+			.select('id', 'name')
+			.fetch();
+		formOptions.roomFeatureCategory = results.toJSON();
+
+		return view.render('adminPages.addEditRoom', { room, actionType, formOptions });
 	}
 
 	/**
@@ -215,24 +274,41 @@ class RoomController {
 			.update({
 				name: body.name,
 				fullName: body.fullName,
-				floor: body.floor,
-				tower: body.tower,
+				floor_id: body.floor,
+				tower_id: body.tower,
 				telephone: body.telephoneNumber,
 				seats: body.tableSeats,
 				capacity: body.maximumCapacity,
-				projector: body.projectorCheck === '1' ? '1' : '0',
-				whiteboard: body.whiteboardCheck === '1' ? '1' : '0',
-				flipchart: body.flipChartCheck === '1' ? '1' : '0',
-				audioConference: body.audioCheck === '1' ? '1' : '0',
-				videoConference: body.videoCheck === '1' ? '1' : '0',
-				surfaceHub: body.surfaceHubCheck === '1' ? '1' : '0',
-				pc: body.pcCheck === '1' ? '1' : '0',
 				floorplan: floorPlanStringPath,
 				picture: roomImageStringPath,
 				extraEquipment: body.extraEquipment == null ? ' ' : body.extraEquipment,
 				comment: body.comment == null ? ' ' : body.comment,
-				state: body.state
+				State_id: body.State_id
 			});
+
+		// save room features
+		const selectedBuilding = request.cookie('selectedBuilding');
+
+		const results = await RoomFeature.query().where('building_id', selectedBuilding.id).fetch();
+		const roomFeatures = results.toJSON();
+
+		// delete currently save room features
+		await FeaturePivot
+			.query()
+			.where('room_id', room.id)
+			.delete();
+
+		// re-save selected room features
+		var index;
+		for (index = 0; index < roomFeatures.length; ++index) {
+			if (body[roomFeatures[index].name]) {
+				const feature = new FeaturePivot();
+				feature.room_id = room.id;
+				feature.feature_id = roomFeatures[index].id;
+				feature.save();
+			}
+		}
+
 		session.flash({ notification: 'Room Updated!' });
 
 		return response.route('showRoom', { id: room.id });
@@ -245,6 +321,9 @@ class RoomController {
 	 */
 	async show ({ response, auth, params, view, request }) {
 		try {
+			const result = await User.query().where('id', auth.user.id).with('role').firstOrFail();
+			const user = result.toJSON();
+
 			// get the search form date range if filled in, otherwise generate the data with current date
 			const form = request.only(['date', 'from', 'to']);
 			if (!form.date || form.date === 'undefined' || !form.from || form.from === 'undefined' || !form.to || form.to === 'undefined') {
@@ -264,22 +343,15 @@ class RoomController {
 				start.add(30, 'm');
 			}
 
-			const room = await Room.findOrFail(params.id);
-			const userRole = await auth.user.getUserRole();
+			var room = await Room.query()
+				.where('id', params.id)
+				.with('tower')
+				.with('floor')
+				.with('building')
+				.firstOrFail();
+
 			const hasReview = await this.hasRatingAndReview(auth.user.id, params.id);
 			const review = await this.getRatingAndReview(auth.user.id, params.id);
-
-			var isAdmin = 0;
-			// if user is admin
-			if (userRole === 'admin') {
-				isAdmin = 1;
-				// check if user is viewing their own profile
-			} else if (userRole === 'user') {
-				isAdmin = 0;
-				// check if user is viewing someone elses profile
-			} else {
-				return response.redirect('/');
-			}
 
 			// retrieves all of the reviews associated to this room
 			let reviewResults = await Review
@@ -305,7 +377,47 @@ class RoomController {
 			// Adds new attribute - rating - to every room object
 			room.rating = await this.getAverageRating(room.id);
 
-			return view.render('userPages.roomDetails', { id: params.id, room, isAdmin, form, hasReview, reviews, review, reviewsCount, dropdownSelection });
+			var roomFeatures = await FeaturePivot
+				.query()
+				.where('room_id', room.id)
+				.with('feature.category')
+				.fetch();
+
+			var roomFeatureCategory = await RoomFeaturesCategory
+				.query()
+				.select('id', 'name', 'icon')
+				.fetch();
+
+			roomFeatureCategory = roomFeatureCategory.toJSON();
+			roomFeatures = roomFeatures.toJSON();
+			room = room.toJSON();
+
+			var selectedBuilding;
+			var allBuildings;
+
+			if (user.role.name === 'admin') {
+				selectedBuilding = request.cookie('selectedBuilding');
+				// get all builig info admin nav bar since this route is shared with regular users and admin
+				// therefore, the admin middle-ware can't retrieve building info to pass to view
+				allBuildings = await Building.all();
+				allBuildings = allBuildings.toJSON();
+			}
+
+			return view.render('userPages.roomDetails', {
+				id: params.id,
+				room,
+				user,
+				form,
+				hasReview,
+				reviews,
+				review,
+				reviewsCount,
+				dropdownSelection,
+				roomFeatureCategory,
+				roomFeatures,
+				selectedBuilding,
+				allBuildings
+			});
 		} catch (error) {
 			console.log(error);
 			return response.redirect('/');
@@ -317,50 +429,75 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getAllRooms ({ auth, view }) {
-		const results = await Room.all();
+	async getAllRooms ({ auth, view, request, response }) {
+		var selectedBuilding;
+		// get info of logged-in user
+		const result = await User.query().where('id', auth.user.id).with('building').with('role').firstOrFail();
+		const user = result.toJSON();
+
+		// set building we are searching rooms in
+		if (user.role.name === 'admin') {
+			selectedBuilding = request.cookie('selectedBuilding');
+			if (!selectedBuilding) {
+				return response.route('viewSelectBuilding');
+			}
+		} else {
+			selectedBuilding = user.building;
+		}
+
+		// find rooms
+		const results = await Room
+			.query()
+			.where('building_id', selectedBuilding.id)
+			.with('floor')
+			.with('tower')
+			.with('features', (builder) => {
+				builder.orderBy('id', 'desc');
+			})
+			.fetch();
+
 		const rooms = results.toJSON();
-		const userRole = await auth.user.getUserRole();
 
 		// Sort the results by name
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
 
-		// Retrieve number of active rooms
-		let countActive = await Room
-			.query()
-			.where('state', 1)
-			.count();
-
-		// Retrieve number of deactive rooms
-		let countDeactive = await Room
-			.query()
-			.where('state', 2)
-			.count();
-
-		// Retrieve number of rooms under maintenance
-		let countMaint = await Room
-			.query()
-			.where('state', 3)
-			.count();
-
-		// Create statistic array with custom keys
-		var stats = {};
-		stats['total'] = rooms.length;
-		stats['active'] = countActive[0]['count(*)'];
-		stats['deactive'] = countDeactive[0]['count(*)'];
-		stats['maintenance'] = countMaint[0]['count(*)'];
-
-		// Sets average rating for each room
-		for (var i = 0; i < rooms.length; i++) {
-			// Adds new attribute - rating - to every room object
-			rooms[i].rating = await this.getAverageRating(rooms[i].id);
-		}
-
 		// if user is admin
-		if (userRole === 'admin') {
-			return view.render('adminPages.viewRooms', { rooms, stats });
+		if (user.role.name === 'admin') {
+			// Retrieve number of active rooms
+			let countActive = await Room
+				.query()
+				.where('State_id', 1)
+				.where('building_id', selectedBuilding.id)
+				.count();
+
+			// Retrieve number of deactive rooms
+			let countDeactive = await Room
+				.query()
+				.where('State_id', 2)
+				.where('building_id', selectedBuilding.id)
+				.count();
+
+			// Retrieve number of rooms under maintenance
+			let countMaint = await Room
+				.query()
+				.where('State_id', 3)
+				.where('building_id', selectedBuilding.id)
+				.count();
+
+			// Create statistic array with custom keys
+			var stats = {};
+			stats['total'] = rooms.length;
+			stats['active'] = countActive[0]['count(*)'];
+			stats['deactive'] = countDeactive[0]['count(*)'];
+			stats['maintenance'] = countMaint[0]['count(*)'];
+
+			// get all builig info admin nav bar since this route is shared with regular users and admin
+			// therefore, the admin middle-ware can't retrieve building info to pass to view
+			var allBuildings = await Building.all();
+			allBuildings = allBuildings.toJSON();
+			return view.render('adminPages.viewRooms', { rooms, stats, allBuildings, selectedBuilding });
 		} else {
 			return view.render('userPages.results', { rooms });
 		}
@@ -411,7 +548,7 @@ class RoomController {
 		// only loook for roosm that are open
 		let searchResults = Room
 			.query()
-			.where('state', 1)
+			.where('State_id', 1)
 			.clone();
 
 		// if the location is selected then query, else dont
