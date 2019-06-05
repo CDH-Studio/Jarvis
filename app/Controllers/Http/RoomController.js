@@ -452,7 +452,7 @@ class RoomController {
 			.with('floor')
 			.with('tower')
 			.with('features', (builder) => {
-				builder.orderBy('id', 'desc');
+				builder.orderBy('name', 'asc');
 			})
 			.fetch();
 
