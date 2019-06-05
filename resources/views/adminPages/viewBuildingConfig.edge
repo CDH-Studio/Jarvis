@@ -23,6 +23,17 @@ Configuration
         </div>
     @endif
 
+    @if(flashMessage('error'))
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="alert alert-dismissible alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ flashMessage('error') }}
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-xl-12 mb-4">         
             @component('components.generalCard', title='Building Info')
@@ -94,7 +105,7 @@ Configuration
                                     <label for="name" class="sr-only">Floor Name</label>
                                     <input type="text" class="form-control mr-2" id="name" name="floorName" placeholder="New Floor" class="form-group mb-2">
                                 </div>
-                                <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
+                                <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-plus"></i></button>
                             </form>
                    
                     @endslot
@@ -146,7 +157,7 @@ Configuration
                                 <label for="name" class="sr-only">New Tower</label>
                                 <input type="text" class="form-control mr-2" id="name" name="towerName" placeholder="New Tower" class="form-group mb-2">
                             </div>
-                            <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
+                            <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-plus"></i></button>
                         </form>
                    
                     @endslot
@@ -167,7 +178,7 @@ Configuration
             @endif
         </div>     
         @each(category in categories)
-            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-4">
+            <div class="col-sm-12 col-md-6 col-lg-5 col-xl-5 mb-4">
                 @component('components.generalCard', title=category.name)
                     @slot('body')
                         @if(category.features.length!=0)
@@ -175,9 +186,9 @@ Configuration
                               <tbody>
                                 @each(feature in category.features)
                                     <tr>
-                                        <td class="text-xl-left"><strong>{{feature.name}}</strong></td> 
-                                        <td class="text-xl-center"># rooms</td>
-                                        <td class="text-xl-right">
+                                        <td class="text-xl-left"><strong>{{feature.name_english}}<br>{{feature.name_french}}</strong></td> 
+                                        <td class="text-xl-center pt-3"># rooms</td>
+                                        <td class="text-xl-right pt-3">
                                             <a class="btn btn-primary btn-circle btn-sm-sb mr-2" name='edit tower' data-toggle='modal'  data-target='#editFeatureModal{{feature.id}}' href='#'>
                                                 <i class="fas fa-pencil-alt fa-1x"></i>
                                             </a>
@@ -193,15 +204,24 @@ Configuration
                         @else
                             <p>No Features</p>
                         @endif
-                            
-                         <form class="form-inline" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'  >
+                        @endslot
+                        @slot('footer')
+
+                         <form class="form-inline mb-2" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'>
+                            <h6 class="text-muted"><strong>New "{{category.name}}" Feature</strong></h6>
                             {{ csrfField() }}
-                            <div class="form-group mb-2 mr-2">
-                                <label for="name" class="sr-only">Feature Name</label>
-                                <input type="hidden"  name="featureCategory" value="{{category.id}}">
-                                <input type="text" class="form-control mr-2" id="name" name="featureName" placeholder="New Feature" class="form-group mb-2">
+                            <input type="hidden"  name="featureCategory" value="{{category.id}}">
+                            <div class="form-row">
+                                <div class="col-12 mb-2">
+                                    <label for="featureNameEnglish" class="sr-only">English Name</label>
+                                    <input type="text" class="form-control w-100" id="featureNameEnglish" name="featureNameEnglish" placeholder="English" class="form-group mb-2">
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <label for="featureNameFrench" class="sr-only">French Name</label>
+                                    <input type="text" class="form-control w-100" id="featureNameFrench" name="featureNameFrench" placeholder="French" class="form-group mb-2">
+                                </div>
+                            <button type="submit" class="btn w-100 btn-primary m-1"><i class="fas fa-plus"></i> Add Feature</button>
                             </div>
-                            <button type="submit" class="btn btn-circle btn-primary mb-2"><i class="fas fa-plus"></i></button>
                         </form>
                    
                     @endslot
@@ -252,15 +272,21 @@ Configuration
                                     <span aria-hidden='true'>×</span>
                                 </button>
                             </div>
-                            <div class='modal-body'>Are you sure want to edit "{{feature.name}}"?<br>
+                            <div class='modal-body'>Are you sure want to edit "{{feature.name_english}}"?<br>
                                 <p>This change will effect ## rooms.</p>
-                                <form class="form-inline" action='{{ route('updateRoomFeature', {id: feature.id}) }}' method='POST' enctype='multipart/form-data'  >
+                                <form action='{{ route('updateRoomFeature', {id: feature.id}) }}' method='POST' enctype='multipart/form-data'  >
                                     {{ csrfField() }}
-                                    <div class="form-group mb-2 mr-2">
+                                    <div class="form-row mb-2 mr-2">
                                         <label for="name" class="sr-only">Edit Feature Name</label>
-                                        <input type="text" class="form-control mr-2" id="name" name="featureName" placeholder="New Tower" class="form-group mb-2" value='{{feature.name}}'>
+                                        <div class="col-12 mb-2">
+                                            <input type="text" class="form-control mr-2" id="name" name="featureNameEnglish" placeholder="English" class="form-group mb-2" value='{{feature.name_english}}'>
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <input type="text" class="form-control mr-2" id="name" name="featureNameFrench" placeholder="French" class="form-group mb-2" value='{{feature.name_french}}'>
+                                        </div>
+                                        <button type='submit' class='btn w-100 btn-primary m-1'>Save</button>
                                     </div>
-                                   <button type='submit' class='btn btn-primary'>Save</button>
+                                   
                                 </form>
                             </div> 
 

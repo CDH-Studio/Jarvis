@@ -14,7 +14,8 @@ class EditFeature {
 	// Validation rules
 	get rules () {
 		return {
-			featureName: 'required|max:20'
+			featureNameEnglish: 'required|max:30',
+			featureNameFrench: 'required|max:30',
 		};
 	}
 
@@ -28,6 +29,7 @@ class EditFeature {
 
 	async fails (error) {
 		this.ctx.session.withErrors(error).flashAll();
+		this.ctx.session.flash({ error: 'Please provide both English and French names (max: 20 Char)' })
 		return this.ctx.response.redirect('back');
 	}
 }

@@ -5,14 +5,20 @@ const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
 class FeatureController {
 
-
+	//save new room feature based on feature category
 	async addRoomFeature ({ request, response, session }) {
 		try {
+
 			// Retrieves user input
 			const body = request.all();
+
+			// check if feature category exists
+			await RoomFeaturesCategory.findOrFail(body.featureCategory);
+
 			// Populates the review object's values
 			const newFeature = new Feature();
-			newFeature.name = body.featureName;
+			newFeature.name_english = body.featureNameEnglish;
+			newFeature.name_french = body.featureNameFrench;
 			newFeature.feature_category_id = body.featureCategory;
 			newFeature.building_id = 1;
 			await newFeature.save();
@@ -21,7 +27,9 @@ class FeatureController {
 
 			return response.route('configuration');
 		} catch (err) {
+			session.flash({error: 'Something when wrong. Feature Not Added.' });
 			console.log(err);
+			response.redirect('back');
 		}
 	}
 
@@ -34,12 +42,16 @@ class FeatureController {
 				.where('id', params.id)
 				.firstOrFail();
 
-			feature.name = body.featureName;
+			feature.name_english = body.featureNameEnglish;
+			feature.name_french = body.featureNameFrench;
 			await feature.save();
 			session.flash({ notification: 'Feature Updated!' });
 			return response.route('configuration');
+
 		} catch (err) {
+			session.flash({error: 'Something when wrong. Feature Not Updated.' });
 			console.log(err);
+			response.redirect('back');
 		}
 	}
 
