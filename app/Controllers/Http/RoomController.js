@@ -48,6 +48,12 @@ function random (times) {
 	return result;
 }
 
+async function asyncForEach (arr, callback) {
+	for (let i = 0; i < arr.length; i++) {
+		await callback(arr[i], i, arr);
+	}
+}
+
 class RoomController {
 	/**
 	*
@@ -446,7 +452,7 @@ class RoomController {
 		}
 
 		// find rooms
-		const results = await Room
+		let results = await Room
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.with('floor')
@@ -456,6 +462,14 @@ class RoomController {
 			})
 			.fetch();
 
+		const generateFloorAndTower = async () => {
+			await asyncForEach(results.rows, async (item) => {
+				item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
+				item.towerName = (await item.tower().fetch()).name;
+			});
+		};
+
+		await generateFloorAndTower();
 		const rooms = results.toJSON();
 
 		// Sort the results by name
@@ -591,12 +605,6 @@ class RoomController {
 		}
 
 		// iterate through the rooms
-		async function asyncForEach (arr, callback) {
-			for (let i = 0; i < arr.length; i++) {
-				await callback(arr[i], i, arr);
-			}
-		}
-
 		const code = random(4);
 		const checkRoomAvailability = async () => {
 			let results = [];
@@ -605,6 +613,8 @@ class RoomController {
 				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
 					item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
 					item.towerName = (await item.tower().fetch()).name;
+					item = item.toJSON();
+
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
 						code: code

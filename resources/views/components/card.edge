@@ -62,9 +62,9 @@
             <div class="row text-center">
                 <div class="col-3"> 
                     @if(room.floor === null)
-                        <i class="far fa-building text-muted mr-1"></i> <span>0 - {{ truncate(room.tower.name, 4, '.') }} </span>
+                        <i class="far fa-building text-muted mr-1"></i> <span>0 - {{ truncate(room.towerName, 4, '.') }} </span>
                     @else
-                        <i class="far fa-building text-muted mr-1"></i> <span>{{ truncate(room.floor.name, 4, '.') }} - {{ truncate(room.tower.name, 4, '.') }} </span>
+                        <i class="far fa-building text-muted mr-1"></i> <span>{{ truncate(room.floorName, 4, '.') }} - {{ truncate(room.towerName, 4, '.') }} </span>
                     @endif
                 </div>
                 <div class="col-5"> 
