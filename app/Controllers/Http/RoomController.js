@@ -603,7 +603,7 @@ class RoomController {
 			await asyncForEach(rooms, async (item) => {
 				const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/findAvail`, {
 					room: item.calendar,
-					floor: item.floor,
+					floor: item.floor_id,
 					duration: duration,
 					start: moment(options.date).format('YYYY-MM-DDTHH:mm'),
 					end: moment(options.date).add(24, 'hour').format('YYYY-MM-DDTHH:mm')
@@ -661,7 +661,7 @@ class RoomController {
 	async findSpecific ({ request, view }) {
 		// importing forms from search form
 		const form = request.all();
-		let rooms = (await this.filterRooms(form)).toJSON();
+		let rooms = (await this.filterRooms(form)).rows;
 
 		// Sets average rating for each room
 		for (var i = 0; i < rooms.length; i++) {
