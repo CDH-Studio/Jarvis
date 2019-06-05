@@ -137,9 +137,9 @@ Configuration
                               <tbody>
                                 @each(tower in building.tower)
                                     <tr>
-                                        <td class="text-xl-left"><strong>{{tower.name}}</strong></td> 
-                                        <td class="text-xl-center">{{tower.room.length}} rooms</td>
-                                        <td class="text-xl-right">
+                                        <td class="text-xl-left"><strong>{{tower.name_english}}<br>{{tower.name_french}}</strong></td> 
+                                        <td class="text-xl-center pt-3">{{tower.room.length}} rooms</td>
+                                        <td class="text-xl-right pt-3">
                                             <a class="btn btn-primary btn-circle btn-sm-sb mr-2" name='edit tower' data-toggle='modal'  data-target='#editTowerModal{{tower.id}}' href='#'>
                                                 <i class="fas fa-pencil-alt fa-1x"></i>
                                             </a>
@@ -159,17 +159,25 @@ Configuration
                             </table>
                         @else
                             <p>No towers configured</p>
-                        @endif
-                            
-                        <form class="form-inline" action='{{ route('addTower') }}' method='POST' enctype='multipart/form-data'  >
+                        @endif       
+                    @endslot
+                    @slot('footer')
+                        <form class="mb-2" action='{{ route('addTower') }}' method='POST' enctype='multipart/form-data'>
+                            <h6 class="text-muted"><strong>New Tower</strong></h6>
                             {{ csrfField() }}
-                            <div class="form-group mb-2 mr-2">
-                                <label for="name" class="sr-only">New Tower</label>
-                                <input type="text" class="form-control mr-2" id="name" name="towerName" placeholder="New Tower" class="form-group mb-2">
+                            <input type="hidden"  name="featureCategory" value="{{category.id}}">
+                            <div class="form-row">
+                                <div class="col-12 mb-2">
+                                    <label for="towerNameEnglish" class="sr-only">English Tower Name</label>
+                                    <input type="text" class="form-control mr-2" id="towerNameEnglish" name="towerNameEnglish" placeholder="English" class="form-group mb-2">
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <label for="towerNameFrench" class="sr-only">French Tower Name</label>
+                                    <input type="text" class="form-control w-100" id="towerNameFrench" name="towerNameFrench" placeholder="French" class="form-group mb-2">
+                                </div>
+                            <button type="submit" class="btn w-100 btn-primary m-1"><i class="fas fa-plus"></i> Add Tower</button>
                             </div>
-                            <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-plus"></i></button>
-                        </form>
-                   
+                        </form> 
                     @endslot
                 @endcomponent
             </div>
@@ -315,7 +323,7 @@ Configuration
                                     <span aria-hidden='true'>×</span>
                                 </button>
                             </div>
-                            <div class='modal-body'>Are you sure want to delete <strong>"{{tower.name}}"</strong>?<br>
+                            <div class='modal-body'>Are you sure want to delete <strong>"{{tower.name_english}}"</strong>?<br>
                                 <p class="text-danger">This is process is permanent!</p>
                             </div>
                             <form action='{{ route('deleteTower', {id: tower.id}) }}' method='POST' enctype='multipart/form-data'>
@@ -340,16 +348,21 @@ Configuration
                                 <span aria-hidden='true'>×</span>
                             </button>
                         </div>
-                        <div class='modal-body'>Are you sure want to edit "{{tower.name}}"?<br>
+                        <div class='modal-body'>Are you sure want to edit "{{tower.name_english}}"?<br>
                             <p>This change will effect {{tower.room.length}} rooms.</p>
-                            <form class="form-inline" action='{{ route('updateTower', {id: tower.id}) }}' method='POST' enctype='multipart/form-data'  >
-                                {{ csrfField() }}
-                                <div class="form-group mb-2 mr-2">
-                                    <label for="name" class="sr-only">Edit Tower Name</label>
-                                    <input type="text" class="form-control mr-2" id="name" name="towerName" placeholder="New Tower" class="form-group mb-2" value='{{ tower.name }}'>
-                                </div>
-                               <button type='submit' class='btn btn-primary'>Save</button>
-                            </form>
+                            <form action='{{ route('updateTower', {id: tower.id}) }}' method='POST' enctype='multipart/form-data'  >
+                                    {{ csrfField() }}
+                                    <div class="form-row mb-2 mr-2">
+                                        <label for="name" class="sr-only">Edit Tower Name</label>
+                                        <div class="col-12 mb-2">
+                                            <input type="text" class="form-control mr-2" id="name" name="towerNameEnglish" placeholder="English" class="form-group mb-2" value='{{tower.name_english}}'>
+                                        </div>
+                                        <div class="col-12 mb-2">
+                                            <input type="text" class="form-control mr-2" id="name" name="towerNameFrench" placeholder="French" class="form-group mb-2" value='{{tower.name_french}}'>
+                                        </div>
+                                        <button type='submit' class='btn w-100 btn-primary m-1'>Save</button>
+                                    </div>
+                                </form>
                         </div> 
 
                     </div>

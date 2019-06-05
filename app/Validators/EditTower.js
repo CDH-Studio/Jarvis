@@ -14,7 +14,8 @@ class EditTower {
 	// Validation rules
 	get rules () {
 		return {
-			towerName: 'required|max:20|unique:towers,name'
+			towerNameEnglish: 'required|max:20',
+			towerNameFrench: 'required|max:20'
 		};
 	}
 
@@ -23,7 +24,6 @@ class EditTower {
 		return {
 			'towerName.required': 'You must provide a tower name',
 			'towerName.max': 'Tower name can only be 20 characters long',
-			'towerName.unique': 'The tower name already exists.'
 		};
 	}
 
