@@ -6,7 +6,7 @@
 
 {{--  Manage bookings page content  --}}
 @section('content')
-    @!component('components.pageHeader', title='Room details')
+    @!component('components.pageHeader', title = antl.formatMessage('roomDetails.title'))
 
     {{--  Actual page content  --}}
     <div class="row">
@@ -60,7 +60,7 @@
                             @endif        
                             <a class='link-color' href='' style='display:block; text-align:center;'  data-toggle='modal' data-target='#mapModal'>
                                 <i class='fas fa-external-link-alt mt-3'></i>
-                                View Map
+                                {{ antl.formatMessage('roomDetails.viewMap') }}
                             </a>             
                         </div>
                         <div class="col-7">
@@ -81,10 +81,10 @@
                             </div>
                             <hr>
                             <div class="mt-2 mb-2">
-                                <strong>Table Seats:</strong>  {{ room.seats }}
+                                <strong>{{ antl.formatMessage('roomDetails.tableSeats') }}:</strong>  {{ room.seats }}
                             </div>
                             <div class="mt-1 mb-2">
-                                <strong>Capacity:</strong> {{ room.capacity }}
+                                <strong>{{ antl.formatMessage('roomDetails.capacity') }}:</strong> {{ room.capacity }}
                             </div>
                             @if(room.comment && room.comment != " ")
                                 <div class="mt-2 mb-2"><b>Comments:</b> {{ room.comment }}</div>
@@ -120,7 +120,7 @@
                         @endeach
                         @if(room.extraEquipment)
                         <div class="col-12 col-lg-12 text-center mt-3">
-                            <p class="mb-0"><strong>Extra Equipment: </strong>{{room.extraEquipment}}</p>
+                            <p class="mb-0"><strong>{{ antl.formatMessage('roomDetails.extraEquipment') }} </strong>{{room.extraEquipment}}</p>
                         </div>
                         @endif
                     </div>    
@@ -131,7 +131,7 @@
         <div class='col-12 col-xl-4 mb-4'>
             <div class="card shadow" style="min-height:433px;">
                 <div class='card-header py-3'>
-                    <h5 class="m-0 font-weight-bold text-primary">Book room</h5>
+                    <h5 class="m-0 font-weight-bold text-primary">{{ antl.formatMessage('roomDetails.bookRoom') }}</h5>
                 </div>
                 <div class="card-body" style="height:100%;">
                     @if(user.role.name === 'user' && room.state_id == 1)
@@ -144,9 +144,9 @@
                                 <div class='row'>
                                     <div class='col form-group'>
                                         <div class='row'>
-                                            <label class='col' for='meeting'>Meeting name <strong class='text-danger'>*</strong></label>
+                                            <label class='col' for='meeting'>{{ antl.formatMessage('roomDetails.bookingName') }} <strong class='text-danger'>*</strong></label>
                                             <div class='col text-right'>
-                                                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='Select a name for the room booking'></i>
+                                                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='{{ antl.formatMessage('roomDetails.bookingNameHelp') }}'></i>
                                             </div>
                                         </div>
                                         <td class='confirmation-modal-column'>
@@ -162,9 +162,9 @@
                                 <div class='row'>
                                     <div class='col form-group'>
                                         <div class='row'>
-                                            <label class='col' for='date'>Date <strong class='text-danger'>*</strong></label>
+                                            <label class='col' for='date'>{{ antl.formatMessage('roomDetails.bookingDate') }} <strong class='text-danger'>*</strong></label>
                                             <div class='col text-right'>
-                                                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='The date may not occur more than 3 months in advance'></i>
+                                                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='{{ antl.formatMessage('roomDetails.bookingDateHelp') }}'></i>
                                             </div>
                                         </div>
                                         {{--  If field is not filled correctly show an error box  --}}
@@ -181,7 +181,7 @@
                                 <div class='row'>
                                     {{--  From  --}}
                                     <div class='col form-group mb-4'>
-                                            <label for='from' aria-labelledby='from-error'>Start time <strong class='text-danger'>*</strong></label>
+                                            <label for='from' aria-labelledby='from-error'>{{ antl.formatMessage('roomDetails.bookingStart') }} <strong class='text-danger'>*</strong></label>
                                             {{--  If field is not filled correctly show an error box  --}}
                                             <div class='timePicker' style='display: flex;'>
                                                 @if(hasErrorFor('from'))
@@ -205,7 +205,7 @@
                                     </div>
                                     {{--  To  --}}
                                     <div class='col form-group mb-4'>
-                                        <label for='to' aria-labelledby='to-error' data-toggle='tooltip'>End time <strong class='text-danger'>*</strong></label>
+                                        <label for='to' aria-labelledby='to-error' data-toggle='tooltip'>{{ antl.formatMessage('roomDetails.bookingEnd') }} <strong class='text-danger'>*</strong></label>
                                         <div style='display: flex;' class='timePicker'>
                                             {{--  If field is not filled correctly show an error box  --}}
                                             @if(hasErrorFor('to'))
@@ -230,7 +230,7 @@
                                 {{--  Reccuring Form  #### No functionality, Display:none for now --}}
                                 <div class='row' style='display:none'>
                                     <div class='col form-group'>
-                                        <label for='recurringSelect' data-toggle='tooltip' data-placement='right' title='' data-original-title=''>Recurring</label>
+                                        <label for='recurringSelect' data-toggle='tooltip' data-placement='right' title='' data-original-title=''>{{ antl.formatMessage('roomDetails.bookingRecurring') }}</label>
                                         <select class='form-control' id='recurringSelect' name='recurringSelect' onchange='showRecurring()'>
                                                 <option value='0' {{ old('recurringSelect') == 0 ? 'selected' : '' }}>No</option>
                                                 <option value='1' {{ old('recurringSelect') == 1 ? 'selected' : '' }}>Yes</option>
@@ -285,7 +285,7 @@
                                 {{--  Footer buttons to cancel and book room  --}}
                                 <div class='row flex-grow-1 align-content-end'>
                                     <div class='col'>
-                                        <button type='submit' class='btn btn-success w-100 mb-2'><i class="fas fa-check"></i> Book Room</button>
+                                        <button type='submit' class='btn btn-success w-100 mb-2'><i class="fas fa-check"></i> {{ antl.formatMessage('roomDetails.bookingButton') }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -298,7 +298,7 @@
         </div>
     </div>
 
-    <h4 class="mt-4 mb-3" id="reviews"><strong>Reviews</strong></h4>
+    <h4 class="mt-4 mb-3" id="reviews"><strong>{{ antl.formatMessage('roomDetails.reviewHeading') }}</strong></h4>
 
     <div class="row">
         <div class='col-12 col-xl-8'>
@@ -306,7 +306,7 @@
                 <div class="card-body p-4">
                     
                     @if(reviews.length == 0)             
-                        @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message="No reviews available")          
+                        @!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-6x", message = antl.formatMessage('roomDetails.noReviews'))          
                     @else
                         {{--  Loops through the rooms array and displays every room's content  --}}
                         @each(review in reviews)
@@ -327,7 +327,7 @@
                         @endeach
                         <div class="row">
                             <div class="col-12 text-center">
-                                <i style="font-size: 0.9rem;">Reviews: {{reviewsCount}}</i>
+                                <i style="font-size: 0.9rem;">{{ antl.formatMessage('roomDetails.reviewCount') }}: {{reviewsCount}}</i>
                             </div>
                         </div>
                     @endif                       
@@ -339,9 +339,9 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     @if(!hasReview) 
-                        <h5 class="m-0 font-weight-bold text-primary">Write a review</h5>
+                        <h5 class="m-0 font-weight-bold text-primary">{{ antl.formatMessage('roomDetails.writeReview') }}</h5>
                     @else
-                        <h5 class="m-0 font-weight-bold text-primary">Edit review</h5>
+                        <h5 class="m-0 font-weight-bold text-primary">{{ antl.formatMessage('roomDetails.editReview') }}</h5>
                     @endif
                 </div>
                 <div class="card-body">
@@ -359,7 +359,7 @@
                             {{--  Body  --}}
                             <div class='row'>
                                 <div class='col form-group'>
-                                    <label for='rating' data-original-title='Enter a rating for this room'>Rating <strong class='text-danger'>*</strong></label>
+                                    <label for='rating' data-original-title='Enter a rating for this room'>{{ antl.formatMessage('roomDetails.reviewRating') }} <strong class='text-danger'>*</strong></label>
 
                                     @if(hasErrorFor('rating'))
                                         <select class='form-control is-invalid' name='rating' id='rating' onchange='removeErrorClass("rating")'>
@@ -382,7 +382,7 @@
 
                             <div class='row'>
                                 <div class='col form-group'>
-                                    <label for='review'>Review <strong class='text-danger'>*</strong></label>
+                                    <label for='review'>{{ antl.formatMessage('roomDetails.editReview') }} <strong class='text-danger'>*</strong></label>
                                     @if(hasErrorFor('review'))
                                         <textarea class='form-control is-invalid' name='review' id='review' rows='5'>{{ old('review',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('review') }}</div>
@@ -395,7 +395,7 @@
                             <div class='row'>
                                 {{--  Floor Plan Picture --}}
                                 <div class='col form-group no-margin' id='reviewPictureContent'>
-                                    <label>Picture</label>
+                                    <label>{{ antl.formatMessage('roomDetails.reviewPicture') }}</label>
                                     <div class='form-group'>
                                         <div class='custom-file'>
                                             @if(hasErrorFor('reviewPicture'))
@@ -404,11 +404,11 @@
                                             @else
                                                 <input type='file' class='custom-file-input' id='reviewPicture' name='reviewPicture'>
                                             @endif
-                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>Choose file (Max: 2MB)</label>
+                                            <label id='reviewPictureLabel' class='custom-file-label' for='reviewPicture'>{{ antl.formatMessage('roomDetails.reviewPictureSize') }}</label>
                                             @if(!hasReview) 
-                                                <small id="reviewPictureHelp" class="form-text text-muted">Image cannot be edited after upload. It can only be deleted.</small>
+                                                <small id="reviewPictureHelp" class="form-text text-muted">{{ antl.formatMessage('roomDetails.reviewPictureRequirements') }}</small>
                                             @else
-                                                <small id="reviewPictureHelp" class="form-text text-muted">Leave blank to delete last uploaded photo.</small>
+                                                <small id="reviewPictureHelp" class="form-text text-muted">{{ antl.formatMessage('roomDetails.reviewPictureRequirementsDelete') }}</small>
                                             @endif
                                         </div>
                                     </div>
@@ -423,21 +423,21 @@
                                         <span class="icon text-white-50">
                                           <i class="fas fa-check"></i>
                                         </span>
-                                        <span class="text">Submit</span>
+                                        <span class="text">{{ antl.formatMessage('roomDetails.reviewSumbitButton') }}</span>
                                     </button>
                                 @else  
                                     <button type='button' class="btn btn-danger btn-icon-split mb-2" data-toggle='modal' data-target='#deleteModal'>
                                         <span class="icon text-white-50">
                                             <i class="fas fa-trash"></i>
                                         </span>
-                                        <span class="text">Delete</span>
+                                        <span class="text">{{ antl.formatMessage('roomDetails.reviewDeleteButton') }}</span>
                                     </button>  
 
                                     <button type='submit' class="btn btn-primary btn-icon-split mb-2">
                                         <span class="icon text-white-50">
                                           <i class="fas fa-check"></i>
                                         </span>
-                                        <span class="text">Update</span>
+                                        <span class="text">{{ antl.formatMessage('roomDetails.reviewUpdateButton') }}</span>
                                     </button>
                                 @endif    
                             </div> 
