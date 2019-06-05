@@ -91,18 +91,9 @@ class HomeController {
 	*
 	*/
 	async userDashboard ({ view, auth }) {
-		// get user with default floor and tower
-		let user = await User.query()
-			.where('id', auth.user.id)
-			.with('floor').with('tower')
-			.with('building')
-			.firstOrFail();
-
-		user = user.toJSON();
-
-		const code = await this.getAvailableRooms(user, view);
-		const freqRooms = await this.getFreqBooked(user);
-		const upcomming = await this.getUpcomming(user);
+		const code = await this.getAvailableRooms({ user: auth.user, view });
+		const freqRooms = await this.getFreqBooked(auth.user);
+		const upcomming = await this.getUpcomming(auth.user);
 		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
 
@@ -421,17 +412,18 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getAvailableRooms (user, view) {
+	async getAvailableRooms ({ user, view }) {
 		// If the tower is West then set the order to descending, else ascending
-		let towerOrder = (await user.getUserTower() === 'West') ? 'desc' : 'asc';
+		let towerOrder = (await user.getUserTower() === 'West') ? 'asc' : 'desc';
 
 		// look for rooms that are open
 		// order all rooms in the database by closest to the user's floor and tower
 		// order by ascending seats number and fetch results
+		// TODO: floor_id -> floor, tower_id
 		let searchResults = await Room
 			.query()
 			.where('state_id', 1)
-			.orderByRaw('ABS(floor_id-' + user.floor.id + ') ASC')
+			.orderByRaw('ABS(floor_id-' + user.floor_id + ') ASC')
 			.orderBy('tower_id', towerOrder)
 			.orderBy('seats', 'asc')
 			.fetch();

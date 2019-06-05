@@ -505,7 +505,7 @@ class RoomController {
 		}
 
 		// find rooms
-		const results = await Room
+		let results = await Room
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.with('floor')
@@ -515,6 +515,14 @@ class RoomController {
 			})
 			.fetch();
 
+		const generateFloorAndTower = async () => {
+			await asyncForEach(results.rows, async (item) => {
+				item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
+				item.towerName = (await item.tower().fetch()).name;
+			});
+		};
+
+		await generateFloorAndTower();
 		const rooms = results.toJSON();
 
 		// Sort the results by name
@@ -669,6 +677,10 @@ class RoomController {
 			let results = [];
 			await asyncForEach(rooms, async (item) => {
 				if (await this.getRoomAvailability(date, from, to, item.floor, item.calendar)) {
+					item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
+					item.towerName = (await item.tower().fetch()).name;
+					item = item.toJSON();
+
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken, from: from, to: to }),
 						code: code
