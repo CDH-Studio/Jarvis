@@ -728,7 +728,7 @@ class RoomController {
 		// only loook for roosm that are open
 		let searchResults = Room
 			.query()
-			.where('state', 1)
+			.where('state_id', 1)
 			.clone();
 
 		// if the location is selected then query, else dont
