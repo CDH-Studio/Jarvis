@@ -60,12 +60,11 @@
     <li class="nav-item">
       <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBuilding" aria-expanded="true" aria-controls="collapseUtilities">
         <i class="fas fa-fw fa-building"></i>
-        <span>Building</span>
+        <span>{{ antl.formatMessage('adminSidebarOptions.buildingDropdown') }}</span>
       </a>
       <div id="collapseBuilding" class="collapse" aria-labelledby="collapseUtilities" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <a id="room-issues-drop-down" class='dropdown-item' href="{{route('configuration')}}">Configure Building</a>
-          <a id="room-issues-drop-down" class='dropdown-item' href='#'>New Building</a>
+          <a id="room-issues-drop-down" class='dropdown-item' href="{{route('configuration')}}"><span>{{ antl.formatMessage('adminSidebarOptions.configureBuilding') }}</span></a>
         </div>
       </div>
     </li>
