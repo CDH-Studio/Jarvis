@@ -46,9 +46,6 @@ Configuration
                         <div class= 'col-md-5'>
                             <p><i class='fas fa-map-marker-alt'></i> {{ building.street_address }} {{ building.postal_code }}</p>
                             <p><i class="fas fa-map-marked-alt"></i> {{ building.city }}, {{ building.country }}</p>
-
-                            {{--  --}}
-
                         </div>
                     </div>
                 @endslot
@@ -63,21 +60,26 @@ Configuration
                 
                 @component('components.generalCard', title='Configure Floor')
                     @slot('body')
-
-                        @if(hasErrorFor('floorName'))
+                        @if(hasErrorFor('floorNameEnglish'))
                             <div class="alert alert-dismissible alert-danger">
-                              <button type="button" class="close" data-dismiss="alert">&times;</button>
-                              {{ getErrorFor('floorName') }}
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                {{ getErrorFor('floorNameEnglish') }}
+                            </div> 
+                        @elseif(hasErrorFor('floorNameFrench'))
+                            <div class="alert alert-dismissible alert-danger">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                {{ getErrorFor('floorNameFrench') }}
                             </div>        
                         @endif
+
                         @if(building.floor.length!=0)
                             <table class="table table-borderless table-hover table-sm">
                               <tbody>
                                 @each(floor in building.floor)
                                     <tr>
-                                        <td class="text-xl-left"><strong>{{floor.name}}</strong></td> 
-                                        <td class="text-xl-center">{{floor.room.length}} rooms</td>
-                                        <td class="text-xl-right">
+                                        <td class="text-xl-left"><strong>{{floor.name_english}}<br>{{floor.name_french}}</strong></td> 
+                                        <td class="text-xl-center pt-3">{{floor.room.length}} rooms</td>
+                                        <td class="text-xl-right pt-3">
                                             <a class="btn btn-primary btn-circle btn-sm-sb mr-2" name='edit tower' data-toggle='modal'  data-target='#editFloorModal{{floor.id}}' href='#'>
                                                 <i class="fas fa-pencil-alt fa-1x"></i>
                                             </a>
@@ -97,17 +99,25 @@ Configuration
                             </table>
                         @else
                             <p>No floors configured</p>
-                        @endif
-                            
-                             <form class="form-inline" action='{{ route('addFloor') }}' method='POST' enctype='multipart/form-data'  >
-                                {{ csrfField() }}
-                                <div class="form-group mb-2 mr-2">
-                                    <label for="name" class="sr-only">Floor Name</label>
-                                    <input type="text" class="form-control mr-2" id="name" name="floorName" placeholder="New Floor" class="form-group mb-2">
+                        @endif                 
+                    @endslot
+                    @slot('footer')
+                        <form class="mb-2" action='{{ route('addFloor') }}' method='POST' enctype='multipart/form-data'>
+                            <h6 class="text-muted"><strong>New Floor</strong></h6>
+                            {{ csrfField() }}
+                            <input type="hidden"  name="featureCategory" value="{{category.id}}">
+                            <div class="form-row">
+                                <div class="col-12 mb-2">
+                                    <label for="floorNameEnglish" class="sr-only">English Floor Name</label>
+                                    <input type="text" class="form-control mr-2" id="floorNameEnglish" name="floorNameEnglish" placeholder="English" class="form-group mb-2">
                                 </div>
-                                <button type="submit" class="btn btn-primary mb-2"><i class="fas fa-plus"></i></button>
-                            </form>
-                   
+                                <div class="col-12 mb-2">
+                                    <label for="floorNameFrench" class="sr-only">French Floor Name</label>
+                                    <input type="text" class="form-control w-100" id="floorNameFrench" name="floorNameFrench" placeholder="French" class="form-group mb-2">
+                                </div>
+                            <button type="submit" class="btn w-100 btn-primary m-1"><i class="fas fa-plus"></i> Add Floor</button>
+                            </div>
+                        </form> 
                     @endslot
                 @endcomponent
             </div>
@@ -204,27 +214,25 @@ Configuration
                         @else
                             <p>No Features</p>
                         @endif
-                        @endslot
-                        @slot('footer')
-
-                         <form class="form-inline mb-2" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'>
-                            <h6 class="text-muted"><strong>New "{{category.name}}" Feature</strong></h6>
-                            {{ csrfField() }}
-                            <input type="hidden"  name="featureCategory" value="{{category.id}}">
-                            <div class="form-row">
-                                <div class="col-12 mb-2">
-                                    <label for="featureNameEnglish" class="sr-only">English Name</label>
-                                    <input type="text" class="form-control w-100" id="featureNameEnglish" name="featureNameEnglish" placeholder="English" class="form-group mb-2">
-                                </div>
-                                <div class="col-12 mb-2">
-                                    <label for="featureNameFrench" class="sr-only">French Name</label>
-                                    <input type="text" class="form-control w-100" id="featureNameFrench" name="featureNameFrench" placeholder="French" class="form-group mb-2">
-                                </div>
-                            <button type="submit" class="btn w-100 btn-primary m-1"><i class="fas fa-plus"></i> Add Feature</button>
-                            </div>
-                        </form>
-                   
                     @endslot
+                        @slot('footer')
+                            <form class="form-inline mb-2" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'>
+                                <h6 class="text-muted"><strong>New "{{category.name}}" Feature</strong></h6>
+                                {{ csrfField() }}
+                                <input type="hidden"  name="featureCategory" value="{{category.id}}">
+                                <div class="form-row">
+                                    <div class="col-12 mb-2">
+                                        <label for="featureNameEnglish" class="sr-only">English Name</label>
+                                        <input type="text" class="form-control w-100" id="featureNameEnglish" name="featureNameEnglish" placeholder="English" class="form-group mb-2">
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <label for="featureNameFrench" class="sr-only">French Name</label>
+                                        <input type="text" class="form-control w-100" id="featureNameFrench" name="featureNameFrench" placeholder="French" class="form-group mb-2">
+                                    </div>
+                                <button type="submit" class="btn w-100 btn-primary m-1"><i class="fas fa-plus"></i> Add Feature</button>
+                                </div>
+                            </form> 
+                        @endslot
                 @endcomponent
             </div>
         @endeach
@@ -247,7 +255,7 @@ Configuration
                                     <span aria-hidden='true'>×</span>
                                 </button>
                             </div>
-                            <div class='modal-body'>Are you sure want to delete <strong>{{feature.name}}</strong>?<br>
+                            <div class='modal-body'>Are you sure want to delete <strong>{{feature.name_english}}</strong>?<br>
                                 <p>This feature will be removed from ## rooms.</p>
                                 <p class="text-danger">This is process is permanent!</p>
                             </div>
@@ -286,10 +294,8 @@ Configuration
                                         </div>
                                         <button type='submit' class='btn w-100 btn-primary m-1'>Save</button>
                                     </div>
-                                   
                                 </form>
                             </div> 
-
                         </div>
                     </div>
                 </div>
@@ -364,7 +370,7 @@ Configuration
                                     <span aria-hidden='true'>×</span>
                                 </button>
                             </div>
-                            <div class='modal-body'>Are you sure want to delete <strong>"{{floor.name}}"</strong>?<br>
+                            <div class='modal-body'>Are you sure want to delete <strong>"{{floor.name_english}}"</strong>?<br>
                                 <p class="text-danger">This is process is permanent!</p>
                             </div>
                             <form action='{{ route('deleteFloor', {id: floor.id}) }}' method='POST' enctype='multipart/form-data'>
@@ -391,13 +397,18 @@ Configuration
                         </div>
                         <div class='modal-body'>Are you sure want to edit "{{floor.name}}"?<br>
                             <p>This change will effect {{floor.room.length}} rooms.</p>
-                            <form class="form-inline" action='{{ route('updateFloor', {id: floor.id} ) }}' method='POST' enctype='multipart/form-data'  >
+                            <form action='{{ route('updateFloor', {id: floor.id} ) }}' method='POST' enctype='multipart/form-data'  >
                                 {{ csrfField() }}
-                                <div class="form-group mb-2 mr-2">
-                                    <label for="name" class="sr-only">Edit Floor Name</label>
-                                    <input type="text" class="form-control mr-2" id="name" name="floorName" placeholder="New Tower" class="form-group mb-2" value='{{ floor.name }}'>
+                                <div class="form-row mb-2 mr-2">
+                                    <label for="floorNameEnglish" class="sr-only">Edit Floor Name</label>
+                                    <div class="col-12 mb-2">
+                                    <input type="text" class="form-control mr-2" id="floorNameEnglish" name="floorNameEnglish" placeholder="English" class="form-group mb-2" value='{{floor.name_english}}'>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <input type="text" class="form-control mr-2" id="floorNameFrench" name="floorNameFrench" placeholder="French" class="form-group mb-2" value='{{floor.name_french}}'>
+                                    </div>
+                                    <button type='submit' class='btn w-100 btn-primary m-1'>Save</button>
                                 </div>
-                               <button type='submit' class='btn btn-primary'>Save</button>
                             </form>
                         </div> 
                     </div>
