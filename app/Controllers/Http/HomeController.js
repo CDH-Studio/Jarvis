@@ -111,15 +111,6 @@ class HomeController {
 	*
 	*/
 	async userDashboard ({ view, auth }) {
-		// get user with default floor and tower
-		let user = await User.query()
-			.where('id', auth.user.id)
-			.with('floor').with('tower')
-			.with('building')
-			.firstOrFail();
-
-		user = user.toJSON();
-
 		const code = await this.getAvailableRooms({ user: auth.user, view });
 		const freqRooms = await this.getFreqBooked(auth.user);
 		const upcomming = await this.getUpcomming(auth.user);

@@ -48,7 +48,7 @@ class TokenController {
 			redirect_uri: Env.get('MICROSOFT_REDIRECT_URI'),
 			scope: Env.get('MICROSOFT_SCOPES')
 		});
-		console.log('hire')
+		console.log('hire');
 		return response.redirect(authUrl);
 	}
 
