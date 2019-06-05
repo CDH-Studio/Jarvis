@@ -734,7 +734,7 @@ class RoomController {
 		// if the location is selected then query, else dont
 		if (location !== 'undefined') {
 			searchResults = searchResults
-				.where('floor', location)
+				.where('floor_id', location)
 				.clone();
 		}
 		// if the "number of seats" is selected then add to query, else ignore it
