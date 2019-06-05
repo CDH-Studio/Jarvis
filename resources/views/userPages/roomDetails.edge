@@ -106,7 +106,7 @@
                                 </span>
                                 @each(roomFeature in roomFeatures)
                                     @if(roomFeature.feature.category.name==$parent.featureCategory.name)
-                                        <p class="mb-0">{{roomFeature.feature.name}}</p>   
+                                        <p class="mb-0">{{ truncate(roomFeature.feature.name, 13, '.') }}</p>   
                                     @endif 
                                 @endeach
                                 @if(featureCategory=='Other')

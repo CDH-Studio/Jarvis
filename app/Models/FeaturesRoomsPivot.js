@@ -9,7 +9,7 @@ class FeaturesRoomsPivot extends Model {
 	}
 
 	feature () {
-		return this.belongsTo('App/Models/RoomFeature', 'feature_id', 'id');
+		return this.belongsTo('App/Models/RoomFeature', 'room_feature_id', 'id');
 	}
 
 	rooms () {

@@ -1,5 +1,6 @@
 {
-	"profile": "profile",
+	"profile": "Profile",
+	"feedback": "Feedback",
 	"logout" : "logout",
 	"logoutModalHeader": "Ready to Leave?",
 	"logoutModalBody": "Are you sure you want to log out?",

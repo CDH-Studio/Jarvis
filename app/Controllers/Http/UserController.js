@@ -89,7 +89,6 @@ class UserController {
 			var floorOptions = await Floor.all();
 			formOptions.floors = floorOptions.toJSON();
 
-
 			return view.render('auth.registerUser', { photoName, formOptions });
 		}
 	}
@@ -116,10 +115,8 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async edit ({ params, view, auth, response }) {
-
 		// Retrieves user object
 		const user = await User.findOrFail(params.id);
-		var layoutType = '';
 		const userRole = await auth.user.getUserRole();
 		var isAdmin;
 
@@ -145,7 +142,7 @@ class UserController {
 			return response.redirect('/');
 		}
 
-		return view.render('auth.editProfile', { user, isAdmin, formOptions});
+		return view.render('auth.editProfile', { user, isAdmin, formOptions });
 	}
 
 	/**
@@ -154,32 +151,30 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async update ({ request, session, params, response }) {
-
-		try{
+		try {
 		// Retrieves user input
-		const body = request.all();
+			const body = request.all();
 
-		//test if selected building, tower, and floor exist
-		await Floor.findOrFail(body.floor);
-		await Tower.findOrFail(body.tower);
-		await Building.findOrFail(body.building);
+			// test if selected building, tower, and floor exist
+			await Floor.findOrFail(body.floor);
+			await Tower.findOrFail(body.tower);
+			await Building.findOrFail(body.building);
 
-		// Updates user information in database
-		await User
-			.query()
-			.where('id', params.id)
-			.update({
-				firstname: body.firstName,
-				lastname: body.lastName,
-				email_id: body.email,
-				floor_id: body.floor,
-				tower_id: body.tower,
-				building_id: body.building
-			});
+			// Updates user information in database
+			await User
+				.query()
+				.where('id', params.id)
+				.update({
+					firstname: body.firstName,
+					lastname: body.lastName,
+					email_id: body.email,
+					floor_id: body.floor,
+					tower_id: body.tower,
+					building_id: body.building
+				});
 
-		session.flash({ notification: 'Your profile has been updated!' });
-
-		}catch(err){
+			session.flash({ notification: 'Your profile has been updated!' });
+		} catch (err) {
 			Logger.debug(err);
 		}
 
@@ -192,11 +187,10 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async createWithoutVerifyingEmail ({ request, response, auth }) {
-		
-		try{
+		try {
 			var body = request.post();
 
-			//test if selected building, tower, and floor exist
+			// test if selected building, tower, and floor exist
 			await Floor.findOrFail(body.floor);
 			await Tower.findOrFail(body.tower);
 			await Building.findOrFail(body.building);
@@ -216,13 +210,10 @@ class UserController {
 			await auth.login(user);
 
 			return response.redirect('/');
-
-		}catch(err){
+		} catch (err) {
 			Logger.debug(err);
 			return response.redirect('/register');
 		}
-
-		
 	}
 	/**
 	 * Create a new Enployee user and send a confirmation email to them.
@@ -230,11 +221,10 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async createWithVerifyingEmail ({ request, response, auth }) {
-
-		try{
+		try {
 			var body = request.post();
 
-			//test if selected building, tower, and floor exist
+			// test if selected building, tower, and floor exist
 			await Floor.findOrFail(body.floor);
 			await Tower.findOrFail(body.tower);
 			await Building.findOrFail(body.building);
@@ -272,12 +262,10 @@ class UserController {
 
 			await User.create(userInfo);
 			return response.redirect('/login');
-
-		}catch(err){
+		} catch (err) {
 			Logger.debug(err);
 			return response.redirect('/register');
 		}
-
 	}
 
 	/**
@@ -361,8 +349,6 @@ class UserController {
 	async login ({ request, auth, response, session }) {
 		const { email, password } = request.all();
 
-		console.log('hello');
-
 		const user = await User
 			.query()
 			.where('email', email.toLowerCase())
@@ -427,7 +413,6 @@ class UserController {
 		var canEdit = 0;
 		const userRole = await auth.user.getUserRole();
 
-
 		// check if user is viewing their own profile or is admin
 		if (auth.user.id === Number(params.id) || userRole === 'admin') {
 			canEdit = 1;
@@ -437,7 +422,7 @@ class UserController {
 
 		user = user.toJSON();
 
-		return view.render('auth.showProfile', {auth, user, canEdit});
+		return view.render('auth.showProfile', { auth, user, canEdit });
 	}
 
 	/**
