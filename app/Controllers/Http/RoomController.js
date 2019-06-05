@@ -446,7 +446,16 @@ class RoomController {
 		}
 
 		// find rooms
-		const results = await Room.query().where('building_id', selectedBuilding.id).with('floor').with('tower').fetch();
+		const results = await Room
+			.query()
+			.where('building_id', selectedBuilding.id)
+			.with('floor')
+			.with('tower')
+			.with('features', (builder) => {
+			    builder.orderBy('id', 'desc')
+			  })
+			.fetch();
+
 		const rooms = results.toJSON();
 
 		// Sort the results by name
@@ -454,42 +463,38 @@ class RoomController {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
 
-		// Retrieve number of active rooms
-		let countActive = await Room
-			.query()
-			.where('State_id', 1)
-			.where('building_id', selectedBuilding.id)
-			.count();
-
-		// Retrieve number of deactive rooms
-		let countDeactive = await Room
-			.query()
-			.where('State_id', 2)
-			.where('building_id', selectedBuilding.id)
-			.count();
-
-		// Retrieve number of rooms under maintenance
-		let countMaint = await Room
-			.query()
-			.where('State_id', 3)
-			.where('building_id', selectedBuilding.id)
-			.count();
-
-		// Create statistic array with custom keys
-		var stats = {};
-		stats['total'] = rooms.length;
-		stats['active'] = countActive[0]['count(*)'];
-		stats['deactive'] = countDeactive[0]['count(*)'];
-		stats['maintenance'] = countMaint[0]['count(*)'];
-
-		// Sets average rating for each room
-		for (var i = 0; i < rooms.length; i++) {
-			// Adds new attribute - rating - to every room object
-			rooms[i].rating = await this.getAverageRating(rooms[i].id);
-		}
-
 		// if user is admin
 		if (user.role.name === 'admin') {
+
+			// Retrieve number of active rooms
+			let countActive = await Room
+				.query()
+				.where('State_id', 1)
+				.where('building_id', selectedBuilding.id)
+				.count();
+
+			// Retrieve number of deactive rooms
+			let countDeactive = await Room
+				.query()
+				.where('State_id', 2)
+				.where('building_id', selectedBuilding.id)
+				.count();
+
+			// Retrieve number of rooms under maintenance
+			let countMaint = await Room
+				.query()
+				.where('State_id', 3)
+				.where('building_id', selectedBuilding.id)
+				.count();
+
+			// Create statistic array with custom keys
+			var stats = {};
+			stats['total'] = rooms.length;
+			stats['active'] = countActive[0]['count(*)'];
+			stats['deactive'] = countDeactive[0]['count(*)'];
+			stats['maintenance'] = countMaint[0]['count(*)'];
+
+		
 			// get all builig info admin nav bar since this route is shared with regular users and admin
 			// therefore, the admin middle-ware can't retrieve building info to pass to view
 			var allBuildings = await Building.all();

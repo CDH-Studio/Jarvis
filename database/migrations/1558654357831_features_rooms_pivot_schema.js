@@ -7,8 +7,8 @@ class FeaturesRoomsPivotSchema extends Schema {
 	up () {
 		this.create('features_rooms_pivot', (table) => {
 			table.increments();
-			table.string('room_id').unsigned().references('id').inTable('rooms').notNullable();
-			table.integer('feature_id').unsigned().references('id').inTable('room_features').notNullable();
+			table.integer('room_id').unsigned().references('id').inTable('rooms').notNullable();
+			table.integer('room_feature_id').unsigned().references('id').inTable('room_features').notNullable();
 			table.timestamps();
 		});
 	}
