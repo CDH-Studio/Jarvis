@@ -74,7 +74,7 @@
                                 <strong><i class="fas fa-building fa-fw"></i></strong> {{ room.building.name }}
                             </div>
                             <div class="mt-2 mb-2">
-                                <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong> {{ room.floor.name }}  {{ room.tower.name }}
+                                <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong> {{ room.floor === null ? 0 : room.floor.name }}  {{ room.tower.name }}
                             </div>
                             <div class="mt-2 mb-3">
                                 <strong><i class="fas fa-phone fa-fw"></i></strong> {{ room.telephone }}
@@ -601,7 +601,7 @@
         <script type='module'>
             import {notify} from '/js/notify.js';
             $(window).on('load', () => {
-                notify({$: $, message: '{{ flashMessage('error') }}', type: 'danger', x: 10, y: 60 });
+                notify({$: $, message: '{{ flashMessage('error') }}', type: 'danger', x: 10, y: 60, delay: 10000 });
             });
         </script>
     @endif

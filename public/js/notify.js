@@ -9,7 +9,8 @@ export function notify ({
 	url = '',
 	enter = 'fadeInRight',
 	exit = 'fadeOutUp',
-	element = 'body'
+	element = 'body',
+	delay = 5000
 } = {}) {
 	$.notify({
 		message: message,
@@ -30,6 +31,7 @@ export function notify ({
 			y: y
 		},
 		spacing: 10,
-		z_index: 1031
+		z_index: 1031,
+		delay: delay
 	});
 };

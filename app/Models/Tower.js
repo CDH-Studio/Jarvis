@@ -11,6 +11,10 @@ class Tower extends Model {
 	room () {
 		return this.hasMany('App/Models/Room', 'id', 'tower_id');
 	}
+
+	user () {
+		return this.hasMany('App/Models/User', 'id', 'tower_id');
+	}
 }
 
 module.exports = Tower;

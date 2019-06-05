@@ -56,10 +56,22 @@
             </div>
             
             {{--  Checkboxes  --}}
+            {{--  <hr style='margin-top:0px;'>  --}}
+            {{--  <div class='d-flex flex-wrap wrapper-center'>  --}}
+                {{--  <div class='flex-fill'>  --}}
+                    {{--  @if(room.floor == 0)  --}}
+                        {{--  <strong>Location:</strong><span>  0-{{ room.tower }} </span>  --}}
+                    {{--  @else   --}}
+                        {{--  <strong>Location:</strong><span>  {{ room.floorName }}-{{ room.towerName }} </span>  --}}
+                    {{--  @endif  --}}
             <hr class="mt-0 mb-2">
             <div class="row text-center">
                 <div class="col-3"> 
-                    <i class="far fa-building text-muted mr-1"></i> <span>{{ truncate(room.floor.name, 4, '.') }} - {{ truncate(room.tower.name, 4, '.') }} </span>
+                    @if(room.floor === null)
+                        <i class="far fa-building text-muted mr-1"></i> <span>0 - {{ truncate(room.towerName, 4, '.') }} </span>
+                    @else
+                        <i class="far fa-building text-muted mr-1"></i> <span>{{ truncate(room.floorName, 4, '.') }} - {{ truncate(room.towerName, 4, '.') }} </span>
+                    @endif
                 </div>
                 <div class="col-5"> 
                     <strong class="text-muted">{{ antl.formatMessage('roomSearchCard.tableSeats') }}:</strong><span> {{ room.seats }} </span>
