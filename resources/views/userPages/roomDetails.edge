@@ -42,7 +42,7 @@
                                 </button>   
                             @else
                                 <span data-toggle="modal" data-target='#reportModal' >
-                                    <a href="#" class="btn btn-danger btn-circle fa-sm" data-toggle='tooltip'  data-placement="top" title="Report Issue">
+                                    <a href="#" class="btn btn-danger btn-circle fa-sm" data-toggle='tooltip'  data-placement="top" title="{{antl.formatMessage('roomDetails.reportIssue')}}">
                                         <i class="fas fa-flag"></i>
                                     </a>
                                 </span>
@@ -482,13 +482,13 @@
                         <div class='modal-highlight'></div>
                         {{--  Header  --}}
                         <div class='modal-header'>
-                            <h4 class='no-margin'>Report</h4>
+                            <h4 class='no-margin'>{{ antl.formatMessage('roomDetails.reportTitle') }}</h4>
                         </div>
                         {{--  Body Information  --}}
                         <div class='body' style='margin: 20px;'>
                             <div class='row'>
                                 <div class='col form-group'>
-                                    <label for='issueType'>Issue Type <strong class='text-danger'>*</strong></label>
+                                    <label for='issueType'>{{ antl.formatMessage('roomDetails.reportIssueType') }}<strong class='text-danger'>*</strong></label>
                                     @if(hasErrorFor('issueType'))
                                         <select class='form-control is-invalid' name='issueType' id='issueType' onchange='removeErrorClass("issueType")'>
                                             <option value='undefined' {{ old('rating', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select an issue</option>
@@ -513,7 +513,7 @@
                             </div>
                             <div class='row'>
                                 <div class='col form-group no-margin'>
-                                    <label for='comment'>Comment <strong class='text-danger'>*</strong></label>
+                                    <label for='comment'>{{ antl.formatMessage('roomDetails.reportComment') }} <strong class='text-danger'>*</strong></label>
                                     @if(hasErrorFor('comment'))
                                         <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
@@ -524,8 +524,8 @@
                             </div>
                         </div>
                         <div class='modal-footer text-right'>
-                            <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                            <button type='submit' class='btn btn-primary'>Report</button>
+                            <button type='button' class='btn btn-secondary' data-dismiss='modal'>{{ antl.formatMessage('roomDetails.reportCancelButton') }}</button>
+                            <button type='submit' class='btn btn-primary'>{{ antl.formatMessage('roomDetails.reportReportButton') }}</button>
                         </div>
                     </form>
                 </div>

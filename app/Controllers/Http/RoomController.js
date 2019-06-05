@@ -13,6 +13,7 @@ const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
 const Event = use('Event');
+const Antl = use('Antl')
 // Used for time related calcuklations and formatting
 const moment = require('moment');
 require('moment-round');
@@ -99,13 +100,15 @@ class RoomController {
 	async create ({ response, view, auth }) {
 		const actionType = 'Add Room';
 
+		const DBNameSelect = 'name_english as name'
+
 		var formOptions = {};
 
 		var results = await RoomStatus.query().select('id', 'name').fetch();
 		formOptions.statuses = results.toJSON();
-		results = await Floor.query().select('id', 'name').fetch();
+		results = await Floor.query().select('id', DBNameSelect).fetch();
 		formOptions.floors = results.toJSON();
-		results = await Tower.query().select('id', 'name').fetch();
+		results = await Tower.query().select('id', DBNameSelect).fetch();
 		formOptions.towers = results.toJSON();
 		results = await RoomFeaturesCategory
 			.query()
@@ -114,6 +117,7 @@ class RoomController {
 			})
 			.select('id', 'name')
 			.fetch();
+
 		formOptions.roomFeatureCategory = results.toJSON();
 
 		return view.render('adminPages.addEditRoom', { actionType, formOptions });
