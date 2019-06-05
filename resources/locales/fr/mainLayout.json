@@ -1,6 +1,7 @@
 {
-	"profile": "profil",
-	"logout" : "déconnexion",
+	"profile": "Profil",
+	"feedback": "Commentaire",
+	"logout" : "Déconnexion",
 	"logoutModalHeader": "Prêt à partir?",
 	"logoutModalBody": "Êtes-vous sûr de vouloir vous déconnecter?",
 	"logoutModalLogoutBtn": "Déconnexion",

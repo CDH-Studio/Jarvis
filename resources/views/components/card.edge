@@ -52,14 +52,14 @@
             {{--  Checkboxes  --}}
             <hr class="mt-0 mb-2">
             <div class="row text-center">
-                <div class="col-4"> 
-                    <i class="far fa-building text-muted mr-1"></i> <span>{{ room.floor.name }} - {{ room.tower.name }} </span>
+                <div class="col-3"> 
+                    <i class="far fa-building text-muted mr-1"></i> <span>{{ truncate(room.floor.name, 4, '.') }} - {{ truncate(room.tower.name, 4, '.') }} </span>
+                </div>
+                <div class="col-5"> 
+                    <strong class="text-muted">{{ antl.formatMessage('roomSearchCard.tableSeats') }}:</strong><span> {{ room.seats }} </span>
                 </div>
                 <div class="col-4"> 
-                    <strong class="text-muted">Table seats:</strong><span> {{ room.seats }} </span>
-                </div>
-                <div class="col-4"> 
-                    <strong class="text-muted">Capacity:</strong><span> {{ room.capacity }}</span>
+                    <strong class="text-muted">{{ antl.formatMessage('roomSearchCard.capacity') }}:</strong><span> {{ room.capacity }}</span>
                 </div>
             </div>
         </div>
