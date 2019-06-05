@@ -597,7 +597,7 @@
         <script type='module'>
             import {notify} from '/js/notify.js';
             $(window).on('load', () => {
-                notify({$: $, message: '{{ flashMessage('error') }}', type: 'danger', x: 10, y: 60 });
+                notify({$: $, message: '{{ flashMessage('error') }}', type: 'danger', x: 10, y: 60, delay: 10000 });
             });
         </script>
     @endif
