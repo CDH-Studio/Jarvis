@@ -11,6 +11,9 @@ tmp
 # Uploads 
 public/uploads/reviewPictures
 
+# Uploads 
+public/uploads/
+
 # the vscode config file
 .vscode
 

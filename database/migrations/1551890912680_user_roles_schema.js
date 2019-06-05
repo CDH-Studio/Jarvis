@@ -7,7 +7,7 @@ class UserRolesSchema extends Schema {
 	up () {
 		this.create('user_roles', (table) => {
 			table.increments();
-			table.string('role_name', 20).notNullable();
+			table.string('name', 20).notNullable();
 			table.timestamps();
 		});
 	}

@@ -37,19 +37,35 @@
       <div id="collapseUsers" class="collapse" aria-labelledby="collapseUsers" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
           <a id="view-users-dropdown" class="dropdown-item" href='{{ route('allUsers') }}'>{{ antl.formatMessage('adminSidebarOptions.viewUsers') }}</a>
+          <a id="view-users-dropdown" class="dropdown-item" href='{{ route('allAdmins') }}'>View Admins</a>
         </div>
       </div>
+
     </li>
 
-          <!-- Nav Item - Utilities Collapse Menu -->
+    <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
       <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
         <i class="fas fa-fw fa-exclamation-circle"></i>
-        <span>Room Issues</span>
+        <span>{{antl.formatMessage('adminSidebarOptions.roomIssuesDropdown')}}</span>
       </a>
       <div id="collapseUtilities" class="collapse" aria-labelledby="collapseUtilities" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
           <a id="room-issues-drop-down" class='dropdown-item' href='{{ route('showIssue', {roomID: 'all', issueStatus: 'all' }) }}'>{{ antl.formatMessage('adminSidebarOptions.viewIssues') }}</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBuilding" aria-expanded="true" aria-controls="collapseUtilities">
+        <i class="fas fa-fw fa-building"></i>
+        <span>Building</span>
+      </a>
+      <div id="collapseBuilding" class="collapse" aria-labelledby="collapseUtilities" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <a id="room-issues-drop-down" class='dropdown-item' href="{{route('configuration')}}">Config Building</a>
+          <a id="room-issues-drop-down" class='dropdown-item' href='#'>New Building</a>
         </div>
       </div>
     </li>

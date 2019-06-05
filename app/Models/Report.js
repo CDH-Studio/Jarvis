@@ -12,6 +12,10 @@ class Report extends Model {
 		return this.belongsTo('App/Models/Room');
 	}
 
+	building () {
+		return this.belongsTo('App/Models/Building');
+	}
+
 	report_type () {
 		return this.belongsTo('App/Models/ReportType');
 	}

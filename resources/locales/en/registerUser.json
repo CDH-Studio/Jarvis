@@ -6,6 +6,7 @@
 	"passTip": "must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character and be at least 8 Characters",
 	"pass": "Password",
 	"confirmPass": "Confirm Password",
+	"building": "Building",
 	"tower": "Tower",
 	"floor": "Floor",
 	"submit": "Register",

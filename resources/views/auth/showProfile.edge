@@ -20,13 +20,9 @@
                                     <span class='badge badge-pill badge-warning'>verification needed</span>
                                 @endif
                             </p>
-                            @if(profileUserRole==='user')
-                                <p><strong>Floor:</strong> {{ user.floor }}</p>
-                                @if(user.tower == 1)
-                                    <p><strong>Tower:</strong> East</p>
-                                @else
-                                    <p><strong>Tower:</strong> West</p>
-                                @endif
+                            @if(user.role.name==='user')
+                                <p><strong>Building:</strong> {{ user.building.name }}</p>
+                                <p><strong>Floor/Tower:</strong> {{ user.floor.name }} {{user.tower.name}}</p>
                                 <button onclick="window.location='{{ route('viewBookings', {id: user.id, bookingType: 'user'}) }}';" class="btn btn-info btn-icon-split">
                                     <span class="icon text-white-50"><i class="fas fa-list-ul"></i></span>
                                     <span class="text">View bookings</span>

@@ -1,12 +1,14 @@
 {
-	"title": "Admin Registration",
-	"warning": "Cette page est destinée uniquement à l'administrateur. Vous aurez besoin d'un code spécial pour vous inscrire.",
+	"title": "L'enregistrement D'Administrateur",
+	"warning": "Cette page est réservée à l'usage de l'administrateur. Vous aurez besoin d'un code spécial pour vous inscrire.",
 	"firstname": "Prénom",
 	"lastname": "Nom de famille",
-	"email": "Email",
+	"email": "Courriel",
+	"passTip": "Doit contenir au moins: 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial et au moins 8 caractères",
 	"pass": "Mot de passe",
-	"confirmPass": "Confirm Password",
+	"confirmPass": "Confirmez le mot de passe",
 	"token": "Jeton d'administration",
-	"submit": "Register",
-	"loginRedirect": "Vous avez déjà un compte? Connectez-vous!"
+	"submit": "Registrez",
+	"loginRedirect": "Vous avez déjà un compte? Ouvrir une session!"
+
 }

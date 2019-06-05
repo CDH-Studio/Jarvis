@@ -9,7 +9,7 @@ class Review extends Model {
 	}
 
 	room () {
-		return this.belongsTo('App/Models/Room');
+		return this.belongsTo('App/Models/Room', 'room_id');
 	}
 }
 

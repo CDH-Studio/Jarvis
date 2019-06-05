@@ -32,8 +32,9 @@ class CreateUser {
 			firstname: 'required|max:50',
 			lastname: 'required|max:50',
 			password:"required|regexPassword", // eslint-disable-line
+			tower: 'required|integer|requiredDropdown',
 			floor: 'required|integer|requiredDropdown',
-			tower: 'required|integer|requiredDropdown'
+			building: 'required|integer|requiredDropdown'
 		};
 	}
 	// Custom error messages

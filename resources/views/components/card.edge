@@ -6,7 +6,7 @@
     <input type='hidden' name='from' value={{ from }} />
     <input type='hidden' name='to' value={{ to }} />
     {{--  Room card  --}}
-    <a class='card room-card custom-shadow ie-room-card' href='javascript:;' onclick='parentNode.submit();' {{--data-toggle='modal' data-target='#roomModal'--}}>
+    <a class='card room-card custom-shadow ie-room-card' href='javascript:;' onclick='parentNode.submit();'>
         {{--  Title  --}}
         <div class='room-card-title'>
             <div class="row">
@@ -14,86 +14,52 @@
                     <h5 style="line-height: 50px" class="m-0">{{ room.name }} </h5>
                 </div> 
                 <div class="col-6 text-right">
-                     @!component('components.stars', rating = room.rating)
+                     @!component('components.stars', rating = room.avg_rating)
                 </div> 
             </div>
         </div>
         <div class='room-card-body'>
-            <div class='d-flex flex-wrap justify-content-center'>
-                {{--  Room Picture  --}}
-                <div class='room-card-photo-container'>
+            <div class="row">
+                <div class="col-12 col-md-5 text-center text-md-left">
                     @if(room.picture) 
-                        <img class='room-card-img' alt='{{ room.name }} photo' src='{{ room.picture }}'>
+                        <img class="img-thumbnail mb-3" alt='{{ room.name }} photo' src='{{ room.picture }}'>
                     @else
-                        <img class='room-card-img' alt='default photo'src='/images/default.png'>
+                        <img class='img-thumbnail' alt='default photo'src='/images/default.png'>
                     @endif
                 </div>
-                {{--  Room information  --}}
-            
-                <div class='checkbox-content d-flex flex-wrap'>
-                    <div class='room-card-spec' style='min-width:122px'>
-                        <ul class='space-evenly'>
-                            @if(room.projector === 1)
-                                <li class='spec-yes'><i class='fas fa-check-circle'></i><span> Projector</span></li>
-                            @else
-                                <li class='spec-no'><i class='fas fa-times-circle spec-no-icon'></i><span> Projector</span></li>
-                            @endif
-                            @if(room.flipchart === 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Flip chart</span></li>
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Flip chart</span></li>
-                            @endif
-                            @if(room.whiteboard === 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Whiteboard</span></li>
-                            @endif
-                            @if(room.audioConference === 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Audio conf.</span></li>
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Audio conf.</span></li>
-                            @endif
-                        </ul>
-                    </div>
-                    <div class='room-card-spec'>
-                        <ul class='space-evenly'>
-                            @if(room.videoConference === 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Video conf.</span></li> 
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Video conf.</span></li>
-                            @endif
-                            @if(room.pc === 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> PC</span></li>
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> PC</span></li>
-                            @endif
-                            @if(room.surfaceHub === 1)
-                                <li class='spec-yes'><i class='fa fa-check-circle'></i><span> Surface hub</span></li>
-                            @else
-                                <li class='spec-no'><i class='fa fa-times-circle spec-no-icon'></i><span> Surface hub</span></li>
-                            @endif
-                            {{--  <li><span class='link-color'>More info...</span></li>  --}}
-                            <li class='spec-no' style='opacity:0;'><i class='fa fa-times-circle'></i><span> Placeholder</span></li>
-                        </ul>
+                <div class="col-12 col-md-7 p-0">
+                    <div class="row text-center text-md-left pt-2">
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                @each(roomFeature in room.features)
+                                    <li class='spec-yes mb-1'><i class='fas fa-check-circle'></i><span> {{ truncate(roomFeature.name, 11, '.') }}</span></li>
+                                    @if($loop.index ===3)
+                                            </ul>
+                                        </div>
+                                        <div class="col-6">
+                                            <ul class="list-unstyled">
+                                    @endif
+                                @else
+                                    <i>no features</i>
+                                @endeach
+
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
             
             {{--  Checkboxes  --}}
-            <hr style='margin-top:0px;'>
-            <div class='d-flex flex-wrap wrapper-center'>
-                <div class='flex-fill'>
-                    @if(room.floor == 0)
-                        <strong>Location:</strong><span>  0-{{ room.tower }} </span>
-                    @else 
-                        <strong>Location:</strong><span>  {{ room.floor }}-{{ room.tower }} </span>
-                    @endif
+            <hr class="mt-0 mb-2">
+            <div class="row text-center">
+                <div class="col-3"> 
+                    <i class="far fa-building text-muted mr-1"></i> <span>{{ truncate(room.floor.name, 4, '.') }} - {{ truncate(room.tower.name, 4, '.') }} </span>
                 </div>
-                <div class='flex-fill'>
-                    <strong>Table seats:</strong><span> {{ room.seats }} </span>
+                <div class="col-5"> 
+                    <strong class="text-muted">{{ antl.formatMessage('roomSearchCard.tableSeats') }}:</strong><span> {{ room.seats }} </span>
                 </div>
-                <div class='flex-fill'>
-                    <strong>Capacity:</strong><span> {{ room.capacity }}</span>
+                <div class="col-4"> 
+                    <strong class="text-muted">{{ antl.formatMessage('roomSearchCard.capacity') }}:</strong><span> {{ room.capacity }}</span>
                 </div>
             </div>
         </div>
