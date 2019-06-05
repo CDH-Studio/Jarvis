@@ -423,7 +423,7 @@ class HomeController {
 	*/
 	async getAvailableRooms (user, view) {
 		// If the tower is West then set the order to descending, else ascending
-		let towerOrder = (await user.tower.name === 'West') ? 'desc' : 'asc';
+		let towerOrder = (await user.getUserTower() === 'West') ? 'desc' : 'asc';
 
 		// look for rooms that are open
 		// order all rooms in the database by closest to the user's floor and tower
