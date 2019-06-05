@@ -106,7 +106,11 @@
                                 </span>
                                 @each(roomFeature in roomFeatures)
                                     @if(roomFeature.feature.category.name==$parent.featureCategory.name)
-                                        <p class="mb-0">{{ truncate(roomFeature.feature.name, 13, '.') }}</p>   
+                                        @if(antl.currentLocale()=='en')
+                                            <p class="mb-0">{{ truncate(roomFeature.feature.name_english, 13, '.') }}</p>   
+                                        @else
+                                            <p class="mb-0">{{ truncate(roomFeature.feature.name_french, 13, '.') }}</p>
+                                        @endif
                                     @endif 
                                 @endeach
                                 @if(featureCategory=='Other')

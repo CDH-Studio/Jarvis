@@ -452,19 +452,20 @@ class RoomController {
 			.with('floor')
 			.with('tower')
 			.with('features', (builder) => {
-				builder.orderBy('name', 'asc');
+				builder.orderBy('id', 'asc');
 			})
 			.fetch();
 
 		const rooms = results.toJSON();
 
-		// Sort the results by name
+		//Sort the results by name
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
 
 		// if user is admin
 		if (user.role.name === 'admin') {
+
 			// Retrieve number of active rooms
 			let countActive = await Room
 				.query()

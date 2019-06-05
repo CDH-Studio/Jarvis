@@ -32,7 +32,13 @@
                         <div class="col-6">
                             <ul class="list-unstyled">
                                 @each(roomFeature in room.features.slice(0,7))
-                                    <li class='spec-yes mb-1'><i class='fas fa-check-circle'></i><span> {{ truncate(roomFeature.name, 11, '.') }}</span></li>
+                                    <li class='spec-yes mb-1'><i class='fas fa-check-circle'></i>
+                                        @if(antl.currentLocale()=='en')
+                                                {{ truncate(roomFeature.name_english, 11, '.') }}
+                                            @else
+                                                {{ truncate(roomFeature.name_french, 11, '.') }}
+                                            @endif
+                                    </li>
                                     @if($loop.index ===3)
                                             </ul>
                                         </div>
