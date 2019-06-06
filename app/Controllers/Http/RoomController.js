@@ -13,7 +13,7 @@ const Token = use('App/Models/Token');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
 const Event = use('Event');
-const Antl = use('Antl')
+
 // Used for time related calcuklations and formatting
 const moment = require('moment');
 require('moment-round');
@@ -329,10 +329,17 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async show ({ response, auth, params, view, request }) {
+	async show ({ antl, response, auth, params, view, request }) {
 		try {
 			const result = await User.query().where('id', auth.user.id).with('role').firstOrFail();
 			const user = result.toJSON();
+	
+			let DBNameSelect = 'name_english as name';
+
+			if(antl.currentLocale() === 'fr'){
+				DBNameSelect = 'name_french as name';
+			}
+			
 
 			// get the search form date range if filled in, otherwise generate the data with current date
 			const form = request.only(['date', 'from', 'to']);
@@ -395,7 +402,7 @@ class RoomController {
 
 			var roomFeatureCategory = await RoomFeaturesCategory
 				.query()
-				.select('id', 'name', 'icon')
+				.select('id', DBNameSelect, 'icon')
 				.fetch();
 
 			roomFeatureCategory = roomFeatureCategory.toJSON();
