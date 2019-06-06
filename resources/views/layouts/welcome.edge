@@ -50,7 +50,7 @@
                       <strong>{{ flashMessage('loginError') }}</strong>
                     </div>
                   @endif
-                  <form action='{{ route('test') }}' method='GET' class='user'>
+                  <form action='{{ route('post') }}' method='POST' class='user'>
                     {{ csrfField() }}
                     <div class='form-group'>
                       <input type='email' class='form-control form-control-user' name='email' id='email' aria-describedby='emailHelp' placeholder='Enter email'>

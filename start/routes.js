@@ -132,3 +132,8 @@ Route.post('/message', 'Roomcontroller.sendMessage').as('message');
 // Pusher
 //= ========================================================================
 Route.get('/push', 'TokenController.push').as('push');
+
+//= ========================================================================
+// Active Directory
+//= ========================================================================
+Route.post('/active', 'UserController.active').as('active');

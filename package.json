@@ -33,6 +33,7 @@
 		"@adonisjs/validator": "^5.0.6",
 		"@adonisjs/websocket": "^1.0.11",
 		"@microsoft/microsoft-graph-client": "^1.6.0",
+		"activedirectory": "^0.7.2",
 		"adonis-scheduler": "^3.0.2",
 		"axios": "^0.18.0",
 		"babel-eslint": "^10.0.1",

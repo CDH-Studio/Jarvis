@@ -10,6 +10,7 @@ const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
 const axios = require('axios');
+const ActiveDirectory = require('activedirectory');
 
 /**
  * Generating a random string.
@@ -549,6 +550,27 @@ class UserController {
 		});
 
 		return view.render('adminPages.viewUsers', { users, pageTitle });
+	}
+
+	/**
+	 * Active Directory
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async active ({ request }) {
+		const options = request.all();
+		console.log('active', options);
+
+		const config = {
+			url: 'ldap://DomainDNSZones.prod.prv',
+			baseDN: 'dc=prod,dc=prv',
+			username: options.email,
+			password: options.password
+		};
+		const ad = new ActiveDirectory(config);
+		console.log('ad', ad);
+
+		return ad;
 	}
 }
 
