@@ -488,7 +488,7 @@
                         <div class='body' style='margin: 20px;'>
                             <div class='row'>
                                 <div class='col form-group'>
-                                    <label for='issueType'>{{ antl.formatMessage('roomDetails.reportIssueType') }}<strong class='text-danger'>*</strong></label>
+                                    <label for='issueType'>{{ antl.formatMessage('roomDetails.reportIssueType') }}: <strong class='text-danger'>*</strong></label>
                                     @if(hasErrorFor('issueType'))
                                         <select class='form-control is-invalid' name='issueType' id='issueType' onchange='removeErrorClass("issueType")'>
                                             <option value='undefined' {{ old('rating', ) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select an issue</option>
@@ -513,7 +513,7 @@
                             </div>
                             <div class='row'>
                                 <div class='col form-group no-margin'>
-                                    <label for='comment'>{{ antl.formatMessage('roomDetails.reportComment') }} <strong class='text-danger'>*</strong></label>
+                                    <label for='comment'>{{ antl.formatMessage('roomDetails.reportComment') }}: <strong class='text-danger'>*</strong></label>
                                     @if(hasErrorFor('comment'))
                                         <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment',  review.review) }}</textarea>
                                         <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
