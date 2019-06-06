@@ -559,34 +559,48 @@ class UserController {
 	 */
 	async active ({ request }) {
 		const options = request.all();
-		console.log('active', options);
 
-		const config = {
-			url: 'ldap://DomainDNSZones.prod.prv',
-			baseDN: 'dc=prod,dc=prv',
-			username: options.email,
-			password: options.password
-		};
-		const ad = new ActiveDirectory(config);
-		console.log('ad', ad);
+		// const config = {
+		// 	url: 'ldap://DomainDNSZones.prod.prv',
+		// 	baseDN: 'dc=prod,dc=prv',
+		// 	username: options.email,
+		// 	password: options.password
+		// };
+		// const ad = new ActiveDirectory(config);
+		// console.log('ad', ad);
 
-		const username = 'liy2';
-		const password = 'o6265623124';
+		// const username = options.email;
+		// const password = options.password;
 
-		ad.authenticate(username, password, (err, auth) => {
-			if (err) {
-				console.log('ERROR: ' + JSON.stringify(err));
-				return;
+		// ad.authenticate(username, password, (err, auth) => {
+		// 	if (err) {
+		// 		console.log('ERROR: ' + JSON.stringify(err));
+		// 		return;
+		// 	}
+
+		// 	if (auth) {
+		// 		console.log('Authenticated!');
+		// 	} else {
+		// 		console.log('Authentication failed!');
+		// 	}
+		// });
+
+		var passport = require('passport');
+		var WindowsStrategy = require('passport-windowsauth');
+
+		passport.use(new WindowsStrategy({
+			ldap: {
+				url: 'ldap://DomainDNSZones.prod.prv',
+				base: 'DC=prod,DC=prv',
+				bindDN: `CN=${options.email},OU=Accounts,OU=Service,DC=prod,DC=prv`,
+				bindCredentials: options.password
 			}
+		}, (profile, done) => {
+			console.log('profile', profile);
+			console.log('done', done);
+		}));
 
-			if (auth) {
-				console.log('Authenticated!');
-			} else {
-				console.log('Authentication failed!');
-			}
-		});
-
-		return ad;
+		return 'done';
 	}
 }
 
