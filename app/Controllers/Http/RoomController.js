@@ -340,7 +340,6 @@ class RoomController {
 				DBNameSelect = 'name_french as name';
 			}
 			
-
 			// get the search form date range if filled in, otherwise generate the data with current date
 			const form = request.only(['date', 'from', 'to']);
 			if (!form.date || form.date === 'undefined' || !form.from || form.from === 'undefined' || !form.to || form.to === 'undefined') {

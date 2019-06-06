@@ -16,7 +16,7 @@ const Tower = use('App/Models/Tower');
 class TowerSeeder {
 	async run () {
 		var towerFillerEnglish = ['East', 'West'];
-		var towerFillerFrench = ['East', 'West'];
+		var towerFillerFrench = ['Est', 'Ouest'];
 		var buildingFiller = [1, 1];
 		var count = await Tower.getCount();
 
