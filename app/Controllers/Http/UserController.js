@@ -586,16 +586,18 @@ class UserController {
 		// });
 
 		var passport = require('passport');
-		var WindowsStrategy = require('passport-windowsauth');
+		var ActiveDirectoryStrategy = require('passport-activedirectory');
 
-		passport.use(new WindowsStrategy({
+		passport.use(new ActiveDirectoryStrategy({
+			integrated: false,
 			ldap: {
 				url: 'ldap://DomainDNSZones.prod.prv',
-				base: 'DC=prod,DC=prv',
-				bindDN: `CN=${options.email},OU=Accounts,OU=Service,DC=prod,DC=prv`,
+				baseDN: 'dc=prod,dc=prv',
+				username: options.email,
 				bindCredentials: options.password
 			}
-		}, (profile, done) => {
+		}, (profile, ad, done) => {
+			console.log('ad', ad)
 			console.log('profile', profile);
 			console.log('done', done);
 		}));
