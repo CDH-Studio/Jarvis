@@ -564,13 +564,13 @@ class RoomController {
 		const seats = form.seats;
 		const capacity = form.capacity;
 		// check boxes input
-		let checkBox = [{ checkName: 'projector', checkValue: form.projectorCheck },
-			{ checkName: 'whiteboard', checkValue: form.whiteboardCheck },
-			{ checkName: 'flipchart', checkValue: form.flipChartCheck },
-			{ checkName: 'audioConference', checkValue: form.audioCheck },
-			{ checkName: 'videoConference', checkValue: form.videoCheck },
-			{ checkName: 'surfaceHub', checkValue: form.surfaceHubCheck },
-			{ checkName: 'pc', checkValue: form.pcCheck }
+		let checkBox = [{ checkName: 1, checkValue: form.projectorCheck },
+			{ checkName: 2, checkValue: form.whiteboardCheck },
+			{ checkName: 3, checkValue: form.flipChartCheck },
+			{ checkName: 4, checkValue: form.audioCheck },
+			{ checkName: 5, checkValue: form.videoCheck },
+			{ checkName: 6, checkValue: form.surfaceHubCheck },
+			{ checkName: 7, checkValue: form.pcCheck }
 		];
 		// only loook for roosm that are open
 		let searchResults = Room
@@ -599,17 +599,20 @@ class RoomController {
 				.clone();
 		}
 
-		// loop through the array of objects and add to query if checked
-		for (let i = 0; i < checkBox.length; i++) {
-			if (checkBox[i].checkValue === '1') {
-				searchResults = searchResults
-					.where(checkBox[i].checkName, checkBox[i].checkValue)
-					.clone();
-			}
-		}
+		// // loop through the array of objects and add to query if checked
+		// for (let i = 0; i < checkBox.length; i++) {
+		// 	if (checkBox[i].checkValue === '1') {
+		// 		searchResults = searchResults
+		// 			// .where('features.id', checkBox[i].checkName)
+		// 			.where(checkBox[i].checkName, checkBox[i].checkValue)
+		// 			.clone();
+		// 	}
+		// }
+
 		// fetch the query
-		searchResults = await searchResults.fetch();
+		searchResults = await searchResults.with('features').fetch();
 		const rooms = searchResults.rows;
+		console.log(searchResults.toJSON())
 
 		// Sets average rating for each room
 		for (var i = 0; i < rooms.length; i++) {
@@ -628,7 +631,6 @@ class RoomController {
 					item.towerName = (await item.tower().fetch()).name;
 					item = item.toJSON();
 
-					console.log('send');
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
 						code: code
