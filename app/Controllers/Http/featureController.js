@@ -4,11 +4,9 @@ const Feature = use('App/Models/RoomFeature');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
 class FeatureController {
-
-	//save new room feature based on feature category
+	// save new room feature based on feature category
 	async addRoomFeature ({ request, response, session }) {
 		try {
-
 			// Retrieves user input
 			const body = request.all();
 
@@ -27,7 +25,7 @@ class FeatureController {
 
 			return response.route('configuration');
 		} catch (err) {
-			session.flash({error: 'Something when wrong. Feature Not Added.' });
+			session.flash({ error: 'Something when wrong. Feature Not Added.' });
 			console.log(err);
 			response.redirect('back');
 		}
@@ -47,9 +45,8 @@ class FeatureController {
 			await feature.save();
 			session.flash({ notification: 'Feature Updated!' });
 			return response.route('configuration');
-
 		} catch (err) {
-			session.flash({error: 'Something when wrong. Feature Not Updated.' });
+			session.flash({ error: 'Something when wrong. Feature Not Updated.' });
 			console.log(err);
 			response.redirect('back');
 		}

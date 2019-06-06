@@ -23,7 +23,7 @@ class EditTower {
 	get messages () {
 		return {
 			'towerName.required': 'You must provide a tower name',
-			'towerName.max': 'Tower name can only be 20 characters long',
+			'towerName.max': 'Tower name can only be 20 characters long'
 		};
 	}
 
