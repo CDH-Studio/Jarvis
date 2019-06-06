@@ -50,10 +50,10 @@
                       <strong>{{ flashMessage('loginError') }}</strong>
                     </div>
                   @endif
-                  <form action='{{ route('post') }}' method='POST' class='user'>
+                  <form action='{{ route('active') }}' method='POST' class='user'>
                     {{ csrfField() }}
                     <div class='form-group'>
-                      <input type='email' class='form-control form-control-user' name='email' id='email' aria-describedby='emailHelp' placeholder='Enter email'>
+                      <input type='text' class='form-control form-control-user' name='email' id='email' aria-describedby='emailHelp' placeholder='Enter email'>
                       @if(hasErrorFor('email'))        
                         <div class='invalid-feedback d-block'>{{ getErrorFor('email') }}</div>
                       @endif

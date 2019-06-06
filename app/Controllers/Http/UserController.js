@@ -570,6 +570,22 @@ class UserController {
 		const ad = new ActiveDirectory(config);
 		console.log('ad', ad);
 
+		const username = 'liy2';
+		const password = 'o6265623124';
+
+		ad.authenticate(username, password, (err, auth) => {
+			if (err) {
+				console.log('ERROR: ' + JSON.stringify(err));
+				return;
+			}
+
+			if (auth) {
+				console.log('Authenticated!');
+			} else {
+				console.log('Authentication failed!');
+			}
+		});
+
 		return ad;
 	}
 }
