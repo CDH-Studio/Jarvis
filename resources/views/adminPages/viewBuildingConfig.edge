@@ -197,7 +197,7 @@ Configuration
         </div>     
         @each(category in categories)
             <div class="col-sm-12 col-md-6 col-lg-5 col-xl-5 mb-4">
-                @component('components.generalCard', title=category.name)
+                @component('components.generalCard', title=category.name_english)
                     @slot('body')
                         @if(category.features.length!=0)
                             <table class="table table-borderless table-hover table-sm">
@@ -225,7 +225,7 @@ Configuration
                     @endslot
                         @slot('footer')
                             <form class="form-inline mb-2" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'>
-                                <h6 class="text-muted"><strong>New "{{category.name}}" Feature</strong></h6>
+                                <h6 class="text-muted"><strong>New "{{category.name_english}}" Feature</strong></h6>
                                 {{ csrfField() }}
                                 <input type="hidden"  name="featureCategory" value="{{category.id}}">
                                 <div class="form-row">

@@ -74,7 +74,12 @@
                                 <strong><i class="fas fa-building fa-fw"></i></strong> {{ room.building.name }}
                             </div>
                             <div class="mt-2 mb-2">
-                                <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong> {{ room.floor === null ? 0 : room.floor.name }}  {{ room.tower.name }}
+                                <strong><i class="fas fa-map-marker-alt fa-fw"></i></strong>  
+                                @if(antl.currentLocale() === 'fr')
+                                    {{ room.floor.name_french }}  {{ room.tower.name_french }}
+                                @else
+                                    {{ room.floor.name_english }}  {{ room.tower.name_english }}
+                                @endif
                             </div>
                             <div class="mt-2 mb-3">
                                 <strong><i class="fas fa-phone fa-fw"></i></strong> {{ room.telephone }}
@@ -104,8 +109,9 @@
                                 <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="{{featureCategory.name}}">
                                     <i class="{{featureCategory.icon}}"></i>
                                 </span>
+
                                 @each(roomFeature in roomFeatures)
-                                    @if(roomFeature.feature.category.name==$parent.featureCategory.name)
+                                    @if(roomFeature.feature.category.id==$parent.featureCategory.id)
                                         @if(antl.currentLocale()=='en')
                                             <p class="mb-0">{{ truncate(roomFeature.feature.name_english, 13, '.') }}</p>   
                                         @else
@@ -113,15 +119,12 @@
                                         @endif
                                     @endif 
                                 @endeach
-                                @if(featureCategory=='Other')
-                                    <p class="mb-0">{{room.extraEquipment}}</p>
-                                @endif
                             </div>
                         @endeach
-                        @if(room.extraEquipment)
-                        <div class="col-12 col-lg-12 text-center mt-3">
-                            <p class="mb-0"><strong>{{ antl.formatMessage('roomDetails.extraEquipment') }} </strong>{{room.extraEquipment}}</p>
-                        </div>
+                        @if(room.extraEquipment.length > 1)
+                            <div class="col-12 col-lg-12 text-center mt-3">
+                                <p class="mb-0"><strong>{{ antl.formatMessage('roomDetails.extraEquipment') }}: </strong>{{room.extraEquipment}}</p>
+                            </div>
                         @endif
                     </div>    
                 </div>

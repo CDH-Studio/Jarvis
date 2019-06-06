@@ -115,7 +115,7 @@ class RoomController {
 			.with('features', (builder) => {
 				builder.where('building_id', 1);
 			})
-			.select('id', 'name')
+			.select('id', DBNameSelect)
 			.fetch();
 
 		formOptions.roomFeatureCategory = results.toJSON();
@@ -153,18 +153,12 @@ class RoomController {
 			room.floor_id = body.floor;
 			room.tower_id = body.tower;
 			room.building_id = selectedBuilding.id;
-			room.State_id = body.State_id;
+			room.State_id = body.state;
 			room.telephone = body.telephoneNumber;
 			room.seats = body.tableSeats;
 			room.capacity = body.maximumCapacity;
+			room.avg_rating = 0;
 
-			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-				name: `${room.name}_floorPlan.png`
-			});
-
-			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-				name: `${room.name}_roomPicture.png`
-			});
 
 			// Populates the room object's values
 			room.floorplan = `uploads/floorPlans/${room.name}_floorPlan.png`;
@@ -178,13 +172,21 @@ class RoomController {
 			const roomFeatures = results.toJSON();
 
 			for (var index = 0; index < roomFeatures.length; ++index) {
-				if (body[roomFeatures[index].name]) {
+				if (body[roomFeatures[index].name_english]) {
 					var feature = new FeaturePivot();
 					feature.room_id = room.id;
-					feature.feature_id = roomFeatures[index].id;
+					feature.room_feature_id = roomFeatures[index].id;
 					feature.save();
 				}
 			}
+
+			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
+				name: `${room.name}_floorPlan.png`
+			});
+
+			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
+				name: `${room.name}_roomPicture.png`
+			});
 
 			session.flash({
 				notification: 'Room Added! To add another room, click here',
@@ -204,9 +206,12 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async edit ({ params, view }) {
+
+		let DBNameSelect = 'name_english as name';
+
 		// Retrieves room object
 		var room = await Room.findBy('id', params.id);
-		room.features = await FeaturePivot.query().where('room_id', room.id).pluck('feature_id');
+		room.features = await FeaturePivot.query().where('room_id', room.id).pluck('room_feature_id');
 		room = room.toJSON();
 
 		const actionType = 'Edit Room';
@@ -215,16 +220,16 @@ class RoomController {
 
 		var results = await RoomStatus.query().select('id', 'name').fetch();
 		formOptions.statuses = results.toJSON();
-		results = await Floor.query().select('id', 'name').fetch();
+		results = await Floor.query().select('id', DBNameSelect).fetch();
 		formOptions.floors = results.toJSON();
-		results = await Tower.query().select('id', 'name').fetch();
+		results = await Tower.query().select('id', DBNameSelect).fetch();
 		formOptions.towers = results.toJSON();
 		results = await RoomFeaturesCategory
 			.query()
 			.with('features', (builder) => {
 				builder.where('building_id', 1);
 			})
-			.select('id', 'name')
+			.select('id', DBNameSelect)
 			.fetch();
 		formOptions.roomFeatureCategory = results.toJSON();
 
@@ -309,12 +314,12 @@ class RoomController {
 			.delete();
 
 		// re-save selected room features
-		var index;
+		var index;		
 		for (index = 0; index < roomFeatures.length; ++index) {
-			if (body[roomFeatures[index].name]) {
+			if (body[roomFeatures[index].name_english]) {			
 				const feature = new FeaturePivot();
 				feature.room_id = room.id;
-				feature.feature_id = roomFeatures[index].id;
+				feature.room_feature_id = roomFeatures[index].id;
 				feature.save();
 			}
 		}

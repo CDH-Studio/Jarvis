@@ -6,6 +6,16 @@
 
 @section('content')
     @!component('components.pageHeader', title='Add room')
+    @if(flashMessage('error'))
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="alert alert-dismissible alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ flashMessage('error') }}
+                </div>
+            </div>
+        </div>
+    @endif
     <p>Add rooms to database. Rooms added here can be booked by users.</p>
 
     <div class='row'>
@@ -63,18 +73,18 @@
                                                 <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right' data-original-title='Active: available for booking, Deactive & Maintenance: unavailable for booking'></i>
                                             </div>
                                         </div>
-                                        @if(hasErrorFor('state_id'))
-                                            <select class='form-control is-invalid' name='state_id' id='state_id' onchange='removeErrorClass("state_id")'>
+                                        @if(hasErrorFor('state'))
+                                            <select class='form-control is-invalid' name='state' id='state' onchange='removeErrorClass("state")'>
                                         @else
-                                            <select class='form-control' name='state_id' id='state_id'>
+                                            <select class='form-control' name='state' id='state'>
                                         @endif
-                                            <option value='undefined' {{ old('state_id', room.state_id) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Room Status</option>
+                                            <option value='undefined' {{ old('state', room.state_id) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Room Status</option>
                                             @each(status in formOptions.statuses)
-                                                <option value='{{status.id}}' {{ old('state_id', room.state_id) == status.id ? 'selected' : '' }}>{{status.name}}</option>
+                                                <option value='{{status.id}}' {{ old('state', room.state_id) == status.id ? 'selected' : '' }}>{{status.name}}</option>
                                             @endeach
                                         </select>
-                                        @if(hasErrorFor('state_id'))
-                                            <div class='invalid-feedback'>{{ getErrorFor('state_id') }}</div>
+                                        @if(hasErrorFor('state'))
+                                            <div class='invalid-feedback'>{{ getErrorFor('state') }}</div>
                                         @endif
                                     </div>
                                 </div>
@@ -164,13 +174,13 @@
 
                                                     @each(feature in featureCategory.features)
                                                         <div class='form-check'>
-                                                            <input class="form-check-input" type='checkbox' name='{{feature.name}}' class='custom-control-input' id='{{feature.name}}' value= '1' 
+                                                            <input class="form-check-input" type='checkbox' name='{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1' 
                                                             @if(room)
-                                                                {{ old(feature.name_english, room.features.includes(feature.id)) ? 'checked' : '' }} >
+                                                                {{ old(feature.id, room.features.includes(feature.id)) ? 'checked' : '' }} >
                                                             @else
                                                                 {{ old(feature.name_english) ? 'checked' : '' }} >
                                                             @endif
-                                                            <label class="form-check-label" for='{{feature.name}}'>{{feature.name_english}}</label>
+                                                            <label class="form-check-label" for='{{feature.name_english}}'>{{feature.name_english}}</label>
                                                         </div>
                                                     @endeach
                                                     </div>
@@ -240,7 +250,7 @@
                                             <div class="col-4 text-center">
                                                 <img class="shadow"style ="width:80%; max-height: 150px;" data-toggle="modal" data-target="#room-roompicture-{{room.id}}" src='/{{room.picture}}'>
                                             </div>
-                                            <small id="reviewPictureHelp" class="form-text text-muted">Click to view the previosuly <strong>saved</strong> image.</small>
+                                            <small id="reviewPictureHelp" class="form-text text-muted">Click to view the previously <strong>saved</strong> image.</small>
                                         @endif
                                     </div>
                                 </div>
