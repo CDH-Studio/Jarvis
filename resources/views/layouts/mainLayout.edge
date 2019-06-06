@@ -115,14 +115,14 @@
                 <li class="nav-item dropdown no-arrow">
                   <a class="nav-link dropdown-toggle text-grey small" href='https://docs.google.com/forms/d/e/1FAIpQLSdy0b5w0p0P-lNET54LsryEsGDN-7f16tr6leO5TH3kjbdPTg/viewform?usp=sf_link' target="_blank"><i class="fas fa-comment mr-1"></i>{{ antl.formatMessage('mainLayout.feedback') }}</a>
                 </li>
-                <li class="nav-item dropdown no-arrow">
+              @endif
+              <li class="nav-item dropdown no-arrow">
                   @if(antl.currentLocale() =="en")
                    <a class="nav-link dropdown-toggle text-grey small" href='/switch/fr'><i class="fas fa-globe mr-1"></i>FR</a>
                   @else
                     <a class="nav-link dropdown-toggle text-grey small" href='/switch/en'><i class="fas fa-globe mr-1"></i>EN</a>
                   @endif
                 </li>
-              @endif
 
               <div class="topbar-divider d-none d-sm-block"></div>
               <!-- Nav Item - User Information -->
