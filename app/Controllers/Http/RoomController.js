@@ -632,9 +632,9 @@ class RoomController {
 		const filterFeatures = async (rooms, feat) => {
 			return asyncFilter(rooms, async (room) => {
 				const feats = (await room.features().fetch()).toJSON();
-				console.log(room.name, feats.map(x => x.name_english));
-				console.log(feat, feats.find(x => x.id == feat) === null)
-				console.log(feats.find(x => x.id === feat))
+				// console.log(room.name, feats.map(x => x.name_english));
+				// console.log(feat, feats.find(x => x.id == feat) === null)
+				// console.log(feats.find(x => x.id === feat))
 				return feats.find(x => x.id === feat);
 			});
 		};
@@ -645,9 +645,7 @@ class RoomController {
 		};
 
 		await forEveryFeature();
-		console.log('length', rooms.length)
 
-		// const rooms = searchResults.rows;
 		// Sets average rating for each room
 		for (var i = 0; i < rooms.length; i++) {
 			// Adds new attribute - rating - to every room object
@@ -664,7 +662,10 @@ class RoomController {
 					item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
 					item.towerName = (await item.tower().fetch()).name;
 					item = item.toJSON();
-					console.log('item', item.features)
+					item.featureNames = item.features.map(f => {
+						return {name_english: f.name_english, name_french: f.name_french};
+					})
+					console.log(item.featureNames)
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
 						code: code

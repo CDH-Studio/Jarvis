@@ -36,6 +36,7 @@
         //Listen for events on the channel
         channel.bind('send-room', function (data) {
             if (data.message.code == '{{ code }}') {
+                console.log(data.message.card)
                 let listItem = $("<div class='cno-padding ie-room-margin'>" + data.message.card + "</div>")
                 $('#results').append(listItem)
             }
