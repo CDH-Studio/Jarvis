@@ -1,12 +1,14 @@
 {
-	"title": "Admin Registration",
-	"firstname": "First Name",
-	"lastname": "Last Name",
-	"email": "Email",
-	"pass": "Password",
-	"confirmPass": "Confirm Password",
-	"tower": "Tower",
-	"floor": "Floor",
-	"submit": "Register",
-	"loginRedirect": "Already have an account? Login!"
+	"title": "Inscrivez-vous",
+	"firstname": "Prénom",
+	"lastname": "Nom de famille",
+	"email": "Courriel",
+	"passTip": "Doit contenir au moins: 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial et au moins 8 caractères",
+	"pass": "Mot de passe",
+	"confirmPass": "Confirmation du mot de passe",
+	"building": "Immeuble",
+	"tower": "Tour",
+	"floor": "Étage",
+	"submit": "Inscrivez-vous",
+	"loginRedirect": "Vous avez déjà un compte? Ouvrir une session!"
 }

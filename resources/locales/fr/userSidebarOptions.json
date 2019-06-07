@@ -1,8 +1,8 @@
 {
-	"dashboard": "fDashboard",
-	"miniNavHeading": "fTools",
-	"roomsDropdown": "fRooms",
-	"search": "fSearch",
-	"allRooms": "fView All Rooms",
-	"manageBookings": "fManage Bookings"
+"dashboard": "Tableau de bord",
+"miniNavHeading": "Outils",
+"roomsDropdown": "Pièces",
+"search": "Chercher",
+"allRooms": "Afficher les pièces",
+"manageBookings": "Gérer les réservations"
 }

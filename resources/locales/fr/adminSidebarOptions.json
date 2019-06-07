@@ -1,0 +1,13 @@
+{
+	"dashboard": "Dashboard",
+	"miniNavHeading": "Tools",
+	"roomsDropdown": "Rooms",
+	"addRoom": "Add Room",
+	"viewRooms": "View Rooms",
+	"usersDropdown": "Users",
+	"viewUsers": "View Users",
+	"roomIssuesDropdown": "Room Issues",
+	"viewIssues": "View Issues",
+	"buildingDropdown": "Building",
+	"configureBuilding": "Configure Building"
+}
