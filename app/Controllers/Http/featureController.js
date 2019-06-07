@@ -1,5 +1,4 @@
 'use strict';
-const Building = use('App/Models/Building');
 const Feature = use('App/Models/RoomFeature');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
