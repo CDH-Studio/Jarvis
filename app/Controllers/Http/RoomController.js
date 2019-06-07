@@ -55,6 +55,17 @@ async function asyncForEach (arr, callback) {
 	}
 }
 
+async function asyncFilter (arr, callback) {
+	let arr2 = [];
+
+	for (let i = 0; i < arr.length; i++) {
+		if (await callback(arr[i], i, arr))
+			arr2.push(arr[i])
+	}
+
+	return arr2;
+}
+
 class RoomController {
 	/**
 	*
@@ -609,10 +620,27 @@ class RoomController {
 		// 	}
 		// }
 
+		// Features filter
+		const filter = checkBox
+			.filter(x => x.checkValue === '1')
+			.map(x => x.checkName);
+
 		// fetch the query
-		searchResults = await searchResults.with('features').fetch();
-		const rooms = searchResults.rows;
-		console.log(searchResults.toJSON())
+		let rooms = (await searchResults.with('features').fetch()).rows;
+		const filterFeatures = async (rooms, feat) => {
+			return asyncFilter(rooms, async (room) => {
+				const feats = (await room.features().fetch()).toJSON();
+
+				return feats.find(x => x.id === feat);
+			});
+		};
+
+		filter.forEach(async feat => {
+			rooms = await filterFeatures(rooms, feat);
+		});
+
+		// const rooms = searchResults.rows;
+		console.log(rooms.length);
 
 		// Sets average rating for each room
 		for (var i = 0; i < rooms.length; i++) {
