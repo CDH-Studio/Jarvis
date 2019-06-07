@@ -43,18 +43,18 @@ class FeaturesCategorySeeder {
 		}
 
 		const featureFillers = [
-			{ name_english: 'Projector', name_french: 'fProjector', feature_category_id: 1, building_id: 1 },
-			{ name_english: 'Whiteboard', name_french: 'fWhiteboard', feature_category_id: 3, building_id: 1 },
-			{ name_english: 'Flip Chart', name_french: 'fFlip Chart', feature_category_id: 3, building_id: 1 },
-			{ name_english: 'Audio Conferencing', name_french: 'fAudio Conferencing', feature_category_id: 2, building_id: 1 },
-			{ name_english: 'Video Conferencing', name_french: 'fVideo Conferencing', feature_category_id: 2, building_id: 1 },
-			{ name_english: 'Surface Hub', name_french: 'fSurface Hub', feature_category_id: 1, building_id: 1 },
+			{ name_english: 'Projector', name_french: 'Projecteur', feature_category_id: 1, building_id: 1 },
+			{ name_english: 'Whiteboard', name_french: 'Tableau blanc', feature_category_id: 3, building_id: 1 },
+			{ name_english: 'Flip Chart', name_french: 'Tableau à feuilles mobiles', feature_category_id: 3, building_id: 1 },
+			{ name_english: 'Audio Conferencing', name_french: 'Conférence audio', feature_category_id: 2, building_id: 1 },
+			{ name_english: 'Video Conferencing', name_french: 'Conférence vidéo', feature_category_id: 2, building_id: 1 },
+			{ name_english: 'Surface Hub', name_french: 'Surface Hub', feature_category_id: 1, building_id: 1 },
 			{ name_english: 'PC', name_french: 'PC', feature_category_id: 1, building_id: 1 },
-			{ name_english: 'Plasma TV', name_french: 'fPlasma TV', feature_category_id: 1, building_id: 1 },
-			{ name_english: 'LCD TV', name_french: 'fLCD TV', feature_category_id: 1, building_id: 1 },
-			{ name_english: 'SMART Board', name_french: 'fSMART Board', feature_category_id: 1, building_id: 1 },
-			{ name_english: 'Glassboard', name_french: 'fGlassboard', feature_category_id: 3, building_id: 1 },
-			{ name_english: 'Wifi', name_french: 'fWifi', feature_category_id: 4, building_id: 1 }
+			{ name_english: 'Plasma TV', name_french: 'Plasma TV', feature_category_id: 1, building_id: 1 },
+			{ name_english: 'LCD TV', name_french: 'LCD TV', feature_category_id: 1, building_id: 1 },
+			{ name_english: 'SMART Board', name_french: 'SMART Board', feature_category_id: 1, building_id: 1 },
+			{ name_english: 'Glassboard', name_french: 'Tableau vitré', feature_category_id: 3, building_id: 1 },
+			{ name_english: 'Wifi', name_french: 'Wifi', feature_category_id: 4, building_id: 1 }
 		];
 
 		count = await RoomFeature.getCount();
