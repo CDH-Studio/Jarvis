@@ -1,11 +1,11 @@
 {
-	"pageTitle": "Modifier réservations",
+	"pageTitle": "Gérer les réservations",
 	"totalBookings": "Total de réservations",
 	"totalCancelled": "Total annulé",
 	"totalRemaining": "Restant ce mois",
 	"bookingsError": "Aucune réservation trouvée",
 	"bookingsHeader": "Réservations à venir",
-	"tableRoom": "Pièce",
+	"tableRoom": "Salle",
 	"tableName": "Nom",
 	"tableMeetingName": "Nom de la réunion",
 	"tableDate": "Date",
