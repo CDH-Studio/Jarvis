@@ -35,7 +35,7 @@ class AddRoom {
 			roomPicture: 'required|file|file_ext:png,jpg,jpeg|file_size:2mb|file_types:image',
 			tableSeats: 'required|integer|above:0',
 			telephoneNumber: 'required',
-			//telephoneNumber: "required| regex: /((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}/",
+			// telephoneNumber: "required| regex: /((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}/",
 			tower: 'required|requiredDropdown',
 			maximumCapacity: 'required|integer|above:0',
 			name: 'required|unique:rooms,name',
@@ -62,7 +62,7 @@ class AddRoom {
 
 	async fails (error) {
 		this.ctx.session.withErrors(error).flashAll();
-		this.ctx.session.flash({ error: 'There is a problem with the information provided. Room not saved.' })
+		this.ctx.session.flash({ error: 'There is a problem with the information provided. Room not saved.' });
 		return this.ctx.response.redirect('back');
 	}
 }

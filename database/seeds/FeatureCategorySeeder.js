@@ -15,8 +15,8 @@ const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
 class FeaturesCategorySeeder {
 	async run () {
-		var categoryNameFillerEnglish = ["Display", "Conferencing", "Collaboration", "Connectivity", "Other"];
-		var categoryNameFillerFrench = ["Outils D'Affichage", "Conférence", "Collaboration", "Connectivité", "Autre"];
+		var categoryNameFillerEnglish = ['Display', 'Conferencing', 'Collaboration', 'Connectivity', 'Other'];
+		var categoryNameFillerFrench = ['Outils D\'Affichage', 'Conférence', 'Collaboration', 'Connectivité', 'Autre'];
 		var categoryIconFiller = ['fas fa-tv', 'fas fa-headset', 'fas fa-chalkboard-teacher', 'fas fa-wifi', 'fas fa-plus'];
 		var count = await RoomFeaturesCategory.getCount();
 

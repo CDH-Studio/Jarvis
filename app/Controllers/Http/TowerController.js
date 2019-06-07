@@ -4,7 +4,6 @@ const Tower = use('App/Models/Tower');
 const Room = use('App/Models/Room');
 
 class TowerController {
-
 	async addTower ({ request, response, session }) {
 		try {
 			const selectedBuilding = request.cookie('selectedBuilding');
@@ -24,7 +23,7 @@ class TowerController {
 
 			return response.route('configuration');
 		} catch (err) {
-			session.flash({error: 'Something when wrong. Tower Not Added.' });
+			session.flash({ error: 'Something when wrong. Tower Not Added.' });
 			console.log(err);
 			response.redirect('back');
 		}
@@ -39,9 +38,8 @@ class TowerController {
 			await tower.save();
 			session.flash({ notification: 'Tower Updated!' });
 			return response.route('configuration');
-
 		} catch (err) {
-			session.flash({error: 'Something when wrong. Tower Not Updated.' });
+			session.flash({ error: 'Something when wrong. Tower Not Updated.' });
 			console.log(err);
 			response.redirect('back');
 		}

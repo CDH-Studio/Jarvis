@@ -30,7 +30,7 @@ class AddFeature {
 
 	async fails (error) {
 		this.ctx.session.withErrors(error).flashAll();
-		this.ctx.session.flash({ error: 'Please provide both English and French names (max: 20 Char)' })
+		this.ctx.session.flash({ error: 'Please provide both English and French names (max: 20 Char)' });
 		return this.ctx.response.redirect('back');
 	}
 }

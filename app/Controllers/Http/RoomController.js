@@ -100,7 +100,7 @@ class RoomController {
 	async create ({ response, view, auth }) {
 		const actionType = 'Add Room';
 
-		const DBNameSelect = 'name_english as name'
+		const DBNameSelect = 'name_english as name';
 
 		var formOptions = {};
 
@@ -159,7 +159,6 @@ class RoomController {
 			room.capacity = body.maximumCapacity;
 			room.avg_rating = 0;
 
-
 			// Populates the room object's values
 			room.floorplan = `uploads/floorPlans/${room.name}_floorPlan.png`;
 			room.picture = `uploads/roomPictures/${room.name}_roomPicture.png`;
@@ -206,7 +205,6 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async edit ({ params, view }) {
-
 		let DBNameSelect = 'name_english as name';
 
 		// Retrieves room object
@@ -314,9 +312,9 @@ class RoomController {
 			.delete();
 
 		// re-save selected room features
-		var index;		
+		var index;
 		for (index = 0; index < roomFeatures.length; ++index) {
-			if (body[roomFeatures[index].name_english]) {			
+			if (body[roomFeatures[index].name_english]) {
 				const feature = new FeaturePivot();
 				feature.room_id = room.id;
 				feature.room_feature_id = roomFeatures[index].id;
@@ -338,13 +336,13 @@ class RoomController {
 		try {
 			const result = await User.query().where('id', auth.user.id).with('role').firstOrFail();
 			const user = result.toJSON();
-	
+
 			let DBNameSelect = 'name_english as name';
 
-			if(antl.currentLocale() === 'fr'){
+			if (antl.currentLocale() === 'fr') {
 				DBNameSelect = 'name_french as name';
 			}
-			
+
 			// get the search form date range if filled in, otherwise generate the data with current date
 			const form = request.only(['date', 'from', 'to']);
 			if (!form.date || form.date === 'undefined' || !form.from || form.from === 'undefined' || !form.to || form.to === 'undefined') {
@@ -487,14 +485,13 @@ class RoomController {
 		await generateFloorAndTower();
 		const rooms = results.toJSON();
 
-		//Sort the results by name
+		// Sort the results by name
 		rooms.sort((a, b) => {
 			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
 		});
 
 		// if user is admin
 		if (user.role.name === 'admin') {
-
 			// Retrieve number of active rooms
 			let countActive = await Room
 				.query()

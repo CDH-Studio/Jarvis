@@ -3,8 +3,6 @@ const Building = use('App/Models/Building');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 
 class BuildingController {
-
-
 	/**
 	 * show building configuration such as:
 	 * floors, towers, features
@@ -37,7 +35,6 @@ class BuildingController {
 			});
 	}
 
-
 	/**
 	 * view all building to manage
 	 *
@@ -50,7 +47,6 @@ class BuildingController {
 
 		return view.render('adminPages.selectBuilding', { allBuildings: allBuildings.toJSON() });
 	}
-
 
 	/**
 	 * store the selected building in the cookie
@@ -70,7 +66,6 @@ class BuildingController {
 
 		return response.route('home');
 	}
-
 }
 
 module.exports = BuildingController;
