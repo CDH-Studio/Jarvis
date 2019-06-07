@@ -59,8 +59,9 @@ async function asyncFilter (arr, callback) {
 	let arr2 = [];
 
 	for (let i = 0; i < arr.length; i++) {
-		if (await callback(arr[i], i, arr))
-			arr2.push(arr[i])
+		if (await callback(arr[i], i, arr)) {
+			arr2.push(arr[i]);
+		}
 	}
 
 	return arr2;
@@ -627,21 +628,26 @@ class RoomController {
 
 		// fetch the query
 		let rooms = (await searchResults.with('features').fetch()).rows;
+
 		const filterFeatures = async (rooms, feat) => {
 			return asyncFilter(rooms, async (room) => {
 				const feats = (await room.features().fetch()).toJSON();
-
+				console.log(room.name, feats.map(x => x.name_english));
+				console.log(feat, feats.find(x => x.id == feat) === null)
+				console.log(feats.find(x => x.id === feat))
 				return feats.find(x => x.id === feat);
 			});
 		};
+		const forEveryFeature = async () => {
+			await asyncForEach(filter, async (feat) => {
+				rooms = await filterFeatures(rooms, feat);
+			})
+		};
 
-		filter.forEach(async feat => {
-			rooms = await filterFeatures(rooms, feat);
-		});
+		await forEveryFeature();
+		console.log('length', rooms.length)
 
 		// const rooms = searchResults.rows;
-		console.log(rooms.length);
-
 		// Sets average rating for each room
 		for (var i = 0; i < rooms.length; i++) {
 			// Adds new attribute - rating - to every room object
@@ -658,7 +664,7 @@ class RoomController {
 					item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
 					item.towerName = (await item.tower().fetch()).name;
 					item = item.toJSON();
-
+					console.log('item', item.features)
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
 						code: code
