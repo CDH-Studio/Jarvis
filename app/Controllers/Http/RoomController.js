@@ -631,23 +631,32 @@ class RoomController {
 
 				return (time >= min && time <= max);
 			});
-			// item: a starting time for a room
-			room.forEach(item => {
-				if (!times[item]) {
-					times[item] = {};
-					times[item].rooms = [];
-					times[item].from = item;
-					times[item].time = moment(item, 'HH:mm').format('h:mm A');
-					times[item].to = moment(item, 'HH:mm').add(duration, 'minutes').format('HH:mm');
-					times[item].id = 'tab' + moment(item, 'HH:mm').format('HHmm');
-				}
 
-				let newRoom = {};
-				newRoom.room = (rooms.find(r => { return r.name === name; })).toJSON();
-				newRoom.from = times[item].from;
-				newRoom.to = times[item].to;
-				times[item].rooms.push(newRoom);
-			});
+			// item: a starting time for a room
+			const generateTimes = async () => {
+				await asyncForEach(room, async (item) => {
+					if (!times[item]) {
+						times[item] = {};
+						times[item].rooms = [];
+						times[item].from = item;
+						times[item].time = moment(item, 'HH:mm').format('h:mm A');
+						times[item].to = moment(item, 'HH:mm').add(duration, 'minutes').format('HH:mm');
+						times[item].id = 'tab' + moment(item, 'HH:mm').format('HHmm');
+					}
+
+					let newRoom = {};
+					newRoom.room = rooms.find(r => { return r.name === name; });
+					const floorObj = (await newRoom.room.floor().fetch()) === null ? { name_english: 0, name_french: 0 } : (await newRoom.room.floor().fetch()).toJSON();
+					const towerObj = (await newRoom.room.tower().fetch()).toJSON();
+					newRoom.room.floor = floorObj;
+					newRoom.room.tower = towerObj;
+					newRoom.from = times[item].from;
+					newRoom.to = times[item].to;
+					times[item].rooms.push(newRoom);
+				});
+			};
+
+			await generateTimes();
 		}
 		times = Object.values(times);
 		times.sort((a, b) => {
