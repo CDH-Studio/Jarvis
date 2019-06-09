@@ -597,7 +597,7 @@ class UserController {
 				bindCredentials: options.password
 			}
 		}, (profile, ad, done) => {
-			console.log('ad', ad)
+			console.log('ad', ad);
 			console.log('profile', profile);
 			console.log('done', done);
 		}));

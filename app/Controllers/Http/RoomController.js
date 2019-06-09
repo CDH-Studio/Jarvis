@@ -744,13 +744,13 @@ class RoomController {
 		const seats = options.seats;
 		const capacity = options.capacity;
 		// check boxes input
-		let checkBox = [{ checkName: 1, checkValue: form.projectorCheck },
-			{ checkName: 2, checkValue: form.whiteboardCheck },
-			{ checkName: 3, checkValue: form.flipChartCheck },
-			{ checkName: 4, checkValue: form.audioCheck },
-			{ checkName: 5, checkValue: form.videoCheck },
-			{ checkName: 6, checkValue: form.surfaceHubCheck },
-			{ checkName: 7, checkValue: form.pcCheck }
+		let checkBox = [{ checkName: 1, checkValue: options.projectorCheck },
+			{ checkName: 2, checkValue: options.whiteboardCheck },
+			{ checkName: 3, checkValue: options.flipChartCheck },
+			{ checkName: 4, checkValue: options.audioCheck },
+			{ checkName: 5, checkValue: options.videoCheck },
+			{ checkName: 6, checkValue: options.surfaceHubCheck },
+			{ checkName: 7, checkValue: options.pcCheck }
 		];
 		// only loook for roosm that are open
 		let searchResults = Room
