@@ -135,7 +135,8 @@
                             @each(room in time.rooms)
                                 <div class='no-padding ie-room-margin'>
                                     {{ csrfField() }}
-                                    @!component('components.card',
+									@!component('components.card',
+												antl=antl,
                                         		form=form,
                                         		room=room.room,
                                         		from=room.from,
