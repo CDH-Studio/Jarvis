@@ -667,7 +667,7 @@ class RoomController {
 					item.towerName = (await item.tower().fetch()).name;
 					item = item.toJSON();
 					item.numFeatures = item.features.length;
-					console.log(typeof (item), item);
+
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
 						code: code
