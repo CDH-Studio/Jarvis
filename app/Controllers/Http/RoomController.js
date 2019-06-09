@@ -653,6 +653,8 @@ class RoomController {
 
 				let newRoom = {};
 				newRoom.room = rooms.find(r => { return r.name === name; });
+				console.log('features', newRoom.room.features);
+				console.log('features()', newRoom.room.features());
 				newRoom.from = times[item].from;
 				newRoom.to = times[item].to;
 				times[item].rooms.push(newRoom);
