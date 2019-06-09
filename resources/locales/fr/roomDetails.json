@@ -1,0 +1,41 @@
+{
+	"title": "Détails de la salle",
+	"viewMap": "Afficher la carte",
+	"tableSeats": "Sièges à la table",
+	"capacity": "Capacité",
+	"comments": "Commentaires",
+	"extraEquipment": "Équipement supplémentaire",
+
+	"bookRoom": "Reserver la salle",
+	"bookingName": "Nom de la réunion",
+	"bookingNameHelp":  "Sélectionnez un nom pour la réservation de la salle",
+	"bookingDate": "Date",
+	"bookingDateHelp": "La date ne peut pas se produire plus de 3 mois à l’avance ",
+	"bookingStart": "L’heure de début ",
+	"bookingEnd": "L'heure de fin",
+	"bookingRecurring": "Récurrent",
+	"bookingButton": "Reserver la salle",
+
+	"reportIssue": "Signaler un problème",
+	"reportTitle": "Rapport",
+	"reportIssueType": "Type de problème",
+	"reportComment": "Commentaire",
+	"reportCancelButton": "Annuler",
+	"reportReportButton": "Soumettre",
+
+	"reviewHeading": "Avis",
+	"noReviews": "Aucun Avis Disponible",
+	"reviewCount": "Critiques",
+
+	"writeReview": "Écrire une critique",
+	"editReview": "Modifier la critique",
+	"reviewRating": "Évaluation",
+	"reviewComment": "Commentaire",
+	"reviewPicture": "Photo",
+	"reviewPictureSize": "Choisir un fichier (max: 2 Mb)",
+	"reviewPictureRequirements": "L'image ne peut pas être modifiée après le téléchargement. Elle ne peut être que supprimé",
+	"reviewPictureRequirementsDelete": "Laissez vide pour supprimer la dernière photo téléchargée.",
+	"reviewUpdateButton": "Mettre à jour",
+	"reviewDeleteButton": "Supprimer",
+	"reviewSubmitButton": "Soumettre"
+}

@@ -14,16 +14,17 @@ class EditFloor {
 	// Validation rules
 	get rules () {
 		return {
-			floorName: 'required|max:20|unique:floors,name'
+			floorNameEnglish: 'required|max:20|unique:floors,name_english',
+			floorNameFrench: 'required|max:20|unique:floors,name_french'
 		};
 	}
 
 	// Custom error messages
 	get messages () {
 		return {
-			'floorName.required': 'You must provide a floor name',
+			'required': 'You must provide a floor name in both English and French',
 			'floorName.max': 'Floor name can only be 20 characters long',
-			'floorName.unique': 'The floor name already exists.'
+			'unique': 'Floor name already exists.'
 		};
 	}
 

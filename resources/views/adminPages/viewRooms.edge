@@ -98,8 +98,8 @@ View Rooms
                                     <th scope='col' class='text-center' style='width:10%'>Name</th>
                                     <th scope='col' class='text-center' style='width:25%'>Full name</th>
                                     <th scope='col' class='text-center' style='width:15%'>Phone number</th>
-                                    <th scope='col' class='text-center' style='width:10%'>Floor</th>
                                     <th scope='col' class='text-center' style='width:10%'>Tower</th>
+                                    <th scope='col' class='text-center' style='width:10%'>Floor</th>
                                     <th scope='col' class='text-center' style='width:10%'>Capacity</th>
                                     <th scope='col' class='text-center' style='width:10%'>Room status</th>
                                 </tr>
@@ -111,8 +111,19 @@ View Rooms
                                         <td class='text-center'>{{ room.name }}</td>
                                         <td class='text-center'>{{ room.fullName }}</td>
                                         <td class='text-center'>{{ room.telephone }}</td>
-                                        <td class='text-center'>{{ room.floorName }}</td>
-                                        <td class='text-center'>{{ room.towerName }} </td>
+                                        <td class='text-center'>
+                                            @if(antl.currentLocale()==='en')
+                                                {{ truncate(room.tower.name_english, 7, '.') }}
+                                            @else
+                                                {{ truncate(room.tower.name_french, 7, '.') }}
+                                            @endif
+                                        <td class='text-center'>
+                                            @if(antl.currentLocale()==='en')
+                                                {{ truncate(room.floor.name_english, 7, '.') }}
+                                            @else
+                                                {{ truncate(room.floor.name_french, 7, '.') }}
+                                            @endif
+                                        </td>
                                         <td class='text-center'>{{ room.capacity }}</td>
                                         @if(room.state_id == 1)
                                             <td class='text-'><i class="fas fa-circle td-success fa-xs mr-1"></i> Active</span></td>

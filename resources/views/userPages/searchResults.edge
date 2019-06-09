@@ -1,7 +1,7 @@
 @layout('layouts.mainLayout')
 
 @section('title')
-    Results
+    {{ antl.formatMessage('results.pageTitle') }}
 @endsection
 
 @section('extracss')
@@ -12,10 +12,10 @@
 @section('content')
 
     {{--  Loading page header  --}}
-    @!component('components.pageHeader', title='Results', loading='true')
+    @!component('components.pageHeader', title=antl.formatMessage('results.pageTitle'), loading='true')
 
     {{--  where result cards will be displayed --}}
-    <div class='row' id='results'>
+    <div class='row d-flex flex-wrap' id='results'>
         
     </div>
 
@@ -36,7 +36,7 @@
         //Listen for events on the channel
         channel.bind('send-room', function (data) {
             if (data.message.code == '{{ code }}') {
-                let listItem = $("<div class='cno-padding ie-room-margin'>" + data.message.card + "</div>")
+                let listItem = $("<div class='no-padding ie-room-margin'>" + data.message.card + "</div>")
                 $('#results').append(listItem)
             }
         });

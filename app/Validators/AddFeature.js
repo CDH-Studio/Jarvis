@@ -14,7 +14,8 @@ class AddFeature {
 	// Validation rules
 	get rules () {
 		return {
-			featureName: 'required|max:20',
+			featureNameEnglish: 'required|max:30',
+			featureNameFrench: 'required|max:30',
 			featureCategory: 'required|integer'
 		};
 	}
@@ -22,13 +23,14 @@ class AddFeature {
 	// Custom error messages
 	get messages () {
 		return {
-			'featureName.required': 'You must provide a feature name',
-			'featureName.max': 'feature name can only be 20 characters long'
+			'required': 'You must provide a feature name',
+			'featureName.max': 'feature name can only be 30 characters long'
 		};
 	}
 
 	async fails (error) {
 		this.ctx.session.withErrors(error).flashAll();
+		this.ctx.session.flash({ error: 'Please provide both English and French names (max: 20 Char)' });
 		return this.ctx.response.redirect('back');
 	}
 }

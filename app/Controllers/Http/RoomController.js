@@ -106,6 +106,18 @@ async function asyncForEach (arr, callback) {
 	}
 }
 
+async function asyncFilter (arr, callback) {
+	let arr2 = [];
+
+	for (let i = 0; i < arr.length; i++) {
+		if (await callback(arr[i], i, arr)) {
+			arr2.push(arr[i]);
+		}
+	}
+
+	return arr2;
+}
+
 class RoomController {
 	/**
 	*
@@ -152,21 +164,24 @@ class RoomController {
 	async create ({ response, view, auth }) {
 		const actionType = 'Add Room';
 
+		const DBNameSelect = 'name_english as name';
+
 		var formOptions = {};
 
 		var results = await RoomStatus.query().select('id', 'name').fetch();
 		formOptions.statuses = results.toJSON();
-		results = await Floor.query().select('id', 'name').fetch();
+		results = await Floor.query().select('id', DBNameSelect).fetch();
 		formOptions.floors = results.toJSON();
-		results = await Tower.query().select('id', 'name').fetch();
+		results = await Tower.query().select('id', DBNameSelect).fetch();
 		formOptions.towers = results.toJSON();
 		results = await RoomFeaturesCategory
 			.query()
 			.with('features', (builder) => {
 				builder.where('building_id', 1);
 			})
-			.select('id', 'name')
+			.select('id', DBNameSelect)
 			.fetch();
+
 		formOptions.roomFeatureCategory = results.toJSON();
 
 		return view.render('adminPages.addEditRoom', { actionType, formOptions });
@@ -202,18 +217,11 @@ class RoomController {
 			room.floor_id = body.floor;
 			room.tower_id = body.tower;
 			room.building_id = selectedBuilding.id;
-			room.State_id = body.State_id;
+			room.State_id = body.state;
 			room.telephone = body.telephoneNumber;
 			room.seats = body.tableSeats;
 			room.capacity = body.maximumCapacity;
-
-			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-				name: `${room.name}_floorPlan.png`
-			});
-
-			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-				name: `${room.name}_roomPicture.png`
-			});
+			room.avg_rating = 0;
 
 			// Populates the room object's values
 			room.floorplan = `uploads/floorPlans/${room.name}_floorPlan.png`;
@@ -227,13 +235,21 @@ class RoomController {
 			const roomFeatures = results.toJSON();
 
 			for (var index = 0; index < roomFeatures.length; ++index) {
-				if (body[roomFeatures[index].name]) {
+				if (body[roomFeatures[index].name_english]) {
 					var feature = new FeaturePivot();
 					feature.room_id = room.id;
-					feature.feature_id = roomFeatures[index].id;
+					feature.room_feature_id = roomFeatures[index].id;
 					feature.save();
 				}
 			}
+
+			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
+				name: `${room.name}_floorPlan.png`
+			});
+
+			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
+				name: `${room.name}_roomPicture.png`
+			});
 
 			session.flash({
 				notification: 'Room Added! To add another room, click here',
@@ -253,9 +269,11 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async edit ({ params, view }) {
+		let DBNameSelect = 'name_english as name';
+
 		// Retrieves room object
 		var room = await Room.findBy('id', params.id);
-		room.features = await FeaturePivot.query().where('room_id', room.id).pluck('feature_id');
+		room.features = await FeaturePivot.query().where('room_id', room.id).pluck('room_feature_id');
 		room = room.toJSON();
 
 		const actionType = 'Edit Room';
@@ -264,16 +282,16 @@ class RoomController {
 
 		var results = await RoomStatus.query().select('id', 'name').fetch();
 		formOptions.statuses = results.toJSON();
-		results = await Floor.query().select('id', 'name').fetch();
+		results = await Floor.query().select('id', DBNameSelect).fetch();
 		formOptions.floors = results.toJSON();
-		results = await Tower.query().select('id', 'name').fetch();
+		results = await Tower.query().select('id', DBNameSelect).fetch();
 		formOptions.towers = results.toJSON();
 		results = await RoomFeaturesCategory
 			.query()
 			.with('features', (builder) => {
 				builder.where('building_id', 1);
 			})
-			.select('id', 'name')
+			.select('id', DBNameSelect)
 			.fetch();
 		formOptions.roomFeatureCategory = results.toJSON();
 
@@ -360,10 +378,10 @@ class RoomController {
 		// re-save selected room features
 		var index;
 		for (index = 0; index < roomFeatures.length; ++index) {
-			if (body[roomFeatures[index].name]) {
+			if (body[roomFeatures[index].name_english]) {
 				const feature = new FeaturePivot();
 				feature.room_id = room.id;
-				feature.feature_id = roomFeatures[index].id;
+				feature.room_feature_id = roomFeatures[index].id;
 				feature.save();
 			}
 		}
@@ -378,10 +396,16 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async show ({ response, auth, params, view, request }) {
+	async show ({ antl, response, auth, params, view, request }) {
 		try {
 			const result = await User.query().where('id', auth.user.id).with('role').firstOrFail();
 			const user = result.toJSON();
+
+			let DBNameSelect = 'name_english as name';
+
+			if (antl.currentLocale() === 'fr') {
+				DBNameSelect = 'name_french as name';
+			}
 
 			// get the search form date range if filled in, otherwise generate the data with current date
 			const form = request.only(['date', 'from', 'to']);
@@ -444,7 +468,7 @@ class RoomController {
 
 			var roomFeatureCategory = await RoomFeaturesCategory
 				.query()
-				.select('id', 'name', 'icon')
+				.select('id', DBNameSelect, 'icon')
 				.fetch();
 
 			roomFeatureCategory = roomFeatureCategory.toJSON();
@@ -511,7 +535,7 @@ class RoomController {
 			.with('floor')
 			.with('tower')
 			.with('features', (builder) => {
-				builder.orderBy('id', 'desc');
+				builder.orderBy('id', 'asc');
 			})
 			.fetch();
 
@@ -519,6 +543,7 @@ class RoomController {
 			await asyncForEach(results.rows, async (item) => {
 				item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
 				item.towerName = (await item.tower().fetch()).name;
+				item.numFeatures = item.features.length;
 			});
 		};
 
@@ -664,7 +689,7 @@ class RoomController {
 	async findSpecific ({ request, view }) {
 		// importing forms from search form
 		const form = request.all();
-		let rooms = (await this.filterRooms(form)).rows;
+		let rooms = await this.filterRooms(form);
 
 		// Sets average rating for each room
 		for (var i = 0; i < rooms.length; i++) {
@@ -683,6 +708,7 @@ class RoomController {
 					item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
 					item.towerName = (await item.tower().fetch()).name;
 					item = item.toJSON();
+					item.numFeatures = item.features.length;
 
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken, from: from, to: to }),
@@ -718,21 +744,22 @@ class RoomController {
 		const seats = options.seats;
 		const capacity = options.capacity;
 		// check boxes input
-		let checkBox = [{ checkName: 'projector', checkValue: options.projectorCheck },
-			{ checkName: 'whiteboard', checkValue: options.whiteboardCheck },
-			{ checkName: 'flipchart', checkValue: options.flipChartCheck },
-			{ checkName: 'audioConference', checkValue: options.audioCheck },
-			{ checkName: 'videoConference', checkValue: options.videoCheck },
-			{ checkName: 'surfaceHub', checkValue: options.surfaceHubCheck },
-			{ checkName: 'pc', checkValue: options.pcCheck }
+		let checkBox = [{ checkName: 1, checkValue: form.projectorCheck },
+			{ checkName: 2, checkValue: form.whiteboardCheck },
+			{ checkName: 3, checkValue: form.flipChartCheck },
+			{ checkName: 4, checkValue: form.audioCheck },
+			{ checkName: 5, checkValue: form.videoCheck },
+			{ checkName: 6, checkValue: form.surfaceHubCheck },
+			{ checkName: 7, checkValue: form.pcCheck }
 		];
 		// only loook for roosm that are open
 		let searchResults = Room
 			.query()
-			.where('state_id', 1)
+			.where('State_id', 1)
 			.clone();
 
 		// if the location is selected then query, else dont
+		// TODO: floor_id -> floorName
 		if (location !== 'undefined') {
 			searchResults = searchResults
 				.where('floor_id', location)
@@ -752,18 +779,37 @@ class RoomController {
 				.clone();
 		}
 
-		// loop through the array of objects and add to query if checked
-		for (let i = 0; i < checkBox.length; i++) {
-			if (checkBox[i].checkValue === '1') {
-				searchResults = searchResults
-					.where(checkBox[i].checkName, checkBox[i].checkValue)
-					.clone();
-			}
-		}
+		// Features filter
+		const filter = checkBox
+			.filter(x => x.checkValue === '1')
+			.map(x => x.checkName);
 
 		// fetch the query
-		searchResults = await searchResults.fetch();
-		return searchResults;
+		let rooms = (await searchResults
+			.with('features', (builder) => {
+				builder.orderBy('id', 'asc');
+			})
+			.fetch()).rows;
+
+		const filterFeatures = async (rooms, feat) => {
+			return asyncFilter(rooms, async (room) => {
+				const feats = (await room.features().fetch()).toJSON();
+				// console.log(room.name, feats.map(x => x.name_english));
+				// console.log(feat, feats.find(x => x.id == feat) === null)
+				// console.log(feats.find(x => x.id === feat))
+				return feats.find(x => x.id === feat);
+			});
+		};
+
+		const forEveryFeature = async () => {
+			await asyncForEach(filter, async (feat) => {
+				rooms = await filterFeatures(rooms, feat);
+			});
+		};
+
+		await forEveryFeature();
+
+		return rooms;
 	}
 
 	/**

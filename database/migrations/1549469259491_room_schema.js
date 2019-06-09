@@ -15,13 +15,6 @@ class RoomsSchema extends Schema {
 			table.string('telephone', 20);
 			table.integer('seats').notNullable();
 			table.integer('capacity').notNullable();
-			table.bool('projector');
-			table.bool('whiteboard');
-			table.bool('flipchart');
-			table.bool('audioConference');
-			table.bool('videoConference');
-			table.bool('surfaceHub');
-			table.bool('pc');
 			table.string('extraEquipment', 100);
 			table.string('comment', 100);
 			table.string('floorplan', 100);
