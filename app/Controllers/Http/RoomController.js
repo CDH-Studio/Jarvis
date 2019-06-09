@@ -597,12 +597,6 @@ class RoomController {
 
 	async searchRooms ({ request, view }) {
 		const options = request.all();
-		const rooms = (await this.filterRooms(options)).toJSON();
-		// Sets average rating for each room
-		for (var i = 0; i < rooms.length; i++) {
-			// Adds new attribute - rating - to every room object
-			rooms[i].rating = await this.getAverageRating(rooms[i].id);
-		}
 
 		const duration = Number(options.hour) * 60;
 		const difference = Math.abs(moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))).asMinutes());
