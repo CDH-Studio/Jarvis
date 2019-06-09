@@ -31,7 +31,7 @@
                     <div class="row text-center text-md-left pt-2">
                         <div class="col-6">
                             <ul class="list-unstyled">
-                                @each(roomFeature in room.features.slice(0,7))
+                                @each(roomFeature in room.features.slice(0, room.numFeatures))
                                     <li class='spec-yes mb-1'><i class='fas fa-check-circle'></i>
                                         @if(antl.currentLocale()==='en')
                                             {{ truncate(roomFeature.name_english, 11, '.') }}

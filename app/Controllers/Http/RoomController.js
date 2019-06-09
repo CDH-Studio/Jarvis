@@ -611,14 +611,13 @@ class RoomController {
 				.clone();
 		}
 
-		// // loop through the array of objects and add to query if checked
+		// loop through the array of objects and add to query if checked
 		// for (let i = 0; i < checkBox.length; i++) {
-		// 	if (checkBox[i].checkValue === '1') {
-		// 		searchResults = searchResults
-		// 			// .where('features.id', checkBox[i].checkName)
-		// 			.where(checkBox[i].checkName, checkBox[i].checkValue)
-		// 			.clone();
-		// 	}
+		// if (checkBox[i].checkValue === '1') {
+		// searchResults = searchResults
+		// .where(checkBox[i].checkName, checkBox[i].checkValue)
+		// .clone();
+		// }
 		// }
 
 		// Features filter
@@ -627,7 +626,11 @@ class RoomController {
 			.map(x => x.checkName);
 
 		// fetch the query
-		let rooms = (await searchResults.with('features').fetch()).rows;
+		let rooms = (await searchResults
+			.with('features', (builder) => {
+				builder.orderBy('id', 'asc');
+			})
+			.fetch()).rows;
 
 		const filterFeatures = async (rooms, feat) => {
 			return asyncFilter(rooms, async (room) => {
@@ -638,10 +641,11 @@ class RoomController {
 				return feats.find(x => x.id === feat);
 			});
 		};
+
 		const forEveryFeature = async () => {
 			await asyncForEach(filter, async (feat) => {
 				rooms = await filterFeatures(rooms, feat);
-			})
+			});
 		};
 
 		await forEveryFeature();
@@ -662,10 +666,8 @@ class RoomController {
 					item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
 					item.towerName = (await item.tower().fetch()).name;
 					item = item.toJSON();
-					item.featureNames = item.features.map(f => {
-						return {name_english: f.name_english, name_french: f.name_french};
-					})
-					console.log(item.featureNames)
+					item.numFeatures = item.features.length;
+					console.log(typeof (item), item);
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
 						code: code
