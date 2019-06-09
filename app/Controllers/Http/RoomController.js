@@ -539,15 +539,6 @@ class RoomController {
 			})
 			.fetch();
 
-		const generateFloorAndTower = async () => {
-			await asyncForEach(results.rows, async (item) => {
-				item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
-				item.towerName = (await item.tower().fetch()).name;
-				item.numFeatures = item.features.length;
-			});
-		};
-
-		await generateFloorAndTower();
 		const rooms = results.toJSON();
 
 		// Sort the results by name
@@ -693,10 +684,13 @@ class RoomController {
 			let results = [];
 			await asyncForEach(rooms, async (item) => {
 				if (await this.getRoomAvailability(date, from, to, item.floor_id, item.calendar)) {
-					item.floorName = (await item.floor().fetch()) === null ? 0 : (await item.floor().fetch()).name;
-					item.towerName = (await item.tower().fetch()).name;
+					const floorObj = (await item.floor().fetch()) === null ? { name_english: 0, name_french: 0 } : (await item.floor().fetch()).toJSON();
+					const towerObj = (await item.tower().fetch()).toJSON();
+
 					item = item.toJSON();
 					item.numFeatures = item.features.length;
+					item.floor = floorObj;
+					item.tower = towerObj;
 
 					Event.fire('send.room', {
 						card: view.render('components.card', { form, room: item, token: request.csrfToken, from: from, to: to }),
