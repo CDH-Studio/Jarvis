@@ -652,7 +652,7 @@ class RoomController {
 				}
 
 				let newRoom = {};
-				newRoom.room = rooms.find(r => { return r.name === name; });
+				newRoom.room = (rooms.find(r => { return r.name === name; })).toJSON();
 				console.log('features', newRoom.room.features);
 				console.log('features()', newRoom.room.features());
 				newRoom.from = times[item].from;
