@@ -650,6 +650,7 @@ class RoomController {
 					const towerObj = (await newRoom.room.tower().fetch()).toJSON();
 					newRoom.room.floor = floorObj;
 					newRoom.room.tower = towerObj;
+					newRoom.room = newRoom.room.toJSON();
 					newRoom.from = times[item].from;
 					newRoom.to = times[item].to;
 					times[item].rooms.push(newRoom);
