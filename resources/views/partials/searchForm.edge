@@ -6,7 +6,7 @@
 			<div class='row'>
 				<div class='col form-group mb-4'>
 					<div class='row'>
-						<label class='col' for='date' aria-describedby='date-tooltip'>Date <strong class='text-danger'>*</strong></label>
+						<label class='col' for='date' aria-describedby='date-tooltip'>{{ antl.formatMessage('roomDetails.bookingDate') }} <strong class='text-danger'>*</strong></label>
 						<div class='col text-right'>
 							<i id='date-tooltip' class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
 						</div>
@@ -24,7 +24,7 @@
 			{{--  Meeting time from  --}}
 			<div class='row'>
 				<div class='col form-group mb-4'>
-					<label for='from' aria-labelledby='from-error'>Start time <strong class='text-danger'>*</strong></label>
+					<label for='from' aria-labelledby='from-error'>{{ antl.formatMessage('roomDetails.bookingStart') }} <strong class='text-danger'>*</strong></label>
 					{{--  If field is not filled correctly show an error box  --}}
 					<div class='timePicker' style='display: flex;'>
 						@if(hasErrorFor('from'))
@@ -47,7 +47,7 @@
 					@endif
 				</div>
 				<div class='col form-group mb-4'>
-					<label for='to' aria-labelledby='to-error' data-toggle='tooltip'>End time <strong class='text-danger'>*</strong></label>
+					<label for='to' aria-labelledby='to-error' data-toggle='tooltip'>{{ antl.formatMessage('roomDetails.bookingEnd') }} <strong class='text-danger'>*</strong></label>
 					<div style='display: flex;' class='timePicker'>
 						{{--  If field is not filled correctly show an error box  --}}
 						@if(hasErrorFor('to'))
