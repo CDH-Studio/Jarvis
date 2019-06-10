@@ -22,7 +22,11 @@
                             </p>
                             @if(user.role.name==='user')
                                 <p><strong>Building:</strong> {{ user.building.name }}</p>
-                                <p><strong>Floor/Tower:</strong> {{ user.floor.name }} {{user.tower.name}}</p>
+                                @if(antl.currentLocale() =="en")
+                                    <p><strong>Floor/Tower:</strong> {{ user.floor.name_english }} {{user.tower.name_english}}</p>
+                                @else
+                                    <p><strong>Floor/Tower:</strong> {{ user.floor.name_french }} {{ user.tower.name_french}}</p>
+                                @endif
                                 <button onclick="window.location='{{ route('viewBookings', {id: user.id, bookingType: 'user'}) }}';" class="btn btn-info btn-icon-split">
                                     <span class="icon text-white-50"><i class="fas fa-list-ul"></i></span>
                                     <span class="text">View bookings</span>
