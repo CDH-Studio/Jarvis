@@ -113,32 +113,30 @@
 							</div>
 							{{--  Equipment check box form  --}}
 							<div class='form-group'>
-								<label>Equipment</label>
 								<div class='row'>
-                                    <div class='col form-group'>
-                                        <div class='row'>
-                                            @each(featureCategory in formOptions.roomFeatureCategory)
-                                                @if(featureCategory.features.length!=0)
-                                                    <div class="col-xl-3 mt-3">
-                                                    <i><strong>{{featureCategory.name}}</strong></i>
-
-                                                    @each(feature in featureCategory.features)
-                                                        <div class='custom-control custom-checkbox'>
-                                                            <input class="custom-control-input" type='checkbox' name='feat{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1' 
-                                                            @if(room)
-                                                                {{ old(feature.id, room.features.includes(feature.id)) ? 'checked' : '' }} >
-                                                            @else
-                                                                {{ old(feature.name_english) ? 'checked' : '' }} >
-															@endif
-                                                            <label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_english, 10, '.')}}</label>
-                                                        </div>
-                                                    @endeach
-                                                    </div>
-												@endif
-                                            @endeach
-                                        </div>
-                                    </div>
-                                </div>
+									@each(featureCategory in formOptions.roomFeatureCategory)
+										@if(featureCategory.features.length!=0)
+											<div class="col-xl-4 mt-4">
+											<i><strong>{{featureCategory.name}}</strong></i>
+											@each(feature in featureCategory.features)
+												<div class='custom-control custom-checkbox'>
+													<input class="custom-control-input" type='checkbox' name='feat{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1' 
+													@if(room)
+														{{ old(feature.id, room.features.includes(feature.id)) ? 'checked' : '' }} >
+													@else
+														{{ old(feature.name_english) ? 'checked' : '' }} >
+													@endif
+													<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_english, 15, '.')}}</label>
+												</div>
+											@endeach
+											</div>
+										@endif
+										@if($loop.index ===3)
+										</div>
+										<div class="row">
+									@endif
+									@endeach
+								</div>
 							</div>
 							{{--  Page buttons  --}}
 							<div class='row align-items-end' style='margin-top:80px;'>
