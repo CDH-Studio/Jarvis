@@ -220,7 +220,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async createWithVerifyingEmail ({ request, response, auth }) {
+	async createWithVerifyingEmail ({ request, response, auth, session }) {
 		try {
 			let body = request.post();
 
@@ -249,7 +249,7 @@ class UserController {
 			};
 			await AccountRequest.create(row);
 
-			let body = `
+			let mailBody = `
 				<h2> Welcome to Jarvis, ${userInfo.firstname} </h2>
 				<p>
 					Please click the following URL into your browser: 
@@ -258,9 +258,13 @@ class UserController {
 			`;
 
 			await sendMail('Verify Email Address for Jarvis',
-				body, userInfo.email);
+				mailBody, userInfo.email);
 
 			await User.create(userInfo);
+
+			session.flash({
+				notification: 'A confirmation email with register instructions has been sent your email address.'
+			});
 			return response.redirect('/login');
 		} catch (err) {
 			Logger.debug(err);
