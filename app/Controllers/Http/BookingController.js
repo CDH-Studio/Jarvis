@@ -104,7 +104,7 @@ class BookingController {
 			'subject': meeting,
 			'body': {
 				'contentType': 'HTML',
-				'content': 'Jarvis Daily Standup'
+				'content': ''
 			},
 			'start': {
 				'dateTime': `${date}T${from}`,
@@ -289,7 +289,7 @@ class BookingController {
 				end: eventInfo.end.dateTime,
 				subject: eventInfo.subject,
 				body: eventInfo.body.content,
-				floor: room.floor,
+				floor: room.floor_id,
 				attendees: [user.email]
 			});
 
