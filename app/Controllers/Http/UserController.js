@@ -188,14 +188,14 @@ class UserController {
 	 */
 	async createWithoutVerifyingEmail ({ request, response, auth }) {
 		try {
-			var body = request.post();
+			let body = request.post();
 
 			// test if selected building, tower, and floor exist
 			await Floor.findOrFail(body.floor);
 			await Tower.findOrFail(body.tower);
 			await Building.findOrFail(body.building);
 
-			var userInfo = {};
+			let userInfo = {};
 			userInfo.firstname = body.firstname;
 			userInfo.lastname = body.lastname;
 			userInfo.password = body.password;
@@ -221,32 +221,51 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async createWithVerifyingEmail ({ request, response, auth }) {
-		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
-		userInfo.role_id = await UserRole.getRoleID('user');
-		userInfo.verified = false;
+		try {
+			let body = request.post();
 
-		let hash = randomString(4);
+			// test if selected building, tower, and floor exist
+			await Floor.findOrFail(body.floor);
+			await Tower.findOrFail(body.tower);
+			await Building.findOrFail(body.building);
 
-		let row = {
-			email: userInfo.email,
-			hash: hash,
-			type: 2
-		};
-		await AccountRequest.create(row);
+			let userInfo = {};
+			userInfo.firstname = body.firstname;
+			userInfo.lastname = body.lastname;
+			userInfo.password = body.password;
+			userInfo.email = body.email.toLowerCase();
+			userInfo.building_id = body.building;
+			userInfo.tower_id = body.tower;
+			userInfo.floor_id = body.floor;
+			userInfo.role_id = await UserRole.getRoleID('user');
+			userInfo.verified = false;
 
-		let body = `
-			<h2> Welcome to Jarvis, ${userInfo.firstname} </h2>
-    		<p>
-      			Please click the following URL into your browser: 
-      			${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newUser?hash=${hash}
-    		</p>
-    	`;
+			let hash = randomString(4);
 
-		await sendMail('Verify Email Address for Jarvis',
-			body, userInfo.email);
+			let row = {
+				email: userInfo.email,
+				hash: hash,
+				type: 2
+			};
+			await AccountRequest.create(row);
 
-		await User.create(userInfo);
-		return response.redirect('/login');
+			let body = `
+				<h2> Welcome to Jarvis, ${userInfo.firstname} </h2>
+				<p>
+					Please click the following URL into your browser: 
+					${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newUser?hash=${hash}
+				</p>
+			`;
+
+			await sendMail('Verify Email Address for Jarvis',
+				body, userInfo.email);
+
+			await User.create(userInfo);
+			return response.redirect('/login');
+		} catch (err) {
+			Logger.debug(err);
+			return response.redirect('/register');
+		}
 	}
 
 	/**

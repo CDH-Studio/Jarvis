@@ -16,7 +16,7 @@ class TempUserSeeder {
 			{ firstname: 'Peter', lastname: 'User', email: 'peter.quach.lam@gmail.com', password: '1234', floor_id: '2', tower_id: '2', building_id: '1', role_id: '2', verified: 1 },
 			{ firstname: 'Majd', lastname: 'Admin', email: 'majd.khodr15@gmail.com', password: '123', floor_id: '5', tower_id: '1', building_id: '1', role_id: '1', verified: 1 },
 			{ firstname: 'Majd', lastname: 'User', email: 'majd.khodr@hotmail.com', password: '123', floor_id: '6', tower_id: '2', building_id: '1', role_id: '2', verified: 1 },
-			{ firstname: 'Yunwei', lastname: 'Admin', email: 'yunwei.li@canada.ca', password: '123', floor_id: '8', tower_id: '1', building_id: '1', role_id: '1', verified: 1 },
+			{ firstname: 'Yunwei', lastname: 'Admin', email: 'yunwei.li@carleton.ca', password: '123', floor_id: '8', tower_id: '1', building_id: '1', role_id: '1', verified: 1 },
 			{ firstname: 'Yunwei', lastname: 'User', email: 'liyunwei10@gmail.com', password: '123', floor_id: '3', tower_id: '2', building_id: '1', role_id: '2', verified: 1 },
 			{ firstname: 'Ali', lastname: 'Admin', email: 'admin@gmail.com', password: '123456', floor_id: '5', tower_id: '2', building_id: '1', role_id: '1', verified: 1 },
 			{ firstname: 'Ali', lastname: 'User', email: 'user@gmail.com', password: '123456', floor_id: '2', tower_id: '2', building_id: '1', role_id: '2', verified: 1 },
