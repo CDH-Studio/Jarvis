@@ -102,31 +102,35 @@
 							<div class='row'>
 								{{--  PMts form  --}}
 								<div class='col form-group mb-4'>
-									<label for='seats'>Number of table seats</label>
+									<label for='seats'>{{ antl.formatMessage('roomSearchCard.tableSeats') }}</label>
 									<input class='form-control' id='seats' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
 								</div>
 								{{--  Max Capacity  --}}
 								<div class='col form-group mb-4'>
-									<label for='capacity'>Max Capacity</label>
+									<label for='capacity'>{{ antl.formatMessage('roomDetails.capacity') }}</label>
 									<input class='form-control' id='capacity' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
 								</div>
 							</div>
 							{{--  Equipment check box form  --}}
 							<div class='form-group'>
+								<label>{{ antl.formatMessage('roomDetails.equipment') }}</label>
 								<div class='row'>
 									@each(featureCategory in formOptions.roomFeatureCategory)
 										@if(featureCategory.features.length!=0)
-											<div class="col-xl-4 mt-4">
-											<i><strong>{{featureCategory.name}}</strong></i>
+											<div class="col-xl-4 mb-4">
+											@if(antl.currentLocale()==='en')
+												<i><strong>{{featureCategory.name_english}}</strong></i>
+											@else
+												<i><strong>{{featureCategory.name_french}}</strong></i>
+											@endif
 											@each(feature in featureCategory.features)
 												<div class='custom-control custom-checkbox'>
-													<input class="custom-control-input" type='checkbox' name='feat{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1' 
-													@if(room)
-														{{ old(feature.id, room.features.includes(feature.id)) ? 'checked' : '' }} >
+													<input class="custom-control-input" type='checkbox' name='feat{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1'>
+													@if(antl.currentLocale()==='en')
+														<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_english, 15, '.')}}</label>
 													@else
-														{{ old(feature.name_english) ? 'checked' : '' }} >
+														<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_french, 15, '.')}}</label>
 													@endif
-													<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_english, 15, '.')}}</label>
 												</div>
 											@endeach
 											</div>

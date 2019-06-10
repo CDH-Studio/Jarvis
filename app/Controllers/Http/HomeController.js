@@ -116,7 +116,6 @@ class HomeController {
 			.with('features', (builder) => {
 				builder.where('building_id', 1);
 			})
-			.select('id', DBNameSelect)
 			.fetch();
 
 		formOptions.roomFeatureCategory = results.toJSON();
