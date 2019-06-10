@@ -123,18 +123,18 @@
                                                     <i><strong>{{featureCategory.name}}</strong></i>
 
                                                     @each(feature in featureCategory.features)
-                                                        <div class='form-check'>
-                                                            <input class="form-check-input" type='checkbox' name='feature' + '{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1' 
+                                                        <div class='custom-control custom-checkbox'>
+                                                            <input class="custom-control-input" type='checkbox' name='feat{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1' 
                                                             @if(room)
                                                                 {{ old(feature.id, room.features.includes(feature.id)) ? 'checked' : '' }} >
                                                             @else
                                                                 {{ old(feature.name_english) ? 'checked' : '' }} >
-                                                            @endif
-                                                            <label class="form-check-label" for='{{feature.name_english}}'>{{feature.name_english}}</label>
+															@endif
+                                                            <label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_english, 10, '.')}}</label>
                                                         </div>
                                                     @endeach
                                                     </div>
-                                                @endif
+												@endif
                                             @endeach
                                         </div>
                                     </div>

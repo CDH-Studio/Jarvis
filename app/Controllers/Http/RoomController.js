@@ -53,6 +53,16 @@ function random (times) {
 	return result;
 }
 
+async function asyncMap (arr, callback) {
+	let arr2 = [];
+
+	for (let i = 0; i < arr.length; i++) {
+		arr2.push(await callback(arr[i], i, arr));
+	}
+
+	return arr2;
+}
+
 /**
  * Populate bookings from booking query results.
  *
@@ -64,16 +74,6 @@ function random (times) {
 async function populateBookings (results) {
 	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-	async function asyncMap (arr, callback) {
-		let arr2 = [];
-
-		for (let i = 0; i < arr.length; i++) {
-			arr2.push(await callback(arr[i], i, arr));
-		}
-
-		return arr2;
-	}
 
 	let bookings = [];
 	const populate = async () => {
@@ -737,18 +737,29 @@ class RoomController {
 		const seats = options.seats;
 		const capacity = options.capacity;
 		// check boxes input
-		let checkBox = [{ checkName: 1, checkValue: options.projectorCheck },
-			{ checkName: 2, checkValue: options.whiteboardCheck },
-			{ checkName: 3, checkValue: options.flipChartCheck },
-			{ checkName: 4, checkValue: options.audioCheck },
-			{ checkName: 5, checkValue: options.videoCheck },
-			{ checkName: 6, checkValue: options.surfaceHubCheck },
-			{ checkName: 7, checkValue: options.pcCheck }
-		];
+
+		let checkBox = Object.keys(options)
+			.filter(key => key.substring(0, 4) === 'feat')
+			.map(key => {
+					return {checkName: key.substring(4), checkValue: options[key]}
+			});
+
+		const findFeatId = async () => {
+			return asyncMap(checkBox, async (feat) => {
+				const featId = (await RoomFeature
+					.findBy('name_english', feat.checkName)).id;
+				feat.checkName = featId
+				
+				return feat; 
+			});
+		};
+		checkBox = await findFeatId();
+		console.log(checkBox)
+
 		// only loook for roosm that are open
 		let searchResults = Room
 			.query()
-			.where('State_id', 1)
+			.where('state_id', 1)
 			.clone();
 
 		// if the location is selected then query, else dont
@@ -783,7 +794,7 @@ class RoomController {
 				builder.orderBy('id', 'asc');
 			})
 			.fetch()).rows;
-
+	
 		const filterFeatures = async (rooms, feat) => {
 			return asyncFilter(rooms, async (room) => {
 				const feats = (await room.features().fetch()).toJSON();
@@ -801,7 +812,7 @@ class RoomController {
 		};
 
 		await forEveryFeature();
-
+		
 		return rooms;
 	}
 
