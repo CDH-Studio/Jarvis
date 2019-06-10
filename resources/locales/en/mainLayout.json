@@ -6,5 +6,6 @@
 	"logoutModalHeader": "Ready to Leave?",
 	"logoutModalBody": "Are you sure you want to log out?",
 	"logoutModalLogoutBtn": "Logout",
-	"logoutModalCancelBtn": "Cancel"
+	"logoutModalCancelBtn": "Cancel",
+	"cdhStudioLogo": "Developed By:"
 }
