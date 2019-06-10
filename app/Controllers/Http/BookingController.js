@@ -91,7 +91,7 @@ class BookingController {
 		const row = results.toJSON();
 		const name = row.name;
 
-		if (!await this.getRoomAvailability(date, from, to, row.floor, row.calendar)) {
+		if (!await this.getRoomAvailability(date, from, to, row.floor_id, row.calendar)) {
 			session.flash({
 				error: `Room ${name} has already been booked for the time selected!`
 			});
