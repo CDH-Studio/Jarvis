@@ -22,7 +22,8 @@ class FloorSeeder {
 		if (count === 0) {
 			for (var i = 0; i < floorFiller.length; i++) {
 				const floor = new Floor();
-				floor.name = floorFiller[i];
+				floor.name_english = floorFiller[i];
+				floor.name_french = floorFiller[i];
 				floor.building_id = buildingFiller[i];
 				await floor.save();
 			}

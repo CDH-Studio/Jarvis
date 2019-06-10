@@ -8,13 +8,14 @@ class TowerController {
 		try {
 			const selectedBuilding = request.cookie('selectedBuilding');
 
-			const building = await Building.query().where('name', selectedBuilding).firstOrFail();
+			const building = await Building.findByOrFail('name', selectedBuilding.name);
 
 			// Retrieves user input
 			const body = request.all();
 			// Populates the review object's values
 			const newTower = new Tower();
-			newTower.name = body.towerName;
+			newTower.name_english = body.towerNameEnglish;
+			newTower.name_french = body.towerNameFrench;
 			newTower.building_id = building.id;
 			await newTower.save();
 
@@ -22,22 +23,25 @@ class TowerController {
 
 			return response.route('configuration');
 		} catch (err) {
+			session.flash({ error: 'Something when wrong. Tower Not Added.' });
 			console.log(err);
+			response.redirect('back');
 		}
 	}
 
 	async updateTower ({ params, response, request, session }) {
 		try {
 			const body = request.all();
-
 			const tower = await Tower.find(params.id);
-
-			tower.name = body.towerName;
+			tower.name_english = body.towerNameEnglish;
+			tower.name_french = body.towerNameFrench;
 			await tower.save();
 			session.flash({ notification: 'Tower Updated!' });
 			return response.route('configuration');
 		} catch (err) {
+			session.flash({ error: 'Something when wrong. Tower Not Updated.' });
 			console.log(err);
+			response.redirect('back');
 		}
 	}
 
