@@ -83,11 +83,12 @@ class UserController {
 			var buildingOptions = await Building.all();
 			formOptions.buildings = buildingOptions.toJSON();
 
-			var towerOptions = await Tower.all();
-			formOptions.towers = towerOptions.toJSON();
+			var towerOptions = (await Tower.all()).toJSON();
+			console.log(towerOptions)
+			formOptions.towers = towerOptions;
 
-			var floorOptions = await Floor.all();
-			formOptions.floors = floorOptions.toJSON();
+			var floorOptions = (await Floor.all()).toJSON();
+			formOptions.floors = floorOptions;
 
 			return view.render('auth.registerUser', { photoName, formOptions });
 		}

@@ -105,7 +105,11 @@
 												<select id='tower' name='tower' class='form-control text-capitalize'>
 													<option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.tower') }}</option>
 													@each(towerOption in formOptions.towers)
-														<option value='{{towerOption.id}}' {{ old('tower') == towerOption.id ? 'selected' : '' }}>{{towerOption.name}}</option>
+														@if(antl.currentLocale() =="en")
+															<option value='{{towerOption.id}}' {{ old('tower') == towerOption.id ? 'selected' : '' }}>{{towerOption.name_english}}</option>
+														@else
+															<option value='{{towerOption.id}}' {{ old('tower') == towerOption.id ? 'selected' : '' }}>{{towerOption.name_french}}</option>
+														@endif
 													@endeach
 												</select>
 												@if(hasErrorFor('tower'))
@@ -120,7 +124,11 @@
 												<select id='floor' name='floor' class='form-control text-capitalize'>
 													<option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.floor') }}</option>
 													@each(floorOption in formOptions.floors)
-														<option value='{{floorOption.id}}' {{ old('floor') == floorOption.id ? 'selected' : '' }}>{{floorOption.name}}</option>
+														@if(antl.currentLocale() =="en")
+															<option value='{{floorOption.id}}' {{ old('floor') == floorOption.id ? 'selected' : '' }}>{{floorOption.name_english}}</option>
+														@else
+															<option value='{{floorOption.id}}' {{ old('floor') == floorOption.id ? 'selected' : '' }}>{{floorOption.name_french}}</option>
+														@endif
 													@endeach
 												</select>
 												@if(hasErrorFor('floor'))
