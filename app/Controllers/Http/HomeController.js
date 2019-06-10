@@ -4,6 +4,10 @@ const User = use('App/Models/User');
 const Report = use('App/Models/Report');
 const Booking = use('App/Models/Booking');
 const Review = use('App/Models/Review');
+const RoomStatus = use('App/Models/RoomStatus');
+const Floor = use('App/Models/Floor');
+const Tower = use('App/Models/Tower');
+const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 const Event = use('Event');
 const Env = use('Env');
 var moment = require('moment');
@@ -97,6 +101,26 @@ class HomeController {
 		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
 
+		const DBNameSelect = 'name_english as name';
+
+		var formOptions = {};
+
+		var results = await RoomStatus.query().select('id', 'name').fetch();
+		formOptions.statuses = results.toJSON();
+		results = await Floor.query().select('id', DBNameSelect).fetch();
+		formOptions.floors = results.toJSON();
+		results = await Tower.query().select('id', DBNameSelect).fetch();
+		formOptions.towers = results.toJSON();
+		results = await RoomFeaturesCategory
+			.query()
+			.with('features', (builder) => {
+				builder.where('building_id', 1);
+			})
+			.select('id', DBNameSelect)
+			.fetch();
+
+		formOptions.roomFeatureCategory = results.toJSON();
+
 		return view.render('userPages.userDash', {
 			code,
 			freqRooms,
@@ -104,7 +128,8 @@ class HomeController {
 			userId,
 			fromTime: searchValues.fromTime,
 			toTime: searchValues.toTime,
-			dropdownSelection: searchValues.dropdownSelection
+			dropdownSelection: searchValues.dropdownSelection,
+			formOptions
 		});
 	}
 
