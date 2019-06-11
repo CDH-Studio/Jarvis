@@ -601,7 +601,7 @@ class RoomController {
 
 	async findAvailable ({ request, view }) {
 		const options = request.all();
-		const rooms = await this.filterRooms(options);
+		const { rooms, features } = await this.filterRooms(options);
 
 		const duration = Number(options.hour) * 60;
 		let results = {};
@@ -667,7 +667,7 @@ class RoomController {
 		options.formattedFrom = moment(options.from, 'HH:mm').format('h:mm A');
 		options.formattedTo = moment(options.to, 'HH:mm').format('h:mm A');
 
-		return view.render('userPages.findAvailableResults', { times: times, form: options });
+		return view.render('userPages.findAvailableResults', { times: times, form: options, features });
 	}
 
 	/**
@@ -678,7 +678,7 @@ class RoomController {
 	async findSpecific ({ request, view }) {
 		// importing forms from search form
 		const form = request.all();
-		let rooms = await this.filterRooms(form);
+		let rooms = (await this.filterRooms(form)).rooms;
 
 		// Sets average rating for each room
 		for (var i = 0; i < rooms.length; i++) {
@@ -732,7 +732,7 @@ class RoomController {
 	}
 
 	async filterRooms (options) {
-		console.log(options)
+		// console.log(options)
 		const location = options.location;
 		const seats = options.seats;
 		const capacity = options.capacity;
@@ -744,11 +744,13 @@ class RoomController {
 				return { checkName: key.substring(4), checkValue: options[key] }
 			});
 
+		const features = [];
 		const findFeatId = async () => {
 			return asyncMap(checkBox, async (feat) => {
-				const featId = (await RoomFeature
-					.findBy('name_english', feat.checkName)).id;
-				feat.checkName = featId;
+				const result = await RoomFeature
+					.findBy('name_english', feat.checkName);
+				feat.checkName = result.id;
+				features.push(result);
 
 				return feat;
 			});
@@ -812,7 +814,7 @@ class RoomController {
 
 		await forEveryFeature();
 
-		return rooms;
+		return { rooms, features};
 	}
 
 	/**

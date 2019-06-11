@@ -45,6 +45,14 @@
 					<div class='d-flex flex-row justify-content-between'>
 						<div class='p-3'>
 							<ul class='list-inline'>
+								@each(feature in features)
+									@if(antl.currentLocale()==='en')
+										<li class='spec-yes list-inline-item'><i class='fas fa-check-circle'></i><span> {{truncate(feature.name_english, 20, '.')}}</span></li>
+									@else
+										<li class='spec-yes list-inline-item'><i class='fas fa-check-circle'></i><span> {{truncate(feature.name_french, 20, '.')}}</span></li>
+									@endif
+								@endeach
+								<!--
 								@if(form.projectorCheck == 1)
 									<li class='spec-yes list-inline-item'><i class='fas fa-check-circle'></i><span> Projector</span></li>
 								@else
@@ -80,6 +88,7 @@
 								@else
 									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> Surface hub</span></li>
 								@endif
+								-->
 							</ul>
 						</div>
 					</div>
