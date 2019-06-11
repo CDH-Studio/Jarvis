@@ -6,7 +6,6 @@ const Booking = use('App/Models/Booking');
 const Review = use('App/Models/Review');
 const Event = use('Event');
 const Token = use('App/Models/Token');
-const Antl = use('Antl');
 
 // Used for time related calcuklations and formatting
 const moment = require('moment');
@@ -649,7 +648,6 @@ class HomeController {
 
 		return bookings;
 	}
-
 }
 
 module.exports = HomeController;
