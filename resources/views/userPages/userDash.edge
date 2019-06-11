@@ -16,10 +16,10 @@
     <div class='row d-flex flex-wrap'>
 		{{--  Search room page content  --}}
 		<div class='col-xl-6 col-xxl-4 mb-4'>
-		@include('partials.searchForm')
+			@include('partials.searchForm')
 		</div>
 		<div class='col-xl-6 col-xxl-8 mb-4'>
-			<div class='row' style='height:100%;'>
+			<div class='row'>
 				<div id='available' class='col-xl-12 col-xxl-6 mb-4' style='height:325px;'>
                     @component('components.generalCard', title=antl.formatMessage('userDash.CAHeading'), extraCSS='custom-card-header')
                         {{--  If there are no avail rooms display a message accordingly  --}}
@@ -31,7 +31,7 @@
 						@endslot
 					@endcomponent
 				</div>
-				<div id='frequentlyBooked' class='col-lg-12 col-xxl-6' style='height:325px;'>
+				<div id='frequentlyBooked' class='col-lg-12 col-xxl-6 mb-4' style='height:325px;'>
 					@component('components.generalCard', title=antl.formatMessage('userDash.FBHeading'), extraCSS='custom-card-header')
 						@slot('body')
 							{{--  if the user have not booked anythings display message, else display the freq booked  --}}
@@ -44,49 +44,55 @@
 					@endcomponent
 				</div>
 			</div>
+			<div class='row'>
+				<div class='col-lg-12'>
+					@component('components.generalCard', title = antl.formatMessage('userDash.MBHeading'), extraCSS = 'custom-card-header')
+						@slot('titleRight')
+							<a class="color-primary"  href='{{ route('viewBookings',{id: userId, bookingType: 'user'}) }}' target='_blank'>
+								<i class="fas fa-external-link-alt"></i>
+							</a>
+						@endslot
+						@slot('body')
+							{{-- display message if there are no upcomming bookings --}}
+							@if(upcoming.length===0)
+								@!component('components.cardEmptyMessage',faIcon="fas fa-search fa-4x", message=antl.formatMessage('userDash.MBError')) 
+							@else
+								<div class='table table-responsive'>
+									<table id='bookNowTable' class='table table-hover' style='width:100%;'>
+										<thead>
+											<tr>
+												<th scope='col' class='text-center' style='width:10%'>Room</th>
+												<th scope='col' class='text-center' style='width:10%'>Name</th>
+												<th scope='col' class='text-center' style='width:10%'>Date</th>
+												<th scope='col' class='text-center' style='width:10%'>Time</th>
+											</tr>
+										</thead>
+										{{--  Loops through the rooms array and displays every room's content  --}}
+										<tbody>
+											@each(booking in upcoming) 
+												<tr class='table-light'>
+													<td class='text-center'><a href='{{ route('showRoom', {id: ""+room.roomId}) }}'>{{ booking.room.name }}</a></td>
+													<td class='text-center'>{{ truncate(booking.subject, 30, '...') }}</td>
+													@if(antl.currentLocale()==='fr')
+														<td class='text-center'>{{ moment(booking.from).locale("fr").format('ddd MMM DD, YYYY') }} </td>
+														<td class='text-center'>{{ moment(booking.from).locale("en").format('HH:MM') }} </td>
+													@else
+														<td class='text-center'>{{ moment(booking.from).locale("en").format('ddd, MMM DD, YYYY') }} </td>
+														<td class='text-center'>{{ moment(booking.from).locale("en").format('hh:mm A') }} </td>
+													@endif
+												</tr>
+											@endeach
+										</tbody>
+									</table>
+								</div>
+							@endif
+						@endslot
+					@endcomponent
+				</div>
+			</div>
 		</div>
+
     </div>
-	<div id='original-upcoming' class='row'>
-		<div id='myBookings' class='col'>
-			@component('components.generalCard', title=antl.formatMessage('userDash.MBHeading'), extraCSS='custom-card-header')
-				@slot('titleRight')
-					<a class="color-primary"  href='{{ route('viewBookings',{id: userId, bookingType: 'user'}) }}' target='_blank'>
-						<i class="fas fa-external-link-alt"></i>
-					</a>
-				@endslot
-				@slot('body')
-					{{-- display message if there are no upcomming bookings --}}
-					@if(!upcoming)
-						@!component('components.cardEmptyMessage',faIcon="fas fa-search fa-4x", message=antl.formatMessage('userDash.MBError')) 
-					@else
-						<div class='table table-responsive'>
-							<table id='bookNowTable' class='table' style='width:100%;'>
-								<thead>
-									<tr>
-										<th scope='col' class='text-center' style='width:10%'>Room</th>
-										<th scope='col' class='text-center' style='width:10%'>Name</th>
-										<th scope='col' class='text-center' style='width:10%'>Date</th>
-										<th scope='col' class='text-center' style='width:10%'>Time</th>
-									</tr>
-								</thead>
-								{{--  Loops through the rooms array and displays every room's content  --}}
-								<tbody>
-									@each(room in upcomming) 
-										<tr class='table-light'>
-											<td class='text-center'><a href='{{ route('showRoom', {id: ""+room.roomId}) }}'>{{ room.room }}</a></td>
-											<td class='text-center'>{{ room.subject }}</td>
-											<td class='text-center'>{{ room.date }} </td>
-											<td class='text-center'>{{ room.time }}</td> 
-										</tr>
-									@endeach
-								</tbody>
-							</table>
-						</div>
-					@endif
-				@endslot
-			@endcomponent
-		</div>
-	</div>
 
 
 

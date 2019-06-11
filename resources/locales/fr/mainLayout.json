@@ -6,5 +6,6 @@
 	"logoutModalHeader": "Prêt à partir?",
 	"logoutModalBody": "Êtes-vous sûr de vouloir vous déconnecter?",
 	"logoutModalLogoutBtn": "Se déconnecter",
-	"logoutModalCancelBtn": "Annuler"
+	"logoutModalCancelBtn": "Annuler",
+	"cdhStudioLogo": "Developed By:"
 }

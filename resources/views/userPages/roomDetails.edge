@@ -105,13 +105,18 @@
                 <div class="card-body m-2">
                     <div class="row justify-content-around">
                         @each(featureCategory in roomFeatureCategory)
+                            @set('firstFind', true)
                             <div class="col-6 col-lg-2  text-center mb-3 mb-lg-0">
-                                <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="{{featureCategory.name}}">
-                                    <i class="{{featureCategory.icon}}"></i>
-                                </span>
-
                                 @each(roomFeature in roomFeatures)
                                     @if(roomFeature.feature.category.id==$parent.featureCategory.id)
+                                        @if(firstFind)
+                                            <span href="#" class="btn btn-primary btn-circle btn-lg mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="{{$parent.featureCategory.name}}">
+                                                <i class="{{$parent.featureCategory.icon}}"></i>
+                                            </span>
+                                            @set('firstFind', false)
+                                        @endif
+
+                                        @set('emptyFlag', '0')
                                         @if(antl.currentLocale()=='en')
                                             <p class="mb-0">{{ truncate(roomFeature.feature.name_english, 13, '.') }}</p>   
                                         @else
@@ -119,6 +124,13 @@
                                         @endif
                                     @endif 
                                 @endeach
+                                @if(firstFind)
+                                    <span href="#" class="btn btn-secondary btn-circle btn-lg mr-0 mb-2 disabled" data-toggle="tooltip" data-placement="top" title="{{featureCategory.name}}">
+                                                <i class="{{featureCategory.icon}}"></i>
+                                            </span>
+                                    <p><i>no features</i></p>
+                                @endif
+
                             </div>
                         @endeach
                         @if(room.extraEquipment.length > 1)
