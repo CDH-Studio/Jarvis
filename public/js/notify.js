@@ -42,7 +42,7 @@ export function notify (
 	type,
 	x,
 	y,
-	from ,
+	from,
 	align,
 	url,
 	enter,
@@ -61,7 +61,7 @@ export function notify (
 		},
 		placement: {
 			from: from ? from : 'top',
-			align: align ? 'right'
+			align: align ? align : 'right'
 		},
 		offset: {
 			x: x ? x : 10,
