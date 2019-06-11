@@ -6,6 +6,7 @@ const Booking = use('App/Models/Booking');
 const Review = use('App/Models/Review');
 const Event = use('Event');
 const Token = use('App/Models/Token');
+const Antl = use('Antl');
 
 // Used for time related calcuklations and formatting
 const moment = require('moment');
@@ -113,18 +114,19 @@ class HomeController {
 	async userDashboard ({ view, auth }) {
 		const code = await this.getAvailableRooms({ user: auth.user, view });
 		const freqRooms = await this.getFreqBooked(auth.user);
-		const upcomming = await this.getUpcomming(auth.user);
+		const upcoming = await this.getUpcomming(auth.user);
 		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
 
 		return view.render('userPages.userDash', {
 			code,
 			freqRooms,
-			upcomming,
+			upcoming,
 			userId,
 			fromTime: searchValues.fromTime,
 			toTime: searchValues.toTime,
-			dropdownSelection: searchValues.dropdownSelection
+			dropdownSelection: searchValues.dropdownSelection,
+			moment: moment
 		});
 	}
 
@@ -632,71 +634,22 @@ class HomeController {
 	*/
 	async getUpcomming (user) {
 		// get the next 3 upcomming bookings
-		let searchResults = await Booking
+		let bookings = await Booking
 			.query()
 			.where('user_id', user.id)
 			.where('status', 'Approved')
-			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.select('*')
 			.orderBy('from', 'asc')
-			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
+			.with('room')
 			.limit(3)
 			.fetch();
-		// Converting date formats
-		searchResults = searchResults.toJSON();
-		const bookings = await this.populateBookings(searchResults);
+
+		bookings = bookings.toJSON();
 
 		return bookings;
 	}
 
-	/**
-	 * Populate bookings from booking query results.
-	 *
-	 * @param {Object} results Results from bookings query.
-	 *
-	 * @returns {Object} The access token.
-	 *
-	 */
-	async populateBookings (results) {
-		const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-		const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-		async function asyncMap (arr, callback) {
-			let arr2 = [];
-
-			for (let i = 0; i < arr.length; i++) {
-				arr2.push(await callback(arr[i], i, arr));
-			}
-
-			return arr2;
-		}
-
-		let bookings = [];
-		const populate = async () => {
-			bookings = await asyncMap(results, async (result) => {
-				const booking = {};
-
-				const from = new Date(result.from);
-				const to = new Date(result.to);
-				booking.subject = result.subject;
-				booking.status = result.status;
-				booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
-				booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-				booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
-				booking.roomId = result.room_id;
-				booking.id = result.id;
-				const userInfo = (await User.findBy('id', result.user_id)).toJSON();
-				booking.userName = userInfo.firstname + ' ' + userInfo.lastname;
-				booking.userId = userInfo.id;
-
-				return booking;
-			});
-		};
-
-		await populate();
-
-		return bookings;
-	}
 }
 
 module.exports = HomeController;
