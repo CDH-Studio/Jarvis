@@ -251,7 +251,7 @@ class UserController {
 			let mailBody = `
 				<h2> Welcome to Jarvis, ${userInfo.firstname} </h2>
 				<p>
-					Please click the following URL into your browser: 
+					Please click on the following link or copy the URL into your browser: 
 					${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newUser?hash=${hash}
 				</p>
 			`;
@@ -455,7 +455,7 @@ class UserController {
 			let body = `
       			<h2> Password Reset Request </h2>
       			<p>
-        			We received a request to reset your password. If you asked to reset your password, please click the following URL: 
+        			We received a request to reset your password. If you asked to reset your password, please click on the following link: 
         			${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newPassword?hash=${hash}
       			</p>
 			`;
