@@ -117,7 +117,7 @@
 								<div class='row'>
 									@each(featureCategory in formOptions.roomFeatureCategory)
 										@if(featureCategory.features.length!=0)
-											<div class="col-xl-4 mb-4">
+											<div class="col-xl-6 mb-4">
 											@if(antl.currentLocale()==='en')
 												<i><strong>{{featureCategory.name_english}}</strong></i>
 											@else
@@ -127,15 +127,15 @@
 												<div class='custom-control custom-checkbox'>
 													<input class="custom-control-input" type='checkbox' name='feat{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1'>
 													@if(antl.currentLocale()==='en')
-														<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_english, 15, '.')}}</label>
+														<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_english, 20, '.')}}</label>
 													@else
-														<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_french, 15, '.')}}</label>
+														<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_french, 20, '.')}}</label>
 													@endif
 												</div>
 											@endeach
 											</div>
 										@endif
-										@if($loop.index ===3)
+										@if($loop.index === 1)
 										</div>
 										<div class="row">
 									@endif
