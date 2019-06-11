@@ -84,7 +84,7 @@ class UserController {
 			formOptions.buildings = buildingOptions.toJSON();
 
 			var towerOptions = (await Tower.all()).toJSON();
-			console.log(towerOptions)
+			console.log(towerOptions);
 			formOptions.towers = towerOptions;
 
 			var floorOptions = (await Floor.all()).toJSON();
