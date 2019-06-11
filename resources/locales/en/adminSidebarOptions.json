@@ -7,5 +7,7 @@
 	"usersDropdown": "Users",
 	"viewUsers": "View Users",
 	"roomIssuesDropdown": "Room Issues",
-	"viewIssues": "View Issues"
+	"viewIssues": "View Issues",
+	"buildingDropdown": "Building",
+	"configureBuilding": "Configure Building"
 }

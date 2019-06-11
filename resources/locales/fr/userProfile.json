@@ -1,0 +1,13 @@
+{
+    "profile": "Profil de l'utilisateur",
+    "name": "Nom",
+    "email": "Courriel",
+    "building": "Édifice",
+    "ft": "Étage/Tour",
+    "viewBookings": "Afficher les réservations",
+    "editProfile": "Modifier votre profil",
+    "changePassword": "Changer mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "verified": "verifié"
+}

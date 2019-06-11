@@ -1,8 +1,11 @@
-{
-	"profile": "profile",
+{	
+	"betaMessage": "Jarvis is currently in development. We appreciate your feedback to help us improve!",
+	"profile": "Profile",
+	"feedback": "Feedback",
 	"logout" : "logout",
 	"logoutModalHeader": "Ready to Leave?",
 	"logoutModalBody": "Are you sure you want to log out?",
 	"logoutModalLogoutBtn": "Logout",
-	"logoutModalCancelBtn": "Cancel"
+	"logoutModalCancelBtn": "Cancel",
+	"cdhStudioLogo": "Developed By:"
 }

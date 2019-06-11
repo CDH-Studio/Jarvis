@@ -741,3 +741,9 @@ a{
     color: white ;
     font-weight: 400 !important;
 }
+
+.btn-circle.btn-sm-sb, .btn-group-sm > .btn-circle.btn {
+  height: 1.8rem;
+  width: 1.8rem;
+  font-size: 0.75rem;
+}

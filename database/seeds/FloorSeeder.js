@@ -15,13 +15,16 @@ const Floor = use('App/Models/Floor');
 
 class FloorSeeder {
 	async run () {
-		var FloorFiller = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+		var floorFiller = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+		var buildingFiller = ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'];
 		var count = await Floor.getCount();
 
 		if (count === 0) {
-			for (var i = 0; i < FloorFiller.length; i++) {
+			for (var i = 0; i < floorFiller.length; i++) {
 				const floor = new Floor();
-				floor.name = FloorFiller[i];
+				floor.name_english = floorFiller[i];
+				floor.name_french = floorFiller[i];
+				floor.building_id = buildingFiller[i];
 				await floor.save();
 			}
 			console.log('Floor Name DB: Finished Seeding');

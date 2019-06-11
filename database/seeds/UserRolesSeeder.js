@@ -20,7 +20,7 @@ class UserRolesSeeder {
 		if (count === 0) {
 			for (var i = 0; i < userRolesFiller.length; i++) {
 				const type = new UserRole();
-				type.role_name = userRolesFiller[i];
+				type.name = userRolesFiller[i];
 				await type.save();
 			}
 			console.log('User Type DB: Finished Seeding');

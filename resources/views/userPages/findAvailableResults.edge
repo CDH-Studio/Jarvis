@@ -42,44 +42,16 @@
 
 				<div class='room-card-body'>
 					{{--  Room information  --}}
-					<div class='d-flex flex-row justify-content-between'>
+					<div class='d-flex flex-row justify-content-center'>
 						<div class='p-3'>
 							<ul class='list-inline'>
-								@if(form.projectorCheck == 1)
-									<li class='spec-yes list-inline-item'><i class='fas fa-check-circle'></i><span> Projector</span></li>
-								@else
-									<li class='spec-no list-inline-item'><i class='fas fa-times-circle spec-no-icon'></i><span> Projector</span></li>
-								@endif
-								@if(form.flipChartCheck == 1)
-									<li class='spec-yes list-inline-item'><i class='fa fa-check-circle'></i><span> Flip chart</span></li>
-								@else
-									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> Flip chart</span></li>
-								@endif
-								@if(form.whiteboardCheck == 1)
-									<li class='spec-yes list-inline-item'><i class='fa fa-check-circle'></i><span> Whiteboard</span></li>
-								@else
-									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> Whiteboard</span></li>
-								@endif
-								@if(form.audioCheck == 1)
-									<li class='spec-yes list-inline-item'><i class='fa fa-check-circle'></i><span> Audio conf.</span></li>
-								@else
-									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> Audio conf.</span></li>
-								@endif
-								@if(form.videoCheck == 1)
-									<li class='spec-yes list-inline-item'><i class='fa fa-check-circle'></i><span> Video conf.</span></li> 
-								@else
-									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> Video conf.</span></li>
-								@endif
-								@if(form.pcCheck == 1)
-									<li class='spec-yes list-inline-item'><i class='fa fa-check-circle'></i><span> PC</span></li>
-								@else
-									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> PC</span></li>
-								@endif
-								@if(form.surfaceHubCheck == 1)
-									<li class='spec-yes list-inline-item'><i class='fa fa-check-circle'></i><span> Surface hub</span></li>
-								@else
-									<li class='spec-no list-inline-item'><i class='fa fa-times-circle spec-no-icon'></i><span> Surface hub</span></li>
-								@endif
+								@each(feature in features)
+									@if(antl.currentLocale()==='en')
+										<li class='spec-yes list-inline-item'><i class='fas fa-check-circle'></i><span> {{truncate(feature.name_english, 20, '.')}}</span></li>
+									@else
+										<li class='spec-yes list-inline-item'><i class='fas fa-check-circle'></i><span> {{truncate(feature.name_french, 20, '.')}}</span></li>
+									@endif
+								@endeach
 							</ul>
 						</div>
 					</div>
@@ -135,7 +107,8 @@
                             @each(room in time.rooms)
                                 <div class='no-padding ie-room-margin'>
                                     {{ csrfField() }}
-                                    @!component('components.card',
+									@!component('components.card',
+												antl=antl,
                                         		form=form,
                                         		room=room.room,
                                         		from=room.from,

@@ -1,6 +1,7 @@
 'use strict';
 
 const User = use('App/Models/User');
+const Building = use('App/Models/Building');
 const Tower = use('App/Models/Tower');
 const Floor = use('App/Models/Floor');
 const UserRole = use('App/Models/UserRole');
@@ -9,6 +10,7 @@ const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
 const axios = require('axios');
+// const ActiveDirectory = require('activedirectory');
 
 /**
  * Generating a random string.
@@ -75,13 +77,18 @@ class UserController {
 			const numb = Math.floor(Math.random() * 8) + 1;
 			const photoName = 'login_' + numb + '.jpg';
 
-			var towerOptions = await Tower.all();
-			towerOptions = towerOptions.toJSON();
+			var formOptions = {};
 
-			var floorOptions = await Floor.all();
-			floorOptions = floorOptions.toJSON();
+			var buildingOptions = await Building.all();
+			formOptions.buildings = buildingOptions.toJSON();
 
-			return view.render('auth.registerUser', { photoName, floorOptions, towerOptions });
+			var towerOptions = (await Tower.all()).toJSON();
+			formOptions.towers = towerOptions;
+
+			var floorOptions = (await Floor.all()).toJSON();
+			formOptions.floors = floorOptions;
+
+			return view.render('auth.registerUser', { photoName, formOptions });
 		}
 	}
 
@@ -91,11 +98,11 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async create ({ request, response, auth }) {
+	async create ({ request, response, auth, session }) {
 		const confirmationRequired = Env.get('REGISTRATION_CONFIRMATION', false);
 
 		if (confirmationRequired) {
-			return this.createWithVerifyingEmail({ request, response });
+			return this.createWithVerifyingEmail({ request, response, session });
 		} else {
 			return this.createWithoutVerifyingEmail({ request, response, auth });
 		}
@@ -108,10 +115,20 @@ class UserController {
 	 */
 	async edit ({ params, view, auth, response }) {
 		// Retrieves user object
-		const user = await User.findBy('id', params.id);
-		var layoutType = '';
+		const user = await User.findOrFail(params.id);
 		const userRole = await auth.user.getUserRole();
 		var isAdmin;
+
+		let formOptions = {};
+
+		var buildingOptions = await Building.all();
+		formOptions.buildings = buildingOptions.toJSON();
+
+		var towerOptions = await Tower.all();
+		formOptions.towers = towerOptions.toJSON();
+
+		var floorOptions = await Floor.all();
+		formOptions.floors = floorOptions.toJSON();
 
 		// check if admin is editing their own profile
 		if (userRole === 'admin') {
@@ -124,7 +141,7 @@ class UserController {
 			return response.redirect('/');
 		}
 
-		return view.render('auth.editProfile', { user: user, layoutType: layoutType, isAdmin: isAdmin });
+		return view.render('auth.editProfile', { user, isAdmin, formOptions });
 	}
 
 	/**
@@ -133,22 +150,32 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async update ({ request, session, params, response }) {
+		try {
 		// Retrieves user input
-		const body = request.all();
+			const body = request.all();
 
-		// Updates user information in database
-		await User
-			.query()
-			.where('id', params.id)
-			.update({
-				firstname: body.firstName,
-				lastname: body.lastName,
-				email: body.email,
-				floor: body.floor,
-				tower: body.tower
-			});
+			// test if selected building, tower, and floor exist
+			await Floor.findOrFail(body.floor);
+			await Tower.findOrFail(body.tower);
+			await Building.findOrFail(body.building);
 
-		session.flash({ notification: 'Your profile has been updated!' });
+			// Updates user information in database
+			await User
+				.query()
+				.where('id', params.id)
+				.update({
+					firstname: body.firstName,
+					lastname: body.lastName,
+					email_id: body.email,
+					floor_id: body.floor,
+					tower_id: body.tower,
+					building_id: body.building
+				});
+
+			session.flash({ notification: 'Your profile has been updated!' });
+		} catch (err) {
+			Logger.debug(err);
+		}
 
 		return response.route('viewProfile', { id: params.id });
 	}
@@ -159,48 +186,89 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async createWithoutVerifyingEmail ({ request, response, auth }) {
-		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
-		userInfo.role_id = await UserRole.getRoleID('user');
-		userInfo.verified = true;
-		userInfo.email = userInfo.email.toLowerCase();
-		const user = await User.create(userInfo);
+		try {
+			let body = request.post();
 
-		await auth.login(user);
-		return response.redirect('/');
+			// test if selected building, tower, and floor exist
+			await Floor.findOrFail(body.floor);
+			await Tower.findOrFail(body.tower);
+			await Building.findOrFail(body.building);
+
+			let userInfo = {};
+			userInfo.firstname = body.firstname;
+			userInfo.lastname = body.lastname;
+			userInfo.password = body.password;
+			userInfo.email = body.email.toLowerCase();
+			userInfo.building_id = body.building;
+			userInfo.tower_id = body.tower;
+			userInfo.floor_id = body.floor;
+			userInfo.role_id = await UserRole.getRoleID('user');
+			userInfo.verified = true;
+
+			const user = await User.create(userInfo);
+			await auth.login(user);
+
+			return response.redirect('/');
+		} catch (err) {
+			Logger.debug(err);
+			return response.redirect('/register');
+		}
 	}
-
 	/**
 	 * Create a new Enployee user and send a confirmation email to them.
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async createWithVerifyingEmail ({ request, response, auth }) {
-		var userInfo = request.only(['firstname', 'lastname', 'email', 'password', 'tower', 'floor']);
-		userInfo.role_id = await UserRole.getRoleID('user');
-		userInfo.verified = false;
+	async createWithVerifyingEmail ({ request, response, auth, session }) {
+		try {
+			let body = request.post();
 
-		let hash = randomString(4);
+			// test if selected building, tower, and floor exist
+			await Floor.findOrFail(body.floor);
+			await Tower.findOrFail(body.tower);
+			await Building.findOrFail(body.building);
 
-		let row = {
-			email: userInfo.email,
-			hash: hash,
-			type: 2
-		};
-		await AccountRequest.create(row);
+			let userInfo = {};
+			userInfo.firstname = body.firstname;
+			userInfo.lastname = body.lastname;
+			userInfo.password = body.password;
+			userInfo.email = body.email.toLowerCase();
+			userInfo.building_id = body.building;
+			userInfo.tower_id = body.tower;
+			userInfo.floor_id = body.floor;
+			userInfo.role_id = await UserRole.getRoleID('user');
+			userInfo.verified = false;
 
-		let body = `
-			<h2> Welcome to Jarvis, ${userInfo.firstname} </h2>
-    		<p>
-      			Please click the following URL into your browser: 
-      			${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newUser?hash=${hash}
-    		</p>
-    	`;
+			let hash = randomString(4);
 
-		await sendMail('Verify Email Address for Jarvis',
-			body, userInfo.email);
+			let row = {
+				email: userInfo.email,
+				hash: hash,
+				type: 2
+			};
+			await AccountRequest.create(row);
 
-		await User.create(userInfo);
-		return response.redirect('/login');
+			let mailBody = `
+				<h2> Welcome to Jarvis, ${userInfo.firstname} </h2>
+				<p>
+					Please click the following URL into your browser: 
+					${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newUser?hash=${hash}
+				</p>
+			`;
+
+			await sendMail('Verify Email Address for Jarvis',
+				mailBody, userInfo.email);
+
+			await User.create(userInfo);
+
+			session.flash({
+				notification: 'A confirmation email with register instructions has been sent your email address.'
+			});
+			return response.redirect('/login');
+		} catch (err) {
+			Logger.debug(err);
+			return response.redirect('/register');
+		}
 	}
 
 	/**
@@ -336,12 +404,17 @@ class UserController {
 	}
 
 	async show ({ auth, params, view, response }) {
-		const user = await User.find(Number(params.id));
+		let user = await User
+			.query()
+			.where('id', params.id)
+			.with('floor')
+			.with('tower')
+			.with('building')
+			.with('role')
+			.firstOrFail();
+
 		var canEdit = 0;
-		var layoutType = '';
 		const userRole = await auth.user.getUserRole();
-		const profileUserRole = await user.getUserRole();
-		// check if admin is viewing their own profile
 
 		// check if user is viewing their own profile or is admin
 		if (auth.user.id === Number(params.id) || userRole === 'admin') {
@@ -350,7 +423,9 @@ class UserController {
 			return response.redirect('/');
 		}
 
-		return view.render('auth.showProfile', { auth, user, layoutType, canEdit, profileUserRole });
+		user = user.toJSON();
+
+		return view.render('auth.showProfile', { auth, user, canEdit });
 	}
 
 	/**
@@ -465,8 +540,10 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getAllUsers ({ view }) {
-		const results = await User.all();
+	async getAllUsers ({ view, request }) {
+		const selectedBuilding = request.cookie('selectedBuilding');
+
+		const results = await User.query().where('role_id', 2).where('building_id', selectedBuilding.id).fetch();
 		const users = results.toJSON();
 
 		// Sort the results by name
@@ -474,7 +551,81 @@ class UserController {
 			return (a.firstname > b.firstname) ? 1 : ((b.firstname > a.firstname) ? -1 : 0);
 		});
 
-		return view.render('adminPages.viewUsers', { users });
+		const pageTitle = 'All users';
+
+		return view.render('adminPages.viewUsers', { users, pageTitle });
+	}
+
+	/**
+	 * Query all admins from the database.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getAllAdmins ({ view, request }) {
+		const pageTitle = 'All admin users';
+
+		const results = await User.query().where('role_id', 1).fetch();
+		const users = results.toJSON();
+
+		// Sort the results by name
+		users.sort((a, b) => {
+			return (a.firstname > b.firstname) ? 1 : ((b.firstname > a.firstname) ? -1 : 0);
+		});
+
+		return view.render('adminPages.viewUsers', { users, pageTitle });
+	}
+
+	/**
+	 * Active Directory
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async active ({ request }) {
+		const options = request.all();
+
+		// const config = {
+		// 	url: 'ldap://DomainDNSZones.prod.prv',
+		// 	baseDN: 'dc=prod,dc=prv',
+		// 	username: options.email,
+		// 	password: options.password
+		// };
+		// const ad = new ActiveDirectory(config);
+		// console.log('ad', ad);
+
+		// const username = options.email;
+		// const password = options.password;
+
+		// ad.authenticate(username, password, (err, auth) => {
+		// 	if (err) {
+		// 		console.log('ERROR: ' + JSON.stringify(err));
+		// 		return;
+		// 	}
+
+		// 	if (auth) {
+		// 		console.log('Authenticated!');
+		// 	} else {
+		// 		console.log('Authentication failed!');
+		// 	}
+		// });
+
+		// var passport = require('passport');
+		// var ActiveDirectoryStrategy = require('passport-activedirectory');
+
+		// passport.use(new ActiveDirectoryStrategy({
+		// 	integrated: false,
+		// 	ldap: {
+		// 		url: 'ldap://DomainDNSZones.prod.prv',
+		// 		baseDN: 'dc=prod,dc=prv',
+		// 		username: options.email,
+		// 		bindCredentials: options.password
+		// 	}
+		// }, (profile, ad, done) => {
+		// 	console.log('ad', ad);
+		// 	console.log('profile', profile);
+		// 	console.log('done', done);
+		// }));
+
+		// return 'done';
 	}
 }
 

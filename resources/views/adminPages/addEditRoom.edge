@@ -6,6 +6,16 @@
 
 @section('content')
     @!component('components.pageHeader', title='Add room')
+    @if(flashMessage('error'))
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="alert alert-dismissible alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ flashMessage('error') }}
+                </div>
+            </div>
+        </div>
+    @endif
     <p>Add rooms to database. Rooms added here can be booked by users.</p>
 
     <div class='row'>
@@ -16,7 +26,7 @@
                         <div class='col-md-12'>
                             @if(actionType =='Add Room')
                                 <h4 class="mb-3">New room</h4>
-                                <form action={{ route('addRoom') }} method='POST' enctype='multipart/form-data'>
+                                <form action='{{ route('addRoom') }}' method='POST' enctype='multipart/form-data'>
                             @else
                                 <form action='{{ route('saveRoom', {id: room.id}) }}' method='POST' enctype='multipart/form-data'>
                             @endif
@@ -58,26 +68,23 @@
                                 <div class='row'>                
                                     <div class='col form-group'>
                                         <div class='row'>
-                                            <label class='col' for='state'>Room status <strong class='text-danger'>* </strong></label>
+                                            <label class='col' for='state_id'>Room status <strong class='text-danger'>* </strong></label>
                                             <div class='col text-right'>
                                                 <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right' data-original-title='Active: available for booking, Deactive & Maintenance: unavailable for booking'></i>
                                             </div>
                                         </div>
                                         @if(hasErrorFor('state'))
                                             <select class='form-control is-invalid' name='state' id='state' onchange='removeErrorClass("state")'>
-                                                <option value='undefined' {{ old('state', room.state) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Room Status</option>
-                                                <option value='1' {{ old('state', room.state) == '1' ? 'selected' : '' }}>Active</option>
-                                                <option value='2' {{ old('state', room.state) == '2' ? 'selected' : '' }}>Deactivated</option>
-                                                <option value='3' {{ old('state', room.state) == '3' ? 'selected' : '' }}>Under maintenance</option>
-                                            </select>
-                                            <div class='invalid-feedback'>{{ getErrorFor('state') }}</div>
                                         @else
-                                            <select class='form-control' name='state' id='state' onchange='removeErrorClass("state")'>
-                                                <option value='undefined' {{ old('state', room.state) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Room Status</option>
-                                                <option value='1' {{ old('state', room.state) == '1' ? 'selected' : '' }}>Active</option>
-                                                <option value='2' {{ old('state', room.state) == '2' ? 'selected' : '' }}>Deactivated</option>
-                                                <option value='3' {{ old('state', room.state) == '3' ? 'selected' : '' }}>Under maintenance</option>
-                                            </select>
+                                            <select class='form-control' name='state' id='state'>
+                                        @endif
+                                            <option value='undefined' {{ old('state', room.state_id) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Room Status</option>
+                                            @each(status in formOptions.statuses)
+                                                <option value='{{status.id}}' {{ old('state', room.state_id) == status.id ? 'selected' : '' }}>{{status.name}}</option>
+                                            @endeach
+                                        </select>
+                                        @if(hasErrorFor('state'))
+                                            <div class='invalid-feedback'>{{ getErrorFor('state') }}</div>
                                         @endif
                                     </div>
                                 </div>
@@ -87,33 +94,17 @@
                                         <label for='floor'>Floor <strong class='text-danger'>*</strong></label>
                                         @if(hasErrorFor('floor'))
                                             <select class='form-control is-invalid' name='floor' id='floor' onchange='removeErrorClass("floor")'>
-                                                <option value='undefined' {{ old('floor', room.floor) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Floor</option>
-                                                <option value='0' {{ old('floor', room.floor) == '0' ? 'selected' : '' }}>0</option>
-                                                <option value='1' {{ old('floor', room.floor) == '1' ? 'selected' : '' }}>1</option>
-                                                <option value='2' {{ old('floor', room.floor) == '2' ? 'selected' : '' }}>2</option>
-                                                <option value='3' {{ old('floor', room.floor) == '3' ? 'selected' : '' }}>3</option>
-                                                <option value='4' {{ old('floor', room.floor) == '4' ? 'selected' : '' }}>4</option>
-                                                <option value='5' {{ old('floor', room.floor) == '5' ? 'selected' : '' }}>5</option>
-                                                <option value='6' {{ old('floor', room.floor) == '6' ? 'selected' : '' }}>6</option>
-                                                <option value='7' {{ old('floor', room.floor) == '7' ? 'selected' : '' }}>7</option>
-                                                <option value='8' {{ old('floor', room.floor) == '8' ? 'selected' : '' }}>8</option>
-                                                <option value='9' {{ old('floor', room.floor) == '9' ? 'selected' : '' }}>9</option>
-                                            </select>
-                                            <div class='invalid-feedback'>{{ getErrorFor('floor') }}</div>
                                         @else
                                             <select class='form-control' name='floor' id='floor'>
-                                                <option value='undefined' {{ old('floor', room.floor) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Floor</option>
-                                                <option value='0' {{ old('floor', room.floor) == '0' ? 'selected' : '' }}>0</option>
-                                                <option value='1' {{ old('floor', room.floor) == '1' ? 'selected' : '' }}>1</option>
-                                                <option value='2' {{ old('floor', room.floor) == '2' ? 'selected' : '' }}>2</option>
-                                                <option value='3' {{ old('floor', room.floor) == '3' ? 'selected' : '' }}>3</option>
-                                                <option value='4' {{ old('floor', room.floor) == '4' ? 'selected' : '' }}>4</option>
-                                                <option value='5' {{ old('floor', room.floor) == '5' ? 'selected' : '' }}>5</option>
-                                                <option value='6' {{ old('floor', room.floor) == '6' ? 'selected' : '' }}>6</option>
-                                                <option value='7' {{ old('floor', room.floor) == '7' ? 'selected' : '' }}>7</option>
-                                                <option value='8' {{ old('floor', room.floor) == '8' ? 'selected' : '' }}>8</option>
-                                                <option value='9' {{ old('floor', room.floor) == '9' ? 'selected' : '' }}>9</option>
-                                            </select>
+                                        @endif
+                                            <option value='undefined' {{ old('floor', room.floor_id) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Floor</option>
+                                            @each(floor in formOptions.floors)
+                                                <option value='{{floor.id}}' {{ old('floor', room.floor_id) == floor.id ? 'selected' : '' }}>{{floor.name}}</option>
+                                            @endeach
+                                        </select>
+                                        @if(hasErrorFor('floor'))
+
+                                            <div class='invalid-feedback'>{{ getErrorFor('floor') }}</div>
                                         @endif
                                     </div>
                                     {{--  Tower Location  --}}
@@ -121,18 +112,18 @@
                                         <label for='tower'>Tower <strong class='text-danger'>*</strong></label>
                                         @if(hasErrorFor('tower'))
                                             <select class='form-control is-invalid' name='tower' id='tower' onchange='removeErrorClass("tower")'>
-                                                <option value='undefined' {{ old('tower', room.tower) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Tower</option>
-                                                <option value='East' {{ old('tower', room.tower) == 'East' ? 'selected' : '' }}>East</option>
-                                                <option value='West' {{ old('tower', room.tower) == 'West' ? 'selected' : '' }}>West</option>
-                                            </select>
-                                            <div class='invalid-feedback'>{{ getErrorFor('tower') }}</div>
                                         @else
-                                            <select class='form-control' name='tower' id='tower'>
-                                                <option value='undefined' {{ old('tower', room.tower) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Tower</option>
-                                                <option value='East' {{ old('tower', room.tower) == 'East' ? 'selected' : '' }}>East</option>
-                                                <option value='West' {{ old('tower', room.tower) == 'West' ? 'selected' : '' }}>West</option>
-                                            </select>
+                                            <select class='form-control' name='tower' id='tower' onchange='removeErrorClass("tower")'>
                                         @endif
+                                            <option value='undefined' {{ old('tower', room.tower) == 'undefined' ? 'selected' : '' }} selected='' disabled>Select a Tower</option>
+                                            @each(tower in formOptions.towers)
+                                                <option value='{{tower.id}}' {{ old('tower', room.tower_id) == tower.id ? 'selected' : '' }}>{{tower.name}}</option>
+                                            @endeach
+                                            </select>
+                                        @if(hasErrorFor('tower'))
+                                            <div class='invalid-feedback'>{{ getErrorFor('tower') }}</div>
+                                        @endif
+ 
                                     </div>
                                 </div>
                                 {{--  Phone Number  --}}
@@ -171,50 +162,31 @@
                                         @endif
                                     </div>
                                 </div>
+
                                 {{--  Equipment List  --}}
                                 <div class='row'>
                                     <div class='col form-group'>
-                                        <label for='equipment'>Equipment <strong class='text-danger'>*</strong></label>
-                                        <div class='row'>               
-                                            <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-4 ml-3'>
-                                                <input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value= '1' {{ old('projectorCheck', room.projector) ? 'checked' : '' }} >
-                                                <label class='custom-control-label' for='projectorCheck'>Projector</label>
-                                            </div>
-                                            <div class='custom-control custom-checkbox ml-3'>
-                                                <input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1' {{ old('whiteboardCheck', room.whiteboard) ? 'checked' : '' }} >
-                                                <label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
-                                            </div>
-                                        </div>
-                    
                                         <div class='row'>
-                                            <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-4 ml-3'>
-                                                <input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck', room.flipchart) ? 'checked' : '' }} >
-                                                <label class='custom-control-label' for='flipChartCheck'>Flip chart</label>
-                                            </div>  
-                                            <div class='custom-control custom-checkbox ml-3'>
-                                                <input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck', room.audioConference) ? 'checked' : '' }} >
-                                                <label class='custom-control-label' for='audioCheck'>Audio conferencing</label>
-                                            </div>                
+                                            @each(featureCategory in formOptions.roomFeatureCategory)
+                                                @if(featureCategory.features.length!=0)
+                                                    <div class="col-xl-3 mt-3">
+                                                    <i><strong>{{featureCategory.name}}</strong></i>
+
+                                                    @each(feature in featureCategory.features)
+                                                        <div class='form-check'>
+                                                            <input class="form-check-input" type='checkbox' name='{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1' 
+                                                            @if(room)
+                                                                {{ old(feature.id, room.features.includes(feature.id)) ? 'checked' : '' }} >
+                                                            @else
+                                                                {{ old(feature.name_english) ? 'checked' : '' }} >
+                                                            @endif
+                                                            <label class="form-check-label" for='{{feature.name_english}}'>{{feature.name_english}}</label>
+                                                        </div>
+                                                    @endeach
+                                                    </div>
+                                                @endif
+                                            @endeach
                                         </div>
-                    
-                                        <div class='row'>
-                                            <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-4 ml-3'>
-                                                <input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck', room.videoConference) ? 'checked' : '' }} >
-                                                <label class='custom-control-label' for='videoCheck'>Video conferencing</label>
-                                            </div>
-                                            
-                                            <div class='custom-control custom-checkbox ml-3'>
-                                                <input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1' {{ old('surfaceHubCheck', room.surfaceHub) ? 'checked' : '' }} >
-                                                <label class='custom-control-label' for='surfaceHubCheck'>Surface hub</label>
-                                            </div>               
-                                        </div>
-                    
-                                        <div class='row'>
-                                            <div class='custom-control custom-checkbox col-sm-3 col-md-3 col-lg-4 ml-3'>
-                                                <input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1' {{ old('pcCheck', room.pc) ? 'checked' : '' }} >
-                                                <label class='custom-control-label' for='pcCheck'>PC</label>
-                                            </div>                
-                                        </div> 
                                     </div>
                                 </div>
                                 {{--  Extra Equipment  --}}
@@ -278,7 +250,7 @@
                                             <div class="col-4 text-center">
                                                 <img class="shadow"style ="width:80%; max-height: 150px;" data-toggle="modal" data-target="#room-roompicture-{{room.id}}" src='/{{room.picture}}'>
                                             </div>
-                                            <small id="reviewPictureHelp" class="form-text text-muted">Click to view the previosuly <strong>saved</strong> image.</small>
+                                            <small id="reviewPictureHelp" class="form-text text-muted">Click to view the previously <strong>saved</strong> image.</small>
                                         @endif
                                     </div>
                                 </div>
@@ -299,6 +271,7 @@
             </div>
         </div>         
     </div>
+
 
     {{--  displaying the room picture  --}}
     @if(room.floorplan)

@@ -7,7 +7,7 @@
 {{--  Manage bookings page content  --}}
 @section('content')
     {{--  Loading page header  --}}
-    @!component('components.pageHeader', title=antl.formatMessage('results.pageTitle') )
+    @!component('components.pageHeader', title=antl.formatMessage('results.pageTitle'))
     @if(rooms.length == 0)
         <div class="row">
             <div class="col-12 text-center mt-5 mb-5">
@@ -22,6 +22,7 @@
                 <div class='no-padding ie-room-margin'>
                     {{ csrfField() }}
                     @!component('components.card',
+                        antl = antl,
                         form=form,
                         room=room,
                         token=csrfToken)

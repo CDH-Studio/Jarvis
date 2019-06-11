@@ -91,7 +91,7 @@ class BookingController {
 		const row = results.toJSON();
 		const name = row.name;
 
-		if (!await this.getRoomAvailability(date, from, to, row.floor, row.calendar)) {
+		if (!await this.getRoomAvailability(date, from, to, row.floor_id, row.calendar)) {
 			session.flash({
 				error: `Room ${name} has already been booked for the time selected!`
 			});
@@ -104,7 +104,7 @@ class BookingController {
 			'subject': meeting,
 			'body': {
 				'contentType': 'HTML',
-				'content': 'Jarvis Daily Standup'
+				'content': ''
 			},
 			'start': {
 				'dateTime': `${date}T${from}`,
@@ -294,7 +294,7 @@ class BookingController {
 				end: eventInfo.end.dateTime,
 				subject: eventInfo.subject,
 				body: eventInfo.body.content,
-				floor: room.floor,
+				floor: room.floor_id,
 				attendees: [user.email]
 			});
 

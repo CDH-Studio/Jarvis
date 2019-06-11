@@ -6,7 +6,7 @@
 							<div class='row'>
 								<div class='col form-group mb-4'>
 									<div class='row'>
-										<label class='col' for='date' aria-describedby='date-tooltip'>Date <strong class='text-danger'>*</strong></label>
+										<label class='col' for='date' aria-describedby='date-tooltip'>{{ antl.formatMessage('roomDetails.bookingDate') }} <strong class='text-danger'>*</strong></label>
 										<div class='col text-right'>
 											<i id='date-tooltip' class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
 										</div>
@@ -24,7 +24,7 @@
 							{{--  Meeting time from  --}}
 							<div class='row'>
 								<div class='col col-sm-4 form-group mb-4 mr-3'>
-									<label for='from' aria-labelledby='from-error'>Start time <strong class='text-danger'>*</strong></label>
+									<label for='from' aria-labelledby='from-error'>{{ antl.formatMessage('roomDetails.bookingStart') }} <strong class='text-danger'>*</strong></label>
 									{{--  If field is not filled correctly show an error box  --}}
 									<div class='timePicker' style='display: flex;'>
 										@if(hasErrorFor('from'))
@@ -47,7 +47,7 @@
 									@endif
 								</div>
 								<div class='col col-sm-4 form-group mb-4 mr-3'>
-									<label for='to' aria-labelledby='to-error' data-toggle='tooltip'>End time <strong class='text-danger'>*</strong></label>
+									<label for='to' aria-labelledby='to-error' data-toggle='tooltip'>{{ antl.formatMessage('roomDetails.bookingEnd') }} <strong class='text-danger'>*</strong></label>
 									<div style='display: flex;' class='timePicker'>
 										{{--  If field is not filled correctly show an error box  --}}
 										@if(hasErrorFor('to'))
@@ -69,7 +69,7 @@
 									@endif
 								</div>
 								<div class='col col-sm-3 form-group mb-1'>
-									<label for='duration'>Duration </label> <strong class='text-danger'>*</strong>
+									<label for='duration'>{{ antl.formatMessage('searchForm.duration') }} </label> <strong class='text-danger'>*</strong>
 									<div class='form-group'>
 										<div class='input-group mb-3'>
 										<input class='form-control duration-input' name='hour' type='number' min=0 max=10 step=0.5 value='{{ old('hour', '1') }}'>
@@ -83,9 +83,9 @@
 							{{--  Location form  --}}
 							<div class='row'>
 								<div class='col form-group mb-4'>
-									<label for='location'>Preferred location</label>
+									<label for='location'>{{ antl.formatMessage('searchForm.preferredLocation') }}</label>
 									<select id='location' name='location' class='form-control'>
-										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>Select a floor</option>
+										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>{{ antl.formatMessage('searchForm.selectFloor') }}</option>
 										<option value='0' {{ old('location') == '0' ? 'selected' : '' }}>Floor 0</option>
 										<option value='1' {{ old('location') == '1' ? 'selected' : '' }}>Floor 1</option>
 										<option value='2' {{ old('location') == '2' ? 'selected' : '' }}>Floor 2</option>
@@ -102,49 +102,44 @@
 							<div class='row'>
 								{{--  PMts form  --}}
 								<div class='col form-group mb-4'>
-									<label for='seats'>Number of table seats</label>
+									<label for='seats'>{{ antl.formatMessage('roomSearchCard.tableSeats') }}</label>
 									<input class='form-control' id='seats' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
 								</div>
 								{{--  Max Capacity  --}}
 								<div class='col form-group mb-4'>
-									<label for='capacity'>Max Capacity</label>
+									<label for='capacity'>{{ antl.formatMessage('roomDetails.capacity') }}</label>
 									<input class='form-control' id='capacity' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
 								</div>
 							</div>
 							{{--  Equipment check box form  --}}
 							<div class='form-group'>
-								<label>Equipment</label>
-								<div class='row'>               
-									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
-										<input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value= '1' {{ old('projectorCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='projectorCheck'>Projector</label>
-									</div>
-									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
-										<input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1' {{ old('whiteboardCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
-									</div>
-									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
-										<input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='flipChartCheck'>Flip chart</label>
-									</div>  
-				
-									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
-										<input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='audioCheck'>Audio conferencing</label>
-									</div>
-									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
-										<input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='videoCheck'>Video conferencing</label>
-									</div>
-									
-									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
-										<input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1' {{ old('surfaceHubCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='surfaceHubCheck'>Surface hub</label>
-									</div>              
-									<div class='custom-control custom-checkbox col ml-3'>
-										<input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1' {{ old('pcCheck') ? 'checked' : '' }}/>
-										<label class='custom-control-label' for='pcCheck'>PC</label>
-									</div>                
+								<label>{{ antl.formatMessage('roomDetails.equipment') }}</label>
+								<div class='row'>
+									@each(featureCategory in formOptions.roomFeatureCategory)
+										@if(featureCategory.features.length!=0)
+											<div class="col-xl-6 mb-4">
+											@if(antl.currentLocale()==='en')
+												<i><strong>{{featureCategory.name_english}}</strong></i>
+											@else
+												<i><strong>{{featureCategory.name_french}}</strong></i>
+											@endif
+											@each(feature in featureCategory.features)
+												<div class='custom-control custom-checkbox'>
+													<input class="custom-control-input" type='checkbox' name='feat{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1'>
+													@if(antl.currentLocale()==='en')
+														<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_english, 20, '.')}}</label>
+													@else
+														<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_french, 20, '.')}}</label>
+													@endif
+												</div>
+											@endeach
+											</div>
+										@endif
+										@if($loop.index === 1)
+										</div>
+										<div class="row">
+									@endif
+									@endeach
 								</div>
 							</div>
 							{{--  Page buttons  --}}
