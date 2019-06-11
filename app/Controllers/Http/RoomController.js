@@ -741,20 +741,19 @@ class RoomController {
 		let checkBox = Object.keys(options)
 			.filter(key => key.substring(0, 4) === 'feat')
 			.map(key => {
-					return {checkName: key.substring(4), checkValue: options[key]}
+				return { checkName: key.substring(4), checkValue: options[key] }
 			});
 
 		const findFeatId = async () => {
 			return asyncMap(checkBox, async (feat) => {
 				const featId = (await RoomFeature
 					.findBy('name_english', feat.checkName)).id;
-				feat.checkName = featId
-				
-				return feat; 
+				feat.checkName = featId;
+
+				return feat;
 			});
 		};
 		checkBox = await findFeatId();
-		console.log(checkBox)
 
 		// only loook for roosm that are open
 		let searchResults = Room
@@ -794,7 +793,7 @@ class RoomController {
 				builder.orderBy('id', 'asc');
 			})
 			.fetch()).rows;
-	
+
 		const filterFeatures = async (rooms, feat) => {
 			return asyncFilter(rooms, async (room) => {
 				const feats = (await room.features().fetch()).toJSON();
@@ -812,7 +811,7 @@ class RoomController {
 		};
 
 		await forEveryFeature();
-		
+
 		return rooms;
 	}
 
