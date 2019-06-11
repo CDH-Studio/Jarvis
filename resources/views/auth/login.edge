@@ -69,12 +69,32 @@
     </div>
 
     @if(flashMessage('notification'))
-    <script type='module'>
-        import {notify} from '/js/notify.js';
-        $(window).on('load', function() {
-            notify({ $: $, message: '{{ flashMessage('notification') }}' });
-        });
-    </script>
+		<script src='https://code.jquery.com/jquery-3.3.1.min.js' integrity='sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=' crossorigin='anonymous'></script>
+		<script>
+			$(window).on('load', function () {
+				// notify({ $: $, message: '{{ flashMessage('notification') }}' });
+				$.notify({ message: '{{ flashMessage('notification') }}' }, 
+					{
+						element: 'body',
+						type: 'success',
+						animate: {
+							enter: 'animated fadeInRight',
+							exit: 'animated fadeOutUp'
+						},
+						placement: {
+							from: 'top',
+							align: 'right'
+						},
+						offset: {
+							x: 10,
+							y: 10
+						},
+						spacing: 10,
+						z_index: 1031,
+						delay: 5000
+					});
+			});
+		</script>
     @elseif(hasErrorFor('password') || hasErrorFor('email'))
         <script type='module'>
             import {notify} from '/js/notify.js';
