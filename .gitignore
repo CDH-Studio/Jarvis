@@ -1,6 +1,5 @@
 # Node modules
 node_modules
-package-lock.json
 
 # Adonis directory for storing tmp files
 tmp
@@ -25,3 +24,14 @@ public/uploads/
 
 # yarn error log
 yarn-error.log
+.scannerwork/.sonar_lock
+.scannerwork/report-task.txt
+.scannerwork/.sonartmp/scanner-report3873574551633152393.zip
+.scannerwork/css-bundle/stylelintconfig.json
+.scannerwork/css-bundle/package.json
+
+# yarn
+yarn.lock
+
+# scanner
+/.scannerwork
