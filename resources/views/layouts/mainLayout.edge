@@ -52,8 +52,8 @@
 
         <!-- Sidebar - Brand -->
         <a class="sidebar-brand navbar-brand d-flex align-items-center justify-content-center" href="{{route('home')}}">
-            <div class="sidebar-brand-icon"><img src='/logo_door.png' alt='jarvis-icon'></div>
-            <div class="sidebar-brand-text"><img src='/logo_text.png' alt='jarvis-text'></div>
+            <div class="sidebar-brand-icon ml-3 ml-md-0"><img src='/images/logo_door.png' alt='jarvis-icon'></div>
+            <div class="sidebar-brand-text"><img src='/images/logo_text.png' alt='jarvis-text'></div>
         </a>
 
         <!-- Divider -->
@@ -67,6 +67,22 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
+
+        <div class="sidebar-heading d-none d-md-inline">
+          {{ antl.formatMessage('mainLayout.cdhStudioLogo') }}
+        </div>
+
+        <div class="text-center d-none d-md-inline pb-3">
+          @if(antl.currentLocale() == "en")
+            <a class="nav-link" href='https://cdhstudio.ca/' target='_blank' >
+              <img src="/images/cdhStudiologo.png" style="width:63%"></img>
+            </a>
+          @else
+            <a class="nav-link" href='https://cdhstudio.ca/fr' target='_blank' >
+              <img src="/images/cdhStudiologo_fr.png" style="width:63%"></img>
+            </a>
+          @endif
+        </div>
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">

@@ -10,7 +10,7 @@ const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
 const axios = require('axios');
-const ActiveDirectory = require('activedirectory');
+// const ActiveDirectory = require('activedirectory');
 
 /**
  * Generating a random string.
@@ -608,24 +608,24 @@ class UserController {
 		// 	}
 		// });
 
-		var passport = require('passport');
-		var ActiveDirectoryStrategy = require('passport-activedirectory');
+		// var passport = require('passport');
+		// var ActiveDirectoryStrategy = require('passport-activedirectory');
 
-		passport.use(new ActiveDirectoryStrategy({
-			integrated: false,
-			ldap: {
-				url: 'ldap://DomainDNSZones.prod.prv',
-				baseDN: 'dc=prod,dc=prv',
-				username: options.email,
-				bindCredentials: options.password
-			}
-		}, (profile, ad, done) => {
-			console.log('ad', ad);
-			console.log('profile', profile);
-			console.log('done', done);
-		}));
+		// passport.use(new ActiveDirectoryStrategy({
+		// 	integrated: false,
+		// 	ldap: {
+		// 		url: 'ldap://DomainDNSZones.prod.prv',
+		// 		baseDN: 'dc=prod,dc=prv',
+		// 		username: options.email,
+		// 		bindCredentials: options.password
+		// 	}
+		// }, (profile, ad, done) => {
+		// 	console.log('ad', ad);
+		// 	console.log('profile', profile);
+		// 	console.log('done', done);
+		// }));
 
-		return 'done';
+		// return 'done';
 	}
 }
 
