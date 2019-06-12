@@ -5,6 +5,7 @@
 	"capacity": "Capacité",
 	"comments": "Commentaires",
 	"extraEquipment": "Équipement supplémentaire",
+	"noFeatures": "",
 
 	"bookRoom": "Reserver la salle",
 	"bookingName": "Nom de la réunion",
