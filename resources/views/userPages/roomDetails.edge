@@ -92,7 +92,7 @@
                                 <strong>{{ antl.formatMessage('roomDetails.capacity') }}:</strong> {{ room.capacity }}
                             </div>
                             @if(room.comment && room.comment != " ")
-                                <div class="mt-2 mb-2"><b>Comments:</b> {{ room.comment }}</div>
+                                <div class="mt-2 mb-2"><b>{{ antl.formatMessage('roomDetails.comments') }}::</b> {{ room.comment }}</div>
                             @endif
                         </div>
 
@@ -118,9 +118,9 @@
 
                                         @set('emptyFlag', '0')
                                         @if(antl.currentLocale()=='en')
-                                            <p class="mb-0">{{ truncate(roomFeature.feature.name_english, 13, '.') }}</p>   
+                                            <p class="mb-0" data-toggle="tooltip" title="{{roomFeature.feature.name_english}}">{{ truncate(roomFeature.feature.name_english, 13, '.') }}</p>   
                                         @else
-                                            <p class="mb-0">{{ truncate(roomFeature.feature.name_french, 13, '.') }}</p>
+                                            <p class="mb-0" data-toggle="tooltip" title="{{roomFeature.feature.name_french}}">{{ truncate(roomFeature.feature.name_french, 13, '.') }}</p>
                                         @endif
                                     @endif 
                                 @endeach
@@ -134,7 +134,7 @@
                             </div>
                         @endeach
                         @if(room.extraEquipment.length > 1)
-                            <div class="col-12 col-lg-12 text-center mt-3">
+                            <div class="col-12 col-lg-12 text-center mt-4">
                                 <p class="mb-0"><strong>{{ antl.formatMessage('roomDetails.extraEquipment') }}: </strong>{{room.extraEquipment}}</p>
                             </div>
                         @endif
