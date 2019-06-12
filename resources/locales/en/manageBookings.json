@@ -13,7 +13,7 @@
 	"tableStatus": "Status",
 	"tableCancel": "Cancel",
 	"tableApproved": "Approved",
-	"tableDeclined": "Declined",
+	"tableDeclined": "Cancelled",
 	"modalHeader":"Are you sure?",
 	"modalBody":"Are you sure you want to cancel your booking?",
 	"yes": "Yes",

@@ -6,10 +6,11 @@ const Tower = use('App/Models/Tower');
 const Floor = use('App/Models/Floor');
 const UserRole = use('App/Models/UserRole');
 const AccountRequest = use('App/Models/AccountRequest');
-const Mail = use('Mail');
 const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
+const axios = require('axios');
+// const ActiveDirectory = require('activedirectory');
 
 /**
  * Generating a random string.
@@ -31,14 +32,12 @@ function randomString (times) {
  * @param {string} subject  Subject of Email
  * @param {string} body     Body of Email
  * @param {string} to       Sending address
- * @param {string} from     Receiving address
  */
-function sendMail (subject, body, to, from) {
-	Mail.raw(body, (message) => {
-		message
-			.to(to)
-			.from(from)
-			.subject(subject);
+async function sendMail (subject, body, to) {
+	await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/send`, {
+		to,
+		subject,
+		body
 	});
 	Logger.info('mail sent');
 }
@@ -84,7 +83,6 @@ class UserController {
 			formOptions.buildings = buildingOptions.toJSON();
 
 			var towerOptions = (await Tower.all()).toJSON();
-			console.log(towerOptions);
 			formOptions.towers = towerOptions;
 
 			var floorOptions = (await Floor.all()).toJSON();
@@ -100,11 +98,11 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async create ({ request, response, auth }) {
+	async create ({ request, response, auth, session }) {
 		const confirmationRequired = Env.get('REGISTRATION_CONFIRMATION', false);
 
 		if (confirmationRequired) {
-			return this.createWithVerifyingEmail({ request, response });
+			return this.createWithVerifyingEmail({ request, response, session });
 		} else {
 			return this.createWithoutVerifyingEmail({ request, response, auth });
 		}
@@ -189,14 +187,14 @@ class UserController {
 	 */
 	async createWithoutVerifyingEmail ({ request, response, auth }) {
 		try {
-			var body = request.post();
+			let body = request.post();
 
 			// test if selected building, tower, and floor exist
 			await Floor.findOrFail(body.floor);
 			await Tower.findOrFail(body.tower);
 			await Building.findOrFail(body.building);
 
-			var userInfo = {};
+			let userInfo = {};
 			userInfo.firstname = body.firstname;
 			userInfo.lastname = body.lastname;
 			userInfo.password = body.password;
@@ -221,16 +219,16 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async createWithVerifyingEmail ({ request, response, auth }) {
+	async createWithVerifyingEmail ({ request, response, auth, session }) {
 		try {
-			var body = request.post();
+			let body = request.post();
 
 			// test if selected building, tower, and floor exist
 			await Floor.findOrFail(body.floor);
 			await Tower.findOrFail(body.tower);
 			await Building.findOrFail(body.building);
 
-			var userInfo = {};
+			let userInfo = {};
 			userInfo.firstname = body.firstname;
 			userInfo.lastname = body.lastname;
 			userInfo.password = body.password;
@@ -250,18 +248,22 @@ class UserController {
 			};
 			await AccountRequest.create(row);
 
-			let emailBody = `
+			let mailBody = `
 				<h2> Welcome to Jarvis, ${userInfo.firstname} </h2>
 				<p>
-					Please click the following URL into your browser: 
-					http://localhost:3333/newUser?hash=${hash}
+					Please click on the following link or copy the URL into your browser: 
+					${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newUser?hash=${hash}
 				</p>
-	    	`;
+			`;
 
 			await sendMail('Verify Email Address for Jarvis',
-				emailBody, userInfo.email, 'support@mail.cdhstudio.ca');
+				mailBody, userInfo.email);
 
 			await User.create(userInfo);
+
+			session.flash({
+				notification: 'A confirmation email with register instructions has been sent your email address.'
+			});
 			return response.redirect('/login');
 		} catch (err) {
 			Logger.debug(err);
@@ -453,13 +455,13 @@ class UserController {
 			let body = `
       			<h2> Password Reset Request </h2>
       			<p>
-        			We received a request to reset your password. If you asked to reset your password, please click the following URL: 
-        			http://localhost:3333/newPassword?hash=${hash}
+        			We received a request to reset your password. If you asked to reset your password, please click on the following link: 
+        			${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newPassword?hash=${hash}
       			</p>
 			`;
 
 			await sendMail('Password Reset Request',
-				body, email, 'support@mail.cdhstudio.ca');
+				body, email);
 		}
 
 		session.flash({
@@ -571,6 +573,59 @@ class UserController {
 		});
 
 		return view.render('adminPages.viewUsers', { users, pageTitle });
+	}
+
+	/**
+	 * Active Directory
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async active ({ request }) {
+		const options = request.all();
+
+		// const config = {
+		// 	url: 'ldap://DomainDNSZones.prod.prv',
+		// 	baseDN: 'dc=prod,dc=prv',
+		// 	username: options.email,
+		// 	password: options.password
+		// };
+		// const ad = new ActiveDirectory(config);
+		// console.log('ad', ad);
+
+		// const username = options.email;
+		// const password = options.password;
+
+		// ad.authenticate(username, password, (err, auth) => {
+		// 	if (err) {
+		// 		console.log('ERROR: ' + JSON.stringify(err));
+		// 		return;
+		// 	}
+
+		// 	if (auth) {
+		// 		console.log('Authenticated!');
+		// 	} else {
+		// 		console.log('Authentication failed!');
+		// 	}
+		// });
+
+		// var passport = require('passport');
+		// var ActiveDirectoryStrategy = require('passport-activedirectory');
+
+		// passport.use(new ActiveDirectoryStrategy({
+		// 	integrated: false,
+		// 	ldap: {
+		// 		url: 'ldap://DomainDNSZones.prod.prv',
+		// 		baseDN: 'dc=prod,dc=prv',
+		// 		username: options.email,
+		// 		bindCredentials: options.password
+		// 	}
+		// }, (profile, ad, done) => {
+		// 	console.log('ad', ad);
+		// 	console.log('profile', profile);
+		// 	console.log('done', done);
+		// }));
+
+		// return 'done';
 	}
 }
 

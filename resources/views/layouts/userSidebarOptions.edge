@@ -14,6 +14,7 @@
 </div>
 
 <!-- Nav Item - Pages Collapse Menu -->
+<!--
 <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRooms" aria-expanded="true" aria-controls="collapseRooms">
     <i class="fas fa-fw fa-map-marker-alt"></i>
@@ -21,12 +22,23 @@
   </a>
   <div id="collapseRooms" class="collapse" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <a id="search-rooms-dropdown" class='dropdown-item' href="{{ route('searchRooms') }}">{{antl.formatMessage('userSidebarOptions.search')}}</a>
+        <h6 class="collapse-header">Room Pages:</h6>
+        <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('searchRooms', { view: 'searchRooms'}) }}'>Search</a>
+        <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('searchRooms', { view: 'findAvailable'}) }}'>Search By Time Range</a>
+        <a id="side-nav-dropdown-item" class='dropdown-item' href='{{ route('searchRooms', { view: 'recurringBooking'}) }}'>Recurring Booking</a>
         <a id="all-rooms-dropdown" class='dropdown-item' href='{{ route('allRooms') }}'>{{antl.formatMessage('userSidebarOptions.allRooms')}}</a>
       </div>
   </div>
 </li>
+-->
+
 <!-- Nav Item - Dashboard -->
+<li class="nav-item">
+  <a class="nav-link"  href='{{ route('allRooms') }}'>
+    <i class="fas fa-fw fa-map-marker-alt"></i>
+    <span>{{antl.formatMessage('userSidebarOptions.allRooms')}}</span>
+  </a>
+</li>
 <li class="nav-item">
   <a class="nav-link"  href='{{ route('viewBookings',{id: userid, bookingType: 'user'}) }}'>
     <i class="fas fa-tasks"></i>

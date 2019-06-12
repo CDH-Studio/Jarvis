@@ -10,12 +10,16 @@ const FeaturePivot = use('App/Models/FeaturesRoomsPivot');
 const RoomStatus = use('App/Models/RoomStatus');
 const Review = use('App/Models/Review');
 const Token = use('App/Models/Token');
+const Booking = use('App/Models/Booking');
 const Helpers = use('Helpers');
 const graph = require('@microsoft/microsoft-graph-client');
+const axios = require('axios');
+const Env = use('Env');
 const Event = use('Event');
-
+const Logger = use('Logger');
 // Used for time related calcuklations and formatting
 const moment = require('moment');
+require('moment-recur');
 require('moment-round');
 
 /**
@@ -30,16 +34,16 @@ async function getAccessToken () {
 		const accessToken = results.toJSON().token;
 		return accessToken;
 	} catch (err) {
-		console.log(err);
+		Logger.debug(err);
 		return null;
 	}
 }
 
 /**
- * Generating a random string.
- *
- * @param {Integer} times Each time a string of 5 to 6 characters is generated.
- */
+* Generating a random string.
+*
+* @param {Integer} times Each time a string of 5 to 6 characters is generated.
+*/
 function random (times) {
 	let result = '';
 	for (let i = 0; i < times; i++) {
@@ -49,6 +53,53 @@ function random (times) {
 	return result;
 }
 
+async function asyncMap (arr, callback) {
+	let arr2 = [];
+
+	for (let i = 0; i < arr.length; i++) {
+		arr2.push(await callback(arr[i], i, arr));
+	}
+
+	return arr2;
+}
+
+/**
+ * Populate bookings from booking query results.
+ *
+ * @param {Object} results Results from bookings query.
+ *
+ * @returns {Object} The access token.
+ *
+ */
+async function populateBookings (results) {
+	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+	let bookings = [];
+	const populate = async () => {
+		bookings = await asyncMap(results, async (result) => {
+			const booking = {};
+
+			const from = new Date(result.from);
+			const to = new Date(result.to);
+			booking.subject = result.subject;
+			booking.status = result.status;
+			booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
+			booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+			booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
+			booking.roomId = result.room_id;
+			booking.id = result.id;
+
+			return booking;
+		});
+	};
+
+	await populate();
+
+	return bookings;
+}
+
+// iterate through the rooms
 async function asyncForEach (arr, callback) {
 	for (let i = 0; i < arr.length; i++) {
 		await callback(arr[i], i, arr);
@@ -75,13 +126,14 @@ class RoomController {
 	* @param {view}
 	*
 	*/
-	async loadSearchRoomsForm ({ view, auth }) {
+	async loadSearchRoomsForm ({ view, params }) {
 		// Calculates the from and too times to pre fill in the search form
 		let fromTime = moment();
 		let toTime = moment();
 		let dropdownSelection = [];
 		const start = moment().startOf('day');
 		const end = moment().endOf('day');
+		const endBy = moment().startOf('day').add(1, 'month').format('YYYY-MM-DD');
 
 		// round the autofill start and end times to the nearest 30mins
 		fromTime = fromTime.round(30, 'minutes').format('HH:mm');
@@ -93,7 +145,7 @@ class RoomController {
 			start.add(30, 'm');
 		}
 
-		return view.render('userPages.searchRooms', { fromTime, toTime, dropdownSelection });
+		return view.render(`userPages.${params.view}`, { fromTime, toTime, dropdownSelection, endBy });
 	}
 	/**
 	 * Takes in a variable and converts the value to 0 if it's null (Used for checkboxes)
@@ -487,7 +539,6 @@ class RoomController {
 			})
 			.fetch();
 
-		// await generateFloorAndTower();
 		const rooms = results.toJSON();
 
 		// Sort the results by name
@@ -535,23 +586,88 @@ class RoomController {
 		}
 	}
 
-	/**
-	 * Query the room from the database which matches the search input.
-	 *
-	 * @param {Object} Context The context object.
-	 */
 	async searchRooms ({ request, view }) {
-		const form = request.all();
-		const name = form.searchField;
+		const options = request.all();
 
-		let searchResults = await Room
-			.query()
-			.where('name', name)
-			.fetch();
+		const duration = Number(options.hour) * 60;
+		const difference = Math.abs(moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))).asMinutes());
 
-		const rooms = searchResults.toJSON();
+		if (duration === difference) {
+			return this.findSpecific({ request, view });
+		} else {
+			return this.findAvailable({ request, view });
+		}
+	}
 
-		return view.render('adminPages.viewRooms', { rooms });
+	async findAvailable ({ request, view }) {
+		const options = request.all();
+		const { rooms, features } = await this.filterRooms(options);
+
+		const duration = Number(options.hour) * 60;
+		let results = {};
+		const find = async () => {
+			await asyncForEach(rooms, async (item) => {
+				const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/findAvail`, {
+					room: item.calendar,
+					floor: item.floor_id,
+					duration: duration,
+					start: moment(options.date).format('YYYY-MM-DDTHH:mm'),
+					end: moment(options.date).add(24, 'hour').format('YYYY-MM-DDTHH:mm')
+				});
+
+				results[item.name] = res.data;
+			});
+		};
+
+		await find();
+		// results = {"0ASIS":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"101A (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","13:30","14:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"101B (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","12:00","12:30","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"105A (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","12:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"145A (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"165A (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"174A (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","12:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"199C (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","11:30","12:00","12:30","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30"],"231A (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","12:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"243A (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","11:00","11:30","12:00","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"255D (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","12:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"259A (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","12:00","12:30","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"298B (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","12:00","14:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"299A (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"331A (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"353A (W)":["16:00"],"398C (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"398B (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"399B (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"3E Lobby":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","12:00","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"3W Lobby":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","12:00","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"401A (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","12:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"401B (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","12:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"402A (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"551A (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"567A (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"5W Lobby":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"645C (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","12:00","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"660F (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"7E Lobby":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","12:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"7W Lobby":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","12:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"741F (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","12:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"752A (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"799A (W)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","12:00","12:30","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"831D (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","11:00","11:30","12:00","12:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"902A (E)":["08:00","08:30","11:30","12:00","15:30","16:00"],"903A (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","12:00","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"903B (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","12:00","14:00","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"921D (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","11:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"921E (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","11:30","12:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"],"949A (E)":["00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","09:30","12:30","14:30","15:00","15:30","16:00","16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00"]}
+		let times = [];
+		for (const name in results) {
+			let room = results[name];
+			room = room.filter(item => {
+				const time = moment(item, 'HH:mm');
+				const min = moment(options.from, 'HH:mm');
+				const max = moment(options.to, 'HH:mm');
+
+				return (time >= min && time <= max);
+			});
+
+			// item: a starting time for a room
+			const generateTimes = async () => {
+				await asyncForEach(room, async (item) => {
+					if (!times[item]) {
+						times[item] = {};
+						times[item].rooms = [];
+						times[item].from = item;
+						times[item].time = moment(item, 'HH:mm').format('h:mm A');
+						times[item].to = moment(item, 'HH:mm').add(duration, 'minutes').format('HH:mm');
+						times[item].id = 'tab' + moment(item, 'HH:mm').format('HHmm');
+					}
+
+					let newRoom = {};
+					newRoom.room = rooms.find(r => { return r.name === name; });
+					const floorObj = (await newRoom.room.floor().fetch()) === null ? { name_english: 0, name_french: 0 } : (await newRoom.room.floor().fetch()).toJSON();
+					const towerObj = (await newRoom.room.tower().fetch()).toJSON();
+					newRoom.room.floor = floorObj;
+					newRoom.room.tower = towerObj;
+					newRoom.room = newRoom.room.toJSON();
+					newRoom.from = times[item].from;
+					newRoom.to = times[item].to;
+					times[item].rooms.push(newRoom);
+				});
+			};
+
+			await generateTimes();
+		}
+		times = Object.values(times);
+		times.sort((a, b) => {
+			return (a.from > b.from) ? 1 : ((b.from > a.from) ? -1 : 0);
+		});
+		options.formattedDate = moment(options.date).format('dddd, MMM DD, YYYY');
+		options.formattedFrom = moment(options.from, 'HH:mm').format('h:mm A');
+		options.formattedTo = moment(options.to, 'HH:mm').format('h:mm A');
+
+		return view.render('userPages.findAvailableResults', { times: times, form: options, features });
 	}
 
 	/**
@@ -559,28 +675,92 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getSearchRooms ({ request, view }) {
+	async findSpecific ({ request, view }) {
 		// importing forms from search form
 		const form = request.all();
+		let rooms = (await this.filterRooms(form)).rooms;
+
+		// Sets average rating for each room
+		for (var i = 0; i < rooms.length; i++) {
+			// Adds new attribute - rating - to every room object
+			rooms[i].rating = await this.getAverageRating(rooms[i].id);
+		}
+
 		const date = form.date;
 		const from = form.from;
 		const to = form.to;
-		const location = form.location;
-		const seats = form.seats;
-		const capacity = form.capacity;
+		const code = random(4);
+		const checkRoomAvailability = async () => {
+			let results = [];
+			await asyncForEach(rooms, async (item) => {
+				if (await this.getRoomAvailability(date, from, to, item.floor_id, item.calendar)) {
+					const floorObj = (await item.floor().fetch()) === null ? { name_english: 0, name_french: 0 } : (await item.floor().fetch()).toJSON();
+					const towerObj = (await item.tower().fetch()).toJSON();
+
+					item = item.toJSON();
+					item.numFeatures = item.features.length;
+					item.floor = floorObj;
+					item.tower = towerObj;
+
+					Event.fire('send.room', {
+						card: view.render('components.card', { form, room: item, token: request.csrfToken, from: from, to: to }),
+						code: code
+					});
+
+					results.push(item);
+				}
+			});
+
+			Event.fire('send.done', {
+				code: code
+			});
+
+			if (results.length === 0) {
+				Event.fire('send.empty', {
+					code: code
+				});
+			}
+		};
+
+		setTimeout(checkRoomAvailability, 500);
+		// Sort the results by name
+		rooms.sort((a, b) => {
+			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
+		});
+
+		return view.render('userPages.searchResults', { code: code });
+	}
+
+	async filterRooms (options) {
+		// console.log(options)
+		const location = options.location;
+		const seats = options.seats;
+		const capacity = options.capacity;
 		// check boxes input
-		let checkBox = [{ checkName: 1, checkValue: form.projectorCheck },
-			{ checkName: 2, checkValue: form.whiteboardCheck },
-			{ checkName: 3, checkValue: form.flipChartCheck },
-			{ checkName: 4, checkValue: form.audioCheck },
-			{ checkName: 5, checkValue: form.videoCheck },
-			{ checkName: 6, checkValue: form.surfaceHubCheck },
-			{ checkName: 7, checkValue: form.pcCheck }
-		];
+
+		let checkBox = Object.keys(options)
+			.filter(key => key.substring(0, 4) === 'feat')
+			.map(key => {
+				return { checkName: key.substring(4), checkValue: options[key] }
+			});
+
+		const features = [];
+		const findFeatId = async () => {
+			return asyncMap(checkBox, async (feat) => {
+				const result = await RoomFeature
+					.findBy('name_english', feat.checkName);
+				feat.checkName = result.id;
+				features.push(result);
+
+				return feat;
+			});
+		};
+		checkBox = await findFeatId();
+
 		// only loook for roosm that are open
 		let searchResults = Room
 			.query()
-			.where('State_id', 1)
+			.where('state_id', 1)
 			.clone();
 
 		// if the location is selected then query, else dont
@@ -603,15 +783,6 @@ class RoomController {
 				.where('capacity', '>=', capacity)
 				.clone();
 		}
-
-		// loop through the array of objects and add to query if checked
-		// for (let i = 0; i < checkBox.length; i++) {
-		// if (checkBox[i].checkValue === '1') {
-		// searchResults = searchResults
-		// .where(checkBox[i].checkName, checkBox[i].checkValue)
-		// .clone();
-		// }
-		// }
 
 		// Features filter
 		const filter = checkBox
@@ -643,198 +814,72 @@ class RoomController {
 
 		await forEveryFeature();
 
-		// Sets average rating for each room
-		for (var i = 0; i < rooms.length; i++) {
-			// Adds new attribute - rating - to every room object
-			rooms[i].rating = await this.getAverageRating(rooms[i].id);
-		}
-
-		// iterate through the rooms
-		const code = random(4);
-		const checkRoomAvailability = async () => {
-			let results = [];
-
-			await asyncForEach(rooms, async (item) => {
-				if (await this.getRoomAvailability(date, from, to, item.calendar)) {
-					const floorObj = (await item.floor().fetch()) === null ? { name_english: 0, name_french: 0 } : (await item.floor().fetch()).toJSON();
-					const towerObj = (await item.tower().fetch()).toJSON();
-
-					item = item.toJSON();
-					item.numFeatures = item.features.length;
-					item.floor = floorObj;
-					item.tower = towerObj;
-
-					Event.fire('send.room', {
-						card: view.render('components.card', { form, room: item, token: request.csrfToken }),
-						code: code
-					});
-
-					results.push(item);
-				}
-			});
-
-			Event.fire('send.done', {
-				code: code
-			});
-
-			if (results.length === 0) {
-				Event.fire('send.empty', {
-					code: code
-				});
-			}
-		};
-
-		setTimeout(checkRoomAvailability, 500);
-
-		// Sort the results by name
-		rooms.sort((a, b) => {
-			return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);
-		});
-
-		return view.render('userPages.searchResults', { code: code });
+		return { rooms, features};
 	}
 
 	/**
-	 * Query all events of the specified room calendar.
+	 * Retrives all of the bookings that correspond to a specific room.
 	 *
-	 * @param {String} calendarId The id of the room calendar.
+	 * @param {Object} Context The context object.
 	 */
-	async getEvents (calendarId) {
-		const accessToken = await getAccessToken();
+	async getBookings ({ params, view, auth, response }) {
+		var canEdit = 0;
+		var layoutType = '';
+		const userRole = await auth.user.getUserRole();
 
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
+		if (userRole === 'admin') {
+			layoutType = 'layouts/adminLayout';
+			canEdit = 1;
+		// check if user is viewing their own profile
+		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
+			layoutType = 'layouts/mainLayout';
+			canEdit = 1;
 
-			try {
-				const events = await client
-					.api(`/me/calendars/${calendarId}/events`)
-					.select('subject,organizer,start,end')
-					// .orderby('createdDateTime DESC')
-					.get();
-
-				return events;
-			} catch (err) {
-				console.log(err);
-			}
+		// check if user is viewing someone elses profile
+		} else if (auth.user.id !== Number(params.id) && userRole === 'user') {
+			layoutType = 'layouts/mainLayout';
+			canEdit = 0;
+		} else {
+			return response.redirect('/');
 		}
+
+		// Queries the database fr the bookings associated to a specific room
+		let searchResults = await Booking
+			.query()
+			.where('room_id', params.id)
+			.fetch();
+
+		searchResults = searchResults.toJSON();
+		const bookings = await populateBookings(searchResults);
+
+		return view.render('userPages.manageBookings', { bookings, layoutType, canEdit });
 	}
 
 	/**
-	 * Query all the room calendars.
-	 */
-	async getCalendars () {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const calendars = await client
-					.api('/me/calendars?top=100')
-					// .orderby('createdDateTime DESC')
-					.get();
-
-				return calendars;
-			} catch (err) {
-				console.log(err);
-			}
-		}
-	}
-
-	/**
-	 * Query the specified room calendar.
+	 * Create a list of all bookings under the current user and render a view for it.
 	 *
-	 * @param {String} calendarId The id of the room calendar.
+	 * @param {Object} Context The context object.
 	 */
-	async getCalendar (calendarId) {
-		const accessToken = await getAccessToken();
+	async viewUserBookings ({ params, auth, view, response }) {
+		var canEdit = 0;
+		var layoutType = '';
+		const userRole = await auth.user.getUserRole();
 
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const calendar = await client
-					.api(`/me/calendars/${calendarId}`)
-					// .orderby('createdDateTime DESC')
-					.get();
-
-				return calendar;
-			} catch (err) {
-				console.log(err);
-			}
+		if (userRole === 'admin') {
+			layoutType = 'layouts/adminLayout';
+			canEdit = 1;
+		// check if user is viewing their own profile
+		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
+			layoutType = 'layouts/mainLayout';
+			canEdit = 1;
+		} else {
+			return response.redirect('/');
 		}
-	}
 
-	async getCalendarView (calendarId, start, end) {
-		const accessToken = await getAccessToken();
+		const results = (await auth.user.bookings().fetch()).toJSON();
+		const bookings = await populateBookings(results);
 
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const calendarView = await client
-					.api(`/me/calendars/${calendarId}/calendarView?startDateTime=${start}&endDateTime=${end}`)
-					// .orderby('start DESC')
-					.header('Prefer', 'outlook.timezone="Eastern Standard Time"')
-					.get();
-
-				return calendarView;
-			} catch (err) {
-				console.log(err);
-			}
-		}
-	}
-
-	/**
-	 *
-	 * @param {String} date     Date
-	 * @param {String} from     Starting time
-	 * @param {String} to       Ending time
-	 * @param {String} calendar Calendar ID
-	 *
-	 * @returns {Boolean} Whether or not the room is available
-	 */
-	async getRoomAvailability (date, from, to, calendar) {
-		const startTime = date + 'T' + from;
-		const endTime = date + 'T' + to;
-
-		// if there is a calendar for the room
-		if (calendar !== 'insertCalendarHere' && calendar !== null) {
-			// query the events within the search time range
-			const calendarViews = (await this.getCalendarView(
-				calendar,
-				startTime,
-				endTime
-			)).value;
-
-			// if event end time is the same as search start time, remove the event
-			calendarViews.forEach((item, index, items) => {
-				const eventEndTime = new Date(item.end.dateTime);
-				const searchStartTime = new Date(startTime);
-
-				if (+eventEndTime === +searchStartTime) {
-					items.splice(index, 1);
-				}
-			});
-
-			return calendarViews.length === 0;
-		}
+		return view.render('userPages.manageUserBookings', { bookings, layoutType, canEdit });
 	}
 
 	/**
@@ -906,6 +951,82 @@ class RoomController {
 		} catch (err) {
 			console.log(err);
 		}
+	}
+
+	/**
+	* Query all the room calendars.
+	*/
+	async getCalendars () {
+		const accessToken = await getAccessToken();
+
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const calendars = await client
+					.api('/me/calendars?top=100')
+					// .orderby('createdDateTime DESC')
+					.get();
+
+				return calendars;
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	}
+
+	/**
+	* Query the specified room calendar.
+	*
+	* @param {String} calendarId The id of the room calendar.
+	*/
+	async getCalendar (calendarId) {
+		const accessToken = await getAccessToken();
+
+		if (accessToken) {
+			const client = graph.Client.init({
+				authProvider: (done) => {
+					done(null, accessToken);
+				}
+			});
+
+			try {
+				const calendar = await client
+					.api(`/me/calendars/${calendarId}`)
+					// .orderby('createdDateTime DESC')
+					.get();
+
+				return calendar;
+			} catch (err) {
+				console.log(err);
+			}
+		}
+	}
+
+	/**
+	 *
+	 * @param {String} date     Date
+	 * @param {String} from     Starting time
+	 * @param {String} to       Ending time
+	 * @param {String} calendar Calendar ID
+	 *
+	 * @returns {Boolean} Whether or not the room is available
+	 */
+	async getRoomAvailability (date, from, to, floor, calendar) {
+		console.log(date, from, to, calendar);
+
+		const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/avail`, {
+			room: calendar,
+			start: date + 'T' + from,
+			end: date + 'T' + to,
+			floor: floor
+		});
+
+		return res.data === 'free';
 	}
 }
 

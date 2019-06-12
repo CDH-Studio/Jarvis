@@ -49,12 +49,12 @@ class FeaturesCategorySeeder {
 			{ name_english: 'Audio Conferencing', name_french: 'Conférence audio', feature_category_id: 2, building_id: 1 },
 			{ name_english: 'Video Conferencing', name_french: 'Conférence vidéo', feature_category_id: 2, building_id: 1 },
 			{ name_english: 'Surface Hub', name_french: 'Surface Hub', feature_category_id: 1, building_id: 1 },
-			{ name_english: 'PC', name_french: 'PC', feature_category_id: 1, building_id: 1 },
-			{ name_english: 'Plasma TV', name_french: 'Plasma TV', feature_category_id: 1, building_id: 1 },
-			{ name_english: 'LCD TV', name_french: 'LCD TV', feature_category_id: 1, building_id: 1 },
-			{ name_english: 'SMART Board', name_french: 'SMART Board', feature_category_id: 1, building_id: 1 },
-			{ name_english: 'Glassboard', name_french: 'Tableau vitré', feature_category_id: 3, building_id: 1 },
-			{ name_english: 'Wifi', name_french: 'Wifi', feature_category_id: 4, building_id: 1 }
+			{ name_english: 'PC', name_french: 'PC', feature_category_id: 1, building_id: 1 }
+			// { name_english: 'Plasma TV', name_french: 'Téléviseur Plasma', feature_category_id: 1, building_id: 1 },
+			// { name_english: 'LCD TV', name_french: 'Téléviseur', feature_category_id: 1, building_id: 1 },
+			// { name_english: 'SMART Board', name_french: 'Tableau intéractif', feature_category_id: 1, building_id: 1 },
+			// { name_english: 'Glassboard', name_french: 'Tableau vitré', feature_category_id: 3, building_id: 1 },
+			// { name_english: 'Wifi', name_french: 'Wifi', feature_category_id: 4, building_id: 1 }
 		];
 
 		count = await RoomFeature.getCount();

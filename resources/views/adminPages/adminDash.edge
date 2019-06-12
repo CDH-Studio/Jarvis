@@ -161,7 +161,7 @@
     @if(flashMessage('notification'))
         <script type='module'>
             import {notify} from '/js/notify.js';
-            $(window).on('load', () => {
+            $(window).on('load', function() {
                 notify({ $: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, type: 'info' });
             });
         </script>
@@ -214,7 +214,7 @@
         var roomStatuses = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ["Active", "Maintenance", "Deactived"],
+                labels: ["Active", "Maintenance", "Deactivated"],
                 datasets: [{
                     data: [ {{ roomStatusStats['active'] }}, {{ roomStatusStats['maintenance'] }}, {{ roomStatusStats['deactive'] }} ],
                     backgroundColor: ['#18bc9c', '#f39c12', '#e74c3c'],

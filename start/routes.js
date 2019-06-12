@@ -17,7 +17,7 @@
 const Route = use('Route');
 
 Route.get('/', 'HomeController.home').as('home');
-Route.on('/welcome').render('welcome');
+Route.on('/welcome').render('layouts.welcome');
 
 Route.get('/switch/:lang', 'HomeController.changeLang');
 
@@ -89,8 +89,8 @@ Route.get('/issue/:id/edit', 'IssueController.editIssue').as('editIssue').middle
 Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['isAdmin']).validator('EditIssue');
 
 // user
-Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('AddReview').middleware(['isUser']);
-Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('AddReview').middleware(['isUser']);
+Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('addReview').middleware(['isUser']);
+Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('addReview').middleware(['isUser']);
 Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['isUser']);
 Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
 
@@ -102,12 +102,15 @@ Route.get('/:bookingType/:id/bookings', 'BookingController.getBookings').as('vie
 Route.post('/:bookingType/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth']);
 
 // Employee user pages
+// Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);
+Route.get('/searchRooms/:view', 'RoomController.loadSearchRoomsForm').as('searchRooms').middleware(['isUser']);
 Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware(['isUser']);
-Route.get('/searchRooms', 'RoomController.loadSearchRoomsForm').as('searchRooms').middleware(['isUser']);
 Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking').middleware(['isUser']);
 
 // Rendering Results
-Route.get('/results', 'RoomController.getSearchRooms').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
+Route.get('/results', 'RoomController.findSpecific').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
+Route.get('/recurringResults', 'RoomController.searchRecurring2').as('recurringResults');
+Route.get('/findAvailable', 'RoomController.searchRooms').as('findAvailable');
 
 // Booking a Room
 Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);
@@ -115,7 +118,6 @@ Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBoo
 // Outlook
 Route.get('/authenticate', 'TokenController.getAuthUrl');
 Route.get('/authorize', 'TokenController.authorize');
-Route.get('/events', 'RoomController.getEvents');
 Route.get('/event', 'BookingController.createEvent');
 Route.get('/calendars', 'RoomController.getCalendars');
 Route.get('/calendar', 'RoomController.getCalendar');
@@ -129,3 +131,8 @@ Route.post('/message', 'Roomcontroller.sendMessage').as('message');
 // Pusher
 //= ========================================================================
 Route.get('/push', 'TokenController.push').as('push');
+
+//= ========================================================================
+// Active Directory
+//= ========================================================================
+Route.post('/active', 'UserController.active').as('active');

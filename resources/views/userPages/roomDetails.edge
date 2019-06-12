@@ -92,7 +92,7 @@
                                 <strong>{{ antl.formatMessage('roomDetails.capacity') }}:</strong> {{ room.capacity }}
                             </div>
                             @if(room.comment && room.comment != " ")
-                                <div class="mt-2 mb-2"><b>Comments:</b> {{ room.comment }}</div>
+                                <div class="mt-2 mb-2"><b>{{antl.formatMessage('roomDetails.comments')}}:</b> {{ room.comment }}</div>
                             @endif
                         </div>
 
@@ -604,7 +604,7 @@
     @if(flashMessage('notification'))
         <script type='module'>
             import {notify} from '/js/notify.js';
-            $(window).on('load', () => {
+            $(window).on('load', function() {
                 var url = '{{ flashMessage('url') }}';
                 notify({$: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
             });
@@ -613,12 +613,38 @@
 
     {{--  Displays "Room has already been booked!" error message  --}}
     @if(flashMessage('error'))
+        <script>
+			$(window).on('load', function () {
+				$.notify({ message: '{{ flashMessage('error') }}' }, 
+					{
+						element: 'body',
+						type: 'danger',
+						animate: {
+							enter: 'animated fadeInRight',
+							exit: 'animated fadeOutUp'
+						},
+						placement: {
+							from: 'top',
+							align: 'right'
+						},
+						offset: {
+							x: 10,
+							y: 60
+						},
+						spacing: 10,
+						z_index: 1031,
+						delay: 10000
+					});
+			});
+        </script>
+        <!--
         <script type='module'>
             import {notify} from '/js/notify.js';
-            $(window).on('load', () => {
+            $(window).on('load', function() {
                 notify({$: $, message: '{{ flashMessage('error') }}', type: 'danger', x: 10, y: 60, delay: 10000 });
             });
         </script>
+        -->
     @endif
 
     {{--  Mouseover Tooltip  --}}

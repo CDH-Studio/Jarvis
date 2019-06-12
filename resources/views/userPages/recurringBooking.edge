@@ -1,0 +1,342 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+    Booking
+@endsection
+
+@section('extracss')
+  {{ style('css/booking') }}
+@endsection
+
+@section('extrajs')
+    {{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
+@endsection
+
+{{--  book room page content  --}}
+@section('content')
+    {{--  Loading page header  --}}
+    @!component('components.pageHeader', title= 'Recurring Booking')
+    {{--  Page Content  --}}
+    <div class='row'>
+		{{--  Search room page content  --}}
+		<div class='col search-room-content'>
+				<form action='/recurringResults' method='GET' enctype='multipart/form-data'>
+					<div class="card shadow mb-4">
+						<div class="card-body">
+							{{ csrfField() }}
+							{{--  Meeting time from  --}}
+							<div class='row'>
+									<div class='col form-group mb-4'>
+											<label for='from'>Start Time <b class='text-danger'>*</b></label>
+											{{--  If field is not filled correctly show an error box  --}}
+											@if(hasErrorFor('from'))
+												<div class='timePicker' style='display: flex;'>
+													<input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
+													<div class='dropdown no-arrow'>
+														<button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+														<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+															@each(item in dropdownSelection)
+																<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+															@endeach
+														</div>
+													</div>
+												</div>
+												<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
+											@else
+												<div class='timePicker' style='display: flex;'>
+													<input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
+													<div class='dropdown no-arrow'>
+														<button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+														<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+															@each(item in dropdownSelection)
+																<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+															@endeach
+														</div>
+													</div>
+												</div>
+											@endif
+											
+										</div>
+										<div class='col form-group mb-4'>
+											<label for='to' data-toggle='tooltip'>End Time <b class='text-danger'>*</b></label>
+											{{--  If field is not filled correctly show an error box  --}}
+											@if(hasErrorFor('to'))
+												<div style='display: flex;' class='timePicker'>
+													<input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
+													<div class='dropdown no-arrow'>
+														<button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+														<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+															@each(item in dropdownSelection)
+																<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+															@endeach
+														</div>
+													</div>
+												</div>
+												<div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
+										   {{--  Otherwise show a normal input  --}}
+											@else
+											<div style='display: flex;' class='timePicker'>
+												<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
+												<div class='dropdown no-arrow'>
+													<button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+													<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+														@each(item in dropdownSelection)
+															<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
+														@endeach
+													</div>
+												</div>
+											</div>
+											@endif                  
+										</div>
+							</div>
+							{{--  Location form  --}}
+							<div class='row'>
+								<div class='col form-group mb-4'>
+									<label for='location'>Location</label>
+									<select name='location' class='form-control'>
+										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>Select a floor</option>
+										<option value='0' {{ old('location') == '0' ? 'selected' : '' }}>Floor 0</option>
+										<option value='1' {{ old('location') == '1' ? 'selected' : '' }}>Floor 1</option>
+										<option value='2' {{ old('location') == '2' ? 'selected' : '' }}>Floor 2</option>
+										<option value='3' {{ old('location') == '3' ? 'selected' : '' }}>Floor 3</option>
+										<option value='4' {{ old('location') == '4' ? 'selected' : '' }}>Floor 4</option>
+										<option value='5' {{ old('location') == '5' ? 'selected' : '' }}>Floor 5</option>
+										<option value='6' {{ old('location') == '6' ? 'selected' : '' }}>Floor 6</option>
+										<option value='7' {{ old('location') == '7' ? 'selected' : '' }}>Floor 7</option>
+										<option value='8' {{ old('location') == '8' ? 'selected' : '' }}>Floor 8</option>
+										<option value='9' {{ old('location') == '9' ? 'selected' : '' }}>Floor 9</option>
+									</select>
+								</div>
+							</div>
+							<div class='row' style='display:none'>
+								{{--  Table Seats form  --}}
+								<div class='col form-group mb-4'>
+									<label for='seats'>Number of Table Seats</label>
+									<input class='form-control' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
+								</div>
+								{{--  Max Capacity  --}}
+								<div class='col form-group mb-4'>
+									<label for='capacity'>Number of People</label>
+									<input class='form-control' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
+								</div>
+							</div>
+							{{--  Equipment check box form  --}}
+							<div class='form-group' style='display:none'>
+								<h4>Equipment</h4>
+								<div class='row'>               
+									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
+										<input type='checkbox' name='projectorCheck' class='custom-control-input' id='projectorCheck' value= '1' {{ old('projectorCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='projectorCheck'>Projector</label>
+									</div>
+									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
+										<input type='checkbox' name='whiteboardCheck' class='custom-control-input' id='whiteboardCheck' value='1' {{ old('whiteboardCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='whiteboardCheck'>Whiteboard</label>
+									</div>
+									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
+										<input type='checkbox' name='flipChartCheck' class='custom-control-input' id='flipChartCheck' value='1' {{ old('flipChartCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='flipChartCheck'>Flip Chart</label>
+									</div>  
+				
+									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
+										<input type='checkbox' name='audioCheck' class='custom-control-input' id='audioCheck' value='1' {{ old('audioCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='audioCheck'>Audio Conferencing</label>
+									</div>
+									<div class='custom-control custom-checkbox ml-3 col-sm-6 col-md-6'>
+										<input type='checkbox' name='videoCheck' class='custom-control-input' id='videoCheck' value='1' {{ old('videoCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='videoCheck'>Video Conferencing</label>
+									</div>
+									
+									<div class='custom-control custom-checkbox ml-3 col-sm-5 col-md-5'>
+										<input type='checkbox' name='surfaceHubCheck' class='custom-control-input' id='surfaceHubCheck' value='1' {{ old('surfaceHubCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='surfaceHubCheck'>Surface Hub</label>
+									</div>              
+									<div class='custom-control custom-checkbox col ml-3'>
+										<input type='checkbox' name='pcCheck' class='custom-control-input' id='pcCheck' value='1' {{ old('pcCheck') ? 'checked' : '' }}/>
+										<label class='custom-control-label' for='pcCheck'>PC</label>
+									</div>                
+								</div>
+                            </div>
+                            
+							{{---------------------------------------------------------------------------------------------}}
+							
+							{{------- Recurring Tabs -------}}
+							<input type="hidden" id="type" name="type" value="daily" />
+							<div class="tabs">
+								<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+									<li class="nav-item">
+										<a class="nav-link active" id="pills-daily-tab" data-toggle="tab" href="#daily">Daily</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" id="pills-weekly-tab" data-toggle="tab" href="#weekly">Weekly</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" id="pills-monthly-tab" data-toggle="tab" href="#monthly">Monthly</a>
+									</li>
+								</ul>
+								
+								<div class="tab-content" id="pills-tabContent">
+									<div class="tab-pane fade show active" id="daily" role="tabpanel">
+										<div>
+											<input type="radio" name="dailyOption" value="every" checked> Every <input type="number" name="dailyInterval" value=1> day(s)
+										</div>
+										<div>
+											<input type="radio" name="dailyOption" value="everyWeekday"> Every weekday
+										</div>
+									</div>
+									<div class="tab-pane fade" id="weekly" role="tabpanel">
+										<div>
+											<p>Every <input type="number" name="weeklyInterval" value=1> week(s) on:</p>
+										</div>
+
+										<div class="weekdays">
+											<div>
+												<input type='checkbox' name='daysOfWeek' id='sunday' value=0 />
+												<label for='sunday'>Sunday</label>
+											</div>
+											<div>
+												<input type='checkbox' name='daysOfWeek' id='monday' value=1 />
+												<label for='monday'>Monday</label>
+											</div>
+											<div>
+												<input type='checkbox' name='daysOfWeek' id='tuesday' value=2 />
+												<label for='tuesday'>Tuesday</label>
+											</div>
+											<div >
+												<input type='checkbox' name='daysOfWeek' id='wednesday' value=3 />
+												<label for='wednesday'>Wednesday</label>
+											</div>
+											<div>
+												<input type='checkbox' name='daysOfWeek' id='thursday' value=4 />
+												<label for='thursday'>Thursday</label>
+											</div>
+											<div>
+												<input type='checkbox' name='daysOfWeek' id='friday' value=5 />
+												<label for='friday'>Friday</label>
+											</div>
+											<div>
+												<input type='checkbox' name='daysOfWeek' id='saturday' value=6 />
+												<label for='saturday'>Saturday</label>
+											</div>
+										</div>
+									</div>
+									<div class="tab-pane fade" id="monthly" role="tabpanel">
+										<div>
+											<p>Day <input type="number" name="dayOfMonth" value=5> of every <input type="number" name="monthlyInterval" value=1> month(s)</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							{{------- END Recurring Tabs -------}}
+
+							{{--  Date form  --}}
+							<div class='row'>
+								<div class='col form-group mb-4'>
+									<div class='row'>
+										<label class='col' for='date'>Start <b class='text-danger'>*</b></label>
+										<div class='col text-right'>
+											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='Some tip'></i>
+										</div>
+									</div>
+									{{--  If field is not filled correctly show an error box  --}}
+									@if(hasErrorFor('date'))
+										<input name='startDate' id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
+										<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
+									{{--  Otherwise show a normal input  --}}
+									@else
+										<input name='startDate' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
+									@endif
+								</div>
+								<div class='col form-group mb-4'>
+									<div class='row end-by'>
+										<input type="radio" name="endOption" value="endBy"><label class='col' for='date'>End by:</label>
+										<div class='col text-right'>
+											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
+										</div>
+									</div>
+									{{--  If field is not filled correctly show an error box  --}}
+									@if(hasErrorFor('endDate'))
+										<input name='endDate' id='endDate' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('endDate', endBy) }}"}' onchange='removeErrorClass("date")'>
+										<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
+									{{--  Otherwise show a normal input  --}}
+									@else
+										<input name='endDate' id='endDate' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('endDate', endBy) }}"}'>
+									@endif
+									<div class='row end-after mt-1'>
+										<input type="radio" name="endOption" value="endAfter"> <label class='col' for='endOccur'>End after:</label>
+										<p><input type="number" name="numberOfOccurrences" value=10> occurrences</p>
+									</div>
+									<div class='row no-end'>
+										<input type="radio" name="endOption" value="noEnd" checked> <label class='col' for='endOccur'>No end date</label>
+									</div>
+								</div>
+							</div>
+
+                            {{---------------------------------------------------------------------------------------------}}
+							{{--  Page buttons  --}}
+							<div class='row mt-5'>
+								<div class='col-sm-12 text-right'>
+									<button type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>
+									<button type='submit' class='btn btn-primary no-margin'>Search</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+		</div>
+
+	{{--  Remove the is-invalid class when input changes  --}}
+	<script>
+		function removeErrorClass(idOfInput){
+			$('#'+idOfInput).removeClass('is-invalid');
+			// Ih field is the calendar, then remove styling from erorr message
+			if (idOfInput == 'date') {
+				$('#date-error').removeClass('show-invalid');
+			}
+			else if (idOfInput == 'from') {
+				$('#from-error').removeClass('show-invalid');
+			}
+			else if (idOfInput == 'to' ) {
+				$('#to-error').removeClass('show-invalid');
+			}
+		}
+
+		// update from and to inputs from dropdown
+		$(document).on("click",".dropdown-menu a", function(ev) {
+			$(this).siblings().removeClass('active');
+			$(this).addClass("active");
+			$(this).parents(".timePicker").find('.time-form').val($(this).attr('data-value'));
+			$(this).parents(".timePicker").find('.time-form').removeClass('is-invalid');
+			$(this).parents(".timePicker").siblings('.invalid-feedback').removeClass('show-invalid');
+		});
+	</script>
+
+    <script>
+        $('#message').keypress((e) => {
+	        if (e.which === 13 && !e.shiftKey) {
+                $('#sub').click();
+                e.preventDefault();
+                return false;
+            }
+		});
+    </script>
+
+    @if(flashMessage('notification'))
+        <script type='module'>
+            import {notify} from '/js/notify.js';
+            $(window).on('load', function() {
+                var url = '{{ flashMessage('url') }}';
+                notify({ $: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
+            });
+        </script>
+	@endif
+
+	{{ script('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js') }}
+	<script>
+		$(document).on('shown.bs.tab', "a[data-toggle='tab']", function (e) {
+			console.log('hi')
+			var target = $(e.target).attr("href")
+  			$('#type').val(target.substr(1));
+		});
+	</script>
+
+@endsection

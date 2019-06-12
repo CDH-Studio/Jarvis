@@ -24,8 +24,8 @@
                     @component('components.generalCard', title=antl.formatMessage('userDash.CAHeading'), extraCSS='custom-card-header')
                         {{--  If there are no avail rooms display a message accordingly  --}}
 						@slot('body')
-                            <div id='avail'></div>
-                            <div id="loading">
+							<div id='avail'></div>
+							<div id="loading">
 								@!component('components.cardEmptyMessage',faIcon="fas fa-circle-notch fa-spin fa-4x", message=antl.formatMessage('userDash.CAError'))
 							</div>
 						@endslot
@@ -61,10 +61,10 @@
 									<table id='bookNowTable' class='table table-hover' style='width:100%;'>
 										<thead>
 											<tr>
-												<th scope='col' class='text-center' style='width:10%'>Room</th>
-												<th scope='col' class='text-center' style='width:10%'>Name</th>
-												<th scope='col' class='text-center' style='width:10%'>Date</th>
-												<th scope='col' class='text-center' style='width:10%'>Time</th>
+												<th scope='col' class='text-center' style='width:10%'>{{ antl.formatMessage('manageBookings.tableRoom') }}</th>
+												<th scope='col' class='text-center' style='width:10%'>{{ antl.formatMessage('manageBookings.tableName') }}</th>
+												<th scope='col' class='text-center' style='width:10%'>{{ antl.formatMessage('manageBookings.tableDate') }}</th>
+												<th scope='col' class='text-center' style='width:10%'>{{ antl.formatMessage('manageBookings.tableTime') }}</th>
 											</tr>
 										</thead>
 										{{--  Loops through the rooms array and displays every room's content  --}}
@@ -156,14 +156,41 @@
 		});
     </script>
 
-    @if(flashMessage('notification'))
+	@if(flashMessage('notification'))
+		<script>
+			$(window).on('load', function () {
+				// notify({ $: $, message: '{{ flashMessage('notification') }}' });
+				$.notify({ message: '{{ flashMessage('notification') }}', url: '{{ flashMessage('url') }}' }, 
+					{
+						element: 'body',
+						type: 'success',
+						animate: {
+							enter: 'animated fadeInRight',
+							exit: 'animated fadeOutUp'
+						},
+						placement: {
+							from: 'top',
+							align: 'right'
+						},
+						offset: {
+							x: 10,
+							y: 60
+						},
+						spacing: 10,
+						z_index: 1031,
+						delay: 5000
+					});
+			});
+		</script>
+		<!--
         <script type='module'>
             import {notify} from '/js/notify.js';
             $(window).on('load', function() {
                 var url = '{{ flashMessage('url') }}';
                 notify({ $: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
             });
-        </script>
+		</script>
+		-->
     @endif
 
 @endsection

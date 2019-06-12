@@ -7,11 +7,11 @@
 {{--  search room page content  --}}
 @section('content')
     {{--  Loading Page Header  --}}
-    @!component('components.pageHeader', title='Search rooms')
+    @!component('components.pageHeader', title='Search')
     {{--  Page content  --}}
     <div class='row'>
         <div class='col search-room-content'>
-            <form aria-label='search-form' action='results' method='GET' enctype='multipart/form-data' style='min-height:674px;'>
+            <form aria-label='search-form' action='/results' method='GET' enctype='multipart/form-data' style='min-height:674px;'>
                 <div class="card shadow" style='min-height:inherit;'>
                     <div class="card-body">
                         {{ csrfField() }}

@@ -1,0 +1,13 @@
+{
+    "profile": "User profile",
+    "name": "Name",
+    "email": "Email",
+    "building": "Building",
+    "ft": "Floor/Tower",
+    "viewBookings": "View bookings",
+    "editProfile": "Edit profile",
+    "changePassword": "Change password",
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+    "verified": "verified"
+}

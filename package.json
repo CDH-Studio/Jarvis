@@ -5,7 +5,7 @@
 	"description": "The fullstack application boilerplate for Adonisjs",
 	"main": "index.js",
 	"scripts": {
-		"start": "npm i -g @adonisjs/cli && adonis serve --dev",
+		"start": "npm i -g @adonisjs/cli && adonis migration:run -f && adonis seed -f && adonis serve --dev",
 		"test": "node ace test",
 		"lint": "node_modules/.bin/eslint . --ext .js"
 	},
@@ -40,7 +40,9 @@
 		"jquery": "^3.4.1",
 		"jsonwebtoken": "^8.5.1",
 		"moment": "^2.24.0",
+		"moment-recur": "^1.0.7",
 		"moment-round": "^1.0.1",
+		"passport-activedirectory": "^1.0.4",
 		"pusher": "^2.2.0",
 		"simple-oauth2": "^2.2.1",
 		"sqlite3": "^4.0.8"

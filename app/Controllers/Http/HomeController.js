@@ -4,14 +4,15 @@ const User = use('App/Models/User');
 const Report = use('App/Models/Report');
 const Booking = use('App/Models/Booking');
 const Review = use('App/Models/Review');
+const RoomStatus = use('App/Models/RoomStatus');
+const Floor = use('App/Models/Floor');
+const Tower = use('App/Models/Tower');
+const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 const Event = use('Event');
-const Token = use('App/Models/Token');
-
-// Used for time related calcuklations and formatting
-const moment = require('moment');
+const Env = use('Env');
+var moment = require('moment');
 require('moment-round');
-
-const graph = require('@microsoft/microsoft-graph-client');
+const axios = require('axios');
 
 /**
  * Generating a random string.
@@ -25,23 +26,6 @@ function randomString (times) {
 	}
 
 	return result;
-}
-
-/**
- * Retrieve access token for Microsoft Graph from the data basebase.
- *
- * @returns {Object} The access token.
- *
- */
-async function getAccessToken () {
-	try {
-		const results = await Token.findBy('type', 'access');
-		const accessToken = results.toJSON().token;
-		return accessToken;
-	} catch (err) {
-		console.log(err);
-		return null;
-	}
 }
 
 async function asyncForEach (arr, callback) {
@@ -117,6 +101,25 @@ class HomeController {
 		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
 
+		const DBNameSelect = 'name_english as name';
+
+		var formOptions = {};
+
+		var results = await RoomStatus.query().select('id', 'name').fetch();
+		formOptions.statuses = results.toJSON();
+		results = await Floor.query().select('id', DBNameSelect).fetch();
+		formOptions.floors = results.toJSON();
+		results = await Tower.query().select('id', DBNameSelect).fetch();
+		formOptions.towers = results.toJSON();
+		results = await RoomFeaturesCategory
+			.query()
+			.with('features', (builder) => {
+				builder.where('building_id', 1);
+			})
+			.fetch();
+
+		formOptions.roomFeatureCategory = results.toJSON();
+
 		return view.render('userPages.userDash', {
 			code,
 			freqRooms,
@@ -125,6 +128,7 @@ class HomeController {
 			fromTime: searchValues.fromTime,
 			toTime: searchValues.toTime,
 			dropdownSelection: searchValues.dropdownSelection,
+			formOptions,
 			moment: moment
 		});
 	}
@@ -456,14 +460,14 @@ class HomeController {
 		const from = moment(now).add(remainder, 'm').format('HH:mm');
 		const to = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
 		const formattedDate = moment().format('dddd, MMMM DD, YYYY');
-		const formattedFrom = moment(now).add(remainder, 'm').format('HH:mm A');
-		const formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm A');
+		const formattedFrom = moment(now).add(remainder, 'm').format('h:mm A');
+		const formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('h:mm A');
 
 		const code = randomString(4);
 		const checkRoomAvailability = async () => {
 			let numberOfRooms = 2;
 			await asyncForEach(rooms, async (item) => {
-				if (numberOfRooms !== 0 && await this.getRoomAvailability(date, from, to, item.calendar)) {
+				if (numberOfRooms !== 0 && await this.getRoomAvailability(date, from, to, item.floor_id, item.calendar)) {
 					Event.fire('send.room', {
 						card: view.render('components.smallCard', { room: item, datetime: { date: formattedDate, time: formattedFrom + ' - ' + formattedTo } }),
 						code: code
@@ -544,55 +548,17 @@ class HomeController {
 	 *
 	 * @returns {Boolean} Whether or not the room is available
 	 */
-	async getRoomAvailability (date, from, to, calendar) {
-		const startTime = date + 'T' + from;
-		const endTime = date + 'T' + to;
+	async getRoomAvailability (date, from, to, floor, calendar) {
+		console.log(date, from, to, calendar);
 
-		// if there is a calendar for the room
-		if (calendar !== 'insertCalendarHere' && calendar !== null) {
-			// query the events within the search time range
-			const calendarViews = (await this.getCalendarView(
-				calendar,
-				startTime,
-				endTime
-			)).value;
+		const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/avail`, {
+			room: calendar,
+			start: date + 'T' + from,
+			end: date + 'T' + to,
+			floor: floor
+		});
 
-			// if event end time is the same as search start time, remove the event
-			calendarViews.forEach((item, index, items) => {
-				const eventEndTime = new Date(item.end.dateTime);
-				const searchStartTime = new Date(startTime);
-
-				if (+eventEndTime === +searchStartTime) {
-					items.splice(index, 1);
-				}
-			});
-
-			return calendarViews.length === 0;
-		}
-	}
-
-	async getCalendarView (calendarId, start, end) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const calendarView = await client
-					.api(`/me/calendars/${calendarId}/calendarView?startDateTime=${start}&endDateTime=${end}`)
-					// .orderby('start DESC')
-					.header('Prefer', 'outlook.timezone="Eastern Standard Time"')
-					.get();
-
-				return calendarView;
-			} catch (err) {
-				console.log(err);
-			}
-		}
+		return res.data === 'free';
 	}
 
 	/**

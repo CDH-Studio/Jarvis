@@ -137,7 +137,6 @@ class IssueController {
 		}
 
 		issues = results.toJSON();
-
 		// Retrieve issue stats
 		const stats = await this.getIssueStatistics(params.roomID, selectedBuilding);
 
