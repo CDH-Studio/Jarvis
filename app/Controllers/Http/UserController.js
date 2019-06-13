@@ -9,7 +9,7 @@ const AccountRequest = use('App/Models/AccountRequest');
 const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
-const axios = require('axios');
+const Outlook = new (use('App/Outlook'))();
 // const ActiveDirectory = require('activedirectory');
 
 /**
@@ -24,22 +24,6 @@ function randomString (times) {
 	}
 
 	return result;
-}
-
-/**
- * Send an email.
- *
- * @param {string} subject  Subject of Email
- * @param {string} body     Body of Email
- * @param {string} to       Sending address
- */
-async function sendMail (subject, body, to) {
-	await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/send`, {
-		to,
-		subject,
-		body
-	});
-	Logger.info('mail sent');
 }
 
 /**
@@ -256,7 +240,7 @@ class UserController {
 				</p>
 			`;
 
-			await sendMail('Verify Email Address for Jarvis',
+			await Outlook.sendMail('Verify Email Address for Jarvis',
 				mailBody, userInfo.email);
 
 			await User.create(userInfo);
@@ -460,7 +444,7 @@ class UserController {
       			</p>
 			`;
 
-			await sendMail('Password Reset Request',
+			await Outlook.sendMail('Password Reset Request',
 				body, email);
 		}
 
@@ -581,51 +565,6 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async active ({ request }) {
-		const options = request.all();
-
-		// const config = {
-		// 	url: 'ldap://DomainDNSZones.prod.prv',
-		// 	baseDN: 'dc=prod,dc=prv',
-		// 	username: options.email,
-		// 	password: options.password
-		// };
-		// const ad = new ActiveDirectory(config);
-		// console.log('ad', ad);
-
-		// const username = options.email;
-		// const password = options.password;
-
-		// ad.authenticate(username, password, (err, auth) => {
-		// 	if (err) {
-		// 		console.log('ERROR: ' + JSON.stringify(err));
-		// 		return;
-		// 	}
-
-		// 	if (auth) {
-		// 		console.log('Authenticated!');
-		// 	} else {
-		// 		console.log('Authentication failed!');
-		// 	}
-		// });
-
-		// var passport = require('passport');
-		// var ActiveDirectoryStrategy = require('passport-activedirectory');
-
-		// passport.use(new ActiveDirectoryStrategy({
-		// 	integrated: false,
-		// 	ldap: {
-		// 		url: 'ldap://DomainDNSZones.prod.prv',
-		// 		baseDN: 'dc=prod,dc=prv',
-		// 		username: options.email,
-		// 		bindCredentials: options.password
-		// 	}
-		// }, (profile, ad, done) => {
-		// 	console.log('ad', ad);
-		// 	console.log('profile', profile);
-		// 	console.log('done', done);
-		// }));
-
-		// return 'done';
 	}
 }
 

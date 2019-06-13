@@ -2,6 +2,7 @@
 
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema');
+const Env = use('Env');
 
 class RoomsSchema extends Schema {
 	up () {
@@ -24,7 +25,13 @@ class RoomsSchema extends Schema {
 			table.integer('state_id').notNullable();
 			table.timestamps();
 
-			const query = require('../rawQueries/populateRoomsOutlook');
+			let query;
+			if (!Env.get('DEV_OUTLOOK', false)) {
+				query = require('../rawQueries/populateRoomsOutlook');
+			} else {
+				query = require('../rawQueries/populateRooms');
+			}
+
 			this.raw(query);
 		});
 	}
