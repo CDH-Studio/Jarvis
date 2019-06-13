@@ -141,7 +141,7 @@ class BookingController {
 
 		if (userRole !== 'admin') {
 			console.log('before sync');
-			this.syncEvents(auth.user.id);
+			// this.syncEvents(auth.user.id);
 		}
 
 		// Queries the database fr the bookings associated to a specific room
