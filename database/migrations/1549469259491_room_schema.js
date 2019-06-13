@@ -26,7 +26,7 @@ class RoomsSchema extends Schema {
 			table.timestamps();
 
 			let query;
-			if (!Env.get('DEV_OUTLOOK', false)) {
+			if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
 				query = require('../rawQueries/populateRoomsOutlook');
 			} else {
 				query = require('../rawQueries/populateRooms');

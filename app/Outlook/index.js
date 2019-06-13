@@ -32,7 +32,7 @@ module.exports = class Outlook {
      * @param {string} to       Sending address
      */
 	async sendMail ({ subject, body, to }) {
-		if (!Env.get('DEV_OUTLOOK', false)) {
+		if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
 			await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/send`, {
 				to,
 				subject,
@@ -61,7 +61,7 @@ module.exports = class Outlook {
 	 */
 	async getRoomAvailability ({ date, from, to, floor, calendar }) {
 		console.log('dev', typeof (Env.get('DEV_OUTLOOK', false)), Env.get('DEV_OUTLOOK', false));
-		if (!Env.get('DEV_OUTLOOK', false)) {
+		if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
 			const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/avail`, {
 				room: calendar,
 				start: date + 'T' + from,
@@ -107,7 +107,7 @@ module.exports = class Outlook {
 	 * @param {String} calendarId The id of the room calendar.
 	 */
 	async createEvent ({ eventInfo, booking, user, room, calendarId }) {
-		if (!Env.get('DEV_OUTLOOK', false)) {
+		if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
 			try {
 				const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/booking`, {
 					room: room.calendar,
@@ -177,7 +177,7 @@ module.exports = class Outlook {
 	* @param {String} eventId The id of the event to delete.
 	*/
 	async deleteEvent ({ eventId, floor, calendarId }) {
-		if (!Env.get('DEV_OUTLOOK', false)) {
+		if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
 			try {
 				const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/cancel`, {
 					eventId: eventId,

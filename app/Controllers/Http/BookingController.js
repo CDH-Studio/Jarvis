@@ -209,7 +209,7 @@ class BookingController {
 		const idType = (params.bookingType === 'user') ? booking.toJSON().user_id : booking.toJSON().room_id;
 
 		let calendarId;
-		if (Env.get('DEV_OUTLOOK', false)) {
+		if (Env.get('DEV_OUTLOOK', 'prod') !== 'prod') {
 			calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
 		}	
 		await Outlook.deleteEvent({ eventId, floor, calendarId });
