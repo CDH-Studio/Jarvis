@@ -179,6 +179,7 @@ module.exports = class Outlook {
 	async deleteEvent ({ eventId, floor, calendarId }) {
 		if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
 			try {
+				console.log(floor)
 				const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/cancel`, {
 					eventId: eventId,
 					floor: floor
