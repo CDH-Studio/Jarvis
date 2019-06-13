@@ -140,7 +140,6 @@ class BookingController {
 		var bookingsType = (idType === 'user_id') ? 'userBookings' : 'roomBookings';
 
 		if (userRole !== 'admin') {
-			console.log('before sync');
 			// this.syncEvents(auth.user.id);
 		}
 
@@ -204,7 +203,7 @@ class BookingController {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
 		const room = (await Room.findBy('id', roomId)).toJSON();
-		const floor = room.floor;
+		const floor = room.floor_id;
 		const eventId = booking.toJSON().event_id;
 		const idType = (params.bookingType === 'user') ? booking.toJSON().user_id : booking.toJSON().room_id;
 
