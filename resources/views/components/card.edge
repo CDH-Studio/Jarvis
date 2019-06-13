@@ -32,11 +32,11 @@
                         <div class="col-6">
                             <ul class="list-unstyled">
                                 @each(roomFeature in room.features.slice(0, room.numFeatures))
-                                    <li class='spec-yes mb-1'><i class='fas fa-check-circle'></i>
-                                        @if(antl.currentLocale()==='en')
-                                            {{ truncate(roomFeature.name_english, 11, '.') }}
+                                    <li class='spec-yes mb-1' ><i class='fas fa-check-circle'></i>
+                                        @if(antl.currentLocale()==='fr')
+                                            <span data-toggle="tooltip" title="{{roomFeature.name_french}}">{{ truncate(roomFeature.name_french, 11, '.') }}</span>
                                         @else
-                                            {{ truncate(roomFeature.name_french, 11, '.') }}
+                                            <span data-toggle="tooltip" title="{{roomFeature.name_english}}">{{ truncate(roomFeature.name_english, 11, '.') }}</span>
                                         @endif
                                     </li>
                                     @if($loop.index ===3)
@@ -54,7 +54,6 @@
                     </div>
                 </div>
             </div>
-            
 
             <hr class="mt-0 mb-2">
             <div class="row text-center">
