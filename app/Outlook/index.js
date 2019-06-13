@@ -60,6 +60,7 @@ module.exports = class Outlook {
 	 * @returns {Boolean} Whether or not the room is available
 	 */
 	async getRoomAvailability ({ date, from, to, floor, calendar }) {
+		console.log('dev', typeof (Env.get('DEV_OUTLOOK', false)), Env.get('DEV_OUTLOOK', false));
 		if (!Env.get('DEV_OUTLOOK', false)) {
 			const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/avail`, {
 				room: calendar,
@@ -69,30 +70,30 @@ module.exports = class Outlook {
 			});
 
 			return res.data === 'free';
-		}
+		} else {
+			const startTime = date + 'T' + from;
+			const endTime = date + 'T' + to;
+			// if there is a calendar for the room
+			if (calendar !== 'insertCalendarHere' && calendar !== null) {
+				// query the events within the search time range
+				const calendarViews = (await this.getCalendarView(
+					calendar,
+					startTime,
+					endTime
+				)).value;
 
-		const startTime = date + 'T' + from;
-		const endTime = date + 'T' + to;
-		// if there is a calendar for the room
-		if (calendar !== 'insertCalendarHere' && calendar !== null) {
-			// query the events within the search time range
-			const calendarViews = (await this.getCalendarView(
-				calendar,
-				startTime,
-				endTime
-			)).value;
+				// if event end time is the same as search start time, remove the event
+				calendarViews.forEach((item, index, items) => {
+					const eventEndTime = new Date(item.end.dateTime);
+					const searchStartTime = new Date(startTime);
 
-			// if event end time is the same as search start time, remove the event
-			calendarViews.forEach((item, index, items) => {
-				const eventEndTime = new Date(item.end.dateTime);
-				const searchStartTime = new Date(startTime);
+					if (+eventEndTime === +searchStartTime) {
+						items.splice(index, 1);
+					}
+				});
 
-				if (+eventEndTime === +searchStartTime) {
-					items.splice(index, 1);
-				}
-			});
-
-			return calendarViews.length === 0;
+				return calendarViews.length === 0;
+			}
 		}
 	}
 
