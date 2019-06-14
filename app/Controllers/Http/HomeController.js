@@ -9,10 +9,8 @@ const Floor = use('App/Models/Floor');
 const Tower = use('App/Models/Tower');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 const Event = use('Event');
-const Env = use('Env');
 var moment = require('moment');
 require('moment-round');
-const axios = require('axios');
 const Outlook = new (use('App/Outlook'))();
 
 /**

@@ -4,7 +4,6 @@ const User = use('App/Models/User');
 const Booking = use('App/Models/Booking');
 const Env = use('Env');
 const Logger = use('Logger');
-const axios = require('axios');
 const Outlook = new (use('App/Outlook'))();
 // Used for time related calcuklations and formatting
 const moment = require('moment');
@@ -72,7 +71,7 @@ class BookingController {
 		const row = results.toJSON();
 		const name = row.name;
 		const calendar = row.calendar;
-		console.log(calendar)
+		console.log(calendar);
 
 		if (!await Outlook.getRoomAvailability({ date, from, to, floor: row.floor_id, calendar })) {
 			session.flash({
@@ -210,7 +209,7 @@ class BookingController {
 		let calendarId;
 		if (Env.get('DEV_OUTLOOK', 'prod') !== 'prod') {
 			calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
-		}	
+		}
 		await Outlook.deleteEvent({ eventId, floor, calendarId });
 		booking.status = 'Cancelled';
 		await booking.save();

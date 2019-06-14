@@ -13,7 +13,6 @@ const Booking = use('App/Models/Booking');
 const Helpers = use('Helpers');
 const Env = use('Env');
 const Event = use('Event');
-const Logger = use('Logger');
 const Outlook = new (use('App/Outlook'))();
 
 // Used for time related calcuklations and formatting
