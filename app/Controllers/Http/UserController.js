@@ -240,8 +240,10 @@ class UserController {
 				</p>
 			`;
 
-			await Outlook.sendMail('Verify Email Address for Jarvis',
-				mailBody, userInfo.email);
+			await Outlook.sendMail({
+				subject: 'Verify Email Address for Jarvis',
+				body: mailBody,
+				to: userInfo.email });
 
 			await User.create(userInfo);
 
@@ -444,8 +446,10 @@ class UserController {
       			</p>
 			`;
 
-			await Outlook.sendMail('Password Reset Request',
-				body, email);
+			await Outlook.sendMail({
+				subject: 'Password Reset Request',
+				body: body,
+				to: email });
 		}
 
 		session.flash({
