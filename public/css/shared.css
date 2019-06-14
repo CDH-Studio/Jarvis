@@ -250,23 +250,23 @@ a{
 
 /* tool tip hover textboxes */
 .tooltip-inner {
-    background-color: #001642;
+    background-color: #404040;
 }
 
 .tooltip.bs-tooltip-auto[x-placement^=left] .arrow::before, .tooltip.bs-tooltip-left .arrow::before {
-    border-left-color: #001642;
+    border-left-color: #404040;
 }
 
 .tooltip.bs-tooltip-auto[x-placement^=bottom] .arrow::before, .tooltip.bs-tooltip-bottom .arrow::before {
-    border-bottom-color:  #001642;
+    border-bottom-color:  #404040;
 }
 
 .tooltip.bs-tooltip-auto[x-placement^=right] .arrow::before, .tooltip.bs-tooltip-right .arrow::before {
-    border-right-color:  #001642;
+    border-right-color:  #404040;
 }
 
 .tooltip.bs-tooltip-auto[x-placement^=top] .arrow::before, .tooltip.bs-tooltip-top .arrow::before {
-    border-top-color:  #001642;
+    border-top-color:  #404040;
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++*/
