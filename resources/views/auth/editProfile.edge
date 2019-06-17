@@ -18,14 +18,14 @@
                                 <div class='form-group'>
                                     <label for='firstName'>First name</label>
                                     @if(hasErrorFor('firstName'))
-                                        <input type='text' class='form-control is-invalid' id='firstName' name='firstName' value='{{ user.firstname }}' oninput='removeErrorClass("firstName")'>
+                                        <input type='text' class='form-control is-invalid' id='{{ antl.formatMessage('updateUser.firstname') }}' name='firstName' value='{{ user.firstname }}' oninput='removeErrorClass("firstName")'>
                                         <div class='invalid-feedback'>{{ getErrorFor('firstName') }}</div>
                                     @else
                                         <input type='text' class='form-control' id='firstName' name='firstName' value='{{ user.firstname }}'>
                                     @endif
                                 </div>
                                 <div class='form-group'>
-                                    <label for='lastName'>Last name</label>
+                                    <label for='lastName'>{{ antl.formatMessage('updateUser.lastname') }}</label>
                                     @if(hasErrorFor('lastName'))
                                         <input type='text' class='form-control is-invalid' id='lastName' name='lastName' value='{{ user.lastname }}' oninput='removeErrorClass("lastName")'> 
                                         <div class='invalid-feedback'>{{ getErrorFor('lastName') }}</div>
@@ -34,13 +34,13 @@
                                     @endif 
                                 </div>
                                 <div class='form-group'>
-                                    <label for='email'>Email</label>
+                                    <label for='email'>{{ antl.formatMessage('updateUser.email') }}</label>
                                     @if(hasErrorFor('email'))
                                         <input type='email' class='form-control is-invalid' id='email' name='email' aria-describedby='emailHelp' value='{{ user.email }}' oninput='removeErrorClass("email")' disabled>   
                                         <div class='invalid-feedback'>{{ getErrorFor('email') }}</div>
                                     @else
                                         <input type='email' class='form-control' id='email' name='email' aria-describedby='emailHelp' value='{{ user.email }}' disabled>
-                                        <small id='emailHelp' class='form-text text-muted'>We'll never share your email with anyone else.</small>
+                                        <small id='emailHelp' class='form-text text-muted'>{{ antl.formatMessage('updateUser.emailMessage') }}</small>
                                     @endif
                                 </div>
 
@@ -48,9 +48,9 @@
                                     <div class='form-row'>
                                         <div class='col'>
                                             <div class='form-group mb-2'>
-                                                <label for='building'>Building</label>
+                                                <label for='building'>{{ antl.formatMessage('updateUser.building') }}</label>
                                                 <select id='building' name='building' class='form-control text-capitalize'>
-                                                    <option value='undefined' {{ old('building') == 'undefined' ? 'selected' : '' }} selected='' disabled>Select Building</option>
+                                                    <option value='undefined' {{ old('building') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('updateUser.building') }}</option>
                                                     @each(buildingOption in formOptions.buildings)
                                                         <option value='{{buildingOption.id}}' {{ old('building', user.building_id) == buildingOption.id ? 'selected' : '' }}>{{buildingOption.name}}</option>
                                                     @endeach
@@ -65,11 +65,17 @@
                                     <div class='form-row'>
                                         <div class='col'>
                                             <div class='form-group mb-2'>
-                                                <label for='tower'>{{ antl.formatMessage('registerUser.tower') }}</label>
+                                                <label for='tower'>{{ antl.formatMessage('updateUser.tower') }}</label>
                                                 <select id='tower' name='tower' class='form-control text-capitalize'>
                                                     <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.tower') }}</option>
                                                     @each(towerOption in formOptions.towers)
-                                                        <option value='{{towerOption.id}}' {{ old('tower', user.tower_id) == towerOption.id ? 'selected' : '' }}>{{towerOption.name}}</option>
+                                                        <option value='{{towerOption.id}}' {{ old('tower', user.tower_id) == towerOption.id ? 'selected' : '' }}>
+                                                            @if(antl.currentLocale() === "fr")
+                                                                {{towerOption.name_french}}
+                                                            @else
+                                                                {{towerOption.name_english}}
+                                                            @endif
+                                                        </option>
                                                     @endeach
                                                 </select>
                                                 @if(hasErrorFor('tower'))
@@ -80,11 +86,17 @@
                                         
                                         <div class='col'>
                                             <div class='form-group mb-2'>
-                                                <label for='floor'>{{ antl.formatMessage('registerUser.floor') }}</label>
+                                                <label for='floor'>{{ antl.formatMessage('updateUser.floor') }}</label>
                                                 <select id='floor' name='floor' class='form-control text-capitalize'>
-                                                    <option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.floor') }}</option>
+                                                    <option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('updateUser.floor') }}</option>
                                                     @each(floorOption in formOptions.floors)
-                                                        <option value='{{floorOption.id}}' {{ old('floor', user.floor_id) == floorOption.id ? 'selected' : '' }}>{{floorOption.name}}</option>
+                                                        <option value='{{floorOption.id}}' {{ old('floor', user.floor_id) == floorOption.id ? 'selected' : '' }}>
+                                                            @if(antl.currentLocale() === "fr")
+                                                                {{floorOption.name_french}}
+                                                            @else
+                                                                {{floorOption.name_english}}
+                                                            @endif
+                                                        </option>
                                                     @endeach
                                                 </select>
                                                 @if(hasErrorFor('floor'))
@@ -98,8 +110,8 @@
 
                                 <div class='row'>
                                     <div class='col text-right'>
-                                        <button type='button' class='btn btn-secondary mt-3' onclick="goBack()">Cancel</button>
-                                        <button type='submit' class='btn btn-primary mt-3 mr-0'>Update</button>
+                                        <button type='button' class='btn btn-secondary mt-3' onclick="goBack()">{{ antl.formatMessage('updateUser.cancelBtn') }}</button>
+                                        <button type='submit' class='btn btn-primary mt-3 mr-0'>{{ antl.formatMessage('updateUser.updateBtn') }}</button>
                                     </div>
                                 </div>
                             </form>

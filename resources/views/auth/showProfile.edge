@@ -11,7 +11,7 @@
                             <i class='fas fa-user-circle fa-6x mb-3'></i>
                             <h4>{{ user.firstname }} {{ user.lastname }}</h4>
                         </div>
-                        <div class= 'col-md-5'>
+                        <div class= 'col-md-8'>
                             <p><strong>{{ antl.formatMessage('userProfile.name') }}:</strong> {{ user.firstname }} {{ user.lastname }}</p>
                             <p><strong>{{ antl.formatMessage('userProfile.email') }}:</strong> {{ user.email }}
                                 @if(user.verified)
@@ -27,14 +27,14 @@
                                 @else
                                     <p><strong>{{ antl.formatMessage('userProfile.ft') }}:</strong> {{ user.floor.name_french }} {{ user.tower.name_french}}</p>
                                 @endif
-                                <button onclick="window.location='{{ route('viewBookings', {id: user.id, bookingType: 'user'}) }}';" class="btn btn-info btn-icon-split">
+                                <button onclick="window.location='{{ route('viewBookings', {id: user.id, bookingType: 'user'}) }}';" class="btn btn-info btn-icon-split mt-2">
                                     <span class="icon text-white-50"><i class="fas fa-list-ul"></i></span>
                                     <span class="text">{{ antl.formatMessage('userProfile.viewBookings') }}</span>
                                 </button>             
                             @endif
                            
                             @if(canEdit)
-                                <button onclick="window.location='{{ route('editUser', { id: user.id }) }}';" class="btn btn-primary btn-icon-split">
+                                <button onclick="window.location='{{ route('editUser', { id: user.id }) }}';" class="btn btn-primary btn-icon-split mt-2">
                                     <span class="icon text-white-50"><i class="fas fa-pen"></i></span>
                                     <span class="text">{{ antl.formatMessage('userProfile.editProfile') }}</span>
                                 </button>
