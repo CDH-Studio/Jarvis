@@ -2,32 +2,12 @@
 const Room = use('App/Models/Room');
 const User = use('App/Models/User');
 const Booking = use('App/Models/Booking');
-const Token = use('App/Models/Token');
 const Env = use('Env');
 const Logger = use('Logger');
-const graph = require('@microsoft/microsoft-graph-client');
-const axios = require('axios');
-
+const Outlook = new (use('App/Outlook'))();
 // Used for time related calcuklations and formatting
 const moment = require('moment');
 require('moment-round');
-
-/**
- * Retrieve access token for Microsoft Graph from the data basebase.
- *
- * @returns {Object} The access token.
- *
- */
-async function getAccessToken () {
-	try {
-		const results = await Token.findBy('type', 'access');
-		const accessToken = results.toJSON().token;
-		return accessToken;
-	} catch (err) {
-		Logger.debug(err);
-		return null;
-	}
-}
 
 /**
  * Populate bookings from booking query results.
@@ -90,8 +70,10 @@ class BookingController {
 			.findBy('id', room);
 		const row = results.toJSON();
 		const name = row.name;
+		const calendar = row.calendar;
+		console.log(calendar);
 
-		if (!await this.getRoomAvailability(date, from, to, row.floor_id, row.calendar)) {
+		if (!await Outlook.getRoomAvailability({ date, from, to, floor: row.floor_id, calendar })) {
 			session.flash({
 				error: `Room ${name} has already been booked for the time selected!`
 			});
@@ -135,7 +117,7 @@ class BookingController {
 		await auth.user.bookings().save(booking);
 		await results.bookings().save(booking);
 
-		this.createEvent(eventInfo, booking, auth.user, results);
+		Outlook.createEvent({ eventInfo, booking, user: auth.user, room: results, calendarId: calendar });
 
 		session.flash({
 			notification: `Room ${name} has been booked. Please click here to view your bookings.`,
@@ -157,8 +139,7 @@ class BookingController {
 		var bookingsType = (idType === 'user_id') ? 'userBookings' : 'roomBookings';
 
 		if (userRole !== 'admin') {
-			console.log('before sync');
-			this.syncEvents(auth.user.id);
+			// this.syncEvents(auth.user.id);
 		}
 
 		// Queries the database fr the bookings associated to a specific room
@@ -221,119 +202,19 @@ class BookingController {
 		const booking = await Booking.findBy('id', params.id);
 		const roomId = booking.toJSON().room_id;
 		const room = (await Room.findBy('id', roomId)).toJSON();
-		const floor = room.floor;
+		const floor = room.floor_id;
 		const eventId = booking.toJSON().event_id;
 		const idType = (params.bookingType === 'user') ? booking.toJSON().user_id : booking.toJSON().room_id;
 
-		await this.deleteEvent(eventId, floor);
+		let calendarId;
+		if (Env.get('DEV_OUTLOOK', 'prod') !== 'prod') {
+			calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
+		}
+		await Outlook.deleteEvent({ eventId, floor, calendarId });
 		booking.status = 'Cancelled';
 		await booking.save();
 
 		return response.route('viewBookings', { id: idType, bookingType: params.bookingType });
-	}
-
-	async getCalendarView (calendarId, start, end) {
-		const accessToken = await getAccessToken();
-
-		if (accessToken) {
-			const client = graph.Client.init({
-				authProvider: (done) => {
-					done(null, accessToken);
-				}
-			});
-
-			try {
-				const calendarView = await client
-					.api(`/me/calendars/${calendarId}/calendarView?startDateTime=${start}&endDateTime=${end}`)
-					// .orderby('start DESC')
-					.header('Prefer', 'outlook.timezone="Eastern Standard Time"')
-					.get();
-
-				return calendarView;
-			} catch (err) {
-				console.log(err);
-			}
-		}
-	}
-
-	/**
-	 *
-	 * @param {String} date     Date
-	 * @param {String} from     Starting time
-	 * @param {String} to       Ending time
-	 * @param {String} calendar Calendar ID
-	 *
-	 * @returns {Boolean} Whether or not the room is available
-	 */
-	async getRoomAvailability (date, from, to, floor, calendar) {
-		console.log(date, from, to, calendar);
-
-		const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/avail`, {
-			room: calendar,
-			start: date + 'T' + from,
-			end: date + 'T' + to,
-			floor: floor
-		});
-
-		return res.data === 'free';
-	}
-
-	/**
-	 * Create an event on the specified room calendar.
-	 *
-	 * @param {String} eventInfo Information of the event.
-	 * @param {Object} booking The Booking (Lucid) Model.
-	 * @param {Object} user The User (Lucid) Model.
-	 * @param {Object} room The Room (Lucid) Model.
-	 */
-	async createEvent (eventInfo, booking, user, room) {
-		try {
-			const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/booking`, {
-				room: room.calendar,
-				start: eventInfo.start.dateTime,
-				end: eventInfo.end.dateTime,
-				subject: eventInfo.subject,
-				body: eventInfo.body.content,
-				floor: room.floor_id,
-				attendees: [user.email]
-			});
-
-			const eventId = res.data.eventId.UniqueId;
-			console.log(eventId);
-
-			booking.from = eventInfo.start.dateTime;
-			booking.to = eventInfo.end.dateTime;
-			booking.event_id = eventId;
-			booking.status = 'Approved';
-			await user.bookings().save(booking);
-			await room.bookings().save(booking);
-
-			return eventInfo;
-		} catch (err) {
-			console.log(err);
-			booking.status = 'Failed';
-			await user.bookings().save(booking);
-			await room.bookings().save(booking);
-		}
-	}
-
-	/**
-	* Delete an event from the room calendar.
-	*
-	* @param {String} calendarId The id of the room calendar.
-	* @param {String} eventId The id of the event to delete.
-	*/
-	async deleteEvent (eventId, floor) {
-		try {
-			const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/cancel`, {
-				eventId: eventId,
-				floor: floor
-			});
-
-			console.log(res);
-		} catch (err) {
-			console.log(err);
-		}
 	}
 
 	/**
@@ -354,12 +235,7 @@ class BookingController {
 
 			for (const booking in bookings) {
 				console.log(booking);
-				const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/sync`, {
-					eventId: booking.event_id,
-					floor: 0
-				});
-
-				booking.status = res.data;
+				booking.status = Outlook.sync({ eventId: booking.event_id, floor: 0 });
 				booking.save();
 			}
 		} catch (err) {

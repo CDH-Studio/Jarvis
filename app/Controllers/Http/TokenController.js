@@ -25,16 +25,18 @@ const Oauth2 = require('simple-oauth2').create(credentials);
  * @param {*} token The tokens received from Graph (access token, refresh token and account information).
  */
 async function saveToDatabase (token) {
-	await Token.truncate();
-	const accessTokenModel = new Token();
-	accessTokenModel.token = token.token.access_token;
-	accessTokenModel.type = 'access';
-	accessTokenModel.save();
+	// await Token.truncate();
+	const accessToken = new Token();
+	accessToken.token = token.token.access_token;
+	accessToken.type = 'access';
+	console.log(accessToken);
+	await accessToken.save();
 
-	const refreshTokenModel = new Token();
-	refreshTokenModel.token = token.token.refresh_token;
-	refreshTokenModel.type = 'refresh';
-	refreshTokenModel.save();
+	const refreshToken = new Token();
+	refreshToken.token = token.token.refresh_token;
+	refreshToken.type = 'refresh';
+	console.log(refreshToken);
+	await refreshToken.save();
 }
 
 class TokenController {
@@ -48,7 +50,6 @@ class TokenController {
 			redirect_uri: Env.get('MICROSOFT_REDIRECT_URI'),
 			scope: Env.get('MICROSOFT_SCOPES')
 		});
-		console.log('hire');
 		return response.redirect(authUrl);
 	}
 

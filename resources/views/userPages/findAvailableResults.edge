@@ -13,37 +13,44 @@
     
     {{--  Loading page header  --}}
     @!component('components.pageHeader', title='Results')
-	<div class='row d-flex flex-row justify-content-center mb-3'>
-		<div class='row' >
-			<div class='card'>
-				{{--  Title  --}}
-				<div class='room-card-title'>
-					<div class="row">
-						<div class="col-6">
-							<h5 style="line-height: 50px" class="m-0">Search Criteria </h5>
-						</div> 
-					</div>
-				</div>
+	<div class='row mb-3'>
+			<div class="col-12 col-xl-7">
 
-				{{--  DateTime  --}}
-				<hr style='margin-top:0px;'>
-				<div class='d-flex flex-row justify-content-between'>
-					<div class='d-inline-flex p-3'>
-						<strong>Date:&nbsp</strong><span>  {{ form.formattedDate }} </span>
-					</div>
-					<div class='d-inline-flex p-3'>
-						<strong>Time range:&nbsp</strong><span>  {{ form.formattedFrom }} - {{ form.formattedTo }} </span>
-					</div>
-					<div class='d-inline-flex p-3'>
-						<strong>Duration:&nbsp</strong><span> {{ form.hour }} Hour(s) </span>
-					</div>
-				</div>
-				<hr style='margin-top:0px;'>
-
-				<div class='room-card-body'>
-					{{--  Room information  --}}
-					<div class='d-flex flex-row justify-content-center'>
-						<div class='p-3'>
+				<div class="card">
+				  <h5 class="card-header"><i class="fas fa-search"></i> Selected Search Criteria</h5>
+				  <div class="card-body">
+				  	<div class="row">
+				  		<div class="col-6">
+				  			<p class="mb-0"><strong>Date:</strong><span>  {{ form.formattedDate }}</p>
+						  	<p class="mb-0"><strong>Time range:</strong> {{ form.formattedFrom }} - {{ form.formattedTo }}</p>
+						  	<p class="mb-0"><strong>Duration:</strong> {{ form.hour }} Hour(s)</p>
+				  		</div>
+				  		<div class="col-6">
+				  				<p class="mb-0"><strong>Floor:&nbsp</strong>
+								@if(form.location && form.location != 'undefined')
+									{{ form.location }}
+								@else
+									Unspecified
+								@endif
+								</p>
+								<p class="mb-0"><strong>Table seats:&nbsp</strong>
+								@if(form.seats)
+									{{ form.seats }}
+								@else
+									Unspecified
+								@endif
+								</p>
+								<p class="mb-0"><strong>Capacity:&nbsp</strong>
+								@if(form.capacity)
+									{{ form.capacity }}
+								@else
+									Unspecified
+								@endif
+								</p>	
+				  		</div>
+				  		<div class="col-12 mt-4">
+				  			<strong>Selected Features</strong>
+				  			{{--  Room information  --}}
 							<ul class='list-inline'>
 								@each(feature in features)
 									@if(antl.currentLocale()==='en')
@@ -51,51 +58,30 @@
 									@else
 										<li class='spec-yes list-inline-item'><i class='fas fa-check-circle'></i><span> {{truncate(feature.name_french, 20, '.')}}</span></li>
 									@endif
-								@endeach
+								@else
+							    	<i>No required features specified</i>
+							  	@endeach
 							</ul>
 						</div>
-					</div>
-					
-					{{--  Checkboxes  --}}
-					<hr style='margin-top:0px;'>
-					<div class='d-flex flex-row justify-content-between'>
-						<div class='d-inline-flex p-3'>
-							@if(form.location && form.location != 'undefined')
-								<strong>Floor:&nbsp</strong><span>  {{ form.location }} </span>
-							@else
-								<strong>Floor:&nbsp</strong><span class='spec-no'> Unspecified </span>
-							@endif
-						</div>
-						<div class='d-inline-flex p-3'>
-							@if(form.seats)
-								<strong>Table seats:&nbsp</strong><span> {{ form.seats }} </span>
-							@else
-								<strong>Table seats:&nbsp</strong><span class='spec-no'> Unspecified </span>
-							@endif
-						</div>
-						<div class='d-inline-flex p-3'>
-							@if(form.capacity)
-								<strong>Capacity:&nbsp</strong><span> {{ form.capacity }}</span>
-							@else
-								<strong>Capacity:&nbsp</strong><span class='spec-no'> Unspecified</span>
-							@endif
-						</div>
-					</div>
+				  	</div>
+
+				  </div>
 				</div>
+
 			</div>
-		</div>
 	</div>
     <div id='times'>
         @if(times.length !== 0)
             @each(time in times)
-                <div class="card">
-                    <div class="card-header" id="heading{{time.id}}">
+                <div class="card shadow">
+                    <div class="card-header p-2 bg-white" id="heading{{time.id}}">
                     <h5 class="mb-0">
                         <button class="btn btn-link" data-toggle="collapse" data-target="#{{time.id}}" aria-expanded="false" aria-controls="{{time.id}}">
+                        	<i class="far fa-clock mr-1"></i>
 							@if(time.rooms.length > 1)
-								{{ time.time }} ({{ time.rooms.length }} rooms)
+								<strong>{{ time.time }} | </strong><small>{{ time.rooms.length }} rooms</small>
 							@else
-								{{ time.time }} ({{ time.rooms.length }} room)
+								<strong>{{ time.time }} | </strong><small>{{ time.rooms.length }} room</small>
 							@endif
                         </button>
                     </h5>

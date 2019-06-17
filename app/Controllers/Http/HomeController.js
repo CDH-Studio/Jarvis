@@ -9,10 +9,9 @@ const Floor = use('App/Models/Floor');
 const Tower = use('App/Models/Tower');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
 const Event = use('Event');
-const Env = use('Env');
 var moment = require('moment');
 require('moment-round');
-const axios = require('axios');
+const Outlook = new (use('App/Outlook'))();
 
 /**
  * Generating a random string.
@@ -467,7 +466,7 @@ class HomeController {
 		const checkRoomAvailability = async () => {
 			let numberOfRooms = 2;
 			await asyncForEach(rooms, async (item) => {
-				if (numberOfRooms !== 0 && await this.getRoomAvailability(date, from, to, item.floor_id, item.calendar)) {
+				if (numberOfRooms !== 0 && await Outlook.getRoomAvailability({ date, from, to, floor: item.floor_id, calendar: item.calendar })) {
 					Event.fire('send.room', {
 						card: view.render('components.smallCard', { room: item, datetime: { date: formattedDate, time: formattedFrom + ' - ' + formattedTo } }),
 						code: code
@@ -537,28 +536,6 @@ class HomeController {
 		} catch (err) {
 			console.log(err);
 		}
-	}
-
-	/**
-	 *
-	 * @param {String} date     Date
-	 * @param {String} from     Starting time
-	 * @param {String} to       Ending time
-	 * @param {String} calendar Calendar ID
-	 *
-	 * @returns {Boolean} Whether or not the room is available
-	 */
-	async getRoomAvailability (date, from, to, floor, calendar) {
-		console.log(date, from, to, calendar);
-
-		const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/avail`, {
-			room: calendar,
-			start: date + 'T' + from,
-			end: date + 'T' + to,
-			floor: floor
-		});
-
-		return res.data === 'free';
 	}
 
 	/**
