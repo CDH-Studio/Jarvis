@@ -1,4 +1,4 @@
-				<form aria-label='search-form' action='findAvailable' method='GET' enctype='multipart/form-data' style='min-height:674px;'>
+				<form id="roomSearch" aria-label='search-form' action='findAvailable' method='GET' enctype='multipart/form-data' style='min-height:674px;'>
 					<div class="card shadow" style='min-height:inherit;'>
 						<div class="card-body">
 							{{ csrfField() }}
@@ -59,7 +59,7 @@
 											<button for='to'  aria-label='end-time-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
 											<div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
 												@each(item in dropdownSelection)
-													<a class="dropdown-item" for='fromDropDown' data-value={{item.dataValue}} href="#">{{item.name}}</a>
+													<a class="dropdown-item" for='fromDropDown' data-value='{{item.dataValue}}' href='#'>{{item.name}}</a>
 												@endeach
 											</div>
 										</div>
@@ -155,8 +155,9 @@
 
 				<script>
 					$('#submit').on('click', function() {
+						$( "#loadingSearch" ).remove();
 						setTimeout(function() {
-							$('#submit').append('<i class="fas fa-circle-notch fa-spin fa-1x"></i>');
+							$('#submit').append('<i id="loadingSearch" class="fas fa-circle-notch fa-spin fa-1x"></i>');
 						}, 500);
 					});
 				</script>
