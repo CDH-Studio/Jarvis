@@ -97,35 +97,50 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async edit ({ params, view, auth, response }) {
-		// Retrieves user object
-		const user = await User.findOrFail(params.id);
-		const userRole = await auth.user.getUserRole();
-		var isAdmin;
+	async edit ({ params, view, auth, response, request }) {
 
-		let formOptions = {};
+		//try{
+			// Retrieves user object
+			const profile = await User.findOrFail(params.id);
+			const profileRole = await profile.getUserRole();
+			const userRole = await auth.user.getUserRole();
+			let isAdmin, selectedBuilding, allBuildings;
+			// check if admin is editing their own profile
+			if (userRole === 'admin') {
+				isAdmin = true;
+				selectedBuilding = request.cookie('selectedBuilding');
+				// get all builig info admin nav bar since this route is shared with regular users and admin
+				// therefore, the admin middle-ware can't retrieve building info to pass to view
+				allBuildings = await Building.all();
+				allBuildings = allBuildings.toJSON();
+			// check if user is editing their own profile
+			} else if (auth.user.id === Number(params.id) && userRole === 'user') {
+				isAdmin = false;
+			// check if user is editing someone elses profile
+			} else {
+				return response.redirect('/');
+			}
+			
 
-		var buildingOptions = await Building.all();
-		formOptions.buildings = buildingOptions.toJSON();
+			let formOptions = {};
 
-		var towerOptions = await Tower.all();
-		formOptions.towers = towerOptions.toJSON();
+			if( profileRole==="user" ){
+				var buildingOptions = await Building.all();
+				formOptions.buildings = buildingOptions.toJSON();
 
-		var floorOptions = await Floor.all();
-		formOptions.floors = floorOptions.toJSON();
+				var towerOptions = await Tower.all();
+				formOptions.towers = towerOptions.toJSON();
 
-		// check if admin is editing their own profile
-		if (userRole === 'admin') {
-			isAdmin = true;
-		// check if user is editing their own profile
-		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
-			isAdmin = false;
-		// check if user is editing someone elses profile
-		} else {
-			return response.redirect('/');
-		}
+				var floorOptions = await Floor.all();
+				formOptions.floors = floorOptions.toJSON();
+			}
 
-		return view.render('auth.editProfile', { user, isAdmin, formOptions });
+			return view.render('auth.editProfile', { user: profile, isAdmin, profileRole, formOptions, selectedBuilding,
+				allBuildings });
+		//} catch (err) {
+		//	Logger.debug(err);
+		//	return response.route('home');
+		//}
 	}
 
 	/**
@@ -133,16 +148,25 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async update ({ request, session, params, response }) {
+	async update ({ auth, request, session, params, response }) {
 		try {
-		// Retrieves user input
+
+			if( auth.user.id != params.id && auth.user.getUserRole() === 'user'){
+				return response.redirect('/');
+			}
+
+			// Retrieves user input
 			const body = request.all();
 
-			// test if selected building, tower, and floor exist
-			await Floor.findOrFail(body.floor);
-			await Tower.findOrFail(body.tower);
-			await Building.findOrFail(body.building);
+			const profile = await User.findOrFail(params.id);
+			const profileRole = await profile.getUserRole();
 
+			// test if selected building, tower, and floor exist
+			if(profileRole === "user"){
+				await Floor.findOrFail(body.floor);
+				await Tower.findOrFail(body.tower);
+				await Building.findOrFail(body.building);
+			}
 			// Updates user information in database
 			await User
 				.query()
@@ -389,7 +413,7 @@ class UserController {
 		return response.redirect('/login');
 	}
 
-	async show ({ auth, params, view, response }) {
+	async show ({ auth, params, view, response, request }) {
 		let user = await User
 			.query()
 			.where('id', params.id)
@@ -401,6 +425,17 @@ class UserController {
 
 		var canEdit = 0;
 		const userRole = await auth.user.getUserRole();
+		user = user.toJSON();
+
+		let selectedBuilding, allBuildings;
+
+		if(userRole === 'admin'){
+			selectedBuilding = request.cookie('selectedBuilding');
+			// get all builig info admin nav bar since this route is shared with regular users and admin
+			// therefore, the admin middle-ware can't retrieve building info to pass to view
+			allBuildings = await Building.all();
+			allBuildings = allBuildings.toJSON();
+		}
 
 		// check if user is viewing their own profile or is admin
 		if (auth.user.id === Number(params.id) || userRole === 'admin') {
@@ -409,9 +444,9 @@ class UserController {
 			return response.redirect('/');
 		}
 
-		user = user.toJSON();
+		
 
-		return view.render('auth.showProfile', { auth, user, canEdit });
+		return view.render('auth.showProfile', { auth, user, canEdit, allBuildings, selectedBuilding });
 	}
 
 	/**

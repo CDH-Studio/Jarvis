@@ -8,15 +8,15 @@
             <div class="card shadow mb-4 p-3">
                 <div class="card-body">
                     <div class="row">
-                        <div class='col-md-5'>
-                            @if(isAdmin)
+                        <div class='col-md-7'>
+                            @if(profileRole === "admin")
                                 <form action='{{ route('saveAdmin', {id: user.id}) }}' method='POST' enctype='multipart/form-data'>
                             @else
                                 <form action='{{ route('saveUser', {id: user.id}) }}' method='POST' enctype='multipart/form-data'>
                             @endif
                                 {{ csrfField() }}
                                 <div class='form-group'>
-                                    <label for='firstName'>First name</label>
+                                    <label for='firstName'>First name </label>
                                     @if(hasErrorFor('firstName'))
                                         <input type='text' class='form-control is-invalid' id='{{ antl.formatMessage('updateUser.firstname') }}' name='firstName' value='{{ user.firstname }}' oninput='removeErrorClass("firstName")'>
                                         <div class='invalid-feedback'>{{ getErrorFor('firstName') }}</div>
@@ -44,7 +44,7 @@
                                     @endif
                                 </div>
 
-                                @if(!isAdmin)
+                                @if(profileRole != "admin")
                                     <div class='form-row'>
                                         <div class='col'>
                                             <div class='form-group mb-2'>
