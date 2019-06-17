@@ -86,16 +86,13 @@
 									<label for='location'>{{ antl.formatMessage('searchForm.preferredLocation') }}</label>
 									<select id='location' name='location' class='form-control'>
 										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>{{ antl.formatMessage('searchForm.selectFloor') }}</option>
-										<option value='0' {{ old('location') == '0' ? 'selected' : '' }}>Floor 0</option>
-										<option value='1' {{ old('location') == '1' ? 'selected' : '' }}>Floor 1</option>
-										<option value='2' {{ old('location') == '2' ? 'selected' : '' }}>Floor 2</option>
-										<option value='3' {{ old('location') == '3' ? 'selected' : '' }}>Floor 3</option>
-										<option value='4' {{ old('location') == '4' ? 'selected' : '' }}>Floor 4</option>
-										<option value='5' {{ old('location') == '5' ? 'selected' : '' }}>Floor 5</option>
-										<option value='6' {{ old('location') == '6' ? 'selected' : '' }}>Floor 6</option>
-										<option value='7' {{ old('location') == '7' ? 'selected' : '' }}>Floor 7</option>
-										<option value='8' {{ old('location') == '8' ? 'selected' : '' }}>Floor 8</option>
-										<option value='9' {{ old('location') == '9' ? 'selected' : '' }}>Floor 9</option>
+										@each(floorOption in formOptions.floors)
+											@if(antl.currentLocale() === "fr")
+												<option value='{{floorOption.id}}' {{ old('location') == floorOption.id ? 'selected' : '' }}>{{floorOption.name_french}}</option>
+											@else
+												<option value='{{floorOption.id}}' {{ old('location') == floorOption.id ? 'selected' : '' }}>{{floorOption.name_english}}</option>
+											@endif
+										@endeach
 									</select>
 								</div>
 							</div>

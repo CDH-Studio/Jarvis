@@ -100,15 +100,13 @@ class HomeController {
 		const userId = auth.user.id;
 		const searchValues = await this.loadSearchRoomsForm({ auth });
 
-		const DBNameSelect = 'name_english as name';
-
 		var formOptions = {};
 
 		var results = await RoomStatus.query().select('id', 'name').fetch();
 		formOptions.statuses = results.toJSON();
-		results = await Floor.query().select('id', DBNameSelect).fetch();
+		results = await Floor.all();
 		formOptions.floors = results.toJSON();
-		results = await Tower.query().select('id', DBNameSelect).fetch();
+		results = await Tower.all();
 		formOptions.towers = results.toJSON();
 		results = await RoomFeaturesCategory
 			.query()
