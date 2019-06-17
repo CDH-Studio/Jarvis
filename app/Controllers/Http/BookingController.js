@@ -138,7 +138,7 @@ class BookingController {
 		var idType = (params.bookingType === 'user') ? 'user_id' : 'room_id';
 		var bookingsType = (idType === 'user_id') ? 'userBookings' : 'roomBookings';
 
-		if (userRole !== 'admin' && idType === "user_id" && parseInt(params.id) !== auth.user.id ) {
+		if (userRole !== 'admin' && idType === 'user_id' && parseInt(params.id) !== auth.user.id) {
 			response.route('home');
 		}
 

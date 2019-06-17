@@ -98,8 +98,7 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async edit ({ params, view, auth, response, request }) {
-
-		//try{
+		try {
 			// Retrieves user object
 			const profile = await User.findOrFail(params.id);
 			const profileRole = await profile.getUserRole();
@@ -113,18 +112,17 @@ class UserController {
 				// therefore, the admin middle-ware can't retrieve building info to pass to view
 				allBuildings = await Building.all();
 				allBuildings = allBuildings.toJSON();
-			// check if user is editing their own profile
+				// check if user is editing their own profile
 			} else if (auth.user.id === Number(params.id) && userRole === 'user') {
 				isAdmin = false;
-			// check if user is editing someone elses profile
+				// check if user is editing someone elses profile
 			} else {
 				return response.redirect('/');
 			}
-			
 
 			let formOptions = {};
 
-			if( profileRole==="user" ){
+			if (profileRole === 'user') {
 				var buildingOptions = await Building.all();
 				formOptions.buildings = buildingOptions.toJSON();
 
@@ -135,12 +133,16 @@ class UserController {
 				formOptions.floors = floorOptions.toJSON();
 			}
 
-			return view.render('auth.editProfile', { user: profile, isAdmin, profileRole, formOptions, selectedBuilding,
+			return view.render('auth.editProfile', { user: profile,
+				isAdmin,
+				profileRole,
+				formOptions,
+				selectedBuilding,
 				allBuildings });
-		//} catch (err) {
-		//	Logger.debug(err);
-		//	return response.route('home');
-		//}
+		} catch (err) {
+			Logger.debug(err);
+			return response.route('home');
+		}
 	}
 
 	/**
@@ -150,8 +152,7 @@ class UserController {
 	 */
 	async update ({ auth, request, session, params, response }) {
 		try {
-
-			if( auth.user.id != params.id && auth.user.getUserRole() === 'user'){
+			if (auth.user.id !== params.id && auth.user.getUserRole() === 'user') {
 				return response.redirect('/');
 			}
 
@@ -162,7 +163,7 @@ class UserController {
 			const profileRole = await profile.getUserRole();
 
 			// test if selected building, tower, and floor exist
-			if(profileRole === "user"){
+			if (profileRole === 'user') {
 				await Floor.findOrFail(body.floor);
 				await Tower.findOrFail(body.tower);
 				await Building.findOrFail(body.building);
@@ -429,7 +430,7 @@ class UserController {
 
 		let selectedBuilding, allBuildings;
 
-		if(userRole === 'admin'){
+		if (userRole === 'admin') {
 			selectedBuilding = request.cookie('selectedBuilding');
 			// get all builig info admin nav bar since this route is shared with regular users and admin
 			// therefore, the admin middle-ware can't retrieve building info to pass to view
@@ -443,8 +444,6 @@ class UserController {
 		} else {
 			return response.redirect('/');
 		}
-
-		
 
 		return view.render('auth.showProfile', { auth, user, canEdit, allBuildings, selectedBuilding });
 	}
