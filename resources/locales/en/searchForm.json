@@ -1,5 +1,6 @@
 {
     "duration": "Duration",
     "preferredLocation": "Preferred location",
-    "selectFloor": "Select a floor"
+    "selectFloor": "Select a floor",
+    "searchBtn": "Search"
 }

@@ -191,7 +191,11 @@
         <footer class="sticky-footer bg-white mt-4">
           <div class="container my-auto">
             <div class="copyright text-center my-auto">
-              <a class='link-style-none' href='https://cdhstudio.ca/' target='_blank'>CDH Studio</a> <i class='fas fa-heart'></i> Jarvis
+              @if(antl.currentLocale() =="fr")
+                <a class='link-style-none' href='https://cdhstudio.ca/fr' target='_blank'> Studio CDH <i class='fas fa-heart'></i> Jarvis</a>
+              @else
+                <a class='link-style-none' href='https://cdhstudio.ca' target='_blank'> CDH Studio <i class='fas fa-heart'></i> Jarvis</a>
+              @endif
             </div>
           </div>
         </footer>
