@@ -32,4 +32,4 @@ yarn.lock
 /.scannerwork
 
 # persistent directory
-data
+# data
