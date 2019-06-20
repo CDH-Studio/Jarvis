@@ -21,15 +21,15 @@ class ResetPassword {
 			 * required: required field, to register an account, these fields are required
 			 * same: password and confirmation passwords must match
 			 */
-			confirmPassword: 'required|regexPassword|same:newPassword',
-			newPassword: 'required|regexPassword'
+			newPassword: 'required|regexPassword',
+			confirmPassword: 'required|same:newPassword|regexPassword',
 		};
 	}
 
 	// Custom error messages
 	get messages () {
 		return {
-			'regexPassword': 'Your password must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character and be at least 8 Characters.',
+			'regexPassword': 'Your password must be at least 6 characters',
 			'required': 'This field is required',
 			'same': 'Passwords do not match.'
 		};

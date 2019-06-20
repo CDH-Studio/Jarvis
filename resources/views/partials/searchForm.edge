@@ -1,6 +1,6 @@
 				<form id="roomSearch" aria-label='search-form' action='findAvailable' method='GET' enctype='multipart/form-data' style='min-height:674px;'>
-					<div class="card shadow" style='min-height:inherit;'>
-						<div class="card-body">
+					<div class="card shadow">
+						<div class="card-body p-4">
 							{{ csrfField() }}
 							{{--  Date form  --}}
 							<div class='row'>
@@ -80,9 +80,9 @@
 									</div>
 								</div>
 							</div>
-							{{--  Location form  --}}
 							<div class='row'>
-								<div class='col form-group mb-4'>
+								{{--  Location form  --}}
+								<div class='col-12 col-md-6 form-group mb-4'>
 									<label for='location'>{{ antl.formatMessage('searchForm.preferredLocation') }}</label>
 									<select id='location' name='location' class='form-control'>
 										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>{{ antl.formatMessage('searchForm.selectFloor') }}</option>
@@ -95,15 +95,13 @@
 										@endeach
 									</select>
 								</div>
-							</div>
-							<div class='row'>
 								{{--  PMts form  --}}
-								<div class='col form-group mb-4'>
+								<div class='col-6 col-md-3 form-group mb-4'>
 									<label for='seats'>{{ antl.formatMessage('roomSearchCard.tableSeats') }}</label>
 									<input class='form-control' id='seats' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
 								</div>
 								{{--  Max Capacity  --}}
-								<div class='col form-group mb-4'>
+								<div class='col-6 col-md-3 form-group mb-4'>
 									<label for='capacity'>{{ antl.formatMessage('roomDetails.capacity') }}</label>
 									<input class='form-control' id='capacity' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
 								</div>
@@ -140,7 +138,7 @@
 								</div>
 							</div>
 							{{--  Page buttons  --}}
-							<div class='row align-items-end' style='margin-top:80px;'>
+							<div class='row align-items-end'>
 								<div class='col-sm-12 text-right'>
 									{{--  <button aria-label='back' type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>  --}}
 									<button aria-label='search-submit-button' type='submit' class='btn btn-primary no-margin' id='submit'> {{ antl.formatMessage('searchForm.searchBtn') }} </button>
