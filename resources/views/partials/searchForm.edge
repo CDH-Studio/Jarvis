@@ -85,12 +85,12 @@
 								<div class='col-12 col-md-6 form-group mb-4'>
 									<label for='location'>{{ antl.formatMessage('searchForm.preferredLocation') }}</label>
 									<select id='location' name='location' class='form-control'>
-										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>{{ antl.formatMessage('searchForm.selectFloor') }}</option>
+										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected='selected'>{{ antl.formatMessage('searchForm.selectFloor') }}</option>
 										@each(floorOption in formOptions.floors)
 											@if(antl.currentLocale() === "fr")
-												<option value='{{floorOption.id}}' {{ old('location') == floorOption.id ? 'selected' : '' }}>{{floorOption.name_french}}</option>
+												<option value='{{floorOption.id}}' {{ old('location') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_french}}</option>
 											@else
-												<option value='{{floorOption.id}}' {{ old('location') == floorOption.id ? 'selected' : '' }}>{{floorOption.name_english}}</option>
+												<option value='{{floorOption.id}}' {{ old('location') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_english}}</option>
 											@endif
 										@endeach
 									</select>
