@@ -153,6 +153,7 @@ class UserController {
 	async update ({ auth, request, session, params, response }) {
 		try {
 			if (auth.user.id !== params.id && auth.user.getUserRole() === 'user') {
+				console.log('hi')
 				return response.redirect('/');
 			}
 
