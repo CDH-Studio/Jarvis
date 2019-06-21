@@ -148,11 +148,4 @@
 					</div>
 				</form>
 
-				<script>
-					$('#submit').on('click', function() {
-						$( "#loadingSearch" ).remove();
-						setTimeout(function() {
-							$('#submit').append('<i id="loadingSearch" class="fas fa-circle-notch fa-spin fa-1x"></i>');
-						}, 500);
-					});
-				</script>
+				{{ script('js/searchFormSpinner') }}
