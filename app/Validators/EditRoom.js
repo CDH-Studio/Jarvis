@@ -30,9 +30,9 @@ class EditRoom {
 			 *
 			 */
 			floor: 'required|requiredDropdown',
-			floorPlan: 'file_ext:png,jpg,jpeg|file_size:2mb|file_types:image',
+			floorPlan: 'file_ext:png,jpg,jpeg|file_size:3mb|file_types:image',
 			fullName: 'required',
-			roomPicture: 'file_ext:png,jpg,jpeg|file_size:2mb|file_types:image',
+			roomPicture: 'file_ext:png,jpg,jpeg|file_size:3mb|file_types:image',
 			tableSeats: 'required|integer|above:0',
 			telephoneNumber: 'required',
 			// telephoneNumber: "required| regex: ^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$",

@@ -175,6 +175,7 @@ class RoomController {
 	 */
 	async add ({ request, response, session }) {
 		try {
+
 			// get building
 			const selectedBuilding = request.cookie('selectedBuilding');
 			const body = request.all();
@@ -188,8 +189,16 @@ class RoomController {
 			// Upload process - Room Picture
 			const roomImage = request.file('roomPicture', {
 				types: ['image'],
-				size: '2mb'
+				size: '3mb'
 			});
+
+			// Convert any input to very high quality JPEG output
+			const zz = await sharp(roomImage)
+			  .jpeg({
+			    quality: 10,
+			    chromaSubsampling: '4:4:4'
+			  })
+			  .toBuffer();
 
 			// Save room details in Rooms table
 			const room = new Room();
@@ -228,7 +237,7 @@ class RoomController {
 				name: `${room.name}_floorPlan.png`
 			});
 
-			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
+			await zz.move(Helpers.publicPath('uploads/roomPictures/'), {
 				name: `${room.name}_roomPicture.png`
 			});
 
@@ -285,6 +294,10 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async update ({ request, session, params, response }) {
+
+		const sharp = require('sharp');
+
+
 		// Retrieves room object
 		let room = await Room.findBy('id', params.id);
 
@@ -294,35 +307,83 @@ class RoomController {
 		// Upload process - Floor Plan
 		const floorPlanImage = request.file('floorPlan', {
 			types: ['image'],
-			size: '2mb'
+			size: '3mb'
 		});
 
-		let floorPlanStringPath;
+		let floorPlanStringPath, floorPlanStringPathSmall;
+
 		if (floorPlanImage != null) {
-			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-				name: `${body.name}_floorPlan.png`,
+			await floorPlanImage.move(Helpers.publicPath('uploads/imageBuffer/'), {
+				name: `${body.name}_floorPlan_temp.png`,
 				overwrite: true
 			});
+
 			floorPlanStringPath = `uploads/floorPlans/${body.name}_floorPlan.png`;
+			floorPlanStringPathSmall = `uploads/floorPlans/${body.name}_floorPlan_small.png`;
+
+			await sharp(Helpers.publicPath(`uploads/imageBuffer/${body.name}_floorPlan_temp.png`))
+				.resize({ height: 500 })
+				.jpeg({
+					quality: 80,
+					chromaSubsampling: '4:4:4'
+				})
+				.toFile(Helpers.publicPath(floorPlanStringPath));
+
+			  			// Convert any input to very high quality JPEG output
+			await sharp(Helpers.publicPath(`uploads/imageBuffer/${body.name}_floorPlan_temp.png`))
+				.resize({ height: 150 })
+				.jpeg({
+					quality: 80,
+					chromaSubsampling: '4:4:4'
+				})
+				.toFile(Helpers.publicPath(floorPlanStringPathSmall));
+
 		} else {
 			floorPlanStringPath = room.floorplan;
+			floorPlanStringPathSmall = room.floorplan_small;
 		}
 
 		// Upload process - Room Picture
 		const roomImage = request.file('roomPicture', {
 			types: ['image'],
-			size: '2mb'
+			size: '3mb'
 		});
 
 		let roomImageStringPath;
+		let roomImageStringPathSmall;
+
 		if (roomImage != null) {
-			await roomImage.move(Helpers.publicPath('uploads/roomPictures/'), {
-				name: `${body.name}_roomPicture.png`,
+
+			await roomImage.move(Helpers.publicPath('uploads/imageBuffer/'), {
+				name: `${body.name}_roomPicture_temp.png`,
 				overwrite: true
 			});
-			roomImageStringPath = `uploads/roomPictures/${body.name}_roomPicture.png`;
+
+			roomImageStringPath = `uploads/roomPictures/${body.name}_roomPicture.jpg`;
+			roomImageStringPathSmall = `uploads/roomPictures/${body.name}_roomPicture_small.jpg`;
+
+			// Convert any input to very high quality JPEG output
+			await sharp(Helpers.publicPath(`uploads/imageBuffer/${body.name}_roomPicture_temp.png`))
+				.resize({ height: 500 })
+				.jpeg({
+					quality: 80,
+					chromaSubsampling: '4:4:4'
+				})
+				.toFile(Helpers.publicPath(roomImageStringPath));
+
+			  			// Convert any input to very high quality JPEG output
+			await sharp(Helpers.publicPath(`uploads/imageBuffer/${body.name}_roomPicture_temp.png`))
+				.resize({ height: 150 })
+				.jpeg({
+					quality: 80,
+					chromaSubsampling: '4:4:4'
+				})
+				.toFile(Helpers.publicPath(roomImageStringPathSmall));
+
+
 		} else {
 			roomImageStringPath = room.picture;
+			roomImageStringPathSmall = room.picture_small;
 		}
 
 		// Updates room information in database
@@ -339,6 +400,7 @@ class RoomController {
 				capacity: body.maximumCapacity,
 				floorplan: floorPlanStringPath,
 				picture: roomImageStringPath,
+				picture_small: roomImageStringPathSmall,
 				extraEquipment: body.extraEquipment == null ? ' ' : body.extraEquipment,
 				comment: body.comment == null ? ' ' : body.comment,
 				State_id: body.State_id
