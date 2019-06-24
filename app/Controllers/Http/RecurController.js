@@ -2,6 +2,7 @@
 const axios = require('axios');
 const Env = use('Env');
 const moment = require('moment');
+const recur = require('moment-recur');
 
 class RecurController {
 	async searchRecurring2 ({ request }) {
@@ -83,6 +84,9 @@ class RecurController {
 		const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/`, recurrence);
 
 		return res.data;
+	}
+
+	async test () {
 	}
 }
 

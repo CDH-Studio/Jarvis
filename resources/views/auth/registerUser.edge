@@ -125,9 +125,9 @@
 													<option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.floor') }}</option>
 													@each(floorOption in formOptions.floors)
 														@if(antl.currentLocale() =="en")
-															<option value='{{floorOption.id}}' {{ old('floor') == floorOption.id ? 'selected' : '' }}>{{floorOption.name_english}}</option>
+															<option value='{{floorOption.id}}' {{ old('floor') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_english}}</option>
 														@else
-															<option value='{{floorOption.id}}' {{ old('floor') == floorOption.id ? 'selected' : '' }}>{{floorOption.name_french}}</option>
+															<option value='{{floorOption.id}}' {{ old('floor') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_french}}</option>
 														@endif
 													@endeach
 												</select>
