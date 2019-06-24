@@ -87,6 +87,7 @@ class RecurController {
 	}
 
 	async test () {
+		console.log(recur);
 	}
 }
 
