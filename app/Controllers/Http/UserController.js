@@ -510,8 +510,10 @@ class UserController {
 
 			if (rows.length !== 0 && rows[0].type === 1) {
 				const email = rows[0].email;
+				const numb = Math.floor(Math.random() * 8) + 1;
+				const photoName = 'login_' + numb + '.jpg';
 
-				return view.render('auth.resetPassword', { email });
+				return view.render('auth.resetPassword', { email, photoName });
 			}
 		}
 	}
