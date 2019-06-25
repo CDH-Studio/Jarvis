@@ -22,7 +22,7 @@ class ResetPassword {
 			 * same: password and confirmation passwords must match
 			 */
 			newPassword: 'required|regexPassword',
-			confirmPassword: 'required|same:newPassword|regexPassword',
+			confirmPassword: 'required|same:newPassword|regexPassword'
 		};
 	}
 

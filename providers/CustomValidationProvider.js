@@ -137,7 +137,7 @@ class CustomValidationProvider extends ServiceProvider {
 	*/
 	async _regexPassword (data, field, message, args, get) {
 		const userSelection = get(data, field);
-		//const regex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})'); // eslint-disable-line
+		// const regex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})'); // eslint-disable-line
 		const regex = new RegExp('^(?=.{6,55}$)');
 		if (!regex.test(userSelection)) {
 			throw message;

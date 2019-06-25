@@ -175,10 +175,12 @@ class RoomController {
 	 */
 	async add ({ request, response, session }) {
 		try {
-
+			const sharp = require('sharp');
 			// get building
 			const selectedBuilding = request.cookie('selectedBuilding');
 			const body = request.all();
+
+			let floorPlanStringPath, floorPlanStringPathSmall;
 
 			// Upload process - Floor Plan
 			const floorPlanImage = request.file('floorPlan', {
@@ -186,19 +188,73 @@ class RoomController {
 				size: '2mb'
 			});
 
+			if (floorPlanImage) {
+				await floorPlanImage.move(Helpers.publicPath('uploads/imageBuffer/'), {
+					name: `${body.name}_floorPlan_temp.png`,
+					overwrite: true
+				});
+
+				floorPlanStringPath = `uploads/floorPlans/${body.name}_floorPlan.jpg`;
+				floorPlanStringPathSmall = `uploads/floorPlans/${body.name}_floorPlan_small.jpg`;
+
+				await sharp(Helpers.publicPath(`uploads/imageBuffer/${body.name}_floorPlan_temp.png`))
+					.resize({ height: 500 })
+					.jpeg({
+						quality: 90,
+						chromaSubsampling: '4:4:4'
+					})
+					.toFile(Helpers.publicPath(floorPlanStringPath));
+
+				await sharp(Helpers.publicPath(`uploads/imageBuffer/${body.name}_floorPlan_temp.png`))
+					.resize({ height: 150 })
+					.jpeg({
+						quality: 80,
+						chromaSubsampling: '4:4:4'
+					})
+					.toFile(Helpers.publicPath(floorPlanStringPathSmall));
+			} else {
+				floorPlanStringPath = 'images/temp_floor_map.jpg';
+				floorPlanStringPathSmall = 'images/temp_floor_map.jpg';
+			}
+
 			// Upload process - Room Picture
 			const roomImage = request.file('roomPicture', {
 				types: ['image'],
 				size: '3mb'
 			});
 
-			// Convert any input to very high quality JPEG output
-			const zz = await sharp(roomImage)
-			  .jpeg({
-			    quality: 10,
-			    chromaSubsampling: '4:4:4'
-			  })
-			  .toBuffer();
+			let roomImageStringPath, roomImageStringPathSmall;
+
+			if (roomImage) {
+				await roomImage.move(Helpers.publicPath('uploads/imageBuffer/'), {
+					name: `${body.name}_roomPicture_temp.png`,
+					overwrite: true
+				});
+
+				roomImageStringPath = `uploads/roomPictures/${body.name}_roomPicture.jpg`;
+				roomImageStringPathSmall = `uploads/roomPictures/${body.name}_roomPicture_small.jpg`;
+
+				// Convert any input to very high quality JPEG output
+				await sharp(Helpers.publicPath(`uploads/imageBuffer/${body.name}_roomPicture_temp.png`))
+					.resize({ height: 500 })
+					.jpeg({
+						quality: 90,
+						chromaSubsampling: '4:4:4'
+					})
+					.toFile(Helpers.publicPath(roomImageStringPath));
+
+				// Convert any input to very high quality JPEG output
+				await sharp(Helpers.publicPath(`uploads/imageBuffer/${body.name}_roomPicture_temp.png`))
+					.resize({ height: 150 })
+					.jpeg({
+						quality: 80,
+						chromaSubsampling: '4:4:4'
+					})
+					.toFile(Helpers.publicPath(roomImageStringPathSmall));
+			} else {
+				roomImageStringPath = 'images/temp_room_image.jpg';
+				roomImageStringPathSmall = 'images/temp_room_image.jpg';
+			}
 
 			// Save room details in Rooms table
 			const room = new Room();
@@ -214,8 +270,10 @@ class RoomController {
 			room.avg_rating = 0;
 
 			// Populates the room object's values
-			room.floorplan = `uploads/floorPlans/${room.name}_floorPlan.png`;
-			room.picture = `uploads/roomPictures/${room.name}_roomPicture.png`;
+			room.floorplan = floorPlanStringPath;
+			room.floorplan_small = floorPlanStringPathSmall;
+			room.picture = roomImageStringPath;
+			room.picture_small = roomImageStringPathSmall;
 			room.extraEquipment = body.extraEquipment == null ? ' ' : body.extraEquipment;
 			room.comment = body.comment == null ? ' ' : body.extraEquipment;
 			await room.save();
@@ -232,14 +290,6 @@ class RoomController {
 					feature.save();
 				}
 			}
-
-			await floorPlanImage.move(Helpers.publicPath('uploads/floorPlans/'), {
-				name: `${room.name}_floorPlan.png`
-			});
-
-			await zz.move(Helpers.publicPath('uploads/roomPictures/'), {
-				name: `${room.name}_roomPicture.png`
-			});
 
 			session.flash({
 				notification: 'Room Added! To add another room, click here',
@@ -294,9 +344,7 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async update ({ request, session, params, response }) {
-
 		const sharp = require('sharp');
-
 
 		// Retrieves room object
 		let room = await Room.findBy('id', params.id);
@@ -330,7 +378,7 @@ class RoomController {
 				})
 				.toFile(Helpers.publicPath(floorPlanStringPath));
 
-			  			// Convert any input to very high quality JPEG output
+			// Convert any input to very high quality JPEG output
 			await sharp(Helpers.publicPath(`uploads/imageBuffer/${body.name}_floorPlan_temp.png`))
 				.resize({ height: 150 })
 				.jpeg({
@@ -340,11 +388,11 @@ class RoomController {
 				.toFile(Helpers.publicPath(floorPlanStringPathSmall));
 
 		// if no image is uploaded and no image has been previously saved on server
-		}else if(room.floorplan === null && floorPlanImage === null){
+		} else if (room.floorplan === null && floorPlanImage === null) {
 			floorPlanStringPath = 'images/temp_floor_map.jpg';
 			floorPlanStringPathSmall = 'images/temp_floor_map.jpg';
 
-		//if no image was uploaded but there is a previously save image 
+		// if no image was uploaded but there is a previously save image
 		} else {
 			floorPlanStringPath = room.floorplan;
 			floorPlanStringPathSmall = room.floorplan_small;
@@ -377,7 +425,7 @@ class RoomController {
 				})
 				.toFile(Helpers.publicPath(roomImageStringPath));
 
-			  			// Convert any input to very high quality JPEG output
+			// Convert any input to very high quality JPEG output
 			await sharp(Helpers.publicPath(`uploads/imageBuffer/${body.name}_roomPicture_temp.png`))
 				.resize({ height: 150 })
 				.jpeg({
@@ -387,11 +435,11 @@ class RoomController {
 				.toFile(Helpers.publicPath(roomImageStringPathSmall));
 
 		// if no image is uploaded and no image has been previously saved on server
-		}else if(room.picture === null && floorPlanImage === null){
+		} else if (room.picture === null && floorPlanImage === null) {
 			roomImageStringPath = 'images/temp_room_image.jpg';
 			roomImageStringPathSmall = 'images/temp_room_image.jpg';
 
-		//if no image was uploaded but there is a previously save image 
+		// if no image was uploaded but there is a previously save image
 		} else {
 			roomImageStringPath = room.picture;
 			roomImageStringPathSmall = room.picture_small;
@@ -595,7 +643,7 @@ class RoomController {
 					builder.orderBy('id', 'asc');
 				})
 				.fetch();
-		}else{
+		} else {
 			// find rooms
 			result = await Room
 				.query()
