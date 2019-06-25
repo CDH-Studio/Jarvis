@@ -6,7 +6,7 @@
     <input type='hidden' name='from' value={{ from }} />
     <input type='hidden' name='to' value={{ to }} />
     {{--  Room card  --}}
-    <a class='card room-card custom-shadow ie-room-card' href='javascript:;' onclick='parentNode.submit();'>
+    <a class='card room-card custom-shadow ie-room-card' href='javascript:;' onclick='parentNode.submit();' aria-label="{{ room.name }} Card">
         {{--  Title  --}}
         <div class='room-card-title'>
             <div class="row">

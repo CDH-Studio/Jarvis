@@ -75,19 +75,19 @@
 
         <div class="text-center d-none d-md-inline pb-3">
           @if(antl.currentLocale() == "en")
-            <a class="nav-link" href='https://cdhstudio.ca/' target='_blank' >
-              <img src="/images/cdhStudioLogo.png" style="width:63%">
+            <a class="nav-link" href='https://cdhstudio.ca/' target='_blank' aria-label="CDH Studio">
+              <img src="/images/cdhStudioLogo.png" alt="CDH Studio English Logo" style="width:63%">
             </a>
           @else
             <a class="nav-link" href='https://cdhstudio.ca/fr' target='_blank' >
-              <img src="/images/cdhStudioLogo_fr.png" style="width:63%">
+              <img src="/images/cdhStudioLogo_fr.png" alt="CDH Studio English Logo" style="width:63%">
             </a>
           @endif
         </div>
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
-          <button class="rounded-circle border-0" id="sidebarToggle"></button>
+          <button class="rounded-circle border-0" id="sidebarToggle" aria-label="Sidebar Toggle"></button>
         </div>
       </ul>
 
@@ -100,7 +100,7 @@
           <div class="alert alert-primary alert-dismissible show m-0 p-2 pl-4" role="alert">
             <small>
               <i class="fas fa-exclamation-circle"></i> {{ antl.formatMessage('mainLayout.betaMessage') }}
-              <a class="text-right ml-1" href="mailto: cdhstudio@canada.ca?Subject=Jarvis%20Feedback">
+              <a class="text-right ml-1 text-dark" href="mailto: cdhstudio@canada.ca?Subject=Jarvis%20Feedback">
               <i class="fas fa-envelope"></i> {{ antl.formatMessage('mainLayout.feedback') }}</a>
             </small>
             <button type="button" class="close p-2 pr-4" data-dismiss="alert" aria-label="Close">
@@ -156,17 +156,17 @@
               <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span class="mr-2 d-none d-lg-inline text-grey small">{{auth.user.firstname}} {{auth.user.lastname}}</span>
-                  <i class="fas fa-user-circle fa-1x"></i>
+                  <i class="fas fa-user-circle fa-1x text-grey"></i>
                 </a>
                 <!-- Dropdown - User Information -->
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                   <a class="dropdown-item" href="{{route('viewProfile',{id: auth.user.id})}}">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-grey"></i>
                     {{ antl.formatMessage('mainLayout.profile') }}
                   </a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-grey"></i>
                     {{ antl.formatMessage('mainLayout.logout') }}
                   </a>
                 </div>
