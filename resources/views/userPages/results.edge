@@ -8,17 +8,11 @@
 @section('content')
     {{--  Loading page header  --}}
     @!component('components.pageHeader', title=antl.formatMessage('results.pageTitle'))
-    @if(rooms.length == 0)
-        <div class="row">
-            <div class="col-12 text-center mt-5 mb-5">
-                <p class="fas fa-ghost fa-10x mb-5 text-muted"></p>
-                <h3 class="text-muted">No Rooms Found</h3>
-            </div>
-        </div>
-    @else
-        {{--  where result cards will be displayed --}}
-        <div class='d-flex flex-wrap'>
+    {{--  where result cards will be displayed --}}
+    <div class='row'>
+        <ul class="list-inline">
             @each(room in rooms)
+            <li class="list-inline-item">
                 <div class='no-padding ie-room-margin'>
                     {{ csrfField() }}
                     @!component('components.card',
@@ -27,7 +21,15 @@
                         room=room,
                         token=csrfToken)
                 </div>
+            </li>
+            @else
+                <div class="row">
+                    <div class="col-12 text-center mt-5 mb-5">
+                        <p class="fas fa-ghost fa-10x mb-5 text-muted"></p>
+                        <h3 class="text-muted">No Rooms Found</h3>
+                    </div>
+                </div>
             @endeach
-        </div>
-    @endif
+        </ul>
+    </div>
 @endsection

@@ -53,11 +53,7 @@
                 <div class='card-body'>
                     <div class="row">
                         <div class="col-5">
-                            @if(room.picture) 
-                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='../{{ room.picture }}'>
-                            @else
-                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/default.png'>
-                            @endif        
+                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='../{{ room.picture }}'>       
                             <a class='link-color' href='' style='display:block; text-align:center;'  data-toggle='modal' data-target='#mapModal'>
                                 <i class='fas fa-external-link-alt mt-3'></i>
                                 {{ antl.formatMessage('roomDetails.viewMap') }}
@@ -115,7 +111,7 @@
                                                 <i class="{{$parent.featureCategory.icon}} fa-fw"></i>
                                             </span>
                                             -->
-                                            <span class="fa-stack fa-2x color-primary" data-toggle="tooltip" data-placement="top" title="{{$parent.featureCategory.name}}">
+                                            <span class="fa-stack fa-2x color-primary mb-2" data-toggle="tooltip" data-placement="top" title="{{$parent.featureCategory.name}}">
                                                 <i class="fas fa-circle fa-stack-2x"></i>
                                                 <i class="{{$parent.featureCategory.icon}} fa-stack-1x fa-inverse" style="font-size:23px"></i>
                                             </span>
@@ -131,7 +127,7 @@
                                     @endif 
                                 @endeach
                                 @if(firstFind)
-                                    <span class="fa-stack fa-2x text-secondary" data-toggle="tooltip" data-placement="top" title="{{featureCategory.name}}">
+                                    <span class="fa-stack fa-2x text-secondary mb-2" data-toggle="tooltip" data-placement="top" title="{{featureCategory.name}}">
                                         <i class="fas fa-circle fa-stack-2x"></i>
                                         <i class="{{featureCategory.icon}} fa-stack-1x fa-inverse" style="font-size:23px"></i>
                                     </span>
@@ -564,18 +560,10 @@
     @endeach
 
     {{--  Loading modal for room picture  --}}
-    @if(room.picture)
-        @!component('components.imageModal', id="room-pic", title=room.name, image='../'+ room.picture)
-    @else
-        @!component('components.imageModal', id="room-pic", title=room.name, image="/images/default.png")
-    @endif
+    @!component('components.imageModal', id="room-pic", title=room.name, image='../'+ room.picture)
 
     {{--  Loading modal for room floor plan  --}}
-    @if(room.floorplan)
-        @!component('components.imageModal', id='mapModal', title= room.name + '- Floor plan', image='../' + room.floorplan)
-    @else
-        @!component('components.imageModal', id='mapModal', title= room.name + '- Floor plan', image='/images/temp_floor_map.png')
-    @endif
+    @!component('components.imageModal', id='mapModal', title= room.name + '- Floor plan', image='../' + room.floorplan)
     
     
 @endsection

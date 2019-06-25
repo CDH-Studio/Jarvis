@@ -431,8 +431,8 @@ a{
 .room-card{
     border-radius: 2px;
     box-shadow: 0 2px 6px 0 hsla(0,0%,0%,0.2);
-    margin: 0 30px 30px auto;
-    max-width: 500px;
+    margin: 0 30px 30px 0;
+    width: 500px;
     display:block;
     text-decoration: none;
     color:#202428;
@@ -440,7 +440,7 @@ a{
 
 @media (max-width: 800px) {
     .room-card{
-        margin: 0 0 30px auto;
+        margin: 0 0px 0px 0;
     }
 }
 
