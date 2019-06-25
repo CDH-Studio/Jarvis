@@ -203,9 +203,9 @@
                                             {{--  If field is not filled correctly show an error box  --}}
                                             <div class='timePicker' style='display: flex;'>
                                                 @if(hasErrorFor('from'))
-                                                    <input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', form.from) }}' onchange='removeErrorClass("from")'>
+                                                    <input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', form.from) }}' onchange='removeErrorClass("from")' step="1800">
                                                 @else
-                                                    <input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', form.from) }}' onchange='removeErrorClass("from")'>										  
+                                                    <input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', form.from) }}' onchange='removeErrorClass("from")' step="1800">										  
                                                 @endif
             
                                                 <div class='dropdown no-arrow'>
@@ -227,9 +227,9 @@
                                         <div style='display: flex;' class='timePicker'>
                                             {{--  If field is not filled correctly show an error box  --}}
                                             @if(hasErrorFor('to'))
-                                                <input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', form.to) }}' onchange='removeErrorClass("to")'>
+                                                <input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', form.to) }}' onchange='removeErrorClass("to")' step="1800">
                                             @else
-                                                <input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', form.to) }}' onchange='removeErrorClass("to")'>											
+                                                <input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', form.to) }}' onchange='removeErrorClass("to")' step="1800">											
                                             @endif
                                             <div class='dropdown no-arrow'>
                                                 <button for='to'  aria-label='end-time-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>

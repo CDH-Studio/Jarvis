@@ -66,15 +66,15 @@
                 <div class="col-3"> 
                     @if(room.floor === null)
                         @if(antl.currentLocale()==='en')
-                            <i class="far fa-building text-muted mr-1"></i> <span>0 - {{ truncate(room.tower.name_english, 4, '.') }} </span>
+                            <i class="far fa-building text-muted mr-1"></i> <span>0 - {{ truncate(room.tower.name_english, 6, '.') }} </span>
                         @else
-                            <i class="far fa-building text-muted mr-1"></i> <span>0 - {{ truncate(room.tower.name_french, 5, '.') }} </span>
+                            <i class="far fa-building text-muted mr-1"></i> <span>0 - {{ truncate(room.tower.name_french, 6, '.') }} </span>
                         @endif
                     @else
                         @if(antl.currentLocale()==='en')
                             <i class="far fa-building text-muted mr-1"></i> <span>{{ truncate(room.floor.name_english, 4, '.') }} - {{ truncate(room.tower.name_english, 4, '.') }} </span>
                         @else
-                            <i class="far fa-building text-muted mr-1"></i> <span>{{ truncate(room.floor.name_french, 5, '.') }} - {{ truncate(room.tower.name_french, 5, '.') }} </span>
+                            <i class="far fa-building text-muted mr-1"></i> <span>{{ truncate(room.floor.name_french, 4, '.') }} - {{ truncate(room.tower.name_french, 5, '.') }} </span>
                         @endif
                     @endif
                 </div>

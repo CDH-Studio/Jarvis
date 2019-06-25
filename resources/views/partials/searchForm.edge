@@ -28,9 +28,9 @@
 									{{--  If field is not filled correctly show an error box  --}}
 									<div class='timePicker' style='display: flex;'>
 										@if(hasErrorFor('from'))
-											<input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
+											<input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")' step="1800">
 										@else
-											<input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>										  
+											<input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")' step="1800">										  
 										@endif
 
 										<div class='dropdown no-arrow'>
@@ -51,9 +51,9 @@
 									<div style='display: flex;' class='timePicker'>
 										{{--  If field is not filled correctly show an error box  --}}
 										@if(hasErrorFor('to'))
-											<input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
+											<input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")' step="1800">
 										@else
-											<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>											
+											<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")' step="1800">											
 										@endif
 										<div class='dropdown no-arrow'>
 											<button for='to'  aria-label='end-time-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
@@ -85,12 +85,12 @@
 								<div class='col-12 col-md-6 form-group mb-4'>
 									<label for='location'>{{ antl.formatMessage('searchForm.preferredLocation') }}</label>
 									<select id='location' name='location' class='form-control'>
-										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected=''>{{ antl.formatMessage('searchForm.selectFloor') }}</option>
+										<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected='selected'>{{ antl.formatMessage('searchForm.selectFloor') }}</option>
 										@each(floorOption in formOptions.floors)
 											@if(antl.currentLocale() === "fr")
-												<option value='{{floorOption.id}}' {{ old('location') == floorOption.id ? 'selected' : '' }}>{{floorOption.name_french}}</option>
+												<option value='{{floorOption.id}}' {{ old('location') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_french}}</option>
 											@else
-												<option value='{{floorOption.id}}' {{ old('location') == floorOption.id ? 'selected' : '' }}>{{floorOption.name_english}}</option>
+												<option value='{{floorOption.id}}' {{ old('location') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_english}}</option>
 											@endif
 										@endeach
 									</select>
@@ -148,11 +148,4 @@
 					</div>
 				</form>
 
-				<script>
-					$('#submit').on('click', function() {
-						$( "#loadingSearch" ).remove();
-						setTimeout(function() {
-							$('#submit').append('<i id="loadingSearch" class="fas fa-circle-notch fa-spin fa-1x"></i>');
-						}, 500);
-					});
-				</script>
+				{{ script('js/searchFormSpinner') }}
