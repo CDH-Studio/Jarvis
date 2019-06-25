@@ -312,19 +312,20 @@ class RoomController {
 
 		let floorPlanStringPath, floorPlanStringPathSmall;
 
+		// if user uploaded new floor plan then save
 		if (floorPlanImage != null) {
 			await floorPlanImage.move(Helpers.publicPath('uploads/imageBuffer/'), {
 				name: `${body.name}_floorPlan_temp.png`,
 				overwrite: true
 			});
 
-			floorPlanStringPath = `uploads/floorPlans/${body.name}_floorPlan.png`;
-			floorPlanStringPathSmall = `uploads/floorPlans/${body.name}_floorPlan_small.png`;
+			floorPlanStringPath = `uploads/floorPlans/${body.name}_floorPlan.jpg`;
+			floorPlanStringPathSmall = `uploads/floorPlans/${body.name}_floorPlan_small.jpg`;
 
 			await sharp(Helpers.publicPath(`uploads/imageBuffer/${body.name}_floorPlan_temp.png`))
 				.resize({ height: 500 })
 				.jpeg({
-					quality: 80,
+					quality: 90,
 					chromaSubsampling: '4:4:4'
 				})
 				.toFile(Helpers.publicPath(floorPlanStringPath));
@@ -338,6 +339,12 @@ class RoomController {
 				})
 				.toFile(Helpers.publicPath(floorPlanStringPathSmall));
 
+		// if no image is uploaded and no image has been previously saved on server
+		}else if(room.floorplan === null && floorPlanImage === null){
+			floorPlanStringPath = 'images/temp_floor_map.jpg';
+			floorPlanStringPathSmall = 'images/temp_floor_map.jpg';
+
+		//if no image was uploaded but there is a previously save image 
 		} else {
 			floorPlanStringPath = room.floorplan;
 			floorPlanStringPathSmall = room.floorplan_small;
@@ -349,11 +356,10 @@ class RoomController {
 			size: '3mb'
 		});
 
-		let roomImageStringPath;
-		let roomImageStringPathSmall;
+		let roomImageStringPath, roomImageStringPathSmall;
 
+		// if user uploaded new floor plan then save
 		if (roomImage != null) {
-
 			await roomImage.move(Helpers.publicPath('uploads/imageBuffer/'), {
 				name: `${body.name}_roomPicture_temp.png`,
 				overwrite: true
@@ -366,7 +372,7 @@ class RoomController {
 			await sharp(Helpers.publicPath(`uploads/imageBuffer/${body.name}_roomPicture_temp.png`))
 				.resize({ height: 500 })
 				.jpeg({
-					quality: 80,
+					quality: 90,
 					chromaSubsampling: '4:4:4'
 				})
 				.toFile(Helpers.publicPath(roomImageStringPath));
@@ -380,7 +386,12 @@ class RoomController {
 				})
 				.toFile(Helpers.publicPath(roomImageStringPathSmall));
 
+		// if no image is uploaded and no image has been previously saved on server
+		}else if(room.picture === null && floorPlanImage === null){
+			roomImageStringPath = 'images/temp_room_image.jpg';
+			roomImageStringPathSmall = 'images/temp_room_image.jpg';
 
+		//if no image was uploaded but there is a previously save image 
 		} else {
 			roomImageStringPath = room.picture;
 			roomImageStringPathSmall = room.picture_small;
@@ -399,6 +410,7 @@ class RoomController {
 				seats: body.tableSeats,
 				capacity: body.maximumCapacity,
 				floorplan: floorPlanStringPath,
+				floorplan_small: floorPlanStringPathSmall,
 				picture: roomImageStringPath,
 				picture_small: roomImageStringPathSmall,
 				extraEquipment: body.extraEquipment == null ? ' ' : body.extraEquipment,
@@ -556,9 +568,9 @@ class RoomController {
 	 * @param {Object} Context The context object.
 	 */
 	async getAllRooms ({ auth, view, request, response }) {
-		var selectedBuilding;
+		let selectedBuilding;
 		// get info of logged-in user
-		const result = await User.query().where('id', auth.user.id).with('building').with('role').firstOrFail();
+		let result = await User.query().where('id', auth.user.id).with('building').with('role').firstOrFail();
 		const user = result.toJSON();
 
 		// set building we are searching rooms in
@@ -571,18 +583,33 @@ class RoomController {
 			selectedBuilding = user.building;
 		}
 
-		// find rooms
-		let results = await Room
-			.query()
-			.where('building_id', selectedBuilding.id)
-			.with('floor')
-			.with('tower')
-			.with('features', (builder) => {
-				builder.orderBy('id', 'asc');
-			})
-			.fetch();
+		// if user is admin
+		if (user.role.name === 'admin') {
+			// find rooms
+			result = await Room
+				.query()
+				.where('building_id', selectedBuilding.id)
+				.with('floor')
+				.with('tower')
+				.with('features', (builder) => {
+					builder.orderBy('id', 'asc');
+				})
+				.fetch();
+		}else{
+			// find rooms
+			result = await Room
+				.query()
+				.where('building_id', selectedBuilding.id)
+				.where('State_id', 1)
+				.with('floor')
+				.with('tower')
+				.with('features', (builder) => {
+					builder.orderBy('id', 'asc');
+				})
+				.fetch();
+		}
 
-		const rooms = results.toJSON();
+		const rooms = result.toJSON();
 
 		// Sort the results by name
 		rooms.sort((a, b) => {
