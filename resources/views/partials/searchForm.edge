@@ -81,7 +81,6 @@
 												});
 
 												$('#from').on("change.datetimepicker", function (e) {
-													console.log($('#to').datetimepicker('date'));
 													if($('#to').datetimepicker('date').isSameOrBefore(e.date))
 														$('#to').datetimepicker('date', e.date.add(1, 'hour').format('HH:mm'));
 												});
