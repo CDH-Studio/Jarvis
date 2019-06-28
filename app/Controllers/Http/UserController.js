@@ -33,7 +33,7 @@ function randomString (times) {
  * @param {String} columnName  Name of the column to query by
  * @param {*} columnValue      Value of the column to query by
  */
-async function updatePassword (newPassword, columnName, columnValue) {
+async function updatePassword ({ newPassword, columnName, columnValue }) {
 	try {
 		const hashedNewPassword = await Hash.make(newPassword);
 		const changedRow = await User
@@ -526,7 +526,7 @@ class UserController {
 	async resetPassword ({ request, response, session }) {
 		const { newPassword, email } = request.only(['newPassword', 'email']);
 
-		if (updatePassword(newPassword, 'email', email)) {
+		if (updatePassword({ newPassword, columnName: 'email', columnValue: email })) {
 			session.flash({
 				notification: 'Your password has been changed. Please use the new password to log in.'
 			});
@@ -544,7 +544,7 @@ class UserController {
 		const userRole = await auth.user.getUserRole();
 		if (userRole === 'admin' || (auth.user.id === Number(userId) && userRole === 'user')) {
 			try {
-				if (updatePassword(newPassword, 'id', userId)) {
+				if (updatePassword({ newPassword, columnName: 'id', columnValue: userId })) {
 					session.flash({ success: 'Password Updated Successfully' });
 				}
 			} catch (error) {
