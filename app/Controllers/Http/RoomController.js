@@ -569,6 +569,8 @@ class RoomController {
 
 	async searchRooms ({ request, view }) {
 		const options = request.all();
+		options.from = moment(options.from, 'HH:mm A').format('HH:mm');
+		options.to = moment(options.to, 'HH:mm A').format('HH:mm');
 
 		const duration = Number(options.hour) * 60;
 		const difference = Math.abs(moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))).asMinutes());
