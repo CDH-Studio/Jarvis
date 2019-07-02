@@ -203,7 +203,7 @@ Configuration
                                 @each(feature in category.features)
                                     <tr>
                                         <td class="text-xl-left"><strong>{{feature.name_english}}<br>{{feature.name_french}}</strong></td> 
-                                        <td class="text-xl-center pt-3"># rooms</td>
+                                        <td class="text-xl-center pt-3">{{feature.room.length}} rooms</td>
                                         <td class="text-xl-right pt-3">
                                             <a class="btn btn-primary btn-circle btn-sm-sb mr-2" name='edit tower' data-toggle='modal'  data-target='#editFeatureModal{{feature.id}}' href='#'>
                                                 <i class="fas fa-pencil-alt fa-1x"></i>
