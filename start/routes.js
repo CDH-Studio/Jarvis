@@ -91,7 +91,7 @@ Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').m
 // user
 Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('addReview').middleware(['isUser']);
 Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('addReview').middleware(['isUser']);
-Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['isUser']);
+Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['auth']);
 Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
 
 //= ========================================================================
