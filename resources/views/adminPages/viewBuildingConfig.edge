@@ -105,7 +105,6 @@ Configuration
                         <form class="mb-2" action='{{ route('addFloor') }}' method='POST' enctype='multipart/form-data'>
                             <h6 class="text-muted"><strong>New Floor</strong></h6>
                             {{ csrfField() }}
-                            <input type="hidden"  name="featureCategory" value="{{category.id}}">
                             <div class="form-row">
                                 <div class="col-12 mb-2">
                                     <label for="floorNameEnglish" class="sr-only">English Floor Name</label>
@@ -165,7 +164,6 @@ Configuration
                         <form class="mb-2" action='{{ route('addTower') }}' method='POST' enctype='multipart/form-data'>
                             <h6 class="text-muted"><strong>New Tower</strong></h6>
                             {{ csrfField() }}
-                            <input type="hidden"  name="featureCategory" value="{{category.id}}">
                             <div class="form-row">
                                 <div class="col-12 mb-2">
                                     <label for="towerNameEnglish" class="sr-only">English Tower Name</label>
@@ -224,7 +222,7 @@ Configuration
                         @endif
                     @endslot
                         @slot('footer')
-                            <form class="form-inline mb-2" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'>
+                            <form class="mb-2" action='{{ route('addRoomFeature') }}' method='POST' enctype='multipart/form-data'>
                                 <h6 class="text-muted"><strong>New "{{category.name_english}}" Feature</strong></h6>
                                 {{ csrfField() }}
                                 <input type="hidden"  name="featureCategory" value="{{category.id}}">
