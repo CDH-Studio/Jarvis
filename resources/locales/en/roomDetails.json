@@ -39,5 +39,10 @@
 	"reviewPictureRequirementsDelete": "Leave blank to delete last uploaded photo.",
 	"reviewUpdateButton": "Update",
 	"reviewDeleteButton": "Delete",
-	"reviewSubmitButton": "Submit"
+	"reviewSubmitButton": "Submit",
+
+	"deleteModalHeader":"Confirm",
+	"deleteModalBody":"Are you sure you want to delete your review?",
+	"deleteModalDeleteBtn":"Delete",
+	"deleteModalCancelBtn":"Cancel"
 }

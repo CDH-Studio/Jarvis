@@ -39,5 +39,10 @@
 	"reviewPictureRequirementsDelete": "Laissez vide pour supprimer la dernière photo téléchargée.",
 	"reviewUpdateButton": "Mettre à jour",
 	"reviewDeleteButton": "Supprimer",
-	"reviewSubmitButton": "Soumettre"
+	"reviewSubmitButton": "Soumettre",
+
+	"deleteModalHeader":"Confirmer",
+	"deleteModalBody":"Êtes-vous sûr de vouloir supprimer votre avis?",
+	"deleteModalDeleteBtn":"Supprimer",
+	"deleteModalCancelBtn":"Annuler"
 }
