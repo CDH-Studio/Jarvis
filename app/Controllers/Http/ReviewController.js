@@ -141,7 +141,6 @@ class ReviewController {
 	 */
 	async delete ({ request, response, session, auth, params }) {
 		try {
-
 			const userRole = await auth.user.getUserRole();
 
 			// Retrieves user input
@@ -152,16 +151,16 @@ class ReviewController {
 
 			let searchResults;
 
-			if(userRole === 'admin'){
+			if (userRole === 'admin') {
 				searchResults = await Review.findOrFail(body.reviewID);
-			}else{
+			} else {
 				// retrieves the reviews in the database
 				searchResults = await Review
 					.query()
 					.where('user_id', auth.user.id)
 					.where('room_id', room.id)
 					.firstOrFail();
-			}	
+			}
 
 			const review = searchResults.toJSON();
 
