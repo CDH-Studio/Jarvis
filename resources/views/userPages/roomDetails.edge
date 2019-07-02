@@ -335,6 +335,18 @@
                                     <br>
                                     <i class="text-muted">{{review.user.email}}</i> | <i class="text-muted">{{review.comment_date}}</i>
                                     <p class="mt-2">{{ review.review }}</p>
+                                    @if(user.role.name === 'admin')
+                                        <form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                                            {{ csrfField() }}
+                                            <input type="hidden"  name="reviewID" value="{{review.id}}">
+                                            <button class="btn btn-danger btn-icon-split" type='submit'>
+                                                <span class="icon text-white-50">
+                                                  <i class="fas fa-trash"></i>
+                                                </span>
+                                                <span class="text">Delete</span>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                                 <div class="col-4 text-center">
                                     @if(review.reviewPicture)
@@ -468,25 +480,25 @@
 
 
     <div class='modal fade'  id='deleteModal' role='dialog' aria-hidden='true'>
-           <div class='modal-dialog modal-dialog-centered modal-lg' role='document'>
-                <div class='modal-content'>
-                    <div class='modal-header'>
-                        <h5 class='modal-title' id='deleteRoomTitle'>Are you sure?</h5>
-                        <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
-                            <span aria-hidden='true'>×</span>
-                        </button>
-                    </div>
-                    <div class='modal-body'>Are you sure you want to delete your review?</div>
-                    <form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
-                        {{ csrfField() }}
-                        <div class='modal-footer'>
-                            <button class='btn btn-secondary' type='button' data-dismiss='modal'>Cancel</button>
-                            <button type='submit' class='btn btn-danger'>Delete</button>
-                        </div>                    
-                    </form>
+       <div class='modal-dialog modal-dialog-centered modal-lg' role='document'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h5 class='modal-title' id='deleteRoomTitle'>Are you sure?</h5>
+                    <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+                        <span aria-hidden='true'>×</span>
+                    </button>
                 </div>
-           </div>
+                <div class='modal-body'>Are you sure you want to delete your review?</div>
+                <form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                    {{ csrfField() }}
+                    <div class='modal-footer'>
+                        <button class='btn btn-secondary' type='button' data-dismiss='modal'>Cancel</button>
+                        <button type='submit' class='btn btn-danger'>Delete</button>
+                    </div>                    
+                </form>
+            </div>
        </div>
+   </div>
     {{--  Only show to non-admin users  --}}
     @if(user.role.name === 'user')
         {{--  Reporting Modal Box  --}}
