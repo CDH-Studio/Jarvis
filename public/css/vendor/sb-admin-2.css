@@ -10961,14 +10961,6 @@ body {
   padding: 0 0.75rem;
 }
 
-.topbar .nav-item .nav-link:focus {
-  outline: none;
-}
-
-.topbar .nav-item:focus {
-  outline: none;
-}
-
 .topbar .dropdown {
   position: static;
 }
