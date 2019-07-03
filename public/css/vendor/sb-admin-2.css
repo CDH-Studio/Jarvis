@@ -10562,10 +10562,6 @@ body {
   height: 100%;
 }
 
-a:focus {
-  outline: none;
-}
-
 #wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
