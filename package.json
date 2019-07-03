@@ -46,7 +46,7 @@
 		"pusher": "^2.2.0",
 		"sharp": "^0.22.1",
 		"simple-oauth2": "^2.2.1",
-		"sqlite3": "^4.0.8"
+		"sqlite3": "^4.0.9"
 	},
 	"devDependencies": {
 		"eslint": "^5.16.0",
