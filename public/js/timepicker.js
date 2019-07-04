@@ -13,7 +13,7 @@ $(function () {
 
     $('#from').on("change.datetimepicker", function (e) {
         if($('#to').datetimepicker('date').isSameOrBefore(e.date))
-            $('#to').datetimepicker('date', e.date.add(1, 'hour').format('HH:mm'));
+            $('#to').datetimepicker('date', e.date.add(0.5, 'hour').format('HH:mm'));
     });
 });
 
@@ -21,6 +21,6 @@ $(function () {
     $('#to').datetimepicker({
         format: 'HH:mm',
         stepping: 30,
-        defaultDate: moment(round(moment()), 'HH:mm').add(1, 'h')
+        defaultDate: moment(round(moment()), 'HH:mm').add(0.5, 'h')
     });
 });

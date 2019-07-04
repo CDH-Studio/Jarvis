@@ -580,9 +580,9 @@ class HomeController {
 			.where('status', 'Approved')
 			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.select('*')
-			.orderBy('from', 'asc')
+			.orderBy('from', 'desc')
 			.with('room')
-			.limit(3)
+			.limit(4)
 			.fetch();
 
 		bookings = bookings.toJSON();
