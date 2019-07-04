@@ -15,6 +15,12 @@ class RoomFeature extends Model {
 	building () {
 		return this.belongsTo('App/Models/Building', 'building_id');
 	}
+
+	room () {
+		return this
+			.belongsToMany('App/Models/Room')
+			.pivotTable('features_rooms_pivot');
+	}
 }
 
 module.exports = RoomFeature;

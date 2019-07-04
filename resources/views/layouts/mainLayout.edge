@@ -16,18 +16,19 @@
     <meta name="msapplication-TileColor" content="#2b5797">
         
     <!-- Custom fonts for this template-->
-    <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700|Roboto:300,400,700' rel='stylesheet'>
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.1/css/all.css' integrity='sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr' crossorigin='anonymous'>
 
+    <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+    {{-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script> --}}
+    {{ script('js/vendor/jquery-ui.min.js') }} 
 
-    {{ style('css/vendor/jtsage-datebox') }}    
-    {{ style('css/vendor/animate.css') }}
+    {{ style('css/vendor/jtsage-datebox.min.css') }}    
+    {{ style('css/vendor/animate.min.css') }}
     <!-- Custom styles for this template-->
-    {{ style('css/vendor/sb-admin-2') }}
+    {{ style('css/vendor/sb-admin-2.min.css') }}
 
     @if(auth.user.role_id===1)
       {{ style('css/admin') }}
@@ -74,19 +75,19 @@
 
         <div class="text-center d-none d-md-inline pb-3">
           @if(antl.currentLocale() == "en")
-            <a class="nav-link" href='https://cdhstudio.ca/' target='_blank' >
-              <img src="/images/cdhStudioLogo.png" style="width:63%">
+            <a class="nav-link" href='https://cdhstudio.ca/' target='_blank' aria-label="CDH Studio">
+              <img src="/images/cdhStudioLogo.png" alt="CDH Studio English Logo" style="width:63%">
             </a>
           @else
             <a class="nav-link" href='https://cdhstudio.ca/fr' target='_blank' >
-              <img src="/images/cdhStudioLogo_fr.png" style="width:63%">
+              <img src="/images/cdhStudioLogo_fr.png" alt="CDH Studio English Logo" style="width:63%">
             </a>
           @endif
         </div>
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
-          <button class="rounded-circle border-0" id="sidebarToggle"></button>
+          <button class="rounded-circle border-0" id="sidebarToggle" aria-label="Sidebar Toggle"></button>
         </div>
       </ul>
 
@@ -99,7 +100,7 @@
           <div class="alert alert-primary alert-dismissible show m-0 p-2 pl-4" role="alert">
             <small>
               <i class="fas fa-exclamation-circle"></i> {{ antl.formatMessage('mainLayout.betaMessage') }}
-              <a class="text-right ml-1" href="mailto: cdhstudio@canada.ca?Subject=Jarvis%20Feedback">
+              <a class="text-right ml-1 text-dark" href="mailto: cdhstudio@canada.ca?Subject=Jarvis%20Feedback">
               <i class="fas fa-envelope"></i> {{ antl.formatMessage('mainLayout.feedback') }}</a>
             </small>
             <button type="button" class="close p-2 pr-4" data-dismiss="alert" aria-label="Close">
@@ -155,17 +156,17 @@
               <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span class="mr-2 d-none d-lg-inline text-grey small">{{auth.user.firstname}} {{auth.user.lastname}}</span>
-                  <i class="fas fa-user-circle fa-1x"></i>
+                  <i class="fas fa-user-circle fa-1x text-grey"></i>
                 </a>
                 <!-- Dropdown - User Information -->
                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                   <a class="dropdown-item" href="{{route('viewProfile',{id: auth.user.id})}}">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-grey"></i>
                     {{ antl.formatMessage('mainLayout.profile') }}
                   </a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-grey"></i>
                     {{ antl.formatMessage('mainLayout.logout') }}
                   </a>
                 </div>
@@ -228,23 +229,24 @@
     <!-- Bootstrap core JavaScript-->
     {{script('js/vendor/popper.js')}}
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-    {{script('js/vendor/sb-admin-2.min.js')}}
-    
+    {{script('js/vendor/sb-admin-2.min.js')}}  
     {{ script('js/vendor/bootstrap-notify.min') }}
-
-    {{ script('js/vendor/jtsage-datebox') }}
+    {{ script('js/vendor/jtsage-datebox.min') }}
    
     {{--  Chart and Graph Import  --}} 
-    {{ script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js') }}
+    @if(auth.user.role_id===1)
+      {{ script('https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.bundle.js') }}
+    @endif
+    
   
     <!-- Core plugin JavaScript-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.compatibility.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
-    <script>
-      
-    $(document).ready(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    })</script>
+    <script>      
+      $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+    </script>
 
     @!section('extrajs')
 

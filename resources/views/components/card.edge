@@ -6,7 +6,7 @@
     <input type='hidden' name='from' value={{ from }} />
     <input type='hidden' name='to' value={{ to }} />
     {{--  Room card  --}}
-    <a class='card room-card custom-shadow ie-room-card' href='javascript:;' onclick='parentNode.submit();'>
+    <a class='card room-card custom-shadow ie-room-card' href='javascript:;' onclick='parentNode.submit();' aria-label="{{ room.name }} Card">
         {{--  Title  --}}
         <div class='room-card-title'>
             <div class="row">
@@ -21,36 +21,42 @@
         <div class='room-card-body'>
             <div class="row">
                 <div class="col-12 col-md-5 text-center text-md-left">
-                    @if(room.picture) 
-                        <img class="img-thumbnail mb-3" alt='{{ room.name }} photo' src='{{ room.picture }}'>
-                    @else
-                        <img class='img-thumbnail' alt='default photo'src='/images/default.png'>
-                    @endif
+                    <img class="img-thumbnail mb-3" alt='{{ room.name }} photo' src='{{ room.picture_small }}'>
                 </div>
                 <div class="col-12 col-md-7 p-0">
                     <div class="row text-center text-md-left pt-2">
-                        <div class="col-6">
-                            <ul class="list-unstyled">
-                                @each(roomFeature in room.features.slice(0, room.numFeatures))
-                                    <li class='spec-yes mb-1' ><i class='fas fa-check-circle'></i>
-                                        @if(antl.currentLocale()==='fr')
-                                            <span data-toggle="tooltip" title="{{roomFeature.name_french}}">{{ truncate(roomFeature.name_french, 11, '.') }}</span>
-                                        @else
-                                            <span data-toggle="tooltip" title="{{roomFeature.name_english}}">{{ truncate(roomFeature.name_english, 11, '.') }}</span>
-                                        @endif
-                                    </li>
-                                    @if($loop.index ===3)
-                                            </ul>
-                                        </div>
-                                        <div class="col-6">
-                                            <ul class="list-unstyled">
-                                    @endif
-                                @else
-                                    <i>no features</i>
-                                @endeach
-
-                            </ul>
-                        </div>
+                        @if(room.features.length===0)
+                            <div class="col-12">
+                                <i>no features</i>
+                            </div>
+                        @else
+                            <div class="col-6">
+                                <ul class="list-unstyled">
+                                    @each(roomFeature in room.features.slice(0, 4))
+                                        <li class='spec-yes mb-1' ><i class='fas fa-check-circle'></i>
+                                            @if(antl.currentLocale()==='fr')
+                                                <span data-toggle="tooltip" title="{{roomFeature.name_french}}">{{ truncate(roomFeature.name_french, 11, '.') }}</span>
+                                            @else
+                                                <span data-toggle="tooltip" title="{{roomFeature.name_english}}">{{ truncate(roomFeature.name_english, 11, '.') }}</span>
+                                            @endif
+                                        </li>
+                                    @endeach
+                                 </ul>
+                            </div>
+                            <div class="col-6">
+                                <ul class="list-unstyled">
+                                    @each(roomFeature in room.features.slice(4, 8))
+                                        <li class='spec-yes mb-1' ><i class='fas fa-check-circle'></i>
+                                            @if(antl.currentLocale()==='fr')
+                                                <span data-toggle="tooltip" title="{{roomFeature.name_french}}">{{ truncate(roomFeature.name_french, 11, '.') }}</span>
+                                            @else
+                                                <span data-toggle="tooltip" title="{{roomFeature.name_english}}">{{ truncate(roomFeature.name_english, 11, '.') }}</span>
+                                            @endif
+                                        </li>
+                                    @endeach
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

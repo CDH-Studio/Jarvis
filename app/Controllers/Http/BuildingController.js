@@ -24,7 +24,7 @@ class BuildingController {
 
 		const categories = await RoomFeaturesCategory
 			.query()
-			.with('features', (builder) => {
+			.with('features.room', (builder) => {
 				builder.where('building_id', 1);
 			}).fetch();
 

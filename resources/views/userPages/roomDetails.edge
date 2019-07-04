@@ -53,11 +53,7 @@
                 <div class='card-body'>
                     <div class="row">
                         <div class="col-5">
-                            @if(room.picture) 
-                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='../{{ room.picture }}'>
-                            @else
-                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='/images/default.png'>
-                            @endif        
+                                <img class='room-details-image' data-toggle="modal" data-target="#room-pic" src='../{{ room.picture }}'>       
                             <a class='link-color' href='' style='display:block; text-align:center;'  data-toggle='modal' data-target='#mapModal'>
                                 <i class='fas fa-external-link-alt mt-3'></i>
                                 {{ antl.formatMessage('roomDetails.viewMap') }}
@@ -115,7 +111,7 @@
                                                 <i class="{{$parent.featureCategory.icon}} fa-fw"></i>
                                             </span>
                                             -->
-                                            <span class="fa-stack fa-2x color-primary" data-toggle="tooltip" data-placement="top" title="{{$parent.featureCategory.name}}">
+                                            <span class="fa-stack fa-2x color-primary mb-2" data-toggle="tooltip" data-placement="top" title="{{$parent.featureCategory.name}}">
                                                 <i class="fas fa-circle fa-stack-2x"></i>
                                                 <i class="{{$parent.featureCategory.icon}} fa-stack-1x fa-inverse" style="font-size:23px"></i>
                                             </span>
@@ -131,7 +127,7 @@
                                     @endif 
                                 @endeach
                                 @if(firstFind)
-                                    <span class="fa-stack fa-2x text-secondary" data-toggle="tooltip" data-placement="top" title="{{featureCategory.name}}">
+                                    <span class="fa-stack fa-2x text-secondary mb-2" data-toggle="tooltip" data-placement="top" title="{{featureCategory.name}}">
                                         <i class="fas fa-circle fa-stack-2x"></i>
                                         <i class="{{featureCategory.icon}} fa-stack-1x fa-inverse" style="font-size:23px"></i>
                                     </span>
@@ -339,6 +335,18 @@
                                     <br>
                                     <i class="text-muted">{{review.user.email}}</i> | <i class="text-muted">{{review.comment_date}}</i>
                                     <p class="mt-2">{{ review.review }}</p>
+                                    @if(user.role.name === 'admin')
+                                        <form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                                            {{ csrfField() }}
+                                            <input type="hidden"  name="reviewID" value="{{review.id}}">
+                                            <button class="btn btn-danger btn-icon-split" type='submit'>
+                                                <span class="icon text-white-50">
+                                                  <i class="fas fa-trash"></i>
+                                                </span>
+                                                <span class="text">Delete</span>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                                 <div class="col-4 text-center">
                                     @if(review.reviewPicture)
@@ -472,25 +480,25 @@
 
 
     <div class='modal fade'  id='deleteModal' role='dialog' aria-hidden='true'>
-           <div class='modal-dialog modal-dialog-centered modal-lg' role='document'>
-                <div class='modal-content'>
-                    <div class='modal-header'>
-                        <h5 class='modal-title' id='deleteRoomTitle'>Are you sure?</h5>
-                        <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
-                            <span aria-hidden='true'>×</span>
-                        </button>
-                    </div>
-                    <div class='modal-body'>Are you sure you want to delete your review?</div>
-                    <form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
-                        {{ csrfField() }}
-                        <div class='modal-footer'>
-                            <button class='btn btn-secondary' type='button' data-dismiss='modal'>Cancel</button>
-                            <button type='submit' class='btn btn-danger'>Delete</button>
-                        </div>                    
-                    </form>
+       <div class='modal-dialog modal-dialog-centered modal-lg' role='document'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h5 class='modal-title' id='deleteRoomTitle'>{{ antl.formatMessage('roomDetails.deleteModalHeader') }}</h5>
+                    <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+                        <span aria-hidden='true'>×</span>
+                    </button>
                 </div>
-           </div>
+                <div class='modal-body'>{{ antl.formatMessage('roomDetails.deleteModalBody') }}</div>
+                <form action='{{ route('deleteReview', { id: id }) }}' method='POST' enctype='multipart/form-data'>
+                    {{ csrfField() }}
+                    <div class='modal-footer'>
+                        <button class='btn btn-secondary' type='button' data-dismiss='modal'>{{ antl.formatMessage('roomDetails.deleteModalCancelBtn') }}</button>
+                        <button type='submit' class='btn btn-danger'>{{ antl.formatMessage('roomDetails.deleteModalDeleteBtn') }}</button>
+                    </div>                    
+                </form>
+            </div>
        </div>
+   </div>
     {{--  Only show to non-admin users  --}}
     @if(user.role.name === 'user')
         {{--  Reporting Modal Box  --}}
@@ -564,18 +572,10 @@
     @endeach
 
     {{--  Loading modal for room picture  --}}
-    @if(room.picture)
-        @!component('components.imageModal', id="room-pic", title=room.name, image='../'+ room.picture)
-    @else
-        @!component('components.imageModal', id="room-pic", title=room.name, image="/images/default.png")
-    @endif
+    @!component('components.imageModal', id="room-pic", title=room.name, image='../'+ room.picture)
 
     {{--  Loading modal for room floor plan  --}}
-    @if(room.floorplan)
-        @!component('components.imageModal', id='mapModal', title= room.name + '- Floor plan', image='../' + room.floorplan)
-    @else
-        @!component('components.imageModal', id='mapModal', title= room.name + '- Floor plan', image='/images/temp_floor_map.png')
-    @endif
+    @!component('components.imageModal', id='mapModal', title= room.name + '- Floor plan', image='../' + room.floorplan)
     
     
 @endsection

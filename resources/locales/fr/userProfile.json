@@ -9,5 +9,6 @@
     "changePassword": "Changer mot de passe",
     "newPassword": "Nouveau mot de passe",
     "confirmNewPassword": "Confirmer le nouveau mot de passe",
-    "verified": "verifié"
+    "verified": "verifié",
+    "save": "enregistrer"
 }

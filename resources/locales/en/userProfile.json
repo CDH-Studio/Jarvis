@@ -9,5 +9,6 @@
     "changePassword": "Change password",
     "newPassword": "New password",
     "confirmNewPassword": "Confirm new password",
-    "verified": "verified"
+    "verified": "verified",
+    "save":" Save"
 }

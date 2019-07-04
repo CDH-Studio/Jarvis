@@ -10562,10 +10562,6 @@ body {
   height: 100%;
 }
 
-a:focus {
-  outline: none;
-}
-
 #wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -10963,14 +10959,6 @@ a:focus {
   -ms-flex-align: center;
   align-items: center;
   padding: 0 0.75rem;
-}
-
-.topbar .nav-item .nav-link:focus {
-  outline: none;
-}
-
-.topbar .nav-item:focus {
-  outline: none;
 }
 
 .topbar .dropdown {
