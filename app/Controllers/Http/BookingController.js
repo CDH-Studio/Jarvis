@@ -193,6 +193,119 @@ class BookingController {
 		return view.render('userPages.manageBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfCancelled, bookingsType, canEdit });
 	}
 
+
+
+		/**
+	 * Retrives all of the bookings that correspond to a specific room.
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async getUserBookingz ({ params, view, auth, response }) {
+
+
+		const userRole = await auth.user.getUserRole();
+		var canEdit = (auth.user.id === Number(params.id) || userRole === 'admin') ? 1 : 0;
+
+		var idType = (params.bookingType === 'user') ? 'user_id' : 'room_id';
+
+		let startTimeFilter,endTimeFilter,searchResults;
+
+		if(params.catFilter === "upcoming"){
+
+			startTimeFilter=moment().format('YYYY-MM-DDTHH:mm');
+
+			switch(String(params.timeFilter)) {
+			  case "month":
+			    endTimeFilter = moment().endOf('month').format('YYYY-MM-DD hh:mm');
+			    break;
+			  case "3-months":
+			    endTimeFilter = moment().add(3, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
+			    break;
+			  case "6-months":
+			  	endTimeFilter = moment().add(6, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
+			  	break;
+			  case "year":
+			  	endTimeFilter = moment().endOf('year').format('YYYY-MM-DD hh:mm');
+			  	break;
+			  case "all":
+			  	endTimeFilter = moment().add(100, 'years').endOf('month').format('YYYY-MM-DD hh:mm');
+			  	break;
+			  default:
+			    response.route('home');
+			    break;
+			}
+
+
+			console.log(idType);
+			 searchResults = await Booking
+				.query()
+				.where(idType, params.id)
+				.whereBetween('from',[startTimeFilter, endTimeFilter])
+				.orderBy('from', 'asc')
+				.fetch();
+
+			// if(params.timeFilter==="month"){
+			// 	timeFilter= moment().endOf('month').format('YYYY-MM-DD hh:mm');
+			// }else if(params.timeFilter==="3-months"){
+			// 	timeFilter= moment().add(3, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
+			// }else if(params.timeFilter==="6-months"){
+			// 	timeFilter= moment().add(6, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
+			// }else if
+		}
+		
+
+
+
+		var idType = (params.bookingType === 'user') ? 'user_id' : 'room_id';
+		var bookingsType = (idType === 'user_id') ? 'userBookings' : 'roomBookings';
+
+		if (userRole !== 'admin' && idType === 'user_id' && parseInt(params.id) !== auth.user.id) {
+			response.route('home');
+		}
+
+		searchResults = searchResults.toJSON();
+		const bookings = await populateBookings(searchResults);
+
+		// counts the number of approved bookings
+		let numberOfApprovedBookings = await Booking
+			.query()
+			.where(idType, params.id)
+			.where('status', 'Approved')
+			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.getCount();
+
+		if (numberOfApprovedBookings === 0) {
+			numberOfApprovedBookings = '0';
+		}
+
+		// calculate the number of bookings a room has this month
+		let numberOfBookingsThisMonth = await Booking
+			.query()
+			.where(idType, params.id)
+			.where('status', 'Approved')
+			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.whereRaw("strftime('%Y-%m', bookings.'from') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
+			.getCount();
+
+		if (numberOfBookingsThisMonth === 0) {
+			numberOfBookingsThisMonth = '0';
+		}
+
+		// Queries the database fr the cancelled bookings
+		let numberOfCancelled = await Booking
+			.query()
+			.where(idType, params.id)
+			.where('status', 'Cancelled')
+			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.getCount();
+
+		if (numberOfCancelled === 0) {
+			numberOfCancelled = '0';
+		}
+
+		return view.render('userPages.manageBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfCancelled, bookingsType, canEdit });
+	}
+
 	/**
 	 * Create a list of all bookings under the current user and render a view for it.
 	 *
