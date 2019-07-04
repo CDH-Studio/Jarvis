@@ -455,10 +455,10 @@ class HomeController {
 		const remainder = 30 - (now.minute() % 30);
 		const date = moment().format('YYYY-MM-DD');
 		const from = moment(now).add(remainder, 'm').format('HH:mm');
-		const to = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
+		const to = moment(now).add(remainder, 'm').add(0.5, 'h').format('HH:mm');
 		const formattedDate = moment().format('dddd, MMMM DD, YYYY');
 		const formattedFrom = moment(now).add(remainder, 'm').format('h:mm A');
-		const formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('h:mm A');
+		const formattedTo = moment(now).add(remainder, 'm').add(0.5, 'h').format('h:mm A');
 
 		const code = randomString(4);
 		const checkRoomAvailability = async () => {

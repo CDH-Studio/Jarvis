@@ -4,6 +4,10 @@
     {{room.name}}
 @endsection
 
+@section('extracss')
+{{ style('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css') }}
+@endsection
+
 {{--  Manage bookings page content  --}}
 @section('content')
     @!component('components.pageHeader', title = antl.formatMessage('roomDetails.title'))
@@ -202,6 +206,7 @@
                                             <label for='from' aria-labelledby='from-error'>{{ antl.formatMessage('roomDetails.bookingStart') }} <strong class='text-danger'>*</strong></label>
                                             {{--  If field is not filled correctly show an error box  --}}
                                             <div class='timePicker' style='display: flex;'>
+                                                <!--
                                                 @if(hasErrorFor('from'))
                                                     <input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', form.from) }}' onchange='removeErrorClass("from")' step="1800">
                                                 @else
@@ -216,6 +221,13 @@
                                                         @endeach
                                                     </div>
                                                 </div>
+                                                -->
+                                                <div class="input-group date" id="from" data-target-input="nearest">
+                                                    <input type="text" class="form-control datetimepicker-input" data-target="#from" name="from" id="from-input" value='{{ old('from', form.from) }}'/>
+                                                    <div class="input-group-append" data-target="#from" data-toggle="datetimepicker">
+                                                        <div class="input-group-text"><i class="fa fa-clock"></i></div>
+                                                    </div>
+                                                </div>
                                             </div>
                                             @if(hasErrorFor('from'))
                                                 <div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
@@ -225,6 +237,7 @@
                                     <div class='col form-group mb-4'>
                                         <label for='to' aria-labelledby='to-error' data-toggle='tooltip'>{{ antl.formatMessage('roomDetails.bookingEnd') }} <strong class='text-danger'>*</strong></label>
                                         <div style='display: flex;' class='timePicker'>
+                                            <!--
                                             {{--  If field is not filled correctly show an error box  --}}
                                             @if(hasErrorFor('to'))
                                                 <input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', form.to) }}' onchange='removeErrorClass("to")' step="1800">
@@ -237,6 +250,13 @@
                                                     @each(item in dropdownSelection)
                                                         <a class="dropdown-item" for='fromDropDown' data-value="{{item.dataValue}}" href="#">{{item.name}}</a>
                                                     @endeach
+                                                </div>
+                                            </div>
+                                            -->
+                                            <div class="input-group date" id="to" data-target-input="nearest">
+                                                <input type="text" class="form-control datetimepicker-input" data-target="#to" name="to" value='{{ old('to', form.to) }}'/>
+                                                <div class="input-group-append" data-target="#to" data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-clock"></i></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -582,7 +602,9 @@
 
 {{--  Deals with the search functionality of the table above- searches all fields   --}}
 @section('extrajs') 
-    
+    {{ script('https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js') }}
+    {{ script('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js') }}
+    {{ script('js/timepicker.js') }}
     {{--  Script to display file name on upload  --}}
     <script>
         $('#reviewPicture').on('change',function(){
