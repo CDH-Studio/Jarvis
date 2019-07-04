@@ -202,19 +202,20 @@ class BookingController {
 	 */
 	async getUserBookingz ({ params, view, auth, response }) {
 
-
+		// get user role for booking editing
 		const userRole = await auth.user.getUserRole();
 		var canEdit = (auth.user.id === Number(params.id) || userRole === 'admin') ? 1 : 0;
-
+		// get room or user filtering
 		var idType = (params.bookingType === 'user') ? 'user_id' : 'room_id';
 
-		let startTimeFilter,endTimeFilter,searchResults;
+		let startTimeFilter, endTimeFilter, searchResults;
 
-		if(params.catFilter === "upcoming"){
-
+		// find upcoming meeting
+		if(params.catFilter === "upcoming" || params.catFilter === "all"){
 			startTimeFilter=moment().format('YYYY-MM-DDTHH:mm');
 
-			switch(String(params.timeFilter)) {
+			// determine time filter for upcoming meetings
+			switch(String(params.limitFilter)) {
 			  case "month":
 			    endTimeFilter = moment().endOf('month').format('YYYY-MM-DD hh:mm');
 			    break;
@@ -225,7 +226,7 @@ class BookingController {
 			  	endTimeFilter = moment().add(6, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
 			  	break;
 			  case "year":
-			  	endTimeFilter = moment().endOf('year').format('YYYY-MM-DD hh:mm');
+			  	endTimeFilter = moment().add(1, 'years').format('YYYY-MM-DD hh:mm');
 			  	break;
 			  case "all":
 			  	endTimeFilter = moment().add(100, 'years').endOf('month').format('YYYY-MM-DD hh:mm');
@@ -235,28 +236,59 @@ class BookingController {
 			    break;
 			}
 
+			if(params.catFilter === "upcoming"){
+				searchResults = await Booking
+					.query()
+					.where(idType, params.id)
+					.where('status','Approved')
+					.whereBetween('from',[startTimeFilter, endTimeFilter])
+					.orderBy('from', 'asc')
+					.fetch();
+			}else{
+				searchResults = await Booking
+					.query()
+					.where(idType, params.id)
+					.whereBetween('from',[startTimeFilter, endTimeFilter])
+					.orderBy('from', 'asc')
+					.fetch();
+			}
+
+		}else if(params.catFilter === "cancelled"){
+
+			endTimeFilter=moment().format('YYYY-MM-DDTHH:mm');
+
+			switch(params.limitFilter) {
+			  case "month":
+			    startTimeFilter = moment().startOf('month').format('YYYY-MM-DD hh:mm');
+			    break;
+			  case "3-months":
+			    startTimeFilter = moment().add(3, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+			    break;
+			  case "6-months":
+			  	startTimeFilter = moment().add(6, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+			  	break;
+			  case "year":
+			  	startTimeFilter = moment().subtract(1, 'years').format('YYYY-MM-DD hh:mm');
+			  	break;
+			  case "all":
+			  	startTimeFilter = moment().subtract(100, 'years').format('YYYY-MM-DD hh:mm');
+			  	break;
+			  default:
+			    response.route('home');
+			    break;
+			}
 
 			console.log(idType);
 			 searchResults = await Booking
 				.query()
 				.where(idType, params.id)
-				.whereBetween('from',[startTimeFilter, endTimeFilter])
-				.orderBy('from', 'asc')
+				.where('status','Cancelled')
+				.whereBetween('updated_at',[startTimeFilter, endTimeFilter])
+				.orderBy('updated_at', 'asc')
 				.fetch();
-
-			// if(params.timeFilter==="month"){
-			// 	timeFilter= moment().endOf('month').format('YYYY-MM-DD hh:mm');
-			// }else if(params.timeFilter==="3-months"){
-			// 	timeFilter= moment().add(3, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
-			// }else if(params.timeFilter==="6-months"){
-			// 	timeFilter= moment().add(6, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
-			// }else if
 		}
 		
 
-
-
-		var idType = (params.bookingType === 'user') ? 'user_id' : 'room_id';
 		var bookingsType = (idType === 'user_id') ? 'userBookings' : 'roomBookings';
 
 		if (userRole !== 'admin' && idType === 'user_id' && parseInt(params.id) !== auth.user.id) {
