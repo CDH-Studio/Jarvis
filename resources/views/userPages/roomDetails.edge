@@ -6,6 +6,13 @@
 
 @section('extracss')
 {{ style('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css') }}
+<style>
+.timepicker-icon {
+    background-color: #145f9c;
+    border: 1px solid #145f9c;
+    color: #ffffff;
+}
+</style>
 @endsection
 
 {{--  Manage bookings page content  --}}
@@ -225,7 +232,7 @@
                                                 <div class="input-group date" id="from" data-target-input="nearest">
                                                     <input type="text" class="form-control datetimepicker-input" data-target="#from" name="from" id="from-input" value='{{ old('from', form.from) }}'/>
                                                     <div class="input-group-append" data-target="#from" data-toggle="datetimepicker">
-                                                        <div class="input-group-text"><i class="fa fa-clock"></i></div>
+                                                        <div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -256,7 +263,7 @@
                                             <div class="input-group date" id="to" data-target-input="nearest">
                                                 <input type="text" class="form-control datetimepicker-input" data-target="#to" name="to" value='{{ old('to', form.to) }}'/>
                                                 <div class="input-group-append" data-target="#to" data-toggle="datetimepicker">
-                                                    <div class="input-group-text"><i class="fa fa-clock"></i></div>
+                                                    <div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
                                                 </div>
                                             </div>
                                         </div>
