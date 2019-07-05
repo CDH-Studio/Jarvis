@@ -69,98 +69,113 @@
 			</div>
 		</div>
 	</div>
-	
-	<div class="card shadow">
-		<div class="card-header py-3">
-			<h6 class="m-0 font-weight-bold text-primary">{{antl.formatMessage('manageBookings.bookingsHeader')}}</h6>
-		</div>
-		@if(bookings.length == 0)
-			{{--  If there are no bookings found, display no bookings   --}}
-			<div class="card-body">
-				@!component('components.cardEmptyMessage',faIcon="fas fa-history fa-5x", message=antl.formatMessage('manageBookings.bookingsError')) 
-			</div>		
-		@else
-			
-			<div class="card-body">
-				<div class="table table-responsive">
-					<table id='manageBookingsTable' class='table table-hover' style='width:100%;'>
-						<thead>
-							<tr>
+
+
+	@component('components.generalCard', title = antl.formatMessage('userDash.MBHeading'))
+		@slot('body')
+			<div class="dropdown" style="min-width:100px">
+			  <button class="btn btn-secondary dropdown-toggle text-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:120px">
+			    {{capitalize(viewFilters.limitFilter)}}
+			  </button>
+			  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+			    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: 'month'}) }}">
+			    	Month
+			    </a>
+			    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: '3-months'}) }}">
+			    	3-Months
+			    </a>
+			    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: '6-months'}) }}">
+			    	6-Months
+			    </a>
+			    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: 'year'}) }}">
+			    	Year
+			    </a>
+			    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: 'all'}) }}">
+			    	All
+			    </a>
+			  </div>
+			</div>
+
+
+			<div class="table table-responsive">
+				<table id='manageBookingsTable' class='table table-hover' style='width:100%;'>
+					<thead>
+						<tr>
+							@if(bookingsType == 'userBookings')
+								<th scope='col' aria-label='Room column' class='text-center'>{{antl.formatMessage('manageBookings.tableRoom')}}</th>
+							@else
+								<th scope='col' aria-label='Room column' class='text-center'>{{antl.formatMessage('manageBookings.tableName')}}</th>
+							@endif
+							<th scope='col' aria-label='Meeting name column'  class='text-center'>{{antl.formatMessage('manageBookings.tableMeetingName')}}</th>
+							<th scope='col' aria-label='Date column' class='text-center'>{{antl.formatMessage('manageBookings.tableDate')}}</th>
+							<th scope='col' aria-label='Time column' class='text-center'>{{antl.formatMessage('manageBookings.tableTime')}}</th>
+							<th scope='col' aria-label='Status column' class='text-center'>{{antl.formatMessage('manageBookings.tableStatus')}}</th>
+							<th scope='col' aria-label='Cancel option column' class='text-center'></th>
+						</tr>
+					</thead>
+					{{--  Loops through the bookings array and displays every booking  --}}
+					<tbody>
+						@each(booking in bookings) 
+							<tr aria-label='{{booking.subject}} row'>
 								@if(bookingsType == 'userBookings')
-									<th scope='col' aria-label='Room column' class='text-center'>{{antl.formatMessage('manageBookings.tableRoom')}}</th>
+									<td class='text-center'><a href='{{ route('showRoom', {id: booking.roomId}) }}'>{{ booking.room }}</a></td>
 								@else
-									<th scope='col' aria-label='Room column' class='text-center'>{{antl.formatMessage('manageBookings.tableName')}}</th>
+									<td class='text-center'><a href='{{ route('viewProfile', {id: booking.userId}) }}'>{{ booking.userName }}</a></td>
 								@endif
-								<th scope='col' aria-label='Meeting name column'  class='text-center'>{{antl.formatMessage('manageBookings.tableMeetingName')}}</th>
-								<th scope='col' aria-label='Date column' class='text-center'>{{antl.formatMessage('manageBookings.tableDate')}}</th>
-								<th scope='col' aria-label='Time column' class='text-center'>{{antl.formatMessage('manageBookings.tableTime')}}</th>
-								<th scope='col' aria-label='Status column' class='text-center'>{{antl.formatMessage('manageBookings.tableStatus')}}</th>
-								<th scope='col' aria-label='Cancel option column' class='text-center'></th>
-							</tr>
-						</thead>
-						{{--  Loops through the bookings array and displays every booking  --}}
-						<tbody>
-							@each(booking in bookings) 
-								<tr aria-label='{{booking.subject}} row'>
-									@if(bookingsType == 'userBookings')
-										<td class='text-center'><a href='{{ route('showRoom', {id: booking.roomId}) }}'>{{ booking.room }}</a></td>
-									@else
-										<td class='text-center'><a href='{{ route('viewProfile', {id: booking.userId}) }}'>{{ booking.userName }}</a></td>
-									@endif
-									<td class='text-center'>{{ booking.subject }}</td>
-									<td class='text-center'>{{ booking.date }}</td>
-									<td class='text-center'>{{ booking.time }}</td>
-									@if(booking.status == 'Approved')
-										<td class='text-center td-{{ booking.status }}'>{{antl.formatMessage('manageBookings.tableApproved')}}</td>
-									@else
-										<td class='text-center td-{{ booking.status }}'>{{antl.formatMessage('manageBookings.tableDeclined')}}</td>
-									@endif
-									@if(booking.status == 'Approved' && canEdit)
-										<td><a class='text-danger cancelButton' name='cancel' data-toggle='modal' data-target='#deleteModal{{ booking.id }}' href='#'><i class="fas fa-times"></i> {{antl.formatMessage('manageBookings.tableCancel')}}</a></td>
-									
-										{{--  Delete Modal Box  --}}
-										<div class='modal' id='deleteModal{{ booking.id }}' role='dialog' aria-hidden='true'>
-											<div class='modal-dialog modal-dialog-centered' role='document'>
-												<div class='modal-content'>
-													<div class='modal-header'>
-														<h5 class='modal-title' id='cancelTitle'>{{antl.formatMessage('manageBookings.modalHeader')}}</h5>
-														<button class='close' type='button' data-dismiss='modal' aria-label='Close'>
-															<span aria-hidden='true'>×</span>
-														</button>
-													</div>
-													<div class='modal-body'>{{antl.formatMessage('manageBookings.modalBody')}}</div>
-													@if(bookingsType == 'userBookings')
-														<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'user'}) }}' method='POST' enctype='multipart/form-data'>
-															{{ csrfField() }}
-															<div class='modal-footer'>
-																<button class='btn btn-secondary' type='button' data-dismiss='modal'>{{antl.formatMessage('manageBookings.no')}}</button>
-																<button type='submit' class='btn btn-danger'>{{antl.formatMessage('manageBookings.yes')}}</button>
-															</div>                    
-														</form>													
-													@else
-														<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'room'}) }}' method='POST' enctype='multipart/form-data'>
-															{{ csrfField() }}
-															<div class='modal-footer'>
-																<button class='btn btn-secondary' type='button' data-dismiss='modal'>{{antl.formatMessage('manageBookings.no')}}</button>
-																<button type='submit' class='btn btn-danger'>{{antl.formatMessage('manageBookings.yes')}}</button>
-															</div>                    
-														</form>													
-													@endif
+								<td class='text-center'>{{ booking.subject }}</td>
+								<td class='text-center'>{{ booking.date }}</td>
+								<td class='text-center'>{{ booking.time }}</td>
+								@if(booking.status == 'Approved')
+									<td class='text-center td-{{ booking.status }}'>{{antl.formatMessage('manageBookings.tableApproved')}}</td>
+								@else
+									<td class='text-center td-{{ booking.status }}'>{{antl.formatMessage('manageBookings.tableDeclined')}}</td>
+								@endif
+								@if(booking.status == 'Approved' && canEdit)
+									<td><a class='text-danger cancelButton' name='cancel' data-toggle='modal' data-target='#deleteModal{{ booking.id }}' href='#'><i class="fas fa-times"></i> {{antl.formatMessage('manageBookings.tableCancel')}}</a></td>
+								
+									{{--  Delete Modal Box  --}}
+									<div class='modal' id='deleteModal{{ booking.id }}' role='dialog' aria-hidden='true'>
+										<div class='modal-dialog modal-dialog-centered' role='document'>
+											<div class='modal-content'>
+												<div class='modal-header'>
+													<h5 class='modal-title' id='cancelTitle'>{{antl.formatMessage('manageBookings.modalHeader')}}</h5>
+													<button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+														<span aria-hidden='true'>×</span>
+													</button>
 												</div>
+												<div class='modal-body'>{{antl.formatMessage('manageBookings.modalBody')}}</div>
+												@if(bookingsType == 'userBookings')
+													<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'user'}) }}' method='POST' enctype='multipart/form-data'>
+														{{ csrfField() }}
+														<div class='modal-footer'>
+															<button class='btn btn-secondary' type='button' data-dismiss='modal'>{{antl.formatMessage('manageBookings.no')}}</button>
+															<button type='submit' class='btn btn-danger'>{{antl.formatMessage('manageBookings.yes')}}</button>
+														</div>                    
+													</form>													
+												@else
+													<form action='{{ route('cancelBooking', {id: booking.id, bookingType: 'room'}) }}' method='POST' enctype='multipart/form-data'>
+														{{ csrfField() }}
+														<div class='modal-footer'>
+															<button class='btn btn-secondary' type='button' data-dismiss='modal'>{{antl.formatMessage('manageBookings.no')}}</button>
+															<button type='submit' class='btn btn-danger'>{{antl.formatMessage('manageBookings.yes')}}</button>
+														</div>                    
+													</form>													
+												@endif
 											</div>
 										</div>
-									@else
-										<td></td>
-									@endif
-								</tr>
-							@endeach
-						</tbody>
+									</div>
+								@else
+									<td></td>
+								@endif
+							</tr>
+						@endeach
+					</tbody>
 
-					</table>
-				</div>
-			</div> 
-		@endif
-	</div>
+				</table>
+			</div>
+		@endslot
+	@endcomponent
+
 @endsection
 
 {{--  Deals with the search functionality of the table above- searches all fields   --}}

@@ -98,8 +98,8 @@ Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(
 // Bookings
 //= ========================================================================
 Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails').middleware(['auth']); // needs to be changed to get
-Route.get('/:bookingType/:id/bookings', 'BookingController.getBookings').as('viewBookings').middleware(['auth']);
-Route.get('/:bookingType/:id/bookings/:catFilter/:limitFilter', 'BookingController.getUserBookingz').as('viewBookingz').middleware(['auth']);
+Route.get('/:bookingType/:id/bookings', 'BookingController.getBookings').as('viewBookingz').middleware(['auth']);
+Route.get('/:bookingType/:id/bookings/:catFilter/:limitFilter', 'BookingController.getUserBookingz').as('viewBookings').middleware(['auth']);
 Route.post('/:bookingType/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth']);
 
 // Employee user pages

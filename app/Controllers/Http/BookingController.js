@@ -210,9 +210,13 @@ class BookingController {
 
 		let startTimeFilter, endTimeFilter, searchResults;
 
+		let viewFilters={};
+
 		// find upcoming meeting
 		if(params.catFilter === "upcoming" || params.catFilter === "all"){
 			startTimeFilter=moment().format('YYYY-MM-DDTHH:mm');
+
+
 
 			// determine time filter for upcoming meetings
 			switch(String(params.limitFilter)) {
@@ -232,8 +236,7 @@ class BookingController {
 			  	endTimeFilter = moment().add(100, 'years').endOf('month').format('YYYY-MM-DD hh:mm');
 			  	break;
 			  default:
-			    response.route('home');
-			    break;
+			    return response.route('home');
 			}
 
 			if(params.catFilter === "upcoming"){
@@ -274,11 +277,9 @@ class BookingController {
 			  	startTimeFilter = moment().subtract(100, 'years').format('YYYY-MM-DD hh:mm');
 			  	break;
 			  default:
-			    response.route('home');
-			    break;
+			    return response.route('home');
 			}
 
-			console.log(idType);
 			 searchResults = await Booking
 				.query()
 				.where(idType, params.id)
@@ -286,8 +287,15 @@ class BookingController {
 				.whereBetween('updated_at',[startTimeFilter, endTimeFilter])
 				.orderBy('updated_at', 'asc')
 				.fetch();
+		}else{
+			return response.route('home');
 		}
-		
+
+		viewFilters.bookingType = params.bookingType;
+		viewFilters.id = params.id;
+		viewFilters.catFilter = params.catFilter;
+		viewFilters.limitFilter = params.limitFilter;
+
 
 		var bookingsType = (idType === 'user_id') ? 'userBookings' : 'roomBookings';
 
@@ -335,7 +343,13 @@ class BookingController {
 			numberOfCancelled = '0';
 		}
 
-		return view.render('userPages.manageBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfCancelled, bookingsType, canEdit });
+		return view.render('userPages.manageBookings', { bookings,
+			numberOfApprovedBookings,
+			numberOfBookingsThisMonth,
+			numberOfCancelled,
+			bookingsType,
+			viewFilters,
+			canEdit });
 	}
 
 	/**
