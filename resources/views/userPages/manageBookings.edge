@@ -16,6 +16,12 @@
 	@component('components.pageHeader', title=antl.formatMessage('manageBookings.pageTitle'))
 	@endcomponent
 
+	<div class="row mb-4 mt-0">
+		<div class="col-12 text-left">
+			@include('partials.TimeFilter')
+		</div>
+	</div>
+
 	{{--  Bookings Stats  --}}
 	<div class='row' style='padding-left: 15px;'>
 		<div class='col card stats-card shadow no-padding'>
@@ -73,28 +79,7 @@
 
 	@component('components.generalCard', title = antl.formatMessage('userDash.MBHeading'))
 		@slot('body')
-			<div class="dropdown" style="min-width:100px">
-			  <button class="btn btn-secondary dropdown-toggle text-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:120px">
-			    {{capitalize(viewFilters.limitFilter)}}
-			  </button>
-			  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-			    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: 'month'}) }}">
-			    	Month
-			    </a>
-			    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: '3-months'}) }}">
-			    	3-Months
-			    </a>
-			    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: '6-months'}) }}">
-			    	6-Months
-			    </a>
-			    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: 'year'}) }}">
-			    	Year
-			    </a>
-			    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: 'all'}) }}">
-			    	All
-			    </a>
-			  </div>
-			</div>
+			
 
 
 			<div class="table table-responsive">

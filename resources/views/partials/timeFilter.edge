@@ -1,0 +1,33 @@
+<strong>In the next:</strong>
+<div class="dropdown" style="min-width:100px">
+	<button class="btn btn-secondary dropdown-toggle text-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:120px">
+		@if(viewFilters.limitFilter === "month")
+			{{antl.formatMessage('timeFilter.month')}}
+		@elseif(viewFilters.limitFilter === "3-months")
+			{{antl.formatMessage('timeFilter.3-months')}}
+		@elseif(viewFilters.limitFilter === "6-months")
+			{{antl.formatMessage('timeFilter.6-months')}}
+		@elseif(viewFilters.limitFilter === "year")
+			{{antl.formatMessage('timeFilter.year')}}
+		@else
+			{{antl.formatMessage('timeFilter.all')}}
+		@endif
+	</button>
+	<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+	    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: 'month'}) }}">
+	    	{{antl.formatMessage('timeFilter.month')}}
+	    </a>
+	    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: '3-months'}) }}">
+	    	{{antl.formatMessage('timeFilter.3-months')}}
+	    </a>
+	    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: '6-months'}) }}">
+	    	{{antl.formatMessage('timeFilter.6-months')}}
+	    </a>
+	    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: 'year'}) }}">
+	    	{{antl.formatMessage('timeFilter.year')}}
+	    </a>
+	    <a class="dropdown-item" href="{{ route('viewBookings', {bookingType: viewFilters.bookingType, id: viewFilters.id, catFilter: viewFilters.catFilter, limitFilter: 'all'}) }}">
+	    	{{antl.formatMessage('timeFilter.all')}}
+	    </a>
+	  </div>
+</div>
