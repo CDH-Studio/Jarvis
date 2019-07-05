@@ -22,66 +22,12 @@
 		</div>
 	</div>
 
-	{{--  Bookings Stats  --}}
-	<div class='row' style='padding-left: 15px;'>
-		<div class='col card stats-card shadow no-padding'>
-			<div class='card-highlight-primary'></div>
-			<div class='card-body'>
-				<div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-					<i class='d-inline-flex no-padding color-info card-icon fas fa-list fa-2x'></i>
-					<div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
-						<div class='row'>
-							<h2 class='col no-margin'><b>{{ numberOfApprovedBookings }}</b></h2>
-						</div>
-						<div class='row'>
-							<h5 class='col text-grey'>{{antl.formatMessage('manageBookings.totalBookings')}}</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 
-		<div class='col card stats-card shadow no-padding'>
-			<div class='card-highlight-danger'></div>
-			<div class='card-body'>
-				<div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-					<i class='d-inline-flex no-padding color-danger card-icon far fa-calendar-times fa-2x'></i>
-					<div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
-						<div class='row'>
-							<h2 class='col no-margin'><b>{{ numberOfCancelled }}</b></h2>
-						</div>
-						<div class='row'>
-							<h5 class='col text-grey'>{{antl.formatMessage('manageBookings.totalCancelled')}}</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		
-		<div class='col card stats-card shadow no-padding'>
-			<div class='card-highlight-success'></div>
-			<div class='card-body'>
-				<div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
-					<i class='d-inline-flex no-padding color-success card-icon far fa-calendar-alt fa-2x'></i>
-					<div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
-						<div class='row'>
-							<h2 class='col no-margin'><b>{{ numberOfBookingsThisMonth }}</b></h2>
-						</div>
-						<div class='row'>
-							<h5 class='col text-grey'>{{antl.formatMessage('manageBookings.totalRemaining')}}</h5>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 
 
 	@component('components.generalCard', title = antl.formatMessage('userDash.MBHeading'))
 		@slot('body')
-			
-
-
+			<strong>Total: {{bookings.length}}</strong>
 			<div class="table table-responsive">
 				<table id='manageBookingsTable' class='table table-hover' style='width:100%;'>
 					<thead>
