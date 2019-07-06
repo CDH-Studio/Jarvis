@@ -1,6 +1,5 @@
 'use strict';
 const Room = use('App/Models/Room');
-const User = use('App/Models/User');
 const Booking = use('App/Models/Booking');
 const Env = use('Env');
 const Logger = use('Logger');
@@ -78,17 +77,12 @@ class BookingController {
 		return response.route('/userDash');
 	}
 
-
-
-
-
 	/**
 	 * Retrives all of the bookings that correspond to a specific room or user.
 	 *
 	 * @param {Object} Context The context object.
 	 */
 	async viewBookings ({ params, view, auth, response }) {
-
 		// get user role for booking editing
 		const userRole = await auth.user.getUserRole();
 		var canEdit = (auth.user.id === Number(params.id) || userRole === 'admin') ? 1 : 0;
@@ -102,50 +96,50 @@ class BookingController {
 
 		let startTimeFilter, endTimeFilter, searchResults, bookings;
 
-		let viewFilters={};
+		let viewFilters = {};
 
 		// find upcoming meeting and all upcoming meetings (approved and cancellled)
-		if(params.catFilter === "upcoming" || params.catFilter === "all"){
-			startTimeFilter=moment().format('YYYY-MM-DDTHH:mm');
+		if (params.catFilter === 'upcoming' || params.catFilter === 'all') {
+			startTimeFilter = moment().format('YYYY-MM-DDTHH:mm');
 
 			// determine time filter for upcoming approved and all meetings
-			switch(String(params.limitFilter)) {
-			  case "month":
-			    endTimeFilter = moment().endOf('month').format('YYYY-MM-DD hh:mm');
-			    break;
-			  case "3-months":
-			    endTimeFilter = moment().add(3, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
-			    break;
-			  case "6-months":
-			  	endTimeFilter = moment().add(6, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
-			  	break;
-			  case "year":
-			  	endTimeFilter = moment().add(1, 'years').format('YYYY-MM-DD hh:mm');
-			  	break;
-			  case "all":
-			  	endTimeFilter = moment().add(100, 'years').endOf('month').format('YYYY-MM-DD hh:mm');
-			  	break;
-			  default:
-			    return response.route('home');
+			switch (String(params.limitFilter)) {
+				case 'month':
+					endTimeFilter = moment().endOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case '3-months':
+					endTimeFilter = moment().add(3, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case '6-months':
+					endTimeFilter = moment().add(6, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case 'year':
+					endTimeFilter = moment().add(1, 'years').format('YYYY-MM-DD hh:mm');
+					break;
+				case 'all':
+					endTimeFilter = moment().add(100, 'years').endOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				default:
+					return response.route('home');
 			}
 
-			if(params.catFilter === "upcoming"){
+			if (params.catFilter === 'upcoming') {
 				// query for upcoming approved meetings
 				searchResults = await Booking
 					.query()
 					.where(idType, params.id)
-					.where('status','Approved')
-					.whereBetween('from',[startTimeFilter, endTimeFilter])
+					.where('status', 'Approved')
+					.whereBetween('from', [startTimeFilter, endTimeFilter])
 					.orderBy('from', 'asc')
 					.with('room')
 					.with('user')
 					.fetch();
-			}else{
+			} else {
 				// query for upcoming meetings (approved and cancelled)
 				searchResults = await Booking
 					.query()
 					.where(idType, params.id)
-					.whereBetween('from',[startTimeFilter, endTimeFilter])
+					.whereBetween('from', [startTimeFilter, endTimeFilter])
 					.orderBy('from', 'asc')
 					.with('room')
 					.with('user')
@@ -153,55 +147,54 @@ class BookingController {
 			}
 
 		// determine time filter for cancelled and past meetings (approved)
-		}else if(params.catFilter === "cancelled" || params.catFilter === "past"){
-
-			endTimeFilter=moment().format('YYYY-MM-DDTHH:mm');
+		} else if (params.catFilter === 'cancelled' || params.catFilter === 'past') {
+			endTimeFilter = moment().format('YYYY-MM-DDTHH:mm');
 
 			// determine time filter for upcoming approved and all meetings
-			switch(params.limitFilter) {
-			  case "month":
-			    startTimeFilter = moment().startOf('month').format('YYYY-MM-DD hh:mm');
-			    break;
-			  case "3-months":
-			    startTimeFilter = moment().add(3, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
-			    break;
-			  case "6-months":
-			  	startTimeFilter = moment().add(6, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
-			  	break;
-			  case "year":
-			  	startTimeFilter = moment().subtract(1, 'years').format('YYYY-MM-DD hh:mm');
-			  	break;
-			  case "all":
-			  	startTimeFilter = moment().subtract(100, 'years').format('YYYY-MM-DD hh:mm');
-			  	break;
-			  default:
-			    return response.route('home');
+			switch (params.limitFilter) {
+				case 'month':
+					startTimeFilter = moment().startOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case '3-months':
+					startTimeFilter = moment().add(3, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case '6-months':
+					startTimeFilter = moment().add(6, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case 'year':
+					startTimeFilter = moment().subtract(1, 'years').format('YYYY-MM-DD hh:mm');
+					break;
+				case 'all':
+					startTimeFilter = moment().subtract(100, 'years').format('YYYY-MM-DD hh:mm');
+					break;
+				default:
+					return response.route('home');
 			}
 
-			if(params.catFilter === "cancelled"){
+			if (params.catFilter === 'cancelled') {
 				// query for cancelled meetings based on cancellation date
 				searchResults = await Booking
 					.query()
 					.where(idType, params.id)
-					.where('status','Cancelled')
-					.whereBetween('updated_at',[startTimeFilter, endTimeFilter])
+					.where('status', 'Cancelled')
+					.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 					.orderBy('updated_at', 'asc')
 					.with('room')
 					.with('user')
 					.fetch();
-			}else{
+			} else {
 				// query for past approved meetings based on "from" date
 				searchResults = await Booking
 					.query()
 					.where(idType, params.id)
-					.where('status','Approved')
-					.whereBetween('from',[startTimeFilter, endTimeFilter])
+					.where('status', 'Approved')
+					.whereBetween('from', [startTimeFilter, endTimeFilter])
 					.orderBy('updated_at', 'asc')
 					.with('room')
 					.with('user')
 					.fetch();
 			}
-		}else{
+		} else {
 			return response.route('home');
 		}
 
@@ -210,14 +203,14 @@ class BookingController {
 		viewFilters.catFilter = params.catFilter;
 		viewFilters.limitFilter = params.limitFilter;
 
-		//bookings = await populateBookings(searchResults.toJSON());
+		// bookings = await populateBookings(searchResults.toJSON());
 		bookings = searchResults.toJSON();
 
 		return view.render('userPages.manageBookings', {
 			bookings,
 			viewFilters,
 			canEdit,
-			moment 
+			moment
 		});
 	}
 
