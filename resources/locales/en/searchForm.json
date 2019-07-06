@@ -1,6 +1,13 @@
-{
+{	
+	"date": "Date",
+	"dateInfo": "The date may not occur more than 3 months in advance",
+	"bookingStart": "Start time",
+	"bookingEnd": "End time",
     "duration": "Duration",
     "preferredLocation": "Preferred location",
     "selectFloor": "Select a floor",
+    "tableSeats": "Table Seats",
+	"capacity": "Capacity",
+	"equipment": "Equipment",
     "searchBtn": "Search"
 }

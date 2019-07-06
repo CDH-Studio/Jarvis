@@ -1,6 +1,5 @@
 'use strict';
 const Room = use('App/Models/Room');
-const User = use('App/Models/User');
 const Booking = use('App/Models/Booking');
 const Env = use('Env');
 const Logger = use('Logger');
@@ -8,55 +7,6 @@ const Outlook = new (use('App/Outlook'))();
 // Used for time related calcuklations and formatting
 const moment = require('moment');
 require('moment-round');
-
-/**
- * Populate bookings from booking query results.
- *
- * @param {Object} results Results from bookings query.
- *
- * @returns {Object} The access token.
- *
- */
-async function populateBookings (results) {
-	const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-	const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-	async function asyncMap (arr, callback) {
-		let arr2 = [];
-
-		for (let i = 0; i < arr.length; i++) {
-			arr2.push(await callback(arr[i], i, arr));
-		}
-
-		return arr2;
-	}
-
-	let bookings = [];
-	const populate = async () => {
-		bookings = await asyncMap(results, async (result) => {
-			const booking = {};
-
-			const from = new Date(result.from);
-			const to = new Date(result.to);
-			booking.subject = result.subject;
-			booking.status = result.status;
-			booking.date = days[from.getDay()] + ', ' + months[from.getMonth()] + ' ' + from.getDate() + ', ' + from.getFullYear();
-			booking.time = from.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + to.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-			booking.room = (await Room.findBy('id', result.room_id)).toJSON().name;
-			booking.roomId = result.room_id;
-			booking.id = result.id;
-			const userInfo = (await User.findBy('id', result.user_id)).toJSON();
-			booking.userName = userInfo.firstname + ' ' + userInfo.lastname;
-			booking.userId = userInfo.id;
-
-			return booking;
-		});
-	};
-
-	await populate();
-
-	return bookings;
-}
 
 class BookingController {
 	/**
@@ -128,69 +78,140 @@ class BookingController {
 	}
 
 	/**
-	 * Retrives all of the bookings that correspond to a specific room.
+	 * Retrives all of the bookings that correspond to a specific room or user.
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getBookings ({ params, view, auth, response }) {
+	async viewBookings ({ params, view, auth, response }) {
+		// get user role for booking editing
 		const userRole = await auth.user.getUserRole();
 		var canEdit = (auth.user.id === Number(params.id) || userRole === 'admin') ? 1 : 0;
+		// get room or user filtering
 		var idType = (params.bookingType === 'user') ? 'user_id' : 'room_id';
-		var bookingsType = (idType === 'user_id') ? 'userBookings' : 'roomBookings';
 
+		// reroute home if user does not have permission
 		if (userRole !== 'admin' && idType === 'user_id' && parseInt(params.id) !== auth.user.id) {
 			response.route('home');
 		}
 
-		// Queries the database fr the bookings associated to a specific room
-		let searchResults = await Booking
-			.query()
-			.where(idType, params.id)
-			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
-			.orderBy('to', 'asc')
-			.fetch();
+		let startTimeFilter, endTimeFilter, searchResults, bookings;
 
-		searchResults = searchResults.toJSON();
-		const bookings = await populateBookings(searchResults);
+		let viewFilters = {};
 
-		// counts the number of approved bookings
-		let numberOfApprovedBookings = await Booking
-			.query()
-			.where(idType, params.id)
-			.where('status', 'Approved')
-			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
-			.getCount();
+		// find upcoming meeting and all upcoming meetings (approved and cancellled)
+		if (params.catFilter === 'upcoming' || params.catFilter === 'all') {
+			startTimeFilter = moment().format('YYYY-MM-DDTHH:mm');
 
-		if (numberOfApprovedBookings === 0) {
-			numberOfApprovedBookings = '0';
+			// determine time filter for upcoming approved and all meetings
+			switch (String(params.limitFilter)) {
+				case 'month':
+					endTimeFilter = moment().endOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case '3-months':
+					endTimeFilter = moment().add(3, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case '6-months':
+					endTimeFilter = moment().add(6, 'months').endOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case 'year':
+					endTimeFilter = moment().add(1, 'years').format('YYYY-MM-DD hh:mm');
+					break;
+				case 'all':
+					endTimeFilter = moment().add(100, 'years').endOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				default:
+					return response.route('home');
+			}
+
+			if (params.catFilter === 'upcoming') {
+				// query for upcoming approved meetings
+				searchResults = await Booking
+					.query()
+					.where(idType, params.id)
+					.where('status', 'Approved')
+					.whereBetween('from', [startTimeFilter, endTimeFilter])
+					.orderBy('from', 'asc')
+					.with('room')
+					.with('user')
+					.fetch();
+			} else {
+				// query for upcoming meetings (approved and cancelled)
+				searchResults = await Booking
+					.query()
+					.where(idType, params.id)
+					.whereBetween('from', [startTimeFilter, endTimeFilter])
+					.orderBy('from', 'asc')
+					.with('room')
+					.with('user')
+					.fetch();
+			}
+
+		// determine time filter for cancelled and past meetings (approved)
+		} else if (params.catFilter === 'cancelled' || params.catFilter === 'past') {
+			endTimeFilter = moment().format('YYYY-MM-DDTHH:mm');
+
+			// determine time filter for upcoming approved and all meetings
+			switch (params.limitFilter) {
+				case 'month':
+					startTimeFilter = moment().startOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case '3-months':
+					startTimeFilter = moment().add(3, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case '6-months':
+					startTimeFilter = moment().add(6, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case 'year':
+					startTimeFilter = moment().subtract(1, 'years').format('YYYY-MM-DD hh:mm');
+					break;
+				case 'all':
+					startTimeFilter = moment().subtract(100, 'years').format('YYYY-MM-DD hh:mm');
+					break;
+				default:
+					return response.route('home');
+			}
+
+			if (params.catFilter === 'cancelled') {
+				// query for cancelled meetings based on cancellation date
+				searchResults = await Booking
+					.query()
+					.where(idType, params.id)
+					.where('status', 'Cancelled')
+					.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
+					.orderBy('updated_at', 'asc')
+					.with('room')
+					.with('user')
+					.fetch();
+			} else {
+				// query for past approved meetings based on "from" date
+				searchResults = await Booking
+					.query()
+					.where(idType, params.id)
+					.where('status', 'Approved')
+					.whereBetween('from', [startTimeFilter, endTimeFilter])
+					.orderBy('updated_at', 'asc')
+					.with('room')
+					.with('user')
+					.fetch();
+			}
+		} else {
+			return response.route('home');
 		}
 
-		// calculate the number of bookings a room has this month
-		let numberOfBookingsThisMonth = await Booking
-			.query()
-			.where(idType, params.id)
-			.where('status', 'Approved')
-			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
-			.whereRaw("strftime('%Y-%m', bookings.'to') < ?", moment().add(1, 'M').format('YYYY-MM')) // eslint-disable-line
-			.getCount();
+		viewFilters.bookingType = params.bookingType;
+		viewFilters.id = params.id;
+		viewFilters.catFilter = params.catFilter;
+		viewFilters.limitFilter = params.limitFilter;
 
-		if (numberOfBookingsThisMonth === 0) {
-			numberOfBookingsThisMonth = '0';
-		}
+		// bookings = await populateBookings(searchResults.toJSON());
+		bookings = searchResults.toJSON();
 
-		// Queries the database fr the cancelled bookings
-		let numberOfCancelled = await Booking
-			.query()
-			.where(idType, params.id)
-			.where('status', 'Cancelled')
-			.whereRaw("bookings.'to' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
-			.getCount();
-
-		if (numberOfCancelled === 0) {
-			numberOfCancelled = '0';
-		}
-
-		return view.render('userPages.manageBookings', { bookings, numberOfApprovedBookings, numberOfBookingsThisMonth, numberOfCancelled, bookingsType, canEdit });
+		return view.render('userPages.manageBookings', {
+			bookings,
+			viewFilters,
+			canEdit,
+			moment
+		});
 	}
 
 	/**

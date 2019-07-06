@@ -1,6 +1,7 @@
 {
 	"browserTab": "Search Room",
 	"date": "Date",
+	"dateInfo": "The date may not occur more than 3 months in advance",
 	"timeRange": "Time Range",
 	"TRFrom": "From",
 	"TRTo": "To",

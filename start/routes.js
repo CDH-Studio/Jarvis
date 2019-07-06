@@ -98,14 +98,13 @@ Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(
 // Bookings
 //= ========================================================================
 Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails').middleware(['auth']); // needs to be changed to get
-Route.get('/:bookingType/:id/bookings', 'BookingController.getBookings').as('viewBookings').middleware(['auth']);
+Route.get('/:bookingType/:id/bookings/:catFilter/:limitFilter', 'BookingController.viewBookings').as('viewBookings').middleware(['auth']);
 Route.post('/:bookingType/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth']);
 
 // Employee user pages
 // Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);
 Route.get('/searchRooms/:view', 'RoomController.loadSearchRoomsForm').as('searchRooms').middleware(['isUser']);
 Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware(['isUser']);
-Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking').middleware(['isUser']);
 
 // Rendering Results
 Route.get('/results', 'RoomController.findSpecific').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
