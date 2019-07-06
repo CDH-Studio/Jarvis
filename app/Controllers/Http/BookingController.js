@@ -216,8 +216,6 @@ class BookingController {
 		if(params.catFilter === "upcoming" || params.catFilter === "all"){
 			startTimeFilter=moment().format('YYYY-MM-DDTHH:mm');
 
-
-
 			// determine time filter for upcoming meetings
 			switch(String(params.limitFilter)) {
 			  case "month":
@@ -256,7 +254,7 @@ class BookingController {
 					.fetch();
 			}
 
-		}else if(params.catFilter === "cancelled"){
+		}else if(params.catFilter === "cancelled" || params.catFilter === "past"){
 
 			endTimeFilter=moment().format('YYYY-MM-DDTHH:mm');
 
@@ -280,13 +278,23 @@ class BookingController {
 			    return response.route('home');
 			}
 
-			 searchResults = await Booking
-				.query()
-				.where(idType, params.id)
-				.where('status','Cancelled')
-				.whereBetween('updated_at',[startTimeFilter, endTimeFilter])
-				.orderBy('updated_at', 'asc')
-				.fetch();
+			if(params.catFilter === "cancelled"){
+				searchResults = await Booking
+					.query()
+					.where(idType, params.id)
+					.where('status','Cancelled')
+					.whereBetween('updated_at',[startTimeFilter, endTimeFilter])
+					.orderBy('updated_at', 'asc')
+					.fetch();
+			}else{
+				searchResults = await Booking
+					.query()
+					.where(idType, params.id)
+					.where('status','Approved')
+					.whereBetween('from',[startTimeFilter, endTimeFilter])
+					.orderBy('updated_at', 'asc')
+					.fetch();
+			}
 		}else{
 			return response.route('home');
 		}
