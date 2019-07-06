@@ -1,6 +1,13 @@
-{
+{	
+	"date": "Date",
+	"dateInfo": "La date ne peut pas apparaître plus de 3 mois à l'avance",
+	"bookingStart": "L’heure de début ",
+	"bookingEnd": "L'heure de fin",
     "duration": "Durée",
     "preferredLocation": "Lieu préféré",
     "selectFloor": "Sélectionnez un étage",
+    "tableSeats": "Sièges De Table",
+	"capacity": "Capacité",
+	"equipment": "Équipement",
     "searchBtn": "Chercher"
 }
