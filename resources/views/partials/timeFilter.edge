@@ -30,7 +30,11 @@
 		</div>
 	</div>
 	<div class="col-12 col-lg-2 text-left">
-		<strong>In the next:</strong>
+		@if(viewFilters.catFilter==="past" || viewFilters.catFilter==="cancelled")
+			<strong>In the last:</strong>
+		@else
+			<strong>In the next:</strong>
+		@endif
 		<div class="dropdown d-inline">
 			<button class="btn btn-secondary dropdown-toggle text-center  d-inline" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%">
 				@if(viewFilters.limitFilter === "month")
