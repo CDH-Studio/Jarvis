@@ -22,9 +22,6 @@
 		</div>
 	</div>
 
-
-
-
 	@component('components.generalCard', title = antl.formatMessage('userDash.MBHeading'))
 		@slot('body')
 			<strong>Total: {{bookings.length}}</strong>
@@ -32,7 +29,7 @@
 				<table id='manageBookingsTable' class='table table-hover' style='width:100%;'>
 					<thead>
 						<tr>
-							@if(bookingsType == 'userBookings')
+							@if(viewFilters.bookingType == 'user')
 								<th scope='col' aria-label='Room column' class='text-center'>{{antl.formatMessage('manageBookings.tableRoom')}}</th>
 							@else
 								<th scope='col' aria-label='Room column' class='text-center'>{{antl.formatMessage('manageBookings.tableName')}}</th>
@@ -48,14 +45,14 @@
 					<tbody>
 						@each(booking in bookings) 
 							<tr aria-label='{{booking.subject}} row'>
-								@if(bookingsType == 'userBookings')
-									<td class='text-center'><a href='{{ route('showRoom', {id: booking.roomId}) }}'>{{ booking.room }}</a></td>
+								@if(viewFilters.bookingType == 'user')
+									<td class='text-center'><a href='{{ route('showRoom', {id: booking.room_id}) }}'>{{ truncate(booking.room.name, 15, '.') }}</a></td>
 								@else
-									<td class='text-center'><a href='{{ route('viewProfile', {id: booking.userId}) }}'>{{ booking.userName }}</a></td>
+									<td class='text-center'><a href='{{ route('viewProfile', {id: booking.user_id}) }}'>{{ truncate(booking.user.firstname, 5, '.') }} {{ truncate(booking.user.lastname, 5, '.') }}</a></td>
 								@endif
-								<td class='text-center'>{{ booking.subject }}</td>
-								<td class='text-center'>{{ booking.date }}</td>
-								<td class='text-center'>{{ booking.time }}</td>
+								<td class='text-center'>{{ truncate(booking.subject, 10, '...') }}</td>
+								<td class='text-center'>{{ moment(booking.from).lang(antl.currentLocale()).format("MMM Do");  }}</td>
+								<td class='text-center'>{{ moment(booking.from).format("HH:MM");  }} - {{ moment(booking.to).format("HH:MM");  }}</td>
 								@if(booking.status == 'Approved')
 									<td class='text-center td-{{ booking.status }}'>{{antl.formatMessage('manageBookings.tableApproved')}}</td>
 								@else
