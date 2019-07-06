@@ -17,15 +17,15 @@ class EditBuilding {
 			name: 'required|max:50',
 			streetAddress: 'required|max:50',
 			postalCode: 'required|max:50',
-			city: 'required|max:50',
+			city: 'required|max:50'
 		};
 	}
 
 	get messages () {
-	    return {
-	      'required': 'This field is required.',
-	    }
-  	}
+		return {
+			'required': 'This field is required.'
+		};
+	}
 }
 
 module.exports = EditBuilding;

@@ -74,12 +74,11 @@ class BuildingController {
 	 */
 	async editBuilding ({ response, params, view }) {
 		try {
-
 			const building = await Building.query()
 				.where('id', params.id)
 				.firstOrFail();
 
-			let actionType="Edit Building"
+			let actionType = 'Edit Building';
 
 			return view.render('adminPages.addEditBuilding', { building: building.toJSON(), actionType });
 		} catch (err) {
@@ -96,7 +95,6 @@ class BuildingController {
 	 */
 	async updateBuilding ({ response, params, request }) {
 		try {
-
 			// Retrieves user input
 			const body = request.all();
 
@@ -109,8 +107,8 @@ class BuildingController {
 					street_address: body.streetAddress,
 					postal_code: body.postalCode,
 					city: body.city,
-					country: "Canada"
-				})
+					country: 'Canada'
+				});
 
 			return response.route('configuration');
 		} catch (err) {
