@@ -1,0 +1,111 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+{{ actionType }}
+@endsection
+
+@section('content')
+    @if(actionType =='Add Building')
+        @!component('components.pageHeader', title='Add building')
+        <p>Add building to database. Rooms will be assigned to buildings.</p>
+    @else
+        @!component('components.pageHeader', title='Edit building')
+    @endif
+
+    <div class='row'>
+        <div class= 'col-12 col-lg-9'>
+            <div class="card shadow mb-4 p-3">
+                <div class="card-body">
+                    <div class='row'>
+                        <div class='col-md-12'>
+                            @if(actionType =='Add Building')
+                                <form action='{{ route('addBuilding') }}' method='POST' enctype='multipart/form-data'>
+                            @else
+                                <form action='{{ route('editBuilding', {id: building.id}) }}' method='POST' enctype='multipart/form-data'>
+                            @endif
+                                {{ csrfField() }}
+                                <div class='row'>
+                                    <div class='col form-group'>
+                                        <div class='row'>
+                                            <label class='col' for='name'>Building name <strong class='text-danger'>*</strong></label>
+                                        </div>
+                                        @if(hasErrorFor('name'))
+                                            <input type='text' name='name' class='form-control is-invalid' id='name' placeholder='Ex: 101A (E)' value='{{ old('name', building.name) }}' oninput='removeErrorClass("name")'>
+                                            <div class='invalid-feedback'>{{ getErrorFor('name') }}</div>
+                                        @else
+                                            <input type="text" name="name" class="form-control" id="name" placeholder="Ex: 101A (E)" value="{{ old('name', building.name) }}" >
+                                        @endif
+                                    </div>
+                                </div>
+                                {{--  Full Room Name form  --}}
+                                <div class='row'>
+                                    <div class='col form-group'>
+                                        <div class='row'>
+                                            <label class='col' for='fullName'>Street Address<strong class='text-danger'>*</strong></label>
+                                        </div>
+                                        @if(hasErrorFor('streetAddress'))
+                                            <input type='text' name='streetAddress' class='form-control is-invalid' id='streetAddress' placeholder='235 Queen Street' value='{{ old('streetAddress', building.street_address) }}'  oninput='removeErrorClass("streetAddress")'/>
+                                            <div class='invalid-feedback'>{{ getErrorFor('streetAddress') }}</div>
+                                        @else
+                                            <input type='text' name='streetAddress' class='form-control' id='streetAddress' placeholder='235 Queen Street' value='{{ old('streetAddress', building.street_address) }}'/>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                {{--  Full Room Name form  --}}
+                                <div class='row'>
+                                    <div class='col form-group'>
+                                        <div class='row'>
+                                            <label class='col' for='fullName'>City<strong class='text-danger'>*</strong></label>
+                                        </div>
+                                        @if(hasErrorFor('city'))
+                                            <input type='text' name='city' class='form-control is-invalid' id='city' placeholder='Ottawa' value='{{ old('city', building.city) }}'  oninput='removeErrorClass("city")'/>
+                                            <div class='invalid-feedback'>{{ getErrorFor('city') }}</div>
+                                        @else
+                                            <input type='text' name='city' class='form-control' id='city' placeholder='Ottawa' value='{{ old('city', building.city) }}'/>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                {{--  Full Room Name form  --}}
+                                <div class='row'>
+                                    <div class='col form-group'>
+                                        <div class='row'>
+                                            <label class='col' for='fullName'>Postal Code<strong class='text-danger'>*</strong></label>
+                                        </div>
+                                        @if(hasErrorFor('postalCode'))
+                                            <input type='text' name='postalCode' class='form-control is-invalid' id='postalCode' placeholder='A2A4Y4' value='{{ old('postalCode', building.postal_code) }}'  oninput='removeErrorClass("postalCode")'/>
+                                            <div class='invalid-feedback'>{{ getErrorFor('postalCode') }}</div>
+                                        @else
+                                            <input type='text' name='postalCode' class='form-control' id='postalCode' placeholder='A2A4Y4' value='{{ old('postalCode', building.postal_code) }}'/>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class='row' style='margin-top:20px;'>
+                                    <div class='col text-right'>
+                                        <button type='button' class='btn btn-secondary mb-3' onclick="window.location='{{ route('adminDash')}}';">Cancel</button>      
+                                        @if(actionType =='Add Room')
+                                            <button type='submit' class='btn btn-primary mb-3 mr-0'>Add Building</button>                
+                                        @else
+                                            <button type='submit' class='btn btn-primary mb-3 mr-0'>Update</button>  
+                                        @endif
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>         
+    </div>
+
+@endsection
+
+
+
+
+
+
+
+

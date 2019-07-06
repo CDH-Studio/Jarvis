@@ -66,6 +66,57 @@ class BuildingController {
 
 		return response.route('home');
 	}
+
+	/**
+	 * store the selected building in the cookie
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async editBuilding ({ response, params, view }) {
+		try {
+			const building = await Building.query()
+				.where('id', params.id)
+				.firstOrFail();
+
+			let actionType = 'Edit Building';
+
+			return view.render('adminPages.addEditBuilding', { building: building.toJSON(), actionType });
+		} catch (err) {
+			console.log(err);
+		}
+
+		return response.route('home');
+	}
+
+	/**
+	 * store the selected building in the cookie
+	 *
+	 * @param {Object} Context The context object.
+	 */
+	async updateBuilding ({ response, params, request }) {
+		try {
+			// Retrieves user input
+			const body = request.all();
+
+			// Updates room information in database
+			await Building
+				.query()
+				.where('id', params.id)
+				.update({
+					name: body.name,
+					street_address: body.streetAddress,
+					postal_code: body.postalCode,
+					city: body.city,
+					country: 'Canada'
+				});
+
+			return response.route('configuration');
+		} catch (err) {
+			console.log(err);
+		}
+
+		return response.route('home');
+	}
 }
 
 module.exports = BuildingController;
