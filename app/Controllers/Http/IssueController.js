@@ -58,7 +58,7 @@ class IssueController {
 		try {
 			const { issueType, comment, roomID, issueStatus } = request.only(['issueType', 'comment', 'roomID', 'userID', 'issueStatus']);
 			const date = new Date();
-			
+
 			// Updates room information in database
 			let issue = await Report.findByOrFail('id', params.id);
 			issue.report_type_id = issueType;
@@ -109,10 +109,15 @@ class IssueController {
 					.query()
 					.where('building_id', selectedBuilding.id)
 					.where('report_status_id', issuefilterType)
+					.with('user')
+					.with('room')
 					.fetch();
 			} else {
 				results = await Report.query()
 					.where('building_id', selectedBuilding.id)
+					.with('user')
+					.with('room')
+					.with('report_type')
 					.fetch();
 			}
 		} else {
@@ -149,16 +154,16 @@ class IssueController {
 
 		// loop through and change ids to the actual names in the tables
 		// TODO: needs to be changed to take advantage of relational database
-		for (let i = 0; i < issues.length; i++) {
-			issues[i].status = await ReportStatus.getName(issues[i].report_status_id);
-			issues[i].room = await Room.getName(issues[i].room_id);
-			issues[i].user = await User.getName(issues[i].user_id);
-			issues[i].type = await ReportType.getName(issues[i].report_type_id);
-			currentTime = new Date(issues[i].created_at);
-			issues[i].created_at = currentTime.toLocaleDateString('de-DE', options);
-		}
+		// for (let i = 0; i < issues.length; i++) {
+		// 	issues[i].status = await ReportStatus.getName(issues[i].report_status_id);
+		// 	issues[i].room = await Room.getName(issues[i].room_id);
+		// 	issues[i].user = await User.getName(issues[i].user_id);
+		// 	issues[i].type = await ReportType.getName(issues[i].report_type_id);
+		// 	currentTime = new Date(issues[i].created_at);
+		// 	issues[i].created_at = currentTime.toLocaleDateString('de-DE', options);
+		// }
 
-		return view.render('adminPages.viewRoomIssues', { roomID: params.roomID, roomName, issues, stats, filterType: params.issueStatus });
+		return view.render('adminPages.viewRoomIssues', { roomID: params.roomID, roomName, issues, stats, filterType: params.issueStatus, moment });
 	}
 
 	/**
