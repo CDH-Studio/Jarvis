@@ -4,6 +4,7 @@ const User = use('App/Models/User');
 const Report = use('App/Models/Report');
 const ReportStatus = use('App/Models/ReportStatus');
 const ReportType = use('App/Models/ReportType');
+const moment = require('moment');
 
 class IssueController {
 	/**
@@ -36,12 +37,14 @@ class IssueController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async editIssue ({ response, auth, params, view, request }) {
+	async editIssue ({ response, params, view }) {
 		try {
 			// get the search form data if employee view
-			const issue = await Report.findOrFail(params.id);
-			return view.render('adminPages.editIssue', { id: params.id, issue });
+			let issue = await Report.query().where('id',params.id).with('user').with('room').fetch();
+			issue = issue.toJSON();
+			return view.render('adminPages.editIssue', { id: params.id, issue: issue[0], moment});
 		} catch (error) {
+			console.log(error);
 			return response.redirect('/');
 		}
 	}
@@ -51,23 +54,24 @@ class IssueController {
 	*
 	* @param {Object} Context The context object.
 	*/
-	async updateIssue ({ response, params, request, session }) {
+	async updateIssue ({ response, params, request, view, session }) {
 		try {
 			const { issueType, comment, roomID, issueStatus } = request.only(['issueType', 'comment', 'roomID', 'userID', 'issueStatus']);
 			const date = new Date();
+			
 			// Updates room information in database
-			await Report
-				.query()
-				.where('id', params.id)
-				.update({
-					report_type_id: issueType,
-					comment: comment,
-					report_status_id: issueStatus,
-					updated_at: date
-				});
+			let issue = await Report.findByOrFail('id', params.id);
+			issue.report_type_id = issueType;
+			issue.comment = comment;
+			issue.report_status_id = issueStatus;
+			issue.updated_at = date;
+			issue.save();
+
 			session.flash({ notification: 'Issue Updated!' });
-			return response.route('showIssue', { roomID: roomID, issueStatus: 'all' });
+
+			return response.route('editIssue', { id: issue.id });
 		} catch (error) {
+			console.log(error);
 			return response.redirect('/');
 		}
 	}

@@ -10,21 +10,50 @@ Issue #{{ issue.id }}
 
 
 @section('content')
-    @!component('components.pageHeader', title='Issue #' + issue.id)
+    @!component('components.pageHeader', title='Ticket #' + issue.id)
     
     <div class='row'>
-        <div class= 'col-md-9'>
+        <div class= 'col-12 col-xl-9'>
             <div class="card shadow mb-4 p-3">
                 <div class="card-body">
                     <div class='row'>
-                        <div class='col-md-12'>
+                        <div class='col-12'>
                             {{--  Form Content  --}}
                             <form action='{{ route('updateIssue', {id: id}) }}' method='POST' enctype='multipart/form-data'>
                                 {{ csrfField() }}
                                 <input type='hidden' name='roomID' value={{ issue.room_id }} /> 
                                 {{--  Body Information  --}}
                                 <div class='row'>
-                                    <div class='col form-group'>
+                                    <div class="col-2 mb-2 text-center  d-sm-none d-lg-block">
+                                    @if(issue.report_status_id == '1' )
+                                        <span class="fa-stack fa-2x mb-2">
+                                          <i class="fas fa-circle fa-stack-2x color-success "></i>
+                                          <i class="fab fa-font-awesome-flag fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                        <h5><strong>Open</strong></h5>
+                                    @elseif(issue.report_status_id == '2' )
+                                        <span class="fa-stack fa-2x mb-2">
+                                          <i class="fas fa-circle fa-stack-2x color-warning "></i>
+                                          <i class="fab fa-font-awesome-flag fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                        <h5><strong>Pending</strong></h5> 
+                                    @else
+                                        <span class="fa-stack fa-2x mb-2">
+                                          <i class="fas fa-circle fa-stack-2x color-danger "></i>
+                                          <i class="fab fa-font-awesome-flag fa-stack-1x fa-inverse"></i>
+                                        </span>
+                                        <strong>Closed</strong> 
+                                    @endif
+                                    </div>
+                                     <div class='col-12 col-md-4 py-md-3 mb-md-1'>
+                                        <p><strong>Submitted By:</strong></h6> {{issue.user.firstname}} {{issue.user.lastname}}</p>
+                                        <p><strong>Room:</strong> {{issue.room.name}}</p>
+                                    </div>
+                                     <div class='col-12 col-md-5 py-md-3 mb-md-1'>
+                                        <p><strong>Submitted On:</strong> {{ moment(issue.created_at).locale(antl.currentLocale()).format("MMM DD, YYYY HH:MM")}}</p>
+                                        <p><strong>Last Edited:</strong> {{ moment(issue.updated_a).locale(antl.currentLocale()).format("MMM DD, YYYY HH:MM")}}</p>
+                                     </div>
+                                    <div class='col-12 form-group'>
                                         <label for='issueStatus'>Status <strong class='text-danger'>*</strong></label>
                                         @if(hasErrorFor('issueStatus'))
                                             <select class='form-control is-invalid' name='issueStatus' id='issueStatus' onchange='removeErrorClass("issueStatus")'>
@@ -74,7 +103,7 @@ Issue #{{ issue.id }}
                                             <textarea class='form-control is-invalid' name='comment' id='comment' rows='5' onchange='removeErrorClass("comment")'> {{ old('comment', issue.comment) }}</textarea>
                                             <div class='invalid-feedback'>{{ getErrorFor('comment') }}</div>
                                         @else
-                                            <textarea class='form-control' name='comment' id='comment' rows='5' > {{ old('comment',  issue.comment) }}</textarea>
+                                            <textarea class='form-control' name='comment' id='comment' rows='5' >{{ old('comment',  issue.comment) }}</textarea>
                                         @endif                                    
                                     </div> 
                                 </div>
