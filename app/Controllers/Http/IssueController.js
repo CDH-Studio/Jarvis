@@ -82,21 +82,12 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async getRoomIssues ({ request, params, view, response }) {
-		var results;
-		var issues;
-		var currentTime;
-		var issuefilterType;
-		var roomName;
-
-		let startTimeFilter, endTimeFilter;
+		let results, issues, currentTime, issuefilterType, roomName, startTimeFilter, endTimeFilter;
 		let viewFilters=[];
 
 		endTimeFilter = moment().format('YYYY-MM-DDTHH:mm');
 
-		viewFilters.timeFilter = params.timeFilter;
-
-
-		// determine time filter for upcoming approved and all meetings
+		// determine time filter for reported issues
 		switch (params.timeFilter) {
 			case 'month':
 				startTimeFilter = moment().startOf('month').format('YYYY-MM-DD hh:mm');
@@ -183,12 +174,14 @@ class IssueController {
 		//Ali fix the querys in this function
 		const stats = await this.getIssueStatistics(params.roomID, selectedBuilding);
 
+		viewFilters.timeFilter = params.timeFilter;
+		viewFilters.filterType = params.issueStatus;
+
 		return view.render('adminPages.viewRoomIssues', { 
 			roomID: params.roomID,
 			roomName,
 			issues,
 			stats,
-			filterType: params.issueStatus,
 			viewFilters,
 			moment
 		});
