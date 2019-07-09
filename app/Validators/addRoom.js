@@ -30,9 +30,9 @@ class AddRoom {
 			 *
 			 */
 			floor: 'required|requiredDropdown',
-			floorPlan: 'required|file|file_ext:png,jpg,jpeg|file_size:2mb|file_types:image',
+			floorPlan: 'file_ext:png,jpg,jpeg|file_size:3mb|file_types:image',
 			fullName: 'required',
-			roomPicture: 'required|file|file_ext:png,jpg,jpeg|file_size:2mb|file_types:image',
+			roomPicture: 'file_ext:png,jpg,jpeg|file_size:3mb|file_types:image',
 			tableSeats: 'required|integer|above:0',
 			telephoneNumber: 'required',
 			// telephoneNumber: "required| regex: /((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}/",

@@ -141,15 +141,26 @@ class ReviewController {
 	 */
 	async delete ({ request, response, session, auth, params }) {
 		try {
+			const userRole = await auth.user.getUserRole();
+
+			// Retrieves user input
+			const body = request.all();
+
 			// Check if room exists
 			const room = await Room.findOrFail(params.id);
 
-			// retrives the reviews in the database
-			let searchResults = await Review
-				.query()
-				.where('user_id', auth.user.id)
-				.where('room_id', room.id)
-				.firstOrFail();
+			let searchResults;
+
+			if (userRole === 'admin') {
+				searchResults = await Review.findOrFail(body.reviewID);
+			} else {
+				// retrieves the reviews in the database
+				searchResults = await Review
+					.query()
+					.where('user_id', auth.user.id)
+					.where('room_id', room.id)
+					.firstOrFail();
+			}
 
 			const review = searchResults.toJSON();
 

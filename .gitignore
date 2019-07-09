@@ -5,10 +5,7 @@ node_modules
 tmp
 
 # Environment variables, never commit this file
-# .env
-
-# Uploads 
-public/uploads/reviewPictures
+.env
 
 # Uploads 
 public/uploads/
@@ -30,3 +27,6 @@ yarn.lock
 
 # scanner
 /.scannerwork
+
+# persistent directory
+data

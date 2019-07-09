@@ -1,5 +1,4 @@
 /node_modules
 /yardstick
-/public/js/vendor
-/public/js/chatbot.js
+/public/js/
 /database/rawQueries/

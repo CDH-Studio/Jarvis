@@ -179,6 +179,12 @@
     }
 }
 
+.timepicker-icon {
+    background-color: #145f9c;
+    border: 1px solid #145f9c;
+    color: #ffffff;
+}
+
 /*+++++++++++++++++++++++++++++++++++++++++++*/
 /* Search Criteria */
 /*+++++++++++++++++++++++++++++++++++++++++++*/

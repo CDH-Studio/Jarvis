@@ -4,7 +4,7 @@
 	"firstname": "First Name",
 	"lastname": "Last Name",
 	"email": "Email",
-	"passTip": "must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character and be at least 8 Characters",
+	"passTip": "Password must be at least 6 characters long",
 	"pass": "Password",
 	"confirmPass": "Confirm Password",
 	"token": "Admin Token",

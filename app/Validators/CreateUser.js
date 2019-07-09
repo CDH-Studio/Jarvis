@@ -27,11 +27,11 @@ class CreateUser {
 			 *
 			 */
 
-			confirmPassword: 'required|regexPassword|same:password',
+			confirmPassword: 'required|same:password',
 			email: 'required|email|unique:users',
 			firstname: 'required|max:50',
 			lastname: 'required|max:50',
-			password:"required|regexPassword", // eslint-disable-line
+			password:"required|different:email|regexPassword", // eslint-disable-line
 			tower: 'required|integer|requiredDropdown',
 			floor: 'required|integer|requiredDropdown',
 			building: 'required|integer|requiredDropdown'
@@ -42,11 +42,12 @@ class CreateUser {
 		return {
 			'email': 'Please enter a valid e-mail address (somebody@example.com)',
 			'max': 'Please limit input to 50 characters.',
-			'regexPassword': 'Your password must contain at least: 1 Uppercase, 1 Lowercase, 1 Number, 1 Special Character and be at least 8 Characters.',
+			'regexPassword': 'Your password must be at least 6 characters',
 			'required': 'This field is required.',
 			'requiredDropdown': 'This field is required.',
 			'same': 'Passwords do not match',
-			'unique': 'The {{ field }} already exists.'
+			'unique': 'The {{ field }} already exists.',
+			'different': 'Password should not match email'
 		};
 	}
 

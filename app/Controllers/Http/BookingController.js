@@ -132,14 +132,14 @@ class BookingController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async getBookings ({ params, view, auth }) {
+	async getBookings ({ params, view, auth, response }) {
 		const userRole = await auth.user.getUserRole();
 		var canEdit = (auth.user.id === Number(params.id) || userRole === 'admin') ? 1 : 0;
 		var idType = (params.bookingType === 'user') ? 'user_id' : 'room_id';
 		var bookingsType = (idType === 'user_id') ? 'userBookings' : 'roomBookings';
 
-		if (userRole !== 'admin') {
-			// this.syncEvents(auth.user.id);
+		if (userRole !== 'admin' && idType === 'user_id' && parseInt(params.id) !== auth.user.id) {
+			response.route('home');
 		}
 
 		// Queries the database fr the bookings associated to a specific room

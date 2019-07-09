@@ -50,7 +50,7 @@ Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['aut
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
 Route.get('/allAdmins', 'UserController.getAllAdmins').as('allAdmins').middleware(['isAdmin']);
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
-Route.post('/user/:id/edit', 'UserController.update').as('saveUser').validator('EditUser').middleware(['isUser']);
+Route.post('/user/:id/edit', 'UserController.update').as('saveUser').validator('EditUser').middleware(['auth']);
 Route.post('/user/:id/editAdmin', 'UserController.update').as('saveAdmin').validator('EditAdmin').middleware(['isAdmin']);
 Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 
@@ -91,7 +91,7 @@ Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').m
 // user
 Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('addReview').middleware(['isUser']);
 Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('addReview').middleware(['isUser']);
-Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['isUser']);
+Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['auth']);
 Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
 
 //= ========================================================================
@@ -110,7 +110,7 @@ Route.on('/manageBookings').render('userPages/manageBookings').as('manageBooking
 // Rendering Results
 Route.get('/results', 'RoomController.findSpecific').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
 Route.get('/recurringResults', 'RoomController.searchRecurring2').as('recurringResults');
-Route.get('/findAvailable', 'RoomController.searchRooms').as('findAvailable');
+Route.get('/findAvailable', 'RoomController.searchRooms').as('findAvailable').validator('SearchRoom');
 
 // Booking a Room
 Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);
@@ -136,3 +136,5 @@ Route.get('/push', 'TokenController.push').as('push');
 // Active Directory
 //= ========================================================================
 Route.post('/active', 'UserController.active').as('active');
+
+Route.get('/test', 'RecurController.test').as('test');

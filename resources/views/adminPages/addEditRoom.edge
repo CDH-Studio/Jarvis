@@ -19,7 +19,7 @@
     <p>Add rooms to database. Rooms added here can be booked by users.</p>
 
     <div class='row'>
-        <div class= 'col-md-9'>
+        <div class= 'col-12 col-lg-9'>
             <div class="card shadow mb-4 p-3">
                 <div class="card-body">
                     <div class='row'>
@@ -205,7 +205,7 @@
                     
                                 <div class='row'>
                                     {{--  Floor Plan Picture --}}
-                                    <div class='col' id='floorPlanContent'>
+                                    <div class='col-6' id='floorPlanContent'>
                                         <label>Floor plan <strong class='text-danger'>*</strong></label>
                                         <div class='form-group'>
                                             <div class='custom-file'>
@@ -217,20 +217,18 @@
                                                 @endif
                                                 <label id='floorPlanLabel' class='custom-file-label' for='floorPlan' style='overflow:hidden;'>Choose file</label>
                                                 @if(actionType !='Add Room')
-                                                    <small class="form-text text-muted">Leaving this blank will keep the previously uploaded picture.</small>
+                                                    <small class="form-text text-muted">Leaving this blank will keep the previously uploaded picture. (Max: 3MB)</small>
                                                 @endif
                                             </div>
                                         </div>
                                         @if(room.floorplan)
-                                            <div class="col-4 text-center">
-                                                <img class="shadow"style ="width:80%; max-height: 150px;" data-toggle="modal" data-target="#room-floorplan-{{room.id}}" src='/{{room.floorplan}}'>
-                                            </div>
+                                            <img class="img-thumbnail" style="width:50%;" data-toggle="modal" data-target="#room-floorplan-{{room.id}}" src='/{{room.floorplan_small}}'>
                                             <small id="floorPlanHelp" class="form-text text-muted">Click to view the previosuly <strong>saved</strong> image.</small>
                                         @endif
                                     </div>
                                     
                                     {{--  Room Picture  --}}
-                                    <div class='col' id='roomPictureContent'>
+                                    <div class='col-6' id='roomPictureContent'>
                                         <label>Room picture <strong class='text-danger'>*</strong></label>
                                         <div class='form-group'>
                                             <div class='custom-file'>
@@ -247,9 +245,7 @@
                                             </div>
                                         </div>
                                         @if(room.picture)
-                                            <div class="col-4 text-center">
-                                                <img class="shadow"style ="width:80%; max-height: 150px;" data-toggle="modal" data-target="#room-roompicture-{{room.id}}" src='/{{room.picture}}'>
-                                            </div>
+                                            <img class="img-thumbnail" style="width:50%" data-toggle="modal" data-target="#room-roompicture-{{room.id}}" src='/{{room.picture_small}}'>
                                             <small id="reviewPictureHelp" class="form-text text-muted">Click to view the previously <strong>saved</strong> image.</small>
                                         @endif
                                     </div>
@@ -274,18 +270,10 @@
 
 
     {{--  displaying the room picture  --}}
-    @if(room.floorplan)
-        @!component('components.imageModal', id="room-floorplan-"+room.id, title=room.name + ' - Floor plan', image='/'+ room.floorplan)
-    @else
-        @!component('components.imageModal', id="room-floorplan-"+room.id, title=room.name + ' - Floor plan', image="/images/default.png")
-    @endif
+    @!component('components.imageModal', id="room-floorplan-"+room.id, title=room.name + ' - Floor plan', image='/'+ room.floorplan)
 
     {{--  displaying the room picture  --}}
-    @if(room.picture)
-        @!component('components.imageModal', id="room-roompicture-"+room.id, title=room.name + ' - Room picture', image='/'+ room.picture)
-    @else
-        @!component('components.imageModal', id="room-roompicture-"+room.id, title=room.name + ' - Room picture', image="/images/default.png")
-    @endif
+    @!component('components.imageModal', id="room-roompicture-"+room.id, title=room.name + ' - Room picture', image='/'+ room.picture)
 
     {{--  Script to display file name on upload  --}}
     <script>

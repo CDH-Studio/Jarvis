@@ -1,0 +1,11 @@
+{
+	"firstname": "Prénom",
+	"lastname": "Nom de famille",
+	"email": "Courriel",
+	"emailMessage": "Nous ne partagerons jamais votre email avec qui que ce soit.",
+	"building": "Immeuble",
+	"tower": "Tour",
+	"floor": "Étage",
+	"cancelBtn": "Annuler",
+	"updateBtn": "Mettre à jour"
+}

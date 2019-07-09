@@ -19,7 +19,9 @@ class RoomsSchema extends Schema {
 			table.string('extraEquipment', 100);
 			table.string('comment', 100);
 			table.string('floorplan', 100);
+			table.string('floorplan_small', 100);
 			table.string('picture', 100);
+			table.string('picture_small', 100);
 			table.string('calendar', 250).defaultTo('insertCalendarHere');
 			table.integer('avg_rating').unsigned().notNullable().defaultTo(0);
 			table.integer('state_id').notNullable();

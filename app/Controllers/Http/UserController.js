@@ -33,7 +33,7 @@ function randomString (times) {
  * @param {String} columnName  Name of the column to query by
  * @param {*} columnValue      Value of the column to query by
  */
-async function updatePassword (newPassword, columnName, columnValue) {
+async function updatePassword ({ newPassword, columnName, columnValue }) {
 	try {
 		const hashedNewPassword = await Hash.make(newPassword);
 		const changedRow = await User
@@ -97,35 +97,52 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async edit ({ params, view, auth, response }) {
-		// Retrieves user object
-		const user = await User.findOrFail(params.id);
-		const userRole = await auth.user.getUserRole();
-		var isAdmin;
+	async edit ({ params, view, auth, response, request }) {
+		try {
+			// Retrieves user object
+			const profile = await User.findOrFail(params.id);
+			const profileRole = await profile.getUserRole();
+			const userRole = await auth.user.getUserRole();
+			let isAdmin, selectedBuilding, allBuildings;
+			// check if admin is editing their own profile
+			if (userRole === 'admin') {
+				isAdmin = true;
+				selectedBuilding = request.cookie('selectedBuilding');
+				// get all builig info admin nav bar since this route is shared with regular users and admin
+				// therefore, the admin middle-ware can't retrieve building info to pass to view
+				allBuildings = await Building.all();
+				allBuildings = allBuildings.toJSON();
+				// check if user is editing their own profile
+			} else if (auth.user.id === Number(params.id) && userRole === 'user') {
+				isAdmin = false;
+				// check if user is editing someone elses profile
+			} else {
+				return response.redirect('/');
+			}
 
-		let formOptions = {};
+			let formOptions = {};
 
-		var buildingOptions = await Building.all();
-		formOptions.buildings = buildingOptions.toJSON();
+			if (profileRole === 'user') {
+				var buildingOptions = await Building.all();
+				formOptions.buildings = buildingOptions.toJSON();
 
-		var towerOptions = await Tower.all();
-		formOptions.towers = towerOptions.toJSON();
+				var towerOptions = await Tower.all();
+				formOptions.towers = towerOptions.toJSON();
 
-		var floorOptions = await Floor.all();
-		formOptions.floors = floorOptions.toJSON();
+				var floorOptions = await Floor.all();
+				formOptions.floors = floorOptions.toJSON();
+			}
 
-		// check if admin is editing their own profile
-		if (userRole === 'admin') {
-			isAdmin = true;
-		// check if user is editing their own profile
-		} else if (auth.user.id === Number(params.id) && userRole === 'user') {
-			isAdmin = false;
-		// check if user is editing someone elses profile
-		} else {
-			return response.redirect('/');
+			return view.render('auth.editProfile', { user: profile,
+				isAdmin,
+				profileRole,
+				formOptions,
+				selectedBuilding,
+				allBuildings });
+		} catch (err) {
+			Logger.debug(err);
+			return response.route('home');
 		}
-
-		return view.render('auth.editProfile', { user, isAdmin, formOptions });
 	}
 
 	/**
@@ -133,16 +150,24 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async update ({ request, session, params, response }) {
+	async update ({ auth, request, session, params, response }) {
 		try {
-		// Retrieves user input
+			if (auth.user.id !== params.id && auth.user.getUserRole() === 'user') {
+				return response.redirect('/');
+			}
+
+			// Retrieves user input
 			const body = request.all();
 
-			// test if selected building, tower, and floor exist
-			await Floor.findOrFail(body.floor);
-			await Tower.findOrFail(body.tower);
-			await Building.findOrFail(body.building);
+			const profile = await User.findOrFail(params.id);
+			const profileRole = await profile.getUserRole();
 
+			// test if selected building, tower, and floor exist
+			if (profileRole === 'user') {
+				await Floor.findOrFail(body.floor);
+				await Tower.findOrFail(body.tower);
+				await Building.findOrFail(body.building);
+			}
 			// Updates user information in database
 			await User
 				.query()
@@ -389,7 +414,7 @@ class UserController {
 		return response.redirect('/login');
 	}
 
-	async show ({ auth, params, view, response }) {
+	async show ({ auth, params, view, response, request }) {
 		let user = await User
 			.query()
 			.where('id', params.id)
@@ -401,6 +426,17 @@ class UserController {
 
 		var canEdit = 0;
 		const userRole = await auth.user.getUserRole();
+		user = user.toJSON();
+
+		let selectedBuilding, allBuildings;
+
+		if (userRole === 'admin') {
+			selectedBuilding = request.cookie('selectedBuilding');
+			// get all builig info admin nav bar since this route is shared with regular users and admin
+			// therefore, the admin middle-ware can't retrieve building info to pass to view
+			allBuildings = await Building.all();
+			allBuildings = allBuildings.toJSON();
+		}
 
 		// check if user is viewing their own profile or is admin
 		if (auth.user.id === Number(params.id) || userRole === 'admin') {
@@ -409,9 +445,7 @@ class UserController {
 			return response.redirect('/');
 		}
 
-		user = user.toJSON();
-
-		return view.render('auth.showProfile', { auth, user, canEdit });
+		return view.render('auth.showProfile', { auth, user, canEdit, allBuildings, selectedBuilding });
 	}
 
 	/**
@@ -476,8 +510,10 @@ class UserController {
 
 			if (rows.length !== 0 && rows[0].type === 1) {
 				const email = rows[0].email;
+				const numb = Math.floor(Math.random() * 8) + 1;
+				const photoName = 'login_' + numb + '.jpg';
 
-				return view.render('auth.resetPassword', { email });
+				return view.render('auth.resetPassword', { email, photoName });
 			}
 		}
 	}
@@ -490,7 +526,7 @@ class UserController {
 	async resetPassword ({ request, response, session }) {
 		const { newPassword, email } = request.only(['newPassword', 'email']);
 
-		if (updatePassword(newPassword, 'email', email)) {
+		if (updatePassword({ newPassword, columnName: 'email', columnValue: email })) {
 			session.flash({
 				notification: 'Your password has been changed. Please use the new password to log in.'
 			});
@@ -508,7 +544,7 @@ class UserController {
 		const userRole = await auth.user.getUserRole();
 		if (userRole === 'admin' || (auth.user.id === Number(userId) && userRole === 'user')) {
 			try {
-				if (updatePassword(newPassword, 'id', userId)) {
+				if (updatePassword({ newPassword, columnName: 'id', columnValue: userId })) {
 					session.flash({ success: 'Password Updated Successfully' });
 				}
 			} catch (error) {
