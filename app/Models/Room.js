@@ -27,6 +27,10 @@ class Room extends Model {
 		return this.belongsTo('App/Models/Tower', 'tower_id');
 	}
 
+	room () {
+		return this.belongsTo('App/Models/Room', 'room_id');
+	}
+
 	features () {
 		return this
 			.belongsToMany('App/Models/RoomFeature')

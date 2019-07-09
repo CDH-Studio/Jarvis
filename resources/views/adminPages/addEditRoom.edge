@@ -5,7 +5,12 @@
 @endsection
 
 @section('content')
-    @!component('components.pageHeader', title='Add room')
+    @if(actionType =='Add Room')
+        @!component('components.pageHeader', title='Add room')
+        <p>Add rooms to database. Rooms added here can be booked by users.</p>
+    @else
+        @!component('components.pageHeader', title='Edit room')
+    @endif
     @if(flashMessage('error'))
         <div class="row">
             <div class="col-xl-12">
@@ -16,7 +21,7 @@
             </div>
         </div>
     @endif
-    <p>Add rooms to database. Rooms added here can be booked by users.</p>
+    
 
     <div class='row'>
         <div class= 'col-12 col-lg-9'>
@@ -277,23 +282,26 @@
     {{--  displaying the room picture  --}}
     @!component('components.imageModal', id="room-roompicture-"+room.id, title=room.name + ' - Room picture', image='/'+ room.picture)
 
-    {{--  Script to display file name on upload  --}}
-    <script>
-        $('#floorPlan').change(function(e){
-            var fileName = e.target.files[0].name;
-            $('#floorPlanLabel').html(fileName);
-        });
-        $('#roomPicture').change(function(e){
-            var fileName = e.target.files[0].name;
-            $('#roomPictureLabel').html(fileName);
-        });
-    </script>
-    {{--  Remove the is-invalid class when input changes  --}}
-    <script>
-        function removeErrorClass(idOfInput){
-            $('#'+idOfInput).removeClass('is-invalid');
-        }
-    </script>
+    @section('extrajs')
+        {{--  Script to display file name on upload  --}}
+        <script>
+            $('#floorPlan').change(function(e){
+                var fileName = e.target.files[0].name;
+                $('#floorPlanLabel').html(fileName);
+            });
+            $('#roomPicture').change(function(e){
+                var fileName = e.target.files[0].name;
+                $('#roomPictureLabel').html(fileName);
+            });
+        </script>
+        {{--  Remove the is-invalid class when input changes  --}}
+        <script>
+            function removeErrorClass(idOfInput){
+                $('#'+idOfInput).removeClass('is-invalid');
+            }
+        </script>
+    @endsection
+    
 @endsection
 
 

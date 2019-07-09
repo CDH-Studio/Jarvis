@@ -1,6 +1,7 @@
 {
 	"browserTab": "Recherche une salle",
 	"date": "Date",
+	"dateInfo": "La date ne peut pas apparaître plus de 3 mois à l'avance",
 	"timeRange": "Intervalle de temps",
 	"TRFrom": "De",
 	"TRTo": "À",
