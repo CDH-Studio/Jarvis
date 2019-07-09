@@ -159,10 +159,10 @@ class BookingController {
 					startTimeFilter = moment().startOf('month').format('YYYY-MM-DD hh:mm');
 					break;
 				case '3-months':
-					startTimeFilter = moment().add(3, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+					startTimeFilter = moment().subtract(3, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
 					break;
 				case '6-months':
-					startTimeFilter = moment().add(6, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+					startTimeFilter = moment().subtract(6, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
 					break;
 				case 'year':
 					startTimeFilter = moment().subtract(1, 'years').format('YYYY-MM-DD hh:mm');

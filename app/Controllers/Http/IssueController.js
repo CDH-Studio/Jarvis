@@ -88,6 +88,35 @@ class IssueController {
 		var issuefilterType;
 		var roomName;
 
+		let startTimeFilter, endTimeFilter;
+		let viewFilters=[];
+
+		endTimeFilter = moment().format('YYYY-MM-DDTHH:mm');
+
+		viewFilters.timeFilter = params.timeFilter;
+
+
+		// determine time filter for upcoming approved and all meetings
+		switch (params.timeFilter) {
+			case 'month':
+				startTimeFilter = moment().startOf('month').format('YYYY-MM-DD hh:mm');
+				break;
+			case '3-months':
+				startTimeFilter = moment().subtract(3, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+				break;
+			case '6-months':
+				startTimeFilter = moment().subtract(6, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+				break;
+			case 'year':
+				startTimeFilter = moment().subtract(1, 'years').format('YYYY-MM-DD hh:mm');
+				break;
+			case 'all':
+				startTimeFilter = moment().subtract(100, 'years').format('YYYY-MM-DD hh:mm');
+				break;
+			default:
+				return response.route('home');
+		}
+
 		// covert status string to int
 		if (params.issueStatus === 'all') {
 			issuefilterType = 0;
@@ -109,12 +138,14 @@ class IssueController {
 					.query()
 					.where('building_id', selectedBuilding.id)
 					.where('report_status_id', issuefilterType)
+					.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 					.with('user')
 					.with('room')
 					.fetch();
 			} else {
 				results = await Report.query()
 					.where('building_id', selectedBuilding.id)
+					.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 					.with('user')
 					.with('room')
 					.with('report_type')
@@ -135,11 +166,13 @@ class IssueController {
 				results = await Report
 					.query()
 					.where('room_id', params.roomID)
+					.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 					.where('report_status_id', issuefilterType)
 					.fetch();
 			} else {
 				results = await Report
 					.query()
+					.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 					.where('room_id', params.roomID)
 					.fetch();
 			}
@@ -147,23 +180,18 @@ class IssueController {
 
 		issues = results.toJSON();
 		// Retrieve issue stats
+		//Ali fix the querys in this function
 		const stats = await this.getIssueStatistics(params.roomID, selectedBuilding);
 
-		// date formatting options
-		var options = { year: 'numeric', month: 'long', day: 'numeric' };
-
-		// loop through and change ids to the actual names in the tables
-		// TODO: needs to be changed to take advantage of relational database
-		// for (let i = 0; i < issues.length; i++) {
-		// 	issues[i].status = await ReportStatus.getName(issues[i].report_status_id);
-		// 	issues[i].room = await Room.getName(issues[i].room_id);
-		// 	issues[i].user = await User.getName(issues[i].user_id);
-		// 	issues[i].type = await ReportType.getName(issues[i].report_type_id);
-		// 	currentTime = new Date(issues[i].created_at);
-		// 	issues[i].created_at = currentTime.toLocaleDateString('de-DE', options);
-		// }
-
-		return view.render('adminPages.viewRoomIssues', { roomID: params.roomID, roomName, issues, stats, filterType: params.issueStatus, moment });
+		return view.render('adminPages.viewRoomIssues', { 
+			roomID: params.roomID,
+			roomName,
+			issues,
+			stats,
+			filterType: params.issueStatus,
+			viewFilters,
+			moment
+		});
 	}
 
 	/**
