@@ -227,7 +227,8 @@
                                             </div>
                                         </div>
                                         @if(room.floorplan)
-                                            <img class="img-thumbnail" style="width:50%;" data-toggle="modal" data-target="#room-floorplan-{{room.id}}" src='/{{room.floorplan_small}}'>
+                                            {{--  <img class="img-thumbnail" style="width:50%;" data-toggle="modal" data-target="#room-floorplan-{{room.id}}" src='/{{room.floorplan_small}}'>  --}}
+                                            <img class="img-thumbnail" style="width:50%;" data-toggle="modal" data-target="#room-floorplan-{{room.id}}" src='/{{room.floorplan}}'>
                                             <small id="floorPlanHelp" class="form-text text-muted">Click to view the previosuly <strong>saved</strong> image.</small>
                                         @endif
                                     </div>
@@ -251,6 +252,7 @@
                                         </div>
                                         @if(room.picture)
                                             <img class="img-thumbnail" style="width:50%" data-toggle="modal" data-target="#room-roompicture-{{room.id}}" src='/{{room.picture_small}}'>
+                                            <img class="img-thumbnail" style="width:50%" data-toggle="modal" data-target="#room-roompicture-{{room.id}}" src='/{{room.picture}}'>
                                             <small id="reviewPictureHelp" class="form-text text-muted">Click to view the previously <strong>saved</strong> image.</small>
                                         @endif
                                     </div>

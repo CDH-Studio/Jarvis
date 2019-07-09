@@ -206,6 +206,28 @@ module.exports = class Outlook {
 		}
 	}
 
+	/**
+	* Authenticate an Outlook account.
+	*
+	* @param {String} email
+	* @param {String} password
+	*/
+	async authUser ({ email, password }) {
+		if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
+			try {
+				const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/auth`, {
+					email,
+					password
+				});
+
+				return res.data;
+			} catch (err) {
+				console.log(err);
+				return null;
+			}
+		}
+	}
+
 	async findAvail ({ room, start, end, duration, floor }) {
 		const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/findAvail`, {
 			room,
