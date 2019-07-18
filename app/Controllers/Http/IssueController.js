@@ -136,6 +136,7 @@ class IssueController {
 						.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 						.with('user')
 						.with('room')
+						.with('report_type')
 						.fetch();
 				} else {
 					// all issies
@@ -159,12 +160,18 @@ class IssueController {
 						.where('room_id', params.roomID)
 						.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 						.where('report_status_id', issuefilterType)
+						.with('user')
+						.with('room')
+						.with('report_type')
 						.fetch();
 				} else {
 					results = await Report
 						.query()
 						.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 						.where('room_id', params.roomID)
+						.with('user')
+						.with('room')
+						.with('report_type')
 						.fetch();
 				}
 			}
