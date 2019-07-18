@@ -1,9 +1,7 @@
 'use strict';
 const Room = use('App/Models/Room');
-const User = use('App/Models/User');
 const Report = use('App/Models/Report');
-const ReportStatus = use('App/Models/ReportStatus');
-const ReportType = use('App/Models/ReportType');
+const moment = require('moment');
 
 class IssueController {
 	/**
@@ -36,12 +34,14 @@ class IssueController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async editIssue ({ response, auth, params, view, request }) {
+	async editIssue ({ response, params, view }) {
 		try {
 			// get the search form data if employee view
-			const issue = await Report.findOrFail(params.id);
-			return view.render('adminPages.editIssue', { id: params.id, issue });
+			let issue = await Report.query().where('id', params.id).with('user').with('room').fetch();
+			issue = issue.toJSON();
+			return view.render('adminPages.editIssue', { id: params.id, issue: issue[0], moment });
 		} catch (error) {
+			console.log(error);
 			return response.redirect('/');
 		}
 	}
@@ -51,23 +51,24 @@ class IssueController {
 	*
 	* @param {Object} Context The context object.
 	*/
-	async updateIssue ({ response, params, request, session }) {
+	async updateIssue ({ response, params, request, view, session }) {
 		try {
-			const { issueType, comment, roomID, issueStatus } = request.only(['issueType', 'comment', 'roomID', 'userID', 'issueStatus']);
+			const { issueType, comment, issueStatus } = request.only(['issueType', 'comment', 'userID', 'issueStatus']);
 			const date = new Date();
+
 			// Updates room information in database
-			await Report
-				.query()
-				.where('id', params.id)
-				.update({
-					report_type_id: issueType,
-					comment: comment,
-					report_status_id: issueStatus,
-					updated_at: date
-				});
+			let issue = await Report.findByOrFail('id', params.id);
+			issue.report_type_id = issueType;
+			issue.comment = comment;
+			issue.report_status_id = issueStatus;
+			issue.updated_at = date;
+			issue.save();
+
 			session.flash({ notification: 'Issue Updated!' });
-			return response.route('showIssue', { roomID: roomID, issueStatus: 'all' });
+
+			return response.route('editIssue', { id: issue.id });
 		} catch (error) {
+			console.log(error);
 			return response.redirect('/');
 		}
 	}
@@ -78,83 +79,119 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async getRoomIssues ({ request, params, view, response }) {
-		var results;
-		var issues;
-		var currentTime;
-		var issuefilterType;
-		var roomName;
+		try {
+			let results, issues, issuefilterType, roomName, startTimeFilter, endTimeFilter;
+			let viewFilters = [];
 
-		// covert status string to int
-		if (params.issueStatus === 'all') {
-			issuefilterType = 0;
-		} else if (params.issueStatus === 'open') {
-			issuefilterType = 1;
-		} else if (params.issueStatus === 'pending') {
-			issuefilterType = 2;
-		} else if (params.issueStatus === 'closed') {
-			issuefilterType = 3;
-		}
+			// end time for filter is now
+			endTimeFilter = moment().format('YYYY-MM-DDTHH:mm');
 
-		const selectedBuilding = request.cookie('selectedBuilding');
+			// determine time filter for reported issues
+			switch (params.timeFilter) {
+				case 'month':
+					startTimeFilter = moment().startOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case '3-months':
+					startTimeFilter = moment().subtract(3, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case '6-months':
+					startTimeFilter = moment().subtract(6, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case 'year':
+					startTimeFilter = moment().subtract(1, 'years').format('YYYY-MM-DD hh:mm');
+					break;
+				case 'all':
+					startTimeFilter = moment().subtract(100, 'years').format('YYYY-MM-DD hh:mm');
+					break;
+				default:
+					return response.route('home');
+			}
 
-		// refine filter by room requested
-		if (params.roomID === 'all') {
-			// filter based on status
-			if (issuefilterType > 0 && issuefilterType < 4) {
-				results = await Report
-					.query()
-					.where('building_id', selectedBuilding.id)
-					.where('report_status_id', issuefilterType)
-					.fetch();
+			// covert status string to int
+			if (params.issueStatus === 'all') {
+				issuefilterType = 0;
+			} else if (params.issueStatus === 'open') {
+				issuefilterType = 1;
+			} else if (params.issueStatus === 'pending') {
+				issuefilterType = 2;
+			} else if (params.issueStatus === 'closed') {
+				issuefilterType = 3;
+			}
+
+			const selectedBuilding = request.cookie('selectedBuilding');
+
+			// refine filter by room requested
+			if (params.roomID === 'all') {
+				// filter based on status for all rooms
+				if (issuefilterType > 0 && issuefilterType < 4) {
+					// open, pending, or closed issues
+					results = await Report
+						.query()
+						.where('building_id', selectedBuilding.id)
+						.where('report_status_id', issuefilterType)
+						.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
+						.with('user')
+						.with('room')
+						.with('report_type')
+						.fetch();
+				} else {
+					// all issies
+					results = await Report.query()
+						.where('building_id', selectedBuilding.id)
+						.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
+						.with('user')
+						.with('room')
+						.with('report_type')
+						.fetch();
+				}
 			} else {
-				results = await Report.query()
-					.where('building_id', selectedBuilding.id)
-					.fetch();
-			}
-		} else {
-			// for security check if room number is actually an int
-			params.roomID = parseInt(params.roomID);
-			if (isNaN(params.roomID)) {
-				return response.redirect('/');
+				// filter based on status if specific room
+				// get room name
+				const roomResult = await Room.findOrFail(params.roomID);
+				roomName = roomResult.name;
+
+				if (issuefilterType > 0 && issuefilterType < 4) {
+					results = await Report
+						.query()
+						.where('room_id', params.roomID)
+						.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
+						.where('report_status_id', issuefilterType)
+						.with('user')
+						.with('room')
+						.with('report_type')
+						.fetch();
+				} else {
+					results = await Report
+						.query()
+						.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
+						.where('room_id', params.roomID)
+						.with('user')
+						.with('room')
+						.with('report_type')
+						.fetch();
+				}
 			}
 
-			// get room name
-			const roomResult = await Room.find(params.roomID);
-			roomName = roomResult.name;
+			issues = results.toJSON();
+			// Retrieve issue stats
+			// Ali fix the querys in this function
+			const stats = await this.getIssueStatistics(params.roomID, selectedBuilding, startTimeFilter, endTimeFilter);
 
-			if (issuefilterType > 0 && issuefilterType < 4) {
-				results = await Report
-					.query()
-					.where('room_id', params.roomID)
-					.where('report_status_id', issuefilterType)
-					.fetch();
-			} else {
-				results = await Report
-					.query()
-					.where('room_id', params.roomID)
-					.fetch();
-			}
+			viewFilters.timeFilter = params.timeFilter;
+			viewFilters.filterType = params.issueStatus;
+
+			return view.render('adminPages.viewRoomIssues', {
+				roomID: params.roomID,
+				roomName,
+				issues,
+				stats,
+				viewFilters,
+				moment
+			});
+		} catch (error) {
+			console.log(error);
+			return response.redirect('/');
 		}
-
-		issues = results.toJSON();
-		// Retrieve issue stats
-		const stats = await this.getIssueStatistics(params.roomID, selectedBuilding);
-
-		// date formatting options
-		var options = { year: 'numeric', month: 'long', day: 'numeric' };
-
-		// loop through and change ids to the actual names in the tables
-		// TODO: needs to be changed to take advantage of relational database
-		for (let i = 0; i < issues.length; i++) {
-			issues[i].status = await ReportStatus.getName(issues[i].report_status_id);
-			issues[i].room = await Room.getName(issues[i].room_id);
-			issues[i].user = await User.getName(issues[i].user_id);
-			issues[i].type = await ReportType.getName(issues[i].report_type_id);
-			currentTime = new Date(issues[i].created_at);
-			issues[i].created_at = currentTime.toLocaleDateString('de-DE', options);
-		}
-
-		return view.render('adminPages.viewRoomIssues', { roomID: params.roomID, roomName, issues, stats, filterType: params.issueStatus });
 	}
 
 	/**
@@ -162,7 +199,7 @@ class IssueController {
 	*
 	* @param {Object} Context The context object.
 	*/
-	async getIssueStatistics (roomID, selectedBuilding) {
+	async getIssueStatistics (roomID, selectedBuilding, startTimeFilter, endTimeFilter) {
 		var countPending;
 		var countUnderReview;
 		var countResolved;
@@ -171,52 +208,58 @@ class IssueController {
 			// Retrieve number of issues that are pending
 			countPending = await Report
 				.query()
+				.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 				.where('building_id', selectedBuilding.id)
 				.where('report_status_id', 1)
-				.count();
+				.getCount();
 
 			// Retrieve number of issues that are under review
 			countUnderReview = await Report
 				.query()
+				.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 				.where('building_id', selectedBuilding.id)
 				.where('report_status_id', 2)
-				.count();
+				.getCount();
 
 			// Retrieve number of issues that are resolved
 			countResolved = await Report
 				.query()
+				.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 				.where('building_id', selectedBuilding.id)
 				.where('report_status_id', 3)
-				.count();
+				.getCount();
 		} else {
 			// Retrieve number of issues that are open
 			countPending = await Report
 				.query()
+				.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 				.where('room_id', roomID)
 				.where('report_status_id', 1)
-				.count();
+				.getCount();
 
 			// Retrieve number of issues that are under review
 			countUnderReview = await Report
 				.query()
+				.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 				.where('room_id', roomID)
 				.where('report_status_id', 2)
-				.count();
+				.getCount();
 
 			// Retrieve number of issues that are resolved
 			countResolved = await Report
 				.query()
+				.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 				.where('room_id', roomID)
 				.where('report_status_id', 3)
-				.count();
+				.getCount();
 		}
 
 		// Create statistic array with custom keys
 		var stats = {};
-		stats['total'] = countPending[0]['count(*)'] + countUnderReview[0]['count(*)'] + countResolved[0]['count(*)'];
-		stats['pending'] = countPending[0]['count(*)'];
-		stats['underReview'] = countUnderReview[0]['count(*)'];
-		stats['resolved'] = countResolved[0]['count(*)'];
+		stats['total'] = countPending + countUnderReview + countResolved;
+		stats['pending'] = countPending;
+		stats['underReview'] = countUnderReview;
+		stats['resolved'] = countResolved;
 
 		return stats;
 	}

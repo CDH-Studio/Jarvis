@@ -51,7 +51,7 @@
       </a>
       <div id="collapseUtilities" class="collapse" aria-labelledby="collapseUtilities" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <a id="room-issues-drop-down" class='dropdown-item' href='{{ route('showIssue', {roomID: 'all', issueStatus: 'all' }) }}'>{{ antl.formatMessage('adminSidebarOptions.viewIssues') }}</a>
+          <a id="room-issues-drop-down" class='dropdown-item' href='{{ route('showIssue', {roomID: 'all', issueStatus: 'all', timeFilter: 'all' }) }}'>{{ antl.formatMessage('adminSidebarOptions.viewIssues') }}</a>
         </div>
       </div>
     </li>
