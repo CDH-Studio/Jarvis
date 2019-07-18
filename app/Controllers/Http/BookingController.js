@@ -71,7 +71,7 @@ class BookingController {
 
 		session.flash({
 			notification: `Room ${name} has been booked. Please click here to view your bookings.`,
-			url: `/user/${auth.user.id}/bookings`
+			url: `/user/${auth.user.id}/bookings/upcoming/month`
 		});
 
 		return response.route('/userDash');
