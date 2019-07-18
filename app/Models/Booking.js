@@ -11,10 +11,6 @@ class Booking extends Model {
 	room () {
 		return this.belongsTo('App/Models/Room', 'room_id');
 	}
-
-	floor () {
-    	return this.belongsToThrough('App/Models/Room', 'floors')
-  	}
 }
 
 module.exports = Booking;

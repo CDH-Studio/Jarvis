@@ -180,7 +180,7 @@ module.exports = class Outlook {
 			try {
 				await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/cancel`, {
 					eventId: eventId,
-					floor: floor
+					floor: floorId
 				});
 			} catch (err) {
 				console.log(err);

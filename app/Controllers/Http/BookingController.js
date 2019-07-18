@@ -240,21 +240,20 @@ class BookingController {
 	 * @param {Object} Context The context object.
 	 */
 	async cancelBooking ({ session, params, response, view }) {
-		
-		try{
-			//fetch booking
+		try {
+			// fetch booking
 			const result = await Booking
 				.query()
 				.where('id', params.id)
 				.with('room')
 				.first();
 
-			let booking = result.toJSON()
+			let booking = result.toJSON();
 
-			//get floor of booking to use correct service account
+			// get floor of booking to use correct service account
 			const floor = (await Floor.findOrFail(booking.room.floor_id)).toJSON();
 
-			//get calendarID to use when communicating to outlook
+			// get calendarID to use when communicating to outlook
 			let calendarId;
 			if (Env.get('DEV_OUTLOOK', 'prod') !== 'prod') {
 				calendarId = (await Room.findBy('id', booking.room.id)).toJSON().calendar;
@@ -271,19 +270,18 @@ class BookingController {
 			await result.save();
 
 			session.flash({
-				notification: `Booking Successfully Cancelled`
+				notification: 'Booking Successfully Cancelled'
 			});
 
-			//select correct id for bookings filter type (user or room)
+			// select correct id for bookings filter type (user or room)
 			const idType = (params.bookingType === 'user') ? booking.user_id : booking.room_id;
 
-			return response.route('viewBookings', { 
-				id: idType, 
-				bookingType: params.bookingType, 
-				catFilter: 'upcoming', 
+			return response.route('viewBookings', {
+				id: idType,
+				bookingType: params.bookingType,
+				catFilter: 'upcoming',
 				limitFilter: 'month'
 			});
-
 		} catch (error) {
 			console.log(error);
 			return response.redirect('/');
