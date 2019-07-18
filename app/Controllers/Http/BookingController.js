@@ -83,7 +83,6 @@ class BookingController {
 	 * @param {Object} Context The context object.
 	 */
 	async viewBookings ({ request, params, view, auth, response }) {
-
 		const User = use('App/Models/User');
 		const Building = use('App/Models/Building');
 
