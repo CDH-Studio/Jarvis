@@ -224,8 +224,6 @@
       </div>
     </div>
 
-    
-
     <!-- Bootstrap core JavaScript-->
     {{script('js/vendor/popper.js')}}
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
@@ -247,6 +245,46 @@
         $('[data-toggle="tooltip"]').tooltip()
       })
     </script>
+
+    <!-- notification popup -->
+    @if(flashMessage('notification'))
+      <script>
+        $(window).on('load', function () {
+          // notify({ $: $, message: '{{ flashMessage('notification') }}' });
+          $.notify({ message: '{{ flashMessage('notification') }}', url: '{{ flashMessage('url') }}' }, 
+            {
+              element: 'body',
+              type: 'success',
+              animate: {
+                enter: 'animated fadeInRight',
+                exit: 'animated fadeOutUp'
+              },
+              placement: {
+                from: 'top',
+                align: 'right'
+              },
+              offset: {
+                x: 10,
+                y: 60
+              },
+              spacing: 10,
+              z_index: 1031,
+              delay: 5000
+            });
+        });
+      </script>
+      <!--
+          <script type='module'>
+              import {notify} from '/js/notify.js';
+              $(window).on('load', function() {
+                  var url = '{{ flashMessage('url') }}';
+                  notify({ $: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
+              });
+      </script>
+      -->
+    @endif
+
+
 
     @!section('extrajs')
 

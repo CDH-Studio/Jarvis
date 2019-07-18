@@ -1,4 +1,5 @@
 'use strict';
+const Floor = use('App/Models/Floor');
 const Room = use('App/Models/Room');
 const Booking = use('App/Models/Booking');
 const Env = use('Env');
@@ -238,23 +239,55 @@ class BookingController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async cancelBooking ({ params, response, view }) {
-		const booking = await Booking.findBy('id', params.id);
-		const roomId = booking.toJSON().room_id;
-		const room = (await Room.findBy('id', roomId)).toJSON();
-		const floor = room.floor_id;
-		const eventId = booking.toJSON().event_id;
-		const idType = (params.bookingType === 'user') ? booking.toJSON().user_id : booking.toJSON().room_id;
+	async cancelBooking ({ session, params, response, view }) {
+		
+		try{
+			//fetch booking
+			const result = await Booking
+				.query()
+				.where('id', params.id)
+				.with('room')
+				.first();
 
-		let calendarId;
-		if (Env.get('DEV_OUTLOOK', 'prod') !== 'prod') {
-			calendarId = (await Room.findBy('id', roomId)).toJSON().calendar;
+			let booking = result.toJSON()
+
+			//get floor of booking to use correct service account
+			const floor = (await Floor.findOrFail(booking.room.floor_id)).toJSON();
+
+			//get calendarID to use when communicating to outlook
+			let calendarId;
+			if (Env.get('DEV_OUTLOOK', 'prod') !== 'prod') {
+				calendarId = (await Room.findBy('id', booking.room.id)).toJSON().calendar;
+			}
+
+			await Outlook.deleteEvent({
+				eventId: booking.event_id,
+				floorId: floor.id,
+				calendarId
+			});
+
+			// Update database
+			result.status = 'Cancelled';
+			await result.save();
+
+			session.flash({
+				notification: `Booking Successfully Cancelled`
+			});
+
+			//select correct id for bookings filter type (user or room)
+			const idType = (params.bookingType === 'user') ? booking.user_id : booking.room_id;
+
+			return response.route('viewBookings', { 
+				id: idType, 
+				bookingType: params.bookingType, 
+				catFilter: 'upcoming', 
+				limitFilter: 'month'
+			});
+
+		} catch (error) {
+			console.log(error);
+			return response.redirect('/');
 		}
-		await Outlook.deleteEvent({ eventId, floor, calendarId });
-		booking.status = 'Cancelled';
-		await booking.save();
-
-		return response.route('viewBookings', { id: idType, bookingType: params.bookingType });
 	}
 
 	/**
