@@ -636,53 +636,6 @@
         </script>
     @endif
 
-    {{--  Displays "Room Added/Updated!" success message  --}}
-    @if(flashMessage('notification'))
-        <script type='module'>
-            import {notify} from '/js/notify.js';
-            $(window).on('load', function() {
-                var url = '{{ flashMessage('url') }}';
-                notify({$: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
-            });
-        </script>
-    @endif
-
-    {{--  Displays "Room has already been booked!" error message  --}}
-    @if(flashMessage('error'))
-        <script>
-			$(window).on('load', function () {
-				$.notify({ message: '{{ flashMessage('error') }}' }, 
-					{
-						element: 'body',
-						type: 'danger',
-						animate: {
-							enter: 'animated fadeInRight',
-							exit: 'animated fadeOutUp'
-						},
-						placement: {
-							from: 'top',
-							align: 'right'
-						},
-						offset: {
-							x: 10,
-							y: 60
-						},
-						spacing: 10,
-						z_index: 1031,
-						delay: 10000
-					});
-			});
-        </script>
-        <!--
-        <script type='module'>
-            import {notify} from '/js/notify.js';
-            $(window).on('load', function() {
-                notify({$: $, message: '{{ flashMessage('error') }}', type: 'danger', x: 10, y: 60, delay: 10000 });
-            });
-        </script>
-        -->
-    @endif
-
     {{--  Mouseover Tooltip  --}}
     <script> $(document).ready(function(){ $('[data-toggle="tooltip"]').tooltip(); });</script>
 
