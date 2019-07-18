@@ -82,109 +82,116 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async getRoomIssues ({ request, params, view, response }) {
-		let results, issues, currentTime, issuefilterType, roomName, startTimeFilter, endTimeFilter;
-		let viewFilters=[];
 
-		endTimeFilter = moment().format('YYYY-MM-DDTHH:mm');
+		try{
+			let results, issues, currentTime, issuefilterType, roomName, startTimeFilter, endTimeFilter;
+			let viewFilters=[];
 
-		// determine time filter for reported issues
-		switch (params.timeFilter) {
-			case 'month':
-				startTimeFilter = moment().startOf('month').format('YYYY-MM-DD hh:mm');
-				break;
-			case '3-months':
-				startTimeFilter = moment().subtract(3, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
-				break;
-			case '6-months':
-				startTimeFilter = moment().subtract(6, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
-				break;
-			case 'year':
-				startTimeFilter = moment().subtract(1, 'years').format('YYYY-MM-DD hh:mm');
-				break;
-			case 'all':
-				startTimeFilter = moment().subtract(100, 'years').format('YYYY-MM-DD hh:mm');
-				break;
-			default:
-				return response.route('home');
-		}
+			// end time for filter is now
+			endTimeFilter = moment().format('YYYY-MM-DDTHH:mm');
 
-		// covert status string to int
-		if (params.issueStatus === 'all') {
-			issuefilterType = 0;
-		} else if (params.issueStatus === 'open') {
-			issuefilterType = 1;
-		} else if (params.issueStatus === 'pending') {
-			issuefilterType = 2;
-		} else if (params.issueStatus === 'closed') {
-			issuefilterType = 3;
-		}
+			// determine time filter for reported issues
+			switch (params.timeFilter) {
+				case 'month':
+					startTimeFilter = moment().startOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case '3-months':
+					startTimeFilter = moment().subtract(3, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case '6-months':
+					startTimeFilter = moment().subtract(6, 'months').startOf('month').format('YYYY-MM-DD hh:mm');
+					break;
+				case 'year':
+					startTimeFilter = moment().subtract(1, 'years').format('YYYY-MM-DD hh:mm');
+					break;
+				case 'all':
+					startTimeFilter = moment().subtract(100, 'years').format('YYYY-MM-DD hh:mm');
+					break;
+				default:
+					return response.route('home');
+			}
 
-		const selectedBuilding = request.cookie('selectedBuilding');
+			// covert status string to int
+			if (params.issueStatus === 'all') {
+				issuefilterType = 0;
+			} else if (params.issueStatus === 'open') {
+				issuefilterType = 1;
+			} else if (params.issueStatus === 'pending') {
+				issuefilterType = 2;
+			} else if (params.issueStatus === 'closed') {
+				issuefilterType = 3;
+			}
 
-		// refine filter by room requested
-		if (params.roomID === 'all') {
-			// filter based on status
-			if (issuefilterType > 0 && issuefilterType < 4) {
-				results = await Report
-					.query()
-					.where('building_id', selectedBuilding.id)
-					.where('report_status_id', issuefilterType)
-					.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
-					.with('user')
-					.with('room')
-					.fetch();
+			const selectedBuilding = request.cookie('selectedBuilding');
+
+			// refine filter by room requested
+			if (params.roomID === 'all') {
+				// filter based on status for all rooms
+				if (issuefilterType > 0 && issuefilterType < 4) {
+					// open, pending, or closed issues
+					results = await Report
+						.query()
+						.where('building_id', selectedBuilding.id)
+						.where('report_status_id', issuefilterType)
+						.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
+						.with('user')
+						.with('room')
+						.fetch();
+				} else {
+					// all issies
+					results = await Report.query()
+						.where('building_id', selectedBuilding.id)
+						.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
+						.with('user')
+						.with('room')
+						.with('report_type')
+						.fetch();
+				}
 			} else {
-				results = await Report.query()
-					.where('building_id', selectedBuilding.id)
-					.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
-					.with('user')
-					.with('room')
-					.with('report_type')
-					.fetch();
-			}
-		} else {
-			// for security check if room number is actually an int
-			params.roomID = parseInt(params.roomID);
-			if (isNaN(params.roomID)) {
-				return response.redirect('/');
+				// filter based on status if specific room
+				// get room name
+				const roomResult = await Room.findOrFail(params.roomID);
+				roomName = roomResult.name;
+
+				if (issuefilterType > 0 && issuefilterType < 4) {
+					results = await Report
+						.query()
+						.where('room_id', params.roomID)
+						.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
+						.where('report_status_id', issuefilterType)
+						.fetch();
+				} else {
+					results = await Report
+						.query()
+						.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
+						.where('room_id', params.roomID)
+						.fetch();
+				}
 			}
 
-			// get room name
-			const roomResult = await Room.find(params.roomID);
-			roomName = roomResult.name;
+			issues = results.toJSON();
+			// Retrieve issue stats
+			//Ali fix the querys in this function
+			const stats = await this.getIssueStatistics(params.roomID, selectedBuilding);
 
-			if (issuefilterType > 0 && issuefilterType < 4) {
-				results = await Report
-					.query()
-					.where('room_id', params.roomID)
-					.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
-					.where('report_status_id', issuefilterType)
-					.fetch();
-			} else {
-				results = await Report
-					.query()
-					.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
-					.where('room_id', params.roomID)
-					.fetch();
-			}
+			viewFilters.timeFilter = params.timeFilter;
+			viewFilters.filterType = params.issueStatus;
+
+			return view.render('adminPages.viewRoomIssues', { 
+				roomID: params.roomID,
+				roomName,
+				issues,
+				stats,
+				viewFilters,
+				moment
+			});
+
+		} catch (error) {
+			console.log(error);
+			return response.redirect('/');
 		}
-
-		issues = results.toJSON();
-		// Retrieve issue stats
-		//Ali fix the querys in this function
-		const stats = await this.getIssueStatistics(params.roomID, selectedBuilding);
-
-		viewFilters.timeFilter = params.timeFilter;
-		viewFilters.filterType = params.issueStatus;
-
-		return view.render('adminPages.viewRoomIssues', { 
-			roomID: params.roomID,
-			roomName,
-			issues,
-			stats,
-			viewFilters,
-			moment
-		});
+		
+		
 	}
 
 	/**
@@ -203,50 +210,50 @@ class IssueController {
 				.query()
 				.where('building_id', selectedBuilding.id)
 				.where('report_status_id', 1)
-				.count();
+				.getCount();
 
 			// Retrieve number of issues that are under review
 			countUnderReview = await Report
 				.query()
 				.where('building_id', selectedBuilding.id)
 				.where('report_status_id', 2)
-				.count();
+				.getCount();
 
 			// Retrieve number of issues that are resolved
 			countResolved = await Report
 				.query()
 				.where('building_id', selectedBuilding.id)
 				.where('report_status_id', 3)
-				.count();
+				.getCount();
 		} else {
 			// Retrieve number of issues that are open
 			countPending = await Report
 				.query()
 				.where('room_id', roomID)
 				.where('report_status_id', 1)
-				.count();
+				.getCount();
 
 			// Retrieve number of issues that are under review
 			countUnderReview = await Report
 				.query()
 				.where('room_id', roomID)
 				.where('report_status_id', 2)
-				.count();
+				.getCount();
 
 			// Retrieve number of issues that are resolved
 			countResolved = await Report
 				.query()
 				.where('room_id', roomID)
 				.where('report_status_id', 3)
-				.count();
+				.getCount();
 		}
 
 		// Create statistic array with custom keys
 		var stats = {};
-		stats['total'] = countPending[0]['count(*)'] + countUnderReview[0]['count(*)'] + countResolved[0]['count(*)'];
-		stats['pending'] = countPending[0]['count(*)'];
-		stats['underReview'] = countUnderReview[0]['count(*)'];
-		stats['resolved'] = countResolved[0]['count(*)'];
+		stats['total'] = countPending + countUnderReview + countResolved;
+		stats['pending'] = countPending;
+		stats['underReview'] = countUnderReview;
+		stats['resolved'] = countResolved;
 
 		return stats;
 	}

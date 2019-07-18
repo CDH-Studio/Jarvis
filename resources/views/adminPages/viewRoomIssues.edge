@@ -18,7 +18,7 @@ View {{upperFirst(filterType)}} Room issues
     <div>
         {{--  room Reports/Issues Stats  --}}
         <div class='row text-center' style='padding-left: 15px;'> 
-            <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('showIssue', {roomID: roomID, issueStatus: 'all', timeFilter: 'month' }) }}'>
+            <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('showIssue', {roomID: roomID, issueStatus: 'all', timeFilter: viewFilters.timeFilter }) }}'>
                 <div class='card-highlight-primary'></div>
                 <div class='card-body'>
                     <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -34,7 +34,7 @@ View {{upperFirst(filterType)}} Room issues
                     </div>
                 </div>
             </a>
-            <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('showIssue', { roomID: roomID, issueStatus: 'open', timeFilter: 'month' }) }}'>
+            <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('showIssue', { roomID: roomID, issueStatus: 'open', timeFilter: viewFilters.timeFilter }) }}'>
                 <div class='card-highlight-success'></div>
                 <div class='card-body'>
                     <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -50,7 +50,7 @@ View {{upperFirst(filterType)}} Room issues
                     </div>
                 </div>
             </a>
-            <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('showIssue', { roomID: roomID, issueStatus: 'pending', timeFilter: 'month'}) }}'>
+            <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('showIssue', { roomID: roomID, issueStatus: 'pending', timeFilter: viewFilters.timeFilter }) }}'>
                 <div class='card-highlight-warning'></div>
                 <div class='card-body'>
                     <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
@@ -66,7 +66,7 @@ View {{upperFirst(filterType)}} Room issues
                     </div>
                 </div>
             </a>
-            <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('showIssue', { roomID: roomID, issueStatus: 'closed', timeFilter: 'month' }) }}'>
+            <a class='col card stats-card shadow no-padding link-style-none' href='{{ route('showIssue', { roomID: roomID, issueStatus: 'closed', timeFilter: viewFilters.timeFilter }) }}'>
                 <div class='card-highlight-danger'></div>
                 <div class='card-body'>
                     <div class='row justify-content-center' style='margin: 20px 0 20px 0;'>
