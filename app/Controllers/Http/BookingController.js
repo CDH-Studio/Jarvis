@@ -71,7 +71,7 @@ class BookingController {
 
 		session.flash({
 			notification: `Room ${name} has been booked. Please click here to view your bookings.`,
-			url: `/user/${auth.user.id}/bookings`
+			url: `/user/${auth.user.id}/bookings/upcoming/month`
 		});
 
 		return response.route('/userDash');
@@ -82,7 +82,10 @@ class BookingController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async viewBookings ({ params, view, auth, response }) {
+	async viewBookings ({ request, params, view, auth, response }) {
+		const User = use('App/Models/User');
+		const Building = use('App/Models/Building');
+
 		// get user role for booking editing
 		const userRole = await auth.user.getUserRole();
 		var canEdit = (auth.user.id === Number(params.id) || userRole === 'admin') ? 1 : 0;
@@ -206,7 +209,23 @@ class BookingController {
 		// bookings = await populateBookings(searchResults.toJSON());
 		bookings = searchResults.toJSON();
 
+		var selectedBuilding;
+		var allBuildings;
+
+		searchResults = await User.query().where('id', auth.user.id).with('role').firstOrFail();
+		const user = searchResults.toJSON();
+
+		if (user.role.name === 'admin') {
+			selectedBuilding = request.cookie('selectedBuilding');
+			// get all builig info admin nav bar since this route is shared with regular users and admin
+			// therefore, the admin middle-ware can't retrieve building info to pass to view
+			allBuildings = await Building.all();
+			allBuildings = allBuildings.toJSON();
+		}
+
 		return view.render('userPages.manageBookings', {
+			selectedBuilding,
+			allBuildings,
 			bookings,
 			viewFilters,
 			canEdit,
