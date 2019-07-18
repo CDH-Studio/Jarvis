@@ -193,16 +193,6 @@ View {{upperFirst(viewFilters.filterType)}} Room issues
         </div>
     </div> 
 
-    {{--  Displays "Issue Added/Updated!" success message  --}}
-    @if(flashMessage('notification'))
-        <script type='module'>
-            import {notify} from '/js/notify.js';
-            $(window).on('load', function() {
-                var url = '{{ flashMessage('url') }}';
-                notify({$: $, message: '{{ flashMessage('notification') }}', x: 10, y: 60, url: url ? url : '' });
-            });
-        </script>
-    @endif
 @endsection
 
 {{--  Deals with the search functionality of the table above- searches all fields   --}}

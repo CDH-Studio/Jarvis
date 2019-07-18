@@ -2,7 +2,7 @@
 	<div class="col-12 col-lg-2 text-left">
 		<strong>Filter:</strong></br>
 		<div class="dropdown d-inline">
-			<button class="btn btn-secondary dropdown-toggle text-center " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%">
+			<button class="btn btn-secondary dropdown-toggle text-center shadow" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%">
 				@if(viewFilters.catFilter === "upcoming")
 					{{antl.formatMessage('timeFilter.upcoming')}}
 				@elseif(viewFilters.catFilter === "cancelled")
@@ -36,7 +36,7 @@
 			<strong>In the next:</strong>
 		@endif
 		<div class="dropdown d-inline">
-			<button class="btn btn-secondary dropdown-toggle text-center  d-inline" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%">
+			<button class="btn btn-secondary dropdown-toggle text-center  d-inline shadow" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%">
 				@if(viewFilters.limitFilter === "month")
 					{{antl.formatMessage('timeFilter.month')}}
 				@elseif(viewFilters.limitFilter === "3-months")
