@@ -179,7 +179,7 @@ class IssueController {
 			issues = results.toJSON();
 			// Retrieve issue stats
 			//Ali fix the querys in this function
-			const stats = await this.getIssueStatistics(params.roomID, selectedBuilding);
+			const stats = await this.getIssueStatistics(params.roomID, selectedBuilding, startTimeFilter, endTimeFilter);
 
 			viewFilters.timeFilter = params.timeFilter;
 			viewFilters.filterType = params.issueStatus;
@@ -206,7 +206,7 @@ class IssueController {
 	*
 	* @param {Object} Context The context object.
 	*/
-	async getIssueStatistics (roomID, selectedBuilding) {
+	async getIssueStatistics (roomID, selectedBuilding, startTimeFilter, endTimeFilter) {
 		var countPending;
 		var countUnderReview;
 		var countResolved;
@@ -215,6 +215,7 @@ class IssueController {
 			// Retrieve number of issues that are pending
 			countPending = await Report
 				.query()
+				.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 				.where('building_id', selectedBuilding.id)
 				.where('report_status_id', 1)
 				.getCount();
@@ -222,6 +223,7 @@ class IssueController {
 			// Retrieve number of issues that are under review
 			countUnderReview = await Report
 				.query()
+				.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 				.where('building_id', selectedBuilding.id)
 				.where('report_status_id', 2)
 				.getCount();
@@ -229,6 +231,7 @@ class IssueController {
 			// Retrieve number of issues that are resolved
 			countResolved = await Report
 				.query()
+				.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 				.where('building_id', selectedBuilding.id)
 				.where('report_status_id', 3)
 				.getCount();
@@ -236,6 +239,7 @@ class IssueController {
 			// Retrieve number of issues that are open
 			countPending = await Report
 				.query()
+				.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 				.where('room_id', roomID)
 				.where('report_status_id', 1)
 				.getCount();
@@ -243,6 +247,7 @@ class IssueController {
 			// Retrieve number of issues that are under review
 			countUnderReview = await Report
 				.query()
+				.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 				.where('room_id', roomID)
 				.where('report_status_id', 2)
 				.getCount();
@@ -250,6 +255,7 @@ class IssueController {
 			// Retrieve number of issues that are resolved
 			countResolved = await Report
 				.query()
+				.whereBetween('updated_at', [startTimeFilter, endTimeFilter])
 				.where('room_id', roomID)
 				.where('report_status_id', 3)
 				.getCount();
