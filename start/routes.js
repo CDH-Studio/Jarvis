@@ -110,7 +110,6 @@ Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware
 
 // Rendering Results
 Route.get('/results', 'RoomController.findSpecific').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
-Route.get('/recurringResults', 'RoomController.searchRecurring2').as('recurringResults');
 Route.get('/findAvailable', 'RoomController.searchRooms').as('findAvailable').validator('SearchRoom');
 
 // Booking a Room
@@ -122,6 +121,12 @@ Route.get('/authorize', 'TokenController.authorize');
 Route.get('/event', 'BookingController.createEvent');
 Route.get('/calendars', 'RoomController.getCalendars');
 Route.get('/calendar', 'RoomController.getCalendar');
+
+//= ========================================================================
+// Recurring
+//= ========================================================================
+Route.get('/recurring', 'RecurController.renderRecurring').as('recurring');
+Route.get('/recurringResults', 'RecurController.searchRecurring2').as('recurringResults');
 
 //= ========================================================================
 // Chatbot
@@ -137,5 +142,3 @@ Route.get('/push', 'TokenController.push').as('push');
 // Active Directory
 //= ========================================================================
 Route.post('/active', 'UserController.active').as('active');
-
-Route.get('/test', 'RecurController.test').as('test');

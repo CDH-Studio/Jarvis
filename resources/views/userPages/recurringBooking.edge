@@ -5,7 +5,7 @@
 @endsection
 
 @section('extracss')
-  {{ style('css/booking') }}
+  {{ style('css/recurring') }}
 @endsection
 
 @section('extrajs')
@@ -27,7 +27,7 @@
 							{{--  Meeting time from  --}}
 							<div class='row'>
 									<div class='col form-group mb-4'>
-											<label for='from'>Start Time <b class='text-danger'>*</b></label>
+											<label for='from'>From <b class='text-danger'>*</b></label>
 											{{--  If field is not filled correctly show an error box  --}}
 											@if(hasErrorFor('from'))
 												<div class='timePicker' style='display: flex;'>
@@ -58,7 +58,7 @@
 											
 										</div>
 										<div class='col form-group mb-4'>
-											<label for='to' data-toggle='tooltip'>End Time <b class='text-danger'>*</b></label>
+											<label for='to' data-toggle='tooltip'>To <b class='text-danger'>*</b></label>
 											{{--  If field is not filled correctly show an error box  --}}
 											@if(hasErrorFor('to'))
 												<div style='display: flex;' class='timePicker'>
@@ -160,22 +160,22 @@
 							{{---------------------------------------------------------------------------------------------}}
 							
 							{{------- Recurring Tabs -------}}
-							<input type="hidden" id="type" name="type" value="daily" />
+							<input type="hidden" id="type" name="type" value="weekly"/>
 							<div class="tabs">
 								<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 									<li class="nav-item">
-										<a class="nav-link active" id="pills-daily-tab" data-toggle="tab" href="#daily">Daily</a>
+										<a class="nav-link" id="pills-daily-tab" data-toggle="tab" href="#daily" style="display: none">Daily</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" id="pills-weekly-tab" data-toggle="tab" href="#weekly">Weekly</a>
+										<a class="nav-link active" id="pills-weekly-tab" data-toggle="tab" href="#weekly">Weekly</a>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" id="pills-monthly-tab" data-toggle="tab" href="#monthly">Monthly</a>
-									</li>
+										<a class="nav-link" id="pills-monthly-tab" data-toggle="tab" href="#monthly" style="display: none">Monthly</a>
+ 									</li>
 								</ul>
 								
 								<div class="tab-content" id="pills-tabContent">
-									<div class="tab-pane fade show active" id="daily" role="tabpanel">
+									<div class="tab-pane fade" id="daily" role="tabpanel">
 										<div>
 											<input type="radio" name="dailyOption" value="every" checked> Every <input type="number" name="dailyInterval" value=1> day(s)
 										</div>
@@ -183,7 +183,7 @@
 											<input type="radio" name="dailyOption" value="everyWeekday"> Every weekday
 										</div>
 									</div>
-									<div class="tab-pane fade" id="weekly" role="tabpanel">
+									<div class="tab-pane fade show active" id="weekly" role="tabpanel">
 										<div>
 											<p>Every <input type="number" name="weeklyInterval" value=1> week(s) on:</p>
 										</div>
@@ -232,42 +232,35 @@
 							<div class='row'>
 								<div class='col form-group mb-4'>
 									<div class='row'>
-										<label class='col' for='date'>Start <b class='text-danger'>*</b></label>
+										<label class='col' for='start'>Start <b class='text-danger'>*</b></label>
 										<div class='col text-right'>
 											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='Some tip'></i>
 										</div>
 									</div>
 									{{--  If field is not filled correctly show an error box  --}}
-									@if(hasErrorFor('date'))
-										<input name='startDate' id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
+									@if(hasErrorFor('start'))
+										<input name='start' id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
 										<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
 									{{--  Otherwise show a normal input  --}}
 									@else
-										<input name='startDate' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
+										<input name='start' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
 									@endif
 								</div>
 								<div class='col form-group mb-4'>
 									<div class='row end-by'>
-										<input type="radio" name="endOption" value="endBy"><label class='col' for='date'>End by:</label>
+										<label class='col' for='end'>End <b class='text-danger'>*</b></label>
 										<div class='col text-right'>
 											<i class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
 										</div>
 									</div>
 									{{--  If field is not filled correctly show an error box  --}}
-									@if(hasErrorFor('endDate'))
-										<input name='endDate' id='endDate' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('endDate', endBy) }}"}' onchange='removeErrorClass("date")'>
+									@if(hasErrorFor('end'))
+										<input name='end' id='end' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('end', '') }}"}' onchange='removeErrorClass("date")'>
 										<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
 									{{--  Otherwise show a normal input  --}}
 									@else
-										<input name='endDate' id='endDate' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('endDate', endBy) }}"}'>
+										<input name='end' id='end' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('end', '') }}"}'>
 									@endif
-									<div class='row end-after mt-1'>
-										<input type="radio" name="endOption" value="endAfter"> <label class='col' for='endOccur'>End after:</label>
-										<p><input type="number" name="numberOfOccurrences" value=10> occurrences</p>
-									</div>
-									<div class='row no-end'>
-										<input type="radio" name="endOption" value="noEnd" checked> <label class='col' for='endOccur'>No end date</label>
-									</div>
 								</div>
 							</div>
 

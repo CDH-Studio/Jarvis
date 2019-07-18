@@ -5,32 +5,41 @@ const moment = require('moment');
 const recur = require('moment-recur');
 
 class RecurController {
+	async renderRecurring ({ view }) {
+		return view.render('userPages.recurringBooking');
+	}
+
 	async searchRecurring2 ({ request }) {
 		const options = request.all();
 		console.log(options);
 
 		// start date
-		const startDate = options.startDate;
+		const start = moment(options.start).dateOnly();
 
-		let recur = moment(startDate);
-		if (options.type === 'daily') {
+		// end date
+		const end = moment(options.end).dateOnly();
+
+		// moment-recur object
+		let recur = moment().recur({
+			start,
+			end
+		});
+
+		// types of recurring
+		if (options.type === 'weekly') {
 			recur = recur
-				.recur()
-				.every(options.dailyInterval)
-				.days();
-		} else if (options.type === 'monthly') {
-			recur = recur
-				.recur()
-				.daysOfMonth(options.dayOfMonth);
-		} else {
-			recur = recur
-				.recur()
 				.daysOfWeek(options.daysOfWeek);
+
+			let dates = recur.all();
+			console.log(dates);
+
+			const firstWeek = dates[0].week();
+			dates = dates.filter((date) => {
+				return (date.week() - firstWeek) % options.weeklyInterval === 0;
+			});
+			console.log(dates);
+			return recur;
 		}
-
-		console.log(recur.next(3));
-
-		return recur;
 	}
 
 	async searchRecurring ({ request }) {

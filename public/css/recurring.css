@@ -1,0 +1,118 @@
+.open-button {
+	color: #555;
+	border: none;
+	cursor: pointer;
+	opacity: 0.8;
+	position: fixed;
+	bottom: 90px;
+	right: 28px;
+}
+
+.chat-popup {
+	display: none;
+	position: fixed;
+	bottom: 0;
+	right: 15px;
+	border: 3px solid #f1f1f1;
+	z-index: 9;
+}
+
+.chat-window {
+	max-width: 300px;
+	padding: 10px;
+	background-color: white;
+}
+
+.chat-window textarea {
+	width: 100%;
+	padding: 10px;
+	margin: 5px 0 22px 0;
+	border: none;
+	background: #f1f1f1;
+	resize: none;
+	min-height: 20px;
+}
+
+.chat-window textarea:focus {
+	background-color: #ddd;
+	outline: none;
+}
+
+.chat-window .btn {
+	background-color: #4CAF50;
+	color: white;
+	padding: 10px 5px;
+	border: none;
+	cursor: pointer;
+	width: 30%;
+	margin-bottom:10px;
+	opacity: 0.8;
+}
+
+.chat-window .cancel {
+	background-color: red;
+}
+
+.chat-window .btn:hover, .open-button:hover {
+	opacity: 1;
+}
+
+/* card */
+.card {
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+	transition: 0.3s;
+	width: 100%;
+  }
+  
+.card:hover {
+	box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.card-container {
+	padding: 2px 16px;
+}
+
+.room-card {
+	animation: fadeIn 2s;
+}
+
+/***** Recurring Booking page *****/
+.tabs a.nav-link {
+	color: #004680 !important;
+}
+
+.tabs a.nav-link.active {
+	background-color: #004680 !important;
+	color: white !important;
+}
+
+.tabs {
+  position: relative;   
+  min-height: 200px;
+  clear: both;
+  margin: 25px 0;
+}
+
+.tab-content {
+  position: absolute;
+  top: 32px;
+  left: 0;
+  background: white;
+  right: 0;
+  bottom: 0;
+	padding: 20px;
+	border: 1px solid #e3e6f0;
+	border-radius: calc(0.35rem - 1px) calc(0.35rem - 1px) 0 0;
+	
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.weekdays {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+input[type=number]{
+	width: 80px;
+} 
