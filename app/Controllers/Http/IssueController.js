@@ -1,9 +1,6 @@
 'use strict';
 const Room = use('App/Models/Room');
-const User = use('App/Models/User');
 const Report = use('App/Models/Report');
-const ReportStatus = use('App/Models/ReportStatus');
-const ReportType = use('App/Models/ReportType');
 const moment = require('moment');
 
 class IssueController {
@@ -40,9 +37,9 @@ class IssueController {
 	async editIssue ({ response, params, view }) {
 		try {
 			// get the search form data if employee view
-			let issue = await Report.query().where('id',params.id).with('user').with('room').fetch();
+			let issue = await Report.query().where('id', params.id).with('user').with('room').fetch();
 			issue = issue.toJSON();
-			return view.render('adminPages.editIssue', { id: params.id, issue: issue[0], moment});
+			return view.render('adminPages.editIssue', { id: params.id, issue: issue[0], moment });
 		} catch (error) {
 			console.log(error);
 			return response.redirect('/');
@@ -56,7 +53,7 @@ class IssueController {
 	*/
 	async updateIssue ({ response, params, request, view, session }) {
 		try {
-			const { issueType, comment, roomID, issueStatus } = request.only(['issueType', 'comment', 'roomID', 'userID', 'issueStatus']);
+			const { issueType, comment, issueStatus } = request.only(['issueType', 'comment', 'userID', 'issueStatus']);
 			const date = new Date();
 
 			// Updates room information in database
@@ -82,10 +79,9 @@ class IssueController {
 	 * @param {Object} Context The context object.
 	 */
 	async getRoomIssues ({ request, params, view, response }) {
-
-		try{
-			let results, issues, currentTime, issuefilterType, roomName, startTimeFilter, endTimeFilter;
-			let viewFilters=[];
+		try {
+			let results, issues, issuefilterType, roomName, startTimeFilter, endTimeFilter;
+			let viewFilters = [];
 
 			// end time for filter is now
 			endTimeFilter = moment().format('YYYY-MM-DDTHH:mm');
@@ -178,13 +174,13 @@ class IssueController {
 
 			issues = results.toJSON();
 			// Retrieve issue stats
-			//Ali fix the querys in this function
+			// Ali fix the querys in this function
 			const stats = await this.getIssueStatistics(params.roomID, selectedBuilding, startTimeFilter, endTimeFilter);
 
 			viewFilters.timeFilter = params.timeFilter;
 			viewFilters.filterType = params.issueStatus;
 
-			return view.render('adminPages.viewRoomIssues', { 
+			return view.render('adminPages.viewRoomIssues', {
 				roomID: params.roomID,
 				roomName,
 				issues,
@@ -192,13 +188,10 @@ class IssueController {
 				viewFilters,
 				moment
 			});
-
 		} catch (error) {
 			console.log(error);
 			return response.redirect('/');
 		}
-		
-		
 	}
 
 	/**
