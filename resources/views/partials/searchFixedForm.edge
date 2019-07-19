@@ -1,0 +1,148 @@
+<h2 class="h5 mb-0"><strong>Specific Time</strong></h2>
+<p>Search for a meeting room at a specific time</p>
+
+<form id="roomSearch" aria-label='search-form' action='findAvailable' method='GET' enctype='multipart/form-data'>
+	{{ csrfField() }}
+	{{--  Date form  --}}
+	<div class='row'>
+		<div class='col form-group mb-4'>
+			<div class='row'>
+				<label class='col' for='date' aria-describedby='date-tooltip'>{{ antl.formatMessage('roomDetails.bookingDate') }} <strong class='text-danger'>*</strong></label>
+				<div class='col text-right'>
+					<i id='date-tooltip' class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
+				</div>
+			</div>
+			{{--  If field is not filled correctly show an error box  --}}
+			@if(hasErrorFor('date'))
+				<input name='date'  id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
+				<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
+			{{--  Otherwise show a normal input  --}}
+			@else
+				<input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
+			@endif
+		</div>
+	</div>
+	{{--  Meeting time from  --}}
+	<div class='row'>
+		<div class='col col-sm-4 form-group mb-4'>
+			<label for='from' aria-labelledby='from-error'>{{ antl.formatMessage('roomDetails.bookingStart') }} <strong class='text-danger'>*</strong></label>
+			{{--  If field is not filled correctly show an error box  --}}
+			<div class='timePicker' style='display: flex;'>
+				<div class="input-group date" id="from" data-target-input="nearest">
+					<input type="text" class="form-control datetimepicker-input" data-target="#from" name="from" id="from-input"/>
+					<div class="input-group-append" data-target="#from" data-toggle="datetimepicker">
+						<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
+					</div>
+				</div>
+			</div>
+			@if(hasErrorFor('from'))
+				<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
+			@endif
+		</div>
+		<div class='col col-sm-4 form-group mb-4'>
+			<label for='to' aria-labelledby='to-error' data-toggle='tooltip'>{{ antl.formatMessage('roomDetails.bookingEnd') }} <strong class='text-danger'>*</strong></label>
+			<div style='display: flex;' class='timePicker'>
+				<!--
+				{{--  If field is not filled correctly show an error box  --}}
+				@if(hasErrorFor('to'))
+					<input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")' step="1800">
+				@else
+					<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")' step="1800">											
+				@endif
+				<div class='dropdown no-arrow'>
+					<button for='to'  aria-label='end-time-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
+					<div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
+						@each(item in dropdownSelection)
+							<a class="dropdown-item" for='fromDropDown' data-value='{{item.dataValue}}' href='#'>{{item.name}}</a>
+						@endeach
+					</div>
+				</div>
+				-->
+				<div class="input-group date" id="to" data-target-input="nearest">
+					<input type="text" class="form-control datetimepicker-input" data-target="#to" name="to"/>
+					<div class="input-group-append" data-target="#to" data-toggle="datetimepicker">
+						<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
+					</div>
+				</div>
+			</div>
+			@if(hasErrorFor('to'))
+				<div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
+			@endif
+		</div>
+		<div class='col col-sm-4 form-group mb-1'>
+			<label for='duration'>{{ antl.formatMessage('searchForm.duration') }} </label> <strong class='text-danger'>*</strong>
+			<div class='form-group'>
+				<div class='input-group mb-3'>
+				<input class='form-control duration-input' name='hour' type='number' min=0.5 max=10 step=0.5 value='{{ old('hour', '0.5') }}'>
+				<div class="input-group-append">
+					<span class="input-group-text duration-append">hr</span>
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='row'>
+		{{--  Location form  --}}
+		<div class='col-12 col-md-6 form-group mb-4'>
+			<label for='location'>{{ antl.formatMessage('searchForm.preferredLocation') }}</label>
+			<select id='location' name='location' class='form-control'>
+				<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected='selected'>{{ antl.formatMessage('searchForm.selectFloor') }}</option>
+				@each(floorOption in formOptions.floors)
+					@if(antl.currentLocale() === "fr")
+						<option value='{{floorOption.id}}' {{ old('location') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_french}}</option>
+					@else
+						<option value='{{floorOption.id}}' {{ old('location') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_english}}</option>
+					@endif
+				@endeach
+			</select>
+		</div>
+		{{--  PMts form  --}}
+		<div class='col-6 col-md-3 form-group mb-4'>
+			<label for='seats'>{{ antl.formatMessage('roomSearchCard.tableSeats') }}</label>
+			<input class='form-control' id='seats' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
+		</div>
+		{{--  Max Capacity  --}}
+		<div class='col-6 col-md-3 form-group mb-4'>
+			<label for='capacity'>{{ antl.formatMessage('roomDetails.capacity') }}</label>
+			<input class='form-control' id='capacity' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
+		</div>
+	</div>
+	{{--  Equipment check box form  --}}
+	<div class='form-group'>
+		<label>{{ antl.formatMessage('roomDetails.equipment') }}</label>
+		<div class='row'>
+			@each(featureCategory in formOptions.roomFeatureCategory)
+				@if(featureCategory.features.length!=0)
+					<div class="col-xl-6 mb-4">
+					@if(antl.currentLocale()==='en')
+						<i><strong>{{featureCategory.name_english}}</strong></i>
+					@else
+						<i><strong>{{featureCategory.name_french}}</strong></i>
+					@endif
+					@each(feature in featureCategory.features)
+						<div class='custom-control custom-checkbox'>
+							<input class="custom-control-input" type='checkbox' name='feat{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1'>
+							@if(antl.currentLocale()==='en')
+								<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_english, 20, '.')}}</label>
+							@else
+								<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_french, 20, '.')}}</label>
+							@endif
+						</div>
+					@endeach
+					</div>
+				@endif
+				@if($loop.index === 1)
+				</div>
+				<div class="row">
+			@endif
+			@endeach
+		</div>
+	</div>
+	{{--  Page buttons  --}}
+	<div class='row align-items-end'>
+		<div class='col-sm-12 text-right'>
+			{{--  <button aria-label='back' type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>  --}}
+			<button aria-label='search-submit-button' type='submit' class='btn btn-primary no-margin' id='submit'> {{ antl.formatMessage('searchForm.searchBtn') }} </button>
+		</div>
+	</div>
+</form>
