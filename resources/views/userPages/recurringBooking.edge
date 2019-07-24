@@ -6,10 +6,14 @@
 
 @section('extracss')
   {{ style('css/recurring') }}
+  {{ style('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css') }}
 @endsection
 
 @section('extrajs')
-    {{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
+	{{ script('https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js') }}
+	{{ script('https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js') }}
+	{{ script('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js') }}
+	{{ script('js/timepicker.js') }}
 @endsection
 
 {{--  book room page content  --}}
@@ -31,26 +35,20 @@
 											{{--  If field is not filled correctly show an error box  --}}
 											@if(hasErrorFor('from'))
 												<div class='timePicker' style='display: flex;'>
-													<input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
-													<div class='dropdown no-arrow'>
-														<button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-														<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-															@each(item in dropdownSelection)
-																<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
-															@endeach
+													<div class="input-group date" id="from" data-target-input="nearest">
+														<input type="text" class="form-control datetimepicker-input" data-target="#from" name="from" id="from-input"/>
+														<div class="input-group-append" data-target="#from" data-toggle="datetimepicker">
+															<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
 														</div>
 													</div>
 												</div>
 												<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
 											@else
 												<div class='timePicker' style='display: flex;'>
-													<input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', fromTime) }}' onchange='removeErrorClass("from")'>
-													<div class='dropdown no-arrow'>
-														<button class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-														<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-															@each(item in dropdownSelection)
-																<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
-															@endeach
+													<div class="input-group date" id="from" data-target-input="nearest">
+														<input type="text" class="form-control datetimepicker-input" data-target="#from" name="from" id="from-input"/>
+														<div class="input-group-append" data-target="#from" data-toggle="datetimepicker">
+															<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
 														</div>
 													</div>
 												</div>
@@ -62,13 +60,10 @@
 											{{--  If field is not filled correctly show an error box  --}}
 											@if(hasErrorFor('to'))
 												<div style='display: flex;' class='timePicker'>
-													<input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
-													<div class='dropdown no-arrow'>
-														<button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-														<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-															@each(item in dropdownSelection)
-																<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
-															@endeach
+													<div class="input-group date" id="to" data-target-input="nearest">
+														<input type="text" class="form-control datetimepicker-input" data-target="#to" name="to"/>
+														<div class="input-group-append" data-target="#to" data-toggle="datetimepicker">
+															<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
 														</div>
 													</div>
 												</div>
@@ -76,13 +71,10 @@
 										   {{--  Otherwise show a normal input  --}}
 											@else
 											<div style='display: flex;' class='timePicker'>
-												<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")'>
-												<div class='dropdown no-arrow'>
-													<button class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-													<div class="dropdown-menu scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-														@each(item in dropdownSelection)
-															<a class="dropdown-item" data-value={{item.dataValue}} href="#">{{item.name}}</a>
-														@endeach
+												<div class="input-group date" id="to" data-target-input="nearest">
+													<input type="text" class="form-control datetimepicker-input" data-target="#to" name="to"/>
+													<div class="input-group-append" data-target="#to" data-toggle="datetimepicker">
+														<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
 													</div>
 												</div>
 											</div>

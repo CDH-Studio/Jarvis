@@ -126,7 +126,7 @@ Route.get('/calendar', 'RoomController.getCalendar');
 // Recurring
 //= ========================================================================
 Route.get('/recurring', 'RecurController.renderRecurring').as('recurring');
-Route.get('/recurringResults', 'RecurController.searchRecurring2').as('recurringResults');
+Route.get('/recurringResults', 'RecurController.searchRecurring').as('recurringResults');
 
 //= ========================================================================
 // Chatbot
