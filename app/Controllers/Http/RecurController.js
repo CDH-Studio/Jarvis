@@ -40,7 +40,7 @@ class RecurController {
 					return (date.week() - firstWeek) % options.weeklyInterval === 0;
 				})
 				.map((date) => {
-					return {from}
+					return { from };
 				});
 			console.log(dates);
 			return recur;
@@ -52,7 +52,13 @@ class RecurController {
 		const options = request.all();
 		console.log(options);
 
-		return { recurType: options.type, start: options.start, end: options.end, from: options.from, to: options.to };
+		return {
+			recurType: options.type,
+			start: options.start,
+			end: options.end,
+			from: moment(options.start + ' ' + options.from).format('YYYY-MM-DDTHH:mm'),
+			to: moment(options.start + ' ' + options.to).format('YYYY-MM-DDTHH:mm')
+		};
 	}
 
 	async test () {
