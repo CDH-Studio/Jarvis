@@ -266,7 +266,7 @@ Configuration
                                 </button>
                             </div>
                             <div class='modal-body'>Are you sure want to delete <strong>{{feature.name_english}}</strong>?<br>
-                                <p>This feature will be removed from ## rooms.</p>
+                                <p>This feature will be removed from {{feature.room.length}} rooms.</p>
                                 <p class="text-danger">This is process is permanent!</p>
                             </div>
                             <form action='{{ route('deleteRoomFeature', {id: feature.id}) }}' method='POST' enctype='multipart/form-data'>
@@ -291,7 +291,7 @@ Configuration
                                 </button>
                             </div>
                             <div class='modal-body'>Are you sure want to edit "{{feature.name_english}}"?<br>
-                                <p>This change will effect ## rooms.</p>
+                                <p>This change will affect {{feature.room.length}} rooms.</p>
                                 <form action='{{ route('updateRoomFeature', {id: feature.id}) }}' method='POST' enctype='multipart/form-data'  >
                                     {{ csrfField() }}
                                     <div class="form-row mb-2 mr-2">
@@ -351,7 +351,7 @@ Configuration
                             </button>
                         </div>
                         <div class='modal-body'>Are you sure want to edit "{{tower.name_english}}"?<br>
-                            <p>This change will effect {{tower.room.length}} rooms.</p>
+                            <p>This change will affect {{tower.room.length}} rooms.</p>
                             <form action='{{ route('updateTower', {id: tower.id}) }}' method='POST' enctype='multipart/form-data'  >
                                     {{ csrfField() }}
                                     <div class="form-row mb-2 mr-2">
@@ -411,7 +411,7 @@ Configuration
                             </button>
                         </div>
                         <div class='modal-body'>Are you sure want to edit "{{floor.name}}"?<br>
-                            <p>This change will effect {{floor.room.length}} rooms.</p>
+                            <p>This change will affect {{floor.room.length}} rooms.</p>
                             <form action='{{ route('updateFloor', {id: floor.id} ) }}' method='POST' enctype='multipart/form-data'  >
                                 {{ csrfField() }}
                                 <div class="form-row mb-2 mr-2">

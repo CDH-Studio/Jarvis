@@ -5,7 +5,7 @@
  **/
 'use strict';
 
-class EditFloor {
+class AddTower {
 	// Validate and return all fields
 	get validateAll () {
 		return true;
@@ -14,17 +14,16 @@ class EditFloor {
 	// Validation rules
 	get rules () {
 		return {
-			floorNameEnglish: 'required|max:20|unique:floors,name_english',
-			floorNameFrench: 'required|max:20|unique:floors,name_french'
+			towerNameEnglish: 'required|max:20',
+			towerNameFrench: 'required|max:20'
 		};
 	}
 
 	// Custom error messages
 	get messages () {
 		return {
-			'required': 'You must provide a floor name in both English and French',
-			'floorName.max': 'Floor name can only be 20 characters long',
-			'unique': 'Floor name already exists.'
+			'towerName.required': 'You must provide a tower name',
+			'max': 'Tower name can only be 20 characters long',
 		};
 	}
 
@@ -34,4 +33,4 @@ class EditFloor {
 	}
 }
 
-module.exports = EditFloor;
+module.exports = AddTower;

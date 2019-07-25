@@ -1,7 +1,7 @@
 <h2 class="h5 mb-0"><strong>Flexible Time</strong></h2>
 <p>Search for a meeting between during a flexible time</p>
 
-<form id="roomSearch" aria-label='search-form' action='findAvailable' method='GET' enctype='multipart/form-data'>
+<form id="fixed-time-search" aria-label='search-form' action='{{route('searchFlexible')}}' method='GET' enctype='multipart/form-data'>
 	{{ csrfField() }}
 	{{--  Date form  --}}
 	<div class='row'>
@@ -141,7 +141,6 @@
 	{{--  Page buttons  --}}
 	<div class='row align-items-end'>
 		<div class='col-sm-12 text-right'>
-			{{--  <button aria-label='back' type='button' class='btn btn-secondary' onclick="window.location='{{ route('booking')}}';">Back</button>  --}}
 			<button aria-label='search-submit-button' type='submit' class='btn btn-primary no-margin' id='submit'> {{ antl.formatMessage('searchForm.searchBtn') }} </button>
 		</div>
 	</div>

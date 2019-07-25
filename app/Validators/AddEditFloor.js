@@ -23,7 +23,7 @@ class AddFloor {
 	get messages () {
 		return {
 			'required': 'You must provide a floor name in both English and French',
-			'floorName.max': 'floor name can only be 20 characters long',
+			'max': 'Floor name can only be 20 characters long',
 			'unique': 'Floor name already exists.'
 		};
 	}
