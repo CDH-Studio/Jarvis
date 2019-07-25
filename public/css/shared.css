@@ -7,6 +7,12 @@ body, .table,.sidebar .nav-item .collapse .collapse-inner .collapse-header, .sid
     color: #4D4D5B;
     color: #4D4D5B;
 }
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #135f9c;
+}
+
 /* links */
 a{
     color: #466CDD;
