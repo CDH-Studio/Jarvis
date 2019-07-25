@@ -461,10 +461,10 @@ class HomeController {
 		let formattedFrom, formattedTo;
 
 		const formattedDate = moment().locale(lang).format('ddd MMM DD, YYYY');
-		if(lang==='fr'){
+		if (lang === 'fr') {
 			formattedFrom = moment(now).add(remainder, 'm').format('HH:mm');
 			formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
-		}else{
+		} else {
 			formattedFrom = moment(now).add(remainder, 'm').format('h:mm A');
 			formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('h:mm A');
 		}
