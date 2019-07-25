@@ -56,7 +56,8 @@ class SearchFixed {
 	}
 
 	async fails (error) {
-		console.log(error);
+		let searchType = { field: 'searchType', message: 'fixed'};
+		error.push(searchType);
 		this.ctx.session.withErrors(error).flashAll();
 		return this.ctx.response.redirect('back');
 	}
