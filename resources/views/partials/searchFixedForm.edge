@@ -39,36 +39,6 @@
 				<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
 			@endif
 		</div>
-		<div class='col col-sm-4 form-group mb-4'>
-			<label for='to' aria-labelledby='to-error' data-toggle='tooltip'>{{ antl.formatMessage('roomDetails.bookingEnd') }} <strong class='text-danger'>*</strong></label>
-			<div style='display: flex;' class='timePicker'>
-				<!--
-				{{--  If field is not filled correctly show an error box  --}}
-				@if(hasErrorFor('to'))
-					<input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")' step="1800">
-				@else
-					<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")' step="1800">											
-				@endif
-				<div class='dropdown no-arrow'>
-					<button for='to'  aria-label='end-time-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-					<div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-						@each(item in dropdownSelection)
-							<a class="dropdown-item" for='fromDropDown' data-value='{{item.dataValue}}' href='#'>{{item.name}}</a>
-						@endeach
-					</div>
-				</div>
-				-->
-				<div class="input-group date" id="to" data-target-input="nearest">
-					<input type="text" class="form-control datetimepicker-input" data-target="#to" name="to"/>
-					<div class="input-group-append" data-target="#to" data-toggle="datetimepicker">
-						<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
-					</div>
-				</div>
-			</div>
-			@if(hasErrorFor('to'))
-				<div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
-			@endif
-		</div>
 		<div class='col col-sm-4 form-group mb-1'>
 			<label for='duration'>{{ antl.formatMessage('searchForm.duration') }} </label> <strong class='text-danger'>*</strong>
 			<div class='form-group'>
@@ -113,7 +83,7 @@
 		<div class='row'>
 			@each(featureCategory in formOptions.roomFeatureCategory)
 				@if(featureCategory.features.length!=0)
-					<div class="col-xl-6 mb-4">
+					<div class="col-sm-6 mb-4">
 					@if(antl.currentLocale()==='en')
 						<i><strong>{{featureCategory.name_english}}</strong></i>
 					@else
