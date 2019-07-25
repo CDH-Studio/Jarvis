@@ -15,22 +15,25 @@ class RecurController {
 		const options = request.all();
 		console.log(options);
 
-		const rooms = await (Room
+		const rooms = (await Room
 			.query()
 			.where('floor_id', '=', options.location)
 			.fetch()).toJSON();
 
-		
-		// const ret = Outlook.findAvailRecurring({
-		// 	type: options.type,
-		// 	start: options.start,
-		// 	end: options.end,
-		// 	from: moment(options.start + ' ' + options.from).format('YYYY-MM-DDTHH:mm'),
-		// 	to: moment(options.start + ' ' + options.to).format('YYYY-MM-DDTHH:mm')
-		// });
+		rooms.forEach(room => {
+			console.log(room.name);
 
+			const ret = Outlook.findAvailRecurring({
+				room: room.calendar,
+				type: options.type,
+				start: options.start,
+				end: options.end,
+				from: moment(options.start + ' ' + options.from).format('YYYY-MM-DDTHH:mm'),
+				to: moment(options.start + ' ' + options.to).format('YYYY-MM-DDTHH:mm')
+			});
+		});
 
-		return rooms.toJSON();
+		return rooms;
 	}
 
 	async generateRucurringDates ({ request }) {
