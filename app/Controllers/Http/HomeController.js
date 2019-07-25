@@ -93,8 +93,8 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async userDashboard ({ view, auth }) {
-		const code = await this.getAvailableRooms({ user: auth.user, view });
+	async userDashboard ({ antl, view, auth }) {
+		const code = await this.getAvailableRooms({ antl, user: auth.user, view });
 		const freqRooms = await this.getFreqBooked(auth.user);
 		const upcoming = await this.getUpcomming(auth.user);
 		const userId = auth.user.id;
@@ -434,9 +434,10 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async getAvailableRooms ({ user, view }) {
+	async getAvailableRooms ({ antl, user, view }) {
 		// If the tower is West then set the order to descending, else ascending
 		let towerOrder = (await user.getUserTower() === 'West') ? 'asc' : 'desc';
+		let lang = antl.currentLocale();
 
 		// look for rooms that are open
 		// order all rooms in the database by closest to the user's floor and tower
@@ -456,9 +457,17 @@ class HomeController {
 		const date = moment().format('YYYY-MM-DD');
 		const from = moment(now).add(remainder, 'm').format('HH:mm');
 		const to = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
-		const formattedDate = moment().format('dddd, MMMM DD, YYYY');
-		const formattedFrom = moment(now).add(remainder, 'm').format('h:mm A');
-		const formattedTo = moment(now).add(remainder, 'm').add(0.5, 'h').format('h:mm A');
+
+		let formattedFrom, formattedTo;
+
+		const formattedDate = moment().locale(lang).format('ddd MMM DD, YYYY');
+		if(lang==='fr'){
+			formattedFrom = moment(now).add(remainder, 'm').format('HH:mm');
+			formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
+		}else{
+			formattedFrom = moment(now).add(remainder, 'm').format('h:mm A');
+			formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('h:mm A');
+		}
 
 		const code = randomString(4);
 		const checkRoomAvailability = async () => {
