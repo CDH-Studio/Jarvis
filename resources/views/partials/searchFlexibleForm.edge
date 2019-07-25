@@ -1,5 +1,5 @@
-<h2 class="h5 mb-0"><strong>Flexible Time</strong></h2>
-<p>Search for a meeting between during a flexible time</p>
+<h2 class="h5 mb-0"><strong>Flexible Time Search</strong></h2>
+<p>For a flexible start or end time, enter time frame and event duration</p>
 
 <form id="fixed-time-search" aria-label='search-form' action='{{route('searchFlexible')}}' method='GET' enctype='multipart/form-data'>
 	{{ csrfField() }}
@@ -24,6 +24,9 @@
 	</div>
 	{{--  Meeting time from  --}}
 	<div class='row'>
+		<div class='col-12'>
+			<h3 class="h6"><strong>Time Frame:</strong></h3>
+		</div>
 		<div class='col col-sm-4 form-group mb-4'>
 			<label for='from' aria-labelledby='from-error'>{{ antl.formatMessage('roomDetails.bookingStart') }} <strong class='text-danger'>*</strong></label>
 			{{--  If field is not filled correctly show an error box  --}}
@@ -42,22 +45,6 @@
 		<div class='col col-sm-4 form-group mb-4'>
 			<label for='to' aria-labelledby='to-error' data-toggle='tooltip'>{{ antl.formatMessage('roomDetails.bookingEnd') }} <strong class='text-danger'>*</strong></label>
 			<div style='display: flex;' class='timePicker'>
-				<!--
-				{{--  If field is not filled correctly show an error box  --}}
-				@if(hasErrorFor('to'))
-					<input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")' step="1800">
-				@else
-					<input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', toTime) }}' onchange='removeErrorClass("to")' step="1800">											
-				@endif
-				<div class='dropdown no-arrow'>
-					<button for='to'  aria-label='end-time-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-					<div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-						@each(item in dropdownSelection)
-							<a class="dropdown-item" for='fromDropDown' data-value='{{item.dataValue}}' href='#'>{{item.name}}</a>
-						@endeach
-					</div>
-				</div>
-				-->
 				<div class="input-group date" id="to" data-target-input="nearest">
 					<input type="text" class="form-control datetimepicker-input" data-target="#to" name="to"/>
 					<div class="input-group-append" data-target="#to" data-toggle="datetimepicker">
