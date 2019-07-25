@@ -43,11 +43,14 @@
 			<label for='duration'>{{ antl.formatMessage('searchForm.duration') }} </label> <strong class='text-danger'>*</strong>
 			<div class='form-group'>
 				<div class='input-group mb-3'>
-				<input class='form-control duration-input' name='hour' type='number' min=0.5 max=10 step=0.5 value='{{ old('hour', '0.5') }}'>
-				<div class="input-group-append">
-					<span class="input-group-text duration-append">hr</span>
+					<input class='form-control duration-input' name='duration' type='number' min=0.5 max=10 step=0.5 value='{{ old('duration', '0.5') }}'>
+					<div class="input-group-append">
+						<span class="input-group-text duration-append">hr</span>
+					</div>
 				</div>
-				</div>
+				@if(hasErrorFor('from'))
+					<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('duration')}}</div>
+				@endif
 			</div>
 		</div>
 	</div>
