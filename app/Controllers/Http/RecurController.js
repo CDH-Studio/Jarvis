@@ -1,6 +1,6 @@
 'use strict';
-const axios = require('axios');
 const Env = use('Env');
+const Room = use('App/Models/Room');
 const moment = require('moment');
 const recur = require('moment-recur');
 const Outlook = new (use('App/Outlook'))();
@@ -10,7 +10,30 @@ class RecurController {
 		return view.render('userPages.recurringBooking');
 	}
 
-	async searchRecurring2 ({ request }) {
+	async searchRecurring ({ request }) {
+		// console.log(Env.get('EXCHANGE_AGENT_SERVER', 'http://172.17.75.10:3000'));
+		const options = request.all();
+		console.log(options);
+
+		const rooms = await (Room
+			.query()
+			.where('floor_id', '=', options.location)
+			.fetch()).toJSON();
+
+		
+		// const ret = Outlook.findAvailRecurring({
+		// 	type: options.type,
+		// 	start: options.start,
+		// 	end: options.end,
+		// 	from: moment(options.start + ' ' + options.from).format('YYYY-MM-DDTHH:mm'),
+		// 	to: moment(options.start + ' ' + options.to).format('YYYY-MM-DDTHH:mm')
+		// });
+
+
+		return rooms.toJSON();
+	}
+
+	async generateRucurringDates ({ request }) {
 		const options = request.all();
 		console.log(options);
 
@@ -38,31 +61,13 @@ class RecurController {
 			dates = dates
 				.filter((date) => {
 					return (date.week() - firstWeek) % options.weeklyInterval === 0;
-				})
-				.map((date) => {
-					return { from };
 				});
+			// .map((date) => {
+			// return { from };
+			// });
 			console.log(dates);
 			return recur;
 		}
-	}
-
-	async searchRecurring ({ request }) {
-		// console.log(Env.get('EXCHANGE_AGENT_SERVER', 'http://172.17.75.10:3000'));
-		const options = request.all();
-		console.log(options);
-
-		return {
-			recurType: options.type,
-			start: options.start,
-			end: options.end,
-			from: moment(options.start + ' ' + options.from).format('YYYY-MM-DDTHH:mm'),
-			to: moment(options.start + ' ' + options.to).format('YYYY-MM-DDTHH:mm')
-		};
-	}
-
-	async test () {
-		console.log(recur);
 	}
 }
 
