@@ -1,7 +1,7 @@
 <h2 class="h5 mb-0"><strong>Flexible Time Search</strong></h2>
 <p>For a flexible start or end time, enter time frame and event duration</p>
 
-<form id="fixed-time-search" aria-label='search-form' action='{{route('searchFlexible')}}' method='GET' enctype='multipart/form-data'>
+<form id="flexible-time-search" aria-label='search-form' action='{{route('searchFlexible')}}' method='GET' enctype='multipart/form-data'>
 	{{ csrfField() }}
 	{{--  Date form  --}}
 	<div class='row'>
@@ -30,10 +30,10 @@
 		<div class='col col-sm-4 form-group mb-4'>
 			<label for='from' aria-labelledby='from-error'>{{ antl.formatMessage('roomDetails.bookingStart') }} <strong class='text-danger'>*</strong></label>
 			{{--  If field is not filled correctly show an error box  --}}
-			<div class='timePicker' style='display: flex;'>
-				<div class="input-group date" id="from" data-target-input="nearest">
-					<input type="text" class="form-control datetimepicker-input" data-target="#from" name="from" id="from-input"/>
-					<div class="input-group-append" data-target="#from" data-toggle="datetimepicker">
+			<div style='display: flex;' class='timePicker'>
+				<div class="input-group date" id="flexible-from" data-target-input="nearest">
+					<input type="text" class="form-control datetimepicker-input" data-target="#flexible-from" name="from" id="from-input"/>
+					<div class="input-group-append" data-target="#flexible-from" data-toggle="datetimepicker">
 						<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
 					</div>
 				</div>
@@ -45,9 +45,9 @@
 		<div class='col col-sm-4 form-group mb-4'>
 			<label for='to' aria-labelledby='to-error' data-toggle='tooltip'>{{ antl.formatMessage('roomDetails.bookingEnd') }} <strong class='text-danger'>*</strong></label>
 			<div style='display: flex;' class='timePicker'>
-				<div class="input-group date" id="to" data-target-input="nearest">
-					<input type="text" class="form-control datetimepicker-input" data-target="#to" name="to"/>
-					<div class="input-group-append" data-target="#to" data-toggle="datetimepicker">
+				<div class="input-group date" id="flexible-to" data-target-input="nearest">
+					<input type="text" class="form-control datetimepicker-input" data-target="#flexible-to" name="to" id="from-input"/>
+					<div class="input-group-append" data-target="#flexible-to" data-toggle="datetimepicker">
 						<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
 					</div>
 				</div>
@@ -60,12 +60,15 @@
 			<label for='duration'>{{ antl.formatMessage('searchForm.duration') }} </label> <strong class='text-danger'>*</strong>
 			<div class='form-group'>
 				<div class='input-group mb-3'>
-				<input class='form-control duration-input' name='hour' type='number' min=0.5 max=10 step=0.5 value='{{ old('hour', '0.5') }}'>
-				<div class="input-group-append">
-					<span class="input-group-text duration-append">hr</span>
-				</div>
+					<input class='form-control duration-input' name='duration' type='number' min=0.5 max=10 step=0.5 value='{{ old('hour', '0.5') }}'>
+					<div class="input-group-append">
+						<span class="input-group-text duration-append">hr</span>
+					</div>
 				</div>
 			</div>
+			@if(hasErrorFor('duration'))
+				<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('duration')}}</div>
+			@endif
 		</div>
 	</div>
 	<div class='row'>

@@ -28,9 +28,9 @@
 			<label for='from' aria-labelledby='from-error'>{{ antl.formatMessage('roomDetails.bookingStart') }} <strong class='text-danger'>*</strong></label>
 			{{--  If field is not filled correctly show an error box  --}}
 			<div class='timePicker' style='display: flex;'>
-				<div class="input-group date" id="from" data-target-input="nearest">
-					<input type="text" class="form-control datetimepicker-input" data-target="#from" name="from" id="from-input"/>
-					<div class="input-group-append" data-target="#from" data-toggle="datetimepicker">
+				<div class="input-group date" id="fixed-from" data-target-input="nearest">
+					<input type="text" class="form-control datetimepicker-input" data-target="#fixed-from" name="from" id="from-input"/>
+					<div class="input-group-append" data-target="#fixed-from" data-toggle="datetimepicker">
 						<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
 					</div>
 				</div>
@@ -48,7 +48,7 @@
 						<span class="input-group-text duration-append">hr</span>
 					</div>
 				</div>
-				@if(hasErrorFor('from'))
+				@if(hasErrorFor('duration'))
 					<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('duration')}}</div>
 				@endif
 			</div>

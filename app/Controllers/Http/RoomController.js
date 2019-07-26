@@ -669,13 +669,15 @@ class RoomController {
 
 	async searchRooms ({ request, view }) {
 		const options = request.all();
+		console.log(options.to +"-"+options.from)
 
 		const duration = Number(options.duration) * 60;
 		const difference = Math.abs(moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))).asMinutes());
 
-		if (duration === difference) {
+		if (!options.to) {
 			return this.findSpecific({ request, view });
 		} else {
+			console.log(options.to +"-"+options.from)
 			return this.findAvailable({ request, view });
 		}
 	}
