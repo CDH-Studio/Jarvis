@@ -28,22 +28,26 @@ class RecurController {
 
 		let results = [];
 
-		await asyncForEach(rooms, async (room) => {
-			console.log(room.name);
+		const getRoomAvailability = async () => {
+			await asyncForEach(rooms, async (room) => {
+				console.log(room.name);
 
-			const ret = await Outlook.findAvailRecurring({
-				room: room.calendar,
-				type: options.type,
-				interval: options.weeklyInterval,
-				daysOfWeek: options.daysOfWeek,
-				start: options.start,
-				end: options.end,
-				from: moment(options.start + ' ' + options.from).format('YYYY-MM-DDTHH:mm'),
-				to: moment(options.start + ' ' + options.to).format('YYYY-MM-DDTHH:mm')
+				const ret = await Outlook.findAvailRecurring({
+					room: room.calendar,
+					type: options.type,
+					interval: options.weeklyInterval,
+					daysOfWeek: options.daysOfWeek,
+					start: options.start,
+					end: options.end,
+					from: moment(options.start + ' ' + options.from).format('YYYY-MM-DDTHH:mm'),
+					to: moment(options.start + ' ' + options.to).format('YYYY-MM-DDTHH:mm')
+				});
+
+				results.push(ret);
 			});
+		};
 
-			results.push(ret);
-		});
+		await getRoomAvailability();
 
 		return results;
 	}
