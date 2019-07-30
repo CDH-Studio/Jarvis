@@ -17,8 +17,8 @@ class RecurController {
 	}
 
 	async searchRecurring ({ request }) {
-		// console.log(Env.get('EXCHANGE_AGENT_SERVER', 'http://172.17.75.10:3000'));
 		const options = request.all();
+		options.daysOfWeek = Array.isArray(options.daysOfWeek) ? options.daysOfWeek : [options.daysOfWeek];
 		console.log(options);
 
 		const rooms = (await Room
