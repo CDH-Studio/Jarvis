@@ -32,6 +32,7 @@ class RecurController {
 			await asyncForEach(rooms, async (room) => {
 				const ret = await Outlook.findAvailRecurring({
 					room: room.calendar,
+					floor: room.floor_id,
 					type: options.type,
 					interval: options.weeklyInterval,
 					daysOfWeek: options.daysOfWeek,
