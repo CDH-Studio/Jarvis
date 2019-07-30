@@ -5,6 +5,12 @@ const moment = require('moment');
 const recur = require('moment-recur');
 const Outlook = new (use('App/Outlook'))();
 
+async function asyncForEach (arr, callback) {
+	for (let i = 0; i < arr.length; i++) {
+		await callback(arr[i], i, arr);
+	}
+}
+
 class RecurController {
 	async renderRecurring ({ view }) {
 		return view.render('userPages.recurringBooking');
@@ -22,10 +28,10 @@ class RecurController {
 
 		let results = [];
 
-		rooms.forEach(room => {
+		await asyncForEach(rooms, async (room) => {
 			console.log(room.name);
 
-			const ret = Outlook.findAvailRecurring({
+			const ret = await Outlook.findAvailRecurring({
 				room: room.calendar,
 				type: options.type,
 				interval: options.weeklyInterval,
