@@ -30,8 +30,6 @@ class RecurController {
 
 		const getRoomAvailability = async () => {
 			await asyncForEach(rooms, async (room) => {
-				console.log(room.name);
-
 				const ret = await Outlook.findAvailRecurring({
 					room: room.calendar,
 					type: options.type,
@@ -43,7 +41,7 @@ class RecurController {
 					to: moment(options.start + ' ' + options.to).format('YYYY-MM-DDTHH:mm')
 				});
 
-				results.push(ret);
+				results.push({ room, availibility: ret });
 			});
 		};
 
