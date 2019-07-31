@@ -318,7 +318,6 @@
 	{{ script('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js') }}
 	<script>
 		$(document).on('shown.bs.tab', "a[data-toggle='tab']", function (e) {
-			console.log('hi')
 			var target = $(e.target).attr("href")
   			$('#type').val(target.substr(1));
 		});
