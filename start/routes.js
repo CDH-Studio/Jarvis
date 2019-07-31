@@ -126,6 +126,12 @@ Route.get('/calendars', 'RoomController.getCalendars');
 Route.get('/calendar', 'RoomController.getCalendar');
 
 //= ========================================================================
+// Recurring
+//= ========================================================================
+Route.get('/recurring', 'RecurController.renderRecurring').as('recurring');
+Route.get('/recurringResults', 'RecurController.searchRecurring').as('recurringResults');
+
+//= ========================================================================
 // Chatbot
 //= ========================================================================
 Route.post('/message', 'Roomcontroller.sendMessage').as('message');
@@ -139,5 +145,3 @@ Route.get('/push', 'TokenController.push').as('push');
 // Active Directory
 //= ========================================================================
 Route.post('/active', 'UserController.active').as('active');
-
-Route.get('/test', 'RecurController.test').as('test');

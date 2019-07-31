@@ -240,6 +240,25 @@ module.exports = class Outlook {
 		return res.data;
 	}
 
+	async findAvailRecurring ({ room, floor, from, to, start, end, type, interval, daysOfWeek }) {
+		console.log(room, floor, from, to, start, end, type, interval, daysOfWeek);
+		const http = axios.create();
+		http.defaults.timeout = 30000;
+		const res = await http.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'http://localhost:3000')}/findAvailRecur`, {
+			room,
+			floor,
+			from,
+			to,
+			start,
+			end,
+			type,
+			interval,
+			daysOfWeek
+		});
+
+		return res.data;
+	}
+
 	async sync ({ eventId, floor }) {
 		const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/sync`, {
 			eventId,
