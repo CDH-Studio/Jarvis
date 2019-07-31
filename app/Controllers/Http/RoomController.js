@@ -677,7 +677,6 @@ class RoomController {
 		if (!options.to) {
 			return this.findSpecific({ request, view });
 		} else {
-			console.log(options.to +"-"+options.from)
 			return this.findAvailable({ request, view });
 		}
 	}
@@ -819,7 +818,7 @@ class RoomController {
 	}
 
 	async filterRooms (options) {
-		// console.log(options)
+
 		const location = options.location;
 		const seats = options.seats;
 		const capacity = options.capacity;
