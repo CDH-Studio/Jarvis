@@ -1,8 +1,6 @@
 'use strict';
-const Env = use('Env');
 const Room = use('App/Models/Room');
 const moment = require('moment');
-const recur = require('moment-recur');
 const Outlook = new (use('App/Outlook'))();
 
 async function asyncForEach (arr, callback) {
