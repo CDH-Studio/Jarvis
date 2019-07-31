@@ -1,5 +1,5 @@
-<h2 class="h5 mb-0"><strong>Flexible Time Search</strong></h2>
-<p>For a flexible start or end time, enter time frame and event duration</p>
+<h2 class="h5 mb-0"><strong>{{ antl.formatMessage('searchForm.flexibleTitle') }}</strong></h2>
+<p>{{ antl.formatMessage('searchForm.flexibleInfo') }}</p>
 
 <form id="flexible-time-search" aria-label='search-form' action='{{route('searchFlexible')}}' method='GET' enctype='multipart/form-data'>
 	{{ csrfField() }}

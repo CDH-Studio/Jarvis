@@ -1,5 +1,5 @@
-<h2 class="h5 mb-0"><strong>Specific Time</strong></h2>
-<p>Search for a meeting room at a specific time</p>
+<h2 class="h5 mb-0"><strong>{{ antl.formatMessage('searchForm.specifiedTitle') }}</strong></h2>
+<p>{{ antl.formatMessage('searchForm.specifiedInfo') }}</p>
 
 <form id="fixed-time-search" aria-label='search-form' action='{{route('searchFixed')}}' method='GET' enctype='multipart/form-data'>
 	{{ csrfField() }}
