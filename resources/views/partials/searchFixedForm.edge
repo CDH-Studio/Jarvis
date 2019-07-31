@@ -56,7 +56,7 @@
 	</div>
 	<div class='row'>
 		{{--  Location form  --}}
-		<div class='col-12 col-md-6 form-group mb-4'>
+		<div class='col-12 col-md-5 form-group mb-4'>
 			<label for='location'>{{ antl.formatMessage('searchForm.preferredLocation') }}</label>
 			<select id='location' name='location' class='form-control'>
 				<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected='selected'>{{ antl.formatMessage('searchForm.selectFloor') }}</option>
@@ -70,7 +70,7 @@
 			</select>
 		</div>
 		{{--  PMts form  --}}
-		<div class='col-6 col-md-3 form-group mb-4'>
+		<div class='col-6 col-md-4 form-group mb-4'>
 			<label for='seats'>{{ antl.formatMessage('roomSearchCard.tableSeats') }}</label>
 			<input class='form-control' id='seats' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
 		</div>
@@ -96,9 +96,9 @@
 						<div class='custom-control custom-checkbox'>
 							<input class="custom-control-input" type='checkbox' name='feat{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1'>
 							@if(antl.currentLocale()==='en')
-								<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_english, 20, '.')}}</label>
+								<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_english, 30, '.')}}</label>
 							@else
-								<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_french, 20, '.')}}</label>
+								<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_french, 30, '.')}}</label>
 							@endif
 						</div>
 					@endeach
