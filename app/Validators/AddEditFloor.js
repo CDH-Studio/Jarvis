@@ -5,7 +5,7 @@
  **/
 'use strict';
 
-class EditFloor {
+class AddFloor {
 	// Validate and return all fields
 	get validateAll () {
 		return true;
@@ -23,7 +23,7 @@ class EditFloor {
 	get messages () {
 		return {
 			'required': 'You must provide a floor name in both English and French',
-			'floorName.max': 'Floor name can only be 20 characters long',
+			'max': 'Floor name can only be 20 characters long',
 			'unique': 'Floor name already exists.'
 		};
 	}
@@ -34,4 +34,4 @@ class EditFloor {
 	}
 }
 
-module.exports = EditFloor;
+module.exports = AddFloor;

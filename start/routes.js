@@ -74,12 +74,12 @@ Route.post('/building/:id/edit', 'BuildingController.updateBuilding').as('update
 Route.get('/building/set/:id', 'BuildingController.setBuilding').as('setBuilding').middleware(['auth']);
 Route.get('/building/configure', 'BuildingController.show').as('configuration').middleware(['isAdmin']);
 
-Route.post('/tower/add', 'TowerController.addTower').as('addTower').validator('AddTower').middleware(['isAdmin']);
-Route.post('/tower/:id/edit', 'TowerController.updateTower').as('updateTower').validator('EditTower').middleware(['isAdmin']);
+Route.post('/tower/add', 'TowerController.addTower').as('addTower').validator('AddEditTower').middleware(['isAdmin']);
+Route.post('/tower/:id/edit', 'TowerController.updateTower').as('updateTower').validator('AddEditTower').middleware(['isAdmin']);
 Route.post('/tower/:id/delete', 'TowerController.deleteTower').as('deleteTower').middleware(['isAdmin']);
 
-Route.post('/floor/add', 'FloorController.addFloor').as('addFloor').validator('AddFloor').middleware(['isAdmin']);
-Route.post('/floor/:id/edit', 'FloorController.updateFloor').as('updateFloor').validator('EditFloor').middleware(['isAdmin']);
+Route.post('/floor/add', 'FloorController.addFloor').as('addFloor').validator('AddEditFloor').middleware(['isAdmin']);
+Route.post('/floor/:id/edit', 'FloorController.updateFloor').as('updateFloor').validator('AddEditFloor').middleware(['isAdmin']);
 Route.post('/floor/:id/delete', 'FloorController.deleteFloor').as('deleteFloor').middleware(['isAdmin']);
 
 Route.post('/feature/add', 'FeatureController.addRoomFeature').as('addRoomFeature').validator('AddFeature').middleware(['isAdmin']);
@@ -110,7 +110,10 @@ Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware
 
 // Rendering Results
 Route.get('/results', 'RoomController.findSpecific').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
-Route.get('/findAvailable', 'RoomController.searchRooms').as('findAvailable').validator('SearchRoom');
+Route.get('/recurringResults', 'RoomController.searchRecurring2').as('recurringResults');
+Route.get('/search/fixed', 'RoomController.searchRooms').as('searchFixed').validator('SearchFixed');
+Route.get('/search/flexible', 'RoomController.searchRooms').as('searchFlexible').validator('SearchFlexible');
+Route.get('/search/recurring', 'RoomController.searchRooms').as('searchRecurring').validator('SearchRoomFlexible'); // TODO
 
 // Booking a Room
 Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);
