@@ -110,7 +110,6 @@ Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware
 
 // Rendering Results
 Route.get('/results', 'RoomController.findSpecific').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
-Route.get('/recurringResults', 'RoomController.searchRecurring2').as('recurringResults');
 Route.get('/search/fixed', 'RoomController.searchRooms').as('searchFixed').validator('SearchFixed');
 Route.get('/search/flexible', 'RoomController.searchRooms').as('searchFlexible').validator('SearchFlexible');
 Route.get('/search/recurring', 'RoomController.searchRooms').as('searchRecurring').validator('SearchRoomFlexible'); // TODO
