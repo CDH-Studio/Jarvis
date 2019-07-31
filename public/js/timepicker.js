@@ -5,20 +5,24 @@ function round(date) {
 }
 
 $(function () {
-    $('#from').datetimepicker({
+    $('#fixed-from').datetimepicker({
+        format: 'HH:mm',
+        stepping: 30,
+        defaultDate: moment(round(moment()), 'HH:mm').add(0.5, 'h')
+    });
+
+    $('#flexible-from').datetimepicker({
         format: 'HH:mm',
         stepping: 30,
         defaultDate: moment(round(moment()), 'HH:mm')
     });
 
-    $('#from').on("change.datetimepicker", function (e) {
-        if($('#to').datetimepicker('date').isSameOrBefore(e.date))
-            $('#to').datetimepicker('date', e.date.add(0.5, 'hour').format('HH:mm'));
+    $('#flexible-from').on("change.datetimepicker", function (e) {
+        if($('#flexible-to').datetimepicker('date').isSameOrBefore(e.date))
+            $('#flexible-to').datetimepicker('date', e.date.add(0.5, 'hour').format('HH:mm'));
     });
-});
 
-$(function () {
-    $('#to').datetimepicker({
+    $('#flexible-to').datetimepicker({
         format: 'HH:mm',
         stepping: 30,
         defaultDate: moment(round(moment()), 'HH:mm').add(0.5, 'h')
