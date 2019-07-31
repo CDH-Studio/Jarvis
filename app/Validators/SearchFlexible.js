@@ -60,7 +60,7 @@ class SearchFlexible {
 	}
 
 	async fails (error) {
-		let searchType = { field: 'searchType', message: 'flexible'};
+		let searchType = { field: 'searchType', message: 'flexible' };
 		error.push(searchType);
 		this.ctx.session.withErrors(error).flashAll();
 		return this.ctx.response.redirect('back');

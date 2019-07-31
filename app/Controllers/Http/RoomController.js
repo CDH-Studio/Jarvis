@@ -669,10 +669,7 @@ class RoomController {
 
 	async searchRooms ({ request, view }) {
 		const options = request.all();
-		console.log(options.to +"-"+options.from)
-
-		const duration = Number(options.duration) * 60;
-		const difference = Math.abs(moment.duration(moment(options.from, 'HH:mm').diff(moment(options.to, 'HH:mm'))).asMinutes());
+		console.log(options.to + '-' + options.from);
 
 		if (!options.to) {
 			return this.findSpecific({ request, view });
@@ -818,7 +815,6 @@ class RoomController {
 	}
 
 	async filterRooms (options) {
-
 		const location = options.location;
 		const seats = options.seats;
 		const capacity = options.capacity;
