@@ -5,7 +5,7 @@
  **/
 'use strict';
 
-class AddFloor {
+class AddEditFloor {
 	// Validate and return all fields
 	get validateAll () {
 		return true;
@@ -34,4 +34,4 @@ class AddFloor {
 	}
 }
 
-module.exports = AddFloor;
+module.exports = AddEditFloor;
