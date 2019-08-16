@@ -669,7 +669,6 @@ class RoomController {
 
 	async searchRooms ({ request, view }) {
 		const options = request.all();
-		console.log(options.to + '-' + options.from);
 
 		if (!options.to) {
 			return this.findSpecific({ request, view });
