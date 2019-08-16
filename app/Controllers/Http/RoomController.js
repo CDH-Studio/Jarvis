@@ -678,7 +678,7 @@ class RoomController {
 		const options = request.all();
 		const { rooms, features } = await this.filterRooms(options);
 
-		//fix this ALI!!!!!
+		// fix this ALI!!!!!
 		const duration = Number(options.duration) * 60;
 		let results = {};
 
@@ -707,7 +707,7 @@ class RoomController {
 			room = room.filter(item => {
 				const time = moment(item, 'HH:mm');
 				const min = moment(options.from, 'HH:mm');
-				const max = moment(options.to, 'HH:mm').subtract(30,'m');
+				const max = moment(options.to, 'HH:mm').subtract(30, 'm');
 
 				return (time >= min && time <= max);
 			});
@@ -761,8 +761,8 @@ class RoomController {
 		let rooms = (await this.filterRooms(form)).rooms;
 
 		const date = form.date;
-		const fromFormated = moment(form.from, "HH:mm");
-		const toFormated = moment(form.to,"HH:mm");
+		const fromFormated = moment(form.from, 'HH:mm');
+		const toFormated = moment(form.to, 'HH:mm');
 		const duration = toFormated.diff(fromFormated, 'minutes');
 
 		const code = random(4);
