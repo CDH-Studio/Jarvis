@@ -1,8 +1,8 @@
 {	
 	"specifiedTitle":"Specified Time",
-	"specifiedInfo":"Search for a room with a specific start and end time",
+	"specifiedInfo":"Find available rooms at a given time",
 	"flexibleTitle":"Flexible Time",
-	"flexibleInfo":"For a flexible start or end time, enter time frame and event duration",
+	"flexibleInfo":"Find available rooms for a given duration and time range.",
 	"recurringTitle": "Recurring Meeting",
 	"recurringInfo": "coming soon!",
 	"date": "Date",
