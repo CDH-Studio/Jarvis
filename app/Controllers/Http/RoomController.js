@@ -523,9 +523,6 @@ class RoomController {
 				reviews[index].comment_date = moment(dd).format('YYYY-MM-DD');
 			}
 
-			// Adds new attribute - rating - to every room object
-			room.rating = await this.getAverageRating(room.id);
-
 			var roomFeatures = await FeaturePivot
 				.query()
 				.where('room_id', room.id)
@@ -762,12 +759,6 @@ class RoomController {
 		const form = request.all();
 		let rooms = (await this.filterRooms(form)).rooms;
 
-		// Sets average rating for each room
-		for (var i = 0; i < rooms.length; i++) {
-			// Adds new attribute - rating - to every room object
-			rooms[i].rating = await this.getAverageRating(rooms[i].id);
-		}
-
 		const date = form.date;
 		const from = form.from;
 		const to = form.to;
@@ -896,31 +887,6 @@ class RoomController {
 		await forEveryFeature();
 
 		return { rooms, features };
-	}
-
-	/**
-	 * Calcualtes the average rating of a specific room, based off of the room Id
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async getAverageRating (roomId) {
-		try {
-			// Retrive all the ratings and calculates the average
-			let searchResults = await Review
-				.query()
-				.where('room_id', roomId)
-				.avg('rating');
-
-			// If there is no averge rating, return 'No Rating'
-			if (searchResults[0]['avg(`rating`)'] == null) {
-				return 'No Rating';
-			}
-
-			// Returns the rating, thus searchResults[0]['avg(`rating`)']
-			return searchResults[0]['avg(`rating`)'];
-		} catch (err) {
-			console.log(err);
-		}
 	}
 
 	/**
