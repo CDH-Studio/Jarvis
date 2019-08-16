@@ -667,7 +667,7 @@ class RoomController {
 	async searchRooms ({ request, view }) {
 		const options = request.all();
 
-		if (!options.to) {
+		if (!options.duration) {
 			return this.findSpecific({ request, view });
 		} else {
 			return this.findAvailable({ request, view });
@@ -678,7 +678,11 @@ class RoomController {
 		const options = request.all();
 		const { rooms, features } = await this.filterRooms(options);
 
-		const duration = Number(options.hour) * 60;
+		//fix this ALI!!!!!
+		let start = moment(options.date).format('YYYY-MM-DDTHH:mm');
+		let end = moment(options.date).add(24, 'hour').format('YYYY-MM-DDTHH:mm');
+		const duration = end.from(start);
+		console.log(duration);
 		let results = {};
 
 		if (Env.get('DEV_OUTLOOK', 'prod') !== 'prod') {
@@ -689,9 +693,9 @@ class RoomController {
 					results[item.name] = await Outlook
 						.findAvail({
 							room: item.calendar,
-							start: moment(options.date).format('YYYY-MM-DDTHH:mm'),
-							end: moment(options.date).add(24, 'hour').format('YYYY-MM-DDTHH:mm'),
-							duration,
+							start: start,
+							end: end,
+							duration: duration,
 							floor: item.floor_id
 						});
 				});
@@ -760,13 +764,15 @@ class RoomController {
 		let rooms = (await this.filterRooms(form)).rooms;
 
 		const date = form.date;
-		const from = form.from;
-		const to = form.to;
+		const fromFormated = moment(form.from, "HH:mm");
+		const toFormated = moment(form.to,"HH:mm");
+		const duration = toFormated.diff(fromFormated, 'minutes');
+
 		const code = random(4);
 		const checkRoomAvailability = async () => {
 			let results = [];
 			await asyncForEach(rooms, async (item) => {
-				if (await Outlook.getRoomAvailability({ date, from, to, floor: item.floor_id, calendar: item.calendar })) {
+				if (await Outlook.getRoomAvailability({ date, from: form.from, to: form.to, duration: duration, floor: item.floor_id, calendar: item.calendar })) {
 					const floorObj = (await item.floor().fetch()) === null ? { name_english: 0, name_french: 0 } : (await item.floor().fetch()).toJSON();
 					const towerObj = (await item.tower().fetch()).toJSON();
 
@@ -776,7 +782,7 @@ class RoomController {
 					item.tower = towerObj;
 
 					Event.fire('send.room', {
-						card: view.render('components.card', { form, room: item, token: request.csrfToken, from: from, to: to }),
+						card: view.render('components.card', { form, room: item, token: request.csrfToken, from: form.from, to: form.to }),
 						code: code
 					});
 

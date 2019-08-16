@@ -457,6 +457,7 @@ class HomeController {
 		const date = moment().format('YYYY-MM-DD');
 		const from = moment(now).add(remainder, 'm').format('HH:mm');
 		const to = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
+		const duration = 1;
 
 		let formattedFrom, formattedTo;
 
@@ -473,7 +474,7 @@ class HomeController {
 		const checkRoomAvailability = async () => {
 			let numberOfRooms = 2;
 			await asyncForEach(rooms, async (item) => {
-				if (numberOfRooms !== 0 && await Outlook.getRoomAvailability({ date, from, to, floor: item.floor_id, calendar: item.calendar })) {
+				if (numberOfRooms !== 0 && await Outlook.getRoomAvailability({ date, from, to, duration, floor: item.floor_id, calendar: item.calendar })) {
 					Event.fire('send.room', {
 						card: view.render('components.smallCard', { room: item, datetime: { date: formattedDate, time: formattedFrom + ' - ' + formattedTo } }),
 						code: code
