@@ -1,8 +1,8 @@
 {	
 	"specifiedTitle":"Heure précise",
-	"specifiedInfo":"Rechercher une salle avec une heure de début et de fin spécifique",
+	"specifiedInfo":" Trouvez les salles disponibles à un moment donné.",
 	"flexibleTitle":"Horaire flexible",
-	"flexibleInfo":"Pour une heure de début ou de fin flexible, saisissez la période et la durée de l'événement",
+	"flexibleInfo":"Trouver les salles disponibles pour une durée spécifique et dans un intervalle de temps donné.",
 	"recurringTitle": "Réunion récurrente",
 	"recurringInfo": "à suivre!",
 	"date": "Date",

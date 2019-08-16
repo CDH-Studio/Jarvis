@@ -8,6 +8,17 @@ $(function () {
     $('#fixed-from').datetimepicker({
         format: 'HH:mm',
         stepping: 30,
+        defaultDate: moment(round(moment()), 'HH:mm')
+    });
+
+    $('#fixed-from').on("change.datetimepicker", function (e) {
+        if($('#fixed-to').datetimepicker('date').isSameOrBefore(e.date))
+            $('#fixed-to').datetimepicker('date', e.date.add(0.5, 'hour').format('HH:mm'));
+    });
+
+    $('#fixed-to').datetimepicker({
+        format: 'HH:mm',
+        stepping: 30,
         defaultDate: moment(round(moment()), 'HH:mm').add(0.5, 'h')
     });
 
@@ -29,27 +40,27 @@ $(function () {
     });
 });
 
-$(function () {
-    $('#from').datetimepicker({
-        format: 'HH:mm',
-        stepping: 30,
-        defaultDate: moment(round(moment()), 'HH:mm')
-    });
+// $(function () {
+//     $('#from').datetimepicker({
+//         format: 'HH:mm',
+//         stepping: 30,
+//         defaultDate: moment(round(moment()), 'HH:mm')
+//     });
 
-    $('#from').datetimepicker({
-        format: 'HH:mm',
-        stepping: 30,
-        defaultDate: moment(round(moment()), 'HH:mm')
-    });
+//     $('#from').datetimepicker({
+//         format: 'HH:mm',
+//         stepping: 30,
+//         defaultDate: moment(round(moment()), 'HH:mm')
+//     });
 
-    $('#from').on("change.datetimepicker", function (e) {
-        if($('#to').datetimepicker('date').isSameOrBefore(e.date))
-            $('#to').datetimepicker('date', e.date.add(0.5, 'hour').format('HH:mm'));
-    });
+//     $('#from').on("change.datetimepicker", function (e) {
+//         if($('#to').datetimepicker('date').isSameOrBefore(e.date))
+//             $('#to').datetimepicker('date', e.date.add(0.5, 'hour').format('HH:mm'));
+//     });
 
-    $('#to').datetimepicker({
-        format: 'HH:mm',
-        stepping: 30,
-        defaultDate: moment(round(moment()), 'HH:mm').add(0.5, 'h')
-    });
-});
+//     $('#to').datetimepicker({
+//         format: 'HH:mm',
+//         stepping: 30,
+//         defaultDate: moment(round(moment()), 'HH:mm').add(0.5, 'h')
+//     });
+// });

@@ -523,9 +523,6 @@ class RoomController {
 				reviews[index].comment_date = moment(dd).format('YYYY-MM-DD');
 			}
 
-			// Adds new attribute - rating - to every room object
-			room.rating = await this.getAverageRating(room.id);
-
 			var roomFeatures = await FeaturePivot
 				.query()
 				.where('room_id', room.id)
@@ -669,9 +666,8 @@ class RoomController {
 
 	async searchRooms ({ request, view }) {
 		const options = request.all();
-		console.log(options.to + '-' + options.from);
 
-		if (!options.to) {
+		if (!options.duration) {
 			return this.findSpecific({ request, view });
 		} else {
 			return this.findAvailable({ request, view });
@@ -682,7 +678,8 @@ class RoomController {
 		const options = request.all();
 		const { rooms, features } = await this.filterRooms(options);
 
-		const duration = Number(options.hour) * 60;
+		// fix this ALI!!!!!
+		const duration = Number(options.duration) * 60;
 		let results = {};
 
 		if (Env.get('DEV_OUTLOOK', 'prod') !== 'prod') {
@@ -710,7 +707,7 @@ class RoomController {
 			room = room.filter(item => {
 				const time = moment(item, 'HH:mm');
 				const min = moment(options.from, 'HH:mm');
-				const max = moment(options.to, 'HH:mm');
+				const max = moment(options.to, 'HH:mm').subtract(30, 'm');
 
 				return (time >= min && time <= max);
 			});
@@ -763,20 +760,16 @@ class RoomController {
 		const form = request.all();
 		let rooms = (await this.filterRooms(form)).rooms;
 
-		// Sets average rating for each room
-		for (var i = 0; i < rooms.length; i++) {
-			// Adds new attribute - rating - to every room object
-			rooms[i].rating = await this.getAverageRating(rooms[i].id);
-		}
-
 		const date = form.date;
-		const from = form.from;
-		const to = form.to;
+		const fromFormated = moment(form.from, 'HH:mm');
+		const toFormated = moment(form.to, 'HH:mm');
+		const duration = toFormated.diff(fromFormated, 'minutes');
+
 		const code = random(4);
 		const checkRoomAvailability = async () => {
 			let results = [];
 			await asyncForEach(rooms, async (item) => {
-				if (await Outlook.getRoomAvailability({ date, from, to, floor: item.floor_id, calendar: item.calendar })) {
+				if (await Outlook.getRoomAvailability({ date, from: form.from, to: form.to, duration: duration, floor: item.floor_id, calendar: item.calendar })) {
 					const floorObj = (await item.floor().fetch()) === null ? { name_english: 0, name_french: 0 } : (await item.floor().fetch()).toJSON();
 					const towerObj = (await item.tower().fetch()).toJSON();
 
@@ -786,7 +779,7 @@ class RoomController {
 					item.tower = towerObj;
 
 					Event.fire('send.room', {
-						card: view.render('components.card', { form, room: item, token: request.csrfToken, from: from, to: to }),
+						card: view.render('components.card', { form, room: item, token: request.csrfToken, from: form.from, to: form.to }),
 						code: code
 					});
 
@@ -897,31 +890,6 @@ class RoomController {
 		await forEveryFeature();
 
 		return { rooms, features };
-	}
-
-	/**
-	 * Calcualtes the average rating of a specific room, based off of the room Id
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async getAverageRating (roomId) {
-		try {
-			// Retrive all the ratings and calculates the average
-			let searchResults = await Review
-				.query()
-				.where('room_id', roomId)
-				.avg('rating');
-
-			// If there is no averge rating, return 'No Rating'
-			if (searchResults[0]['avg(`rating`)'] == null) {
-				return 'No Rating';
-			}
-
-			// Returns the rating, thus searchResults[0]['avg(`rating`)']
-			return searchResults[0]['avg(`rating`)'];
-		} catch (err) {
-			console.log(err);
-		}
 	}
 
 	/**

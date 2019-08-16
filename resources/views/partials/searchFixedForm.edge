@@ -22,10 +22,11 @@
 			@endif
 		</div>
 	</div>
-	{{--  Meeting time from  --}}
+	
 	<div class='row'>
+		{{--  Meeting time FROM  --}}
 		<div class='col col-sm-4 form-group mb-4'>
-			<label for='from' aria-labelledby='from-error'>{{ antl.formatMessage('roomDetails.bookingStart') }} <strong class='text-danger'>*</strong></label>
+			<label for='from' aria-labelledby='from-error'>{{ antl.formatMessage('searchForm.bookingStart') }} <strong class='text-danger'>*</strong></label>
 			{{--  If field is not filled correctly show an error box  --}}
 			<div class='timePicker' style='display: flex;'>
 				<div class="input-group date" id="fixed-from" data-target-input="nearest">
@@ -39,19 +40,21 @@
 				<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
 			@endif
 		</div>
-		<div class='col col-sm-4 form-group mb-1'>
-			<label for='duration'>{{ antl.formatMessage('searchForm.duration') }} </label> <strong class='text-danger'>*</strong>
-			<div class='form-group'>
-				<div class='input-group mb-3'>
-					<input class='form-control duration-input' name='duration' type='number' min=0.5 max=10 step=0.5 value='{{ old('duration', '0.5') }}'>
-					<div class="input-group-append">
-						<span class="input-group-text duration-append">hr</span>
+		{{--  Meeting time TO  --}}
+		<div class='col col-sm-4 form-group mb-4'>
+			<label for='to' aria-labelledby='to-error'>{{ antl.formatMessage('searchForm.bookingEnd') }} <strong class='text-danger'>*</strong></label>
+			{{--  If field is not filled correctly show an error box  --}}
+			<div class='timePicker' style='display: flex;'>
+				<div class="input-group date" id="fixed-to" data-target-input="nearest">
+					<input type="text" class="form-control datetimepicker-input" data-target="#fixed-to" name="to" id="to-input"/>
+					<div class="input-group-append" data-target="#fixed-to" data-toggle="datetimepicker">
+						<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
 					</div>
 				</div>
-				@if(hasErrorFor('duration'))
-					<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('duration')}}</div>
-				@endif
 			</div>
+			@if(hasErrorFor('to'))
+				<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
+			@endif
 		</div>
 	</div>
 	<div class='row'>
@@ -114,7 +117,7 @@
 	{{--  Page buttons  --}}
 	<div class='row align-items-end'>
 		<div class='col-sm-12 text-right'>
-			<button aria-label='search-submit-button' type='submit' class='btn btn-primary no-margin' id='submit'> {{ antl.formatMessage('searchForm.searchBtn') }} </button>
+			<button aria-label='search-submit-button' type='submit' class='btn btn-primary no-margin' id='fixed-submit'> {{ antl.formatMessage('searchForm.searchBtn') }} </button>
 		</div>
 	</div>
 </form>

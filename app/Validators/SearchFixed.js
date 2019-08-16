@@ -39,7 +39,7 @@ class SearchFixed {
 			 * required: require field, cannot search without a date entered
 			 */
 			from: 'required|isAfterToday:date',
-			duration: 'required|range:0,24'
+			to: 'required|isAfter:from|isAfterToday:date'
 
 		};
 	}
