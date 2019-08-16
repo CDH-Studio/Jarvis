@@ -679,10 +679,7 @@ class RoomController {
 		const { rooms, features } = await this.filterRooms(options);
 
 		//fix this ALI!!!!!
-		let start = moment(options.date).format('YYYY-MM-DDTHH:mm');
-		let end = moment(options.date).add(24, 'hour').format('YYYY-MM-DDTHH:mm');
-		const duration = end.from(start);
-		console.log(duration);
+		const duration = Number(options.duration) * 60;
 		let results = {};
 
 		if (Env.get('DEV_OUTLOOK', 'prod') !== 'prod') {
@@ -693,9 +690,9 @@ class RoomController {
 					results[item.name] = await Outlook
 						.findAvail({
 							room: item.calendar,
-							start: start,
-							end: end,
-							duration: duration,
+							start: moment(options.date).format('YYYY-MM-DDTHH:mm'),
+							end: moment(options.date).add(24, 'hour').format('YYYY-MM-DDTHH:mm'),
+							duration,
 							floor: item.floor_id
 						});
 				});
@@ -710,7 +707,7 @@ class RoomController {
 			room = room.filter(item => {
 				const time = moment(item, 'HH:mm');
 				const min = moment(options.from, 'HH:mm');
-				const max = moment(options.to, 'HH:mm');
+				const max = moment(options.to, 'HH:mm').subtract(30,'m');
 
 				return (time >= min && time <= max);
 			});
