@@ -60,10 +60,6 @@ module.exports = class Outlook {
 	 * @returns {Boolean} Whether or not the room is available
 	 */
 	async getRoomAvailability ({ date, from, to, duration, floor, calendar }) {
-		console.log('Ali');
-		console.log(date);
-		console.log(from);
-		console.log(duration);
 		if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
 			const res = await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/avail`, {
 				room: calendar,
