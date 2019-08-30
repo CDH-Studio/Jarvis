@@ -14,18 +14,6 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseRooms" aria-expanded="true" aria-controls="collapseRooms">
-        <i class="fas fa-fw fa-map-marker-alt"></i>
-        <span>{{ antl.formatMessage('adminSidebarOptions.roomsDropdown') }}</span>
-      </a>
-      <div id="collapseRooms" class="collapse" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-          <a id="add-room-dropdown" class='dropdown-item' href='{{ route('addRoom') }}'>Add Room</a>
-          <a id="view-rooms-dropdown" class='dropdown-item' href='{{ route('allRooms') }}'>View Rooms</a>
-        </div>
-      </div>
-    </li>
 
 
     <!-- Nav Item - Utilities Collapse Menu -->
@@ -36,8 +24,8 @@
       </a>
       <div id="collapseUsers" class="collapse" aria-labelledby="collapseUsers" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <a id="view-users-dropdown" class="dropdown-item" href='{{ route('allUsers') }}'>{{ antl.formatMessage('adminSidebarOptions.viewUsers') }}</a>
-          <a id="view-users-dropdown" class="dropdown-item" href='{{ route('allAdmins') }}'>View Admins</a>
+          <a id="view-users-dropdown" class="dropdown-item" href='{{ route('allUsers') }}'><i class="fas fa-fw fa-list text-grey"></i> {{ antl.formatMessage('adminSidebarOptions.viewUsers') }}</a>
+          <a id="view-users-dropdown" class="dropdown-item" href='{{ route('allAdmins') }}'><i class="fas fa-fw fa-list text-grey"></i> View Admins</a>
         </div>
       </div>
     </li>
@@ -57,7 +45,10 @@
       </a>
       <div id="collapseUtilities" class="collapse" aria-labelledby="collapseUtilities" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <a id="room-issues-drop-down" class='dropdown-item' href='{{ route('showIssue', {roomID: 'all', issueStatus: 'all', timeFilter: 'all' }) }}'>{{ antl.formatMessage('adminSidebarOptions.viewIssues') }}</a>
+          <a id="room-issues-drop-down" class='dropdown-item' href='{{ route('showIssue', {roomID: 'all', issueStatus: 'all', timeFilter: 'all' }) }}'>
+          <i class="fas fa-fw fa-list text-grey"></i>
+          {{ antl.formatMessage('adminSidebarOptions.viewIssues') }}
+          </a>
         </div>
       </div>
     </li>
@@ -70,7 +61,18 @@
       </a>
       <div id="collapseBuilding" class="collapse" aria-labelledby="collapseUtilities" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
-          <a id="room-issues-drop-down" class='dropdown-item' href="{{route('configuration')}}"><span>{{ antl.formatMessage('adminSidebarOptions.configureBuilding') }}</span></a>
+          <a id="room-issues-drop-down" class='dropdown-item' href="{{route('configuration')}}">
+            <i class="fas fa-fw fa-cog text-grey"></i>
+            {{ antl.formatMessage('adminSidebarOptions.configureBuilding') }}
+          </a>
+          <a id="view-rooms-dropdown" class='dropdown-item' href='{{ route('allRooms') }}'>
+            <i class="fas fa-fw fa-list text-grey"></i>
+            View Rooms
+          </a>
+          <a id="add-room-dropdown" class='dropdown-item' href='{{ route('addRoom') }}'>
+            <i class="fas fa-fw fa-plus text-grey"></i>
+            Add Room
+          </a>
         </div>
       </div>
     </li>
