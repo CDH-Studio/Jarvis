@@ -49,7 +49,7 @@
 		"sqlite3": "^4.1.0"
 	},
 	"devDependencies": {
-		"eslint": "^6.1.0",
+		"eslint": "^6.2.2",
 		"eslint-config-standard": "^12.0.0",
 		"eslint-plugin-import": "^2.18.2",
 		"eslint-plugin-node": "^9.1.0",
