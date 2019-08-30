@@ -121,6 +121,7 @@ module.exports = class Outlook {
 
 				const eventId = res.data.eventId.UniqueId;
 
+				booking.building_id = room.building_id;
 				booking.from = eventInfo.start.dateTime;
 				booking.to = eventInfo.end.dateTime;
 				booking.event_id = eventId;
