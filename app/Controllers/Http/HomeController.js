@@ -270,10 +270,11 @@ class HomeController {
 			let bookings = await Booking
 				.query()
 				.where('building_id', selectedBuilding.id)
+				.where('status', 'Approved')
 				.whereRaw("strftime('%Y-%m', bookings.'from') = ?", [date.format('YYYY-MM')]) // eslint-disable-line
-				.count();
+				.getCount();
 
-			numberOfBookings.push(bookings[0]['count(*)']);
+			numberOfBookings.push(bookings);
 			months.push(date.format('MMM YYYY'));
 
 			date.subtract(1, 'M');
