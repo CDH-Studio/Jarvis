@@ -40,7 +40,13 @@
           <a id="view-users-dropdown" class="dropdown-item" href='{{ route('allAdmins') }}'>View Admins</a>
         </div>
       </div>
+    </li>
 
+    <li class="nav-item">
+      <a class="nav-link"  href="{{ route('viewBookings',{bookingType: 'admin', id: userid, catFilter: 'upcoming', limitFilter: 'all' }) }}">
+        <i class="fas fa-tasks"></i>
+        <span>{{antl.formatMessage('userSidebarOptions.manageBookings')}}</span>
+      </a>
     </li>
 
     <!-- Nav Item - Utilities Collapse Menu -->

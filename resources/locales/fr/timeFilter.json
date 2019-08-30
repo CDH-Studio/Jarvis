@@ -2,9 +2,8 @@
 	"upcoming": "Prochaine",
 	"cancelled": "Annulé",
 	"past": "Passé",
-	"month": "mois",
-	"3-months": "3 mois",
-	"6-months": "6 mois",
-	"year": "année",
+	"7-days": "7 journées",
+	"30-days": "30 journées",
+	"60-days": "60 journées",
 	"all": "tout"
 }
