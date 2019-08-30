@@ -61,7 +61,7 @@
         <hr class="sidebar-divider my-0">
 
         @if(auth.user.role_id===1)
-          @!component('layouts.adminSidebarOptions', antl = antl)
+          @!component('layouts.adminSidebarOptions', userid = auth.user.id, antl = antl)
         @else
           @!component('layouts.userSidebarOptions', userid = auth.user.id, antl = antl)
         @endif
