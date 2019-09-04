@@ -47,8 +47,6 @@
 
     <div id='wrapper'>
       <!-- Sidebar -->
-
-      
       <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
@@ -97,9 +95,19 @@
 
         <!-- Main Content -->
         <div id="content">
-          <div class="alert alert-primary alert-dismissible show m-0 p-2 pl-4" role="alert">
+          <div class="alert alert-danger alert-dismissible m-0 p-2 pl-4" role="alert" id="agent-error-alert" style="display: none;">
             <small>
-              <i class="fas fa-exclamation-circle"></i> {{ antl.formatMessage('mainLayout.betaMessage') }}
+              <i class="fas fa-exclamation-triangle mr-1"></i> {{ antl.formatMessage('mainLayout.agentTestMessage') }}
+              <a class="text-right ml-1 text-dark" href="mailto: cdhstudio@canada.ca?Subject=Jarvis%20Error">
+              <i class="fas fa-envelope"></i> {{ antl.formatMessage('mainLayout.feedback') }}</a>
+            </small>
+            <button type="button" class="close p-2 pr-4" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="alert alert-primary alert-dismissible m-0 p-2 pl-4" role="alert" id="feedback-alert">
+            <small>
+              <i class="fas fa-exclamation-circle mr-1"></i> {{ antl.formatMessage('mainLayout.betaMessage') }}
               <a class="text-right ml-1 text-dark" href="mailto: cdhstudio@canada.ca?Subject=Jarvis%20Feedback">
               <i class="fas fa-envelope"></i> {{ antl.formatMessage('mainLayout.feedback') }}</a>
             </small>
@@ -300,7 +308,20 @@
         </script>
     @endif
 
-
+    <script>
+      $.ajax({url: "/test-connection", success: function(result){
+        //check status of agent
+        if(result === '1'){
+          // display agent alert and hide feedback notification
+          $('#feedback-alert').show(); 
+          $('#agent-error-alert').hide(); 
+        }else{
+          // hide agent alert and diplay feedback notification
+          $('#feedback-alert').hide(); 
+          $('#agent-error-alert').show(); 
+        }
+      }});
+    </script>
 
     @!section('extrajs')
 

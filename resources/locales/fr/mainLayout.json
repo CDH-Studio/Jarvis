@@ -1,5 +1,6 @@
 {	
 	"betaMessage": "Jarvis est en développement. Nous apprécions vos commentaires pour nous aider à améliorer!",
+	"agentTestMessage": "Veuillez noter que nous éprouvons présentement une panne de service. Nous revenons bientôt!",
 	"profile": "Profil",
 	"feedback": "Commentaire",
 	"logout" : "Se déconnecter",

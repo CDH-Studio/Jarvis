@@ -88,12 +88,28 @@ class HomeController {
 
 	/**
 	*
+	* Change language cookie
+	*
+	* @param {view}
+	*
+	*/
+	async testAgentConnection ({ params, antl, request, response }) {
+		let res = await Outlook.testConnection();
+		return res;
+	}
+
+	/**
+	*
 	* Render user dashboard and gather information for dashboard view
 	*
 	* @param {view}
 	*
 	*/
 	async userDashboard ({ antl, view, auth }) {
+		if (await Outlook.testConnection()) {
+
+		};
+
 		const code = await this.getAvailableRooms({ antl, user: auth.user, view });
 		const freqRooms = await this.getFreqBooked(auth.user);
 		const upcoming = await this.getUpcomming(auth.user);
