@@ -1,5 +1,6 @@
 {	
 	"betaMessage": "Jarvis is currently in development. We appreciate your feedback to help us improve!",
+	"agentTestMessage": "We are currently experiencing a service outage. We will be back shortly!",
 	"profile": "Profile",
 	"feedback": "Feedback",
 	"logout" : "Logout",

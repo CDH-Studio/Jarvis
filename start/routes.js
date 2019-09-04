@@ -118,6 +118,7 @@ Route.get('/search/recurring', 'RoomController.searchRooms').as('searchRecurring
 Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);
 
 // Outlook
+Route.get('/test-connection', 'HomeController.testAgentConnection').as('testAgentConnection');
 Route.get('/authenticate', 'TokenController.getAuthUrl');
 Route.get('/authorize', 'TokenController.authorize');
 Route.get('/event', 'BookingController.createEvent');

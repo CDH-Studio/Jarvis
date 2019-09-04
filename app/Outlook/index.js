@@ -51,6 +51,30 @@ module.exports = class Outlook {
 	}
 
 	/**
+	 * check if Agent is running correctly
+	 *
+	 * @returns {Boolean} test connection to agent
+	 */
+	async testConnection () {
+		if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
+			try {
+				// make a test connection using an empty post request
+				await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/avail`, {});
+			} catch (e) {
+				// console.log(e.response.status);
+				if (e.response.status === 300) {
+					// return true (server working)
+					return 1;
+				} else {
+					// return false (server unresponsive)
+					return 0;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Check if specific room is available at the provided time
 	 *
 	 * @param {String} date     Date
 	 * @param {String} from     Starting time
