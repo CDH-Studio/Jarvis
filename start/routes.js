@@ -70,7 +70,7 @@ Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['au
 
 Route.get('/building/select', 'BuildingController.viewSelectBuilding').as('viewSelectBuilding').middleware(['auth']);
 Route.get('/building/:id/edit', 'BuildingController.editBuilding').as('editBuilding').middleware(['isAdmin']);
-Route.post('/building/:id/edit', 'BuildingController.updateBuilding').as('updateBuilding').validator('EditBuilding').middleware(['isAdmin']);
+Route.post('/building/:id/edit', 'BuildingController.updateBuilding').as('updateBuilding').validator('editBuilding').middleware(['isAdmin']);
 Route.get('/building/set/:id', 'BuildingController.setBuilding').as('setBuilding').middleware(['auth']);
 Route.get('/building/configure', 'BuildingController.show').as('configuration').middleware(['isAdmin']);
 
