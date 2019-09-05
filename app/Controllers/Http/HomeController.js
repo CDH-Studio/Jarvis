@@ -502,7 +502,7 @@ class HomeController {
 
 			if (numberOfRooms === 2) {
 				Event.fire('send.empty', {
-					view: view.render('components.noAvailableRooms'),
+					view: view.render('components.cardEmptyMessage', { faIcon: 'fas fa-ghost fa-5x', message: antl.formatMessage('userDash.FBError') }),
 					code: code
 				});
 			}
