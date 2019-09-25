@@ -106,10 +106,6 @@ class HomeController {
 	*
 	*/
 	async userDashboard ({ antl, view, auth }) {
-		if (await Outlook.testConnection()) {
-
-		};
-
 		const code = await this.getAvailableRooms({ antl, user: auth.user, view });
 		const freqRooms = await this.getFreqBooked(auth.user);
 		const upcoming = await this.getUpcomming(auth.user);

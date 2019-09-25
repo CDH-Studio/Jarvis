@@ -201,9 +201,9 @@
           <div class="container my-auto">
             <div class="copyright text-center my-auto">
               @if(antl.currentLocale() =="fr")
-                <a class='link-style-none' href='https://cdhstudio.ca/fr' target='_blank'> Studio CDH <i class='fas fa-heart'></i> Jarvis</a>
+                <a class='link-style-none' href='https://cdhstudio.ca/fr' target='_blank'> Studio CDH <i class='fas fa-heart' id='footer-heart-icon'></i> Jarvis</a>
               @else
-                <a class='link-style-none' href='https://cdhstudio.ca' target='_blank'> CDH Studio <i class='fas fa-heart'></i> Jarvis</a>
+                <a class='link-style-none' href='https://cdhstudio.ca' target='_blank'> CDH Studio <i class='fas fa-heart' id='footer-heart-icon'></i> Jarvis</a>
               @endif
             </div>
           </div>
@@ -309,19 +309,34 @@
     @endif
 
     <script>
-      $.ajax({url: "/test-connection", success: function(result){
-        //check status of agent
-        if(result === '1'){
-          // display agent alert and hide feedback notification
-          $('#feedback-alert').show(); 
-          $('#agent-error-alert').hide(); 
-        }else{
-          // hide agent alert and diplay feedback notification
-          $('#feedback-alert').hide(); 
-          $('#agent-error-alert').show(); 
-        }
+      $.ajax({
+        url: "/test-connection",
+        error: function(result) {
+            // hide agent alert and diplay feedback notification
+            $('#feedback-alert').hide(); 
+            $('#agent-error-alert').show();
+            $('#footer-heart-icon').removeClass('color-warning'); 
+            $('#footer-heart-icon').addClass('color-danger'); 
+        }, 
+        success: function(result){
+          //check status of agent
+          if(result === '1'){
+            // display agent alert and hide feedback notification
+            $('#feedback-alert').show(); 
+            $('#agent-error-alert').hide();
+            $('#footer-heart-icon').removeClass('color-warning'); 
+            $('#footer-heart-icon').addClass('color-success');  
+          }else{
+            // hide agent alert and diplay feedback notification
+            $('#feedback-alert').hide(); 
+            $('#agent-error-alert').show();
+            $('#footer-heart-icon').removeClass('color-warning'); 
+            $('#footer-heart-icon').addClass('color-danger'); 
+          }
       }});
+      $('#footer-heart-icon').addClass('color-warning');
     </script>
+    
 
     @!section('extrajs')
 
