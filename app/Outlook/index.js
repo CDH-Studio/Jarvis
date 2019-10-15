@@ -4,6 +4,7 @@ const Env = use('Env');
 const Logger = use('Logger');
 const Mail = use('Mail');
 const Token = use('App/Models/Token');
+require('isomorphic-fetch');
 const graph = require('@microsoft/microsoft-graph-client');
 
 /**
