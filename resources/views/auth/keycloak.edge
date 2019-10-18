@@ -9,7 +9,8 @@
             $(document).ready(function() {
                 let keycloak = Keycloak('js/vendor/keycloak.json');
                 keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
-                    console.log(authenticated)
+                    console.log('hi')
+                    console.log(keycloak)
                     alert(authenticated ? 'authenticated' : 'not authenticated');
                 }).error(function() {
                     alert('failed to initialize');
