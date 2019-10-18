@@ -604,7 +604,8 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async active ({ request }) {
+	async key ({ view }) {
+		return view.render('auth.keycloak');
 	}
 }
 
