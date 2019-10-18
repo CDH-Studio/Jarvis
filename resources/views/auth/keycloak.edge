@@ -11,6 +11,9 @@
                 keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
                     console.log('hi')
                     console.log(keycloak)
+                    console.log('user')
+                    console.log(keycloak.loadUserInfo())
+                    console.log(keycloak.loadUserProfile())
                     alert(authenticated ? 'authenticated' : 'not authenticated');
                 }).error(function() {
                     alert('failed to initialize');
