@@ -35,7 +35,7 @@ Route.post('/admin/register', 'UserController.createAdmin').as('CreateAdmin').va
 
 // Logout
 Route.get('/login', 'UserController.loginRender').as('login');
-Route.post('/login', 'UserController.login').validator('LoginUser');
+Route.post('/login', 'UserController.login');
 Route.get('/logout', 'UserController.logout').as('logout');
 
 // Forgot password
