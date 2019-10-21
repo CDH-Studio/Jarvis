@@ -9,6 +9,7 @@
         $(document).ready(function() {
             let keycloak = Keycloak('js/vendor/keycloak.json');
             keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
+                keycloak.loadUserProfile();
                 console.log(keycloak)
                 console.log(authenticated ? 'authenticated' : 'not authenticated');
             }).error(function() {

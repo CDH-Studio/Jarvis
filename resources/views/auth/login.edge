@@ -190,8 +190,9 @@
 			let keycloak = Keycloak('js/vendor/keycloak.json');
                 keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
                     if(authenticated) {
-					$.post('/login', {
-							email: keycloak.userInfo.email, 
+						keycloak.loadUserProfile();
+						$.post('/login', {
+							email: keycloak.profile.email, 
 							_csrf: '{{ csrfToken }}' 
 						}, function(res) {
 							$(location).attr('href', '/userDash');
