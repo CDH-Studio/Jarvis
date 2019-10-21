@@ -193,6 +193,7 @@
 						keycloak.loadUserProfile().success(function(profile) {
 							$.post('/login', {
 								email: profile.email, 
+								keycloak: keycloak,
 								_csrf: '{{ csrfToken }}' 
 							}, function(res) {
 								$(location).attr('href', '/userDash');

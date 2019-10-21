@@ -361,7 +361,9 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async login ({ request, auth, response, session }) {
-		const { email } = request.all();
+		const { email, keycloak } = request.all();
+		auth.keycloak = keycloak;
+		console.log(auth.keycloak)
 
 		const user = await User
 			.query()
@@ -407,6 +409,7 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async logout ({ auth, response, session }) {
+		auth.keycloak.logout();
 		await auth.logout();
 		session.flash({
 			notification: 'You have been logged out.'
