@@ -6,21 +6,14 @@
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     {{ csrfField() }}
     <script>
-            $(document).ready(function() {
-                let keycloak = Keycloak('js/vendor/keycloak.json');
-                keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
-                    console.log(keycloak)
-                    console.log(authenticated ? 'authenticated' : 'not authenticated');
-                }).error(function() {
-                    console.log('failed to initialize');
-                });
-                $.post(
-                    '/login', 
-                    {email: 'liyunwei10@gmail.com', password: '1234567', _csrf: '{{ csrfToken }}' },
-                    function(res) {
-                        console.log(res)
-                        $(location).attr('href', '/userDash');
-                    });
+        $(document).ready(function() {
+            let keycloak = Keycloak('js/vendor/keycloak.json');
+            keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
+                console.log(keycloak)
+                console.log(authenticated ? 'authenticated' : 'not authenticated');
+            }).error(function() {
+                console.log('failed to initialize');
             });
-        </script>
+        });
+    </script>
 @endsection
