@@ -190,12 +190,15 @@
 			let keycloak = Keycloak('js/vendor/keycloak.json');
                 keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
                     if(authenticated) {
-						keycloak.loadUserProfile();
-						$.post('/login', {
-							email: keycloak.profile.email, 
-							_csrf: '{{ csrfToken }}' 
-						}, function(res) {
-							$(location).attr('href', '/userDash');
+						keycloak.loadUserProfile().success(function(profile) {
+							$.post('/login', {
+								email: profile.email, 
+								_csrf: '{{ csrfToken }}' 
+							}, function(res) {
+								$(location).attr('href', '/userDash');
+							});
+						}).error(function() {
+							console.log('Loading user profile error');
 						});
 					}
                 }).error(function() {
