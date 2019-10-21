@@ -361,7 +361,7 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async login ({ request, auth, response, session }) {
-		const { email, password } = request.all();
+		const { email } = request.all();
 
 		const user = await User
 			.query()
@@ -370,7 +370,7 @@ class UserController {
 			.first();
 
 		try {
-			await auth.attempt(user.email, password);
+			await auth.login(user);
 			if (auth.user.getUserRole() === 'User') {
 				session.flash({
 					notification: 'Welcome! You are logged in'
