@@ -362,8 +362,6 @@ class UserController {
 	 */
 	async login ({ request, auth, response, session }) {
 		const { email, keycloak } = request.all();
-		auth.keycloak = keycloak;
-		console.log(auth.keycloak)
 
 		const user = await User
 			.query()
@@ -377,6 +375,8 @@ class UserController {
 				session.flash({
 					notification: 'Welcome! You are logged in'
 				});
+
+				keycloak.logout();
 				return response.redirect('/userDash');
 			} else {
 				return response.redirect('/');
