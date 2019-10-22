@@ -1,0 +1,24 @@
+@layout('layouts.loginLayout')
+
+@section('extrajs') 
+    {{ script('js/vendor/keycloak.js') }}
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    {{ csrfField() }}
+    <script>
+        $(document).ready(function() {
+            let keycloak = Keycloak('js/vendor/keycloak.json');
+            keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
+                keycloak.loadUserProfile().success(function(profile) {
+                    console.log(profile)
+                }).error(function() {
+                    console.log('Loading user profile error');
+                });
+                console.log(keycloak)
+                console.log(authenticated ? 'authenticated' : 'not authenticated');
+            }).error(function() {
+                console.log('failed to initialize');
+            });
+        });
+    </script>
+@endsection

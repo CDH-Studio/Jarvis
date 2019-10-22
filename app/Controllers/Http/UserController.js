@@ -361,7 +361,9 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async login ({ request, auth, response, session }) {
-		const { email, password } = request.all();
+		const { email, keycloak } = request.all();
+		auth.keycloak = keycloak;
+		console.log(auth.keycloak)
 
 		const user = await User
 			.query()
@@ -370,7 +372,7 @@ class UserController {
 			.first();
 
 		try {
-			await auth.attempt(user.email, password);
+			await auth.login(user);
 			if (auth.user.getUserRole() === 'User') {
 				session.flash({
 					notification: 'Welcome! You are logged in'
@@ -407,6 +409,7 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async logout ({ auth, response, session }) {
+		auth.keycloak.logout();
 		await auth.logout();
 		session.flash({
 			notification: 'You have been logged out.'
@@ -604,7 +607,8 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async active ({ request }) {
+	async key ({ view }) {
+		return view.render('auth.keycloak');
 	}
 }
 

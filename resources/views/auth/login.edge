@@ -25,7 +25,7 @@
 								<a class='btn btn-primary btn-user float-right' href='/switch/en'>EN</a>
 								@endif
 							</div>
-
+							<!--
 							<div class='text-left'>
 								<h1 class='h4 text-gray-900 mb-3'>{{ antl.formatMessage('login.title') }}</h1>
 							</div>
@@ -57,10 +57,12 @@
 								</div>
 								<button type='submit' class='btn btn-primary btn-user btn-block mt-3 mb-2'>{{ antl.formatMessage('login.submit') }}</button>
 							</form>
+							-->
+							<button id='login' type='submit' class='btn btn-primary btn-user btn-block mt-5 mb-5'>{{ antl.formatMessage('login.submit') }}</button>
 							<hr>
-							<div class='text-center'>
-								<a class='small' href='{{route('registerUser')}}'>{{ antl.formatMessage('login.registerRedirect') }}</a>
-							</div>
+							{{--  <div class='text-center'>  --}}
+								{{--  <a class='small' href='{{route('registerUser')}}'>{{ antl.formatMessage('login.registerRedirect') }}</a>  --}}
+							{{--  </div>  --}}
 						</div>
 					</div>
 				</div>
@@ -139,6 +141,8 @@
 @endsection
 
 @section('extrajs')
+	{{ script('js/vendor/keycloak.js') }}
+	{{ csrfField() }}
 	<script>
 		// Get IE or Edge browser version
 		var version = detectIE();
@@ -178,5 +182,29 @@
 			// other browser
 			return false;
 		}
+
+		/**
+		 * Keycloak login
+		 */
+		$('#login').on('click', function() {
+			let keycloak = Keycloak('js/vendor/keycloak.json');
+                keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
+                    if(authenticated) {
+						keycloak.loadUserProfile().success(function(profile) {
+							$.post('/login', {
+								email: profile.email, 
+								keycloak: keycloak,
+								_csrf: '{{ csrfToken }}' 
+							}, function(res) {
+								$(location).attr('href', '/userDash');
+							});
+						}).error(function() {
+							console.log('Loading user profile error');
+						});
+					}
+                }).error(function() {
+                    console.log('failed to initialize');
+                });
+		})
 	</script>
 @endsection
