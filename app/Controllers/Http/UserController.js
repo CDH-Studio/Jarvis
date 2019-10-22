@@ -409,7 +409,6 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async logout ({ auth, response, session }) {
-		auth.keycloak.logout();
 		await auth.logout();
 		session.flash({
 			notification: 'You have been logged out.'
