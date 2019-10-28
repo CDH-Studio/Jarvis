@@ -68,7 +68,7 @@ class BookingController {
 		await auth.user.bookings().save(booking);
 		await results.bookings().save(booking);
 
-		Outlook.createEvent({ eventInfo, booking, user: auth.user, room: results, calendarId: calendar });
+		await Outlook.createEvent({ eventInfo, booking, user: auth.user, room: results, calendarId: calendar });
 
 		session.flash({
 			notification: `Room ${name} has been booked. Please click here to view your bookings.`,
