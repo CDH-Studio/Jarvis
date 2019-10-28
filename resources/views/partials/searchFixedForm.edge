@@ -89,7 +89,7 @@
 		<div class='row'>
 			@each(featureCategory in formOptions.roomFeatureCategory)
 				@if(featureCategory.features.length!=0)
-					<div class="col-sm-6 mb-4">
+					<div class="col-sm-6 mb-2">
 					@if(antl.currentLocale()==='en')
 						<i><strong>{{featureCategory.name_english}}</strong></i>
 					@else
@@ -116,7 +116,7 @@
 	</div>
 	{{--  Page buttons  --}}
 	<div class='row align-items-end'>
-		<div class='col-sm-12 text-right'>
+		<div class='col-sm-12 text-left'>
 			<button aria-label='search-submit-button' type='submit' class='btn btn-primary no-margin' id='fixed-submit'> {{ antl.formatMessage('searchForm.searchBtn') }} </button>
 		</div>
 	</div>
