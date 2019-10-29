@@ -11,7 +11,18 @@ const Env = use('Env');
 const Logger = use('Logger');
 const Outlook = new (use('App/Outlook'))();
 const Oauth2 = require('simple-oauth2');
-// const ActiveDirectory = require('activedirectory');
+const oauth2 = Oauth2.create({
+	client: {
+		id: 'jarvis',
+		secret: 'dc57e116-dd36-4ce5-bef3-d0043bce454d'
+	},
+
+	auth: {
+		tokenHost: 'https://sso-dev.ised-isde.canada.ca',
+		tokenPath: '/auth/realms/individual/protocol/openid-connect/token',
+		authorizePath: '/auth/realms/individual/protocol/openid-connect/auth'
+	}
+});
 
 /**
  * Generating a random string.
@@ -608,19 +619,6 @@ class UserController {
 	async key ({ response }) {
 		console.log('hi');
 
-		const oauth2 = Oauth2.create({
-			client: {
-				id: 'jarvis',
-				secret: 'dc57e116-dd36-4ce5-bef3-d0043bce454d'
-			},
-
-			auth: {
-				tokenHost: 'https://sso-dev.ised-isde.canada.ca',
-				tokenPath: '/auth/realms/individual/protocol/openid-connect/token',
-				authorizePath: '/auth/realms/individual/protocol/openid-connect/auth'
-			}
-		});
-
 		const authUri = oauth2.authorizationCode.authorizeURL({
 			redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/keyAuth',
 			scope: 'openid'
@@ -631,6 +629,7 @@ class UserController {
 
 	async keyAuth ({ request }) {
 		const code = request.only(['code']).code;
+		console.log(code)
 		if (code) {
 			try {
 				let result = await oauth2.authorizationCode.getToken({
@@ -638,14 +637,13 @@ class UserController {
 					redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/keyAuth',
 					scope: 'openid'
 				});
-	
+				console.log(result)
 				const token = await oauth2.accessToken.create(result);
 	
 				return token;
 			} catch (err) {
 				console.log(err);
 			}
-			return token;
 		}
 	}
 }
