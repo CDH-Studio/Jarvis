@@ -10,6 +10,7 @@ const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
 const Outlook = new (use('App/Outlook'))();
+const Oauth2 = require('simple-oauth2');
 // const ActiveDirectory = require('activedirectory');
 
 /**
@@ -344,7 +345,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async loginRender ({ request, auth, view, response }) {
+	async loginRender ({ auth, view, response }) {
 		// present login to logged out users only
 		if (auth.user) {
 			return response.redirect('/');
@@ -361,8 +362,7 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async login ({ request, auth, response, session }) {
-		const { email, keycloak } = request.all();
-
+		const { email } = request.all();
 		const user = await User
 			.query()
 			.where('email', email.toLowerCase())
@@ -376,7 +376,6 @@ class UserController {
 					notification: 'Welcome! You are logged in'
 				});
 
-				keycloak.logout();
 				return response.redirect('/userDash');
 			} else {
 				return response.redirect('/');
@@ -606,8 +605,37 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async key ({ view }) {
-		return view.render('auth.keycloak');
+	async key ({ response }) {
+		console.log('hi');
+
+		const oauth2 = Oauth2.create({
+			client: {
+				id: 'jarvis',
+				secret: 'dc57e116-dd36-4ce5-bef3-d0043bce454d'
+			},
+
+			auth: {
+				tokenHost: 'https://sso-dev.ised-isde.canada.ca',
+				tokenPath: '/auth/realms/individual/protocol/openid-connect/token',
+				authorizePath: '/auth/realms/individual/protocol/openid-connect/auth'
+			}
+		});
+
+		const authUri = oauth2.authorizationCode.authorizeURL({
+			redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/keyAuth',
+			scope: 'openid'
+		  });
+
+		return response.redirect(authUri);
+	}
+
+	async keyAuth ({ request }) {
+		const code = request.only(['code']).code;
+		return request.all();
+		// if (code) {
+		// 	const token = await this.getAccessTokenFromAuthCode(code);
+		// 	return token;
+		// }
 	}
 }
 

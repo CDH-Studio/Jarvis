@@ -8,13 +8,18 @@
     <script>
         $(document).ready(function() {
             let keycloak = Keycloak('js/vendor/keycloak.json');
-            keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
-                keycloak.loadUserProfile().success(function(profile) {
-                    console.log(profile)
-                }).error(function() {
-                    console.log('Loading user profile error');
-                });
-                console.log(keycloak)
+            keycloak.init({ /*onLoad: 'login-required'*/ }).success(function(authenticated) {
+                //keycloak.loadUserProfile().success(function(profile) {
+                    // console.log(keycloak);
+                    // const loginUrl = keycloak.createLoginUrl({ redirectUri: 'http://localhost:3000/userDash' });
+                    // const logoutUrl = keycloak.createLogoutUrl({ redirectUri: 'https://www.google.com' });
+                    // console.log(keycloak);
+                    // console.log(loginUrl);
+                    // console.log(logoutUrl);
+                    $.post('/key');
+                //}).error(function() {
+                //    console.log('Loading user profile error');
+                //});
                 console.log(authenticated ? 'authenticated' : 'not authenticated');
             }).error(function() {
                 console.log('failed to initialize');
