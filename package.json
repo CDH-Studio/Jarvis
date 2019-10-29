@@ -46,7 +46,7 @@
 		"moment-round": "^1.0.1",
 		"passport-activedirectory": "^1.0.4",
 		"pusher": "^2.2.2",
-		"sharp": "^0.23.0",
+		"sharp": "^0.23.2",
 		"simple-oauth2": "^2.3.0",
 		"sqlite3": "^4.1.0"
 	},
