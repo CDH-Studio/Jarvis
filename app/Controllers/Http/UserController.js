@@ -631,11 +631,22 @@ class UserController {
 
 	async keyAuth ({ request }) {
 		const code = request.only(['code']).code;
-		return request.all();
-		// if (code) {
-		// 	const token = await this.getAccessTokenFromAuthCode(code);
-		// 	return token;
-		// }
+		if (code) {
+			try {
+				let result = await oauth2.authorizationCode.getToken({
+					code: code,
+					redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/keyAuth',
+					scope: 'openid'
+				});
+	
+				const token = await oauth2.accessToken.create(result);
+	
+				return token;
+			} catch (err) {
+				console.log(err);
+			}
+			return token;
+		}
 	}
 }
 
