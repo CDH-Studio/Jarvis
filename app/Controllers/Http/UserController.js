@@ -419,14 +419,15 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async logout ({ auth, response, session }) {
+	async logout ({ auth, request, response, session }) {
 		await auth.logout();
 
 		const cookies = request.cookies();
 		const refreshToken = cookies.refreshToken;
+		const accessToken = cookies.accessToken;
 		const res = (await Axios.get('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/logout', {
 					headers: {
-						Authorization: 'Bearer ' + token.token.access_token
+						Authorization: 'Bearer ' + accessToken
 					},
 					params: {
 						client_id: 'jarvis',
@@ -659,6 +660,11 @@ class UserController {
 				});
 				console.log(result)
 				const token = await oauth2.accessToken.create(result);
+
+				response.cookie('accessToken', token.token.access_token, {
+					maxAge: 3600,
+					httpOnly: true
+				});
 
 				response.cookie('refreshToken', token.token.refresh_token, {
 					maxAge: 3600,
