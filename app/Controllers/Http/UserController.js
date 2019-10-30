@@ -626,12 +626,13 @@ class UserController {
 		return response.redirect(authUri);
 	}
 
-	async authAD ({ request }) {
+	async authAD ({ request, session, response, auth }) {
 		// getting authorization code
 		const code = request.only(['code']).code;
 		console.log(code)
 
 		// acquiring access token for user
+		let userInfo;
 		if (code) {
 			try {
 				let result = await oauth2.authorizationCode.getToken({
@@ -642,7 +643,7 @@ class UserController {
 				console.log(result)
 				const token = await oauth2.accessToken.create(result);
 				
-				const userInfo = (await Axios.get('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/userinfo', {
+				userInfo = (await Axios.get('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/userinfo', {
 					headers: {
 						Authorization: 'Bearer ' + token.token.access_token
 					}
@@ -674,6 +675,10 @@ class UserController {
 			session.flash({ loginError: 'Invalid email/password' });
 			return response.redirect('/login');
 		}
+	}
+
+	async key ({ request, view }) {
+		return view.render('auth.keycloak')
 	}
 }
 

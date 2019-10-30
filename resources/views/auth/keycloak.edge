@@ -8,15 +8,15 @@
     <script>
         $(document).ready(function() {
             let keycloak = Keycloak('js/vendor/keycloak.json');
-            keycloak.init({ /*onLoad: 'login-required'*/ }).success(function(authenticated) {
+            keycloak.init({ onLoad: 'login-required', redirectUri: 'https://jarvis-dev.apps.ic.gc.ca/authAD' }).success(function(authenticated) {
                 //keycloak.loadUserProfile().success(function(profile) {
-                    // console.log(keycloak);
-                    // const loginUrl = keycloak.createLoginUrl({ redirectUri: 'http://localhost:3000/userDash' });
+                    console.log(keycloak);
+                    // const loginUrl = keycloak.createLoginUrl({ redirectUri: 'https://jarvis-dev.apps.ic.gc.ca/authAD' });
                     // const logoutUrl = keycloak.createLogoutUrl({ redirectUri: 'https://www.google.com' });
                     // console.log(keycloak);
                     // console.log(loginUrl);
                     // console.log(logoutUrl);
-                    $.post('/loginAD');
+                    // $.post('/loginAD');
                 //}).error(function() {
                 //    console.log('Loading user profile error');
                 //});

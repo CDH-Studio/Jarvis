@@ -146,3 +146,4 @@ Route.get('/push', 'TokenController.push').as('push');
 //= ========================================================================
 Route.get('/loginAD', 'UserController.loginAD').as('loginAD');
 Route.get('/authAD', 'UserController.authAD').as('authAD');
+Route.get('/key', 'UserController.key').as('key');
