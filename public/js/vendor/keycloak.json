@@ -2,7 +2,7 @@
     "realm": "individual",
     "auth-server-url": "https://sso-dev.ised-isde.canada.ca/auth",
     "ssl-required": "external",
-    "resource": "jarvis",
+    "resource": "jarvi",
     "bearer-only": true,
     "confidential-port": 0
   }

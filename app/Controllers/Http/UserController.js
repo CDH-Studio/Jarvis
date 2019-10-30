@@ -23,6 +23,7 @@ const oauth2 = require('simple-oauth2').create({
 	}
 });
 const Axios = require('axios');
+const JWT = require('jsonwebtoken');
 
 /**
  * Generating a random string.
@@ -420,6 +421,22 @@ class UserController {
 	 */
 	async logout ({ auth, response, session }) {
 		await auth.logout();
+
+		const cookies = request.cookies();
+		const refreshToken = cookies.refreshToken;
+		const res = (await Axios.get('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/logout', {
+					headers: {
+						Authorization: 'Bearer ' + token.token.access_token
+					},
+					params: {
+						client_id: 'jarvis',
+						client_secret: 'dc57e116-dd36-4ce5-bef3-d0043bce454d',
+						refresh_token: refreshToken
+					}
+				})).data;
+		console.log('res')
+		console.log(res)
+
 		session.flash({
 			notification: 'You have been logged out.'
 		});
@@ -642,6 +659,14 @@ class UserController {
 				});
 				console.log(result)
 				const token = await oauth2.accessToken.create(result);
+
+				response.cookie('refreshToken', token.token.refresh_token, {
+					maxAge: 3600,
+					httpOnly: true
+				});
+				const user = JWT.decode(token.token.id_token);
+				console.log('user')
+				console.log(user)
 				
 				userInfo = (await Axios.get('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/userinfo', {
 					headers: {
