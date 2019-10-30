@@ -10,8 +10,7 @@ const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
 const Outlook = new (use('App/Outlook'))();
-const Oauth2 = require('simple-oauth2');
-const oauth2 = Oauth2.create({
+const oauth2 = require('simple-oauth2').create({
 	client: {
 		id: 'jarvis',
 		secret: 'dc57e116-dd36-4ce5-bef3-d0043bce454d'
@@ -23,6 +22,7 @@ const oauth2 = Oauth2.create({
 		authorizePath: '/auth/realms/individual/protocol/openid-connect/auth'
 	}
 });
+const Axios = require('axios');
 
 /**
  * Generating a random string.
@@ -638,8 +638,13 @@ class UserController {
 				});
 				console.log(result)
 				const token = await oauth2.accessToken.create(result);
-	
-				return token;
+				
+				const userInfo = await Axios.get('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/userinfo', {
+					headers: {
+						Authorization: 'Bearer ' + token.access_token
+					}
+				})
+				return userInfo;
 			} catch (err) {
 				console.log(err);
 			}
