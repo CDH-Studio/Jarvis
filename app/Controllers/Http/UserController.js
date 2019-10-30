@@ -627,8 +627,11 @@ class UserController {
 	}
 
 	async authAD ({ request }) {
+		// getting authorization code
 		const code = request.only(['code']).code;
 		console.log(code)
+
+		// acquiring access token for user
 		if (code) {
 			try {
 				let result = await oauth2.authorizationCode.getToken({
@@ -639,15 +642,37 @@ class UserController {
 				console.log(result)
 				const token = await oauth2.accessToken.create(result);
 				
-				const userInfo = await Axios.get('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/userinfo', {
+				const userInfo = (await Axios.get('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/userinfo', {
 					headers: {
-						Authorization: 'Bearer ' + token.access_token
+						Authorization: 'Bearer ' + token.token.access_token
 					}
-				})
-				return userInfo;
+				})).data;
 			} catch (err) {
-				console.log(err);
+				return err;
 			}
+		}
+
+		const email = userInfo.email;
+		const user = await User
+			.query()
+			.where('email', email.toLowerCase())
+			.where('verified', true)
+			.first();
+
+		try {
+			await auth.login(user);
+			if (auth.user.getUserRole() === 'User') {
+				session.flash({
+					notification: 'Welcome! You are logged in'
+				});
+
+				return response.redirect('/userDash');
+			} else {
+				return response.redirect('/');
+			}
+		} catch (error) {
+			session.flash({ loginError: 'Invalid email/password' });
+			return response.redirect('/login');
 		}
 	}
 }
