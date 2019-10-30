@@ -144,5 +144,5 @@ Route.get('/push', 'TokenController.push').as('push');
 //= ========================================================================
 // Active Directory
 //= ========================================================================
-Route.get('/key', 'UserController.key').as('key');
-Route.get('/keyAuth', 'UserController.keyAuth').as('keyAuth');
+Route.get('/loginAD', 'UserController.loginAD').as('loginAD');
+Route.get('/authAD', 'UserController.authAD').as('authAD');

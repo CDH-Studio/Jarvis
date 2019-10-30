@@ -616,25 +616,24 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async key ({ response }) {
-		console.log('hi');
-
+	async loginAD ({ response }) {
+		console.log('hi')
 		const authUri = oauth2.authorizationCode.authorizeURL({
-			redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/keyAuth',
+			redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/authAD',
 			scope: 'openid'
-		  });
+		});
 
 		return response.redirect(authUri);
 	}
 
-	async keyAuth ({ request }) {
+	async authAD ({ request }) {
 		const code = request.only(['code']).code;
 		console.log(code)
 		if (code) {
 			try {
 				let result = await oauth2.authorizationCode.getToken({
 					code: code,
-					redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/keyAuth',
+					redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/authAD',
 					scope: 'openid'
 				});
 				console.log(result)

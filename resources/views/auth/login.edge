@@ -58,11 +58,12 @@
 								<button type='submit' class='btn btn-primary btn-user btn-block mt-3 mb-2'>{{ antl.formatMessage('login.submit') }}</button>
 							</form>
 							-->
-							<button id='login' type='submit' class='btn btn-primary btn-user btn-block mt-5 mb-5'>{{ antl.formatMessage('login.submit') }}</button>
+							<br>
+							<form action='{{ route('loginAD') }}' method='GET' class='user'>
+								<button id='login' type='submit' class='btn btn-primary btn-user btn-block mt-5 mb-5'>{{ antl.formatMessage('login.submit') }}</button>
+							</form>
+							<br>
 							<hr>
-							{{--  <div class='text-center'>  --}}
-								{{--  <a class='small' href='{{route('registerUser')}}'>{{ antl.formatMessage('login.registerRedirect') }}</a>  --}}
-							{{--  </div>  --}}
 						</div>
 					</div>
 				</div>
@@ -182,29 +183,5 @@
 			// other browser
 			return false;
 		}
-
-		/**
-		 * Keycloak login
-		 */
-		$('#login').on('click', function() {
-			let keycloak = Keycloak('js/vendor/keycloak.json');
-                keycloak.init({ onLoad: 'login-required' }).success(function(authenticated) {
-                    if(authenticated) {
-						keycloak.loadUserProfile().success(function(profile) {
-							$.post('/login', {
-								email: profile.email, 
-								keycloak: keycloak,
-								_csrf: '{{ csrfToken }}' 
-							}, function(res) {
-								$(location).attr('href', '/userDash');
-							});
-						}).error(function() {
-							console.log('Loading user profile error');
-						});
-					}
-                }).error(function() {
-                    console.log('failed to initialize');
-                });
-		})
 	</script>
 @endsection
