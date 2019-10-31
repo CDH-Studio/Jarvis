@@ -3,43 +3,43 @@
 		<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 		  <li class="nav-item">
 		  	@if(getErrorFor('searchType')==='fixed' || !hasErrorFor('searchType'))
-		    	<a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">{{ antl.formatMessage('searchForm.specifiedTitle') }}</a>
+		    	<a class="nav-link active" id="fixed-search-tab" data-toggle="pill" href="#fixed-search" role="tab" aria-controls="fixed-search-tab" aria-selected="true">{{ antl.formatMessage('searchForm.specifiedTitle') }}</a>
 		    @else
-		    	<a class="nav-link" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="false">{{ antl.formatMessage('searchForm.specifiedTitle') }}</a>
+		    	<a class="nav-link" id="fixed-search-tab" data-toggle="pill" href="#fixed-search" role="tab" aria-controls="fixed-search-tab" aria-selected="false">{{ antl.formatMessage('searchForm.specifiedTitle') }}</a>
 		    @endif
 		  </li>
 		  <li class="nav-item">
 		  	@if(getErrorFor('searchType')==='flexible')
-		    	<a class="nav-link active" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="true">{{ antl.formatMessage('searchForm.flexibleTitle') }}</a>
+		    	<a class="nav-link active" id="flexible-search-tab" data-toggle="pill" href="#flexible-search" role="tab" aria-controls="flexible-search-tab" aria-selected="true">{{ antl.formatMessage('searchForm.flexibleTitle') }}</a>
 		    @else
-		    	<a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">{{ antl.formatMessage('searchForm.flexibleTitle') }}</a>
+		    	<a class="nav-link" id="flexible-search-tab" data-toggle="pill" href="#flexible-search" role="tab" aria-controls="flexible-search-tab" aria-selected="false">{{ antl.formatMessage('searchForm.flexibleTitle') }}</a>
 		    @endif
 		  </li>
 		  <li class="nav-item">
 		  	@if(getErrorFor('searchType')==='recurring')
-		    	<a class="nav-link active" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="true">{{ antl.formatMessage('searchForm.recurringTitle') }}</a>
+		    	<a class="nav-link active" id="recurring-search-tab" data-toggle="pill" href="#recurring-search" role="tab" aria-controls="recurring-search-tab" aria-selected="true">{{ antl.formatMessage('searchForm.recurringTitle') }}</a>
 		    @else
-		    	<a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">{{ antl.formatMessage('searchForm.recurringTitle') }}</a>
+		    	<a class="nav-link" id="recurring-search-tab" data-toggle="pill" href="#recurring-search" role="tab" aria-controls="recurring-search-tab" aria-selected="false">{{ antl.formatMessage('searchForm.recurringTitle') }}</a>
 		    @endif
 		  </li>
 		</ul>
 		<hr>
 		<div class="tab-content" id="pills-tabContent">
 			@if(getErrorFor('searchType')==='fixed' || !hasErrorFor('searchType'))
-				<div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+				<div class="tab-pane fade show active" id="fixed-search" role="tabpanel" aria-labelledby="fixed-search-tab">
 			@else
-				<div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+				<div class="tab-pane fade" id="fixed-search" role="tabpanel" aria-labelledby="fixed-search-tab">
 			@endif
 		  			@include('partials.searchFixedForm')
 		  		</div>
 		  	@if(getErrorFor('searchType')==='flexible')
-				<div class="tab-pane fade show active" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+				<div class="tab-pane fade show active" id="flexible-search" role="tabpanel" aria-labelledby="flexible-search-tab">
 			@else
-				<div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+				<div class="tab-pane fade" id="flexible-search" role="tabpanel" aria-labelledby="flexible-search-tab">
 			@endif
 		  	@include('partials.searchFlexibleForm')
 		  </div>
-		  <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+		  <div class="tab-pane fade" id="recurring-search" role="tabpanel" aria-labelledby="recurring-search-tab">
 		  	@include('partials.searchRecurringForm')
 		  </div>
 		</div>
@@ -50,4 +50,3 @@
 {{ script('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js') }}
 {{ script('js/timepicker.js') }}
 {{ style('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css') }}
-{{ script('js/searchFormSpinner') }}
