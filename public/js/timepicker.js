@@ -24,35 +24,35 @@ $(function () {
 
 
 
-    $('#fixed-from').datetimepicker({
+    $('#fixed-search-from').datetimepicker({
         format: 'HH:mm',
         stepping: 30,
         defaultDate: moment(round(moment()), 'HH:mm')
     });
 
-    $('#fixed-from').on("change.datetimepicker", function (e) {
-        if($('#fixed-to').datetimepicker('date').isSameOrBefore(e.date))
-            $('#fixed-to').datetimepicker('date', e.date.add(0.5, 'hour').format('HH:mm'));
+    $('#fixed-search-from').on("change.datetimepicker", function (e) {
+        if($('#fixed-search-to').datetimepicker('date').isSameOrBefore(e.date))
+            $('#fixed-search-to').datetimepicker('date', e.date.add(0.5, 'hour').format('HH:mm'));
     });
 
-    $('#fixed-to').datetimepicker({
+    $('#fixed-search-to').datetimepicker({
         format: 'HH:mm',
         stepping: 30,
         defaultDate: moment(round(moment()), 'HH:mm').add(0.5, 'h')
     });
 
-    $('#flexible-from').datetimepicker({
+    $('#flexible-search-from').datetimepicker({
         format: 'HH:mm',
         stepping: 30,
         defaultDate: moment(round(moment()), 'HH:mm')
     });
 
-    $('#flexible-from').on("change.datetimepicker", function (e) {
-        if($('#flexible-to').datetimepicker('date').isSameOrBefore(e.date))
-            $('#flexible-to').datetimepicker('date', e.date.add(0.5, 'hour').format('HH:mm'));
+    $('#flexible-search-from').on("change.datetimepicker", function (e) {
+        if($('#flexible-search-to').datetimepicker('date').isSameOrBefore(e.date))
+            $('#flexible-search-to').datetimepicker('date', e.date.add(0.5, 'hour').format('HH:mm'));
     });
 
-    $('#flexible-to').datetimepicker({
+    $('#flexible-search-to').datetimepicker({
         format: 'HH:mm',
         stepping: 30,
         defaultDate: moment(round(moment()), 'HH:mm').add(0.5, 'h')

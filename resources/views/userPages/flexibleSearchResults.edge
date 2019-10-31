@@ -1,0 +1,133 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+    {{ antl.formatMessage('searchResults.pageTitleFelxibleSearch') }}
+@endsection
+
+@section('extracss')
+    {{ style('css/user') }}
+@endsection
+
+{{--  Manage bookings page content  --}}
+@section('content')
+    {{--  page header  --}}
+    @!component('components.pageHeader', title=antl.formatMessage('searchResults.pageTitleFelxibleSearch'), subtitle=antl.formatMessage('searchResults.subtitle'), loading=false)
+
+    @if(roomsLength == 0)
+        {{--  Loading result empty card  --}}
+        @!component('components.cardEmptyMessage', {faIcon:"fas fa-ghost fa-8x mb-4 mt-3", message:"No rooms available"})
+    @else
+        {{--  Loading spinning wheel  --}}
+        @!component('components.searchLoadingSpinner',  {message:antl.formatMessage('searchResults.searching')})
+
+        <div id="empty-results-card" class="d-none">
+            @!component('components.cardEmptyMessage', {faIcon:"fas fa-ghost fa-8x mb-4 mt-3", message:antl.formatMessage('searchResults.error')})
+        </div>
+
+        {{--  Results  --}}
+        <div id="search-results" class="d-none">
+            @!component('components.searchResultCountBar', {antl: antl})
+
+            <div id="accordion">
+                {{--  create a collapsed card  for each time slot  --}}
+                @each(timeslot in timeSlots)
+                    <div class="card border-0 shadow-none mb-2" id="time-slot-{{timeslot.startID}}">
+                        {{--  card header  --}}
+                        <div class="card-header bg-light text-primary p-2">
+                            <div class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse" data-target="#time-slot-{{timeslot.startID}}-content" aria-expanded="true" aria-controls="time slot {{timeslot.start}}">
+                                        <i class="far fa-clock mr-1"></i><strong>{{ timeslot.start }} |</strong>
+                                        <small><span id="time-slot-{{timeslot.startID}}-count">0 </span> {{antl.formatMessage('searchResults.rooms')}}</small>
+                                </button>
+                            </div>
+                        </div>
+                        {{--  card body  --}}
+                        <div id="time-slot-{{timeslot.startID}}-content" class="collapse" aria-labelledby="time slot {{timeslot.start}}" data-parent="#accordion" style="border: none; background-color:#f8f9fc;">
+                            <div class="card-body d-flex flex-wrap">
+                                {{-- room cards go here --}}
+                                <div class="w-100" id="empty-time-slot-{{timeslot.startID}}">
+                                    @!component('components.cardEmptyMessage', {faIcon:"fas fa-ghost fa-5x", message:antl.formatMessage('searchResults.error')})
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                @endeach
+            </div>
+        </div>
+    @endif
+@endsection
+			
+{{--  Script for pusher.js to recieve room cards in real time--}}	
+@section('extrajs')
+    @if(roomsLength != 0)
+        {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
+        <script>
+            let pusher = new Pusher('aca8a920ad0e3d8ac09f', {
+                    cluster: 'us2',
+                    useTLS: true
+                });
+
+            //Subscribe to the channel we specified in our Adonis Application
+            let channel = pusher.subscribe('adonis-channel')
+
+            //Listen for events on the channel
+            channel.bind('send-room', function (data) {
+                if (data.message.code == '{{ code }}') {
+
+                    let listItem = $("<div class='no-padding ie-room-margin'>" + data.message.card + "</div>")
+                    let elemtID="#time-slot-"+  data.message.startTimeID + "-content"+ " .card-body"; 
+                    $(elemtID).append(listItem);
+                    
+                    // get time-slot result count and increment
+                    let timeSlotCountID = "#time-slot-"+ data.message.startTimeID + "-count"; 
+                    let timeSlotResultCount = parseInt($( timeSlotCountID).html())+1;
+
+                    $(timeSlotCountID).text(
+                        parseInt(timeSlotResultCount)
+                    );
+
+                    // make floor appear if it has results
+                    if(timeSlotResultCount == 1){
+                        let emptyTimeSlotMessage="#empty-time-slot-"+  data.message.startTimeID; 
+                        $(emptyTimeSlotMessage).addClass('d-none');
+                    }
+
+                    // read total result count and increment
+                    let totalCountID = "#total-count";
+                    let totalResultCount = parseInt($(totalCountID).html())+1;
+
+                    //write total count
+                    $(totalCountID).text((totalResultCount));
+
+                    // after first result remove big spinner and show live results
+                    if(totalResultCount == 1){
+                       $('#big-loading-spinner').addClass('d-none');
+                       $('#search-results').removeClass('d-none');
+                    }
+                }
+            });
+
+           //Listen for end of search
+            channel.bind('send-done', function (data) {
+                setTimeout(function() {
+                    if (data.message.code == '{{ code }}') {
+                        //chnage loading pulse to finished message
+                        $('#loading-results-pulse').addClass('d-none');
+                        $('#loading-results-done').removeClass('d-none');
+
+                        //read total results count
+                        let totalCountID = "#total-count";
+                        let totalResultCount = parseInt($(totalCountID).html());
+
+                        if(totalResultCount===0){
+                            $('#big-loading-spinner').addClass('d-none');
+                            $('#empty-results-card').removeClass('d-none');
+                        }
+                    }
+                }, 1000);
+            });
+
+        </script>
+    @endif
+@endsection

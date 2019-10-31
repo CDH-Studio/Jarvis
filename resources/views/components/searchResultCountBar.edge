@@ -1,0 +1,15 @@
+<div class="row search-status-bar mb-2">
+    <div class="col-6">
+        <strong>{{antl.formatMessage('searchResults.total')}}: <i id="total-count">0</i></strong>
+    </div>
+    <div class="col-6 text-right" id="loading-results-pulse">
+        <div class="spinner-grow text-primary spinner-grow-sm" role="status">
+            <span class="sr-only">{{antl.formatMessage('searchResults.searching')}}</span>
+        </div>
+        <strong class="px-2">{{antl.formatMessage('searchResults.searching')}}</strong>
+    </div>
+    <div class="col-6 text-right d-none" id="loading-results-done">
+        <i class="fas fa-check color-success"></i>
+        <strong class="px-1">{{antl.formatMessage('searchResults.done')}}</strong>
+    </div>
+</div>
