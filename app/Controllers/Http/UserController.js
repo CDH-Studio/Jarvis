@@ -91,13 +91,8 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async create ({ request, response, auth, session }) {
-		const confirmationRequired = Env.get('REGISTRATION_CONFIRMATION', false);
-
-		if (confirmationRequired) {
-			return this.createWithVerifyingEmail({ request, response, session });
-		} else {
-			return this.createWithoutVerifyingEmail({ request, response, auth });
-		}
+		console.log('create');
+		return this.createWithoutVerifyingEmail({ request, response, auth });
 	}
 
 	/**
@@ -665,7 +660,7 @@ class UserController {
 				return response.redirect('/');
 			}
 		} else {
-			await this.registerUserRender({ view, userInfo });
+			return await this.registerUserRender({ view, userInfo });
 		}
 	}
 
