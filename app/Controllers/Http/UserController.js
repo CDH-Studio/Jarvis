@@ -611,14 +611,14 @@ class UserController {
 	async loginAD ({ response }) {
 		console.log('hi')
 		const authUri = oauth2.authorizationCode.authorizeURL({
-			redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/authAD',
+			redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/tokenAD',
 			scope: 'openid'
 		});
 
 		return response.redirect(authUri);
 	}
 
-	async authAD ({ request, session, response, auth, view }) {
+	async tokenAD ({ request, session, response, auth, view }) {
 		// getting authorization code
 		const code = request.only(['code']).code;
 		console.log(code)
@@ -636,11 +636,15 @@ class UserController {
 				const token = await oauth2.accessToken.create(result);
 
 				userInfo = JWT.decode(token.token.id_token);
+
+				return this.authAD({ userInfo, session, response, auth, view })
 			} catch (err) {
 				return err;
 			}
 		}
+	}
 
+	async authAD ({ userInfo, session, response, auth, view }) {
 		const email = userInfo.email;
 		const user = await User
 			.query()
