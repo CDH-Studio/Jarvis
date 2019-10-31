@@ -32,7 +32,7 @@
 										<div class='col-md-6'>
 											<div class='form-group mb-2'>
 												<label for='firstname'>{{ antl.formatMessage('registerUser.firstname') }}</label>
-												<input type='text' class='form-control' name='firstname' id='firstname' placeholder='John' value='{{ old('firstname', '') }}' readonly>
+												<input type='text' class='form-control' name='firstname' id='firstname' placeholder='{{ userInfo.given_name }}' value='{{ old('firstname', '') }}'>
 												@if(hasErrorFor('firstname'))
 													<div class='invalid-feedback d-block'>{{ getErrorFor('firstname') }}</div>
 												@endif
@@ -41,7 +41,7 @@
 										<div class='col-md-6'>
 											<div class='form-group mb-2'>
 												<label for='lastname'>{{ antl.formatMessage('registerUser.lastname') }}</label>
-												<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe' value='{{ old('lastname', '') }}' readonly>
+												<input type='text' class='form-control' name='lastname' id='lastname' placeholder='{{ userInfo.family_name }}' value='{{ old('lastname', '') }}'>
 												@if(hasErrorFor('lastname'))        
 													<div class='invalid-feedback d-block'>{{ getErrorFor('lastname') }}</div>
 												@endif
@@ -52,35 +52,12 @@
 										
 									<div class='form-group mb-2'>
 										<label for='email'>{{ antl.formatMessage('registerUser.email') }}</label>
-										<input type='email' class='form-control' name='email' id='email' placeholder='sample@canada.ca' value='{{ old('email', '') }}'>
+										<input type='email' class='form-control' name='email' id='email' placeholder='{{ userInfo.email }}' value='{{ old('email', '') }}' readonly>
 										@if(hasErrorFor('email'))        
 											<div class='invalid-feedback d-block'>{{ getErrorFor('email') }}</div>
 										@endif
 									</div>
 
-									<div class='form-row'>
-										<div class='col-md-6'>
-											<div class='form-group mb-2'>
-												<label for='password'>{{ antl.formatMessage('registerUser.pass') }}</label>
-													<span href="#" class="mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="{{ antl.formatMessage('registerUser.passTip') }}">
-														<i class="fas fa-info-circle text-muted fa-xs"></i>
-													</span>
-												<input type='password' class='form-control' name='password' id='password' placeholder='{{ antl.formatMessage('registerUser.pass') }}'>
-												@if(hasErrorFor('password'))
-													<div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>
-												@endif
-											</div>
-										</div>
-										<div class='col-md-6'>
-											<div class='form-group mb-2'>
-												<label for='confirmPassword'>{{ antl.formatMessage('registerUser.confirmPass') }}</label>
-												<input type='password' class='form-control' name='confirmPassword' id='confirmPassword' placeholder='{{ antl.formatMessage('registerUser.confirmPass') }}'>
-												@if(hasErrorFor('confirmPassword'))
-												<div class='invalid-feedback d-block'>{{ getErrorFor('confirmPassword') }}</div>
-												@endif
-											</div>
-										</div>
-									</div>
 									<div class='form-row'>
 										<div class='col'>
 											<div class='form-group mb-2'>

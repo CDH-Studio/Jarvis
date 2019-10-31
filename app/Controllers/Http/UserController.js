@@ -66,28 +66,22 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async registerUserRender ({ request, auth, view, response }) {
-		// present login to logged out users only
-		console.log(request)
-		if (auth.user) {
-			return response.redirect('/');
-		} else {
-			const numb = Math.floor(Math.random() * 8) + 1;
-			const photoName = 'login_' + numb + '.jpg';
+	async registerUserRender ({ view, userInfo }) {
+		const numb = Math.floor(Math.random() * 8) + 1;
+		const photoName = 'login_' + numb + '.jpg';
 
-			var formOptions = {};
+		var formOptions = {};
 
-			var buildingOptions = await Building.all();
-			formOptions.buildings = buildingOptions.toJSON();
+		var buildingOptions = await Building.all();
+		formOptions.buildings = buildingOptions.toJSON();
 
-			var towerOptions = (await Tower.all()).toJSON();
-			formOptions.towers = towerOptions;
+		var towerOptions = (await Tower.all()).toJSON();
+		formOptions.towers = towerOptions;
 
-			var floorOptions = (await Floor.all()).toJSON();
-			formOptions.floors = floorOptions;
+		var floorOptions = (await Floor.all()).toJSON();
+		formOptions.floors = floorOptions;
 
-			return view.render('auth.registerUser', { photoName, formOptions });
-		}
+		return view.render('auth.registerUser', { photoName, formOptions, userInfo });
 	}
 
 	/**
@@ -629,7 +623,7 @@ class UserController {
 		return response.redirect(authUri);
 	}
 
-	async authAD ({ request, session, response, auth }) {
+	async authAD ({ request, session, response, auth, view }) {
 		// getting authorization code
 		const code = request.only(['code']).code;
 		console.log(code)
@@ -646,15 +640,7 @@ class UserController {
 				console.log(result)
 				const token = await oauth2.accessToken.create(result);
 
-				const user = JWT.decode(token.token.id_token);
-				console.log('user')
-				console.log(user)
-				
-				userInfo = (await Axios.get('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/userinfo', {
-					headers: {
-						Authorization: 'Bearer ' + token.token.access_token
-					}
-				})).data;
+				userInfo = JWT.decode(token.token.id_token);
 			} catch (err) {
 				return err;
 			}
@@ -679,13 +665,30 @@ class UserController {
 				return response.redirect('/');
 			}
 		} else {
-			request.user = user;
-			return response.redirect('/register', true);
+			await this.registerUserRender({ view, userInfo });
 		}
 	}
 
-	async key ({ request, view }) {
-		return view.render('auth.keycloak')
+	async key ({ request, view, response }) {
+		//return view.render('auth.keycloak')
+		const user = {
+			client: {
+				id: 'jarvis',
+				secret: 'dc57e116-dd36-4ce5-bef3-d0043bce454d'
+			},
+		
+			auth: {
+				tokenHost: 'https://sso-dev.ised-isde.canada.ca',
+				tokenPath: '/auth/realms/individual/protocol/openid-connect/token',
+				authorizePath: '/auth/realms/individual/protocol/openid-connect/auth'
+			}
+		};
+
+		return response.route('key2', {user});
+	}
+
+	async key2 ({ request, view, params }) {
+		return params;
 	}
 }
 
