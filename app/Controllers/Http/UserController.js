@@ -68,6 +68,7 @@ class UserController {
 	 */
 	async registerUserRender ({ request, auth, view, response }) {
 		// present login to logged out users only
+		console.log(request)
 		if (auth.user) {
 			return response.redirect('/');
 		} else {
@@ -666,7 +667,7 @@ class UserController {
 			.where('verified', true)
 			.first();
 
-		try {
+		if (user) {
 			await auth.login(user);
 			if (auth.user.getUserRole() === 'User') {
 				session.flash({
@@ -677,9 +678,9 @@ class UserController {
 			} else {
 				return response.redirect('/');
 			}
-		} catch (error) {
-			session.flash({ loginError: 'Invalid email/password' });
-			return response.redirect('/login');
+		} else {
+			request.user = user;
+			return response.redirect('/register', true);
 		}
 	}
 
