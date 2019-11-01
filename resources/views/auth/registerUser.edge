@@ -41,7 +41,7 @@
 										<div class='col-md-6'>
 											<div class='form-group mb-2'>
 												<label for='lastname'>{{ antl.formatMessage('registerUser.lastname') }}</label>
-												<input type='text' class='form-control' name='lastname' id='lastname' placeholder='{{ userInfo.family_name }}' value='{{ userInfo.given_name }}'>
+												<input type='text' class='form-control' name='lastname' id='lastname' placeholder='{{ userInfo.family_name }}' value='{{ userInfo.family_name }}'>
 												@if(hasErrorFor('lastname'))        
 													<div class='invalid-feedback d-block'>{{ getErrorFor('lastname') }}</div>
 												@endif
