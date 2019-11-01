@@ -98,7 +98,7 @@
 								<div class='custom-control custom-checkbox'>
 									<input class="custom-control-input" type='checkbox' name='fixedSearchFeatures' class='custom-control-input' id='fixed-search-{{camelCase(feature.name_english)}}' value= '{{feature.id}}'>
 									@if(antl.currentLocale()==='fr')
-										<label class="custom-control-label" for='fixed-search-{{camelCase(feature.name_french)}}'>{{truncate(feature.name_french, 30, '.')}}</label>
+										<label class="custom-control-label" for='fixed-search-{{camelCase(feature.name_english)}}'>{{truncate(feature.name_french, 30, '.')}}</label>
 									@else
 										<label class="custom-control-label" for='fixed-search-{{camelCase(feature.name_english)}}'>{{truncate(feature.name_english, 30, '.')}}</label>
 									@endif
