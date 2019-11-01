@@ -209,7 +209,7 @@ class UserController {
 			let userInfo = {};
 			userInfo.firstname = body.firstname;
 			userInfo.lastname = body.lastname;
-			userInfo.password = body.password;
+			userInfo.password = await Hash.make('123');;
 			userInfo.email = body.email.toLowerCase();
 			userInfo.building_id = body.building;
 			userInfo.tower_id = body.tower;
@@ -629,7 +629,7 @@ class UserController {
 			try {
 				let result = await oauth2.authorizationCode.getToken({
 					code: code,
-					// redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/authAD',
+					redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/authAD',
 					scope: 'openid'
 				});
 				console.log(result)

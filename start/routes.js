@@ -27,7 +27,7 @@ Route.get('/switch/:lang', 'HomeController.changeLang');
 
 // User Authentication
 Route.get('/register', 'UserController.registerUserRender').as('registerUser');
-Route.post('/register', 'UserController.create').validator('CreateUser');
+Route.post('/register', 'UserController.create');//.validator('CreateUser');
 
 // Admin Authentication
 Route.get('/admin/register', 'UserController.registerAdminRender').as('registerAdmin');
