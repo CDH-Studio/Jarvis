@@ -8,8 +8,8 @@
 	<div class='row'>
 		<div class='col form-group mb-4'>
 			<label for='flexible-search-date'>{{ antl.formatMessage('roomDetails.bookingDate') }} <strong class='text-danger'>*</strong></label>
-			<i id='date-tooltip' class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
-			<input name='flexibleSearchDate' id='flexible-search-date' aria-required="true" class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('flexibleSearchDate', '') }}"}'>
+			<i id='date-tooltip' class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='{{ antl.formatMessage('searchForm.dateInfo')}}'></i>
+			<input name='flexibleSearchDate' id='flexible-search-date' aria-required="true" class='form-control date-form' type="text" data-role="datebox" data-options='{"mode":"calbox", "defaultValue":"{{ old('flexibleSearchDate', '') }}", "useLang":"{{antl.currentLocale()}}", "overrideDateFormat": "%Y-%m-%d"}'>
 			
 			@if(hasErrorFor('flexibleSearchDate'))
 				<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('flexibleSearchDate')}}</div>			

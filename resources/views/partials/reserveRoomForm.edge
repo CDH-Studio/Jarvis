@@ -1,0 +1,80 @@
+<form action='{{ route('confirmBooking') }}' method='POST'  style="min-height:334px;">
+    {{ csrfField() }}
+    <input type='hidden' name='room' value={{ room.id }} /> 
+    {{--  Body content  --}}
+    <div class='body d-flex flex-column' style="min-height:inherit;">
+        {{--  Meeting Name  --}}
+        <div class='row'>
+            <div class='col col-sm-12 form-group'>
+                <label for='meeting'>{{ antl.formatMessage('roomDetails.bookingName') }} <strong class='text-danger'>*</strong></label>
+                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='{{ antl.formatMessage('roomDetails.bookingNameHelp') }}'></i>
+                <input type='text' id='meeting' name='meeting' class='form-control' placeholder='{{ antl.formatMessage('roomDetails.bookingNamePlaceholder') }}' value='{{ old('meeting', '') }}'/>
+                
+                @if(hasErrorFor('meeting'))
+                    <div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('meeting')}}</div>
+                @endif
+                
+            </div>
+        </div>
+        {{--  Date form  --}}
+        <div class='row'>
+            <div class='col col-sm-12 form-group '>
+                <label for='date'>{{ antl.formatMessage('roomDetails.bookingDate') }} <strong class='text-danger'>*</strong></label>
+                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='{{ antl.formatMessage('roomDetails.bookingDateHelp') }}'></i>
+                <input name='date' id='date' aria-required="true" class='form-control date-form' type="text" data-role="datebox" data-options='{"mode":"calbox", "defaultValue":"{{ old('date', form.date) }}", "useLang":"{{antl.currentLocale()}}", "overrideDateFormat": "%Y-%m-%d" }'>
+
+                @if(hasErrorFor('date'))
+                    <div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
+                @endif
+            </div>
+        </div>
+
+        {{--  From and To form  --}}
+        <div class='row'>
+
+            {{--  Meeting time FROM  --}}
+            <div class='col col-sm-6 form-group mb-4'>
+                <label for='from'>{{ antl.formatMessage('searchForm.bookingStart') }} <strong class='text-danger'>*</strong></label>
+                <div class='timePicker' style='display: flex;'>
+                    <div class="input-group date" id="from" data-target-input="nearest">
+                        <input type="text" name="from" id="from" aria-required="true" class="form-control datetimepicker-input" value='{{ old('from', form.from) }}' data-target="#from"/>
+                        <div class="input-group-append" data-target="#from" data-toggle="datetimepicker">
+                            <div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                @if(hasErrorFor('from'))
+                    <div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
+                @endif
+		    </div>
+
+            {{--  Meeting time TO  --}}
+            <div class='col col-sm-6 form-group mb-4'>
+                <label for='to'>{{ antl.formatMessage('searchForm.bookingEnd') }} <strong class='text-danger'>*</strong></label>
+                <div class='timePicker' style='display: flex;'>
+                    <div class="input-group date" id="to" data-target-input="nearest">
+                        <input type="text" name="to" id="to" aria-required="true" class="form-control datetimepicker-input" value='{{ old('to', form.to) }}' data-target="#to"/>
+                        <div class="input-group-append" data-target="#to" data-toggle="datetimepicker">
+                            <div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                @if(hasErrorFor('to') && !hasErrorFor('from'))
+                    <div id='to-error' aria-labelledby='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
+                @endif
+            </div>
+
+        </div>
+
+        {{--  Footer buttons to cancel and book room  --}}
+        <div class='row'>
+            <div class='col w-100'>
+                <button type='submit' class='btn btn-success w-100 mb-2'><i class="fas fa-check"></i> {{ antl.formatMessage('roomDetails.bookingButton') }}</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+

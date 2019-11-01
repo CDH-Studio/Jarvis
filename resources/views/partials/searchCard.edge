@@ -46,7 +46,11 @@
 	</div>
 </div>
 
-{{ script('https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js') }}
-{{ script('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js') }}
-{{ script('js/timepicker.js') }}
-{{ style('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css') }}
+@section('extrajs')
+    {{ script('js/vendor/jtsage-datebox.min') }}
+    {{ script('https://cdn.jsdelivr.net/npm/jtsage-datebox-i18n@5.2.0/jtsage-datebox.i18n.fr.utf8.min.js') }}
+	{{ script('https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js') }}
+	{{ script('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js') }}
+	{{ style('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css') }}
+	{{ script('js/timepicker.js') }}
+@endsection

@@ -4,6 +4,7 @@
  * Instructions: Use this validator by adding ".validator('BookRoom')" to your route in /routes.js
  **/
 'use strict';
+const moment = require('moment');
 
 class BookRoom {
 	// Validate and return all fields
@@ -14,12 +15,10 @@ class BookRoom {
 	// Validation rules
 	get rules () {
 		// getting the current date subract 1 day
-		let afterDate = new Date();
-		afterDate.setDate(afterDate.getDate() - 1);
+		let minDate = moment().subtract(1, 'days').format();
+
 		//  getting the current date plus 3 months
-		let beforeDate = new Date();
-		beforeDate.setDate(beforeDate.getDate() + 1);
-		beforeDate.setMonth(beforeDate.getMonth() + 3);
+		let maxDate = moment().add(1, 'days').add(3, 'months').format();
 
 		return {
 			/**
@@ -36,7 +35,7 @@ class BookRoom {
 			 * date: checks if the input field is a valid date
 			 * required: require field, cannot book a room without a date entered
 			 */
-			date: `required|date|after:${afterDate}|before:${beforeDate}`,
+			date: `required|date|after:${minDate}|before:${maxDate}`,
 			/**
 			 * From and To validation rules
 			 *
@@ -47,7 +46,7 @@ class BookRoom {
 			 *
 			 */
 			from: 'required|isAfterToday:date',
-			to: 'required|isAfter:from|isAfterToday:date'
+			to: 'required|isAfter:fixedSearchFrom|isAfterToday:date'
 			/**
 			 * Recurring Validation
 			 *
@@ -69,6 +68,7 @@ class BookRoom {
 			'date.dateFormat': 'Please enter a date with the following format: MM/DD/YYYY',
 			'from.isAfterToday': 'This field must occur after the current time',
 			'from.timeFormat': 'You may only search with 30 min time intervals, please enter a starting time that ends with 00 or 30',
+			'to.isAfter': 'This field must occur after start time',
 			'to.isAfterToday': 'This field must occur after the current time',
 			'to.timeFormat': 'You may only search with 30 min time intervals, please enter a starting time that ends with 00 or 30',
 			'recurringSelected': 'This field is required',
