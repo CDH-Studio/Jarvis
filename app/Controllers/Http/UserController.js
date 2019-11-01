@@ -611,14 +611,14 @@ class UserController {
 	async loginAD ({ response }) {
 		console.log('hi')
 		const authUri = oauth2.authorizationCode.authorizeURL({
-			redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/tokenAD',
+			redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/authAD',
 			scope: 'openid'
 		});
 
 		return response.redirect(authUri);
 	}
 
-	async tokenAD ({ request, session, response, auth, view }) {
+	async authAD ({ request, session, response, auth, view }) {
 		// getting authorization code
 		const code = request.only(['code']).code;
 		console.log(code)
@@ -660,7 +660,7 @@ class UserController {
 				return response.redirect('/');
 			}
 		} else {
-			return await this.registerUserRender({ view, userInfo });
+			return this.registerUserRender({ view, userInfo });
 		}
 	}
 
