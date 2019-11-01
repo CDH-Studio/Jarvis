@@ -1,7 +1,7 @@
 @layout('layouts.mainLayout')
 
 @section('title')
-    {{ antl.formatMessage('results.pageTitle') }}
+    {{ antl.formatMessage('searchResults.pageTitleAllRooms') }}
 @endsection
 
 @section('extracss')
@@ -11,7 +11,7 @@
 {{--  Manage bookings page content  --}}
 @section('content')
     {{--  Loading page header  --}}
-    @!component('components.pageHeader', title="All Rooms", loading=false)
+    @!component('components.pageHeader', title=antl.formatMessage('searchResults.pageTitleAllRooms'), loading=false)
 
     {{--  categorize rooms by floor  --}}
     @each(floor in floors)
