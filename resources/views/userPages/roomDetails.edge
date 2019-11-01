@@ -21,7 +21,6 @@
 
     {{--  Actual page content  --}}
     <div class="row">
-    
         <div class='col-12 col-xl-8'>
             <div class='card room-details-card shadow mb-4'>
                 <div class='card-header py-3 custom-card-header'>
@@ -164,177 +163,7 @@
                 </div>
                 <div class="card-body" style="height:100%;">
                     @if(user.role.name === 'user' && room.state_id == 1)
-                        <form action='{{ route('confirmBooking') }}' method='POST'  style="min-height:334px;">
-                            {{ csrfField() }}
-                            <input type='hidden' name='room' value={{ room.id }} /> 
-                            {{--  Body content  --}}
-                            <div class='body d-flex flex-column' style="min-height:inherit;">
-                                {{--  Meeting Name  --}}
-                                <div class='row'>
-                                    <div class='col form-group'>
-                                        <div class='row'>
-                                            <label class='col' for='meeting'>{{ antl.formatMessage('roomDetails.bookingName') }} <strong class='text-danger'>*</strong></label>
-                                            <div class='col text-right'>
-                                                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='{{ antl.formatMessage('roomDetails.bookingNameHelp') }}'></i>
-                                            </div>
-                                        </div>
-                                        <td class='confirmation-modal-column'>
-                                            @if(hasErrorFor('meeting'))
-                                                <input type='text' id='meeting' name='meeting' class='form-control is-invalid' placeholder='Please enter booking name' value='{{ old('meeting', '') }}' onchange='removeErrorClass("meeting")'/>
-                                                <div class="invalid-feedback">{{ getErrorFor('meeting')}}</div>
-                                            @else
-                                                <input type='text' id='meeting' name='meeting' class='form-control' placeholder='Please enter booking name' value='{{ old('meeting', '') }}'/>
-                                            @endif
-                                    </div>
-                                </div>
-                                {{--  Date form  --}}
-                                <div class='row'>
-                                    <div class='col form-group'>
-                                        <div class='row'>
-                                            <label class='col' for='date'>{{ antl.formatMessage('roomDetails.bookingDate') }} <strong class='text-danger'>*</strong></label>
-                                            <div class='col text-right'>
-                                                <i class='fas fa-info-circle tooltip-info mt-1' data-toggle='tooltip' data-placement='right'data-original-title='{{ antl.formatMessage('roomDetails.bookingDateHelp') }}'></i>
-                                            </div>
-                                        </div>
-                                        {{--  If field is not filled correctly show an error box  --}}
-                                        @if(hasErrorFor('date'))
-                                            <input name='date'  id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', form.date) }}"}' onchange='removeErrorClass("date")'>
-                                            <div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
-                                        {{--  Otherwise show a normal input  --}}
-                                        @else
-                                            <input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', form.date) }}"}'>
-                                        @endif
-                                    </div>
-                                </div>
-                                {{--  From and To form  --}}
-                                <div class='row'>
-                                    {{--  From  --}}
-                                    <div class='col form-group mb-4'>
-                                            <label for='from' aria-labelledby='from-error'>{{ antl.formatMessage('roomDetails.bookingStart') }} <strong class='text-danger'>*</strong></label>
-                                            {{--  If field is not filled correctly show an error box  --}}
-                                            <div class='timePicker' style='display: flex;'>
-                                                <!--
-                                                @if(hasErrorFor('from'))
-                                                    <input name='from' id='from' class='form-control time-form is-invalid' type='time' value='{{ old('from', form.from) }}' onchange='removeErrorClass("from")' step="1800">
-                                                @else
-                                                    <input name='from' id='from' class='form-control time-form' type='time' value='{{ old('from', form.from) }}' onchange='removeErrorClass("from")' step="1800">										  
-                                                @endif
-            
-                                                <div class='dropdown no-arrow'>
-                                                    <button for='from' aria-label='start-time-button' class='btn time-button dropdown-toggle' type='button' id="fromDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-                                                    <div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="fromDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                                                        @each(item in dropdownSelection)
-                                                            <a class="dropdown-item" for='fromDropDown' data-value="{{item.dataValue}}" href="#">{{item.name}}</a>
-                                                        @endeach
-                                                    </div>
-                                                </div>
-                                                -->
-                                                <div class="input-group date" id="from" data-target-input="nearest">
-                                                    <input type="text" class="form-control datetimepicker-input" data-target="#from" name="from" id="from-input" value='{{ old('from', form.from) }}'/>
-                                                    <div class="input-group-append" data-target="#from" data-toggle="datetimepicker">
-                                                        <div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @if(hasErrorFor('from'))
-                                                <div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
-                                            @endif
-                                    </div>
-                                    {{--  To  --}}
-                                    <div class='col form-group mb-4'>
-                                        <label for='to' aria-labelledby='to-error' data-toggle='tooltip'>{{ antl.formatMessage('roomDetails.bookingEnd') }} <strong class='text-danger'>*</strong></label>
-                                        <div style='display: flex;' class='timePicker'>
-                                            <!--
-                                            {{--  If field is not filled correctly show an error box  --}}
-                                            @if(hasErrorFor('to'))
-                                                <input name='to'  id='to' class='form-control time-form is-invalid' type='time' value='{{ old('to', form.to) }}' onchange='removeErrorClass("to")' step="1800">
-                                            @else
-                                                <input name='to'  id='to' class='form-control time-form' type='time' value='{{ old('to', form.to) }}' onchange='removeErrorClass("to")' step="1800">											
-                                            @endif
-                                            <div class='dropdown no-arrow'>
-                                                <button for='to'  aria-label='end-time-button' class='btn time-button dropdown-toggle' type='button' id="toDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-clock"></i></button>
-                                                <div class="dropdown-menu dropdown-menu-right scrollable-menu text-right time-dropdown" aria-labelledby="toDropDown" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 38px, 0px);">
-                                                    @each(item in dropdownSelection)
-                                                        <a class="dropdown-item" for='fromDropDown' data-value="{{item.dataValue}}" href="#">{{item.name}}</a>
-                                                    @endeach
-                                                </div>
-                                            </div>
-                                            -->
-                                            <div class="input-group date" id="to" data-target-input="nearest">
-                                                <input type="text" class="form-control datetimepicker-input" data-target="#to" name="to" value='{{ old('to', form.to) }}'/>
-                                                <div class="input-group-append" data-target="#to" data-toggle="datetimepicker">
-                                                    <div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @if(hasErrorFor('to'))
-                                            <div id='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
-                                        @endif
-                                    </div>
-                                </div>
-                                {{--  Reccuring Form  #### No functionality, Display:none for now --}}
-                                <div class='row' style='display:none'>
-                                    <div class='col form-group'>
-                                        <label for='recurringSelect' data-toggle='tooltip' data-placement='right' title='' data-original-title=''>{{ antl.formatMessage('roomDetails.bookingRecurring') }}</label>
-                                        <select class='form-control' id='recurringSelect' name='recurringSelect' onchange='showRecurring()'>
-                                                <option value='0' {{ old('recurringSelect') == 0 ? 'selected' : '' }}>No</option>
-                                                <option value='1' {{ old('recurringSelect') == 1 ? 'selected' : '' }}>Yes</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                {{--  NOTE: This only shows when the user selects 'Yes' in the Reccuring Dropdown  --}}
-                                <div class='row' id='recurringInfo' style='display:none'>
-                                    <div class='col form-group'>
-                                        @if(hasErrorFor('interval'))
-                                            <select class='form-control is-invalid' name='interval' id='interval' onchange='removeErrorClass("interval")'>
-                                                <option value='0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
-                                                <option value='daily' {{ old('interval') == 'daily' ? 'selected' : '' }}>Daily</option>
-                                                <option value='weekly' {{ old('interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
-                                                <option value='biWeekly' {{ old('interval') == 'biWeekly' ? 'selected' : '' }}>Bi-Weekly</option>
-                                                <option value='monthly' {{ old('interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
-                                                <option value='yearly' {{ old('interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
-                                            </select>
-                                            <div class='invalid-feedback show-invalid'>{{ getErrorFor('interval')}}</div>
-                                        @else
-                                            <select class='form-control' name='interval' id='interval'>
-                                                <option value= '0' {{ old('interval') == 0 ? 'selected' : '' }}>Select an Interval</option>
-                                                <option value='daily' {{ old('interval') == 'daily' ? 'selected' : '' }}>Daily</option>
-                                                <option value='weekly' {{ old('interval') == 'weekly' ? 'selected' : '' }}>Weekly</option>
-                                                <option value='biWeekly' {{ old('interval') == 'biWeekly' ? 'selected' : '' }}>Bi-Weekly</option>
-                                                <option value='monthly' {{ old('interval') == 'monthly' ? 'selected' : '' }}>Monthly</option>
-                                                <option value='yearly' {{ old('interval') == 'yearly' ? 'selected' : '' }}>Yearly</option>
-                                            </select>
-                                        @endif
-                                    </div>
-                                    <div class='col form-group'>
-                                        @if(hasErrorFor('numberOfTimes'))
-                                            <select class='form-control is-invalid' name='numberOfTimes' id='numberOfTimes' onchange='removeErrorClass("numberOfTimes")'>
-                                                <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
-                                                <option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
-                                                <option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
-                                                <option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
-                                                <option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
-                                            </select> 
-                                            <div class='invalid-feedback show-invalid'>{{ getErrorFor('numberOfTimes')}}</div>
-                                        @else
-                                            <select class='form-control' name='numberOfTimes' id='numberOfTimes'>
-                                                <option value='0' {{ old('numberOfTimes') == 0 ? 'selected' : '' }}>Select Number of Occurrences</option>
-                                                <option value='2' {{ old('numberOfTimes') == 2 ? 'selected' : '' }}>2 Times</option>
-                                                <option value='3' {{ old('numberOfTimes') == 3 ? 'selected' : '' }}>3 Times</option>
-                                                <option value='4' {{ old('numberOfTimes') == 4 ? 'selected' : '' }}>4 Times</option>
-                                                <option value='5' {{ old('numberOfTimes') == 5 ? 'selected' : '' }}>5 Times</option>
-                                            </select> 
-                                        @endif
-                                    </div>
-                                </div>
-                                {{--  Footer buttons to cancel and book room  --}}
-                                <div class='row flex-grow-1 align-content-end'>
-                                    <div class='col'>
-                                        <button type='submit' class='btn btn-success w-100 mb-2'><i class="fas fa-check"></i> {{ antl.formatMessage('roomDetails.bookingButton') }}</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                        @include('partials.reserveRoomForm')
                     @else
                         @!component('components.cardEmptyMessage', faIcon='fas fa-ban fa-6x', message='Booking not available for admin')
                     @endif
@@ -609,9 +438,15 @@
 
 {{--  Deals with the search functionality of the table above- searches all fields   --}}
 @section('extrajs') 
-    {{ script('https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js') }}
-    {{ script('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js') }}
-    {{ script('js/timepicker.js') }}
+    {{ script('js/vendor/jtsage-datebox.min') }}
+    {{ script('https://cdn.jsdelivr.net/npm/jtsage-datebox-i18n@5.2.0/jtsage-datebox.i18n.fr.utf8.min.js') }}
+	{{ script('https://cdn.jsdelivr.net/npm/moment@2.24.0/moment.min.js') }}
+	{{ script('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js') }}
+	{{ style('https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css') }}
+	{{ script('js/timepicker.js') }}
+
+
+
     {{--  Script to display file name on upload  --}}
     <script>
         $('#reviewPicture').on('change',function(){
@@ -640,4 +475,6 @@
     <script> $(document).ready(function(){ $('[data-toggle="tooltip"]').tooltip(); });</script>
 
     {{ script('js/roomBookingForm.js') }}
+
+
 @endsection

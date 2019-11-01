@@ -11,6 +11,7 @@
 	"bookRoom": "Book room",
 	"bookingName": "Meeting name",
 	"bookingNameHelp": "Select a name for the room booking",
+	"bookingNamePlaceholder":"Please enter booking name",
 	"bookingDate": "Date",
 	"bookingDateHelp": "The date may not occur more than 3 months in advance",
 	"bookingStart": "Start time",
