@@ -629,22 +629,18 @@ class UserController {
 			try {
 				let result = await oauth2.authorizationCode.getToken({
 					code: code,
-					redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/authAD',
+					// redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/authAD',
 					scope: 'openid'
 				});
 				console.log(result)
 				const token = await oauth2.accessToken.create(result);
 
 				userInfo = JWT.decode(token.token.id_token);
-
-				return this.authAD({ userInfo, session, response, auth, view })
 			} catch (err) {
 				return err;
 			}
 		}
-	}
 
-	async authAD ({ userInfo, session, response, auth, view }) {
 		const email = userInfo.email;
 		const user = await User
 			.query()
