@@ -32,7 +32,7 @@
 										<div class='col-md-6'>
 											<div class='form-group mb-2'>
 												<label for='firstname'>{{ antl.formatMessage('registerUser.firstname') }}</label>
-												<input type='text' class='form-control' name='firstname' id='firstname' placeholder='{{ userInfo.given_name }}' value='{{ userInfo.given_name }}'>
+												<input type='text' class='form-control' name='firstname' id='firstname' placeholder='John' value='{{ userInfo.given_name }}'>
 												@if(hasErrorFor('firstname'))
 													<div class='invalid-feedback d-block'>{{ getErrorFor('firstname') }}</div>
 												@endif
@@ -41,7 +41,7 @@
 										<div class='col-md-6'>
 											<div class='form-group mb-2'>
 												<label for='lastname'>{{ antl.formatMessage('registerUser.lastname') }}</label>
-												<input type='text' class='form-control' name='lastname' id='lastname' placeholder='{{ userInfo.family_name }}' value='{{ userInfo.family_name }}'>
+												<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe' value='{{ userInfo.family_name }}'>
 												@if(hasErrorFor('lastname'))        
 													<div class='invalid-feedback d-block'>{{ getErrorFor('lastname') }}</div>
 												@endif
@@ -49,7 +49,6 @@
 										</div>
 									</div>
 
-										
 									<div class='form-group mb-2'>
 										<label for='email'>{{ antl.formatMessage('registerUser.email') }}</label>
 										<input type='email' class='form-control' name='email' id='email' placeholder='{{ userInfo.email }}' value='{{ userInfo.email }}' readonly>

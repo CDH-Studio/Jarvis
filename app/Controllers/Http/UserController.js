@@ -206,19 +206,12 @@ class UserController {
 			await Tower.findOrFail(body.tower);
 			await Building.findOrFail(body.building);
 
-			let userInfo = {};
-			userInfo.firstname = body.firstname;
-			userInfo.lastname = body.lastname;
-			userInfo.password = await Hash.make('123');;
-			userInfo.email = body.email.toLowerCase();
-			userInfo.building_id = body.building;
-			userInfo.tower_id = body.tower;
-			userInfo.floor_id = body.floor;
-			userInfo.role_id = await UserRole.getRoleID('user');
-			userInfo.verified = true;
+			auth.user.verified = true;
+			auth.user.building_id = body.building;
+			auth.user.tower_id = body.tower;
+			auth.user.floor_id = body.floor;
 
-			const user = await User.create(userInfo);
-			await auth.login(user);
+			await auth.user.save();
 
 			return response.redirect('/');
 		} catch (err) {
@@ -651,39 +644,38 @@ class UserController {
 		if (user) {
 			await auth.login(user);
 			if (auth.user.getUserRole() === 'User') {
-				session.flash({
-					notification: 'Welcome! You are logged in'
-				});
+				if (auth.user.verified) {
+					session.flash({
+						notification: 'Welcome! You are logged in'
+					});
 
-				return response.redirect('/userDash');
+					return response.redirect('/userDash');
+				} else {
+					return response.redirect('/register');
+				}
 			} else {
 				return response.redirect('/');
 			}
 		} else {
-			return this.registerUserRender({ view, userInfo });
+			let newUser = {};
+			newUser.firstname = userInfo.given_name;
+			newUser.lastname = userInfo.family_name;
+			newUser.password = await Hash.make('123');
+			newUser.email = userInfo.email.toLowerCase();
+			newUser.role_id = await UserRole.getRoleID('user');
+			newUser.verified = false;
+			newUser.building_id = '1';
+			newUser.tower_id = '1';
+			newUser.floor_id = '1';
+
+			const user = await User.create(userInfo);
+			await auth.login(user);
+			return response.redirect('/register');
 		}
 	}
 
 	async key ({ request, view, response }) {
 		//return view.render('auth.keycloak')
-		const user = {
-			client: {
-				id: 'jarvis',
-				secret: 'dc57e116-dd36-4ce5-bef3-d0043bce454d'
-			},
-		
-			auth: {
-				tokenHost: 'https://sso-dev.ised-isde.canada.ca',
-				tokenPath: '/auth/realms/individual/protocol/openid-connect/token',
-				authorizePath: '/auth/realms/individual/protocol/openid-connect/auth'
-			}
-		};
-
-		return response.route('key2', {user});
-	}
-
-	async key2 ({ request, view, params }) {
-		return params;
 	}
 }
 
