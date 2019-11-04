@@ -53,6 +53,9 @@ class HomeController {
 			if (userRole === 'admin') {
 				return response.route('adminDash', { auth });
 			} else {
+				if (!auth.user.verified) {
+					return route('/register');
+				}
 				return response.route('userDash', { auth });
 			}
 		} catch (error) {

@@ -638,12 +638,11 @@ class UserController {
 		const user = await User
 			.query()
 			.where('email', email.toLowerCase())
-			.where('verified', true)
 			.first();
 
 		if (user) {
 			await auth.login(user);
-			if (auth.user.getUserRole() === 'User') {
+			if (auth.user.role_id === 2) {
 				if (auth.user.verified) {
 					session.flash({
 						notification: 'Welcome! You are logged in'
