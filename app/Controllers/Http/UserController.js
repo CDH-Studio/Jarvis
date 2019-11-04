@@ -66,7 +66,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async registerUserRender ({ view, userInfo }) {
+	async registerUserRender ({ view, auth }) {
 		const numb = Math.floor(Math.random() * 8) + 1;
 		const photoName = 'login_' + numb + '.jpg';
 
@@ -81,7 +81,7 @@ class UserController {
 		var floorOptions = (await Floor.all()).toJSON();
 		formOptions.floors = floorOptions;
 
-		return view.render('auth.registerUser', { photoName, formOptions, userInfo });
+		return view.render('auth.registerUser', { photoName, formOptions, userInfo: auth.user });
 	}
 
 	/**
@@ -668,7 +668,7 @@ class UserController {
 			newUser.tower_id = '1';
 			newUser.floor_id = '1';
 
-			const user = await User.create(userInfo);
+			const user = await User.create(newUser);
 			await auth.login(user);
 			return response.redirect('/register');
 		}
