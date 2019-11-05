@@ -45,7 +45,7 @@
 								<td class='text-center'><a href='{{ route('showRoom', {id: booking.room_id}) }}'>{{ truncate(booking.room.name, 15, '.') }}</a></td>
 								<td class='text-center'><a href='{{ route('viewProfile', {id: booking.user_id}) }}'>{{ truncate(booking.user.firstname, 5, '.') }} {{ truncate(booking.user.lastname, 5, '.') }}</a></td>
 								<td class='text-center'>{{ truncate(booking.subject, 10, '...') }}</td>
-								<td class='text-center'>{{ moment(booking.from).locale(antl.currentLocale()).format("MMM Do");  }}</td>
+								<td class='text-center'>{{ moment(booking.from).format("YYYY-MM-DD"); }}</td>
 								<td class='text-center'>{{ moment(booking.from).format("HH:mm");  }} - {{ moment(booking.to).format("HH:mm");  }}</td>
 								@if(booking.status == 'Approved')
 									<td class='text-center td-{{ booking.status }}'>{{antl.formatMessage('manageBookings.tableApproved')}}</td>
@@ -107,7 +107,8 @@
 	<script>$(document).ready(function() {
 			$('#manageBookingsTable').DataTable( {
 				"paging":   false,
-				"ordering": true,
+				"columnDefs": [ { type: 'date', 'targets': [3] } ],
+				"order": [[ 3, "desc" ]],
 				"info":     false
 			});
 		});
