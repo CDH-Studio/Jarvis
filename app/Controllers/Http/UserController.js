@@ -596,12 +596,7 @@ class UserController {
 		const results = await User.query().where('role_id', 1).fetch();
 		const users = results.toJSON();
 
-		// Sort the results by name
-		users.sort((a, b) => {
-			return (a.firstname > b.firstname) ? 1 : ((b.firstname > a.firstname) ? -1 : 0);
-		});
-
-		return view.render('adminPages.viewUsers', { users, pageTitle });
+		return view.render('adminPages.viewUsers', { users, pageTitle, moment });
 	}
 
 	/**
