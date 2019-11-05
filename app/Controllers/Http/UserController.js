@@ -446,7 +446,7 @@ class UserController {
 			return response.redirect('/');
 		}
 
-		return view.render('auth.showProfile', { auth, user, canEdit, allBuildings, selectedBuilding});
+		return view.render('auth.showProfile', { auth, user, canEdit, allBuildings, selectedBuilding });
 	}
 
 	/**
