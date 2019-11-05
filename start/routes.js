@@ -26,8 +26,8 @@ Route.get('/switch/:lang', 'HomeController.changeLang');
 //= ========================================================================
 
 // User Authentication
-Route.get('/register', 'UserController.registerUserRender').as('registerUser');
-Route.post('/register', 'UserController.create');//.validator('CreateUser');
+Route.get('/profile', 'UserController.createProfileRender').as('createProfile');
+Route.post('/profile', 'UserController.create').validator('CreateUser');
 
 // Admin Authentication
 Route.get('/admin/register', 'UserController.registerAdminRender').as('registerAdmin');
@@ -42,7 +42,6 @@ Route.get('/logout', 'UserController.logout').as('logout');
 Route.get('/forgotPassword', 'UserController.forgotPasswordRender').as('forgotPassword');
 Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword').validator('ResetPassword');
 Route.get('/newPassword', 'UserController.verifyHash');
-Route.get('/newUser', 'UserController.verifyEmail');
 Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
 
 // Authentication

@@ -62,11 +62,11 @@ async function updatePassword ({ newPassword, columnName, columnValue }) {
 
 class UserController {
 	/**
-	 * Render Register page
+	 * Render Profile Creation page
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async registerUserRender ({ view, auth }) {
+	async createProfileRender ({ view, auth }) {
 		const numb = Math.floor(Math.random() * 8) + 1;
 		const photoName = 'login_' + numb + '.jpg';
 
@@ -81,18 +81,35 @@ class UserController {
 		var floorOptions = (await Floor.all()).toJSON();
 		formOptions.floors = floorOptions;
 
-		return view.render('auth.registerUser', { photoName, formOptions, userInfo: auth.user });
+		return view.render('auth.createProfile', { photoName, formOptions, userInfo: auth.user });
 	}
 
 	/**
-	 * Create a new Enployee user. There is an option to verify the user directly
-	 * or to make them verify their email address.
+	 * Create a profile for user.
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async create ({ request, response, auth, session }) {
-		console.log('create');
-		return this.createWithoutVerifyingEmail({ request, response, auth });
+	async createProfile ({ request, response, auth }) {
+		try {
+			let body = request.post();
+
+			// test if selected building, tower, and floor exist
+			await Floor.findOrFail(body.floor);
+			await Tower.findOrFail(body.tower);
+			await Building.findOrFail(body.building);
+
+			auth.user.verified = true;
+			auth.user.building_id = body.building;
+			auth.user.tower_id = body.tower;
+			auth.user.floor_id = body.floor;
+
+			await auth.user.save();
+
+			return response.redirect('/');
+		} catch (err) {
+			Logger.debug(err);
+			return response.redirect('/profile');
+		}
 	}
 
 	/**
@@ -190,120 +207,6 @@ class UserController {
 		}
 
 		return response.route('viewProfile', { id: params.id });
-	}
-
-	/**
-	 * Create and verify a new Enployee user. Save them to the database and log them in.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async createWithoutVerifyingEmail ({ request, response, auth }) {
-		try {
-			let body = request.post();
-
-			// test if selected building, tower, and floor exist
-			await Floor.findOrFail(body.floor);
-			await Tower.findOrFail(body.tower);
-			await Building.findOrFail(body.building);
-
-			auth.user.verified = true;
-			auth.user.building_id = body.building;
-			auth.user.tower_id = body.tower;
-			auth.user.floor_id = body.floor;
-
-			await auth.user.save();
-
-			return response.redirect('/');
-		} catch (err) {
-			Logger.debug(err);
-			return response.redirect('/register');
-		}
-	}
-	/**
-	 * Create a new Enployee user and send a confirmation email to them.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async createWithVerifyingEmail ({ request, response, auth, session }) {
-		try {
-			let body = request.post();
-
-			// test if selected building, tower, and floor exist
-			await Floor.findOrFail(body.floor);
-			await Tower.findOrFail(body.tower);
-			await Building.findOrFail(body.building);
-
-			let userInfo = {};
-			userInfo.firstname = body.firstname;
-			userInfo.lastname = body.lastname;
-			userInfo.password = body.password;
-			userInfo.email = body.email.toLowerCase();
-			userInfo.building_id = body.building;
-			userInfo.tower_id = body.tower;
-			userInfo.floor_id = body.floor;
-			userInfo.role_id = await UserRole.getRoleID('user');
-			userInfo.verified = false;
-
-			let hash = randomString(4);
-
-			let row = {
-				email: userInfo.email,
-				hash: hash,
-				type: 2
-			};
-			await AccountRequest.create(row);
-
-			let mailBody = `
-				<h2> Welcome to Jarvis, ${userInfo.firstname} </h2>
-				<p>
-					Please click on the following link or copy the URL into your browser: 
-					${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newUser?hash=${hash}
-				</p>
-			`;
-
-			await Outlook.sendMail({
-				subject: 'Verify Email Address for Jarvis',
-				body: mailBody,
-				to: userInfo.email });
-
-			await User.create(userInfo);
-
-			session.flash({
-				notification: 'A confirmation email with register instructions has been sent your email address.'
-			});
-			return response.redirect('/login');
-		} catch (err) {
-			Logger.debug(err);
-			return response.redirect('/register');
-		}
-	}
-
-	/**
-	 * Verify the user's emaill address.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async verifyEmail ({ request, response }) {
-		const hash = request._all.hash;
-
-		try {
-			let results = await AccountRequest
-				.query()
-				.where('hash', '=', hash)
-				.fetch();
-			let rows = results.toJSON();
-			Logger.debug(rows);
-			const email = rows[0].email;
-
-			await User
-				.query()
-				.where('email', email)
-				.update({ verified: true });
-
-			return response.redirect('/');
-		} catch (err) {
-			Logger.debug(err);
-		}
 	}
 
 	/**
@@ -650,7 +553,7 @@ class UserController {
 
 					return response.redirect('/userDash');
 				} else {
-					return response.redirect('/register');
+					return response.redirect('/profile');
 				}
 			} else {
 				return response.redirect('/');
@@ -669,7 +572,7 @@ class UserController {
 
 			const user = await User.create(newUser);
 			await auth.login(user);
-			return response.redirect('/register');
+			return response.redirect('/profile');
 		}
 	}
 

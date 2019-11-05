@@ -54,7 +54,7 @@ class HomeController {
 				return response.route('adminDash', { auth });
 			} else {
 				if (!auth.user.verified) {
-					return response.route('/register');
+					return response.route('/profile');
 				}
 				return response.route('userDash', { auth });
 			}
