@@ -45,13 +45,13 @@ Route.get('/newPassword', 'UserController.verifyHash');
 Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
 
 // Authentication
-Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
+Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth', 'isVerified']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
 Route.get('/allAdmins', 'UserController.getAllAdmins').as('allAdmins').middleware(['isAdmin']);
-Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
-Route.post('/user/:id/edit', 'UserController.update').as('saveUser').validator('EditUser').middleware(['auth']);
+Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth', 'isVerified']);
+Route.post('/user/:id/edit', 'UserController.update').as('saveUser').validator('EditUser').middleware(['auth', 'isVerified']);
 Route.post('/user/:id/editAdmin', 'UserController.update').as('saveAdmin').validator('EditAdmin').middleware(['isAdmin']);
-Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
+Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth', 'isVerified']).validator('ResetPassword');
 
 //= ========================================================================
 //  Rooms
@@ -62,10 +62,10 @@ Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['is
 Route.post('/addRoom', 'RoomController.add').as('addRoom').validator('AddRoom').middleware(['isAdmin']);
 Route.get('/adminDash', 'HomeController.adminDashboard').as('adminDash').middleware(['isAdmin']);
 
-Route.get('/rooms/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
+Route.get('/rooms/:id', 'RoomController.show').as('showRoom').middleware(['auth', 'isVerified']);
 Route.get('/rooms/:id/edit', 'RoomController.edit').as('editRoom').middleware(['isAdmin']);
 Route.post('/rooms/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['isAdmin']);
-Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
+Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth', 'isVerified']);
 
 Route.get('/building/select', 'BuildingController.viewSelectBuilding').as('viewSelectBuilding').middleware(['auth']);
 Route.get('/building/:id/edit', 'BuildingController.editBuilding').as('editBuilding').middleware(['isAdmin']);
@@ -90,31 +90,31 @@ Route.get('/issue/:id/edit', 'IssueController.editIssue').as('editIssue').middle
 Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['isAdmin']).validator('EditIssue');
 
 // user
-Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('AddReview').middleware(['isUser']);
-Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('AddReview').middleware(['isUser']);
-Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['auth']);
-Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
+Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('AddReview').middleware(['isUser', 'isVerified']);
+Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('AddReview').middleware(['isUser', 'isVerified']);
+Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['auth', 'isVerified']);
+Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(['isUser', 'isVerified']).validator('ReportRoom');
 
 //= ========================================================================
 // Bookings
 //= ========================================================================
-Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails').middleware(['auth']); // needs to be changed to get
-Route.get('/:bookingType/:id/bookings/:catFilter/:limitFilter', 'BookingController.viewBookings').as('viewBookings').middleware(['auth']);
-Route.post('/:bookingType/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth']);
+Route.post('/goToDetails', 'RoomController.goToDetails').as('goToDetails').middleware(['auth', 'isVerified']); // needs to be changed to get
+Route.get('/:bookingType/:id/bookings/:catFilter/:limitFilter', 'BookingController.viewBookings').as('viewBookings').middleware(['auth', 'isVerified']);
+Route.post('/:bookingType/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth', 'isVerified']);
 
 // Employee user pages
 // Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);
-Route.get('/searchRooms/:view', 'RoomController.loadSearchRoomsForm').as('searchRooms').middleware(['isUser']);
+Route.get('/searchRooms/:view', 'RoomController.loadSearchRoomsForm').as('searchRooms').middleware(['isUser', 'isVerified']);
 Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware(['isUser', 'isVerified']);
 
 // Rendering Results
-Route.get('/results', 'RoomController.findSpecific').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
+Route.get('/results', 'RoomController.findSpecific').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser', 'isVerified']);
 Route.get('/search/fixed', 'RoomController.searchRooms').as('searchFixed').validator('SearchFixed');
 Route.get('/search/flexible', 'RoomController.searchRooms').as('searchFlexible').validator('SearchFlexible');
 Route.get('/search/recurring', 'RoomController.searchRooms').as('searchRecurring').validator('SearchRoomFlexible'); // TODO
 
 // Booking a Room
-Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);
+Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser', 'isVerified']);
 
 // Outlook
 Route.get('/test-connection', 'HomeController.testAgentConnection').as('testAgentConnection');
