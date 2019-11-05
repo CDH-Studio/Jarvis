@@ -160,11 +160,11 @@ View {{upperFirst(viewFilters.filterType)}} Room issues
 						<thead>
 							<tr>
 								<th scope='col' class='text-center' style='width:10%'>Ticket #</th>
-								<th scope='col' class='text-center' style='width:15%'>Room</th>
-								<th scope='col' class='text-center' style='width:20%'>Submitted by</th>
-                                <th scope='col' class='text-center' style='width:20%'>Report type</th>
-                                <th scope='col' class='text-center' style='width:10%'>Created</th>                        
-								<th scope='col' class='text-center' style='width:10%'>Status</th>
+								<th scope='col' class='text-center'>Room</th>
+								<th scope='col' class='text-center'>Submitted by</th>
+                                <th scope='col' class='text-center'>Report type</th>
+                                <th scope='col' class='text-center'>Created</th>                        
+								<th scope='col' class='text-center'>Status</th>
 							</tr>
 						</thead>
 						{{--  Loops through the issues array and displays every report's content  --}}
@@ -175,7 +175,7 @@ View {{upperFirst(viewFilters.filterType)}} Room issues
 								<td class='text-center'>{{ issue.room.name }}</td>
 								<td class='text-center'>{{ issue.user.firstname }} {{ issue.user.lastname }}</td>
                                 <td class='text-center'>{{ issue.report_type.name }}</td>
-                                <td class='text-center'>{{ moment(issue.created_at).locale(antl.currentLocale()).format("MMM DD, YYYY")}}</td>                                    
+                                <td class='text-center'>{{ moment(issue.created_at).format("YYYY-MM-DD")}}</td>                                    
 								
                                 @if(issue.report_status_id == '1' )
                                     <td class=''><i class="fas fa-circle td-Open fa-xs mr-1"></i>Open</td>
@@ -199,7 +199,15 @@ View {{upperFirst(viewFilters.filterType)}} Room issues
 @section('extrajs') 
     <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
     <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
-    {{ script('js/vendor/dataTables.js') }}
+    <script>$(document).ready(function() {
+        $('#issuesTable').DataTable( {
+				"paging":   false,
+				"columnDefs": [ { type: 'date', 'targets': [4] } ],
+				"order": [[ 4, "desc" ]],
+				"info":     false
+			});
+		});
+	</script>
 @endsection
 
 

@@ -60,7 +60,7 @@ View Users
                                     <tr class='table-light' onclick="window.location='{{ route('viewProfile', { id: user.id }) }}';">
                                     <td class='text-center'>{{ user.firstname }} {{ user.lastname }}</td>
                                     <td class='text-center'>{{ user.email }}</td>
-                                    <td class='text-center'>{{moment(user.created_at).format("YYYY-MM-DD");}}</td>
+                                    <td class='text-center'>{{moment(user.created_at).format("YYYY-MM-DD")}}</td>
                                     <td class='text-center'>{{user.__meta__.bookings_count}}</td>
                                     </tr>
                                 @endeach
