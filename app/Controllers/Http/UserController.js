@@ -10,6 +10,7 @@ const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
 const Outlook = new (use('App/Outlook'))();
+const moment = require('moment');
 // const ActiveDirectory = require('activedirectory');
 
 /**
@@ -445,7 +446,7 @@ class UserController {
 			return response.redirect('/');
 		}
 
-		return view.render('auth.showProfile', { auth, user, canEdit, allBuildings, selectedBuilding });
+		return view.render('auth.showProfile', { auth, user, canEdit, allBuildings, selectedBuilding});
 	}
 
 	/**
@@ -567,7 +568,11 @@ class UserController {
 	async getAllUsers ({ view, request }) {
 		const selectedBuilding = request.cookie('selectedBuilding');
 
-		const results = await User.query().where('role_id', 2).where('building_id', selectedBuilding.id).fetch();
+		const results = await User.query()
+			.where('role_id', 2)
+			.where('building_id', selectedBuilding.id)
+			.withCount('bookings')
+			.fetch();
 		const users = results.toJSON();
 
 		// Sort the results by name
@@ -577,7 +582,7 @@ class UserController {
 
 		const pageTitle = 'All users';
 
-		return view.render('adminPages.viewUsers', { users, pageTitle });
+		return view.render('adminPages.viewUsers', { users, pageTitle, moment });
 	}
 
 	/**
