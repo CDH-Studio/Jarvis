@@ -21,10 +21,9 @@ class CreateUser {
 			 * max: limits the amount of characters to 50
 			 * required: required field, to register an account, these fields are required
 			 * requiredDropdown: this field is required and cannot be selected on "Select a ___" which has a value of 'undefined'
-			 * unique: email must be unique and must not already exist within the database
 			 *
 			 */
-			email: 'required|email|unique:users',
+			email: 'required|email',
 			firstname: 'required|max:50',
 			lastname: 'required|max:50',
 			tower: 'required|integer|requiredDropdown',
@@ -38,8 +37,7 @@ class CreateUser {
 			'email': 'Please enter a valid e-mail address (somebody@example.com)',
 			'max': 'Please limit input to 50 characters.',
 			'required': 'This field is required.',
-			'requiredDropdown': 'This field is required.',
-			'unique': 'The {{ field }} already exists.',
+			'requiredDropdown': 'This field is required.'
 		};
 	}
 
