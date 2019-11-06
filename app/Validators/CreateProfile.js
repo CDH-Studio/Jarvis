@@ -1,7 +1,7 @@
 /**
- * File Name: CreateUser.js
+ * File Name: CreateProfile.js
  * Description: Validator used to validate input fields in User Registration Page (Employee)
- * Instructions: Use this validator by adding ".validator('CreateUser')" to your route in /routes.js
+ * Instructions: Use this validator by adding ".validator('CreateProfile')" to your route in /routes.js
  **/
 'use strict';
 
