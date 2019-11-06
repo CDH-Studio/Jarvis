@@ -13,14 +13,14 @@ const Outlook = new (use('App/Outlook'))();
 const moment = require('moment');
 const oauth2 = require('simple-oauth2').create({
 	client: {
-		id: 'jarvis',
-		secret: 'dc57e116-dd36-4ce5-bef3-d0043bce454d'
+		id: Env.get('KEYCLOAK_CLIENT_ID'),
+		secret: Env.get('KEYCLOAK_CLIENT_SECRET')
 	},
 
 	auth: {
-		tokenHost: 'https://sso-dev.ised-isde.canada.ca',
-		tokenPath: '/auth/realms/individual/protocol/openid-connect/token',
-		authorizePath: '/auth/realms/individual/protocol/openid-connect/auth'
+		tokenHost: Env.get('KEYCLOAK_HOST'),
+		tokenPath: Env.get('KEYCLOAK_TOKEN_ENDPOINT'),
+		authorizePath: Env.get('KEYCLOAK_AUTH_ENDPOINT')
 	}
 });
 const JWT = require('jsonwebtoken');
@@ -506,8 +506,8 @@ class UserController {
 	async loginAD ({ response }) {
 		console.log('hi');
 		const authUri = oauth2.authorizationCode.authorizeURL({
-			redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/authAD',
-			scope: 'openid'
+			redirect_uri: Env.get('KEYCLOAK_REDIRECT_URI'),
+			scope: Env.get('KEYCLOAK_SCOPES')
 		});
 
 		return response.redirect(authUri);
@@ -524,8 +524,8 @@ class UserController {
 			try {
 				let result = await oauth2.authorizationCode.getToken({
 					code: code,
-					redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/authAD',
-					scope: 'openid'
+					redirect_uri: Env.get('KEYCLOAK_REDIRECT_URI'),
+					scope: Env.get('KEYCLOAK_SCOPES')
 				});
 				console.log(result);
 				const token = await oauth2.accessToken.create(result);
