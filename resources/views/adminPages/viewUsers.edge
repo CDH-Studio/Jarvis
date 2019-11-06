@@ -41,33 +41,39 @@ View Users
                 </div>
             </div>
 
-            <div class="card shadow mt-4 mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">All users</h6>
-                </div>
-                <div class="card-body">
+            @component('components.generalCard', title='All users')
+                @slot('body')
                     {{--  All Users table  --}}
                     <div class='table-responsive'>
                         <table id='usersTable' class='table table-hover mt-4' style='width:100%'> 
                             <thead>
                                 <tr>
-                                <th scope='col' style='width:50%'>Name</th>
-                                <th scope='col' style='width:50%'>Email address</th>
+                                <th scope='col' class='text-center'>Name</th>
+                                <th scope='col' class='text-center'>Email address</th>
+                                <th scope='col' class='text-center'>Registered</th>
+                                <th scope='col' class='text-center'># of bookings</th>
                                 </tr>
                             </thead>
                             {{--  Loops through the users array and displays every user's information  --}}
                             <tbody>
                                 @each(user in users) 
                                     <tr class='table-light' onclick="window.location='{{ route('viewProfile', { id: user.id }) }}';">
-                                    <td>{{ user.firstname }} {{ user.lastname }}</td>
-                                    <td>{{ user.email }}</td>
+                                    <td class='text-center'>{{ user.firstname }} {{ user.lastname }}</td>
+                                    <td class='text-center'>{{ user.email }}</td>
+                                    <td class='text-center'>{{moment(user.created_at).format("YYYY-MM-DD")}}</td>
+
+                                    @if(user.role_id!=1)
+                                        <td class='text-center'>{{user.__meta__.bookings_count}}</td>
+                                    @else
+                                        <td class='text-center text-muted'>not available</td>
+                                    @endif
                                     </tr>
                                 @endeach
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
+                @endslot
+            @endcomponent
         @endif
     </div> 
 @endsection
@@ -79,7 +85,8 @@ View Users
     <script>$(document).ready(function() {
             $('#usersTable').DataTable( {
                 "paging":   false,
-                "ordering": true,
+                "columnDefs": [ { type: 'date', 'targets': [2] } ],
+				"order": [[ 2, "desc" ]],
                 "info":     false
             });
         });

@@ -21,9 +21,10 @@
                         {{--  If there are no avail rooms display a message accordingly  --}}
 						@slot('body')
 							<div id='avail'></div>
-							<div id="loading">
-								@!component('components.cardEmptyMessage',faIcon="fas fa-circle-notch fa-spin fa-4x", message=antl.formatMessage('userDash.CAError'))
-							</div>
+							{{-- spinner --}}
+							{{--  <div id="loading">  --}}
+								{{--  @!component('components.cardEmptyMessage',faIcon="fas fa-circle-notch fa-spin fa-4x", message=antl.formatMessage('userDash.CAError'))  --}}
+							{{--  </div>  --}}
 						@endslot
 					@endcomponent
 				</div>
@@ -44,8 +45,8 @@
 				<div class='col-lg-12'>
 					@component('components.generalCard', title = antl.formatMessage('userDash.MBHeading'), extraCSS = 'custom-card-header')
 						@slot('titleRight')
-							<a class="text-white"  href="{{ route('viewBookings',{bookingType: 'user', id: auth.user.id, catFilter: 'upcoming', limitFilter: 'month' }) }}">
-								<i class="fas fa-chevron-right" aria-label="Bookings Page"></i>
+							<a class="text-white"  href="{{ route('viewBookings',{bookingType: 'user', id: auth.user.id, catFilter: 'upcoming', limitFilter: 'all' }) }}" aria-label="Go to Bookings Page" title="Go to Bookings page">
+								<i class="fas fa-chevron-right"></i>
 							</a>
 						@endslot
 						@slot('body')
@@ -58,7 +59,7 @@
 										<thead>
 											<tr>
 												<th scope='col' class='text-center' style='width:10%'>{{ antl.formatMessage('manageBookings.tableRoom') }}</th>
-												<th scope='col' class='text-center' style='width:10%'>{{ antl.formatMessage('manageBookings.tableName') }}</th>
+												<th scope='col' class='text-center' style='width:10%'>{{ antl.formatMessage('manageBookings.tableMeetingName') }}</th>
 												<th scope='col' class='text-center' style='width:10%'>{{ antl.formatMessage('manageBookings.tableDate') }}</th>
 												<th scope='col' class='text-center' style='width:10%'>{{ antl.formatMessage('manageBookings.tableTime') }}</th>
 											</tr>
@@ -116,7 +117,7 @@
         channel.bind('send-room', function (data) {
             if (data.message.code == '{{ code }}') {
                 let listItem = $("<div class='row'><div class='col'>" + data.message.card + "</div></div>");
-                $('#loading').hide();
+                // $('#loading').hide();
                 $('#avail').prepend(listItem);
             }
         });
@@ -124,7 +125,7 @@
         channel.bind('send-empty', function (data) {
             if (data.message.code == '{{ code }}') {
                 let listItem = $(data.message.view)
-                $('#loading').hide();
+                // $('#loading').hide();
                 $('#avail').empty().append(listItem)
 
             }

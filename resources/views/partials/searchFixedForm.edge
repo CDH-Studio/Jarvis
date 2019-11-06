@@ -1,24 +1,18 @@
 <h2 class="h5 mb-0"><strong>{{ antl.formatMessage('searchForm.specifiedTitle') }}</strong></h2>
 <p>{{ antl.formatMessage('searchForm.specifiedInfo') }}</p>
 
-<form id="fixed-time-search" aria-label='search-form' action='{{route('searchFixed')}}' method='GET' enctype='multipart/form-data'>
+<form id="fixed-time-search" role="form" aria-label='search-form' action='{{route('searchFixed')}}' method='GET' enctype='multipart/form-data'>
 	{{ csrfField() }}
+
 	{{--  Date form  --}}
 	<div class='row'>
 		<div class='col form-group mb-4'>
-			<div class='row'>
-				<label class='col' for='date' aria-describedby='date-tooltip'>{{ antl.formatMessage('roomDetails.bookingDate') }} <strong class='text-danger'>*</strong></label>
-				<div class='col text-right'>
-					<i id='date-tooltip' class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='The date may not occur more than 3 months in advance'></i>
-				</div>
-			</div>
-			{{--  If field is not filled correctly show an error box  --}}
-			@if(hasErrorFor('date'))
-				<input name='date'  id='date' class='form-control date-form is-invalid' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}' onchange='removeErrorClass("date")'>
-				<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('date')}}</div>
-			{{--  Otherwise show a normal input  --}}
-			@else
-				<input name='date' id='date' class='form-control date-form' type="date" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('date', '') }}"}'>
+			<label for='fixed-search-date'>{{ antl.formatMessage('roomDetails.bookingDate') }} <strong class='text-danger'>*</strong></label>
+			<i id='date-tooltip' class='fas fa-info-circle fa-sm tooltip-info mt-1' data-toggle='tooltip' data-placement='right' title='' data-original-title='{{ antl.formatMessage('searchForm.dateInfo')}}'></i>
+			<input name='fixedSearchDate' id='fixed-search-date' aria-required="true" class='form-control date-form' type="text" data-role="datebox" data-options='{"mode":"calbox", "defaultValue": "{{ old('fixedSearchDate', '') }}", "useLang":"{{antl.currentLocale()}}", "overrideDateFormat": "%Y-%m-%d"}'>
+			
+			@if(hasErrorFor('fixedSearchDate'))
+				<div id='date-error' class='invalid-feedback show-invalid'>{{ getErrorFor('fixedSearchDate')}}</div>			
 			@endif
 		</div>
 	</div>
@@ -26,98 +20,106 @@
 	<div class='row'>
 		{{--  Meeting time FROM  --}}
 		<div class='col col-sm-4 form-group mb-4'>
-			<label for='from' aria-labelledby='from-error'>{{ antl.formatMessage('searchForm.bookingStart') }} <strong class='text-danger'>*</strong></label>
-			{{--  If field is not filled correctly show an error box  --}}
+			<label for='fixed-search-from-input'>{{ antl.formatMessage('searchForm.bookingStart') }} <strong class='text-danger'>*</strong></label>
 			<div class='timePicker' style='display: flex;'>
-				<div class="input-group date" id="fixed-from" data-target-input="nearest">
-					<input type="text" class="form-control datetimepicker-input" data-target="#fixed-from" name="from" id="from-input"/>
-					<div class="input-group-append" data-target="#fixed-from" data-toggle="datetimepicker">
+				<div class="input-group date" id="fixed-search-from" data-target-input="nearest">
+					<input type="text" name="fixedSearchFrom" id="fixed-search-from-input" aria-required="true" class="form-control datetimepicker-input" data-target="#fixed-search-from"/>
+					<div class="input-group-append" data-target="#fixed-search-from" data-toggle="datetimepicker">
 						<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
 					</div>
 				</div>
 			</div>
-			@if(hasErrorFor('from'))
-				<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('from')}}</div>
+
+			@if(hasErrorFor('fixedSearchFrom'))
+				<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('fixedSearchFrom')}}</div>
 			@endif
 		</div>
+
 		{{--  Meeting time TO  --}}
 		<div class='col col-sm-4 form-group mb-4'>
-			<label for='to' aria-labelledby='to-error'>{{ antl.formatMessage('searchForm.bookingEnd') }} <strong class='text-danger'>*</strong></label>
+			<label for='fixed-search-to-input'>{{ antl.formatMessage('searchForm.bookingEnd') }} <strong class='text-danger'>*</strong></label>
 			{{--  If field is not filled correctly show an error box  --}}
 			<div class='timePicker' style='display: flex;'>
-				<div class="input-group date" id="fixed-to" data-target-input="nearest">
-					<input type="text" class="form-control datetimepicker-input" data-target="#fixed-to" name="to" id="to-input"/>
-					<div class="input-group-append" data-target="#fixed-to" data-toggle="datetimepicker">
+				<div class="input-group date" id="fixed-search-to" data-target-input="nearest">
+					<input type="text" name="fixedSearchTo" id='fixed-search-to-input' aria-required="true"  class="form-control datetimepicker-input" data-target="#fixed-search-to"/>
+					<div class="input-group-append" data-target="#fixed-search-to" data-toggle="datetimepicker">
 						<div class="input-group-text timepicker-icon"><i class="fa fa-clock"></i></div>
 					</div>
 				</div>
 			</div>
-			@if(hasErrorFor('to'))
-				<div id='from-error' class='invalid-feedback show-invalid'>{{ getErrorFor('to')}}</div>
+
+			@if(hasErrorFor('fixedSearchTo') && !hasErrorFor('fixedSearchFrom'))
+				<div id='to-error' aria-labelledby='to-error' class='invalid-feedback show-invalid'>{{ getErrorFor('fixedSearchTo')}}</div>
 			@endif
 		</div>
 	</div>
+
 	<div class='row'>
-		{{--  Location form  --}}
+		{{--  Preferred Floor  --}}
 		<div class='col-12 col-md-5 form-group mb-4'>
-			<label for='location'>{{ antl.formatMessage('searchForm.preferredLocation') }}</label>
-			<select id='location' name='location' class='form-control'>
-				<option value='undefined' {{ old('location') == 'undefined' ? 'selected' : '' }} selected='selected'>{{ antl.formatMessage('searchForm.selectFloor') }}</option>
+			<label for='fixed-search-location'>{{ antl.formatMessage('searchForm.preferredLocation') }}</label>
+			<select id='fixed-search-location' name='fixedSearchFloor' class='form-control'>
+				<option value='undefined' {{ old('fixedSearchFloor') == 'undefined' ? 'selected' : '' }} selected='selected'>{{ antl.formatMessage('searchForm.anyFloor')}}</option>
 				@each(floorOption in formOptions.floors)
 					@if(antl.currentLocale() === "fr")
-						<option value='{{floorOption.id}}' {{ old('location') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_french}}</option>
+						<option value='{{floorOption.id}}' {{ old('fixedSearchFloor') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_french}}</option>
 					@else
-						<option value='{{floorOption.id}}' {{ old('location') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_english}}</option>
+						<option value='{{floorOption.id}}' {{ old('fixedSearchFloor') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_english}}</option>
 					@endif
 				@endeach
 			</select>
 		</div>
-		{{--  PMts form  --}}
+		{{--  Number of Seats  --}}
 		<div class='col-6 col-md-4 form-group mb-4'>
-			<label for='seats'>{{ antl.formatMessage('roomSearchCard.tableSeats') }}</label>
-			<input class='form-control' id='seats' name='seats' type='number' min='1' max='100'  value='{{ old('seats', '') }}'>
+			<label for='fixed-search-seats'>{{ antl.formatMessage('roomSearchCard.tableSeats') }}</label>
+			<input class='form-control' id='fixed-search-seats' name='fixedSearchSeats' type='number' min='1' max='100'  value='{{ old('fixedSearchSeats', '') }}' placeholder="{{ antl.formatMessage('searchForm.anySeats')}}">
 		</div>
 		{{--  Max Capacity  --}}
 		<div class='col-6 col-md-3 form-group mb-4'>
-			<label for='capacity'>{{ antl.formatMessage('roomDetails.capacity') }}</label>
-			<input class='form-control' id='capacity' name='capacity' type='number' min='1' max='100'  value='{{ old('capacity', '') }}'>
+			<label for='fixed-search-capacity'>{{ antl.formatMessage('roomDetails.capacity') }}</label>
+			<input class='form-control' id='fixed-search-capacity' name='fixedSearchCapacity' type='number' min='1' max='100'  value='{{ old('fixedSearchCapacity', '') }}' placeholder="{{ antl.formatMessage('searchForm.anyCapacity')}}">
 		</div>
 	</div>
+
 	{{--  Equipment check box form  --}}
-	<div class='form-group'>
-		<label>{{ antl.formatMessage('roomDetails.equipment') }}</label>
+	<div class='form-group mb-0'>
+		<h3 class="h6"><strong>{{ antl.formatMessage('roomDetails.equipment') }}</strong></h3>
 		<div class='row'>
 			@each(featureCategory in formOptions.roomFeatureCategory)
 				@if(featureCategory.features.length!=0)
 					<div class="col-sm-6 mb-4">
-					@if(antl.currentLocale()==='en')
-						<i><strong>{{featureCategory.name_english}}</strong></i>
-					@else
-						<i><strong>{{featureCategory.name_french}}</strong></i>
-					@endif
-					@each(feature in featureCategory.features)
-						<div class='custom-control custom-checkbox'>
-							<input class="custom-control-input" type='checkbox' name='feat{{feature.name_english}}' class='custom-control-input' id='{{feature.name_english}}' value= '1'>
-							@if(antl.currentLocale()==='en')
-								<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_english, 30, '.')}}</label>
+						<fieldset>
+							@if(antl.currentLocale()==='fr')
+								<legend class="h6"><i>{{featureCategory.name_french}}</i></legend>
 							@else
-								<label class="custom-control-label" for='{{feature.name_english}}'>{{truncate(feature.name_french, 30, '.')}}</label>
+								<legend class="h6"><i>{{featureCategory.name_english}}</i></legend>
 							@endif
-						</div>
-					@endeach
+							@each(feature in featureCategory.features)
+								<div class='custom-control custom-checkbox'>
+									<input class="custom-control-input" type='checkbox' name='fixedSearchFeatures' class='custom-control-input' id='fixed-search-{{camelCase(feature.name_english)}}' value= '{{feature.id}}'>
+									@if(antl.currentLocale()==='fr')
+										<label class="custom-control-label" for='fixed-search-{{camelCase(feature.name_english)}}'>{{truncate(feature.name_french, 30, '.')}}</label>
+									@else
+										<label class="custom-control-label" for='fixed-search-{{camelCase(feature.name_english)}}'>{{truncate(feature.name_english, 30, '.')}}</label>
+									@endif
+								</div>
+							@endeach
+						</fieldset>
 					</div>
 				@endif
 				@if($loop.index === 1)
-				</div>
-				<div class="row">
-			@endif
+					</div>
+					<div class="row">
+				@endif
 			@endeach
 		</div>
 	</div>
 	{{--  Page buttons  --}}
-	<div class='row align-items-end'>
-		<div class='col-sm-12 text-right'>
-			<button aria-label='search-submit-button' type='submit' class='btn btn-primary no-margin' id='fixed-submit'> {{ antl.formatMessage('searchForm.searchBtn') }} </button>
+	<div class='row'>
+		<div class='col-sm-12'>
+			<button aria-label='Search' type='submit' class='btn btn-primary no-margin w-100' id='fixed-submit'> 
+				<strong><i class="fas fa-search"></i> {{ antl.formatMessage('searchForm.searchBtn') }}</strong>
+			</button>
 		</div>
 	</div>
 </form>

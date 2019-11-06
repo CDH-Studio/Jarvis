@@ -467,7 +467,11 @@ class UserController {
 	async getAllUsers ({ view, request }) {
 		const selectedBuilding = request.cookie('selectedBuilding');
 
-		const results = await User.query().where('role_id', 2).where('building_id', selectedBuilding.id).fetch();
+		const results = await User.query()
+			.where('role_id', 2)
+			.where('building_id', selectedBuilding.id)
+			.withCount('bookings')
+			.fetch();
 		const users = results.toJSON();
 
 		// Sort the results by name
@@ -477,7 +481,7 @@ class UserController {
 
 		const pageTitle = 'All users';
 
-		return view.render('adminPages.viewUsers', { users, pageTitle });
+		return view.render('adminPages.viewUsers', { users, pageTitle, moment });
 	}
 
 	/**
@@ -491,12 +495,7 @@ class UserController {
 		const results = await User.query().where('role_id', 1).fetch();
 		const users = results.toJSON();
 
-		// Sort the results by name
-		users.sort((a, b) => {
-			return (a.firstname > b.firstname) ? 1 : ((b.firstname > a.firstname) ? -1 : 0);
-		});
-
-		return view.render('adminPages.viewUsers', { users, pageTitle });
+		return view.render('adminPages.viewUsers', { users, pageTitle, moment });
 	}
 
 	/**

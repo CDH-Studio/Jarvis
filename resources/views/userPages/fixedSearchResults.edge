@@ -1,0 +1,120 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+    {{ antl.formatMessage('searchResults.pageTitleFixedSearch') }}
+@endsection
+
+@section('extracss')
+    {{ style('css/user') }}
+@endsection
+
+{{--  Manage bookings page content  --}}
+@section('content')
+        {{--  Loading page header  --}}
+        @!component('components.pageHeader', title=antl.formatMessage('searchResults.pageTitleFixedSearch'), subtitle=antl.formatMessage('searchResults.subtitle'), loading=false)
+
+        @if(roomsLength == 0)
+            {{--  Loading result empty card  --}}
+            @!component('components.cardEmptyMessage', {faIcon:"fas fa-ghost fa-8x mb-4 mt-3", message:"No rooms available"})
+        @else
+            {{--  Loading spinning wheel  --}}
+            @!component('components.searchLoadingSpinner', {message:antl.formatMessage('searchResults.searching')})
+
+            <div id="empty-results-card" class="d-none">
+                @!component('components.cardEmptyMessage', {faIcon:"fas fa-ghost fa-8x mb-4 mt-3", message:"No rooms available"})
+            </div>
+
+            <div id="search-results" class="d-none">
+                @!component('components.searchResultCountBar', {antl: antl})
+
+                @each(floor in floors)
+                    <div class="w-100 my-2 d-none" id="floor-{{floor.id}}">
+                        <div class="w-100 bg-light text-primary p-3 mb-3 rounded">
+                            <div class="m-0">
+                                <i class="far fa-building mr-1"></i><strong>{{ floor.name_english }} |</strong> 
+                                <small><span id="floor-{{floor.id}}-count">0 </span> {{antl.formatMessage('searchResults.rooms')}}</small>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-wrap" id="floor-{{floor.id}}-content">
+                            {{-- room cards go here --}}
+                        </div>
+                    </div>
+                @endeach
+            </div>
+        @endif
+@endsection
+    
+
+
+@section('extrajs')
+    @if(roomsLength != 0)
+
+        {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
+        <script>
+            let pusher = new Pusher('aca8a920ad0e3d8ac09f', {
+                    cluster: 'us2',
+                    useTLS: true
+                });
+
+            //Subscribe to the channel we specified in our Adonis Application
+            let channel = pusher.subscribe('adonis-channel')
+
+            //Listen for events on the channel 
+            channel.bind('send-room', function (data) {
+                if (data.message.code == '{{ code }}') {
+                    let listItem = $("<div class='no-padding ie-room-margin'>" + data.message.card + "</div>")
+                    let elemtID="#"+  "floor-"+ data.message.floor.id + "-content"; 
+                    $(elemtID).append(listItem)
+                    
+                    // get floor result count
+                    let floorCountID = "#floor-"+ data.message.floor.id + "-count"; 
+                    let floorResultCount = parseInt($(floorCountID).html())+1;
+
+                    // write floor results count
+                    $(floorCountID).text(
+                        parseInt(floorResultCount)
+                    );
+
+                    // make floor appear if it has results
+                    if(floorResultCount == 1){
+                        let floorID="#"+  "floor-"+ data.message.floor.id; 
+                        $(floorID).removeClass('d-none');
+                    }
+
+                    // read total result count and increment
+                    let totalCountID = "#total-count";
+                    let totalResultCount = parseInt($(totalCountID).html())+1;
+
+                    //write total count
+                    $(totalCountID).text((totalResultCount));
+
+                    // after first result remove big spinner and show live results
+                    if(totalResultCount == 1){
+                       $('#big-loading-spinner').addClass('d-none');
+                       $('#search-results').removeClass('d-none');
+                    }
+                }
+            });
+
+            //Listen for end of search
+            channel.bind('send-done', function (data) {
+                setTimeout(function() {
+                    if (data.message.code == '{{ code }}') {
+                        //chnage loading pulse to finished message
+                        $('#loading-results-pulse').addClass('d-none');
+                        $('#loading-results-done').removeClass('d-none');
+
+                        //read total results count
+                        let totalCountID = "#total-count";
+                        let totalResultCount = parseInt($(totalCountID).html());
+
+                        if(totalResultCount===0){
+                            $('#big-loading-spinner').addClass('d-none');
+                            $('#empty-results-card').removeClass('d-none');
+                        }
+                    }
+                }, 1000);
+            });
+        </script>
+    @endif
+@endsection

@@ -109,8 +109,8 @@ Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware
 
 // Rendering Results
 Route.get('/results', 'RoomController.findSpecific').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser', 'isVerified']);
-Route.get('/search/fixed', 'RoomController.searchRooms').as('searchFixed').validator('SearchFixed');
-Route.get('/search/flexible', 'RoomController.searchRooms').as('searchFlexible').validator('SearchFlexible');
+Route.get('/search/fixed', 'RoomController.fixedSearchRooms').as('searchFixed').validator('SearchFixed');
+Route.get('/search/flexible', 'RoomController.flexibleSearchRooms').as('searchFlexible').validator('SearchFlexible');
 Route.get('/search/recurring', 'RoomController.searchRooms').as('searchRecurring').validator('SearchRoomFlexible'); // TODO
 
 // Booking a Room

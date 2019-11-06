@@ -1,0 +1,42 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+    {{ antl.formatMessage('searchResults.pageTitleAllRooms') }}
+@endsection
+
+@section('extracss')
+    {{ style('css/user') }}
+@endsection
+
+{{--  Manage bookings page content  --}}
+@section('content')
+    {{--  Loading page header  --}}
+    @!component('components.pageHeader', title=antl.formatMessage('searchResults.pageTitleAllRooms'), loading=false)
+
+    {{--  categorize rooms by floor  --}}
+    @each(floor in floors)
+        <div class="w-100 my-2" id="floor-{{floor.id}}">
+            <div class="w-100 bg-light text-primary p-3 mb-3 rounded">
+                <h3 class="h6 m-0">
+                    <i class="far fa-building mr-1"></i><strong>{{ floor.name_english }}</strong> 
+                </h3>
+            </div>
+            <div class="d-flex flex-wrap" id="floor-{{floor.id}}-content">
+                @each(room in rooms)
+                    @if(room.floor.id === $parent.floor.id)
+                        <li class="list-inline-item">
+                            <div class='no-padding ie-room-margin'>
+                                {{ csrfField() }}
+                                @!component('components.card',
+                                    antl = antl,
+                                    form=form,
+                                    room=room,
+                                    token=csrfToken)
+                            </div>
+                        </li>
+                    @endif
+                @endeach
+            </div>
+        </div>
+    @endeach
+@endsection

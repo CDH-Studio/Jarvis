@@ -11,6 +11,7 @@
 	"bookRoom": "Reserver la salle",
 	"bookingName": "Nom de la réunion",
 	"bookingNameHelp":  "Sélectionnez un nom pour la réservation de la salle",
+	"bookingNamePlaceholder":"Entrer le nom de la réservation",
 	"bookingDate": "Date",
 	"bookingDateHelp": "La date ne peut pas se produire plus de 3 mois à l’avance ",
 	"bookingStart": "L’heure de début ",

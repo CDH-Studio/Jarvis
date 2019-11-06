@@ -1,9 +1,10 @@
 /**
- * File Name: SearchRoom.js
- * Description: Validator used to validate input fields Search Room Page (Employee)
+ * File Name: SearchFixed.js
+ * Description: Validator used to validate input fields for Fixed Search Room form (Employee)
  * Instructions: Use this validator by adding ".validator('SearchRoom')" to your route in /routes.js
  **/
 'use strict';
+const moment = require('moment');
 
 class SearchFixed {
 	// Validate and return all fields
@@ -14,12 +15,10 @@ class SearchFixed {
 	// Validation rules
 	get rules () {
 		// getting the current date subract 1 day
-		let minDate = new Date();
-		minDate.setDate(minDate.getDate() - 1);
+		let minDate = moment().subtract(1, 'days').format();
+
 		//  getting the current date plus 3 months
-		let maxDate = new Date();
-		maxDate.setDate(maxDate.getDate() + 1);
-		maxDate.setMonth(maxDate.getMonth() + 3);
+		let maxDate = moment().add(1, 'days').add(3, 'months').format();
 
 		// Validation rules
 		return {
@@ -31,15 +30,17 @@ class SearchFixed {
 			 * date: checks if the input field is a valid date
 			 * required: require field, cannot search without a date entered
 			 */
-			date: `required|date|after:${minDate}|before:${maxDate}`,
+			fixedSearchDate: `required|date|after:${minDate}|before:${maxDate}`,
 			/**
 			 * From and To validation rules
 			 *
 			 * isAfterToday: 'from' and 'to' fields must occur after the current time if the date field is the current date
 			 * required: require field, cannot search without a date entered
 			 */
-			from: 'required|isAfterToday:date',
-			to: 'required|isAfter:from|isAfterToday:date'
+			fixedSearchFrom: 'required|isAfterToday:fixedSearchDate',
+			fixedSearchTo: 'required|isAfter:fixedSearchFrom|isAfterToday:fixedSearchDate',
+			fixedSearchSeats: 'integer',
+			fixedSearchCapacity: 'integer'
 
 		};
 	}
@@ -47,10 +48,11 @@ class SearchFixed {
 	// Custom error messages
 	get messages () {
 		return {
-			'date.after': 'Please enter a time in the future',
-			'date.before': 'You can only book rooms up to 3 months ahead of time',
-			'date.date': 'Please enter a valid date',
-			'from.isAfterToday': 'This field must occur after the current time',
+			'fixedSearchFrom.isAfterToday': 'This field must occur after the current time',
+			'fixedSearchTo.isAfter()': 'End time must be after Start time',
+			'fixedSearchDate.after': 'Please enter a time in the future',
+			'fixedSearchDate.before': 'You can only book rooms up to 3 months ahead of time',
+			'fixedSearchDate.date': 'Please enter a valid date',
 			'required': 'This field is required'
 		};
 	}

@@ -98,7 +98,7 @@
           <div class="alert alert-danger alert-dismissible m-0 p-2 pl-4" role="alert" id="agent-error-alert" style="display: none;">
             <small>
               <i class="fas fa-exclamation-triangle mr-1"></i> {{ antl.formatMessage('mainLayout.agentTestMessage') }}
-              <a class="text-right ml-1 text-dark" href="mailto: cdhstudio@canada.ca?Subject=Jarvis%20Error">
+              <a class="text-right ml-1 text-dark" href="mailto: mena.machado@canada.ca?Subject=Jarvis%20Error">
               <i class="fas fa-envelope"></i> {{ antl.formatMessage('mainLayout.feedback') }}</a>
             </small>
             <button type="button" class="close p-2 pr-4" data-dismiss="alert" aria-label="Close">
@@ -108,7 +108,7 @@
           <div class="alert alert-primary alert-dismissible m-0 p-2 pl-4" role="alert" id="feedback-alert">
             <small>
               <i class="fas fa-exclamation-circle mr-1"></i> {{ antl.formatMessage('mainLayout.betaMessage') }}
-              <a class="text-right ml-1 text-dark" href="mailto: cdhstudio@canada.ca?Subject=Jarvis%20Feedback">
+              <a class="text-right ml-1 text-dark" href="mailto: mena.machado@canada.ca?Subject=Jarvis%20Feedback">
               <i class="fas fa-envelope"></i> {{ antl.formatMessage('mainLayout.feedback') }}</a>
             </small>
             <button type="button" class="close p-2 pr-4" data-dismiss="alert" aria-label="Close">
@@ -148,7 +148,7 @@
                 </form>
               @else
                 <li class="nav-item dropdown no-arrow">
-                  <a class="nav-link dropdown-toggle text-grey small" href="mailto: cdhstudio@canada.ca?Subject=Jarvis%20Feedback"><i class="fas fa-comment mr-1"></i>{{ antl.formatMessage('mainLayout.feedback') }}</a>
+                  <a class="nav-link dropdown-toggle text-grey small" href="mailto: mena.machado@canada.ca?Subject=Jarvis%20Feedback"><i class="fas fa-comment mr-1"></i>{{ antl.formatMessage('mainLayout.feedback') }}</a>
                 </li>
               @endif
               <li class="nav-item dropdown no-arrow">
@@ -236,8 +236,7 @@
     {{script('js/vendor/popper.js')}}
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     {{script('js/vendor/sb-admin-2.min.js')}}  
-    {{ script('js/vendor/bootstrap-notify.min') }}
-    {{ script('js/vendor/jtsage-datebox.min') }}
+    {{ script('js/vendor/bootstrap-notify.min') }}    
    
     {{--  Chart and Graph Import  --}} 
     @if(auth.user.role_id===1)
@@ -258,9 +257,11 @@
     @if(flashMessage('notification'))
       <script>
         $(window).on('load', function () {
-          // notify({ $: $, message: '{{ flashMessage('notification') }}' });
-          $.notify({ message: '{{ flashMessage('notification') }}', url: '{{ flashMessage('url') }}' }, 
-            {
+          $.notify({ 
+            message: '{{ flashMessage('notification') }}', 
+            url: '{{ flashMessage('url') }}',
+            target: '_self'
+          },{
               element: 'body',
               type: 'success',
               animate: {
@@ -277,7 +278,7 @@
               },
               spacing: 10,
               z_index: 1031,
-              delay: 5000
+              delay: 10000
             });
         });
       </script>
