@@ -10,6 +10,7 @@ const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
 const Outlook = new (use('App/Outlook'))();
+const moment = require('moment');
 const oauth2 = require('simple-oauth2').create({
 	client: {
 		id: 'jarvis',
@@ -22,7 +23,6 @@ const oauth2 = require('simple-oauth2').create({
 		authorizePath: '/auth/realms/individual/protocol/openid-connect/auth'
 	}
 });
-const Axios = require('axios');
 const JWT = require('jsonwebtoken');
 
 /**
@@ -504,7 +504,7 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async loginAD ({ response }) {
-		console.log('hi')
+		console.log('hi');
 		const authUri = oauth2.authorizationCode.authorizeURL({
 			redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/authAD',
 			scope: 'openid'
@@ -516,7 +516,7 @@ class UserController {
 	async authAD ({ request, session, response, auth, view }) {
 		// getting authorization code
 		const code = request.only(['code']).code;
-		console.log(code)
+		console.log(code);
 
 		// acquiring access token for user
 		let userInfo;
@@ -527,7 +527,7 @@ class UserController {
 					redirect_uri: 'https://jarvis-dev.apps.ic.gc.ca/authAD',
 					scope: 'openid'
 				});
-				console.log(result)
+				console.log(result);
 				const token = await oauth2.accessToken.create(result);
 
 				userInfo = JWT.decode(token.token.id_token);
@@ -576,7 +576,7 @@ class UserController {
 	}
 
 	async key ({ request, view, response }) {
-		//return view.render('auth.keycloak')
+		// return view.render('auth.keycloak')
 	}
 }
 
