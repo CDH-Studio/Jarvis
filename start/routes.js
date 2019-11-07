@@ -38,12 +38,6 @@ Route.get('/login', 'UserController.loginRender').as('login');
 Route.post('/login', 'UserController.login');
 Route.get('/logout', 'UserController.logout').as('logout');
 
-// Forgot password
-Route.get('/forgotPassword', 'UserController.forgotPasswordRender').as('forgotPassword');
-Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword').validator('ResetPassword');
-Route.get('/newPassword', 'UserController.verifyHash');
-Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
-
 // Authentication
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth', 'isVerified']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
@@ -51,7 +45,7 @@ Route.get('/allAdmins', 'UserController.getAllAdmins').as('allAdmins').middlewar
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth', 'isVerified']);
 Route.post('/user/:id/edit', 'UserController.update').as('saveUser').validator('EditUser').middleware(['auth', 'isVerified']);
 Route.post('/user/:id/editAdmin', 'UserController.update').as('saveAdmin').validator('EditAdmin').middleware(['isAdmin']);
-Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth', 'isVerified']).validator('ResetPassword');
+Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth', 'isVerified']).validator('ChangePassword');
 
 //= ========================================================================
 //  Rooms

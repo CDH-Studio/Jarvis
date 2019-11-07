@@ -1,11 +1,11 @@
 /**
- * File Name: ResetPassword.js
+ * File Name: ChangePassword.js
  * Description: Validator used to validate input fields in Reset Password Page (Any)
- * Instructions: Use this validator by adding ".validator('ResetPassword')" to your route in /routes.js
+ * Instructions: Use this validator by adding ".validator('ChangePassword')" to your route in /routes.js
  **/
 'use strict';
 
-class ResetPassword {
+class ChangePassword {
 	// Validate and return all fields
 	get validateAll () {
 		return true;
@@ -41,4 +41,4 @@ class ResetPassword {
 	}
 }
 
-module.exports = ResetPassword;
+module.exports = ChangePassword;

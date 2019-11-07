@@ -285,22 +285,6 @@ class UserController {
 	}
 
 	/**
-	 * Render login page
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async forgotPasswordRender ({ request, auth, view, response }) {
-		// present login to logged out users only
-		if (auth.user) {
-			return response.redirect('/');
-		} else {
-			var numb = Math.floor(Math.random() * 8) + 1;
-			var photoName = 'login_' + numb + '.jpg';
-			return view.render('auth.forgotPassword', { photoName });
-		}
-	}
-
-	/**
 	 * Log a user out.
 	 *
 	 * @param {Object} Context The context object.
@@ -346,92 +330,6 @@ class UserController {
 		}
 
 		return view.render('auth.showProfile', { auth, user, canEdit, allBuildings, selectedBuilding });
-	}
-
-	/**
-	 * Create a password reset request record in the database and send a confirmation email to the user.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async createPasswordResetRequest ({ request, response, session }) {
-		const email = request.body.email;
-		const results = await User
-			.query()
-			.where('email', '=', email)
-			.fetch();
-		const rows = results.toJSON();
-
-		if (rows.length !== 0) {
-			let hash = randomString(4);
-
-			let row = {
-				email: email,
-				hash: hash,
-				type: 1
-			};
-
-			await AccountRequest.create(row);
-
-			let body = `
-      			<h2> Password Reset Request </h2>
-      			<p>
-        			We received a request to reset your password. If you asked to reset your password, please click on the following link: 
-        			${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newPassword?hash=${hash}
-      			</p>
-			`;
-
-			await Outlook.sendMail({
-				subject: 'Password Reset Request',
-				body: body,
-				to: email });
-		}
-
-		session.flash({
-			notification: `An email has been sent to ${email} with further instructions on how to reset your password.`
-		});
-
-		return response.redirect('/login');
-	}
-
-	/**
-	 * Verify the user's password reset hash code and redirect them to the password reset page.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async verifyHash ({ request, view }) {
-		const hash = request._all.hash;
-		if (hash) {
-			const results = await AccountRequest
-				.query()
-				.where('hash', '=', hash)
-				.fetch();
-			const rows = results.toJSON();
-			Logger.debug(hash);
-
-			if (rows.length !== 0 && rows[0].type === 1) {
-				const email = rows[0].email;
-				const numb = Math.floor(Math.random() * 8) + 1;
-				const photoName = 'login_' + numb + '.jpg';
-
-				return view.render('auth.resetPassword', { email, photoName });
-			}
-		}
-	}
-
-	/**
-	 * Update the user's password in the database.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async resetPassword ({ request, response, session }) {
-		const { newPassword, email } = request.only(['newPassword', 'email']);
-
-		if (updatePassword({ newPassword, columnName: 'email', columnValue: email })) {
-			session.flash({
-				notification: 'Your password has been changed. Please use the new password to log in.'
-			});
-			return response.redirect('/login');
-		}
 	}
 
 	/**
