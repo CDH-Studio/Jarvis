@@ -8,7 +8,6 @@ const UserRole = use('App/Models/UserRole');
 const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
-const Outlook = new (use('App/Outlook'))();
 const moment = require('moment');
 const oauth2 = require('simple-oauth2').create({
 	client: {
@@ -23,41 +22,6 @@ const oauth2 = require('simple-oauth2').create({
 	}
 });
 const JWT = require('jsonwebtoken');
-
-/**
- * Generating a random string.
- *
- * @param {Integer} times Each time a string of 5 to 6 characters is generated.
- */
-function randomString (times) {
-	let result = '';
-	for (let i = 0; i < times; i++) {
-		result += Math.random().toString(36).substring(2);
-	}
-
-	return result;
-}
-
-/**
- * Update user password in the database
- *
- * @param {String} newPassword New password
- * @param {String} columnName  Name of the column to query by
- * @param {*} columnValue      Value of the column to query by
- */
-async function updatePassword ({ newPassword, columnName, columnValue }) {
-	try {
-		const hashedNewPassword = await Hash.make(newPassword);
-		const changedRow = await User
-			.query()
-			.where(columnName, columnValue)
-			.update({ password: hashedNewPassword });
-
-		return changedRow;
-	} catch (err) {
-		Logger.debug(err);
-	}
-}
 
 class UserController {
 	/**
@@ -329,31 +293,6 @@ class UserController {
 		}
 
 		return view.render('auth.showProfile', { auth, user, canEdit, allBuildings, selectedBuilding });
-	}
-
-	/**
-	 * Update the user's password in the database.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async changePassword ({ request, response, auth, session }) {
-		const { newPassword, userId } = request.only(['newPassword', 'userId']);
-		const userRole = await auth.user.getUserRole();
-		if (userRole === 'admin' || (auth.user.id === Number(userId) && userRole === 'user')) {
-			try {
-				if (updatePassword({ newPassword, columnName: 'id', columnValue: userId })) {
-					session.flash({ success: 'Password Updated Successfully' });
-				}
-			} catch (error) {
-				session.flash({ error: 'Password Update failed' });
-				return response.redirect('/login');
-			}
-
-			return response.route('viewProfile', { id: Number(userId) });
-			// check if user is viewing their own profile
-		} else {
-			return response.redirect('/');
-		}
 	}
 
 	/**

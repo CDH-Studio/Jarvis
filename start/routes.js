@@ -45,7 +45,6 @@ Route.get('/allAdmins', 'UserController.getAllAdmins').as('allAdmins').middlewar
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth', 'isVerified']);
 Route.post('/user/:id/edit', 'UserController.update').as('saveUser').validator('EditUser').middleware(['auth', 'isVerified']);
 Route.post('/user/:id/editAdmin', 'UserController.update').as('saveAdmin').validator('EditAdmin').middleware(['isAdmin']);
-Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth', 'isVerified']).validator('ChangePassword');
 
 //= ========================================================================
 //  Rooms

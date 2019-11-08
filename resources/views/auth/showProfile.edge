@@ -45,53 +45,6 @@
             </div>
         </div>
     </div>
-    <div class='row'>
-        <div class= 'col-12'>
-            <div class="card shadow mb-4 p-3">
-                <div class="card-body">
-                    <div class='row'>
-                        <div class='col-md-5'>
-							@if(canEdit)
-								<h4>{{ antl.formatMessage('userProfile.changePassword') }}</h4>
-								@if(old('error'))
-									<div class='alert alert-danger'>
-										{{ old('error') }}
-									</div>
-								@endif
-								@if(old('success'))
-									<div class='alert alert-success'>
-										{{ old('success') }}
-									</div>
-								@endif
-								<form action='{{ route('changePassword') }}' method='POST'>
-									{{ csrfField() }}
-									<input type='hidden' name='userId' value='{{ user.id }}' />
-								
-									<div class='form-group mb-2'>
-										<label for='newPassword'>{{ antl.formatMessage('userProfile.newPassword') }}</label>
-										<input type='password' class='form-control' name='newPassword' id='newPassword' />
-										@if(hasErrorFor('newPassword'))        
-											<div class='invalid-feedback d-block'>{{ getErrorFor('newPassword') }}</div>
-										@endif
-									</div>
-									
-									<div class='form-group mb-2'>
-										<label for='confirmPassword'>{{ antl.formatMessage('userProfile.confirmNewPassword') }}</label>
-										<input type='password' class='form-control' name='confirmPassword' id='confirmPassword' />
-										@if(hasErrorFor('confirmPassword'))        
-											<div class='invalid-feedback d-block'>{{ getErrorFor('confirmPassword') }}</div>
-										@endif
-									</div>
-
-									<button type='submit' class='btn btn-primary mt-3'>{{ antl.formatMessage('userProfile.save') }}</button>
-								</form> 
-							@endif
-                    </div>
-                    </div>
-                </div> 
-            </div>
-        </div>         
-    </div>
 @endsection
 
 
