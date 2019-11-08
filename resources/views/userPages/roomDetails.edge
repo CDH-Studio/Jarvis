@@ -162,7 +162,7 @@
                     <h5 class="m-0 font-weight-bold text-primary">{{ antl.formatMessage('roomDetails.bookRoom') }}</h5>
                 </div>
                 <div class="card-body" style="height:100%;">
-                    @if(user.role.name === 'user' && room.state_id == 1)
+                    @if(room.state_id == 1)
                         @include('partials.reserveRoomForm')
                     @else
                         @!component('components.cardEmptyMessage', faIcon='fas fa-ban fa-6x', message='Booking not available for admin')
