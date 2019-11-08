@@ -340,7 +340,6 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async loginAD ({ response }) {
-		console.log('hi');
 		const authUri = oauth2.authorizationCode.authorizeURL({
 			redirect_uri: Env.get('KEYCLOAK_REDIRECT_URI'),
 			scope: Env.get('KEYCLOAK_SCOPES')
@@ -352,7 +351,6 @@ class UserController {
 	async authAD ({ request, session, response, auth, view }) {
 		// getting authorization code
 		const code = request.only(['code']).code;
-		console.log(code);
 
 		// acquiring access token for user
 		let userInfo;
@@ -363,7 +361,6 @@ class UserController {
 					redirect_uri: Env.get('KEYCLOAK_REDIRECT_URI'),
 					scope: Env.get('KEYCLOAK_SCOPES')
 				});
-				console.log(result);
 				const token = await oauth2.accessToken.create(result);
 
 				userInfo = JWT.decode(token.token.id_token);
