@@ -5,10 +5,20 @@
     "building": "Édifice",
     "ft": "Étage/Tour",
     "viewBookings": "Afficher les réservations",
+    "bookings": "réservations",
     "editProfile": "Modifier votre profil",
     "changePassword": "Changer mot de passe",
     "newPassword": "Nouveau mot de passe",
     "confirmNewPassword": "Confirmer le nouveau mot de passe",
     "verified": "verifié",
-    "save": "enregistrer"
+    "verificationNeeded": "vérification nécessaire",
+    "save": "enregistrer",
+    "deleteAccount":"Supprimer votre compte",
+    "deleteWarning1":"Ce compte sera definitivement supprime!",
+    "deleteWarning2":"Continuer avec prudence",
+    "deleteUnauthorized":"Ce compte ne peut pas etre supprime car il a des reservations ou commentaires",
+    "deleteConfirm1":"Voulez-vous vraiment supprimer",
+    "deleteConfirm2":"Cet utilisateur sera completement enlever de la base de donnee",
+    "deleteConfirm3":"Ce processus est permanent!",
+    "cancelBtn": "Annuler"
 }
