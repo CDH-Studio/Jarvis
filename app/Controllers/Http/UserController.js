@@ -324,7 +324,7 @@ class UserController {
 					await user.delete();
 				}
 			}
-			return response.route('home');
+			return response.redirect('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=https://jarvis-dev.apps.ic.gc.ca/login');
 		} catch (error) {
 			return response.route('home');
 		}
