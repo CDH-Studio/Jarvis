@@ -42,8 +42,7 @@ const namedMiddleware = {
 	auth: 'App/Middleware/CheckLoggedIn',
 	guest: 'Adonis/Middleware/AllowGuestOnly',
 	isAdmin: 'App/Middleware/CheckAdminUserRole',
-	isUser: 'App/Middleware/CheckRegularUserRole',
-	isVerified: 'App/Middleware/CheckVerified'
+	isUser: 'App/Middleware/CheckRegularUserRole'
 };
 
 /*

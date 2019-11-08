@@ -93,6 +93,10 @@ class CheckRegularUserRole {
 			return response.redirect('/');
 		}
 
+		if (!auth.user.verified) {
+			return response.redirect('/profile');
+		}
+		
 		/**
 		 * For compatibility with the old API
 		 */
