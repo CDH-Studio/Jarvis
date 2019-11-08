@@ -105,7 +105,7 @@ class HomeController {
 	* @param {view}
 	*
 	*/
-	async userDashboard ({ antl, view, auth }) {
+	async userDashboard ({ antl, view, auth, request }) {
 		const code = await this.getAvailableRooms({ antl, user: auth.user, view });
 		const freqRooms = await this.getFreqBooked(auth.user);
 		const upcoming = await this.getUpcomming(auth.user);
@@ -129,6 +129,8 @@ class HomeController {
 
 		formOptions.roomFeatureCategory = results.toJSON();
 
+		const selectedBuilding = request.cookie('selectedBuilding');
+
 		return view.render('userPages.userDash', {
 			code,
 			freqRooms,
@@ -138,7 +140,8 @@ class HomeController {
 			toTime: searchValues.toTime,
 			dropdownSelection: searchValues.dropdownSelection,
 			formOptions,
-			moment: moment
+			moment: moment,
+			selectedBuilding
 		});
 	}
 

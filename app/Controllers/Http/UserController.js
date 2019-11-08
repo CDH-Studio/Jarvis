@@ -372,14 +372,7 @@ class UserController {
 
 		try {
 			await auth.attempt(user.email, password);
-			if (auth.user.getUserRole() === 'User') {
-				session.flash({
-					notification: 'Welcome! You are logged in'
-				});
-				return response.redirect('/userDash');
-			} else {
-				return response.redirect('/');
-			}
+			return response.route('home');
 		} catch (error) {
 			session.flash({ loginError: 'Invalid email/password' });
 			return response.redirect('/login');
@@ -628,7 +621,10 @@ class UserController {
 	async getAllAdmins ({ view, request }) {
 		const pageTitle = 'All admin users';
 
-		const results = await User.query().where('role_id', 1).fetch();
+		const results = await User.query()
+			.where('role_id', 1)
+			.withCount('bookings')
+			.fetch();
 		const users = results.toJSON();
 
 		return view.render('adminPages.viewUsers', { users, pageTitle, moment });

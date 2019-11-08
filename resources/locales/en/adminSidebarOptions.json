@@ -1,5 +1,7 @@
 {
-	"dashboard": "Dashboard",
+	"dataDashboard": "Data Dashboard",
+	"searchDashboard": "Search Dashboard",
+	"dashboard": "Data Dashboard",
 	"miniNavHeading": "Tools",
 	"roomsDropdown": "Rooms",
 	"addRoom": "Add Room",

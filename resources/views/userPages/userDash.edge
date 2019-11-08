@@ -6,6 +6,7 @@
 
 {{--  book room page content  --}}
 @section('content')
+
     {{--  Loading page header  --}}
     @!component('components.pageHeader', title= antl.formatMessage('userDash.hello') + auth.user.firstname)
     {{--  Page Content  --}}
@@ -69,7 +70,7 @@
 											@each(booking in upcoming) 
 												<tr class='table-light'>
 													<td class='text-center'><a href='{{ route('showRoom', {id: booking.room.id}) }}'>{{ booking.room.name }}</a></td>
-													<td class='text-center'>{{ truncate(booking.subject, 30, '...') }}</td>
+													<td class='text-center'>{{ truncate(booking.subject, 20, '...') }}</td>
 													@if(antl.currentLocale()==='fr')
 														<td class='text-center'>{{ moment(booking.from).locale("fr").format('ddd MMM DD, YYYY') }} </td>
 														<td class='text-center'>{{ moment(booking.from).locale("fr").format('HH:mm') }} </td>

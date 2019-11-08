@@ -107,7 +107,7 @@ Route.post('/:bookingType/cancelBooking/:id', 'BookingController.cancelBooking')
 
 // Employee user pages
 Route.get('/searchRooms/:view', 'RoomController.loadSearchRoomsForm').as('searchRooms').middleware(['isUser']);
-Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware(['isUser']);
+Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware(['auth']);
 
 // Rendering Results
 Route.get('/results', 'RoomController.findSpecific').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
@@ -116,7 +116,7 @@ Route.get('/search/flexible', 'RoomController.flexibleSearchRooms').as('searchFl
 Route.get('/search/recurring', 'RoomController.searchRooms').as('searchRecurring').validator('SearchRoomFlexible'); // TODO
 
 // Booking a Room
-Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);
+Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['auth']);
 
 // Outlook
 Route.get('/test-connection', 'HomeController.testAgentConnection').as('testAgentConnection');
