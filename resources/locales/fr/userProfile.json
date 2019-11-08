@@ -5,10 +5,20 @@
     "building": "Édifice",
     "ft": "Étage/Tour",
     "viewBookings": "Afficher les réservations",
+    "bookings": "réservations",
     "editProfile": "Modifier votre profil",
     "changePassword": "Changer mot de passe",
     "newPassword": "Nouveau mot de passe",
     "confirmNewPassword": "Confirmer le nouveau mot de passe",
     "verified": "verifié",
-    "save": "enregistrer"
+    "verificationNeeded": "vérification nécessaire",
+    "save": "enregistrer",
+    "deleteAccount":"Supprimer votre compte",
+    "deleteWarning1":"La suppression d'un compte est permanente!",
+    "deleteWarning2":"Procéder avec prudence",
+    "deleteUnauthorized":"Ce compte ne peut pas être supprimé car des réservations ou des commentaires lui sont associés.",
+    "deleteConfirm1":"Êtes-vous sûr de vouloir supprimer",
+    "deleteConfirm2":"Cet utilisateur sera définitivement supprimé de l'application Jarvis",
+    "deleteConfirm3":"Ce processus est permanent!",
+    "cancelBtn": "Annuler"
 }

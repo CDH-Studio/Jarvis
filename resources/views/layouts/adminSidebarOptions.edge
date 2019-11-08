@@ -1,8 +1,13 @@
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
-      <a class="nav-link" href="{{route('home')}}">
+      <a class="nav-link pb-2" href="{{route('home')}}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>{{ antl.formatMessage('adminSidebarOptions.dashboard') }}</span></a>
+        <span>{{ antl.formatMessage('adminSidebarOptions.dataDashboard') }}</span></a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link pt-3" href="{{route('userDash')}}">
+        <i class="fas fa-search"></i>
+        <span>{{ antl.formatMessage('adminSidebarOptions.searchDashboard') }}</span></a>
     </li>
 
     <!-- Divider -->

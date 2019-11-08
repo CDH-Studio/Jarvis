@@ -9,7 +9,7 @@
                     <div class='row'>
                         <div class='col-md-2 text-center'>
                             <i class='fas fa-user-circle fa-6x mb-3'></i>
-                            <h4>{{ user.firstname }} {{ user.lastname }}</h4>
+                            <h2 class="h4">{{ user.firstname }} {{ user.lastname }}</h2>
                         </div>
                         <div class= 'col-md-8'>
                             <p><strong>{{ antl.formatMessage('userProfile.name') }}:</strong> {{ user.firstname }} {{ user.lastname }}</p>
@@ -17,9 +17,14 @@
                                 @if(user.verified)
                                     <span class='badge badge-pill badge-success'>{{ antl.formatMessage('userProfile.verified') }}</span>
                                 @else
-                                    <span class='badge badge-pill badge-warning'>verification needed</span>
+                                    <span class='badge badge-pill badge-warning'>{{ antl.formatMessage('userProfile.verificationNeeded') }}</span>
                                 @endif
                             </p>
+                            <div class="d-block mb-2">
+                                    <span class="badge badge-primary">{{ antl.formatMessage('userProfile.bookings') }}: {{user.__meta__.bookings_count}}</span>
+                                    <span class="badge badge-primary">Reviews: {{user.__meta__.reviews_count}}</span>
+                                    <span class="badge badge-primary">Issues: {{user.__meta__.reports_count}}</span>
+                                </div>
                             @if(user.role.name==='user')
                                 <p><strong>{{ antl.formatMessage('userProfile.building') }}:</strong> {{ user.building.name }}</p>
                                 @if(antl.currentLocale() =="en")
@@ -27,6 +32,7 @@
                                 @else
                                     <p><strong>{{ antl.formatMessage('userProfile.ft') }}:</strong> {{ user.floor.name_french }} {{ user.tower.name_french}}</p>
                                 @endif
+
                                 <button onclick="window.location='{{ route('viewBookings', {bookingType: 'user', id: user.id, catFilter: 'upcoming', limitFilter: 'all'}) }}';" class="btn btn-info btn-icon-split mt-2">
                                     <span class="icon text-white-50"><i class="fas fa-list-ul"></i></span>
                                     <span class="text">{{ antl.formatMessage('userProfile.viewBookings') }}</span>
@@ -45,6 +51,61 @@
             </div>
         </div>
     </div>
+
+    @if(canEdit)
+        <div class='row'>
+            <div class= 'col-12'>
+                <div class="card shadow mb-4 p-3">
+                    <div class="card-body">
+                        <div class='row'>
+                            <div class='col-md-5'>
+                                <h2 class="h4"><i class="fas fa-exclamation-triangle text-muted"></i> {{ antl.formatMessage('userProfile.deleteAccount') }}</h2>
+                                @if(!user.__meta__.bookings_count && !user.__meta__.reports_count && !user.__meta__.reviews_count)
+                                    <p class="mt-4 mb-1"><strong>{{ antl.formatMessage('userProfile.deleteWarning1') }}</strong></p>
+                                    <p class="mt-1">{{ antl.formatMessage('userProfile.deleteWarning2') }}</p>
+                                <button class='btn btn-danger btn-icon-split mt-2' name='delete profile' data-toggle='modal' data-target='#deleteProfileModal'>
+                                    <span class="icon text-white-50"><i class="fas fa-trash"></i></span>
+                                    <span class="text">{{ antl.formatMessage('userProfile.deleteAccount') }}</span>
+                                </button>   
+     
+                                @else 
+                                    <p class="mt-4">{{ antl.formatMessage('userProfile.deleteUnauthorized') }}</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>         
+        </div>
+    @endif
+
+    @if(!user.__meta__.bookings_count && !user.__meta__.reports_count && !user.__meta__.reviews_count)
+        {{-- delete Feature modal --}}
+        <div class='modal' id='deleteProfileModal' role='dialog' aria-hidden='true'>
+            <div class='modal-dialog modal-dialog-centered' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h5 class='modal-title' id='cancelTitle'>{{ antl.formatMessage('userProfile.deleteAccount') }}?</h5>
+                        <button class='close' type='button' data-dismiss='modal' aria-label='Close'>
+                            <span aria-hidden='true'>×</span>
+                        </button>
+                    </div>
+                    <div class='modal-body'>{{ antl.formatMessage('userProfile.deleteConfirm1') }} <strong>{{user.firstname}} {{user.lastname}}</strong>?<br>
+                        <p>{{ antl.formatMessage('userProfile.deleteConfirm2') }}</p>
+                        <p class="text-danger">{{ antl.formatMessage('userProfile.deleteConfirm3') }}</p>
+                    </div>
+
+                    <div class='modal-footer'>
+                        <form action='{{ route('deleteProfile', {id: user.id}) }}' method='POST' enctype='multipart/form-data'>
+                            {{ csrfField() }}
+                                <button class='btn btn-secondary' type='button' data-dismiss='modal'>{{ antl.formatMessage('userProfile.cancelBtn') }}</button>
+                                <button type='submit' class='btn btn-danger'>{{ antl.formatMessage('userProfile.deleteAccount') }}</button>                
+                        </form> 
+                    </div>   
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection
 
 

@@ -261,38 +261,73 @@ class UserController {
 		return response.redirect('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=https://jarvis-dev.apps.ic.gc.ca/login');
 	}
 
-	async show ({ auth, params, view, response, request }) {
-		let user = await User
-			.query()
-			.where('id', params.id)
-			.with('floor')
-			.with('tower')
-			.with('building')
-			.with('role')
-			.firstOrFail();
+	async show ({ auth, params, view, response, request, session }) {
+		try {
+			// find user
+			let user = await User
+				.query()
+				.where('id', params.id)
+				.with('floor')
+				.with('tower')
+				.with('building')
+				.with('role')
+				.withCount('bookings')
+				.withCount('reports')
+				.withCount('reviews')
+				.firstOrFail();
 
-		var canEdit = 0;
-		const userRole = await auth.user.getUserRole();
-		user = user.toJSON();
+			var canEdit = 0;
+			const userRole = await auth.user.getUserRole();
+			user = user.toJSON();
 
-		let selectedBuilding, allBuildings;
+			let selectedBuilding, allBuildings;
 
-		if (userRole === 'admin') {
-			selectedBuilding = request.cookie('selectedBuilding');
-			// get all builig info admin nav bar since this route is shared with regular users and admin
-			// therefore, the admin middle-ware can't retrieve building info to pass to view
-			allBuildings = await Building.all();
-			allBuildings = allBuildings.toJSON();
+			if (userRole === 'admin') {
+				selectedBuilding = request.cookie('selectedBuilding');
+				// get all builig info admin nav bar since this route is shared with regular users and admin
+				// therefore, the admin middle-ware can't retrieve building info to pass to view
+				allBuildings = await Building.all();
+				allBuildings = allBuildings.toJSON();
+			}
+
+			// check if user is viewing their own profile or is admin
+			if (auth.user.id === Number(params.id) || userRole === 'admin') {
+				canEdit = 1;
+			} else {
+				return response.redirect('/');
+			}
+
+			return view.render('auth.showProfile', { auth, user, canEdit, allBuildings, selectedBuilding });
+		} catch (error) {
+			return response.route('home');
 		}
+	}
 
-		// check if user is viewing their own profile or is admin
-		if (auth.user.id === Number(params.id) || userRole === 'admin') {
-			canEdit = 1;
-		} else {
-			return response.redirect('/');
+	async delete ({ auth, params, response }) {
+		try {
+			const userRole = await auth.user.getUserRole();
+
+			if (userRole === 'admin' || auth.user.id === Number(params.id)) {
+				// find user
+				let user = await User
+					.query()
+					.where('id', params.id)
+					.withCount('bookings')
+					.withCount('reports')
+					.withCount('reviews')
+					.firstOrFail();
+
+				let userJSON = user.toJSON();
+
+				// check if user has bookings, reviews, or reported issues
+				if (!userJSON.__meta__.bookings_count && !userJSON.__meta__.reports_count && !userJSON.__meta__.reviews_count) {
+					await user.delete();
+				}
+			}
+			return response.route('home');
+		} catch (error) {
+			return response.route('home');
 		}
-
-		return view.render('auth.showProfile', { auth, user, canEdit, allBuildings, selectedBuilding });
 	}
 
 	/**
@@ -328,7 +363,10 @@ class UserController {
 	async getAllAdmins ({ view, request }) {
 		const pageTitle = 'All admin users';
 
-		const results = await User.query().where('role_id', 1).fetch();
+		const results = await User.query()
+			.where('role_id', 1)
+			.withCount('bookings')
+			.fetch();
 		const users = results.toJSON();
 
 		return view.render('adminPages.viewUsers', { users, pageTitle, moment });

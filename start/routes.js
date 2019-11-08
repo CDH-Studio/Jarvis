@@ -24,7 +24,6 @@ Route.get('/switch/:lang', 'HomeController.changeLang');
 //= ========================================================================
 // Auth
 //= ========================================================================
-
 // User Authentication
 Route.get('/profile', 'UserController.createProfileRender').as('createProfile');
 Route.post('/profile', 'UserController.createProfile').validator('CreateProfile');
@@ -45,21 +44,11 @@ Route.get('/allAdmins', 'UserController.getAllAdmins').as('allAdmins').middlewar
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
 Route.post('/user/:id/edit', 'UserController.update').as('saveUser').validator('EditUser').middleware(['auth']);
 Route.post('/user/:id/editAdmin', 'UserController.update').as('saveAdmin').validator('EditAdmin').middleware(['isAdmin']);
+Route.post('/user/:id/delete', 'UserController.delete').as('deleteProfile').validator('DeleteProfile').middleware(['auth']);
 
 //= ========================================================================
-//  Rooms
+//  Configuration of buildings
 //= ========================================================================
-
-// admin
-Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['isAdmin']);
-Route.post('/addRoom', 'RoomController.add').as('addRoom').validator('AddRoom').middleware(['isAdmin']);
-Route.get('/adminDash', 'HomeController.adminDashboard').as('adminDash').middleware(['isAdmin']);
-
-Route.get('/rooms/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
-Route.get('/rooms/:id/edit', 'RoomController.edit').as('editRoom').middleware(['isAdmin']);
-Route.post('/rooms/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['isAdmin']);
-Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
-
 Route.get('/building/select', 'BuildingController.viewSelectBuilding').as('viewSelectBuilding').middleware(['auth']);
 Route.get('/building/:id/edit', 'BuildingController.editBuilding').as('editBuilding').middleware(['isAdmin']);
 Route.post('/building/:id/edit', 'BuildingController.updateBuilding').as('updateBuilding').validator('EditBuilding').middleware(['isAdmin']);
@@ -78,15 +67,28 @@ Route.post('/feature/add', 'FeatureController.addRoomFeature').as('addRoomFeatur
 Route.post('/feature/:id/edit', 'FeatureController.updateRoomFeature').as('updateRoomFeature').validator('EditFeature').middleware(['isAdmin']);
 Route.post('/feature/:id/delete', 'FeatureController.deleteRoomFeature').as('deleteRoomFeature').middleware(['isAdmin']);
 
+Route.get('/addRoom', 'RoomController.create').as('addRoomForm').middleware(['isAdmin']);
+Route.post('/addRoom', 'RoomController.add').as('addRoom').validator('AddRoom').middleware(['isAdmin']);
+Route.get('/adminDash', 'HomeController.adminDashboard').as('adminDash').middleware(['isAdmin']);
+
+//= ========================================================================
+//  Rooms
+//= ========================================================================
+Route.get('/rooms/:id', 'RoomController.show').as('showRoom').middleware(['auth']);
+Route.get('/rooms/:id/edit', 'RoomController.edit').as('editRoom').middleware(['isAdmin']);
+Route.post('/rooms/:id/edit', 'RoomController.update').as('saveRoom').validator('EditRoom').middleware(['isAdmin']);
+Route.get('/rooms', 'RoomController.getAllRooms').as('allRooms').middleware(['auth']);
+
+// Issues
 Route.get('/room/:roomID/issues/:issueStatus/:timeFilter', 'IssueController.getRoomIssues').as('showIssue').middleware(['isAdmin']);
 Route.get('/issue/:id/edit', 'IssueController.editIssue').as('editIssue').middleware(['isAdmin']);
 Route.post('/issue/:id/edit', 'IssueController.updateIssue').as('updateIssue').middleware(['isAdmin']).validator('EditIssue');
+Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
 
-// user
+// Reviews
 Route.post('/addReview/:id', 'ReviewController.add').as('addReview').validator('AddReview').middleware(['isUser']);
 Route.post('/editReview/:id', 'ReviewController.edit').as('editReview').validator('AddReview').middleware(['isUser']);
 Route.post('/deleteReview/:id', 'ReviewController.delete').as('deleteReview').middleware(['auth']);
-Route.post('/reportRoom', 'IssueController.submit').as('reportRoom').middleware(['isUser']).validator('ReportRoom');
 
 //= ========================================================================
 // Bookings
@@ -96,9 +98,8 @@ Route.get('/:bookingType/:id/bookings/:catFilter/:limitFilter', 'BookingControll
 Route.post('/:bookingType/cancelBooking/:id', 'BookingController.cancelBooking').as('cancelBooking').middleware(['auth']);
 
 // Employee user pages
-// Route.on('/booking').render('userPages/booking').as('booking').middleware(['isUser']);
 Route.get('/searchRooms/:view', 'RoomController.loadSearchRoomsForm').as('searchRooms').middleware(['isUser']);
-Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware(['isUser']);
+Route.get('/userDash', 'HomeController.userDashboard').as('userDash').middleware(['auth']);
 
 // Rendering Results
 Route.get('/results', 'RoomController.findSpecific').as('results').middleware(['auth']).validator('SearchRoom').middleware(['isUser']);
@@ -107,7 +108,7 @@ Route.get('/search/flexible', 'RoomController.flexibleSearchRooms').as('searchFl
 Route.get('/search/recurring', 'RoomController.searchRooms').as('searchRecurring').validator('SearchRoomFlexible'); // TODO
 
 // Booking a Room
-Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['isUser']);
+Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['auth']);
 
 // Outlook
 Route.get('/test-connection', 'HomeController.testAgentConnection').as('testAgentConnection');
