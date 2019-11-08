@@ -17,8 +17,8 @@
     "deleteWarning1":"Ce compte sera definitivement supprime!",
     "deleteWarning2":"Continuer avec prudence",
     "deleteUnauthorized":"Ce compte ne peut pas etre supprime car il a des reservations ou commentaires",
-    "deleteConfirm1":"Voulez-vous vraiment supprimer",
-    "deleteConfirm2":"Cet utilisateur sera completement enlever de la base de donnee",
+    "deleteConfirm1":"Êtes-vous sûr de vouloir supprimer",
+    "deleteConfirm2":"Cet utilisateur sera définitivement supprimé de l'application Jarvis",
     "deleteConfirm3":"Ce processus est permanent!",
     "cancelBtn": "Annuler"
 }
