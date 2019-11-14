@@ -19,13 +19,23 @@
 			<div class='row'>
 				<div id='available' class='col-xl-12 col-xxl-6 mb-4' style='height:325px;'>
                     @component('components.generalCard', title=antl.formatMessage('userDash.CAHeading'), extraCSS='custom-card-header')
-                        {{--  If there are no avail rooms display a message accordingly  --}}
+                        @slot('titleRight')
+							<div id="currently-avail-loading">
+								<div class="spinner-grow text-white spinner-grow-sm" role="status">
+									<span class="sr-only">{{antl.formatMessage('searchResults.searching')}}</span>
+								</div>
+								<strong class="px-2">{{antl.formatMessage('searchResults.searching')}}</strong>
+							</div>
+							<div id="currently-avail-done" class="d-none">
+								<i class="fas fa-check color-success"></i>
+        						<strong class="px-1">{{antl.formatMessage('searchResults.done')}}</strong>
+							</div>
+						@endslot
 						@slot('body')
 							<div id='avail'></div>
-							{{-- spinner --}}
-							{{--  <div id="loading">  --}}
-								{{--  @!component('components.cardEmptyMessage',faIcon="fas fa-circle-notch fa-spin fa-4x", message=antl.formatMessage('userDash.CAError'))  --}}
-							{{--  </div>  --}}
+							<div id="currently-avail-no-results" class="d-none">
+								@!component('components.cardEmptyMessage',faIcon="fas fa-ghost fa-spin fa-4x", message=antl.formatMessage('userDash.CAError'))
+							</div>
 						@endslot
 					@endcomponent
 				</div>
@@ -98,6 +108,15 @@
     {{ script('https://js.pusher.com/4.1/pusher.min.js') }}
 
     <script>
+
+		$(function() {
+    		$.post( "{{route('getCurrentlyAvail')}}", { user_id: '{{auth.user.id}}', code: '{{ code }}', _csrf: '{{ csrfToken }}' } )
+			  .fail(function(xhr, textStatus, error) {
+					console.log(error);
+			});;
+		});
+
+
         $('#message').keypress(function(e) {
 	        if (e.which === 13 && !e.shiftKey) {
                 $('#sub').click();
@@ -113,22 +132,28 @@
 
         //Subscribe to the channel we specified in our Adonis Application
         let channel = pusher.subscribe('adonis-channel')
+		let availableCount=0;
 
         //Listen for events on the channel
         channel.bind('send-room', function (data) {
             if (data.message.code == '{{ code }}') {
                 let listItem = $("<div class='row'><div class='col'>" + data.message.card + "</div></div>");
-                // $('#loading').hide();
                 $('#avail').prepend(listItem);
+				availableCount++;
+
             }
         });
 
-        channel.bind('send-empty', function (data) {
+        channel.bind('send-done', function (data) {
             if (data.message.code == '{{ code }}') {
-                let listItem = $(data.message.view)
-                // $('#loading').hide();
-                $('#avail').empty().append(listItem)
 
+				$('#currently-avail-loading').addClass('d-none');
+				$('#currently-avail-done').removeClass('d-none');
+
+				if(availableCount==0){
+					$('#currently-avail-no-results').removeClass('d-none');
+					console.error("hello")
+				}
             }
         });
 
