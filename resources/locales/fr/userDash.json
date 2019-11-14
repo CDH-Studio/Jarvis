@@ -5,7 +5,7 @@
 	"CAHeading":"Présentment disponible",
 	"FBHeading": "Fréquemment Réservé",
 	"MBHeading": "Mes réservations",
-	"CAError": "Recherche",
+	"CAError": "Aucune salles trouvées",
 	"FBError": "Aucune salles trouvées",
 	"MBError": "Aucune réservation trouvées"
 }
