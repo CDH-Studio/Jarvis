@@ -17,6 +17,9 @@
         {{--  Loading result empty card  --}}
         @!component('components.cardEmptyMessage', {faIcon:"fas fa-ghost fa-8x mb-4 mt-3", message:"No rooms available"})
     @else
+        {{--  used to detect if page refresh required  --}}
+        <input type="hidden" id="refresh" value="no">
+        
         {{--  Loading spinning wheel  --}}
         @!component('components.searchLoadingSpinner',  {message:antl.formatMessage('searchResults.searching')})
 
@@ -128,6 +131,11 @@
                 }, 1000);
             });
 
+            //reload page to refresh results if user used the back button ot get to resutls page
+            $(document).ready(function(e) {
+                var $input = $('#refresh');
+                $input.val() == 'yes' ? location.reload(true) : $input.val('yes');
+            });
         </script>
     @endif
 @endsection
