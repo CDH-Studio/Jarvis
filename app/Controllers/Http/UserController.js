@@ -257,7 +257,7 @@ class UserController {
 		session.flash({
 			notification: 'You have been logged out.'
 		});
-		return response.redirect(`https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=${Env.get('SERVER_URL')}/login`);
+		return response.redirect(`${Env.get('KEYCLOAK_HOST')}/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=${Env.get('SERVER_URL')}/login`);
 	}
 
 	async show ({ auth, params, view, response, request, session }) {
@@ -323,7 +323,7 @@ class UserController {
 					await user.delete();
 				}
 			}
-			return response.redirect(`https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=${Env.get('SERVER_URL')}/login`);
+			return response.redirect(`${Env.get('KEYCLOAK_HOST')}/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=${Env.get('SERVER_URL')}/login`);
 		} catch (error) {
 			return response.route('home');
 		}
