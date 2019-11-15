@@ -61,7 +61,7 @@ module.exports = class Outlook {
 			try {
 				// make a test connection using an empty post request
 				await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}`, {});
-				
+
 				// return true (server working)
 				return 1;
 			} catch (e) {
