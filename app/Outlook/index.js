@@ -60,16 +60,13 @@ module.exports = class Outlook {
 		if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
 			try {
 				// make a test connection using an empty post request
-				await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}/avail`, {});
+				await axios.post(`${Env.get('EXCHANGE_AGENT_SERVER', 'localhost:3000')}`, {});
+
+				// return true (server working)
+				return 1;
 			} catch (e) {
-				// console.log(e.response.status);
-				if (e.response.status === 300) {
-					// return true (server working)
-					return 1;
-				} else {
-					// return false (server unresponsive)
-					return 0;
-				}
+				// return false (server unresponsive)
+				return 0;
 			}
 		}
 	}
