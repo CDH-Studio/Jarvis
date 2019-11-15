@@ -25,8 +25,8 @@ Route.get('/switch/:lang', 'HomeController.changeLang');
 // Auth
 //= ========================================================================
 // User Authentication
-Route.get('/register', 'UserController.registerUserRender').as('registerUser');
-Route.post('/register', 'UserController.create').validator('CreateUser');
+Route.get('/profile', 'UserController.createProfileRender').as('createProfile');
+Route.post('/profile', 'UserController.createProfile').validator('CreateProfile');
 
 // Admin Authentication
 Route.get('/admin/register', 'UserController.registerAdminRender').as('registerAdmin');
@@ -34,24 +34,16 @@ Route.post('/admin/register', 'UserController.createAdmin').as('CreateAdmin').va
 
 // Logout
 Route.get('/login', 'UserController.loginRender').as('login');
-Route.post('/login', 'UserController.login').validator('LoginUser');
+Route.post('/login', 'UserController.login');
 Route.get('/logout', 'UserController.logout').as('logout');
 
-// Forgot password
-Route.get('/forgotPassword', 'UserController.forgotPasswordRender').as('forgotPassword');
-Route.post('/resetPassword', 'UserController.resetPassword').as('resetPassword').validator('ResetPassword');
-Route.get('/newPassword', 'UserController.verifyHash');
-Route.get('/newUser', 'UserController.verifyEmail');
-Route.post('/createPasswordResetRequest', 'UserController.createPasswordResetRequest').as('createPasswordResetRequest');
-
-// user details
+// Authentication
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
 Route.get('/allAdmins', 'UserController.getAllAdmins').as('allAdmins').middleware(['isAdmin']);
 Route.get('/user/:id/edit', 'UserController.edit').as('editUser').middleware(['auth']);
 Route.post('/user/:id/edit', 'UserController.update').as('saveUser').validator('EditUser').middleware(['auth']);
 Route.post('/user/:id/editAdmin', 'UserController.update').as('saveAdmin').validator('EditAdmin').middleware(['isAdmin']);
-Route.post('/user/updatepassword', 'UserController.changePassword').as('changePassword').middleware(['auth']).validator('ResetPassword');
 Route.post('/user/:id/delete', 'UserController.delete').as('deleteProfile').validator('DeleteProfile').middleware(['auth']);
 
 //= ========================================================================
@@ -146,4 +138,6 @@ Route.get('/push', 'TokenController.push').as('push');
 //= ========================================================================
 // Active Directory
 //= ========================================================================
-Route.post('/active', 'UserController.active').as('active');
+Route.get('/loginAD', 'UserController.loginAD').as('loginAD');
+Route.get('/authAD', 'UserController.authAD').as('authAD');
+Route.get('/key', 'UserController.key').as('key');

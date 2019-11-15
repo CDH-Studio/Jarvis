@@ -25,7 +25,7 @@
 								<a class='btn btn-primary btn-user float-right' href='/switch/en'>EN</a>
 								@endif
 							</div>
-
+							<!--
 							<div class='text-left'>
 								<h1 class='h4 text-gray-900 mb-3'>{{ antl.formatMessage('login.title') }}</h1>
 							</div>
@@ -53,14 +53,16 @@
 											<div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>
 										</span>
 									@endif
-									<a class='small text-right' href='{{ route('forgotPassword') }}'>{{ antl.formatMessage('login.forgot') }}</a>
 								</div>
 								<button type='submit' class='btn btn-primary btn-user btn-block mt-3 mb-2'>{{ antl.formatMessage('login.submit') }}</button>
 							</form>
+							-->
+							<br>
+							<form action='{{ route('loginAD') }}' method='GET' class='user'>
+								<button id='login' type='submit' class='btn btn-primary btn-user btn-block mt-5 mb-5'>{{ antl.formatMessage('login.submit') }}</button>
+							</form>
+							<br>
 							<hr>
-							<div class='text-center'>
-								<a class='small' href='{{route('registerUser')}}'>{{ antl.formatMessage('login.registerRedirect') }}</a>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -139,6 +141,8 @@
 @endsection
 
 @section('extrajs')
+	{{ script('js/vendor/keycloak.js') }}
+	{{ csrfField() }}
 	<script>
 		// Get IE or Edge browser version
 		var version = detectIE();

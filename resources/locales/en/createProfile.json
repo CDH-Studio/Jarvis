@@ -1,5 +1,5 @@
 {
-	"title": "Registration",
+	"title": "Welcome to Jarvis! Please complete your profile to continue.",
 	"firstname": "First Name",
 	"lastname": "Last Name",
 	"email": "Email",
@@ -9,6 +9,6 @@
 	"building": "Building",
 	"tower": "Tower",
 	"floor": "Floor",
-	"submit": "Register",
-	"loginRedirect": "Already have an account? Login!"
+	"submit": "Submit",
+	"loginRedirect": "Go back to sign-in page"
 }

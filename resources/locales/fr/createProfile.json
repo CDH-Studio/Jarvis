@@ -1,5 +1,5 @@
 {
-	"title": "Inscrivez-vous",
+	"title": "Bienvenue sur Jarvis! Veuillez mettre à jour votre profil avant de continuer.",
 	"firstname": "Prénom",
 	"lastname": "Nom de famille",
 	"email": "Courriel",
@@ -9,6 +9,6 @@
 	"building": "Immeuble",
 	"tower": "Tour",
 	"floor": "Étage",
-	"submit": "Inscrivez-vous",
-	"loginRedirect": "Vous avez déjà un compte? Ouvrir une session!"
+	"submit": "Soumettre",
+	"loginRedirect": "Retourner à la page de connexion"
 }

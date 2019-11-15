@@ -67,7 +67,7 @@
                                             <div class='form-group mb-2'>
                                                 <label for='tower'>{{ antl.formatMessage('updateUser.tower') }}</label>
                                                 <select id='tower' name='tower' class='form-control text-capitalize'>
-                                                    <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.tower') }}</option>
+                                                    <option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('createProfile.tower') }}</option>
                                                     @each(towerOption in formOptions.towers)
                                                         <option value='{{towerOption.id}}' {{ old('tower', user.tower_id) == towerOption.id ? 'selected' : '' }}>
                                                             @if(antl.currentLocale() === "fr")

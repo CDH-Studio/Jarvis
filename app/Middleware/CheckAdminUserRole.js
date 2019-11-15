@@ -93,6 +93,10 @@ class CheckAdminUserRole {
 			return response.redirect('/');
 		}
 
+		if (!auth.user.verified) {
+			return response.redirect('/profile');
+		}
+
 		// get all building
 		const Building = use('App/Models/Building');
 		const allBuildings = await Building.all();

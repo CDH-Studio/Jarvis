@@ -66,7 +66,6 @@
                             <div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>
                         </span>
                       @endif
-                      <a class='small text-right' href='{{ route('forgotPassword') }}'>Forgot password</a>
                     </div>
                     <button type='submit' class='btn btn-primary btn-user btn-block'>
                       Login
@@ -74,7 +73,7 @@
                     <hr>
                   </form>
                   <div class='text-center'>
-                    <a class='small' href='{{route('registerUser')}}'>Create an Account!</a>
+                    <a class='small' href='{{route('createProfile')}}'>Create an Account!</a>
                   </div>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 @layout('layouts.loginLayout')
 
 @section('title')
-{{ antl.formatMessage('registerUser.title') }} | Jarvis
+{{ antl.formatMessage('createProfile.title') }} | Jarvis
 @endsection
 
 @section('content')
@@ -23,16 +23,16 @@
 									@endif
 								</div>
 								<div class="text-left">
-									<h1 class="h4 text-gray-900 mb-4">{{ antl.formatMessage('registerUser.title') }}</h1>
+									<h1 class="h6 text-gray-900 mb-4">{{ antl.formatMessage('createProfile.title') }}</h1>
 								</div>
-								<form class='needs-validation user' action='{{ route('UserController.create') }}' method='POST'>
+								<form class='needs-validation user' action='{{ route('UserController.createProfile') }}' method='POST'>
 									{{ csrfField() }}
 
 									<div class='form-row'>
 										<div class='col-md-6'>
 											<div class='form-group mb-2'>
-												<label for='firstname'>{{ antl.formatMessage('registerUser.firstname') }}</label>
-												<input type='text' class='form-control' name='firstname' id='firstname' placeholder='John' value='{{ old('firstname', '') }}'>
+												<label for='firstname'>{{ antl.formatMessage('createProfile.firstname') }}</label>
+												<input type='text' class='form-control' name='firstname' id='firstname' placeholder='John' value='{{ userInfo.firstname }}'>
 												@if(hasErrorFor('firstname'))
 													<div class='invalid-feedback d-block'>{{ getErrorFor('firstname') }}</div>
 												@endif
@@ -40,8 +40,8 @@
 										</div>
 										<div class='col-md-6'>
 											<div class='form-group mb-2'>
-												<label for='lastname'>{{ antl.formatMessage('registerUser.lastname') }}</label>
-												<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe' value='{{ old('lastname', '') }}'>
+												<label for='lastname'>{{ antl.formatMessage('createProfile.lastname') }}</label>
+												<input type='text' class='form-control' name='lastname' id='lastname' placeholder='Doe' value='{{ userInfo.lastname }}'>
 												@if(hasErrorFor('lastname'))        
 													<div class='invalid-feedback d-block'>{{ getErrorFor('lastname') }}</div>
 												@endif
@@ -49,44 +49,17 @@
 										</div>
 									</div>
 
-										
 									<div class='form-group mb-2'>
-										<label for='email'>{{ antl.formatMessage('registerUser.email') }}</label>
-										<input type='email' class='form-control' name='email' id='email' placeholder='sample@canada.ca' value='{{ old('email', '') }}'>
-										@if(hasErrorFor('email'))        
-											<div class='invalid-feedback d-block'>{{ getErrorFor('email') }}</div>
-										@endif
+										<label for='email'>{{ antl.formatMessage('createProfile.email') }}</label>
+										<input type='email' class='form-control' name='email' id='email' placeholder='{{ userInfo.email }}' value='{{ userInfo.email }}' readonly>
 									</div>
 
 									<div class='form-row'>
-										<div class='col-md-6'>
-											<div class='form-group mb-2'>
-												<label for='password'>{{ antl.formatMessage('registerUser.pass') }}</label>
-													<span href="#" class="mr-0 mb-2" data-toggle="tooltip" data-placement="top" title="{{ antl.formatMessage('registerUser.passTip') }}">
-														<i class="fas fa-info-circle text-muted fa-xs"></i>
-													</span>
-												<input type='password' class='form-control' name='password' id='password' placeholder='{{ antl.formatMessage('registerUser.pass') }}'>
-												@if(hasErrorFor('password'))
-													<div class='invalid-feedback d-block'>{{ getErrorFor('password') }}</div>
-												@endif
-											</div>
-										</div>
-										<div class='col-md-6'>
-											<div class='form-group mb-2'>
-												<label for='confirmPassword'>{{ antl.formatMessage('registerUser.confirmPass') }}</label>
-												<input type='password' class='form-control' name='confirmPassword' id='confirmPassword' placeholder='{{ antl.formatMessage('registerUser.confirmPass') }}'>
-												@if(hasErrorFor('confirmPassword'))
-												<div class='invalid-feedback d-block'>{{ getErrorFor('confirmPassword') }}</div>
-												@endif
-											</div>
-										</div>
-									</div>
-									<div class='form-row'>
 										<div class='col'>
 											<div class='form-group mb-2'>
-												<label for='building'>{{ antl.formatMessage('registerUser.building') }}</label>
+												<label for='building'>{{ antl.formatMessage('createProfile.building') }}</label>
 												<select id='building' name='building' class='form-control text-capitalize'>
-													<option value='undefined' {{ old('building') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.building') }}</option>
+													<option value='undefined' {{ old('building') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('createProfile.building') }}</option>
 													@each(buildingOption in formOptions.buildings)
 														<option value='{{buildingOption.id}}' {{ old('building') == buildingOption.id ? 'selected' : '' }}>{{buildingOption.name}}</option>
 													@endeach
@@ -101,9 +74,9 @@
 									<div class='form-row'>
 										<div class='col'>
 											<div class='form-group mb-2'>
-												<label for='tower'>{{ antl.formatMessage('registerUser.tower') }}</label>
+												<label for='tower'>{{ antl.formatMessage('createProfile.tower') }}</label>
 												<select id='tower' name='tower' class='form-control text-capitalize'>
-													<option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.tower') }}</option>
+													<option value='undefined' {{ old('tower') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('createProfile.tower') }}</option>
 													@each(towerOption in formOptions.towers)
 														@if(antl.currentLocale() =="en")
 															<option value='{{towerOption.id}}' {{ old('tower') == towerOption.id ? 'selected' : '' }}>{{towerOption.name_english}}</option>
@@ -120,9 +93,9 @@
 										
 										<div class='col'>
 											<div class='form-group mb-2'>
-												<label for='floor'>{{ antl.formatMessage('registerUser.floor') }}</label>
+												<label for='floor'>{{ antl.formatMessage('createProfile.floor') }}</label>
 												<select id='floor' name='floor' class='form-control text-capitalize'>
-													<option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('registerUser.floor') }}</option>
+													<option value='undefined' {{ old('floor') == 'undefined' ? 'selected' : '' }} selected='' disabled>{{ antl.formatMessage('createProfile.floor') }}</option>
 													@each(floorOption in formOptions.floors)
 														@if(antl.currentLocale() =="en")
 															<option value='{{floorOption.id}}' {{ old('floor') === floorOption.id ? 'selected' : '' }}>{{floorOption.name_english}}</option>
@@ -137,12 +110,11 @@
 											</div>
 										</div>
 									</div>
-									<button type='submit' class='btn btn-primary btn-user btn-block mt-3 mb-2'>{{ antl.formatMessage('registerUser.submit') }}</button>
+									<button type='submit' class='btn btn-primary btn-user btn-block mt-3 mb-2'>{{ antl.formatMessage('createProfile.submit') }}</button>
 								</form>
 								<hr>
-
-								<div class="text-center">
-									<a class="small" href='{{ route('login') }}'>{{ antl.formatMessage('registerUser.loginRedirect') }}</a>
+								<div class='text-center'>
+									<a class='small' href='{{route('logout')}}'>{{ antl.formatMessage('createProfile.loginRedirect') }}</a>
 								</div>
 							</div>
 						</div>

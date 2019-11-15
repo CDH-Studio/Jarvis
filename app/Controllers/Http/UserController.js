@@ -5,91 +5,72 @@ const Building = use('App/Models/Building');
 const Tower = use('App/Models/Tower');
 const Floor = use('App/Models/Floor');
 const UserRole = use('App/Models/UserRole');
-const AccountRequest = use('App/Models/AccountRequest');
-const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
-const Outlook = new (use('App/Outlook'))();
 const moment = require('moment');
-// const ActiveDirectory = require('activedirectory');
+const oauth2 = require('simple-oauth2').create({
+	client: {
+		id: Env.get('KEYCLOAK_CLIENT_ID'),
+		secret: Env.get('KEYCLOAK_CLIENT_SECRET')
+	},
 
-/**
- * Generating a random string.
- *
- * @param {Integer} times Each time a string of 5 to 6 characters is generated.
- */
-function randomString (times) {
-	let result = '';
-	for (let i = 0; i < times; i++) {
-		result += Math.random().toString(36).substring(2);
+	auth: {
+		tokenHost: Env.get('KEYCLOAK_HOST'),
+		tokenPath: Env.get('KEYCLOAK_TOKEN_ENDPOINT'),
+		authorizePath: Env.get('KEYCLOAK_AUTH_ENDPOINT')
 	}
-
-	return result;
-}
-
-/**
- * Update user password in the database
- *
- * @param {String} newPassword New password
- * @param {String} columnName  Name of the column to query by
- * @param {*} columnValue      Value of the column to query by
- */
-async function updatePassword ({ newPassword, columnName, columnValue }) {
-	try {
-		const hashedNewPassword = await Hash.make(newPassword);
-		const changedRow = await User
-			.query()
-			.where(columnName, columnValue)
-			.update({ password: hashedNewPassword });
-
-		return changedRow;
-	} catch (err) {
-		Logger.debug(err);
-	}
-}
+});
+const JWT = require('jsonwebtoken');
 
 class UserController {
 	/**
-	 * Render Register page
+	 * Render Profile Creation page
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async registerUserRender ({ request, auth, view, response }) {
-		// present login to logged out users only
-		if (auth.user) {
-			return response.redirect('/');
-		} else {
-			const numb = Math.floor(Math.random() * 8) + 1;
-			const photoName = 'login_' + numb + '.jpg';
+	async createProfileRender ({ view, auth }) {
+		const numb = Math.floor(Math.random() * 8) + 1;
+		const photoName = 'login_' + numb + '.jpg';
 
-			var formOptions = {};
+		var formOptions = {};
 
-			var buildingOptions = await Building.all();
-			formOptions.buildings = buildingOptions.toJSON();
+		var buildingOptions = await Building.all();
+		formOptions.buildings = buildingOptions.toJSON();
 
-			var towerOptions = (await Tower.all()).toJSON();
-			formOptions.towers = towerOptions;
+		var towerOptions = (await Tower.all()).toJSON();
+		formOptions.towers = towerOptions;
 
-			var floorOptions = (await Floor.all()).toJSON();
-			formOptions.floors = floorOptions;
+		var floorOptions = (await Floor.all()).toJSON();
+		formOptions.floors = floorOptions;
 
-			return view.render('auth.registerUser', { photoName, formOptions });
-		}
+		return view.render('auth.createProfile', { photoName, formOptions, userInfo: auth.user });
 	}
 
 	/**
-	 * Create a new Enployee user. There is an option to verify the user directly
-	 * or to make them verify their email address.
+	 * Create a profile for user.
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async create ({ request, response, auth, session }) {
-		const confirmationRequired = Env.get('REGISTRATION_CONFIRMATION', false);
+	async createProfile ({ request, response, auth }) {
+		try {
+			let body = request.post();
 
-		if (confirmationRequired) {
-			return this.createWithVerifyingEmail({ request, response, session });
-		} else {
-			return this.createWithoutVerifyingEmail({ request, response, auth });
+			// test if selected building, tower, and floor exist
+			await Floor.findOrFail(body.floor);
+			await Tower.findOrFail(body.tower);
+			await Building.findOrFail(body.building);
+
+			auth.user.verified = true;
+			auth.user.building_id = body.building;
+			auth.user.tower_id = body.tower;
+			auth.user.floor_id = body.floor;
+
+			await auth.user.save();
+
+			return response.redirect('/');
+		} catch (err) {
+			Logger.debug(err);
+			return response.redirect('/profile');
 		}
 	}
 
@@ -191,127 +172,6 @@ class UserController {
 	}
 
 	/**
-	 * Create and verify a new Enployee user. Save them to the database and log them in.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async createWithoutVerifyingEmail ({ request, response, auth }) {
-		try {
-			let body = request.post();
-
-			// test if selected building, tower, and floor exist
-			await Floor.findOrFail(body.floor);
-			await Tower.findOrFail(body.tower);
-			await Building.findOrFail(body.building);
-
-			let userInfo = {};
-			userInfo.firstname = body.firstname;
-			userInfo.lastname = body.lastname;
-			userInfo.password = body.password;
-			userInfo.email = body.email.toLowerCase();
-			userInfo.building_id = body.building;
-			userInfo.tower_id = body.tower;
-			userInfo.floor_id = body.floor;
-			userInfo.role_id = await UserRole.getRoleID('user');
-			userInfo.verified = true;
-
-			const user = await User.create(userInfo);
-			await auth.login(user);
-
-			return response.redirect('/');
-		} catch (err) {
-			Logger.debug(err);
-			return response.redirect('/register');
-		}
-	}
-	/**
-	 * Create a new Enployee user and send a confirmation email to them.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async createWithVerifyingEmail ({ request, response, auth, session }) {
-		try {
-			let body = request.post();
-
-			// test if selected building, tower, and floor exist
-			await Floor.findOrFail(body.floor);
-			await Tower.findOrFail(body.tower);
-			await Building.findOrFail(body.building);
-
-			let userInfo = {};
-			userInfo.firstname = body.firstname;
-			userInfo.lastname = body.lastname;
-			userInfo.password = body.password;
-			userInfo.email = body.email.toLowerCase();
-			userInfo.building_id = body.building;
-			userInfo.tower_id = body.tower;
-			userInfo.floor_id = body.floor;
-			userInfo.role_id = await UserRole.getRoleID('user');
-			userInfo.verified = false;
-
-			let hash = randomString(4);
-
-			let row = {
-				email: userInfo.email,
-				hash: hash,
-				type: 2
-			};
-			await AccountRequest.create(row);
-
-			let mailBody = `
-				<h2> Welcome to Jarvis, ${userInfo.firstname} </h2>
-				<p>
-					Please click on the following link or copy the URL into your browser: 
-					${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newUser?hash=${hash}
-				</p>
-			`;
-
-			await Outlook.sendMail({
-				subject: 'Verify Email Address for Jarvis',
-				body: mailBody,
-				to: userInfo.email });
-
-			await User.create(userInfo);
-
-			session.flash({
-				notification: 'A confirmation email with register instructions has been sent your email address.'
-			});
-			return response.redirect('/login');
-		} catch (err) {
-			Logger.debug(err);
-			return response.redirect('/register');
-		}
-	}
-
-	/**
-	 * Verify the user's emaill address.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async verifyEmail ({ request, response }) {
-		const hash = request._all.hash;
-
-		try {
-			let results = await AccountRequest
-				.query()
-				.where('hash', '=', hash)
-				.fetch();
-			let rows = results.toJSON();
-			Logger.debug(rows);
-			const email = rows[0].email;
-
-			await User
-				.query()
-				.where('email', email)
-				.update({ verified: true });
-
-			return response.redirect('/');
-		} catch (err) {
-			Logger.debug(err);
-		}
-	}
-
-	/**
 	 * Render Register page
 	 *
 	 * @param {Object} Context The context object.
@@ -345,7 +205,7 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async loginRender ({ request, auth, view, response }) {
+	async loginRender ({ auth, view, response }) {
 		// present login to logged out users only
 		if (auth.user) {
 			return response.redirect('/');
@@ -362,8 +222,7 @@ class UserController {
 	 * @param {Object} Context The context object.
 	 */
 	async login ({ request, auth, response, session }) {
-		const { email, password } = request.all();
-
+		const { email } = request.all();
 		const user = await User
 			.query()
 			.where('email', email.toLowerCase())
@@ -371,27 +230,19 @@ class UserController {
 			.first();
 
 		try {
-			await auth.attempt(user.email, password);
-			return response.route('home');
+			await auth.login(user);
+			if (auth.user.getUserRole() === 'User') {
+				session.flash({
+					notification: 'Welcome! You are logged in'
+				});
+
+				return response.redirect('/userDash');
+			} else {
+				return response.redirect('/');
+			}
 		} catch (error) {
 			session.flash({ loginError: 'Invalid email/password' });
 			return response.redirect('/login');
-		}
-	}
-
-	/**
-	 * Render login page
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async forgotPasswordRender ({ request, auth, view, response }) {
-		// present login to logged out users only
-		if (auth.user) {
-			return response.redirect('/');
-		} else {
-			var numb = Math.floor(Math.random() * 8) + 1;
-			var photoName = 'login_' + numb + '.jpg';
-			return view.render('auth.forgotPassword', { photoName });
 		}
 	}
 
@@ -402,10 +253,11 @@ class UserController {
 	 */
 	async logout ({ auth, response, session }) {
 		await auth.logout();
+
 		session.flash({
 			notification: 'You have been logged out.'
 		});
-		return response.redirect('/login');
+		return response.redirect('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=https://jarvis-dev.apps.ic.gc.ca/login');
 	}
 
 	async show ({ auth, params, view, response, request, session }) {
@@ -471,120 +323,9 @@ class UserController {
 					await user.delete();
 				}
 			}
-			return response.route('home');
+			return response.redirect('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=https://jarvis-dev.apps.ic.gc.ca/login');
 		} catch (error) {
 			return response.route('home');
-		}
-	}
-
-	/**
-	 * Create a password reset request record in the database and send a confirmation email to the user.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async createPasswordResetRequest ({ request, response, session }) {
-		const email = request.body.email;
-		const results = await User
-			.query()
-			.where('email', '=', email)
-			.fetch();
-		const rows = results.toJSON();
-
-		if (rows.length !== 0) {
-			let hash = randomString(4);
-
-			let row = {
-				email: email,
-				hash: hash,
-				type: 1
-			};
-
-			await AccountRequest.create(row);
-
-			let body = `
-      			<h2> Password Reset Request </h2>
-      			<p>
-        			We received a request to reset your password. If you asked to reset your password, please click on the following link: 
-        			${Env.get('SERVER_URL', 'https://jarvis-outlook-new-jarvis.apps.ic.gc.ca')}/newPassword?hash=${hash}
-      			</p>
-			`;
-
-			await Outlook.sendMail({
-				subject: 'Password Reset Request',
-				body: body,
-				to: email });
-		}
-
-		session.flash({
-			notification: `An email has been sent to ${email} with further instructions on how to reset your password.`
-		});
-
-		return response.redirect('/login');
-	}
-
-	/**
-	 * Verify the user's password reset hash code and redirect them to the password reset page.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async verifyHash ({ request, view }) {
-		const hash = request._all.hash;
-		if (hash) {
-			const results = await AccountRequest
-				.query()
-				.where('hash', '=', hash)
-				.fetch();
-			const rows = results.toJSON();
-			Logger.debug(hash);
-
-			if (rows.length !== 0 && rows[0].type === 1) {
-				const email = rows[0].email;
-				const numb = Math.floor(Math.random() * 8) + 1;
-				const photoName = 'login_' + numb + '.jpg';
-
-				return view.render('auth.resetPassword', { email, photoName });
-			}
-		}
-	}
-
-	/**
-	 * Update the user's password in the database.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async resetPassword ({ request, response, session }) {
-		const { newPassword, email } = request.only(['newPassword', 'email']);
-
-		if (updatePassword({ newPassword, columnName: 'email', columnValue: email })) {
-			session.flash({
-				notification: 'Your password has been changed. Please use the new password to log in.'
-			});
-			return response.redirect('/login');
-		}
-	}
-
-	/**
-	 * Update the user's password in the database.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async changePassword ({ request, response, auth, session }) {
-		const { newPassword, userId } = request.only(['newPassword', 'userId']);
-		const userRole = await auth.user.getUserRole();
-		if (userRole === 'admin' || (auth.user.id === Number(userId) && userRole === 'user')) {
-			try {
-				if (updatePassword({ newPassword, columnName: 'id', columnValue: userId })) {
-					session.flash({ success: 'Password Updated Successfully' });
-				}
-			} catch (error) {
-				session.flash({ error: 'Password Update failed' });
-				return response.redirect('/login');
-			}
-
-			return response.route('viewProfile', { id: Number(userId) });
-			// check if user is viewing their own profile
-		} else {
-			return response.redirect('/');
 		}
 	}
 
@@ -635,7 +376,76 @@ class UserController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async active ({ request }) {
+	async loginAD ({ response }) {
+		const authUri = oauth2.authorizationCode.authorizeURL({
+			redirect_uri: Env.get('KEYCLOAK_REDIRECT_URI'),
+			scope: Env.get('KEYCLOAK_SCOPES')
+		});
+
+		return response.redirect(authUri);
+	}
+
+	async authAD ({ request, session, response, auth, view }) {
+		// getting authorization code
+		const code = request.only(['code']).code;
+
+		// acquiring access token for user
+		let userInfo;
+		if (code) {
+			try {
+				let result = await oauth2.authorizationCode.getToken({
+					code: code,
+					redirect_uri: Env.get('KEYCLOAK_REDIRECT_URI'),
+					scope: Env.get('KEYCLOAK_SCOPES')
+				});
+				const token = await oauth2.accessToken.create(result);
+
+				userInfo = JWT.decode(token.token.id_token);
+			} catch (err) {
+				return err;
+			}
+		}
+
+		const email = userInfo.email;
+		const user = await User
+			.query()
+			.where('email', email.toLowerCase())
+			.first();
+
+		if (user) {
+			await auth.login(user);
+			if (auth.user.role_id === 2) {
+				if (auth.user.verified) {
+					session.flash({
+						notification: 'Welcome! You are logged in'
+					});
+
+					return response.redirect('/userDash');
+				} else {
+					return response.redirect('/profile');
+				}
+			} else {
+				return response.redirect('/');
+			}
+		} else {
+			let newUser = {};
+			newUser.firstname = userInfo.given_name;
+			newUser.lastname = userInfo.family_name;
+			newUser.email = userInfo.email.toLowerCase();
+			newUser.role_id = await UserRole.getRoleID('user');
+			newUser.verified = false;
+			newUser.building_id = '1';
+			newUser.tower_id = '1';
+			newUser.floor_id = '1';
+
+			const user = await User.create(newUser);
+			await auth.login(user);
+			return response.redirect('/profile');
+		}
+	}
+
+	async key ({ request, view, response }) {
+		// return view.render('auth.keycloak')
 	}
 }
 
