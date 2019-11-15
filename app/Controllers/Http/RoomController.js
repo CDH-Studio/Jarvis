@@ -10,6 +10,7 @@ const FeaturePivot = use('App/Models/FeaturesRoomsPivot');
 const RoomStatus = use('App/Models/RoomStatus');
 const Review = use('App/Models/Review');
 const Helpers = use('Helpers');
+const Event = use('Event');
 const Outlook = new (use('App/Outlook'))();
 
 // Used for time related calcuklations and formatting
@@ -676,6 +677,84 @@ class RoomController {
 		}
 
 		return view.render('userPages.fixedSearchResults', { code: code, roomsLength: rooms.length, floors: floors });
+	}
+
+	/**
+	*
+	* Retrieve currently available rooms and returns and array of size 2 with results
+	* User's Floor and Tower > User's Floor and ¬ Tower > User's Floor-1 and Tower > User's Floor+1 and Tower > User's Floor-1 and ¬ Tower
+	*
+	* @param {view}
+	*
+	*/
+	async currentlyAvailable ({ antl, view, request }) {
+		try {
+			const body = request.all();
+			// check if user is valid
+			let user = await User.findByOrFail('id', body.user_id);
+			let code = body.code;
+
+			// If the tower is West then set the order to descending, else ascending
+			let towerOrder = (await user.getUserTower() === 'West') ? 'asc' : 'desc';
+			let lang = antl.currentLocale();
+
+			// format date
+			const now = moment();
+			const remainder = 30 - (now.minute() % 30);
+			const date = moment().format('YYYY-MM-DD');
+			const from = moment(now).add(remainder, 'm').format('HH:mm');
+			const to = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
+			const duration = 1;
+
+			let formattedFrom, formattedTo;
+
+			const formattedDate = moment().locale(lang).format('ddd MMM DD, YYYY');
+			if (lang === 'fr') {
+				formattedFrom = moment(now).add(remainder, 'm').format('HH:mm');
+				formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
+			} else {
+				formattedFrom = moment(now).add(remainder, 'm').format('h:mm A');
+				formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('h:mm A');
+			}
+
+			// look for rooms that are open
+			// order all rooms in the database by closest to the user's floor and tower
+			// order by ascending seats number and fetch results
+			let searchResults = await Room
+				.query()
+				.where('state_id', 1)
+				.orderByRaw('ABS(floor_id-' + user.floor_id + ') ASC')
+				.orderBy('tower_id', towerOrder)
+				.orderBy('seats', 'asc')
+				.fetch();
+			const rooms = searchResults.toJSON();
+
+			// Search for rooms
+			let numberOfRooms = 2;
+			let roomsSearched = 0;
+			await rooms.forEach(async room => {
+				// check availability of room
+				let result = await Outlook.getRoomAvailability({ date, from, to, duration, floor: room.floor_id, calendar: room.calendar });
+				if (numberOfRooms !== 0 && result) {
+					Event.fire('send.room', {
+						card: view.render('components.smallCard', { room: room, datetime: { date: formattedDate, time: formattedFrom + ' - ' + formattedTo } }),
+						code: code
+					});
+					numberOfRooms--;
+				}
+
+				roomsSearched++;
+
+				// once 2 rooms are found or searched all rooms then send END sifnal
+				if (numberOfRooms === 0 || rooms.length === roomsSearched) {
+					Event.fire('send.done', {
+						code: code
+					});
+				}
+			});
+		} catch (error) {
+			console.log(error);
+		}
 	}
 
 	/**

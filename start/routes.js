@@ -106,6 +106,7 @@ Route.get('/results', 'RoomController.findSpecific').as('results').middleware(['
 Route.get('/search/fixed', 'RoomController.fixedSearchRooms').as('searchFixed').validator('SearchFixed');
 Route.get('/search/flexible', 'RoomController.flexibleSearchRooms').as('searchFlexible').validator('SearchFlexible');
 Route.get('/search/recurring', 'RoomController.searchRooms').as('searchRecurring').validator('SearchRoomFlexible'); // TODO
+Route.post('/currentlyavail', 'RoomController.currentlyAvailable').as('getCurrentlyAvail').middleware(['auth']);
 
 // Booking a Room
 Route.post('/confirmBooking', 'BookingController.confirmBooking').as('confirmBooking').validator('BookRoom').middleware(['auth']);

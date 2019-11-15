@@ -257,7 +257,11 @@ class UserController {
 		session.flash({
 			notification: 'You have been logged out.'
 		});
+<<<<<<< HEAD
 		return response.redirect(`https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=${Env.get('SERVER_URL')}/login`);
+=======
+		return response.redirect('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=https://jarvis-dev.apps.ic.gc.ca/login');
+>>>>>>> dev
 	}
 
 	async show ({ auth, params, view, response, request, session }) {
@@ -323,7 +327,11 @@ class UserController {
 					await user.delete();
 				}
 			}
+<<<<<<< HEAD
 			return response.redirect(`https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=${Env.get('SERVER_URL')}/login`);
+=======
+			return response.redirect('https://sso-dev.ised-isde.canada.ca/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=https://jarvis-dev.apps.ic.gc.ca/login');
+>>>>>>> dev
 		} catch (error) {
 			return response.route('home');
 		}

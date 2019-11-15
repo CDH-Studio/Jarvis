@@ -5,7 +5,7 @@
 	"CAHeading":"Currently Available",
 	"FBHeading": "Frequently booked",
 	"MBHeading": "My bookings",
-	"CAError": "Searching",
+	"CAError": "No rooms found",
 	"FBError": "No rooms found",
 	"MBError": "No bookings found"
 }

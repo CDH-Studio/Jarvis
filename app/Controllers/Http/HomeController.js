@@ -8,7 +8,6 @@ const RoomStatus = use('App/Models/RoomStatus');
 const Floor = use('App/Models/Floor');
 const Tower = use('App/Models/Tower');
 const RoomFeaturesCategory = use('App/Models/RoomFeaturesCategory');
-const Event = use('Event');
 var moment = require('moment');
 require('moment-round');
 const Outlook = new (use('App/Outlook'))();
@@ -25,12 +24,6 @@ function randomString (times) {
 	}
 
 	return result;
-}
-
-async function asyncForEach (arr, callback) {
-	for (let i = 0; i < arr.length; i++) {
-		await callback(arr[i], i, arr);
-	}
 }
 
 class HomeController {
@@ -109,7 +102,7 @@ class HomeController {
 	*
 	*/
 	async userDashboard ({ antl, view, auth, request }) {
-		const code = await this.getAvailableRooms({ antl, user: auth.user, view });
+		const code = randomString(4);
 		const freqRooms = await this.getFreqBooked(auth.user);
 		const upcoming = await this.getUpcomming(auth.user);
 		const userId = auth.user.id;
@@ -444,75 +437,6 @@ class HomeController {
 	/****************************************
 				User Functions
 	****************************************/
-
-	/**
-	*
-	* Retrieve currently available rooms and returns and array of size 2 with results
-	* User's Floor and Tower > User's Floor and ¬ Tower > User's Floor-1 and Tower > User's Floor+1 and Tower > User's Floor-1 and ¬ Tower
-	*
-	* @param {view}
-	*
-	*/
-	async getAvailableRooms ({ antl, user, view }) {
-		// If the tower is West then set the order to descending, else ascending
-		let towerOrder = (await user.getUserTower() === 'West') ? 'asc' : 'desc';
-		let lang = antl.currentLocale();
-
-		// look for rooms that are open
-		// order all rooms in the database by closest to the user's floor and tower
-		// order by ascending seats number and fetch results
-		// TODO: floor_id -> floor, tower_id
-		let searchResults = await Room
-			.query()
-			.where('state_id', 1)
-			.orderByRaw('ABS(floor_id-' + user.floor_id + ') ASC')
-			.orderBy('tower_id', towerOrder)
-			.orderBy('seats', 'asc')
-			.fetch();
-		const rooms = searchResults.toJSON();
-
-		const now = moment();
-		const remainder = 30 - (now.minute() % 30);
-		const date = moment().format('YYYY-MM-DD');
-		const from = moment(now).add(remainder, 'm').format('HH:mm');
-		const to = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
-		const duration = 1;
-
-		let formattedFrom, formattedTo;
-
-		const formattedDate = moment().locale(lang).format('ddd MMM DD, YYYY');
-		if (lang === 'fr') {
-			formattedFrom = moment(now).add(remainder, 'm').format('HH:mm');
-			formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('HH:mm');
-		} else {
-			formattedFrom = moment(now).add(remainder, 'm').format('h:mm A');
-			formattedTo = moment(now).add(remainder, 'm').add(1, 'h').format('h:mm A');
-		}
-
-		const code = randomString(4);
-		const checkRoomAvailability = async () => {
-			let numberOfRooms = 2;
-			await asyncForEach(rooms, async (item) => {
-				if (numberOfRooms !== 0 && await Outlook.getRoomAvailability({ date, from, to, duration, floor: item.floor_id, calendar: item.calendar })) {
-					Event.fire('send.room', {
-						card: view.render('components.smallCard', { room: item, datetime: { date: formattedDate, time: formattedFrom + ' - ' + formattedTo } }),
-						code: code
-					});
-					numberOfRooms--;
-				}
-			});
-
-			if (numberOfRooms === 2) {
-				Event.fire('send.empty', {
-					view: view.render('components.cardEmptyMessage', { faIcon: 'fas fa-ghost fa-5x', message: antl.formatMessage('userDash.FBError') }),
-					code: code
-				});
-			}
-		};
-
-		setTimeout(checkRoomAvailability, 800);
-		return code;
-	}
 
 	/**
 	*

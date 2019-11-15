@@ -231,7 +231,7 @@ class BookingController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async cancelBooking ({ session, params, response, view }) {
+	async cancelBooking ({ session, params, response }) {
 		try {
 			// fetch booking
 			const result = await Booking
