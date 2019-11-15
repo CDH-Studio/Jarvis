@@ -5,7 +5,6 @@ const Building = use('App/Models/Building');
 const Tower = use('App/Models/Tower');
 const Floor = use('App/Models/Floor');
 const UserRole = use('App/Models/UserRole');
-const Hash = use('Hash');
 const Env = use('Env');
 const Logger = use('Logger');
 const moment = require('moment');
