@@ -432,7 +432,6 @@ class UserController {
 			let newUser = {};
 			newUser.firstname = userInfo.given_name;
 			newUser.lastname = userInfo.family_name;
-			newUser.password = await Hash.make('123');
 			newUser.email = userInfo.email.toLowerCase();
 			newUser.role_id = await UserRole.getRoleID('user');
 			newUser.verified = false;

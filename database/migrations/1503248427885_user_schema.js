@@ -11,7 +11,6 @@ class UserSchema extends Schema {
 			table.string('firstname', 80).notNullable();
 			table.string('lastname', 80).notNullable();
 			table.string('email', 254).notNullable().unique();
-			table.string('password', 60).notNullable();
 			table.integer('floor_id').unsigned().references('id').inTable('floors');
 			table.integer('tower_id').unsigned().references('id').inTable('towers');
 			table.integer('building_id').unsigned().references('id').inTable('buildings');
