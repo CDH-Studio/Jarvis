@@ -457,7 +457,7 @@ class UserController {
 			auth.login(user);
 
 			response.redirect('/');
-		} catch {
+		} catch (e) {
 			response.redirect('/');
 		}
 	}
