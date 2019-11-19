@@ -36,7 +36,7 @@
 		"adonis-scheduler": "^3.0.2",
 		"axios": "^0.19.0",
 		"babel-eslint": "^10.0.3",
-		"chart.js": "^2.9.2",
+		"chart.js": "^2.9.3",
 		"es6-promise": "^4.2.8",
 		"isomorphic-fetch": "^2.2.1",
 		"jquery": "^3.4.1",
@@ -46,7 +46,7 @@
 		"moment-round": "^1.0.1",
 		"passport-activedirectory": "^1.0.4",
 		"pusher": "^3.0.0",
-		"sharp": "^0.23.2",
+		"sharp": "^0.23.3",
 		"simple-oauth2": "^3.0.1",
 		"sqlite3": "^4.1.0"
 	},
