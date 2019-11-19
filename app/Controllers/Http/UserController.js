@@ -446,15 +446,20 @@ class UserController {
 
 	async test ({ params, auth, response }) {
 		const email = params.id;
-		const user = await User
-			.query()
-			.where('email', email.toLowerCase())
-			.where('verified', true)
-			.first();
 
-		auth.login(user);
-		
-		response.redirect('/');
+		try {
+			const user = await User
+				.query()
+				.where('email', email.toLowerCase())
+				.where('verified', true)
+				.first();
+
+			auth.login(user);
+
+			response.redirect('/');
+		} catch {
+			response.redirect('/');
+		}
 	}
 }
 
