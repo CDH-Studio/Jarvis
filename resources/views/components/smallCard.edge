@@ -8,8 +8,7 @@
             {{--  Room Picture  --}}
             {{--  <div class='photo'>  --}}
                 @if(room.picture) 
-                    {{--  <img src='{{ room.picture_small }}' alt='{{ room.name }}-picture'>  --}}
-                    <img src='{{ room.picture }}' alt='{{ room.name }}-picture'>
+                    <img src='{{ room.picture_small }}' alt='{{ room.name }}-picture'>
                 @else
                     <img src='/images/default.png' alt='default-room-image'>
                 @endif
