@@ -12,6 +12,7 @@ const Review = use('App/Models/Review');
 const Helpers = use('Helpers');
 const Event = use('Event');
 const Outlook = new (use('App/Outlook'))();
+const SearchRecord = use('App/Models/SearchRecord');
 
 // Used for time related calcuklations and formatting
 const moment = require('moment');
@@ -609,8 +610,10 @@ class RoomController {
 		}
 	}
 
-	async flexibleSearchRooms ({ request, view, response, antl }) {
+	async flexibleSearchRooms ({ request, view, response, antl, auth }) {
 		const options = request.all();
+		
+		this.saveSearchRecord({ userId: auth.user.id, type: 'flexible' });
 
 		let timeSlots = [];
 		// Generate randome code for pusher
@@ -654,9 +657,11 @@ class RoomController {
 	 *
 	 * @param {Object} Context The context object.
 	 */
-	async fixedSearchRooms ({ request, view, antl }) {
+	async fixedSearchRooms ({ request, view, antl, auth }) {
 		// importing forms from search form
 		const options = request.all();
+		
+		this.saveSearchRecord({ userId: auth.user.id, type: 'fixed' });
 
 		let rooms = (await Room.filterRooms(options.fixedSearchFloor, options.fixedSearchSeats, options.fixedSearchCapacity, options.fixedSearchFeatures)).toJSON();
 
@@ -677,6 +682,13 @@ class RoomController {
 		}
 
 		return view.render('userPages.fixedSearchResults', { code: code, roomsLength: rooms.length, floors: floors });
+	}
+
+	async saveSearchRecord({ userId, type }) {
+		const record = new SearchRecord();
+		record.user_id = userId;
+		record.type = type;
+		record.save();
 	}
 
 	/**
