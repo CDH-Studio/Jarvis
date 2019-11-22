@@ -15,7 +15,7 @@ const Floor = use('App/Models/Floor');
 
 class FloorSeeder {
 	async run () {
-		var floorFiller = ['Lobby', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+		var floorFiller = ['C3', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
 		var buildingFiller = ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'];
 		var count = await Floor.getCount();
 
