@@ -1,0 +1,84 @@
+@layout('layouts.mainLayout')
+
+@section('title')
+    {{antl.formatMessage('manageBookings.pageTitle')}}
+@endsection
+
+@section('extracss')
+	{{ style('css/manageBookings') }}
+	{{--  Bootstrap link needed for the table formating  --}}
+	<link href='https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css' rel='stylesheet'>
+@endsection
+
+{{--  Manage bookings page content  --}}
+@section('content')
+    {{--  Loading page header  --}}
+    @component('components.pageHeader', title=antl.formatMessage('manageBookings.pageTitle'))
+	@endcomponent
+    <button id='test'>Click</button>
+	<div class="row mb-4 mt-0">
+		<div class="col-12 text-left">
+            {{--  @include('partials.timeFilter')  --}}
+		</div>
+	</div>
+
+    @component('components.generalCard', title=antl.formatMessage('userDash.MBHeading'))
+		@slot('body')
+			<strong>Total: {{records.length}}</strong>
+			<div class="table table-responsive">
+				<table id='searchRecordsTable' class='table table-hover' style='width:100%;'>
+					<thead>
+						<tr>
+							<th scope='col' aria-label='Room column' class='text-center'>{{antl.formatMessage('manageBookings.tableName')}}</th>
+							<th scope='col' aria-label='Room column' class='text-center'>Type</th>
+							<th scope='col' aria-label='Meeting name column'  class='text-center'>{{antl.formatMessage('manageBookings.tableDate')}}</th>
+							<th scope='col' aria-label='Date column' class='text-center'>{{antl.formatMessage('manageBookings.tableTime')}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						@each(record in records) 
+							{{--  <tr aria-label='{{booking.subject}} row'>  --}}
+								<td class='text-center'><a href='{{ route('viewProfile', {id: record.user_id}) }}'>{{ truncate(record.user.firstname, 5, '.') }} {{ truncate(record.user.lastname, 5, '.') }}</a></td>
+								<td class='text-center'>{{ record.type }}</td>
+								<td class='text-center'>{{ moment(record.created_at).format("YYYY-MM-DD"); }}</td>
+								<td class='text-center'>{{ moment(record.created_at).format("HH:mm");  }}</td>
+							</tr>
+						@endeach
+					</tbody>
+				</table>
+			</div>
+		@endslot
+	@endcomponent
+
+@endsection
+
+{{--  Deals with the search functionality of the table above- searches all fields   --}}
+@section('extrajs') 
+    <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
+    <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
+    <script>
+        $(document).ready(function() {
+			$('#searchRecordsTable').DataTable( {
+				"paging":   true,
+				"columnDefs": [ { type: 'date', 'targets': [3] } ],
+				"order": [[ 3, "desc" ]],
+				"info":     false
+			});
+        });
+        
+        $('#test').on('click', function() {
+            var table = $('#searchRecordsTable').DataTable();
+ 
+            var filteredData = table
+                .column( 1 )
+                .data()
+                .filter( function ( value, index ) {
+                    return value === 'flexible' ? true : false;
+                } );
+            console.log(filteredData)
+            table.clear();
+            table.add(filteredData);
+            table.draw();
+        });
+	</script>
+@endsection

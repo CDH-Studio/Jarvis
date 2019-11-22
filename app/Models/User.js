@@ -66,6 +66,10 @@ class User extends Model {
 		return this.belongsTo('App/Models/UserRole', 'role_id');
 	}
 
+	searchRecords () {
+		return this.hasMany('App/Models/SearchRecord');
+	}
+
 	async getUserRole () {
 		try {
 			var role = await UserRole.findOrFail(this.role_id);
