@@ -120,7 +120,7 @@ Route.get('/calendars', 'RoomController.getCalendars');
 Route.get('/calendar', 'RoomController.getCalendar');
 
 // Search records
-Route.get('/records', 'SearchRecordController.viewSearchRecords').middleware(['isAdmin']);
+Route.get('/records', 'SearchRecordController.viewSearchRecords').middleware(['isAdmin']).as('records');
 
 //= ========================================================================
 // Recurring

@@ -15,16 +15,44 @@
     {{--  Loading page header  --}}
     @component('components.pageHeader', title=antl.formatMessage('manageBookings.pageTitle'))
 	@endcomponent
-    <button id='test'>Click</button>
 	<div class="row mb-4 mt-0">
-		<div class="col-12 text-left">
-            {{--  @include('partials.timeFilter')  --}}
-		</div>
+        <div class="col-12 text-left">
+            <div class="row mb-2 mt-0">
+                <div class="col-6 col-lg-2 text-left">
+                    <strong>Type:</strong></br>
+                    <div class="dropdown d-inline">
+                        <button class="btn btn-secondary dropdown-toggle text-center shadow" type="button" id="dropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%">
+                            All
+                        </button>
+                        <div class="dropdown-menu text-center" id='menu1' aria-labelledby="dropdown1" style="width:100%">
+                            <a class="dropdown-item" id='menu1-item1' href="#" selected='selected'>All</a>
+                            <a class="dropdown-item" id='menu1-item2' href="#">Fixed</a>
+                            <a class="dropdown-item" id='menu1-item3' href="#">Flexible</a>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-6 col-lg-2 text-left">
+                    <strong>Past:</strong></br>
+                    <div class="dropdown d-inline">
+                        <button class="btn btn-secondary dropdown-toggle text-center shadow" type="button" id="dropdown2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%">
+                            7 days
+                        </button>
+                        <div class="dropdown-menu text-center" id='menu2' aria-labelledby="dropdown2" style="width:100%">
+                            <a class="dropdown-item" id='menu2-item1' href="#" value=7>7 days</a>
+                            <a class="dropdown-item" id='menu2-item2' href="#">30 days</a>
+                            <a class="dropdown-item" id='menu2-item3' href="#">60 days</a>
+                            <a class="dropdown-item" id='menu2-item4' href="#">360 days</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
 
     @component('components.generalCard', title=antl.formatMessage('userDash.MBHeading'))
 		@slot('body')
-			<strong>Total: {{records.length}}</strong>
+			<strong>Total: </strong><strong id='total'>{{records.length}}</strong>
 			<div class="table table-responsive">
 				<table id='searchRecordsTable' class='table table-hover' style='width:100%;'>
 					<thead>
@@ -56,29 +84,6 @@
 @section('extrajs') 
     <script src='https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js'></script>
     <script src='https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js'></script>
-    <script>
-        $(document).ready(function() {
-			$('#searchRecordsTable').DataTable( {
-				"paging":   true,
-				"columnDefs": [ { type: 'date', 'targets': [3] } ],
-				"order": [[ 3, "desc" ]],
-				"info":     false
-			});
-        });
-        
-        $('#test').on('click', function() {
-            var table = $('#searchRecordsTable').DataTable();
- 
-            var filteredData = table
-                .column( 1 )
-                .data()
-                .filter( function ( value, index ) {
-                    return value === 'flexible' ? true : false;
-                } );
-            console.log(filteredData)
-            table.clear();
-            table.add(filteredData);
-            table.draw();
-        });
-	</script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js'></script>
+    <script src='js/searchRecords.js'></script>
 @endsection
