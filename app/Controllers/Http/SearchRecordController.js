@@ -8,7 +8,6 @@ class SearchRecordController {
 			.query()
 			.with('user')
 			.fetch()).toJSON();
-		console.log(records)
 
 		return view.render('adminPages.viewSearchRecords', {
 			records,

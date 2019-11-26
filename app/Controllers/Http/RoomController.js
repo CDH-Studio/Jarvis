@@ -612,7 +612,7 @@ class RoomController {
 
 	async flexibleSearchRooms ({ request, view, response, antl, auth }) {
 		const options = request.all();
-		
+
 		this.saveSearchRecord({ userId: auth.user.id, type: 'flexible' });
 
 		let timeSlots = [];
@@ -660,7 +660,7 @@ class RoomController {
 	async fixedSearchRooms ({ request, view, antl, auth }) {
 		// importing forms from search form
 		const options = request.all();
-		
+
 		this.saveSearchRecord({ userId: auth.user.id, type: 'fixed' });
 
 		let rooms = (await Room.filterRooms(options.fixedSearchFloor, options.fixedSearchSeats, options.fixedSearchCapacity, options.fixedSearchFeatures)).toJSON();
@@ -684,7 +684,7 @@ class RoomController {
 		return view.render('userPages.fixedSearchResults', { code: code, roomsLength: rooms.length, floors: floors });
 	}
 
-	async saveSearchRecord({ userId, type }) {
+	async saveSearchRecord ({ userId, type }) {
 		const record = new SearchRecord();
 		record.user_id = userId;
 		record.type = type;
