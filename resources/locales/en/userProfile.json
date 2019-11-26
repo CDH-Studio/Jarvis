@@ -16,7 +16,7 @@
     "deleteAccount":"Delete Account",
     "deleteWarning1":"The deletion of an account is permanent!",
     "deleteWarning2":"proceed with caution",
-    "deleteUnauthorized":"This account cannot be deleted becausue it has bookings or reviews associated with it",
+    "deleteUnauthorized":"This account cannot be deleted because it has bookings or reviews associated with it",
     "deleteConfirm1":"Are you sure want to delete",
     "deleteConfirm2":"This user will be permanently removed from Jarvis",
     "deleteConfirm3":"This is process is permanent!",
