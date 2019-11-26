@@ -1,82 +1,115 @@
-function setTotal(table) {
-    $('#total').text(table.$('tr', {"filter":"applied"}).length);
-}
+(function() {
+    function setTotal() {
+        $('#total').text(total);
+    }
 
-function setStartDate(interval) {
-    return moment().subtract(interval, 'days').format('YYYY-MM-DD');
-}
+    function resetTotal() {
+        total = 0;
+    }
 
-var startDate = setStartDate(7);
+    function setStartDate(interval) {
+        return moment().subtract(interval, 'days').format('YYYY-MM-DD');
+    }
 
-$(document).ready(function() {
-    $.fn.dataTable.ext.search.push(
-        function( settings, data, dataIndex ) {
-            var date = data[2]; // use data for the age column
-            console.log('date ', date)
+    function drawTable() {
+        resetTotal();
+        table.draw();
+        setTotal();
+    }
 
-            return date > startDate;
-        }
-    ); 
+    var startDate = setStartDate(7);
+    var typeFilter = '';
+    var table;
+    var total = 0;
+    var username = '';
 
-    $('#searchRecordsTable').DataTable( {
-        "paging":   true,
-        "columnDefs": [ { type: 'date', 'targets': [3] } ],
-        "order": [[ 3, "desc" ]],
-        "info":     false
+    $(document).ready(function() {
+        $.fn.dataTable.ext.search.push(
+            function( settings, data, dataIndex ) {
+                var date = data[2];
+                var type = data[1];
+                var user = data[0];
+
+                var condition = date > startDate && 
+                    (typeFilter === ''? true : (type === typeFilter)) && 
+                    (user.toLowerCase().includes(username.toLowerCase()));
+                
+                if (condition) {
+                    total++;  
+                }
+        
+                return condition;
+            }
+        ); 
+
+        table = $('#searchRecordsTable').DataTable({
+            "paging":   true,
+            "order": [[ 2, "desc" ]],
+            "bLengthChange": false,
+            "bInfo": false
+        });
     });
 
-    console.log(startDate);
-});
+    //= ========================================================================
+    // Search type filter
+    //= ========================================================================
+    $('#dropdownType-All').on('click', function() {
+        $('#dropdownType').text('All');
 
-$('#menu1-item1').on('click', function() {
-    $('#dropdown1').text('All');
+        typeFilter = '';
+        drawTable();
+    })
 
-    var table = $('#searchRecordsTable').DataTable()
-        .columns(1)
-        .search('');
-    table.draw();
+    $('#dropdownType-Fixed').on('click', function() {
+        $('#dropdownType').text('Fixed');
 
-    setTotal(table);
-})
+        typeFilter = 'fixed';
+        drawTable();
+    })
 
-$('#menu1-item2').on('click', function() {
-    $('#dropdown1').text('Fixed');
+    $('#dropdownType-Flexible').on('click', function() {
+        $('#dropdownType').text('Flexible');
 
-    var table = $('#searchRecordsTable').DataTable()
-        .columns(1)
-        .search('fixed');
-    table.draw();
-    
-    setTotal(table);
-})
+        typeFilter = 'flexible';
+        drawTable();
+    })
 
-$('#menu1-item3').on('click', function() {
-    $('#dropdown1').text('Flexible');
+    //= ========================================================================
+    // Time filter
+    //= ========================================================================
+    $('#dropdownTime-7d').on('click', function() {
+        $('#dropdownTime').text('7 days');
 
-    var table = $('#searchRecordsTable').DataTable()
-        .columns(1)
-        .search('flexible');
-    table.draw();
-    
-    setTotal(table);
-})
+        startDate = setStartDate(7);
+        drawTable();
+    })
 
-$('#menu2-item1').on('click', function() {
-    $('#dropdown2').text('7 days');
-    startDate = setStartDate(1);
+    $('#dropdownTime-30d').on('click', function() {
+        $('#dropdownTime').text('30 days');
 
-    var table = $('#searchRecordsTable').DataTable()
-        .columns(1)
-        .search('flexible');
-    table.draw();
-})
+        startDate = setStartDate(30);
+        drawTable();
+    })
 
-$('#menu2-item2').on('click', function() {
-    $('#dropdown2').text('30 days');
-    startDate = setStartDate(30);
+    $('#dropdownTime-60d').on('click', function() {
+        $('#dropdownTime').text('60 days');
 
-    var table = $('#searchRecordsTable').DataTable()
-        .columns(1)
-        .search('flexible');
-    table.draw();
-})
+        startDate = setStartDate(60);
+        drawTable();
+    })
+
+    $('#dropdownTime-360d').on('click', function() {
+        $('#dropdownTime').text('360 days');
+
+        startDate = setStartDate(360);
+        drawTable();
+    })
+
+    //= ========================================================================
+    // User filter
+    //= ========================================================================
+    $('#user').keyup(function() {
+        username = $('#user').val();
+        drawTable();
+    })
+})();
