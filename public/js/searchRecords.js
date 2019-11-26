@@ -98,10 +98,10 @@
         drawTable();
     })
 
-    $('#dropdownTime-360d').on('click', function() {
-        $('#dropdownTime').text('360 days');
+    $('#dropdownTime-180d').on('click', function() {
+        $('#dropdownTime').text('180 days');
 
-        startDate = setStartDate(360);
+        startDate = setStartDate(180);
         drawTable();
     })
 
