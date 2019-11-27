@@ -352,7 +352,7 @@ class UserController {
 			if (user.bookings.length !== 0) {
 				const last = user.bookings.reduce((prev, cur) => {
 					return cur.from > prev.from ? cur : prev;
-				})
+				});
 
 				user.lastBooking = moment(last.from).format('YYYY-MM-DD');
 			}
@@ -386,11 +386,11 @@ class UserController {
 		// look for the most recent booking of each user
 		users.forEach(user => {
 			user.lastBooking = '';
-			
+
 			if (user.bookings.length !== 0) {
 				const last = user.bookings.reduce((prev, cur) => {
 					return cur.from > prev.from ? cur : prev;
-				})
+				});
 
 				user.lastBooking = moment(last.from).format('YYYY-MM-DD');
 			}
