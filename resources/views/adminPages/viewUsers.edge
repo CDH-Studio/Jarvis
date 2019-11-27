@@ -52,6 +52,7 @@ View Users
                                 <th scope='col' class='text-center'>Email address</th>
                                 <th scope='col' class='text-center'>Registered</th>
                                 <th scope='col' class='text-center'># of bookings</th>
+                                <th scope='col' class='text-center'>Last booking</th>
                                 </tr>
                             </thead>
                             {{--  Loops through the users array and displays every user's information  --}}
@@ -61,8 +62,8 @@ View Users
                                     <td class='text-center'>{{ user.firstname }} {{ user.lastname }}</td>
                                     <td class='text-center'>{{ user.email }}</td>
                                     <td class='text-center'>{{moment(user.created_at).format("YYYY-MM-DD")}}</td>
-
                                     <td class='text-center'>{{user.__meta__.bookings_count}}</td>
+                                    <td class='text-center'>{{user.lastBooking}}</td>
                                     </tr>
                                 @endeach
                             </tbody>
