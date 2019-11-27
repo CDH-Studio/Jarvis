@@ -341,8 +341,22 @@ class UserController {
 			.where('role_id', 2)
 			.where('building_id', selectedBuilding.id)
 			.withCount('bookings')
+			.with('bookings')
 			.fetch();
 		const users = results.toJSON();
+
+		// look for the most recent booking of each user
+		users.forEach(user => {
+			user.lastBooking = '';
+
+			if (user.bookings.length !== 0) {
+				const last = user.bookings.reduce((prev, cur) => {
+					return cur.from > prev.from ? cur : prev;
+				})
+
+				user.lastBooking = moment(last.from).format('YYYY-MM-DD');
+			}
+		});
 
 		// Sort the results by name
 		users.sort((a, b) => {
@@ -365,8 +379,22 @@ class UserController {
 		const results = await User.query()
 			.where('role_id', 1)
 			.withCount('bookings')
+			.with('bookings')
 			.fetch();
 		const users = results.toJSON();
+
+		// look for the most recent booking of each user
+		users.forEach(user => {
+			user.lastBooking = '';
+			
+			if (user.bookings.length !== 0) {
+				const last = user.bookings.reduce((prev, cur) => {
+					return cur.from > prev.from ? cur : prev;
+				})
+
+				user.lastBooking = moment(last.from).format('YYYY-MM-DD');
+			}
+		});
 
 		return view.render('adminPages.viewUsers', { users, pageTitle, moment });
 	}
