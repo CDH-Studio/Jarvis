@@ -150,41 +150,6 @@ class TokenController {
 			httpOnly: true
 		});
 	}
-
-	async push ({ request, session, response, view }) {
-		this.show();
-		console.log(view.render('components.pageHeader', { title: '1' }));
-		return response.redirect('back');
-	}
-
-	show () {
-		console.log('hi');
-		const message = ['1', '2', '3', '4', '5'];
-		setTimeout(() => {
-			console.log('yo');
-			Event.fire('send.message', message[0]);
-		}, 1000);
-
-		setTimeout(() => {
-			console.log('yo');
-			Event.fire('send.message', message[1]);
-		}, 1500);
-
-		setTimeout(() => {
-			console.log('yo');
-			Event.fire('send.message', message[2]);
-		}, 2000);
-
-		setTimeout(() => {
-			console.log('yo');
-			Event.fire('send.message', message[3]);
-		}, 2500);
-
-		setTimeout(() => {
-			console.log('yo');
-			Event.fire('send.message', message[4]);
-		}, 3000);
-	}
 }
 
 module.exports = TokenController;

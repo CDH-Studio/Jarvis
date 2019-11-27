@@ -646,7 +646,7 @@ class RoomController {
 				timeStepStart.add(30, 'm');
 			} while (timeframeEnd.diff(end, 'minutes') >= meetingDuration);
 
-			Room.FlexibleSearchRoomsByTime({ timeSlots: timeSlots, rooms: rooms, options: options, csrfToken: request.csrfToken, code: code, antl: antl });
+			Room.FlexibleSearchRoomsByTime({ timeSlots: timeSlots, rooms: rooms, options: options, csrfToken: request.csrfToken, code: code, antl: antl, userId: auth.user.id });
 		}
 
 		return view.render('userPages.flexibleSearchResults', { code: code, roomsLength: rooms.length, timeSlots: timeSlots });
@@ -676,7 +676,7 @@ class RoomController {
 
 		if (rooms.length) {
 			// search room availability and push to results page
-			Room.FixedSearchRoomsBy({ antl: antl, rooms: rooms, options: options, csrfToken: request.csrfToken, code: code, view: view });
+			Room.FixedSearchRoomsBy({ antl: antl, rooms: rooms, options: options, csrfToken: request.csrfToken, code: code, view: view, userId: auth.user.id });
 			// load floors
 			floors = (await Floor.all()).toJSON();
 		}
@@ -699,7 +699,7 @@ class RoomController {
 	* @param {view}
 	*
 	*/
-	async currentlyAvailable ({ antl, view, request }) {
+	async currentlyAvailable ({ antl, view, request, auth }) {
 		try {
 			const body = request.all();
 			// check if user is valid
@@ -750,7 +750,8 @@ class RoomController {
 				if (numberOfRooms !== 0 && result) {
 					Event.fire('send.room', {
 						card: view.render('components.smallCard', { room: room, datetime: { date: formattedDate, time: formattedFrom + ' - ' + formattedTo } }),
-						code: code
+						code: code,
+						userId: auth.user.id
 					});
 					numberOfRooms--;
 				}
@@ -760,7 +761,8 @@ class RoomController {
 				// once 2 rooms are found or searched all rooms then send END sifnal
 				if (numberOfRooms === 0 || rooms.length === roomsSearched) {
 					Event.fire('send.done', {
-						code: code
+						code: code,
+						userId: auth.user.id
 					});
 				}
 			});
