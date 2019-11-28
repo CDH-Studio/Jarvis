@@ -2,7 +2,6 @@
 const Env = use('Env');
 const Token = use('App/Models/Token');
 const JWT = require('jsonwebtoken');
-const Event = use('Event');
 
 // The credentials for Microsoft Graph
 const credentials = {

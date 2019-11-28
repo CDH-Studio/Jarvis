@@ -681,7 +681,7 @@ class RoomController {
 			floors = (await Floor.all()).toJSON();
 		}
 
-		return view.render('userPages.fixedSearchResults', { code: code, roomsLength: rooms.length, floors: floors });
+		return view.render('userPages.fixedSearchResults', { code: code, roomsLength: rooms.length, floors: floors, userId: auth.user.id });
 	}
 
 	async saveSearchRecord ({ userId, type }) {

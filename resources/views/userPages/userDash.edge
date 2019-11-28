@@ -131,8 +131,8 @@
         });
 
         //Subscribe to the channel we specified in our Adonis Application
-        let channel = pusher.subscribe('adonis-channel')
-		let availableCount=0;
+        let channel = pusher.subscribe('adonis-channel-' + '{{auth.user.id}}')
+		let availableCount = 0;
 
         //Listen for events on the channel
         channel.bind('send-room', function (data) {
