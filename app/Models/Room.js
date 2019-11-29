@@ -54,7 +54,7 @@ class Room extends Model {
 	*
 	* return 0 if not available
 	*/
-	static async FlexibleSearchRoomsByTime ({ rooms, timeSlots, options, csrfToken, code, antl }) {
+	static async FlexibleSearchRoomsByTime ({ rooms, timeSlots, options, csrfToken, code, antl, userId }) {
 		try {
 			// delay to allow page to laod before pushing results
 			setTimeout(function () {
@@ -70,7 +70,7 @@ class Room extends Model {
 					// Asynchronous check with agent if room is available and push room card to results page
 					rooms.forEach(async room => {
 						promises.push(
-							Room.pushAvailableRoomCard({ room: room, options: searchOptions, csrfToken: csrfToken, code: code, antl: antl })
+							Room.pushAvailableRoomCard({ room: room, options: searchOptions, csrfToken: csrfToken, code: code, antl: antl, userId })
 						);
 					});
 				});
@@ -78,7 +78,8 @@ class Room extends Model {
 				Promise.all(promises).then(values => {
 					Event.fire('send.done', {
 						message: 'done',
-						code: code
+						code: code,
+						userId
 					});
 				});
 
@@ -95,7 +96,7 @@ class Room extends Model {
 	*
 	* return 0 if not available
 	*/
-	static async FixedSearchRoomsBy ({ rooms, options, csrfToken, code, antl }) {
+	static async FixedSearchRoomsBy ({ rooms, options, csrfToken, code, antl, userId }) {
 		try {
 			// delay to allow page to laod before pushing results
 			setTimeout(function () {
@@ -110,7 +111,7 @@ class Room extends Model {
 				// Asynchronous check with agent if room is available and push room card to results page
 				rooms.forEach(async room => {
 					promises.push(
-						Room.pushAvailableRoomCard({ room: room, options: searchOptions, csrfToken: csrfToken, code: code, antl: antl })
+						Room.pushAvailableRoomCard({ room: room, options: searchOptions, csrfToken: csrfToken, code: code, antl: antl, userId })
 					);
 				});
 
@@ -118,7 +119,8 @@ class Room extends Model {
 				Promise.all(promises).then(values => {
 					Event.fire('send.done', {
 						message: 'done',
-						code: code
+						code: code,
+						userId
 					});
 				});
 
@@ -135,7 +137,7 @@ class Room extends Model {
 	*
 	* return 0 if not available
 	*/
-	static async pushAvailableRoomCard ({ room, options, csrfToken, code, antl }) {
+	static async pushAvailableRoomCard ({ room, options, csrfToken, code, antl, userId }) {
 		try {
 			// check room availability
 			let roomAvailability = await Outlook.getRoomAvailability({
@@ -159,7 +161,8 @@ class Room extends Model {
 					card: card,
 					floor: room.floor,
 					startTimeID: options.from.slice(0, 2) + options.from.slice(3, 5),
-					code: code
+					code: code,
+					userId
 				});
 			}
 			return roomAvailability;

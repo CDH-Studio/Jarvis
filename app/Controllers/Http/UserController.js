@@ -350,7 +350,11 @@ class UserController {
 			user.lastBooking = '';
 
 			if (user.bookings.length !== 0) {
-				const last = user.bookings.reduce((prev, cur) => {
+				const bookings = user.bookings.filter(booking => {
+					return booking.from !== null;
+				});
+
+				const last = bookings.reduce((prev, cur) => {
 					return cur.from > prev.from ? cur : prev;
 				});
 
@@ -388,7 +392,11 @@ class UserController {
 			user.lastBooking = '';
 
 			if (user.bookings.length !== 0) {
-				const last = user.bookings.reduce((prev, cur) => {
+				const bookings = user.bookings.filter(booking => {
+					return booking.from !== null;
+				});
+
+				const last = bookings.reduce((prev, cur) => {
 					return cur.from > prev.from ? cur : prev;
 				});
 
