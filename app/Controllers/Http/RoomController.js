@@ -649,7 +649,7 @@ class RoomController {
 			Room.FlexibleSearchRoomsByTime({ timeSlots: timeSlots, rooms: rooms, options: options, csrfToken: request.csrfToken, code: code, antl: antl, userId: auth.user.id });
 		}
 
-		return view.render('userPages.flexibleSearchResults', { code: code, roomsLength: rooms.length, timeSlots: timeSlots });
+		return view.render('userPages.flexibleSearchResults', { code: code, roomsLength: rooms.length, timeSlots: timeSlots, userId: auth.user.id });
 	}
 
 	/**
