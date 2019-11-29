@@ -758,9 +758,9 @@ class RoomController {
 
 				roomsSearched++;
 
-				// once 2 rooms are found or searched all rooms then send END sifnal
-				if (numberOfRooms === 0 || rooms.length === roomsSearched) {
-					Event.fire('send.done', {
+				// searched all rooms and none available then send EMPTY signal
+				if (numberOfRooms === 2 && rooms.length === roomsSearched) {
+					Event.fire('send.empty', {
 						code: code,
 						userId: auth.user.id
 					});

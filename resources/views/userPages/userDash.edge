@@ -132,28 +132,27 @@
 
         //Subscribe to the channel we specified in our Adonis Application
         let channel = pusher.subscribe('adonis-channel-' + '{{auth.user.id}}')
-		let availableCount = 0;
+		let numberOfRooms = 0;
 
         //Listen for events on the channel
         channel.bind('send-room', function (data) {
             if (data.message.code == '{{ code }}') {
                 let listItem = $("<div class='row'><div class='col'>" + data.message.card + "</div></div>");
                 $('#avail').prepend(listItem);
-				availableCount++;
+				numberOfRooms++;
 
+				if (numberOfRooms === 2) {
+					$('#currently-avail-loading').addClass('d-none');
+					$('#currently-avail-done').removeClass('d-none');
+				}
             }
         });
 
-        channel.bind('send-done', function (data) {
+        channel.bind('send-empty', function (data) {
             if (data.message.code == '{{ code }}') {
-
 				$('#currently-avail-loading').addClass('d-none');
 				$('#currently-avail-done').removeClass('d-none');
-
-				if(availableCount==0){
-					$('#currently-avail-no-results').removeClass('d-none');
-					console.error("hello")
-				}
+				$('#currently-avail-no-results').removeClass('d-none');
             }
         });
 
