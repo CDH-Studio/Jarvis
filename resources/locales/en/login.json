@@ -1,5 +1,6 @@
-{
-	"title": "Login Using Your Windows Account",
+{	
+	"title": "Login",
+	"message": "Login using your windows account",
 	"ADlogin": "Login",
 	"IEModalHeader" : "Hello There!",
 	"IEModalMessage": "Our team is working to make Jarvis compatible with Internet Explorer. In the meantime, we recommend using modern browsers such as ",
