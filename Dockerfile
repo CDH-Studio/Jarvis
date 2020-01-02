@@ -1,9 +1,13 @@
 FROM node:10
 
-#install adonis cli
+# set docker proxy settings
+ENV http_proxy http://cdhwg01.prod.prv:80
+ENV https_proxy http://cdhwg01.prod.prv:80
+
+# install adonis cli
 RUN npm i -g @adonisjs/cli
 
-#change workign directory
+# change workign directory
 WORKDIR /jarvis-core
 
 # copy and run npm package list
