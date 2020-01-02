@@ -1,0 +1,30 @@
+version: '3'
+services:
+  web:
+    container_name: "Jarvis"
+    build: .
+    ports:
+      - "3333:3333"
+    volumes:
+      - .:/jarvis-core
+      - /jarvis-core/node_modules
+
+  db-postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: root
+      POSTGRES_DB: jarvis
+    ports:
+      - "3306:3306"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+
+# Names our volume
+volumes:
+  mysql:
