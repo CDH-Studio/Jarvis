@@ -7,11 +7,8 @@
 <br />
 <p align="center">
   <a href="https://github.com/CDH-Studio/Jarvis">
-    <img src="/public/door_logo_dark.png" alt="Logo" width="80" height="80">
+    <img src="public/logo_full_dark.png" alt="Logo" width="40%" height="auto">
   </a>
-
-  <h3 align="center">Jarvis</h3>
-
   <p align="center">
      A CDH Studio Room Booking Application
     <br />
@@ -46,8 +43,6 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://cdh-studio.github.io/Jarvis-Demo-Website/)
 
 Jarvis is a simplified room booking application that provides a solution to the issues currently present at ISED, namely a complicated and time consuming room booking process. Jarvis works on top of the current Outlook system and is designed to save employees time, money, and increase productivity. Main features include: 
 * The ability to view and book available rooms
