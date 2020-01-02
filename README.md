@@ -7,11 +7,8 @@
 <br />
 <p align="center">
   <a href="https://github.com/CDH-Studio/Jarvis">
-    <img src="/public/logo_door.png" alt="Logo" width="80" height="80">
+    <img src="public/logo_full_dark.png" alt="Logo" width="40%" height="auto">
   </a>
-
-  <h3 align="center">Jarvis</h3>
-
   <p align="center">
      A CDH Studio Room Booking Application
     <br />
@@ -46,8 +43,6 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://cdh-studio.github.io/Jarvis-Demo-Website/)
 
 Jarvis is a simplified room booking application that provides a solution to the issues currently present at ISED, namely a complicated and time consuming room booking process. Jarvis works on top of the current Outlook system and is designed to save employees time, money, and increase productivity. Main features include: 
 * The ability to view and book available rooms
@@ -85,26 +80,99 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
+
+### Install virtual environment 
+The commands provided beyond this point are linux based. The preferred local environment is a **ubuntu 18.04 LTS virtual machine**.
+
+Follow the steps below to install the virtual machine:
+
+1. Download and install Virtual Box from the following link. Last tested version: 6.0
+
+    [Oracle Virtual Box](https://www.virtualbox.org/ "Oracle Virtual Box")
+
+2. Download the VM image (VirtualBox Appliance) and load into Virtual box
+
+    ** link to ubuntu image configured with proxy by Ali here **
+
+    **NOTE:** Please read the README file included in the zip to find the password for image
+
+3. Boot up the VM and test you have network connection. **If you are having issue it is often related to proxy settings**
+
+4. If you are having problems with screen resolution and clipboard sharing between Guest and Host OS then please install the **Ubuntu Guest additions**:
+
+    1.
+        `$ sudo apt update`<br/>
+        `$ sudo apt upgrade`<br/>
+        `$ sudo apt install build-essential dkms linux-headers-$(uname -r)`
+
+    2. Next, from the Virtual Machine menu bar, go to Devices => click on Insert Guest Additions CD image as shown in the screenshot. This helps to mount the Guest Additions ISO file inside your virtual machine.
+
+    3. Next, you will get a dialog window, prompting you to Run the installer to launch it.
+
+    4. A terminal window will be opened from which the actual installation of VirtualBox Guest Additions will be performed. Once the installation is complete, press [Enter] to close the installer terminal window. Then power off your Ubuntu guest OS to change some settings from VirtualBox manager as explained in the next step.
+
+### Install Dev tools
+inside the VM you can now install your dev tools. we rommend:
+1. Git
+2. Visual studio Code
+
+**PLEASE NOTE:** The proxy setting of Git might have to be configured manually if it int picked up  automatically form the system settings.
+
+### Install Docker & Docker Composer
+We use docker within the VM to further standardize the dev environment.
+You can run docker in windows if you get correct permissions from IT support but for consistency of environment we recommend using the VM provided above.
+
+<strong>Install Docker</strong><br/>
+`$ sudo apt-get update` <br/>
+`$ sudo apt-get install docker-ce docker-ce-cli containerd.io`
+
+<strong>Install Docker Compose</strong><br/>
+Run this command to download the current stable release of Docker Compose: <br/>
+`$ sudo curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose` <br/>
+
+Apply executable permissions to the binary:<br/>
+`$ sudo chmod +x /usr/local/bin/docker-compose`
+
+<strong>Configure Docker Proxy Settings</strong><br/>
+Create a systemd drop-in directory: <br/>
+`$sudo mkdir /etc/systemd/system/docker.service.d` <br/>
+
+open config file <br/>
+`sudo gedit /etc/systemd/system/docker.service.d/`<br/>
+
+copy the following code into the file:
+```
+[Service]
+Environment="HTTP_PROXY=https://http://cdhwg01.prod.prv:80/"
+Environment="HTTPS_PROXY=https://http://cdhwg01.prod.prv:80/"
+Environment="NO_PROXY=localhost,127.0.0.1,localaddress,0.0.0.0"
+```
+flush changes
+`$ sudo systemctl daemon-reload` <br/>
+
+Verify that the configuration has been loaded:<br/>
+`$ sudo systemctl show --property Environment docker` <br/>
+**Output should be:** "Environment=HTTP_PROXY=http://cdhwg01.prod.prv:80/"<br/>
+
+Restart Docker<br/>
+`$ sudo systemctl restart docker` <br/>
+
+### Other Prerequisites
+
+Install the following in your local enviroment:
+
 * Install Node.js [here](https://nodejs.org/en/download/)
 
-* Install Yarn [here](https://yarnpkg.com/lang/en/docs/install/#windows-stable)
-
 * Install Adonis with `yarn add global @adonisjs/cli`
-
-* Clone the following [repo](https://github.com/CDH-Studio/Jarvis)
 
 * To setup SQLite3, Outlook, and more check out our [wiki](https://github.com/CDH-Studio/Jarvis/wiki/Set-Up)
 
 ### Installation
 
-Within the directory /Jasper write the following to install all dependencies:
-* `yarn install`
-
-To start the application run
-* `adonis serve --dev`
-
-To run test if your code meets coding conventions
-* run `yarn lint`
+1. Clone the Jarvis [repo](https://github.com/CDH-Studio/Jarvis)
+2. Set up the .env file based on .env.example
+3. Run 'docker-compose up"
+4. Go to `http://0.0.0.0:3333/` in the virtual machine browser
 
 <!-- USAGE EXAMPLES -->
 ## Screenshots
