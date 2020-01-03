@@ -47,7 +47,7 @@
 		"passport-activedirectory": "^1.0.4",
 		"pusher": "^3.0.0",
 		"sharp": "^0.23.4",
-		"simple-oauth2": "^3.0.1",
+		"simple-oauth2": "^3.1.0",
 		"sqlite3": "^4.1.1"
 	},
 	"devDependencies": {
