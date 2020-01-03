@@ -1,10 +1,7 @@
 {
 	"title": "Se connecter",
-	"email": "Courriel",
-	"pass": "Mot de passe",
-	"forgot": "Vous avez oublié votre mot de passe?",
-	"submit": "Ouvrir une session",
-	"registerRedirect": "Créer un compte",
+	"message": "Connectez-vous à l'aide de votre compte Windows",
+	"ADlogin": "Ouvrir une session",
 	"IEModalHeader" : "Bonjour!",
 	"IEModalMessage": "Notre équipe travaille pour que Jarvis sois compatible avec Internet Explorer. Entre temps, nous recommandons l'usage de navigateurs tels que ",
 	"IEModalBrowser": "Chrome ou Firefox",
