@@ -499,24 +499,6 @@ class UserController {
 			return response.redirect('/profile');
 		}
 	}
-
-	async test ({ params, auth, response }) {
-		const email = params.id;
-
-		try {
-			const user = await User
-				.query()
-				.where('email', email.toLowerCase())
-				.where('verified', true)
-				.first();
-
-			auth.login(user);
-
-			response.redirect('/');
-		} catch (e) {
-			response.redirect('/');
-		}
-	}
 }
 
 module.exports = UserController;
