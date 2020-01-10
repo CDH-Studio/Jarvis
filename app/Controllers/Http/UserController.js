@@ -8,18 +8,35 @@ const UserRole = use('App/Models/UserRole');
 const Env = use('Env');
 const Logger = use('Logger');
 const moment = require('moment');
-const oauth2 = require('simple-oauth2').create({
+const HttpsProxyAgent = require('https-proxy-agent');
+
+//configure keycloak (OAuth agent)
+var keycloak = {
 	client: {
 		id: Env.get('KEYCLOAK_CLIENT_ID'),
 		secret: Env.get('KEYCLOAK_CLIENT_SECRET')
 	},
-
 	auth: {
 		tokenHost: Env.get('KEYCLOAK_HOST'),
 		tokenPath: Env.get('KEYCLOAK_TOKEN_ENDPOINT'),
 		authorizePath: Env.get('KEYCLOAK_AUTH_ENDPOINT')
+	},
+	http: {
+        //leave empty
+	},
+	options:{
+		authorizationMethod: "body"
 	}
-});
+}
+
+// set proxy if keycloak proxy is needed from env file
+if(Env.get('KEYCLOAK_proxy')){
+	keycloak.http['agent']=new HttpsProxyAgent(Env.get('KEYCLOAK_proxy'));
+}
+
+// create OAuth agent
+const oauth2 = require('simple-oauth2').create(keycloak);
+
 const JWT = require('jsonwebtoken');
 
 class UserController {
@@ -198,22 +215,6 @@ class UserController {
 		const user = await User.create(adminInfo);
 		await auth.login(user);
 		return response.redirect('/');
-	}
-
-	/**
-	 * Render login page
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async loginRender ({ auth, view, response }) {
-		// present login to logged out users only
-		if (auth.user) {
-			return response.redirect('/');
-		} else {
-			var numb = Math.floor(Math.random() * 8) + 1;
-			var photoName = 'login_' + numb + '.jpg';
-			return view.render('auth.login', { photoName });
-		}
 	}
 
 	/**
@@ -408,9 +409,8 @@ class UserController {
 	}
 
 	/**
-	 * Active Directory
+	 * Redirect to Active Directory login form login screen
 	 *
-	 * @param {Object} Context The context object.
 	 */
 	async loginAD ({ response }) {
 		const authUri = oauth2.authorizationCode.authorizeURL({
@@ -421,6 +421,25 @@ class UserController {
 		return response.redirect(authUri);
 	}
 
+	/**
+	 * Render login page
+	 *
+	 */
+	async loginRender ({ auth, view, response }) {
+		// present login to logged out users only
+		if (auth.user) {
+			return response.redirect('/');
+		} else {
+			var numb = Math.floor(Math.random() * 8) + 1;
+			var photoName = 'login_' + numb + '.jpg';
+			return view.render('auth.login', { photoName });
+		}
+	}
+	
+	/**
+	 * Convert code to token to authenticate user
+	 * We return here after user logs in with AD
+	 */
 	async authAD ({ request, session, response, auth, view }) {
 		// getting authorization code
 		const code = request.only(['code']).code;
@@ -438,6 +457,7 @@ class UserController {
 
 				userInfo = JWT.decode(token.token.id_token);
 			} catch (err) {
+				console.log(err)
 				return err;
 			}
 		}
