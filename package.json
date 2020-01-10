@@ -46,6 +46,7 @@
     "moment-recur": "^1.0.7",
     "moment-round": "^1.0.1",
     "passport-activedirectory": "^1.0.4",
+    "pg": "^7.17.1",
     "pusher": "^3.0.0",
     "sharp": "^0.23.4",
     "simple-oauth2": "^3.1.0",

@@ -6,6 +6,8 @@ const Env = use('Env');
 
 class RoomsSchema extends Schema {
 	up () {
+		console.log('starting Migration: Rooms');
+
 		this.create('rooms', (table) => {
 			table.increments();
 			table.string('name', 20).notNullable().unique();
@@ -27,14 +29,15 @@ class RoomsSchema extends Schema {
 			table.integer('state_id').notNullable();
 			table.timestamps();
 
-			let query;
-			if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
-				query = require('../rawQueries/populateRoomsOutlook');
-			} else {
-				query = require('../rawQueries/populateRooms');
-			}
+			// let query;
+			// if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
+			// 	query = require('../rawQueries/populateRoomsOutlook');
+			// } else {
+			// 	query = require('../rawQueries/populateRooms');
+			// }
 
-			this.raw(query);
+			// this.raw(query);
+			console.log('Done Migration: Rooms');
 		});
 	}
 
