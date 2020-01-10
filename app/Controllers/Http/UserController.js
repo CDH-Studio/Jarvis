@@ -8,19 +8,6 @@ const UserRole = use('App/Models/UserRole');
 const Env = use('Env');
 const Logger = use('Logger');
 const moment = require('moment');
-const oauth2 = require('simple-oauth2').create({
-	client: {
-		id: Env.get('KEYCLOAK_CLIENT_ID'),
-		secret: Env.get('KEYCLOAK_CLIENT_SECRET')
-	},
-
-	auth: {
-		tokenHost: Env.get('KEYCLOAK_HOST'),
-		tokenPath: Env.get('KEYCLOAK_TOKEN_ENDPOINT'),
-		authorizePath: Env.get('KEYCLOAK_AUTH_ENDPOINT')
-	}
-});
-const JWT = require('jsonwebtoken');
 
 class UserController {
 	/**
@@ -200,66 +187,6 @@ class UserController {
 		return response.redirect('/');
 	}
 
-	/**
-	 * Render login page
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async loginRender ({ auth, view, response }) {
-		// present login to logged out users only
-		if (auth.user) {
-			return response.redirect('/');
-		} else {
-			var numb = Math.floor(Math.random() * 8) + 1;
-			var photoName = 'login_' + numb + '.jpg';
-			return view.render('auth.login', { photoName });
-		}
-	}
-
-	/**
-	 * Log a user in and redirect them to their respective landing page depending on the user type.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async login ({ request, auth, response, session }) {
-		const { email } = request.all();
-		const user = await User
-			.query()
-			.where('email', email.toLowerCase())
-			.where('verified', true)
-			.first();
-
-		try {
-			await auth.login(user);
-			if (auth.user.getUserRole() === 'User') {
-				session.flash({
-					notification: 'Welcome! You are logged in'
-				});
-
-				return response.redirect('/userDash');
-			} else {
-				return response.redirect('/');
-			}
-		} catch (error) {
-			session.flash({ loginError: 'Invalid email/password' });
-			return response.redirect('/login');
-		}
-	}
-
-	/**
-	 * Log a user out.
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async logout ({ auth, response, session }) {
-		await auth.logout();
-
-		session.flash({
-			notification: 'You have been logged out.'
-		});
-		return response.redirect(`${Env.get('KEYCLOAK_HOST')}/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=${Env.get('SERVER_URL')}/login`);
-	}
-
 	async show ({ auth, params, view, response, request, session }) {
 		try {
 			// find user
@@ -405,97 +332,6 @@ class UserController {
 		});
 
 		return view.render('adminPages.viewUsers', { users, pageTitle, moment });
-	}
-
-	/**
-	 * Active Directory
-	 *
-	 * @param {Object} Context The context object.
-	 */
-	async loginAD ({ response }) {
-		const authUri = oauth2.authorizationCode.authorizeURL({
-			redirect_uri: Env.get('KEYCLOAK_REDIRECT_URI'),
-			scope: Env.get('KEYCLOAK_SCOPES')
-		});
-
-		return response.redirect(authUri);
-	}
-
-	async authAD ({ request, session, response, auth, view }) {
-		// getting authorization code
-		const code = request.only(['code']).code;
-
-		// acquiring access token for user
-		let userInfo;
-		if (code) {
-			try {
-				let result = await oauth2.authorizationCode.getToken({
-					code: code,
-					redirect_uri: Env.get('KEYCLOAK_REDIRECT_URI'),
-					scope: Env.get('KEYCLOAK_SCOPES')
-				});
-				const token = await oauth2.accessToken.create(result);
-
-				userInfo = JWT.decode(token.token.id_token);
-			} catch (err) {
-				return err;
-			}
-		}
-
-		const email = userInfo.email;
-		const user = await User
-			.query()
-			.where('email', email.toLowerCase())
-			.first();
-
-		if (user) {
-			await auth.login(user);
-			if (auth.user.role_id === 2) {
-				if (auth.user.verified) {
-					session.flash({
-						notification: 'Welcome! You are logged in'
-					});
-
-					return response.redirect('/userDash');
-				} else {
-					return response.redirect('/profile');
-				}
-			} else {
-				return response.redirect('/');
-			}
-		} else {
-			let newUser = {};
-			newUser.firstname = userInfo.given_name;
-			newUser.lastname = userInfo.family_name;
-			newUser.email = userInfo.email.toLowerCase();
-			newUser.role_id = await UserRole.getRoleID('user');
-			newUser.verified = false;
-			newUser.building_id = '1';
-			newUser.tower_id = '1';
-			newUser.floor_id = '1';
-
-			const user = await User.create(newUser);
-			await auth.login(user);
-			return response.redirect('/profile');
-		}
-	}
-
-	async test ({ params, auth, response }) {
-		const email = params.id;
-
-		try {
-			const user = await User
-				.query()
-				.where('email', email.toLowerCase())
-				.where('verified', true)
-				.first();
-
-			auth.login(user);
-
-			response.redirect('/');
-		} catch (e) {
-			response.redirect('/');
-		}
 	}
 }
 
