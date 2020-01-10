@@ -10,9 +10,9 @@ class ReportSchema extends Schema {
 			table.integer('user_id').unsigned().references('id').inTable('users').notNullable();
 			table.integer('building_id').unsigned().references('id').inTable('buildings').notNullable();
 			table.integer('room_id').unsigned().references('id').inTable('rooms').notNullable();
-			table.integer('report_type_id').unsigned().references('id').inTable('report_type').notNullable();
+			table.integer('report_type_id').unsigned().references('id').inTable('report_types').notNullable();
 			table.string('comment', 250);
-			table.integer('report_status_id').unsigned().references('id').inTable('report_status').notNullable();
+			table.integer('report_status_id').unsigned().references('id').inTable('report_statuses').notNullable();
 			table.timestamps();
 		});
 	}
