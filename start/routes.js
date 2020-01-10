@@ -24,20 +24,25 @@ Route.get('/switch/:lang', 'HomeController.changeLang');
 //= ========================================================================
 // Auth
 //= ========================================================================
-// User Authentication
+
+//= ========================================================================
+// Active Directory
+//= ========================================================================
+
+// render login page with link to AD
+Route.get('/login', 'AuthController.loginRender').as('login');
+// generate URL redirect to AD login
+Route.get('/loginAD', 'AuthController.loginAD').as('loginAD');
+// AD returns to this route and app authenticates using token
+Route.get('/authAD', 'AuthController.authAD').as('authAD');
+// logout
+Route.get('/logout', 'AuthController.logout').as('logout');
+
+// Create User Profile
 Route.get('/profile', 'UserController.createProfileRender').as('createProfile');
 Route.post('/profile', 'UserController.createProfile').validator('CreateProfile');
 
-// Admin Authentication
-Route.get('/admin/register', 'UserController.registerAdminRender').as('registerAdmin');
-Route.post('/admin/register', 'UserController.createAdmin').as('CreateAdmin').validator('CreateAdmin');
-
-// Logout
-Route.get('/login', 'UserController.loginRender').as('login');
-Route.post('/login', 'UserController.login');
-Route.get('/logout', 'UserController.logout').as('logout');
-
-// Authentication
+// view and edit users
 Route.get('/user/:id', 'UserController.show').as('viewProfile').middleware(['auth']);
 Route.get('/allUsers', 'UserController.getAllUsers').as('allUsers').middleware(['isAdmin']);
 Route.get('/allAdmins', 'UserController.getAllAdmins').as('allAdmins').middleware(['isAdmin']);
@@ -137,10 +142,3 @@ Route.post('/message', 'Roomcontroller.sendMessage').as('message');
 // Pusher
 //= ========================================================================
 Route.get('/push', 'TokenController.push').as('push');
-
-//= ========================================================================
-// Active Directory
-//= ========================================================================
-Route.get('/loginAD', 'UserController.loginAD').as('loginAD');
-Route.get('/authAD', 'UserController.authAD').as('authAD');
-Route.get('/key', 'UserController.key').as('key');
