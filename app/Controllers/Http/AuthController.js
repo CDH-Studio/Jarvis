@@ -85,7 +85,7 @@ class AuthController {
 				userInfo = JWT.decode(token.token.id_token);
 			} catch (err) {
 				console.log(err);
-				return err;
+				return response.redirect('/');
 			}
 		}
 
@@ -138,7 +138,7 @@ class AuthController {
 		session.flash({
 			notification: 'You have been logged out.'
 		});
-		return response.redirect(`${Env.get('KEYCLOAK_HOST')}/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=${Env.get('SERVER_URL')}/login`);
+		return response.redirect(`${Env.get('KEYCLOAK_HOST')}/auth/realms/individual/protocol/openid-connect/logout?redirect_uri=${Env.get('APP_URL')}/login`);
 	}
 }
 
