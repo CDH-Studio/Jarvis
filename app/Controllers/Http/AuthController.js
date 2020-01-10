@@ -5,7 +5,7 @@ const UserRole = use('App/Models/UserRole');
 const Env = use('Env');
 const HttpsProxyAgent = require('https-proxy-agent');
 
-//configure keycloak (OAuth agent)
+// configure keycloak (OAuth agent)
 var keycloak = {
 	client: {
 		id: Env.get('KEYCLOAK_CLIENT_ID'),
@@ -17,16 +17,16 @@ var keycloak = {
 		authorizePath: Env.get('KEYCLOAK_AUTH_ENDPOINT')
 	},
 	http: {
-        //leave empty
+		// leave empty
 	},
-	options:{
-		authorizationMethod: "body"
+	options: {
+		authorizationMethod: 'body'
 	}
-}
+};
 
 // set proxy if keycloak proxy is needed from env file
-if(Env.get('KEYCLOAK_proxy')){
-	keycloak.http['agent']=new HttpsProxyAgent(Env.get('KEYCLOAK_proxy'));
+if (Env.get('KEYCLOAK_proxy')) {
+	keycloak.http['agent'] = new HttpsProxyAgent(Env.get('KEYCLOAK_proxy'));
 }
 
 // create OAuth agent
@@ -62,7 +62,7 @@ class AuthController {
 
 		return response.redirect(authUri);
 	}
-	
+
 	/**
 	 * Convert code to token to authenticate user
 	 * We return here after user logs in with AD
@@ -84,7 +84,7 @@ class AuthController {
 
 				userInfo = JWT.decode(token.token.id_token);
 			} catch (err) {
-				console.log(err)
+				console.log(err);
 				return err;
 			}
 		}

@@ -8,36 +8,6 @@ const UserRole = use('App/Models/UserRole');
 const Env = use('Env');
 const Logger = use('Logger');
 const moment = require('moment');
-const HttpsProxyAgent = require('https-proxy-agent');
-
-//configure keycloak (OAuth agent)
-var keycloak = {
-	client: {
-		id: Env.get('KEYCLOAK_CLIENT_ID'),
-		secret: Env.get('KEYCLOAK_CLIENT_SECRET')
-	},
-	auth: {
-		tokenHost: Env.get('KEYCLOAK_HOST'),
-		tokenPath: Env.get('KEYCLOAK_TOKEN_ENDPOINT'),
-		authorizePath: Env.get('KEYCLOAK_AUTH_ENDPOINT')
-	},
-	http: {
-        //leave empty
-	},
-	options:{
-		authorizationMethod: "body"
-	}
-}
-
-// set proxy if keycloak proxy is needed from env file
-if(Env.get('KEYCLOAK_proxy')){
-	keycloak.http['agent']=new HttpsProxyAgent(Env.get('KEYCLOAK_proxy'));
-}
-
-// create OAuth agent
-const oauth2 = require('simple-oauth2').create(keycloak);
-
-const JWT = require('jsonwebtoken');
 
 class UserController {
 	/**
