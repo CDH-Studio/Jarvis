@@ -15,7 +15,6 @@ const Building = use('App/Models/Building');
 
 class FloorSeeder {
 	async run () {
-		
 		// load in dummy data for buildings
 		let buildingFiller = require('../seederData/buildings.json');
 
