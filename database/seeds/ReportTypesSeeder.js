@@ -12,13 +12,17 @@ const ReportType = use('App/Models/ReportType');
 
 class ReportTypeSeeder {
 	async run () {
-		var TypeFiller = ['Facilities', 'Furniture', 'Incorrect Information', 'Technical Equipment', 'Other'];
+
+		// load in dummy data for report types
+		let TypeFiller = require('../seederData/report_types.json');
+
+		// count report types in database
 		var count = await ReportType.getCount();
 
 		if (count == 0) {
 			for (var i = 0; i < TypeFiller.length; i++) {
 				const type = new ReportType();
-				type.name = TypeFiller[i];
+				type.name = TypeFiller[i]['name'];
 				await type.save();
 			}
 			console.log('Report Type DB: Finished Seeding');
