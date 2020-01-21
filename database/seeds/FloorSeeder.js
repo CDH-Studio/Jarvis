@@ -15,10 +15,10 @@ const Floor = use('App/Models/Floor');
 
 class FloorSeeder {
 	async run () {
-		// load in dymmy data for floor
+		// load in dummy data for floor
 		let floorFiller = require('../seederData/floors.json');
 
-		// count floors in databse
+		// count floors in database
 		var count = await Floor.getCount();
 
 		if (count == 0) {

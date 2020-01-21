@@ -22,19 +22,21 @@ async function asyncForEach (arr, callback) {
 	}
 }
 
-class FeaturesCategorySeeder {
+class RoomFeatureSeeder {
 	async run () {
-		var categoryNameFillerEnglish = ['Display', 'Conferencing', 'Collaboration', 'Connectivity', 'Other'];
-		var categoryNameFillerFrench = ['Outils D\'Affichage', 'Conférence', 'Collaboration', 'Connectivité', 'Autre'];
-		var categoryIconFiller = ['fas fa-tv', 'fas fa-headset', 'fas fa-chalkboard-teacher', 'fas fa-wifi', 'fas fa-plus'];
+
+		// load in dummy data for categories
+		let categoriesFiller = require('../seederData/room_features_categories.json');
+
+		// count categories in database
 		var count = await RoomFeaturesCategory.getCount();
 
 		if (count == 0) {
-			for (var i = 0; i < categoryNameFillerEnglish.length; i++) {
+			for (var i = 0; i < categoriesFiller.length; i++) {
 				const category = new RoomFeaturesCategory();
-				category.name_english = categoryNameFillerEnglish[i];
-				category.name_french = categoryNameFillerFrench[i];
-				category.icon = categoryIconFiller[i];
+				category.name_english = categoriesFiller[i]['name_english'];
+				category.name_french = categoriesFiller[i]['name_french'];
+				category.icon = categoriesFiller[i]['icon'];
 				await category.save();
 			}
 			console.log('Category DB: Finished Seeding');
@@ -42,30 +44,18 @@ class FeaturesCategorySeeder {
 			console.log('Category DB: Already Seeded');
 		}
 
-		const featureFillers = [
-			{ name_english: 'Projector', name_french: 'Projecteur', feature_category_id: 1, building_id: 1 },
-			{ name_english: 'Whiteboard', name_french: 'Tableau blanc', feature_category_id: 3, building_id: 1 },
-			{ name_english: 'Flip Chart', name_french: 'Tableau à feuilles mobiles', feature_category_id: 3, building_id: 1 },
-			{ name_english: 'Audio Conferencing', name_french: 'Conférence audio', feature_category_id: 2, building_id: 1 },
-			{ name_english: 'Video Conferencing', name_french: 'Conférence vidéo', feature_category_id: 2, building_id: 1 },
-			{ name_english: 'Surface Hub', name_french: 'Surface Hub', feature_category_id: 1, building_id: 1 },
-			{ name_english: 'PC', name_french: 'PC', feature_category_id: 1, building_id: 1 }
-			// { name_english: 'Plasma TV', name_french: 'Téléviseur Plasma', feature_category_id: 1, building_id: 1 },
-			// { name_english: 'LCD TV', name_french: 'Téléviseur', feature_category_id: 1, building_id: 1 },
-			// { name_english: 'SMART Board', name_french: 'Tableau intéractif', feature_category_id: 1, building_id: 1 },
-			// { name_english: 'Glassboard', name_french: 'Tableau vitré', feature_category_id: 3, building_id: 1 },
-			// { name_english: 'Wifi', name_french: 'Wifi', feature_category_id: 4, building_id: 1 }
-		];
+		// load in dummy data for room features
+		let featuresFiller = require('../seederData/room_features.json');
 
 		count = await RoomFeature.getCount();
 
 		if (count == 0) {
-			for (let i = 0; i < featureFillers.length; i++) {
+			for (let i = 0; i < featuresFiller.length; i++) {
 				const feature = new RoomFeature();
-				feature.name_english = featureFillers[i].name_english;
-				feature.name_french = featureFillers[i].name_french;
-				feature.feature_category_id = featureFillers[i].feature_category_id;
-				feature.building_id = featureFillers[i].building_id;
+				feature.name_english = featuresFiller[i]['name_english'];
+				feature.name_french = featuresFiller[i]['name_french'];
+				feature.feature_category_id = featuresFiller[i]['feature_category_id'];
+				feature.building_id = featuresFiller[i]['building_id'];
 				await feature.save();
 			}
 			console.log('Room Features DB: Finished Seeding');
@@ -141,4 +131,4 @@ class FeaturesCategorySeeder {
 	}
 }
 
-module.exports = FeaturesCategorySeeder;
+module.exports = RoomFeatureSeeder;
