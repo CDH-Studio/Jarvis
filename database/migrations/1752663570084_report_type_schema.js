@@ -7,7 +7,7 @@ class ReportTypeSchema extends Schema {
 	up () {
 		this.create('report_types', (table) => {
 			table.increments();
-			table.string('name', 20).notNullable();
+			table.string('name', 100).notNullable();
 			table.timestamps();
 		});
 	}

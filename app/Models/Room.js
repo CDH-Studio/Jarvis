@@ -36,7 +36,7 @@ class Room extends Model {
 	features () {
 		return this
 			.belongsToMany('App/Models/RoomFeature')
-			.pivotTable('features_rooms_pivot');
+			.pivotTable('room_features_pivot');
 	}
 
 	static get table () {

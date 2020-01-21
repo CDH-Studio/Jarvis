@@ -5,7 +5,7 @@ const Model = use('Model');
 
 class FeaturesRoomsPivot extends Model {
 	static get table () {
-		return 'features_rooms_pivot';
+		return 'room_features_pivot';
 	}
 
 	feature () {

@@ -1,0 +1,110 @@
+[
+    {
+        "batch": "1",
+        "id": "1",
+        "migration_time": "2019-06-20 20:33:45",
+        "name": "1503248427885_user_schema"
+    },
+    {
+        "batch": "1",
+        "id": "2",
+        "migration_time": "2019-06-20 20:33:45",
+        "name": "1503248427886_token_schema"
+    },
+    {
+        "batch": "1",
+        "id": "4",
+        "migration_time": "2019-06-20 20:33:46",
+        "name": "1549486672610_room_features_schema"
+    },
+    {
+        "batch": "1",
+        "id": "5",
+        "migration_time": "2019-06-20 20:33:46",
+        "name": "1549487437488_relations_schema"
+    },
+    {
+        "batch": "1",
+        "id": "6",
+        "migration_time": "2019-06-20 20:33:46",
+        "name": "1551212804137_booking_schema"
+    },
+    {
+        "batch": "1",
+        "id": "7",
+        "migration_time": "2019-06-20 20:33:46",
+        "name": "1551815511272_room_status_schema"
+    },
+    {
+        "batch": "1",
+        "id": "8",
+        "migration_time": "2019-06-20 20:33:46",
+        "name": "1551890912680_user_roles_schema"
+    },
+    {
+        "batch": "1",
+        "id": "9",
+        "migration_time": "2019-06-20 20:33:46",
+        "name": "1552065231377_review_schema"
+    },
+    {
+        "batch": "1",
+        "id": "10",
+        "migration_time": "2019-06-20 20:33:46",
+        "name": "1552663570084_report_type_schema"
+    },
+    {
+        "batch": "1",
+        "id": "11",
+        "migration_time": "2019-06-20 20:33:46",
+        "name": "1552663918254_report_schema"
+    },
+    {
+        "batch": "1",
+        "id": "12",
+        "migration_time": "2019-06-20 20:33:46",
+        "name": "1552664478964_report_status_schema"
+    },
+    {
+        "batch": "1",
+        "id": "13",
+        "migration_time": "2019-06-20 20:33:47",
+        "name": "1553112254228_floors_schema"
+    },
+    {
+        "batch": "1",
+        "id": "14",
+        "migration_time": "2019-06-20 20:33:47",
+        "name": "1553112392769_towers_schema"
+    },
+    {
+        "batch": "1",
+        "id": "15",
+        "migration_time": "2019-06-20 20:33:47",
+        "name": "1558106587521_room_features_categories_schema"
+    },
+    {
+        "batch": "1",
+        "id": "16",
+        "migration_time": "2019-06-20 20:33:47",
+        "name": "1558189769643_building_schema"
+    },
+    {
+        "batch": "1",
+        "id": "17",
+        "migration_time": "2019-06-20 20:33:47",
+        "name": "1558654357831_features_rooms_pivot_schema"
+    },
+    {
+        "batch": "2",
+        "id": "19",
+        "migration_time": "2019-11-21 17:34:40",
+        "name": "1549469259491_room_schema"
+    },
+    {
+        "batch": "3",
+        "id": "20",
+        "migration_time": "2019-11-26 15:39:07",
+        "name": "1574453600440_search_record_schema"
+    }
+]
