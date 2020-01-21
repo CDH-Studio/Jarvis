@@ -15,7 +15,7 @@ class ReportTypeSeeder {
 		var TypeFiller = ['Facilities', 'Furniture', 'Incorrect Information', 'Technical Equipment', 'Other'];
 		var count = await ReportType.getCount();
 
-		if (count === 0) {
+		if (count == 0) {
 			for (var i = 0; i < TypeFiller.length; i++) {
 				const type = new ReportType();
 				type.name = TypeFiller[i];

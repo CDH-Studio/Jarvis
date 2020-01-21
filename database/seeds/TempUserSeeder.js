@@ -26,7 +26,7 @@ class TempUserSeeder {
 
 		var count = await Users.getCount();
 
-		if (count === 0) {
+		if (count == 0) {
 			for (var i = 0; i < userFiller.length; i++) {
 				const user = new Users();
 				user.firstname = userFiller[i].firstname;

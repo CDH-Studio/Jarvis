@@ -1,0 +1,65 @@
+[
+    {
+        "building_id": "1",
+        "created_at": "2019-06-20 16:33:52",
+        "feature_category_id": "1",
+        "id": "1",
+        "name_english": "Projector",
+        "name_french": "Projecteur",
+        "updated_at": "2019-06-20 16:33:52"
+    },
+    {
+        "building_id": "1",
+        "created_at": "2019-06-20 16:33:52",
+        "feature_category_id": "3",
+        "id": "2",
+        "name_english": "Whiteboard",
+        "name_french": "Tableau blanc",
+        "updated_at": "2019-06-20 16:33:52"
+    },
+    {
+        "building_id": "1",
+        "created_at": "2019-06-20 16:33:52",
+        "feature_category_id": "3",
+        "id": "3",
+        "name_english": "Flip Chart",
+        "name_french": "Tableau à feuilles mobiles",
+        "updated_at": "2019-06-20 16:33:52"
+    },
+    {
+        "building_id": "1",
+        "created_at": "2019-06-20 16:33:52",
+        "feature_category_id": "2",
+        "id": "4",
+        "name_english": "Audio Conferencing",
+        "name_french": "Conférence audio",
+        "updated_at": "2019-06-20 16:33:52"
+    },
+    {
+        "building_id": "1",
+        "created_at": "2019-06-20 16:33:52",
+        "feature_category_id": "2",
+        "id": "5",
+        "name_english": "Video Conferencing",
+        "name_french": "Conférence vidéo",
+        "updated_at": "2019-06-20 16:33:52"
+    },
+    {
+        "building_id": "1",
+        "created_at": "2019-06-20 16:33:52",
+        "feature_category_id": "1",
+        "id": "6",
+        "name_english": "Surface Hub",
+        "name_french": "Surface Hub",
+        "updated_at": "2019-06-20 16:33:52"
+    },
+    {
+        "building_id": "1",
+        "created_at": "2019-06-20 16:33:52",
+        "feature_category_id": "1",
+        "id": "7",
+        "name_english": "PC",
+        "name_french": "PC",
+        "updated_at": "2019-06-20 16:33:52"
+    }
+]

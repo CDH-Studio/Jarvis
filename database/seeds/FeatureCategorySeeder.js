@@ -29,7 +29,7 @@ class FeaturesCategorySeeder {
 		var categoryIconFiller = ['fas fa-tv', 'fas fa-headset', 'fas fa-chalkboard-teacher', 'fas fa-wifi', 'fas fa-plus'];
 		var count = await RoomFeaturesCategory.getCount();
 
-		if (count === 0) {
+		if (count == 0) {
 			for (var i = 0; i < categoryNameFillerEnglish.length; i++) {
 				const category = new RoomFeaturesCategory();
 				category.name_english = categoryNameFillerEnglish[i];
@@ -59,7 +59,7 @@ class FeaturesCategorySeeder {
 
 		count = await RoomFeature.getCount();
 
-		if (count === 0) {
+		if (count == 0) {
 			for (let i = 0; i < featureFillers.length; i++) {
 				const feature = new RoomFeature();
 				feature.name_english = featureFillers[i].name_english;
@@ -74,7 +74,7 @@ class FeaturesCategorySeeder {
 		}
 
 		count = await FeaturesRoomsPivot.getCount();
-		if (count === 0) {
+		if (count == 0) {
 			const roomFeaturePivotFillers = {};
 			roomFeaturePivotFillers['1'] = [1, 2, 4, 5, 7];
 			roomFeaturePivotFillers['2'] = [4, 7];

@@ -15,7 +15,7 @@ class RoomStatusSeeder {
 		var StatusFiller = ['available', 'deactive', 'maintenance'];
 		var count = await Status.getCount();
 
-		if (count === 0) {
+		if (count == 0) {
 			for (var i = 0; i < StatusFiller.length; i++) {
 				const status = new Status();
 				status.name = StatusFiller[i];

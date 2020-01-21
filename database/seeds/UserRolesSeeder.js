@@ -17,7 +17,7 @@ class UserRolesSeeder {
 		var userRolesFiller = ['admin', 'user'];
 		var count = await UserRole.getCount();
 
-		if (count === 0) {
+		if (count == 0) {
 			for (var i = 0; i < userRolesFiller.length; i++) {
 				const type = new UserRole();
 				type.name = userRolesFiller[i];

@@ -17,7 +17,7 @@ class FloorSeeder {
 	async run () {
 		var count = await Building.getCount();
 
-		if (count === 0) {
+		if (count == 0) {
 			const building = new Building();
 			building.name = 'CD Howe';
 			building.street_address = '55 Golflinks dr.';

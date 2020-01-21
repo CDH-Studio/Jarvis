@@ -20,7 +20,7 @@ class TowerSeeder {
 		var buildingFiller = [1, 1];
 		var count = await Tower.getCount();
 
-		if (count === 0) {
+		if (count == 0) {
 			for (var i = 0; i < towerFillerEnglish.length; i++) {
 				const tower = new Tower();
 				tower.name_english = towerFillerEnglish[i];

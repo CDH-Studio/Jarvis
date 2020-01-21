@@ -15,7 +15,7 @@ class ReportStatusSeeder {
 		var StatusFiller = ['Open', 'Pending', 'Closed'];
 		var count = await ReportStatus.getCount();
 
-		if (count === 0) {
+		if (count == 0) {
 			for (var i = 0; i < StatusFiller.length; i++) {
 				const status = new ReportStatus();
 				status.name = StatusFiller[i];
