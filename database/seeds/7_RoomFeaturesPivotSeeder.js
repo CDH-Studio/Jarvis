@@ -11,12 +11,10 @@
 */
 
 /** @type {import('@adonisjs/lucid/src/Factory')} */
-const RoomFeature = use('App/Models/RoomFeature');
 const FeaturesRoomsPivot = use('App/Models/FeaturesRoomsPivot');
 
 class RoomFeaturesPivotSeeder {
 	async run () {
-
 		// load in dummy data for room features
 		let roomFeaturePivotFillers = require('../seederData/room_features_pivot.json');
 

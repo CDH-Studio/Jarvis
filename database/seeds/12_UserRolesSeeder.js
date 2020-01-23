@@ -14,13 +14,16 @@ const UserRole = use('App/Models/UserRole');
 
 class UserRolesSeeder {
 	async run () {
-		var userRolesFiller = ['admin', 'user'];
-		var count = await UserRole.getCount();
+		// load in dummy data for report types
+		let userRolesFiller = require('../seederData/user_roles.json');
+
+		// count report types in database
+		const count = await UserRole.getCount();
 
 		if (count == 0) {
 			for (var i = 0; i < userRolesFiller.length; i++) {
 				const type = new UserRole();
-				type.name = userRolesFiller[i];
+				type.name = userRolesFiller[i]['name'];
 				await type.save();
 			}
 			console.log('User Type DB: Finished Seeding');
