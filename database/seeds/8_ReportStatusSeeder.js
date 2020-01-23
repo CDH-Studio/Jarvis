@@ -16,9 +16,9 @@ class ReportStatusSeeder {
 		let StatusFiller = require('../seederData/report_statuses.json');
 
 		// count report statuses in database
-		var count = await ReportStatus.getCount();
+		var count = parseInt(await ReportStatus.getCount());
 
-		if (count == 0) {
+		if (count === 0) {
 			for (var i = 0; i < StatusFiller.length; i++) {
 				const status = new ReportStatus();
 				status.name = StatusFiller[i]['name'];

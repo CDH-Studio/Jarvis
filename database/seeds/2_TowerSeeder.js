@@ -15,17 +15,19 @@ const Tower = use('App/Models/Tower');
 
 class TowerSeeder {
 	async run () {
-		var towerFillerEnglish = ['East', 'West'];
-		var towerFillerFrench = ['Est', 'Ouest'];
-		var buildingFiller = [1, 1];
-		var count = await Tower.getCount();
+		// load in dummy data for buildings
+		let towerFiller = require('../seederData/towers.json');
 
-		if (count == 0) {
-			for (var i = 0; i < towerFillerEnglish.length; i++) {
+		// count buildings in database
+		const count = parseInt(await Tower.getCount());
+		console.log(count)
+
+		if (count === 0) {
+			for (var i = 0; i < towerFiller.length; i++) {
 				const tower = new Tower();
-				tower.name_english = towerFillerEnglish[i];
-				tower.name_french = towerFillerFrench[i];
-				tower.building_id = buildingFiller[i];
+				tower.name_english = towerFiller[i]['name_english'];
+				tower.name_french = towerFiller[i]['name_french'];
+				tower.building_id = towerFiller[i]['building_id'];
 				await tower.save();
 			}
 			console.log('Tower Name DB: Finished Seeding');

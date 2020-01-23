@@ -18,9 +18,9 @@ class UserRolesSeeder {
 		let userRolesFiller = require('../seederData/user_roles.json');
 
 		// count report types in database
-		const count = await UserRole.getCount();
+		const count = parseInt(await UserRole.getCount());
 
-		if (count == 0) {
+		if (count === 0) {
 			for (var i = 0; i < userRolesFiller.length; i++) {
 				const type = new UserRole();
 				type.name = userRolesFiller[i]['name'];

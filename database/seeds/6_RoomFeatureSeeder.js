@@ -20,7 +20,7 @@ class RoomFeatureSeeder {
 		let featuresFiller = require('../seederData/room_features.json');
 
 		// count room features in database
-		const count = await RoomFeature.getCount();
+		const count = parseInt(await RoomFeature.getCount());
 
 		if (count == 0) {
 			for (let i = 0; i < featuresFiller.length; i++) {

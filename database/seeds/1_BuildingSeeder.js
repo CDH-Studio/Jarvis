@@ -19,9 +19,10 @@ class FloorSeeder {
 		let buildingFiller = require('../seederData/buildings.json');
 
 		// count buildings in database
-		var count = await Building.getCount();
+		var count = parseInt(await Building.getCount());
+		console.log(count)
 
-		if (count == 0) {
+		if (count === 0) {
 			for (var i = 0; i < buildingFiller.length; i++) {
 				const building = new Building();
 				building.name = buildingFiller[i]['name'];

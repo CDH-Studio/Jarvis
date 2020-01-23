@@ -19,9 +19,9 @@ class FloorSeeder {
 		let floorFiller = require('../seederData/floors.json');
 
 		// count floors in database
-		var count = await Floor.getCount();
+		var count = parseInt(await Floor.getCount());
 
-		if (count == 0) {
+		if (count === 0) {
 			for (var i = 0; i < floorFiller.length; i++) {
 				const floor = new Floor();
 				floor.id = i === 0 ? '0' : i;

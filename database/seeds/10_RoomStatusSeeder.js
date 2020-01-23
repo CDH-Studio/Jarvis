@@ -16,9 +16,9 @@ class RoomStatusSeeder {
 		let reportStatusFiller = require('../seederData/report_statuses.json');
 
 		// count report types in database
-		const count = await Status.getCount();
+		const count = parseInt(await Status.getCount());
 
-		if (count == 0) {
+		if (count === 0) {
 			for (var i = 0; i < reportStatusFiller.length; i++) {
 				const status = new Status();
 				status.name = reportStatusFiller[i]['name'];

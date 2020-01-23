@@ -19,9 +19,9 @@ class RoomSeeder {
 		let roomFiller = require('../seederData/rooms.json');
 
 		// count rooms in database
-		var count = await Room.getCount();
+		var count = parseInt(await Room.getCount());
 
-		if (count == 0) {
+		if (count === 0) {
 			for (var i = 0; i < roomFiller.length; i++) {
 				const room = new Room();
 				room.name = roomFiller[i]['name'];
