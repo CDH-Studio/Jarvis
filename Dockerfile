@@ -19,5 +19,5 @@ COPY . .
 
 EXPOSE 3333
 
-CMD ["adonis", "serve", "--dev"]
-#CMD [ "npm", "run", "docker-start" ]
+#CMD ["adonis", "serve", "--dev"]
+CMD [ "npm", "run", "docker-start" ]

@@ -5,7 +5,8 @@
   "description": "The fullstack application boilerplate for Adonisjs",
   "main": "index.js",
   "scripts": {
-    "start": "npm i -g @adonisjs/cli && adonis migration:run -f && adonis seed -f && touch .env && adonis serve --dev",
+    "docker-start":  "adonis migration:run -f && adonis seed -f && adonis serve --dev",
+    "start": "npm i -g @adonisjs/cli && adonis serve --dev",
     "test": "node ace test",
     "lint": "node_modules/.bin/eslint . --ext .js"
   },
