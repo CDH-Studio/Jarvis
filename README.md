@@ -170,7 +170,11 @@ To shutdown the application for local environment `cd` in to your project direct
 
 `docker-compose down`
 
-## Run Database Migrations
+## Migration and Seeding
+
+All testing databases should automatically migrate and seed When spinning up the application using `docker-compose`. In the event that it doesn't please follow the following steps.
+
+### Run Database Migrations
 
 To run the database migrations you much attach your terminal to the container shell. This can be done by either right clicking on the container named "jarvis_web" in VS Code and selecting "attach shell" in the drop down or running the following command:
 
@@ -182,7 +186,7 @@ Once the shell has attached to the container you can run to begin the migration.
 
 Every time you shutdown the application container you will have to run the migration again.
 
-## Run Database Seeding
+### Run Database Seeding
 
 Seeding will fill you DB with some valid dummy data. 
 
@@ -204,7 +208,23 @@ One of the containers running alongside jarvis is called `adminer`. This contain
 
 You can now use the credential you defined in the .env file to log in as seen in the following image.
 
- <img src="screenshots/adminer-login.png" alt="Logo" width="40%" height="auto">
+<img src="screenshots/adminer-login.png" alt="Logo" width="40%" height="auto">
+
+## ESLint
+
+In order to successfully merge pull requests you must run ESLint on your project before opening PR.
+
+Step 1: cd into project directory in VM
+
+Step 2: install ESLint globally
+
+`npm i -g eslint`
+
+Step 3: run ESLint
+
+Run eslint using the --fix flag to automatically fix as much as it can. Please manually correct any errors that it print out.
+
+`eslint . --fix`
 
 ************************
 *please ignore beyond this point*
