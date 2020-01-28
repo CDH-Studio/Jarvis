@@ -29,15 +29,6 @@ class RoomsSchema extends Schema {
 			table.integer('state_id').notNullable();
 			table.timestamps();
 
-			// temporarly commented out until new data is found
-			let query;
-			if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
-				query = require('../rawQueries/populateRoomsOutlook');
-			} else {
-				query = require('../rawQueries/populateRooms');
-			}
-
-			//this.raw(query);
 			console.log('Done Migration: Rooms');
 		});
 	}
