@@ -16,7 +16,7 @@ class ReportTypeSeeder {
 		let TypeFiller = require('../seederData/report_types.json');
 
 		// count report types in database
-		const count = parseInt(await ReportType.getCount());
+		var count = await ReportType.getCount();
 
 		if (count === 0) {
 			for (var i = 0; i < TypeFiller.length; i++) {

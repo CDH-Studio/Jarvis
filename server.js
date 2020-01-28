@@ -25,3 +25,8 @@ new Ignitor(require('@adonisjs/fold'))
 	.wsServer()
 	.fireHttpServer()
 	.catch(console.error);
+
+var types = require('pg').types;
+types.setTypeParser(20, function (val) {
+	return parseInt(val);
+});

@@ -19,7 +19,7 @@ class RoomFeaturesPivotSeeder {
 		let roomFeaturePivotFillers = require('../seederData/room_features_pivot.json');
 
 		// count room features in database
-		const count = parseInt(await FeaturesRoomsPivot.getCount());
+		const count = await FeaturesRoomsPivot.getCount();
 
 		if (count === 0) {
 			for (let i = 0; i < roomFeaturePivotFillers.length; i++) {

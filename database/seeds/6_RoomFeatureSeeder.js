@@ -15,14 +15,13 @@ const RoomFeature = use('App/Models/RoomFeature');
 
 class RoomFeatureSeeder {
 	async run () {
-
 		// load in dummy data for room features
 		let featuresFiller = require('../seederData/room_features.json');
 
 		// count room features in database
-		const count = parseInt(await RoomFeature.getCount());
+		const count = await RoomFeature.getCount();
 
-		if (count == 0) {
+		if (count === 0) {
 			for (let i = 0; i < featuresFiller.length; i++) {
 				const feature = new RoomFeature();
 				feature.name_english = featuresFiller[i]['name_english'];

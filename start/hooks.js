@@ -2,6 +2,18 @@ const { hooks } = require('@adonisjs/ignitor');
 
 hooks.after.providersBooted(() => {
 	const Validator = use('Validator');
+	const Env = use('Env');
+
+	// convert postgresql bigint to JS supported data-types
+	if (Env.get('DB_CONNECTION') === 'pg') {
+		var types = require('pg').types;
+		types.setTypeParser(20, function (value) {
+			return parseInt(value);
+		});
+		types.setTypeParser(1700, function (value) {
+			return parseFloat(value);
+		});
+	}
 
 	/**
 	 * Validator for making sure the values of input fields match.

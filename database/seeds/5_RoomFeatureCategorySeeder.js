@@ -19,7 +19,7 @@ class RoomFeatureCategorySeeder {
 		let categoriesFiller = require('../seederData/room_features_categories.json');
 
 		// count categories in database
-		const count = parseInt(await RoomFeaturesCategory.getCount());
+		const count = await RoomFeaturesCategory.getCount();
 
 		if (count === 0) {
 			for (var i = 0; i < categoriesFiller.length; i++) {

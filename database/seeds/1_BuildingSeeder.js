@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| FloorSeeder
+| BuildingSeeder
 |--------------------------------------------------------------------------
 |
 | Make use of the Factory instance to seed database with dummy data or
@@ -19,8 +19,7 @@ class FloorSeeder {
 		let buildingFiller = require('../seederData/buildings.json');
 
 		// count buildings in database
-		var count = parseInt(await Building.getCount());
-		console.log(count)
+		var count = await Building.getCount();
 
 		if (count === 0) {
 			for (var i = 0; i < buildingFiller.length; i++) {

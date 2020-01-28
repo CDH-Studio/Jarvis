@@ -19,8 +19,7 @@ class TowerSeeder {
 		let towerFiller = require('../seederData/towers.json');
 
 		// count buildings in database
-		const count = parseInt(await Tower.getCount());
-		console.log(count)
+		const count = await Tower.getCount();
 
 		if (count === 0) {
 			for (var i = 0; i < towerFiller.length; i++) {
