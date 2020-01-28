@@ -2,7 +2,7 @@
 
 /*
 |--------------------------------------------------------------------------
-| FloorSeeder
+| BuildingSeeder
 |--------------------------------------------------------------------------
 |
 | Make use of the Factory instance to seed database with dummy data or
@@ -15,17 +15,22 @@ const Building = use('App/Models/Building');
 
 class FloorSeeder {
 	async run () {
+		// load in dummy data for buildings
+		let buildingFiller = require('../seederData/buildings.json');
+
+		// count buildings in database
 		var count = await Building.getCount();
 
 		if (count === 0) {
-			const building = new Building();
-			building.name = 'CD Howe';
-			building.street_address = '55 Golflinks dr.';
-			building.postal_code = 'K2J4Y3';
-			building.city = 'Ottawa';
-			building.country = 'Canada';
-			await building.save();
-
+			for (var i = 0; i < buildingFiller.length; i++) {
+				const building = new Building();
+				building.name = buildingFiller[i]['name'];
+				building.street_address = buildingFiller[i]['street_address'];
+				building.postal_code = buildingFiller[i]['postal_code'];
+				building.city = buildingFiller[i]['city'];
+				building.country = buildingFiller[i]['country'];
+				await building.save();
+			}
 			console.log('Building DB: Finished Seeding');
 		} else {
 			console.log('Building DB: Already Seeded');

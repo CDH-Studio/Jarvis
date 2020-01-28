@@ -74,12 +74,9 @@ Developed by the Winter 2019 students at CDH Studio, this application is current
 * [OpenShift](https://www.openshift.com)
 
 <!-- GETTING STARTED -->
-## Getting Started
+## Prerequisites
 
 To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
 
 ### Install virtual environment 
 The commands provided beyond this point are linux based. The preferred local environment is a **ubuntu 18.04 LTS virtual machine**.
@@ -157,9 +154,64 @@ Verify that the configuration has been loaded:<br/>
 Restart Docker<br/>
 `$ sudo systemctl restart docker` <br/>
 
+## Run Application Container
+
+To run the application for local environment `cd` in to your project directory inside the virtual machine and run.
+
+`docker-compose up`
+
+The application is now served at the following address
+
+`http://0.0.0.0:3333/`
+
+## Shutdown Application Container
+
+To shutdown the application for local environment `cd` in to your project directory inside the virtual machine and run.
+
+`docker-compose down`
+
+## Run Database Migrations
+
+To run the database migrations you much attach your terminal to the container shell. This can be done by either right clicking on the container named "jarvis_web" in VS Code and selecting "attach shell" in the drop down or running the following command:
+
+`docker exec -it <mycontainerid> bash`
+
+Once the shell has attached to the container you can run to begin the migration.
+
+`adonis migration:done`
+
+Every time you shutdown the application container you will have to run the migration again.
+
+## Run Database Seeding
+
+Seeding will fill you DB with some valid dummy data. 
+
+To run the database seeding you much attach your terminal to the container shell. This can be done by either right clicking on the container named "jarvis_web" in VS Code and selecting "attach shell" in the drop down or running the following command:
+
+`docker exec -it <mycontainerid> bash`
+
+Once the shell has attached to the container you can run to begin the migration.
+
+`adonis seed`
+
+## See Into Database
+
+One of the containers running alongside jarvis is called `adminer`. This container serves a tool that allows us to see the contents of the DB. To go to the tool you can visit the following address in your browser. 
+
+*please note: you should have already ran docker-compose up for this to work* 
+
+`http://0.0.0.0:8080/`
+
+You can now use the credential you defined in the .env file to log in as seen in the following image.
+
+ <img src="screenshots/adminer-login.png" alt="Logo" width="40%" height="auto">
+
+************************
+*please ignore beyond this point*
+
 ### Other Prerequisites
 
-Install the following in your local enviroment:
+Install the following in your local environment:
 
 * Install Node.js [here](https://nodejs.org/en/download/)
 

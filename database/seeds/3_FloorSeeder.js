@@ -15,17 +15,19 @@ const Floor = use('App/Models/Floor');
 
 class FloorSeeder {
 	async run () {
-		var floorFiller = ['C3', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
-		var buildingFiller = ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'];
+		// load in dummy data for floor
+		let floorFiller = require('../seederData/floors.json');
+
+		// count floors in database
 		var count = await Floor.getCount();
 
 		if (count === 0) {
 			for (var i = 0; i < floorFiller.length; i++) {
 				const floor = new Floor();
 				floor.id = i === 0 ? '0' : i;
-				floor.name_english = floorFiller[i];
-				floor.name_french = floorFiller[i];
-				floor.building_id = buildingFiller[i];
+				floor.name_english = floorFiller[i]['name_english'];
+				floor.name_french = floorFiller[i]['name_french'];
+				floor.building_id = floorFiller[i]['building_id'];
 				await floor.save();
 			}
 			console.log('Floor Name DB: Finished Seeding');

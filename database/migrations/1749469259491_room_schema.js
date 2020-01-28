@@ -2,7 +2,6 @@
 
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema');
-// const Env = use('Env');
 
 class RoomsSchema extends Schema {
 	up () {
@@ -15,7 +14,7 @@ class RoomsSchema extends Schema {
 			table.integer('floor_id').unsigned().references('id').inTable('floors').notNullable();
 			table.integer('tower_id').unsigned().references('id').inTable('towers').notNullable();
 			table.integer('building_id').unsigned().references('id').inTable('buildings').notNullable();
-			table.string('telephone', 20);
+			table.string('telephone', 30);
 			table.integer('seats').notNullable();
 			table.integer('capacity').notNullable();
 			table.string('extraEquipment', 100);
@@ -29,15 +28,6 @@ class RoomsSchema extends Schema {
 			table.integer('state_id').notNullable();
 			table.timestamps();
 
-			// temporarly commented out until new data is found
-			// let query;
-			// if (Env.get('DEV_OUTLOOK', 'prod') === 'prod') {
-			// query = require('../rawQueries/populateRoomsOutlook');
-			// } else {
-			// query = require('../rawQueries/populateRooms');
-			// }
-
-			// this.raw(query);
 			console.log('Done Migration: Rooms');
 		});
 	}

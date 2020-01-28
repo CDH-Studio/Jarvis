@@ -1,0 +1,42 @@
+[
+    {
+        "created_at": "2019-06-20 16:33:52",
+        "icon": "fas fa-tv",
+        "id": "1",
+        "name_english": "Display",
+        "name_french": "Outils D'Affichage",
+        "updated_at": "2019-06-20 16:33:52"
+    },
+    {
+        "created_at": "2019-06-20 16:33:52",
+        "icon": "fas fa-headset",
+        "id": "2",
+        "name_english": "Conferencing",
+        "name_french": "Conférence",
+        "updated_at": "2019-06-20 16:33:52"
+    },
+    {
+        "created_at": "2019-06-20 16:33:52",
+        "icon": "fas fa-chalkboard-teacher",
+        "id": "3",
+        "name_english": "Collaboration",
+        "name_french": "Collaboration",
+        "updated_at": "2019-06-20 16:33:52"
+    },
+    {
+        "created_at": "2019-06-20 16:33:52",
+        "icon": "fas fa-wifi",
+        "id": "4",
+        "name_english": "Connectivity",
+        "name_french": "Connectivité",
+        "updated_at": "2019-06-20 16:33:52"
+    },
+    {
+        "created_at": "2019-06-20 16:33:52",
+        "icon": "fas fa-plus",
+        "id": "5",
+        "name_english": "Other",
+        "name_french": "Autre",
+        "updated_at": "2019-06-20 16:33:52"
+    }
+]
