@@ -71,8 +71,9 @@ class AuthController {
 		// getting authorization code
 		const code = request.only(['code']).code;
 
+		let userInfo, userAccess, userRole;
+
 		// acquiring access token for user
-		let userInfo;
 		if (code) {
 			try {
 				let result = await oauth2.authorizationCode.getToken({
@@ -82,7 +83,16 @@ class AuthController {
 				});
 				const token = await oauth2.accessToken.create(result);
 
+				// get user type from id_token
 				userInfo = JWT.decode(token.token.id_token);
+
+				// get user type from access_token
+				userAccess = JWT.decode(token.token.access_token);
+				if (userAccess.resource_access.jarvis.roles[0] === 'admin') {
+					userRole = 'admin';
+				} else {
+					userRole = 'user';
+				}
 			} catch (err) {
 				console.log(err);
 				return response.redirect('/');
@@ -94,10 +104,18 @@ class AuthController {
 			.query()
 			.where('email', email.toLowerCase())
 			.first();
-
 		if (user) {
 			await auth.login(user);
-			if (auth.user.role_id === 2) {
+
+			// Set user role based on info from keycloak
+			if (userRole === 'admin') {
+				user.setUserRole('admin');
+			} else {
+				user.setUserRole('user');
+			}
+
+			// redirect user
+			if (user.getUserRole === 'user') {
 				if (auth.user.verified) {
 					session.flash({
 						notification: 'Welcome! You are logged in'
