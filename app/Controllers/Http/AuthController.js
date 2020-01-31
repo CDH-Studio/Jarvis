@@ -157,7 +157,7 @@ class AuthController {
 			newUser.setUserRole(userRole);
 
 			// save user
-			await newUser.save()
+			await newUser.save();
 
 			await auth.login(newUser);
 			return response.redirect('/profile');
