@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:12.14.1
 
 # set docker proxy settings
 ENV http_proxy http://cdhwg01.prod.prv:80
