@@ -66,6 +66,11 @@ class AuthController {
 	/**
 	 * Convert code to token to authenticate user
 	 * We return here after user logs in with AD
+	 *
+	 * If a user is already in our database we allow them through
+	 * If a user is not found then they will have to make a profile.
+	 *
+	 *
 	 */
 	async authAD ({ request, session, response, auth, view }) {
 		// getting authorization code
@@ -88,9 +93,11 @@ class AuthController {
 
 				// get user type from access_token
 				userAccess = JWT.decode(token.token.access_token);
-				if (userAccess.resource_access.jarvis.roles[0] === 'admin') {
-					userRole = 'admin';
-				} else {
+
+				// try to read admin role
+				try {
+					userRole = userAccess.resource_access.jarvis.roles[0];
+				} catch (err) {
 					userRole = 'user';
 				}
 			} catch (err) {
@@ -99,36 +106,45 @@ class AuthController {
 			}
 		}
 
+		// get user email and search for user in database
 		const email = userInfo.email;
 		const user = await User
 			.query()
 			.where('email', email.toLowerCase())
 			.first();
+
+		// Set user role based on info from keycloak
+		if (userRole === 'admin') {
+			user.setUserRole('admin');
+		} else {
+			user.setUserRole('user');
+		}
+
+		// if user is found update role and login
 		if (user) {
+			// login user
 			await auth.login(user);
 
-			// Set user role based on info from keycloak
-			if (userRole === 'admin') {
-				user.setUserRole('admin');
-			} else {
-				user.setUserRole('user');
-			}
+			session.flash({
+				notification: 'Welcome! You are logged in'
+			});
 
 			// redirect user
-			if (user.getUserRole === 'user') {
-				if (auth.user.verified) {
-					session.flash({
-						notification: 'Welcome! You are logged in'
-					});
-
-					return response.redirect('/userDash');
-				} else {
-					return response.redirect('/profile');
-				}
+			if (auth.user.verified) {
+				// If user details were found then redirect home
+				session.flash({
+					notification: 'Welcome! You are logged in'
+				});
+				return response.route('home');
 			} else {
-				return response.redirect('/');
+				// If user details were not found then redirect to profile form
+				session.flash({
+					notification: 'Please verify your information'
+				});
+				return response.redirect('/profile');
 			}
 		} else {
+			// if user is not found then create the user and ask them to create a profile
 			let newUser = {};
 			newUser.firstname = userInfo.given_name;
 			newUser.lastname = userInfo.family_name;
