@@ -69,8 +69,8 @@ class AuthController {
 	 *
 	 * If a user is already in our database we allow them through
 	 * If a user is not found then they will have to make a profile.
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	async authAD ({ request, session, response, auth, view }) {
 		// getting authorization code
