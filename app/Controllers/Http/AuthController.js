@@ -94,9 +94,11 @@ class AuthController {
 				// get user type from access_token
 				userAccess = JWT.decode(token.token.access_token);
 
-				// try to read admin role
+				// try to read access role or default to regular user type
 				try {
-					userRole = userAccess.resource_access.jarvis.roles[0];
+					if (userAccess.resource_access.jarvis.roles[0] === 'admin') {
+						userRole = 'admin';
+					}
 				} catch (err) {
 					userRole = 'user';
 				}
@@ -113,15 +115,11 @@ class AuthController {
 			.where('email', email.toLowerCase())
 			.first();
 
-		// Set user role based on info from keycloak
-		if (userRole === 'admin') {
-			user.setUserRole('admin');
-		} else {
-			user.setUserRole('user');
-		}
-
 		// if user is found update role and login
 		if (user) {
+			// Set user role based on info from keycloak
+			user.setUserRole(userRole);
+
 			// login user
 			await auth.login(user);
 
@@ -145,7 +143,7 @@ class AuthController {
 			}
 		} else {
 			// if user is not found then create the user and ask them to create a profile
-			let newUser = {};
+			let newUser = new User();
 			newUser.firstname = userInfo.given_name;
 			newUser.lastname = userInfo.family_name;
 			newUser.email = userInfo.email.toLowerCase();
@@ -155,8 +153,13 @@ class AuthController {
 			newUser.tower_id = '1';
 			newUser.floor_id = '1';
 
-			const user = await User.create(newUser);
-			await auth.login(user);
+			// Set user role based on info from keycloak
+			newUser.setUserRole(userRole);
+
+			// save user
+			await newUser.save()
+
+			await auth.login(newUser);
 			return response.redirect('/profile');
 		}
 	}
