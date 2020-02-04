@@ -217,7 +217,6 @@ class HomeController {
 	*
 	*/
 	async getRoomStats (selectedBuilding) {
-
 		// Get total number of rooms
 		var countRooms = await Room
 			.query()
@@ -233,7 +232,7 @@ class HomeController {
 
 		var stats = {};
 		stats['numberOfRooms'] = countRooms;
-		stats['percentageOfActiveRooms'] = Math.round(countActiveRooms/ countRooms) * 100;
+		stats['percentageOfActiveRooms'] = Math.round(countActiveRooms / countRooms) * 100;
 
 		// return the number of users
 		return stats;
@@ -274,7 +273,6 @@ class HomeController {
 
 		// queries the bookings table to retrieve the bookings for the past 6 months
 		for (let i = 0; i < 6; i++) {
-
 			// set start and end data of time period
 			const startOfMonth = date.startOf('month').format('YYYY-MM-DDTHH:mm');
 			const endOfMonth = date.endOf('month').format('YYYY-MM-DDTHH:mm');
@@ -284,15 +282,15 @@ class HomeController {
 				.where('building_id', selectedBuilding.id)
 				.where('status', 'Approved')
 				.where("from",'>=', startOfMonth)// eslint-disable-line
-				.where("from",'<=',endOfMonth)
-				.getCount()
+				.where('from', '<=', endOfMonth)
+				.getCount();
 
 			numberOfBookings.push(bookings);
 			months.push(date.format('MMM YYYY'));
 
 			date.subtract(1, 'M');
 		}
-		console.log(numberOfBookings)
+		console.log(numberOfBookings);
 		// reverses the order of the array so the months are in ascending order
 		numberOfBookings.reverse();
 		months.reverse();
@@ -448,18 +446,16 @@ class HomeController {
 	*
 	*/
 	async getFreqBooked (user) {
-
-		const Database = use('Database')
 		let searchResults = await Booking
-		.query()
-		.where('user_id', user.id)
-		.where('status', 'Approved')
-		.select('room_id', 'rooms.id', 'rooms.name', 'rooms.picture_small', 'rooms.avg_rating', 'rooms.capacity', 'rooms.seats')
-		.count('room_id as count')
-		.groupBy('room_id','rooms.id')
-		.orderBy('count', 'desc')
-		.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
-		.limit(2)
+			.query()
+			.where('user_id', user.id)
+			.where('status', 'Approved')
+			.select('room_id', 'rooms.id', 'rooms.name', 'rooms.picture_small', 'rooms.avg_rating', 'rooms.capacity', 'rooms.seats')
+			.count('room_id as count')
+			.groupBy('room_id', 'rooms.id')
+			.orderBy('count', 'desc')
+			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
+			.limit(2);
 
 		if (searchResults <= 0) {
 			return null;
