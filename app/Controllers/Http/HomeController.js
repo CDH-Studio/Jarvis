@@ -160,9 +160,6 @@ class HomeController {
 		const topFiveRooms = await this.getRoomPopularity(selectedBuilding);
 		const highestRatedRooms = await this.getTopRatedRooms(selectedBuilding);
 
-		console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkk")
-		console.log(issueStats)
-
 		return view.render('adminPages.adminDash', {
 			userStats,
 			roomStats,
@@ -196,18 +193,19 @@ class HomeController {
 			.where("created_at", ">=", moment().startOf('month').format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.getCount();
 
-
-		// let usersRegisteredThisMonth = users;
-		let usersRegisteredBeforeThisMonth = allUsers - usersRegisteredThisMonth;
+		let usersRegisteredBeforeThisMonth = await User
+			.query()
+			.where('building_id', selectedBuilding.id)
+			.where("created_at", "<", moment().startOf('month').format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.getCount();
 
 		var stats = {};
 		stats['numberOfUsers'] = allUsers;
-		stats['haveUsersIncreased'] = true;
 
 		let differenceInUsers = usersRegisteredThisMonth - usersRegisteredBeforeThisMonth;
 		stats['increaseOfUsers'] = Math.round((differenceInUsers / allUsers) * 100);
 
-		// return the number of users and pourcentage of the increase of users from last month to the current one
+		// return the number of users and percentage of the increase of users from last month to the current one
 		return stats;
 	}
 
