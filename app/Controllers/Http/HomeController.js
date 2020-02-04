@@ -160,6 +160,9 @@ class HomeController {
 		const topFiveRooms = await this.getRoomPopularity(selectedBuilding);
 		const highestRatedRooms = await this.getTopRatedRooms(selectedBuilding);
 
+		console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkk")
+		console.log(issueStats)
+
 		return view.render('adminPages.adminDash', {
 			userStats,
 			roomStats,
@@ -246,16 +249,14 @@ class HomeController {
 	*
 	*/
 	async getIssueStats (selectedBuilding) {
-		// retrieves all the users form the database
-		const results = await Report
+		// retrieves all issues form the database
+		const countIssues = await Report
 			.query()
 			.where('building_id', selectedBuilding.id)
-			.fetch();
+			.getCount();
 
-		const issues = results.toJSON();
-
-		// return the number of users
-		return issues.length;
+		// return the number of issues
+		return countIssues;
 	}
 
 	/**

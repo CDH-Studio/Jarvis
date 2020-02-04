@@ -19,7 +19,13 @@
                                 <i class='d-inline-flex no-padding color-info card-icon fas fa-user fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
+                                        
+                                        {{--  workaround for Adonis edge bug that doesnt print zero  --}}
+                                        @if(userStats['numberOfUsers'])
                                         <h2 class='col no-margin'><strong>{{ userStats['numberOfUsers'] }}</strong></h2>
+                                        @else
+                                            <h2 class='col no-margin'><strong>0</strong></h2>
+                                        @endif
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total users</h5>
@@ -48,7 +54,12 @@
                                 <i class='d-inline-flex no-padding color-success card-icon fas fa-door-open fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
-                                        <h2 class='col no-margin'><strong>{{ roomStats['numberOfRooms'] }}</strong></h2>
+                                        {{--  workaround for Adonis edge bug that doesnt print zero  --}}
+                                        @if(roomStats['numberOfRooms'])
+                                            <h2 class='col no-margin'><strong>{{ roomStats['numberOfRooms'] }}</strong></h2>
+                                        @else
+                                            <h2 class='col no-margin'><strong>0</strong></h2>
+                                        @endif
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total rooms</h5>
@@ -77,7 +88,13 @@
                                 <i class='d-inline-flex no-padding color-warning card-icon far fa-flag fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
-                                        <h2 class='col no-margin'><strong>{{ issueStats }}</strong></h2>
+                                        {{--  workaround for Adonis edge bug that doesnt print zero  --}}
+                                        @if(issueStats)
+                                            <h2 class='col no-margin'><strong>{{ issueStats }}</strong></h2>
+                                        @else
+                                            <h2 class='col no-margin'><strong>0</strong></h2>
+                                        @endif
+                                        
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total issues</h5>
