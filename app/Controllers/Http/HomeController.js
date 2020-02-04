@@ -317,28 +317,28 @@ class HomeController {
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('state_id', 1)
-			.count();
+			.getCount();
 
 		// Retrieve number of deactive rooms
 		let countDeactive = await Room
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('state_id', 2)
-			.count();
+			.getCount();
 
 		// Retrieve number of rooms under maintenance
 		let countMaint = await Room
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('state_id', 3)
-			.count();
+			.getCount();
 
 		// Create statistic array with custom keys
 		var stats = {};
-		stats['total'] = countActive[0]['count(*)'] + countDeactive[0]['count(*)'] + countMaint[0]['count(*)'];
-		stats['active'] = countActive[0]['count(*)'];
-		stats['deactive'] = countDeactive[0]['count(*)'];
-		stats['maintenance'] = countMaint[0]['count(*)'];
+		stats['total'] = countActive + countDeactive + countMaint;
+		stats['active'] = countActive;
+		stats['deactive'] = countDeactive;
+		stats['maintenance'] = countMaint;
 
 		return stats;
 	}
