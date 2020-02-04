@@ -7,7 +7,7 @@
         <div class='body d-flex flex-wrap justify-content-center'>
             {{--  Room Picture  --}}
             {{--  <div class='photo'>  --}}
-                @if(room.picture) 
+                @if(room.picture_small) 
                     <img src='/{{ room.picture_small }}' alt='{{ room.name }}-picture'>
                 @else
                     <img src='/images/default.png' alt='default-room-image'>

@@ -446,16 +446,18 @@ class HomeController {
 	*
 	*/
 	async getFreqBooked (user) {
-		// get the top 2 freq booked rooms that are available and join with the rooms table to find the room name
+
+		const Database = use('Database')
 		let searchResults = await Booking
-			.query()
-			.where('user_id', user.id)
-			.select('*')
-			.count('room_id as total')
-			.groupBy('room_id')
-			.orderBy('total', 'desc')
-			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
-			.limit(2);
+		.query()
+		.where('user_id', user.id)
+		.where('status', 'Approved')
+		.select('room_id', 'rooms.id', 'rooms.name', 'rooms.picture_small', 'rooms.avg_rating', 'rooms.capacity', 'rooms.seats')
+		.count('room_id as count')
+		.groupBy('room_id','rooms.id')
+		.orderBy('count', 'desc')
+		.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
+		.limit(2)
 
 		if (searchResults <= 0) {
 			return null;
@@ -506,7 +508,7 @@ class HomeController {
 			.query()
 			.where('user_id', user.id)
 			.where('status', 'Approved')
-			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.where('from', '>=' , moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.select('*')
 			.orderBy('from', 'desc')
 			.with('room')
