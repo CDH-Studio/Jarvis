@@ -185,17 +185,14 @@ class HomeController {
 	async getUserStats (selectedBuilding) {
 		// retrieves all the users form the database
 		const allUsers = await User.getCount();
-		// const allUsers = results.toJSON();
-
-		// initialize the moment.js object to act as our date
-		const date = moment();
 
 		// queries the users table to retrieve the users for the current and previous month
 		let usersRegisteredThisMonth = await User
 			.query()
 			.where('building_id', selectedBuilding.id)
-			.whereRaw("strftime('%Y-%m', created_at) = ?", [date.format('YYYY-MM')]) // eslint-disable-line
+			.where("created_at", ">=", moment().startOf('month').format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.getCount();
+
 
 		// let usersRegisteredThisMonth = users;
 		let usersRegisteredBeforeThisMonth = allUsers - usersRegisteredThisMonth;
@@ -278,19 +275,25 @@ class HomeController {
 
 		// queries the bookings table to retrieve the bookings for the past 6 months
 		for (let i = 0; i < 6; i++) {
+
+			// set start and end data of time period
+			const startOfMonth = date.startOf('month').format('YYYY-MM-DDTHH:mm');
+			const endOfMonth = date.endOf('month').format('YYYY-MM-DDTHH:mm');
+
 			let bookings = await Booking
 				.query()
 				.where('building_id', selectedBuilding.id)
 				.where('status', 'Approved')
-				.whereRaw("strftime('%Y-%m', bookings.'from') = ?", [date.format('YYYY-MM')]) // eslint-disable-line
-				.getCount();
+				.where("from",'>=', startOfMonth)// eslint-disable-line
+				.where("from",'<=',endOfMonth)
+				.getCount()
 
 			numberOfBookings.push(bookings);
 			months.push(date.format('MMM YYYY'));
 
 			date.subtract(1, 'M');
 		}
-
+		console.log(numberOfBookings)
 		// reverses the order of the array so the months are in ascending order
 		numberOfBookings.reverse();
 		months.reverse();
