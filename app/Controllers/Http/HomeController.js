@@ -216,23 +216,23 @@ class HomeController {
 	*
 	*/
 	async getRoomStats (selectedBuilding) {
-		var rooms = await Room
+
+		// Get total number of rooms
+		var countRooms = await Room
 			.query()
 			.where('building_id', selectedBuilding.id)
-			.fetch();
-
-		rooms = rooms.toJSON();
+			.getCount();
 
 		// Retrieve number of active rooms
-		let countActive = await Room
+		let countActiveRooms = await Room
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('state_id', 1)
-			.count();
+			.getCount();
 
 		var stats = {};
-		stats['numberOfRooms'] = rooms.length;
-		stats['percentageOfActiveRooms'] = Math.round((countActive[0]['count(*)'] / rooms.length) * 100);
+		stats['numberOfRooms'] = countRooms;
+		stats['percentageOfActiveRooms'] = Math.round(countActiveRooms/ countRooms) * 100;
 
 		// return the number of users
 		return stats;
