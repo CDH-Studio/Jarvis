@@ -8,7 +8,7 @@
     "docker-start":  "adonis migration:run -f && adonis seed -f && adonis serve --dev",
     "start": "npm i -g @adonisjs/cli && adonis serve --dev",
     "test": "node ace test",
-    "lint": "node_modules/.bin/eslint . --ext .js"
+    "lint": "node_modules/.bin/eslint . --fix --ext .js "
   },
   "keywords": [
     "adonisjs",

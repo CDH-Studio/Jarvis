@@ -185,29 +185,27 @@ class HomeController {
 	async getUserStats (selectedBuilding) {
 		// retrieves all the users form the database
 		const allUsers = await User.getCount();
-		// const allUsers = results.toJSON();
-
-		// initialize the moment.js object to act as our date
-		const date = moment();
 
 		// queries the users table to retrieve the users for the current and previous month
 		let usersRegisteredThisMonth = await User
 			.query()
 			.where('building_id', selectedBuilding.id)
-			.whereRaw("strftime('%Y-%m', created_at) = ?", [date.format('YYYY-MM')]) // eslint-disable-line
+			.where("created_at", ">=", moment().startOf('month').format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.getCount();
 
-		// let usersRegisteredThisMonth = users;
-		let usersRegisteredBeforeThisMonth = allUsers - usersRegisteredThisMonth;
+		let usersRegisteredBeforeThisMonth = await User
+			.query()
+			.where('building_id', selectedBuilding.id)
+			.where("created_at", "<", moment().startOf('month').format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.getCount();
 
 		var stats = {};
 		stats['numberOfUsers'] = allUsers;
-		stats['haveUsersIncreased'] = true;
 
 		let differenceInUsers = usersRegisteredThisMonth - usersRegisteredBeforeThisMonth;
 		stats['increaseOfUsers'] = Math.round((differenceInUsers / allUsers) * 100);
 
-		// return the number of users and pourcentage of the increase of users from last month to the current one
+		// return the number of users and percentage of the increase of users from last month to the current one
 		return stats;
 	}
 
@@ -219,23 +217,22 @@ class HomeController {
 	*
 	*/
 	async getRoomStats (selectedBuilding) {
-		var rooms = await Room
+		// Get total number of rooms
+		var countRooms = await Room
 			.query()
 			.where('building_id', selectedBuilding.id)
-			.fetch();
-
-		rooms = rooms.toJSON();
+			.getCount();
 
 		// Retrieve number of active rooms
-		let countActive = await Room
+		let countActiveRooms = await Room
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('state_id', 1)
-			.count();
+			.getCount();
 
 		var stats = {};
-		stats['numberOfRooms'] = rooms.length;
-		stats['percentageOfActiveRooms'] = Math.round((countActive[0]['count(*)'] / rooms.length) * 100);
+		stats['numberOfRooms'] = countRooms;
+		stats['percentageOfActiveRooms'] = Math.round(countActiveRooms / countRooms) * 100;
 
 		// return the number of users
 		return stats;
@@ -249,16 +246,14 @@ class HomeController {
 	*
 	*/
 	async getIssueStats (selectedBuilding) {
-		// retrieves all the users form the database
-		const results = await Report
+		// retrieves all issues form the database
+		const countIssues = await Report
 			.query()
 			.where('building_id', selectedBuilding.id)
-			.fetch();
+			.getCount();
 
-		const issues = results.toJSON();
-
-		// return the number of users
-		return issues.length;
+		// return the number of issues
+		return countIssues;
 	}
 
 	/**
@@ -278,11 +273,16 @@ class HomeController {
 
 		// queries the bookings table to retrieve the bookings for the past 6 months
 		for (let i = 0; i < 6; i++) {
+			// set start and end data of time period
+			const startOfMonth = date.startOf('month').format('YYYY-MM-DDTHH:mm');
+			const endOfMonth = date.endOf('month').format('YYYY-MM-DDTHH:mm');
+
 			let bookings = await Booking
 				.query()
 				.where('building_id', selectedBuilding.id)
 				.where('status', 'Approved')
-				.whereRaw("strftime('%Y-%m', bookings.'from') = ?", [date.format('YYYY-MM')]) // eslint-disable-line
+				.where("from",'>=', startOfMonth)// eslint-disable-line
+				.where('from', '<=', endOfMonth)
 				.getCount();
 
 			numberOfBookings.push(bookings);
@@ -290,7 +290,7 @@ class HomeController {
 
 			date.subtract(1, 'M');
 		}
-
+		console.log(numberOfBookings);
 		// reverses the order of the array so the months are in ascending order
 		numberOfBookings.reverse();
 		months.reverse();
@@ -317,28 +317,28 @@ class HomeController {
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('state_id', 1)
-			.count();
+			.getCount();
 
 		// Retrieve number of deactive rooms
 		let countDeactive = await Room
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('state_id', 2)
-			.count();
+			.getCount();
 
 		// Retrieve number of rooms under maintenance
 		let countMaint = await Room
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('state_id', 3)
-			.count();
+			.getCount();
 
 		// Create statistic array with custom keys
 		var stats = {};
-		stats['total'] = countActive[0]['count(*)'] + countDeactive[0]['count(*)'] + countMaint[0]['count(*)'];
-		stats['active'] = countActive[0]['count(*)'];
-		stats['deactive'] = countDeactive[0]['count(*)'];
-		stats['maintenance'] = countMaint[0]['count(*)'];
+		stats['total'] = countActive + countDeactive + countMaint;
+		stats['active'] = countActive;
+		stats['deactive'] = countDeactive;
+		stats['maintenance'] = countMaint;
 
 		return stats;
 	}
@@ -356,28 +356,28 @@ class HomeController {
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('report_status_id', 1)
-			.count();
+			.getCount();
 
 		// Retrieve number of issues that are under review
 		let countUnderReview = await Report
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('report_status_id', 2)
-			.count();
+			.getCount();
 
 		// Retrieve number of issues that are resolved
 		let countResolved = await Report
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('report_status_id', 3)
-			.count();
+			.getCount();
 
 		// Create statistic array with custom keys
 		var stats = {};
-		stats['total'] = countPending[0]['count(*)'] + countUnderReview[0]['count(*)'] + countResolved[0]['count(*)'];
-		stats['pending'] = countPending[0]['count(*)'];
-		stats['underReview'] = countUnderReview[0]['count(*)'];
-		stats['resolved'] = countResolved[0]['count(*)'];
+		stats['total'] = countPending + countUnderReview + countResolved;
+		stats['pending'] = countPending;
+		stats['underReview'] = countUnderReview;
+		stats['resolved'] = countResolved;
 
 		return stats;
 	}
@@ -393,25 +393,15 @@ class HomeController {
 		// Retrieves the top five rooms with the highest number of bookings
 		let bookings = await Booking
 			.query()
-			.where('building_id', selectedBuilding.id)
-			.select('room_id')
-			.count('room_id as total')
-			.orderBy('total', 'desc')
-			.groupBy('room_id')
+			.where('rooms.building_id', selectedBuilding.id)
+			.select('room_id', 'rooms.name')
+			.count('room_id as count')
+			.groupBy('room_id', 'rooms.id')
+			.orderBy('count', 'desc')
+			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
 			.limit(5);
 
-		var topFiveRooms = [];
-
-		// Populate the rooms array with the top five room objects
-		for (var i = 0; i < bookings.length; i++) {
-			var rooms = {};
-			rooms['room'] = await Room.findBy('id', bookings[i]['room_id']);
-			rooms['bookings'] = bookings[i]['total'];
-
-			topFiveRooms.push(rooms);
-		}
-
-		return topFiveRooms;
+		return bookings;
 	}
 
 	/**
@@ -446,14 +436,14 @@ class HomeController {
 	*
 	*/
 	async getFreqBooked (user) {
-		// get the top 2 freq booked rooms that are available and join with the rooms table to find the room name
 		let searchResults = await Booking
 			.query()
 			.where('user_id', user.id)
-			.select('*')
-			.count('room_id as total')
-			.groupBy('room_id')
-			.orderBy('total', 'desc')
+			.where('status', 'Approved')
+			.select('room_id', 'rooms.id', 'rooms.name', 'rooms.picture_small', 'rooms.avg_rating', 'rooms.capacity', 'rooms.seats')
+			.count('room_id as count')
+			.groupBy('room_id', 'rooms.id')
+			.orderBy('count', 'desc')
 			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
 			.limit(2);
 
@@ -506,7 +496,7 @@ class HomeController {
 			.query()
 			.where('user_id', user.id)
 			.where('status', 'Approved')
-			.whereRaw("bookings.'from' >= ?", moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
+			.where('from', '>=' , moment().format('YYYY-MM-DDTHH:mm')) // eslint-disable-line
 			.select('*')
 			.orderBy('from', 'desc')
 			.with('room')

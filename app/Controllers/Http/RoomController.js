@@ -169,7 +169,7 @@ class RoomController {
 			room.floor_id = body.floor;
 			room.tower_id = body.tower;
 			room.building_id = selectedBuilding.id;
-			room.State_id = body.state;
+			room.state_id = body.state;
 			room.telephone = body.telephoneNumber;
 			room.seats = body.tableSeats;
 			room.capacity = body.maximumCapacity;
@@ -369,7 +369,7 @@ class RoomController {
 				picture_small: roomImageStringPathSmall,
 				extraEquipment: body.extraEquipment == null ? ' ' : body.extraEquipment,
 				comment: body.comment == null ? ' ' : body.comment,
-				State_id: body.State_id
+				state_id: body.state
 			});
 
 		// save room features
@@ -552,7 +552,7 @@ class RoomController {
 			result = await Room
 				.query()
 				.where('building_id', selectedBuilding.id)
-				.where('State_id', 1)
+				.where('state_id', 1)
 				.with('floor')
 				.with('tower')
 				.with('features', (builder) => {
@@ -575,30 +575,30 @@ class RoomController {
 			// Retrieve number of active rooms
 			let countActive = await Room
 				.query()
-				.where('State_id', 1)
+				.where('state_id', 1)
 				.where('building_id', selectedBuilding.id)
-				.count();
+				.getCount();
 
 			// Retrieve number of deactive rooms
 			let countDeactive = await Room
 				.query()
-				.where('State_id', 2)
+				.where('state_id', 2)
 				.where('building_id', selectedBuilding.id)
-				.count();
+				.getCount();
 
 			// Retrieve number of rooms under maintenance
 			let countMaint = await Room
 				.query()
-				.where('State_id', 3)
+				.where('state_id', 3)
 				.where('building_id', selectedBuilding.id)
-				.count();
+				.getCount();
 
 			// Create statistic array with custom keys
 			var stats = {};
 			stats['total'] = rooms.length;
-			stats['active'] = countActive[0]['count(*)'];
-			stats['deactive'] = countDeactive[0]['count(*)'];
-			stats['maintenance'] = countMaint[0]['count(*)'];
+			stats['active'] = countActive;
+			stats['deactive'] = countDeactive;
+			stats['maintenance'] = countMaint;
 
 			// get all builig info admin nav bar since this route is shared with regular users and admin
 			// therefore, the admin middle-ware can't retrieve building info to pass to view

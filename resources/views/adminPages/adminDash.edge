@@ -19,7 +19,13 @@
                                 <i class='d-inline-flex no-padding color-info card-icon fas fa-user fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
+                                        
+                                        {{--  workaround for Adonis edge bug that doesnt print zero  --}}
+                                        @if(userStats['numberOfUsers'])
                                         <h2 class='col no-margin'><strong>{{ userStats['numberOfUsers'] }}</strong></h2>
+                                        @else
+                                            <h2 class='col no-margin'><strong>0</strong></h2>
+                                        @endif
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total users</h5>
@@ -48,7 +54,12 @@
                                 <i class='d-inline-flex no-padding color-success card-icon fas fa-door-open fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
-                                        <h2 class='col no-margin'><strong>{{ roomStats['numberOfRooms'] }}</strong></h2>
+                                        {{--  workaround for Adonis edge bug that doesnt print zero  --}}
+                                        @if(roomStats['numberOfRooms'])
+                                            <h2 class='col no-margin'><strong>{{ roomStats['numberOfRooms'] }}</strong></h2>
+                                        @else
+                                            <h2 class='col no-margin'><strong>0</strong></h2>
+                                        @endif
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total rooms</h5>
@@ -77,7 +88,13 @@
                                 <i class='d-inline-flex no-padding color-warning card-icon far fa-flag fa-2x'></i>
                                 <div class='no-padding text-left stats-card-content' style='padding-left:15px;'>
                                     <div class='row'>
-                                        <h2 class='col no-margin'><strong>{{ issueStats }}</strong></h2>
+                                        {{--  workaround for Adonis edge bug that doesnt print zero  --}}
+                                        @if(issueStats)
+                                            <h2 class='col no-margin'><strong>{{ issueStats }}</strong></h2>
+                                        @else
+                                            <h2 class='col no-margin'><strong>0</strong></h2>
+                                        @endif
+                                        
                                     </div>
                                     <div class='row'>
                                         <h5 class='col text-grey'>Total issues</h5>
@@ -91,6 +108,9 @@
             <div class='row'>
                 <div class='col' style='padding:12px'> 
                     @component('components.generalCard', title='Bookings')
+                        @slot('titleRight')
+                            <i class="fas fa-info-circle text-muted" data-toggle="tooltip" data-placement="top" title="number of meetings per months organized my meeting start date"></i>
+                        @endslot
                         @slot('body')
                             <div class='chart-bar'>
                                 <canvas id="bookings" width="400" height="400"></canvas>
@@ -102,10 +122,18 @@
             <div class='row'>
                 <div class='col' style='padding:12px'>
                     @component('components.generalCard', title='Most popular')
+                        @slot('titleRight')
+                            <i class="fas fa-info-circle text-muted" data-toggle="tooltip" data-placement="top" title="most commonly booked rooms"></i>
+                        @endslot
                         @slot('body')
-                            <div class='chart-bar'>
-                                <canvas id="roomPopularity" width="400" height="400"></canvas>
-                            </div>
+                            @if( topFiveRooms.length >= 5 )
+                                <div class='chart-bar'>
+                                    <canvas id="roomPopularity" width="400" height="400"></canvas>
+                                </div>
+                            @else
+                                @!component('components.cardEmptyMessage',faIcon="fas fa-history fa-4x", message="we need some more bookings to generate this plot...")
+                            @endif
+                            
                         @endslot
                     @endcomponent
                 </div>
@@ -116,6 +144,9 @@
             <div class='row'>
                 <div class='col-6' style='padding:12px'>
                     @component('components.generalCard', title='Status - Rooms')
+                        @slot('titleRight')
+                            <i class="fas fa-info-circle text-muted" data-toggle="tooltip" data-placement="top" title="status of rooms"></i>
+                        @endslot
                         @slot('body')
                             <div class='chart-bar'>
                                 <canvas id="roomStatuses" width="400" height="400"></canvas>
@@ -125,10 +156,17 @@
                 </div>
                 <div class='col-6' style='padding:12px'>
                     @component('components.generalCard', title='Issue - Rooms')
+                        @slot('titleRight')
+                            <i class="fas fa-info-circle text-muted" data-toggle="tooltip" data-placement="top" title="issues reported by users for each room"></i>
+                        @endslot
                         @slot('body')
-                            <div class='chart-bar'>
-                                <canvas id="roomIssues" width="400" height="400"></canvas>
-                            </div>
+                            @if(roomIssueStats['pending'] || roomIssueStats['underReview'] || roomIssueStats['resolved'] )
+                                <div class='chart-bar'>
+                                    <canvas id="roomIssues" width="400" height="400"></canvas>
+                                </div>
+                            @else
+                                @!component('components.cardEmptyMessage',faIcon="fas fa-glass-cheers fa-4x", message="no reported issues")
+                            @endif
                         @endslot
                     @endcomponent
                 </div>
@@ -136,6 +174,9 @@
             <div class='row'>
                 <div class='col-12' style='padding:12px'>
                     @component('components.generalCard', title='Highest rated')
+                        @slot('titleRight')
+                            <i class="fas fa-info-circle text-muted" data-toggle="tooltip" data-placement="top" title="highest rated rooms based on user reviews"></i>
+                        @endslot
                         @slot('body')
                             @each(room in highestRatedRooms) 
                                 @component('components.smallCard', room = room)
@@ -228,7 +269,7 @@
                 legend: {
                     display: true
                 },
-                cutoutPercentage: 80
+                cutoutPercentage: 75
             },
         });
 
@@ -281,7 +322,7 @@
             data: {
                 labels: [ "{{ topFiveRooms[0]['room'].name }}", "{{ topFiveRooms[1]['room'].name }}", "{{ topFiveRooms[2]['room'].name }}", "{{ topFiveRooms[3]['room'].name }}", "{{ topFiveRooms[4]['room'].name }}" ],
                 datasets: [{
-                    data: [ {{ topFiveRooms[0]['bookings'] }}, {{ topFiveRooms[1]['bookings'] }}, {{ topFiveRooms[2]['bookings'] }}, {{ topFiveRooms[3]['bookings'] }}, {{ topFiveRooms[4]['bookings'] }} ],
+                    data: [ {{ topFiveRooms[0]['count'] }}, {{ topFiveRooms[1]['count'] }}, {{ topFiveRooms[2]['count'] }}, {{ topFiveRooms[3]['count'] }}, {{ topFiveRooms[4]['count'] }} ],
                     backgroundColor: ['#004680', '#3B67A5', '#648BCC', '#8CB0F5', '#B4D7FF'],
                     hoverBorderColor: "rgba(234, 236, 244, 1)",
                 }],

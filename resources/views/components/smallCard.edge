@@ -3,11 +3,11 @@
 {{--  Routing to rooom details when clicked  --}}
 {{--  href='{{ route('viewProfile', {id: auth.user.id}) }}'  --}}
 <a class='link-style-none no-margin' href="{{  route('showRoom', { id: ''+ room.id }) }}">
-    <div class='small-card border-left-primary custom-shadow-2'>
+    <div class='small-card border-left-primary shadow-sm'>
         <div class='body d-flex flex-wrap justify-content-center'>
             {{--  Room Picture  --}}
             {{--  <div class='photo'>  --}}
-                @if(room.picture) 
+                @if(room.picture_small) 
                     <img src='/{{ room.picture_small }}' alt='{{ room.name }}-picture'>
                 @else
                     <img src='/images/default.png' alt='default-room-image'>

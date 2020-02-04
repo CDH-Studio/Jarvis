@@ -4,6 +4,8 @@ FROM node:12.14.1
 ENV http_proxy http://cdhwg01.prod.prv:80
 ENV https_proxy http://cdhwg01.prod.prv:80
 
+ENV TZ=America/Toronto
+
 # install adonis cli
 RUN npm i -g @adonisjs/cli
 
