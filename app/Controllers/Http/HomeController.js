@@ -356,28 +356,28 @@ class HomeController {
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('report_status_id', 1)
-			.count();
+			.getCount();
 
 		// Retrieve number of issues that are under review
 		let countUnderReview = await Report
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('report_status_id', 2)
-			.count();
+			.getCount();
 
 		// Retrieve number of issues that are resolved
 		let countResolved = await Report
 			.query()
 			.where('building_id', selectedBuilding.id)
 			.where('report_status_id', 3)
-			.count();
+			.getCount();
 
 		// Create statistic array with custom keys
 		var stats = {};
-		stats['total'] = countPending[0]['count(*)'] + countUnderReview[0]['count(*)'] + countResolved[0]['count(*)'];
-		stats['pending'] = countPending[0]['count(*)'];
-		stats['underReview'] = countUnderReview[0]['count(*)'];
-		stats['resolved'] = countResolved[0]['count(*)'];
+		stats['total'] = countPending + countUnderReview + countResolved;
+		stats['pending'] = countPending;
+		stats['underReview'] = countUnderReview;
+		stats['resolved'] = countResolved;
 
 		return stats;
 	}
