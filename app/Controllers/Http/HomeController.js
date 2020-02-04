@@ -393,25 +393,29 @@ class HomeController {
 		// Retrieves the top five rooms with the highest number of bookings
 		let bookings = await Booking
 			.query()
-			.where('building_id', selectedBuilding.id)
-			.select('room_id')
-			.count('room_id as total')
-			.orderBy('total', 'desc')
-			.groupBy('room_id')
+			.where('rooms.building_id', selectedBuilding.id)
+			.select('room_id', 'rooms.name')
+			.count('room_id as count')
+			.groupBy('room_id','rooms.id')
+			.orderBy('count', 'desc')
+			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
 			.limit(5);
+
+			console.log("mmmmmmmmmmmmmmm")
+			console.log(bookings)
 
 		var topFiveRooms = [];
 
-		// Populate the rooms array with the top five room objects
-		for (var i = 0; i < bookings.length; i++) {
-			var rooms = {};
-			rooms['room'] = await Room.findBy('id', bookings[i]['room_id']);
-			rooms['bookings'] = bookings[i]['total'];
+		// // Populate the rooms array with the top five room objects
+		// for (var i = 0; i < bookings.length; i++) {
+		// 	var rooms = {};
+		// 	rooms['room'] = await Room.findBy('id', bookings[i]['room_id']);
+		// 	rooms['bookings'] = bookings[i]['total'];
 
-			topFiveRooms.push(rooms);
-		}
+		// 	topFiveRooms.push(rooms);
+		// }
 
-		return topFiveRooms;
+		return bookings;
 	}
 
 	/**
@@ -446,6 +450,17 @@ class HomeController {
 	*
 	*/
 	async getFreqBooked (user) {
+		// let searchResults = await Booking
+		// 	.query()
+		// 	.where('user_id', user.id)
+		// 	.where('status', 'Approved')
+		// 	.select('room_id', 'rooms.id', 'rooms.name', 'rooms.picture_small', 'rooms.avg_rating', 'rooms.capacity', 'rooms.seats')
+		// 	.count('room_id as count')
+		// 	.groupBy('room_id', 'rooms.id')
+		// 	.orderBy('count', 'desc')
+		// 	.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
+		// 	.limit(2);
+
 		let searchResults = await Booking
 			.query()
 			.where('user_id', user.id)
@@ -456,6 +471,7 @@ class HomeController {
 			.orderBy('count', 'desc')
 			.innerJoin('rooms', 'bookings.room_id', 'rooms.id')
 			.limit(2);
+
 
 		if (searchResults <= 0) {
 			return null;
